@@ -82,6 +82,9 @@ std::optional<PullOverPath> GeometricPullOver::plan(
   auto pull_over_path_opt = PullOverPath::create(
     getPlannerType(), id, planner_.getPaths(), planner_.getStartPose(), modified_goal_pose,
     planner_.getPairsTerminalVelocityAndAccel());
-  return pull_over_path_opt;
+  if (!pull_over_path_opt) {
+    return {};
+  }
+  return pull_over_path_opt.value();
 }
 }  // namespace autoware::behavior_path_planner

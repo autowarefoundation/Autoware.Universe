@@ -19,6 +19,7 @@
 #include <autoware/behavior_path_goal_planner_module/manager.hpp>
 #include <autoware/behavior_path_goal_planner_module/pull_over_planner/bezier_pull_over.hpp>
 #include <autoware/behavior_path_goal_planner_module/pull_over_planner/shift_pull_over.hpp>
+#include <autoware/behavior_path_goal_planner_module/pull_over_planner/geometric_pull_over.hpp>
 #include <autoware/behavior_path_planner/behavior_path_planner_node.hpp>
 #include <autoware/behavior_path_planner_common/data_manager.hpp>
 #include <autoware/behavior_path_planner_common/utils/parking_departure/utils.hpp>

@@ -185,6 +185,10 @@ GoalPlannerParameters GoalPlannerModuleManager::initGoalPlannerParameters(
       node->declare_parameter<double>(ns + "forward_parking_path_interval");
     p.parallel_parking_parameters.forward_parking_max_steer_angle =
       node->declare_parameter<double>(ns + "forward_parking_max_steer_angle");  // 20deg
+    p.parallel_parking_parameters.forward_parking_steer_rate_lim =
+      node->declare_parameter<double>(ns + "forward_parking_steer_rate_lim");  // 20deg
+    p.parallel_parking_parameters.forward_parking_use_clothoid =
+      node->declare_parameter<bool>(ns + "forward_parking_use_clothoid");
   }
 
   // forward parallel parking backward
@@ -202,6 +206,10 @@ GoalPlannerParameters GoalPlannerModuleManager::initGoalPlannerParameters(
       node->declare_parameter<double>(ns + "backward_parking_path_interval");
     p.parallel_parking_parameters.backward_parking_max_steer_angle =
       node->declare_parameter<double>(ns + "backward_parking_max_steer_angle");  // 20deg
+    p.parallel_parking_parameters.backward_parking_steer_rate_lim =
+      node->declare_parameter<double>(ns + "backward_parking_steer_rate_lim");  // 20deg
+    p.parallel_parking_parameters.backward_parking_use_clothoid =
+      node->declare_parameter<bool>(ns + "backward_parking_use_clothoid");
   }
 
   // freespace parking general params
@@ -578,6 +586,12 @@ void GoalPlannerModuleManager::updateModuleParams(
     updateParam<double>(
       parameters, ns + "forward_parking_max_steer_angle",
       p->parallel_parking_parameters.forward_parking_max_steer_angle);
+    updateParam<double>(
+      parameters, ns + "forward_parking_steer_rate_lim",
+      p->parallel_parking_parameters.forward_parking_steer_rate_lim);
+    updateParam<bool>(
+      parameters, ns + "forward_parking_use_clothoid",
+      p->parallel_parking_parameters.forward_parking_use_clothoid);
   }
 
   // forward parallel parking backward
@@ -600,6 +614,12 @@ void GoalPlannerModuleManager::updateModuleParams(
     updateParam<double>(
       parameters, ns + "backward_parking_max_steer_angle",
       p->parallel_parking_parameters.backward_parking_max_steer_angle);
+    updateParam<double>(
+      parameters, ns + "backward_parking_steer_rate_lim",
+      p->parallel_parking_parameters.backward_parking_steer_rate_lim);
+    updateParam<bool>(
+      parameters, ns + "backward_parking_use_clothoid",
+      p->parallel_parking_parameters.backward_parking_use_clothoid);
   }
 
   // freespace parking general params

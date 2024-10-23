@@ -36,6 +36,7 @@
 
 using autoware::universe_utils::calcDistance2d;
 using autoware::universe_utils::calcOffsetPose;
+using autoware::universe_utils::createQuaternionFromYaw;
 using autoware::universe_utils::inverseTransformPoint;
 using autoware::universe_utils::normalizeRadian;
 using autoware::universe_utils::transformPose;
@@ -117,9 +118,27 @@ std::vector<PathWithLaneId> GeometricParallelParking::generatePullOverPaths(
                                          : parameters_.backward_parking_lane_departure_margin;
   const double arc_path_interval = is_forward ? parameters_.forward_parking_path_interval
                                               : parameters_.backward_parking_path_interval;
-  auto arc_paths = planOneTrial(
-    start_pose, goal_pose, R_E_far, road_lanes, pull_over_lanes, is_forward, left_side_parking,
-    end_pose_offset, lane_departure_margin, arc_path_interval, {});
+  std::vector<PathWithLaneId> arc_paths;
+  if (
+    is_forward ? parameters_.forward_parking_use_clothoid
+               : parameters_.backward_parking_use_clothoid) {
+    const double L_min =
+      is_forward
+        ? std::abs(
+            parameters_.forward_parking_velocity * (parameters_.forward_parking_max_steer_angle /
+                                                    parameters_.forward_parking_steer_rate_lim))
+        : std::abs(
+            parameters_.backward_parking_velocity * (parameters_.backward_parking_max_steer_angle /
+                                                     parameters_.backward_parking_steer_rate_lim));
+    arc_paths = planOneTrialClothoid(
+      start_pose, goal_pose, R_E_far, L_min, road_lanes, pull_over_lanes, is_forward,
+      left_side_parking, end_pose_offset, lane_departure_margin, arc_path_interval, {});
+  } else {
+    arc_paths = planOneTrial(
+      start_pose, goal_pose, R_E_far, road_lanes, pull_over_lanes, is_forward, left_side_parking,
+      end_pose_offset, lane_departure_margin, arc_path_interval, {});
+  }
+
   if (arc_paths.empty()) {
     return std::vector<PathWithLaneId>{};
   }
@@ -130,7 +149,8 @@ std::vector<PathWithLaneId> GeometricParallelParking::generatePullOverPaths(
   setVelocityToArcPaths(arc_paths, velocity, set_stop_end);
 
   // straight path from current to parking start
-  const auto straight_path = generateStraightPath(start_pose, road_lanes);
+  const bool set_stop_straight_end = !(is_forward && parameters_.forward_parking_use_clothoid);
+  const auto straight_path = generateStraightPath(start_pose, road_lanes, set_stop_straight_end);
 
   // check the continuity of straight path and arc path
   const Pose & road_path_last_pose = straight_path.points.back().point.pose;
@@ -143,8 +163,19 @@ std::vector<PathWithLaneId> GeometricParallelParking::generatePullOverPaths(
   }
 
   // combine straight_path -> arc_path*2
-  auto paths = arc_paths;
-  paths.insert(paths.begin(), straight_path);
+  std::vector<PathWithLaneId> paths;
+  if (is_forward && parameters_.forward_parking_use_clothoid) {
+    paths.push_back(straight_path);
+    for (const auto & path : arc_paths) {
+      for (const auto & path_point : path.points) {
+        paths.front().points.push_back(path_point);
+      }
+    }
+    paths.front().points = autoware::motion_utils::removeOverlapPoints(paths.front().points);
+  } else {
+    paths = arc_paths;
+    paths.insert(paths.begin(), straight_path);
+  }
 
   return paths;
 }
@@ -219,7 +250,6 @@ bool GeometricParallelParking::planPullOver(
       }
     }
   }
-
   return false;
 }
 
@@ -244,10 +274,21 @@ bool GeometricParallelParking::planPullOut(
     }
 
     // plan reverse path of parking. end_pose <-> start_pose
-    auto arc_paths = planOneTrial(
-      *end_pose, start_pose, R_E_min_, road_lanes, pull_over_lanes, is_forward, left_side_start,
-      start_pose_offset, parameters_.pull_out_lane_departure_margin,
-      parameters_.pull_out_arc_path_interval, lane_departure_checker);
+    std::vector<PathWithLaneId> arc_paths;
+    if (parameters_.pull_out_use_clothoid) {
+      const double L_min = std::abs(
+        parameters_.pull_out_velocity *
+        (parameters_.pull_out_max_steer_angle / parameters_.pull_out_steer_rate_lim));
+      arc_paths = planOneTrialClothoid(
+        *end_pose, start_pose, R_E_min_, L_min, road_lanes, pull_over_lanes, is_forward,
+        left_side_start, start_pose_offset, parameters_.pull_out_lane_departure_margin,
+        parameters_.pull_out_arc_path_interval, lane_departure_checker);
+    } else {
+      arc_paths = planOneTrial(
+        *end_pose, start_pose, R_E_min_, road_lanes, pull_over_lanes, is_forward, left_side_start,
+        start_pose_offset, parameters_.pull_out_lane_departure_margin,
+        parameters_.pull_out_arc_path_interval, lane_departure_checker);
+    }
     if (arc_paths.empty()) {
       // not found path
       continue;
@@ -355,7 +396,7 @@ std::optional<Pose> GeometricParallelParking::calcStartPose(
 }
 
 PathWithLaneId GeometricParallelParking::generateStraightPath(
-  const Pose & start_pose, const lanelet::ConstLanelets & road_lanes)
+  const Pose & start_pose, const lanelet::ConstLanelets & road_lanes, const bool set_stop_end)
 {
   // get straight path before parking.
   const auto start_arc_position = lanelet::utils::getArcCoordinates(road_lanes, start_pose);
@@ -368,7 +409,7 @@ PathWithLaneId GeometricParallelParking::generateStraightPath(
       road_lanes, current_arc_position.length, start_arc_position.length, true),
     parameters_.center_line_path_interval);
   path.header = planner_data_->route_handler->getRouteHeader();
-  if (!path.points.empty()) {
+  if (!path.points.empty() && set_stop_end) {
     path.points.back().point.longitudinal_velocity_mps = 0;
   }
 
@@ -558,6 +599,300 @@ std::vector<PathWithLaneId> GeometricParallelParking::planOneTrial(
   return paths_;
 }
 
+std::vector<PathWithLaneId> GeometricParallelParking::planOneTrialClothoid(
+  const Pose & start_pose, const Pose & goal_pose, const double R_E_far, const double L_min,
+  const lanelet::ConstLanelets & road_lanes, const lanelet::ConstLanelets & shoulder_lanes,
+  const bool is_forward, const bool left_side_parking, const double end_pose_offset,
+  const double lane_departure_margin, const double arc_path_interval,
+  const std::shared_ptr<autoware::lane_departure_checker::LaneDepartureChecker>
+    lane_departure_checker)
+{
+  clearPaths();
+
+  const auto & common_params = planner_data_->parameters;
+  const auto & route_handler = planner_data_->route_handler;
+
+  const double A_min = std::sqrt(R_E_far * L_min);
+
+  // calculate R_1
+  Pose pose_zero;
+  pose_zero.position.x = 0;
+  pose_zero.position.y = 0;
+  pose_zero.orientation = createQuaternionFromYaw(0);
+  const auto clothoid_min =
+    generateClothoidPath(R_E_far, L_min, pose_zero, arc_path_interval, true, true);
+  const auto q = clothoid_min.points.back().point.pose;
+  const double x_R = q.position.x;
+  const double y_R = q.position.y;
+  const double psi_clotho = std::pow(A_min, 2) / (2 * std::pow(R_E_far, 2));
+  const double x_C = x_R - R_E_far * std::sin(psi_clotho);
+  const double y_C = y_R + R_E_far * std::cos(psi_clotho);
+  const double R_1 = std::hypot(x_C, y_C);
+  const double mu = std::atan2(x_C, y_C);
+  const double alpha_clotho =
+    std::atan2(std::tan(psi_clotho) + std::tan(mu), 1 - std::tan(psi_clotho) * std::tan(mu));
+
+  const double mu_offset = (left_side_parking ^ is_forward) ? -mu : mu;
+
+  const Pose arc_end_pose = calcOffsetPose(goal_pose, end_pose_offset, 0, 0);
+
+  const Pose start_pose_dummy = calcOffsetPose(start_pose, 0, 0, 0, mu_offset);
+  const Pose arc_end_pose_dummy = calcOffsetPose(arc_end_pose, 0, 0, 0, mu_offset);
+
+  const double self_yaw = tf2::getYaw(start_pose_dummy.orientation);
+  const double goal_yaw = tf2::getYaw(arc_end_pose_dummy.orientation);
+  const double psi = normalizeRadian(self_yaw - goal_yaw);
+
+  const Pose C_far = left_side_parking ? calcOffsetPose(arc_end_pose_dummy, 0, -R_1, 0)
+                                       : calcOffsetPose(arc_end_pose_dummy, 0, R_1, 0);
+  const double d_C_far_Einit = calcDistance2d(C_far, start_pose_dummy);
+
+  const Point C_far_goal_coords = inverseTransformPoint(C_far.position, arc_end_pose_dummy);
+  const Point self_point_goal_coords =
+    inverseTransformPoint(start_pose_dummy.position, arc_end_pose_dummy);
+
+  const double angle_offset =
+    std::asin((self_point_goal_coords.y - C_far_goal_coords.y) / d_C_far_Einit);
+  const double alpha = M_PI_2 + (left_side_parking ? 1.0 : -1.0) *
+                                  (is_forward ? psi + angle_offset : -psi + angle_offset);
+
+  const double R_E_near =
+    (std::pow(d_C_far_Einit, 2) - std::pow(R_1, 2)) / (2 * (R_1 + d_C_far_Einit * std::cos(alpha)));
+
+  if (R_E_near < R_1) {
+    return std::vector<PathWithLaneId>{};
+  }
+
+  // combine road and shoulder lanes
+  // cut the road lanes up to start_pose to prevent unintended processing for overlapped lane
+  lanelet::ConstLanelets lanes{};
+  autoware::universe_utils::Point2d start_point2d(
+    start_pose_dummy.position.x, start_pose_dummy.position.y);
+  for (const auto & lane : road_lanes) {
+    if (boost::geometry::within(start_point2d, lane.polygon2d().basicPolygon())) {
+      lanes.push_back(lane);
+      break;
+    }
+    lanes.push_back(lane);
+  }
+  lanes.insert(lanes.end(), shoulder_lanes.begin(), shoulder_lanes.end());
+
+  // If start_pose is parallel to goal_pose, we can know lateral deviation of edges of vehicle,
+  // and detect lane departure.
+  if (is_forward) {  // check front corner of the vehicle
+    const double d_EB = std::hypot(common_params.vehicle_width, common_params.base_link2front);
+    const double alpha_B = std::acos(common_params.base_link2front / d_EB);
+    const double R_B_min1 =
+      std::sqrt(std::pow(R_1, 2) + std::pow(d_EB, 2) - 2 * std::cos(M_PI_2 + alpha_B - mu));
+    const double near_deviation = R_B_min1 - R_1 * std::cos(mu);
+    const double distance_to_near_bound =
+      utils::getSignedDistanceFromBoundary(shoulder_lanes, arc_end_pose_dummy, left_side_parking);
+    if (std::abs(distance_to_near_bound) - near_deviation < lane_departure_margin) {
+      return std::vector<PathWithLaneId>{};
+    }
+  } else {  // check back corner of the vehicle
+    const double d_EA = std::hypot(common_params.vehicle_width, common_params.base_link2rear);
+    const double alpha_A = std::acos(common_params.base_link2rear / d_EA);
+    const double R_A_min1 =
+      std::sqrt(std::pow(R_1, 2) + std::pow(d_EA, 2) - 2 * std::cos(M_PI_2 + alpha_A + mu));
+    const double near_deviation = R_A_min1 - R_1 * std::cos(mu);
+    const double distance_to_near_bound =
+      utils::getSignedDistanceFromBoundary(shoulder_lanes, arc_end_pose_dummy, left_side_parking);
+    if (std::abs(distance_to_near_bound) - near_deviation < lane_departure_margin) {
+      return std::vector<PathWithLaneId>{};
+    }
+  }
+
+  // Generate arc path(first turn -> second turn)
+  const Pose C_near = left_side_parking ? calcOffsetPose(start_pose_dummy, 0, R_E_near, 0, 0)
+                                        : calcOffsetPose(start_pose_dummy, 0, -R_E_near, 0, 0);
+  const double alpha_tot_near = std::acos(
+    (std::pow(R_E_near, 2) + std::pow(R_E_near + R_1, 2) - std::pow(d_C_far_Einit, 2)) /
+    (2 * R_E_near * (R_E_near + R_1)));
+  const double alpha_tot_far =
+    (left_side_parking ^ is_forward) ? alpha_tot_near - psi : alpha_tot_near + psi;
+
+  const double inflection_x_offset = (is_forward ? -1.0 : 1.0) * R_1 * std::sin(alpha_tot_far);
+  const double inflection_y_offset =
+    (left_side_parking ? -1.0 : 1.0) * R_1 * (1 - std::cos(alpha_tot_far));
+  const double inflection_yaw_offset =
+    (is_forward ^ left_side_parking ? -1.0 : 1.0) * alpha_tot_far + mu_offset;
+  const Pose inflection_point = calcOffsetPose(
+    arc_end_pose_dummy, inflection_x_offset, inflection_y_offset, 0, inflection_yaw_offset);
+
+  const auto generateClothoidalSequenceWithHeader =
+    [&](
+      const double A, const double L, const double theta, const Pose start_pose,
+      const Pose & end_pose, const double arc_path_interval, const bool is_left_turn,
+      const bool is_forward) -> std::vector<PathWithLaneId> {
+    auto paths = generateClothoidalSequence(
+      A, L, theta, start_pose, end_pose, arc_path_interval, is_left_turn, is_forward);
+    for (auto & path : paths) {
+      path.header = route_handler->getRouteHeader();
+    }
+    return paths;
+  };
+
+  // path of first turn
+  std::vector<PathWithLaneId> path_turn_first;
+  if (alpha_tot_near > 2 * alpha_clotho) {  // Case A
+    path_turn_first = generateClothoidalSequenceWithHeader(
+      A_min, L_min, alpha_tot_near - 2 * alpha_clotho, start_pose, inflection_point,
+      arc_path_interval, left_side_parking, is_forward);
+  } else if (alpha_tot_near >= 2 * mu) {  // Case B
+    const double beta_1 = std::fmod(
+      std::abs(tf2::getYaw(inflection_point.orientation) - tf2::getYaw(start_pose.orientation)),
+      2 * M_PI);
+    double C_f_1 = 0;
+    double S_f_1 = 0;
+    for (double u = 0; u <= std::sqrt(beta_1 / M_PI); u += clothoid_integral_interval_) {
+      C_f_1 += std::cos(M_PI_2 * std::pow(u, 2)) * clothoid_integral_interval_;
+      S_f_1 += std::sin(M_PI_2 * std::pow(u, 2)) * clothoid_integral_interval_;
+    }
+    const double A_new_1 =
+      std::sqrt(1 / M_PI) * std::abs(
+                              (R_E_near * std::sin(beta_1 / 2 - mu)) /
+                              (std::cos(beta_1 / 2) * C_f_1 + std::sin(beta_1 / 2) * S_f_1));
+    const double L_new_1 = A_new_1 * std::sqrt(beta_1);
+    path_turn_first = generateClothoidalSequenceWithHeader(
+      A_new_1, L_new_1, 0, start_pose, inflection_point, arc_path_interval, left_side_parking,
+      is_forward);
+  } else {  // Case C
+    return std::vector<PathWithLaneId>{};
+  }
+
+  // path of second turn
+  std::vector<PathWithLaneId> path_turn_second;
+  if (alpha_tot_far > 2 * alpha_clotho) {  // Case A
+    path_turn_second = generateClothoidalSequenceWithHeader(
+      A_min, L_min, alpha_tot_far - 2 * alpha_clotho, inflection_point, arc_end_pose,
+      arc_path_interval, !left_side_parking, is_forward);
+  } else if (alpha_tot_near >= 2 * mu) {  // Case B
+    const double beta_2 = std::fmod(
+      std::abs(tf2::getYaw(inflection_point.orientation) - tf2::getYaw(arc_end_pose.orientation)),
+      2 * M_PI);
+    double C_f_2 = 0;
+    double S_f_2 = 0;
+    for (double u = 0; u <= std::sqrt(beta_2 / M_PI); u += clothoid_integral_interval_) {
+      C_f_2 += std::cos(M_PI_2 * std::pow(u, 2)) * clothoid_integral_interval_;
+      S_f_2 += std::sin(M_PI_2 * std::pow(u, 2)) * clothoid_integral_interval_;
+    }
+    const double A_new_2 =
+      std::sqrt(1 / M_PI) * std::abs(
+                              (R_1 * std::sin(beta_2 / 2 - mu)) /
+                              (std::cos(beta_2 / 2) * C_f_2 + std::sin(beta_2 / 2) * S_f_2));
+    const double L_new_2 = A_new_2 * std::sqrt(beta_2);
+    path_turn_second = generateClothoidalSequenceWithHeader(
+      A_new_2, L_new_2, 0, inflection_point, arc_end_pose, arc_path_interval, !left_side_parking,
+      is_forward);
+  } else {  // Case C
+    return std::vector<PathWithLaneId>{};
+  }
+
+  // Need to add straight path to last right_turning for parking in parallel
+  if (std::abs(end_pose_offset) > 0) {
+    PathPointWithLaneId straight_point{};
+    straight_point.point.pose = goal_pose;
+    path_turn_second.back().points.push_back(straight_point);
+  }
+
+  // Populate lane ids for a given path.
+  // It checks if each point in the path is within a lane
+  // and if its ID hasn't been added yet, it appends the ID to the container.
+  std::vector<lanelet::Id> path_lane_ids;
+  const auto populateLaneIds = [&](const auto & paths) {
+    for (const auto & path : paths) {
+      for (const auto & p : path.points) {
+        for (const auto & lane : lanes) {
+          if (
+            lanelet::utils::isInLanelet(p.point.pose, lane) &&
+            std::find(path_lane_ids.begin(), path_lane_ids.end(), lane.id()) ==
+              path_lane_ids.end()) {
+            path_lane_ids.push_back(lane.id());
+          }
+        }
+      }
+    }
+  };
+  populateLaneIds(path_turn_first);
+  populateLaneIds(path_turn_second);
+
+  // Set lane ids to each point in a given path.
+  // It assigns the accumulated lane ids from path_lane_ids to each point's lane_ids member.
+  const auto setLaneIdsToPath = [&](std::vector<PathWithLaneId> & paths) {
+    for (auto & path : paths) {
+      for (auto & p : path.points) {
+        p.lane_ids = path_lane_ids;
+      }
+    }
+  };
+  setLaneIdsToPath(path_turn_first);
+  setLaneIdsToPath(path_turn_second);
+
+  if (lane_departure_checker) {
+    const auto lanelet_map_ptr = planner_data_->route_handler->getLaneletMapPtr();
+
+    for (auto & p : path_turn_first) {
+      const bool is_path_turn_first_outside_lanes =
+        lane_departure_checker->checkPathWillLeaveLane(lanelet_map_ptr, p);
+
+      if (is_path_turn_first_outside_lanes) {
+        return std::vector<PathWithLaneId>{};
+      }
+    }
+
+    for (auto & p : path_turn_second) {
+      const bool is_path_turn_second_outside_lanes =
+        lane_departure_checker->checkPathWillLeaveLane(lanelet_map_ptr, p);
+
+      if (is_path_turn_second_outside_lanes) {
+        return std::vector<PathWithLaneId>{};
+      }
+    }
+  }
+
+  // combine into single path
+  for (const auto & path : path_turn_first) {
+    if (paths_.size() == 0) {
+      paths_.push_back(path);
+    } else {
+      for (const auto & path_point : path.points) {
+        paths_.front().points.push_back(path_point);
+      }
+    }
+  }
+  for (const auto & path : path_turn_second) {
+    if (paths_.size() == 0) {
+      paths_.push_back(path);
+    } else {
+      for (const auto & path_point : path.points) {
+        paths_.front().points.push_back(path_point);
+      }
+    }
+  }
+  paths_.front().points = autoware::motion_utils::removeOverlapPoints(paths_.front().points);
+
+  // set terminal velocity and acceleration(temporary implementation)
+  if (is_forward) {
+    pairs_terminal_velocity_and_accel_.emplace_back(parameters_.forward_parking_velocity, 0.0);
+    pairs_terminal_velocity_and_accel_.emplace_back(parameters_.forward_parking_velocity, 0.0);
+  } else {
+    pairs_terminal_velocity_and_accel_.emplace_back(parameters_.backward_parking_velocity, 0.0);
+    pairs_terminal_velocity_and_accel_.emplace_back(parameters_.backward_parking_velocity, 0.0);
+  }
+
+  // set pull_over start and end pose
+  // todo: make start and end pose for pull_out
+  start_pose_ = start_pose;
+  arc_end_pose_ = arc_end_pose;
+
+  // debug
+  Cr_ = left_side_parking ? C_far : C_near;
+  Cl_ = left_side_parking ? C_near : C_far;
+
+  return paths_;
+}
+
 PathWithLaneId GeometricParallelParking::generateArcPath(
   const Pose & center, const double radius, const double start_yaw, double end_yaw,
   const double arc_path_interval,
@@ -625,6 +960,122 @@ void GeometricParallelParking::setTurningRadius(
   R_Bl_min_ = std::hypot(
     R_E_min_ + common_params.wheel_tread / 2 + common_params.left_over_hang,
     common_params.wheel_base + common_params.front_overhang);
+}
+
+std::vector<PathWithLaneId> GeometricParallelParking::generateClothoidalSequence(
+  const double A, const double L, const double theta, const Pose & start_pose,
+  const Pose & end_pose, const double arc_path_interval, const bool is_left_steering,
+  const bool is_forward)
+{
+  std::vector<PathWithLaneId> clothoidal_sequence;
+  const double R = std::pow(A, 2) / L;
+
+  const auto clothoid_path_first =
+    generateClothoidPath(R, L, start_pose, arc_path_interval, is_left_steering, is_forward);
+
+  auto clothoid_path_second =
+    generateClothoidPath(R, L, end_pose, arc_path_interval, is_left_steering, !is_forward);
+  // reverse path points order
+  std::reverse(clothoid_path_second.points.begin(), clothoid_path_second.points.end());
+  // reverse lane_ids. shoulder, lane order
+  for (auto & p : clothoid_path_second.points) {
+    std::reverse(p.lane_ids.begin(), p.lane_ids.end());
+  }
+
+  if (theta != 0) {
+    // generate arc path which connect two clothoid paths
+    const auto end_of_prev_path = clothoid_path_first.points.back().point.pose;
+    const auto start_of_next_path = clothoid_path_second.points.front().point.pose;
+    const auto arc_path = generateArcPathFromTwoPoses(
+      end_of_prev_path, start_of_next_path, arc_path_interval, is_left_steering, is_forward);
+
+    clothoidal_sequence.push_back(clothoid_path_first);
+    clothoidal_sequence.push_back(arc_path);
+    clothoidal_sequence.push_back(clothoid_path_second);
+  } else {
+    clothoidal_sequence.push_back(clothoid_path_first);
+    clothoidal_sequence.push_back(clothoid_path_second);
+  }
+  return clothoidal_sequence;
+}
+
+PathWithLaneId GeometricParallelParking::generateArcPathFromTwoPoses(
+  const Pose & start_pose, const Pose & end_pose, const double arc_path_interval,
+  const bool is_left_turn,  // is_left_turn means clockwise around center.
+  const bool is_forward)
+{
+  const double x_s = start_pose.position.x;
+  const double y_s = start_pose.position.y;
+  const double x_g = end_pose.position.x;
+  const double y_g = end_pose.position.y;
+
+  const auto start_yaw = tf2::getYaw(start_pose.orientation);
+  const auto end_yaw = tf2::getYaw(end_pose.orientation);
+  const double a_s = std::tan(start_yaw - M_PI_2);
+  const double a_g = std::tan(end_yaw - M_PI_2);
+
+  // calculate circle parameter
+  Pose pose_center;
+  pose_center.position.x = (a_s * x_s - a_g * x_g - y_s + y_g) / (a_s - a_g);
+  pose_center.position.y = a_s * (pose_center.position.x - x_s) + y_s;
+  const double radius = std::hypot(pose_center.position.x - x_s, pose_center.position.y - y_s);
+  const double arc_start_yaw =
+    std::atan2(y_s - pose_center.position.y, x_s - pose_center.position.x);
+  const double arc_end_yaw = std::atan2(y_g - pose_center.position.y, x_g - pose_center.position.x);
+
+  return generateArcPath(
+    pose_center, radius, arc_start_yaw, arc_end_yaw, arc_path_interval,
+    !(is_left_turn ^ is_forward), is_forward);
+}
+
+PathWithLaneId GeometricParallelParking::generateClothoidPath(
+  const double R, const double L, const Pose & start_pose, const double arc_path_interval,
+  const bool is_left_steering, const bool is_forward)
+{
+  PathWithLaneId path;
+  const int NUM_STEPS = L / clothoid_integral_interval_;
+
+  const auto generatePathPointFromXYYaw = [](
+                                            const Pose & start_pose, const double x, const double y,
+                                            const double yaw) -> PathPointWithLaneId {
+    Pose pose;
+    pose.position.x = x;
+    pose.position.y = y;
+    pose.orientation = createQuaternionFromYaw(yaw);
+    // get pose in map coords
+    PathPointWithLaneId p{};
+    p.point.pose = transformPose(pose, start_pose);
+    return p;
+  };
+
+  double x = 0.0;
+  double y = 0.0;
+  double x_prev = 0.0;
+  double y_prev = 0.0;
+  double yaw = 0.0;
+  path.points.push_back(generatePathPointFromXYYaw(start_pose, x, y, yaw));
+
+  for (int i = 0; i <= NUM_STEPS; ++i) {
+    double curvature = i * clothoid_integral_interval_ / (R * L);
+    x += clothoid_integral_interval_ * std::cos(yaw);
+    y += clothoid_integral_interval_ * std::sin(yaw);
+    yaw += clothoid_integral_interval_ * curvature;
+    if (std::hypot(x - x_prev, y - y_prev) > arc_path_interval) {
+      x_prev = x;
+      y_prev = y;
+      PathPointWithLaneId p;
+      if (is_left_steering) {
+        p = is_forward ? generatePathPointFromXYYaw(start_pose, x, y, yaw)
+                       : generatePathPointFromXYYaw(start_pose, -x, y, -yaw);
+      } else {
+        p = is_forward ? generatePathPointFromXYYaw(start_pose, x, -y, -yaw)
+                       : generatePathPointFromXYYaw(start_pose, -x, -y, yaw);
+      }
+      path.points.push_back(p);
+    }
+  }
+
+  return path;
 }
 
 }  // namespace autoware::behavior_path_planner
