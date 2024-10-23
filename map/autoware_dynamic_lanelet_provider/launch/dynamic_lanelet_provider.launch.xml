@@ -1,0 +1,7 @@
+<launch>
+  <arg name="dynamic_lanelet_provider_param_path" default="$(find-pkg-share autoware_dynamic_lanelet_provider)/config/dynamic_lanelet_provider.param.yaml"/>
+
+  <node pkg="autoware_dynamic_lanelet_provider" exec="dynamic_lanelet_provider_node" name="dynamic_lanelet_provider_node">
+    <param from="$(var dynamic_lanelet_provider_param_path)"/>
+  </node>
+</launch>

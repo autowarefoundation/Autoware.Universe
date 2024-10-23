@@ -25,4 +25,13 @@ TEST(map, interface)
     EXPECT_EQ(map_projector.reliability, RMW_QOS_POLICY_RELIABILITY_RELIABLE);
     EXPECT_EQ(map_projector.durability, RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL);
   }
+
+  {
+    using map_interface::LaneletMapMetaData;
+    LaneletMapMetaData lanelet_metadata;
+    size_t depth = 1;
+    EXPECT_EQ(lanelet_metadata.depth, depth);
+    EXPECT_EQ(lanelet_metadata.reliability, RMW_QOS_POLICY_RELIABILITY_RELIABLE);
+    EXPECT_EQ(lanelet_metadata.durability, RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL);
+  }
 }

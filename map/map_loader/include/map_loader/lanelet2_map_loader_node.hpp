@@ -15,6 +15,9 @@
 #ifndef MAP_LOADER__LANELET2_MAP_LOADER_NODE_HPP_
 #define MAP_LOADER__LANELET2_MAP_LOADER_NODE_HPP_
 
+#include "map_loader/lanelet2_differential_loader_module.hpp"
+#include "map_loader/utils.hpp"
+
 #include <autoware_lanelet2_extension/version.hpp>
 #include <component_interface_specs/map.hpp>
 #include <component_interface_utils/rclcpp.hpp>
@@ -25,8 +28,10 @@
 
 #include <lanelet2_projection/UTM.h>
 
+#include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 class Lanelet2MapLoaderNode : public rclcpp::Node
 {
@@ -48,8 +53,20 @@ private:
 
   void on_map_projector_info(const MapProjectorInfo::Message::ConstSharedPtr msg);
 
+  std::unique_ptr<Lanelet2DifferentialLoaderModule> differential_loader_module_;
+
   component_interface_utils::Subscription<MapProjectorInfo>::SharedPtr sub_map_projector_info_;
   rclcpp::Publisher<autoware_map_msgs::msg::LaneletMapBin>::SharedPtr pub_map_bin_;
+
+  std::vector<std::string> get_lanelet2_paths(
+    const std::vector<std::string> & lanelet2_paths_or_directory) const;
+  std::map<std::string, Lanelet2FileMetaData> get_lanelet2_metadata(
+    const std::string & lanelet2_metadata_path, const std::vector<std::string> & lanelet2_paths,
+    double & x_resolution, double & y_resolution) const;
+  std::map<std::string, Lanelet2FileMetaData> get_dummy_lanelet2_metadata(
+    const std::string & lanelet2_path,
+    const MapProjectorInfo::Message::ConstSharedPtr projection_info, double & x_resolution,
+    double & y_resolution);
 };
 
 #endif  // MAP_LOADER__LANELET2_MAP_LOADER_NODE_HPP_

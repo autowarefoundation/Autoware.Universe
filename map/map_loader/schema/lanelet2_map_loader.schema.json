@@ -6,6 +6,11 @@
     "lanelet2_map_loader": {
       "type": "object",
       "properties": {
+        "enable_differential_map_loading": {
+          "type": "string",
+          "description": "Flag to enable loading of differential map",
+          "default": "true"
+        },
         "allow_unsupported_version": {
           "type": "boolean",
           "description": "Flag to load unsupported format_version anyway. If true, just prints warning.",
@@ -25,6 +30,32 @@
           "type": "string",
           "description": "The lanelet2 map path pointing to the .osm file",
           "default": ""
+        },
+        "dummy_metadata": {
+          "type": "object",
+          "properties": {
+            "min_x": {
+              "type": "number",
+              "description": "When the dynamic map loading is true and the map is a single file, this is the minimum x value of the map",
+              "default": "0.0"
+            },
+            "min_y": {
+              "type": "number",
+              "description": "When the dynamic map loading is true and the map is a single file, this is the minimum y value of the map",
+              "default": "0.0"
+            },
+            "x_resolution": {
+              "type": "number",
+              "description": "When the dynamic map loading is true and the map is a single file, this is the resolution of the x axis",
+              "default": "100000.0"
+            },
+            "y_resolution": {
+              "type": "number",
+              "description": "When the dynamic map loading is true and the map is a single file, this is the resolution of the y axis",
+              "default": "100000.0"
+            }
+          },
+          "required": ["min_x", "min_y", "x_resolution", "y_resolution"]
         }
       },
       "required": ["center_line_resolution", "use_waypoints", "lanelet2_map_path"],

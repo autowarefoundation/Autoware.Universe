@@ -1,6 +1,12 @@
 /**:
   ros__parameters:
+    enable_differential_map_loading: $(var enable_differential_map_loading)      # flag to enable loading of differential map
     allow_unsupported_version: true             # flag to load unsupported format_version anyway. If true, just prints warning.
     center_line_resolution: 5.0                 # [m]
     use_waypoints: true                         # "centerline" in the Lanelet2 map will be used as a "waypoints" tag.
     lanelet2_map_path: $(var lanelet2_map_path) # The lanelet2 map path
+    dummy_metadata:                             # When the dynamic map loading is true and the map is a single file, this parameter will generate the metadata.
+      min_x: 0.0
+      min_y: 0.0
+      x_resolution: 100000.0
+      y_resolution: 100000.0

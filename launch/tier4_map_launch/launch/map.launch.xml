@@ -3,19 +3,25 @@
   <arg name="pointcloud_map_path"/>
   <arg name="pointcloud_map_metadata_path"/>
   <arg name="lanelet2_map_path"/>
+  <arg name="lanelet2_map_metadata_path"/>
   <arg name="map_projector_info_path"/>
 
   <!-- Parameter files -->
   <arg name="pointcloud_map_loader_param_path"/>
   <arg name="lanelet2_map_loader_param_path"/>
+  <arg name="dynamic_lanelet_provider_param_path"/>
   <arg name="map_tf_generator_param_path"/>
   <arg name="map_projection_loader_param_path"/>
+
+  <!-- Dynamic lanelet loading -->
+  <arg name="enable_differential_map_loading"/>
 
   <!-- whether use intra-process -->
   <arg name="use_intra_process" default="false"/>
 
   <!-- select container type -->
-  <arg name="use_multithread" default="false"/>
+  <arg name="use_multithread" default="false" unless="$(var enable_differential_map_loading)"/>
+  <arg name="use_multithread" default="true" if="$(var enable_differential_map_loading)"/>
   <let name="container_type" value="component_container" unless="$(var use_multithread)"/>
   <let name="container_type" value="component_container_mt" if="$(var use_multithread)"/>
 
@@ -38,13 +44,35 @@
       <composable_node pkg="map_loader" plugin="Lanelet2MapLoaderNode" name="lanelet2_map_loader">
         <param from="$(var lanelet2_map_loader_param_path)"/>
         <param name="lanelet2_map_path" value="$(var lanelet2_map_path)"/>
+        <param name="lanelet2_map_metadata_path" value="$(var lanelet2_map_metadata_path)"/>
+        <param name="enable_differential_map_loading" value="$(var enable_differential_map_loading)"/>
         <remap from="output/lanelet2_map" to="vector_map"/>
+        <remap from="service/get_differential_lanelet_map" to="/map/get_differential_lanelet_map"/>
+        <extra_arg name="use_intra_process_comms" value="$(var use_intra_process)"/>
+      </composable_node>
+
+      <composable_node
+        pkg="autoware_dynamic_lanelet_provider"
+        plugin="autoware::dynamic_lanelet_provider::DynamicLaneletProviderNode"
+        name="dynamic_lanelet_provider"
+        if="$(var enable_differential_map_loading)"
+      >
+        <param from="$(var dynamic_lanelet_provider_param_path)"/>
+        <remap from="input/odometry" to="/localization/kinematic_state"/>
+        <remap from="output/lanelet2_map" to="dynamic_vector_map"/>
+        <remap from="service/get_differential_lanelet_map" to="/map/get_differential_lanelet_map"/>
         <extra_arg name="use_intra_process_comms" value="$(var use_intra_process)"/>
       </composable_node>
 
       <composable_node pkg="map_loader" plugin="Lanelet2MapVisualizationNode" name="lanelet2_map_visualization">
         <remap from="input/lanelet2_map" to="vector_map"/>
         <remap from="output/lanelet2_map_marker" to="vector_map_marker"/>
+        <extra_arg name="use_intra_process_comms" value="$(var use_intra_process)"/>
+      </composable_node>
+
+      <composable_node pkg="map_loader" plugin="Lanelet2MapVisualizationNode" name="dynamic_lanelet2_map_visualization" if="$(var enable_differential_map_loading)">
+        <remap from="input/lanelet2_map" to="/map/dynamic_vector_map"/>
+        <remap from="output/lanelet2_map_marker" to="/map/dynamic_vector_map_marker"/>
         <extra_arg name="use_intra_process_comms" value="$(var use_intra_process)"/>
       </composable_node>
 

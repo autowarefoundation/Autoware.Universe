@@ -1,0 +1,4 @@
+/**:
+  ros__parameters:
+    dynamic_map_loading_update_distance: 100.0  # [m]
+    dynamic_map_loading_map_radius: 200.0       # [m]

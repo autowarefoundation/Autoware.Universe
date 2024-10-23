@@ -130,9 +130,74 @@ Please see [the description of `GetSelectedPointCloudMap.srv`](https://github.co
 
 ### Feature
 
-lanelet2_map_loader loads Lanelet2 file and publishes the map data as autoware_map_msgs/LaneletMapBin message.
+`lanelet2_map_loader` loads Lanelet2 file(s) and publishes the map data as `autoware_map_msgs/LaneletMapBin` message.
 The node projects lan/lon coordinates into arbitrary coordinates defined in `/map/map_projector_info` from `map_projection_loader`.
 Please see [tier4_autoware_msgs/msg/MapProjectorInfo.msg](https://github.com/tier4/tier4_autoware_msgs/blob/tier4/universe/tier4_map_msgs/msg/MapProjectorInfo.msg) for supported projector types.
+lanelet2_map_loader provides Lanelet2 maps in two different configurations:
+
+- It loads single Lanelet2 file and publishes the map data as `autoware_map_msgs/LaneletMapBin` message.
+- It loads multiple Lanelet2 files differentially via ROS 2 service.
+
+NOTE: **If you work on large scale area, we recommend to use differential loading feature to avoid the time-consuming
+in various nodes that use the Lanelet2 map data.**
+
+### Prerequisites
+
+#### Prerequisites on Lanelet2 map file(s)
+
+You may provide either a single `.osm` file or multiple `.osm` files. If you are using multiple OSM file,
+it MUST obey the following rules:
+
+1. **The `.osm` files should all be within the same MGRS grid**. The system does not support loading multiple `.osm` files from different MGRS grids.
+2. **It must be divided by straight lines parallel to the x-axis and y-axis**. The system does not support division by diagonal lines or curved lines.
+3. **Metadata file should also be provided.** The metadata structure description is provided below.
+
+#### Metadata structure
+
+The metadata should look like this:
+
+```yaml
+x_resolution: 20.0
+y_resolution: 20.0
+A.osm: [1200, 2500] # -> 1200 < x < 1220, 2500 < y < 2520
+B.osm: [1220, 2500] # -> 1220 < x < 1240, 2500 < y < 2520
+C.osm: [1200, 2520] # -> 1200 < x < 1220, 2520 < y < 2540
+D.osm: [1240, 2520] # -> 1240 < x < 1260, 2520 < y < 2540
+```
+
+where,
+
+- `x_resolution` and `y_resolution` are the resolution of the map in meters.
+- `A.osm`, `B.osm`, etc, are the names of OSM files.
+- List such as `[1200, 2500]` are the values indicate that for this OSM file, x coordinates are between 1200 and 1220 (`x_resolution` + `x_coordinate`) and y coordinates are between 2500 and 2520 (`y_resolution` + `y_coordinate`).
+
+You may use [lanelet2_map_tile_generator](https://github.com/leo-drive/lanelet2-map-tile-generator) from LeoDrive for
+dividing Lanelet2 map as well as generating the compatible metadata.yaml.
+
+#### Directory structure of these files
+
+If you only have one Lanelet2 map, Autoware will assume the following directory structure by default.
+
+```bash
+sample-map-rosbag
+├── lanelet2_map.osm
+├── pointcloud_map.pcd
+```
+
+If you have multiple Lanelet2 maps, an example directory structure would be as follows. Note that you need to have a metadata when you have multiple Lanelet2 map files.
+
+```bash
+sample-map-rosbag
+├── pointcloud_map.pcd
+├── lanelet2_map.osm
+│ ├── A.osm
+│ ├── B.osm
+│ ├── C.osm
+│ └── ...
+├── map_projector_info.yaml
+├── lanelet2_map_metadata.yaml
+└── ...
+```
 
 ### How to run
 
@@ -144,7 +209,19 @@ Please see [tier4_autoware_msgs/msg/MapProjectorInfo.msg](https://github.com/tie
 
 ### Published Topics
 
+If you use single Lanelet2 map file:
+
 - ~output/lanelet2_map (autoware_map_msgs/LaneletMapBin) : Binary data of loaded Lanelet2 Map
+
+If you use multiple Lanelet2 map files:
+
+- ~output/lanelet_map_meta_data (autoware_map_msgs/msg/LaneletMapMetaData) : Metadata of Lanelet2 Map
+
+### Services
+
+If you use multiple Lanelet2 map files:
+
+- ~service/get_differential_lanelet_map (autoware_map_msgs/srv/GetSelectedLanelet2Map) : Differential loading of Lanelet2 Map
 
 ### Parameters
 

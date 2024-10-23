@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for autoware_dynamic_lanelet_provider",
+  "type": "object",
+  "definitions": {
+    "autoware_dynamic_lanelet_provider": {
+      "type": "object",
+      "properties": {
+        "dynamic_map_loading_update_distance": {
+          "type": "number",
+          "description": "The distance to update the map [m]",
+          "default": "100.0"
+        },
+        "dynamic_map_loading_map_radius": {
+          "type": "number",
+          "description": "The radius for the map to be loaded [m]",
+          "default": "200.0"
+        }
+      },
+      "required": ["dynamic_map_loading_update_distance", "dynamic_map_loading_map_radius"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/autoware_dynamic_lanelet_provider"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}
