@@ -14,6 +14,8 @@
 
 #include "autoware/pointcloud_preprocessor/vector_map_filter/vector_map_inside_area_filter_node.hpp"
 
+#include <tf2_ros/create_timer_ros.h>
+
 namespace
 {
 autoware::universe_utils::Box2d calcBoundingBox(

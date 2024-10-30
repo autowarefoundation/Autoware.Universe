@@ -23,6 +23,7 @@ ament_auto_add_library(autoware_universe_utils SHARED
   src/math/trigonometry.cpp
   src/ros/msg_operation.cpp
   src/ros/marker_helper.cpp
+  src/ros/managed_transform_buffer.cpp
   src/ros/logger_level_configure.cpp
   src/system/backtrace.cpp
   src/system/time_keeper.cpp

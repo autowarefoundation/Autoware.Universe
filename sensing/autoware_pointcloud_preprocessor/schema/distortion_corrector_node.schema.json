@@ -25,19 +25,13 @@
           "type": "boolean",
           "description": "Flag to update the azimuth and distance values of each point after undistortion. If set to false, the azimuth and distance values will remain unchanged after undistortion, resulting in a mismatch with the updated x, y, z coordinates.",
           "default": "false"
-        },
-        "has_static_tf_only": {
-          "type": "boolean",
-          "description": "Flag to indicate if only static TF is used.",
-          "default": false
         }
       },
       "required": [
         "base_frame",
         "use_imu",
         "use_3d_distortion_correction",
-        "update_azimuth_and_distance",
-        "has_static_tf_only"
+        "update_azimuth_and_distance"
       ]
     }
   },

@@ -92,18 +92,6 @@ private:
   std::shared_ptr<autoware::universe_utils::TimeKeeper> time_keeper_;
 
   /*!
-   * Output transformed PointCloud from in_cloud_ptr->header.frame_id to in_target_frame
-   * @param[in] in_target_frame Coordinate system to perform transform
-   * @param[in] in_cloud_ptr PointCloud to perform transform
-   * @param[out] out_cloud_ptr Resulting transformed PointCloud
-   * @retval true transform succeeded
-   * @retval false transform failed
-   */
-  bool transformPointCloud(
-    const std::string & in_target_frame, const PointCloud2ConstPtr & in_cloud_ptr,
-    const PointCloud2::SharedPtr & out_cloud_ptr);
-
-  /*!
    * Returns the resulting complementary PointCloud, one with the points kept and the other removed
    * as indicated in the indices
    * @param in_cloud_ptr Input PointCloud to which the extraction will be performed

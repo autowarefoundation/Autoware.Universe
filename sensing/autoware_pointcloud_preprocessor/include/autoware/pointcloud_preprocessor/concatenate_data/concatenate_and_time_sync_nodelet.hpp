@@ -146,9 +146,6 @@ private:
   /** \brief Output TF frame the concatenated points should be transformed to. */
   std::string output_frame_;
 
-  /** \brief The flag to indicate if only static TF are used. */
-  bool has_static_tf_only_;
-
   /** \brief Input point cloud topics. */
   // XmlRpc::XmlRpcValue input_topics_;
   std::vector<std::string> input_topics_;

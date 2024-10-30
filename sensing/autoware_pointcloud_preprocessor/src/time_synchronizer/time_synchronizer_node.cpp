@@ -58,8 +58,6 @@ PointCloudDataSynchronizerComponent::PointCloudDataSynchronizerComponent(
   std::string synchronized_pointcloud_postfix;
   {
     output_frame_ = declare_parameter<std::string>("output_frame");
-    has_static_tf_only_ = declare_parameter<bool>(
-      "has_static_tf_only", false);  // TODO(amadeuszsz): remove default value
     keep_input_frame_in_synchronized_pointcloud_ =
       declare_parameter<bool>("keep_input_frame_in_synchronized_pointcloud");
     if (output_frame_.empty() && !keep_input_frame_in_synchronized_pointcloud_) {
@@ -111,8 +109,7 @@ PointCloudDataSynchronizerComponent::PointCloudDataSynchronizerComponent(
 
   // tf2 listener
   {
-    managed_tf_buffer_ =
-      std::make_unique<autoware::universe_utils::ManagedTransformBuffer>(this, has_static_tf_only_);
+    managed_tf_buffer_ = std::make_unique<autoware::universe_utils::ManagedTransformBuffer>(this);
   }
 
   // Subscribers

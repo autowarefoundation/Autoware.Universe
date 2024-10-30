@@ -15,21 +15,24 @@
 #ifndef AUTOWARE__UNIVERSE_UTILS__ROS__MANAGED_TRANSFORM_BUFFER_HPP_
 #define AUTOWARE__UNIVERSE_UTILS__ROS__MANAGED_TRANSFORM_BUFFER_HPP_
 
-#include "autoware/universe_utils/ros/transform_listener.hpp"
-
 #include <eigen3/Eigen/Core>
-#include <pcl_ros/transforms.hpp>
 #include <rclcpp/rclcpp.hpp>
 
-#include <sensor_msgs/point_cloud2_iterator.hpp>
+#include <geometry_msgs/msg/transform_stamped.hpp>
+#include <sensor_msgs/msg/point_cloud2.hpp>
 
-#include <pcl_conversions/pcl_conversions.h>
+#include <tf2/LinearMath/Transform.h>
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/transform_listener.h>
 
 #include <chrono>
 #include <functional>
 #include <memory>
+#include <optional>
+#include <shared_mutex>
 #include <string>
-#include <string_view>
+#include <thread>
+#include <type_traits>
 #include <unordered_map>
 #include <utility>
 
@@ -49,7 +52,6 @@ struct hash<std::pair<std::string, std::string>>
 
 namespace autoware::universe_utils
 {
-using std::chrono_literals::operator""ms;
 using Key = std::pair<std::string, std::string>;
 struct PairEqual
 {
@@ -58,169 +60,206 @@ struct PairEqual
     return p1.first == p2.first && p1.second == p2.second;
   }
 };
-using TFMap = std::unordered_map<Key, Eigen::Matrix4f, std::hash<Key>, PairEqual>;
-constexpr std::array<std::string_view, 3> warn_frames = {"map", "odom", "world"};
+struct TreeNode
+{
+  TreeNode() : is_static(false) {}
+  TreeNode(std::string p_parent, const bool p_is_static)
+  : parent(std::move(p_parent)), is_static(p_is_static)
+  {
+  }
+  std::string parent;
+  bool is_static;
+};
 
+struct TraverseResult
+{
+  TraverseResult() : success(false), is_static(false) {}
+  TraverseResult(const bool p_success, const bool p_is_static)
+  : success(p_success), is_static(p_is_static)
+  {
+  }
+  bool success;
+  bool is_static;
+};
+using std::chrono_literals::operator""ms;
+using geometry_msgs::msg::TransformStamped;
+using TFMap = std::unordered_map<Key, TransformStamped, std::hash<Key>, PairEqual>;
+using TreeMap = std::unordered_map<std::string, TreeNode>;
+constexpr std::size_t max_depth = 10000;
+constexpr std::chrono::milliseconds default_timeout = 50ms;
+
+/**
+ * @brief A managed TF buffer that handles listener node lifetime. This buffer triggers listener
+ * only for first occurrence of frames pair. After that, the local buffer is used for storing
+ * static transforms. If a dynamic transform is detected, the listener is switched to dynamic mode
+ * and acts as a regular TF buffer.
+ */
 class ManagedTransformBuffer
 {
 public:
-  explicit ManagedTransformBuffer(rclcpp::Node * node, const bool & has_static_tf_only)
-  : node_(node)
-  {
-    if (has_static_tf_only) {
-      get_transform_ = [this](
-                         const std::string & target_frame, const std::string & source_frame,
-                         Eigen::Matrix4f & eigen_transform) {
-        return getStaticTransform(target_frame, source_frame, eigen_transform);
-      };
-    } else {
-      tf_listener_ = std::make_unique<autoware::universe_utils::TransformListener>(node);
-      get_transform_ = [this](
-                         const std::string & target_frame, const std::string & source_frame,
-                         Eigen::Matrix4f & eigen_transform) {
-        return getDynamicTransform(target_frame, source_frame, eigen_transform);
-      };
-    }
-  }
+  /**
+   * @brief Construct a new Managed Transform Buffer object
+   *
+   * @param[in] node the node to use for the transform buffer
+   * @param[in] managed whether managed buffer feature should be used
+   */
+  explicit ManagedTransformBuffer(rclcpp::Node * node, bool managed = true);
 
-  bool getTransform(
-    const std::string & target_frame, const std::string & source_frame,
-    Eigen::Matrix4f & eigen_transform)
-  {
-    return get_transform_(target_frame, source_frame, eigen_transform);
-  }
+  /** @brief Destroy the Managed Transform Buffer object */
+  ~ManagedTransformBuffer();
 
   /**
-   * Transforms a point cloud from one frame to another.
+   * @brief Get the transform between two frames by frame ID.
    *
-   * @param target_frame The target frame to transform the point cloud to.
-   * @param cloud_in The input point cloud to be transformed.
-   * @param cloud_out The transformed point cloud.
-   * @return True if the transformation is successful, false otherwise.
+   * @tparam T the type of the transformation to retrieve
+   * @param[in] target_frame the frame to which data should be transformed
+   * @param[in] source_frame the frame where the data originated
+   * @param[in] time the time at which the value of the transform is desired (0 will get the latest)
+   * @param[in] timeout how long to block before failing
+   * @return an optional containing the transform if successful, or empty if not
+   *
+   * @overload getTransform<geometry_msgs::msg::TransformStamped>
+   * @return An optional containing the TransformStamped if successful, or empty if not
+   *
+   * @overload getTransform<Eigen::Matrix4f>
+   * @return An optional containing the Eigen::Matrix4f if successful, or empty if not
+   *
+   * @overload getTransform<tf2::Transform>
+   * @return An optional containing the tf2::Transform if successful, or empty if not
+   */
+  template <typename T = TransformStamped>
+  std::enable_if_t<std::is_same_v<T, TransformStamped>, std::optional<TransformStamped>>
+  getTransform(
+    const std::string & target_frame, const std::string & source_frame,
+    const rclcpp::Time & time = rclcpp::Time(0),
+    const rclcpp::Duration & timeout = default_timeout);
+
+  template <typename T = Eigen::Matrix4f>
+  std::enable_if_t<std::is_same_v<T, Eigen::Matrix4f>, std::optional<Eigen::Matrix4f>> getTransform(
+    const std::string & target_frame, const std::string & source_frame,
+    const rclcpp::Time & time = rclcpp::Time(0),
+    const rclcpp::Duration & timeout = default_timeout);
+
+  template <typename T = tf2::Transform>
+  std::enable_if_t<std::is_same_v<T, tf2::Transform>, std::optional<tf2::Transform>> getTransform(
+    const std::string & target_frame, const std::string & source_frame,
+    const rclcpp::Time & time = rclcpp::Time(0),
+    const rclcpp::Duration & timeout = default_timeout);
+
+  /**
+   * @brief Transforms a point cloud from one frame to another.
+   *
+   * @param[in] target_frame the target TF frame
+   * @param[in] cloud_in the input point cloud
+   * @param[out] cloud_out the resultant output point cloud
+   * @param[in] time the time at which the value of the transform is desired (0 will get the latest)
+   * @param[in] timeout how long to block before failing
+   * @return true if the transformation is successful, false otherwise
    */
   bool transformPointcloud(
     const std::string & target_frame, const sensor_msgs::msg::PointCloud2 & cloud_in,
-    sensor_msgs::msg::PointCloud2 & cloud_out)
-  {
-    if (
-      pcl::getFieldIndex(cloud_in, "x") == -1 || pcl::getFieldIndex(cloud_in, "y") == -1 ||
-      pcl::getFieldIndex(cloud_in, "z") == -1) {
-      RCLCPP_ERROR(node_->get_logger(), "Input pointcloud does not have xyz fields");
-      return false;
-    }
-    if (target_frame == cloud_in.header.frame_id) {
-      cloud_out = cloud_in;
-      return true;
-    }
-    Eigen::Matrix4f eigen_transform;
-    if (!getTransform(target_frame, cloud_in.header.frame_id, eigen_transform)) {
-      return false;
-    }
-    pcl_ros::transformPointCloud(eigen_transform, cloud_in, cloud_out);
-    cloud_out.header.frame_id = target_frame;
-    return true;
-  }
+    sensor_msgs::msg::PointCloud2 & cloud_out, const rclcpp::Time & time = rclcpp::Time(0),
+    const rclcpp::Duration & timeout = default_timeout);
 
 private:
-  /**
-   * @brief Retrieves a transform between two static frames.
+  /** @brief Initialize TF listener used for storing transforms */
+  void activateListener();
+
+  /** @brief Initialize local TF listener used for building TF tree */
+  void activateLocalListener();
+
+  /** @brief Deactivate TF listener */
+  void deactivateListener();
+
+  /** @brief Deactivate local TF listener */
+  void deactivateLocalListener();
+
+  /** @brief Callback for TF messages
    *
-   * This function attempts to retrieve a transform between the target frame and the source frame.
-   * If success, the transform matrix is set to the output parameter and the function returns true.
-   * Otherwise, transform matrix is set to identity and the function returns false. Transform
-   * Listener is destroyed after function call.
-   *
-   * @param target_frame The target frame.
-   * @param source_frame The source frame.
-   * @param eigen_transform The output Eigen transform matrix. It is set to the identity if the
-   * transform is not found.
-   * @return True if the transform was successfully retrieved, false otherwise.
+   * @param[in] msg the TF message
+   * @param[in] is_static whether the TF topic refers to static transforms
    */
-  bool getStaticTransform(
-    const std::string & target_frame, const std::string & source_frame,
-    Eigen::Matrix4f & eigen_transform)
-  {
-    if (
-      std::find(warn_frames.begin(), warn_frames.end(), target_frame) != warn_frames.end() ||
-      std::find(warn_frames.begin(), warn_frames.end(), source_frame) != warn_frames.end()) {
-      RCLCPP_WARN(
-        node_->get_logger(), "Using %s -> %s transform. This may not be a static transform.",
-        target_frame.c_str(), source_frame.c_str());
-    }
+  void tfCallback(const tf2_msgs::msg::TFMessage::SharedPtr msg, const bool is_static);
 
-    auto key = std::make_pair(target_frame, source_frame);
-    auto key_inv = std::make_pair(source_frame, target_frame);
-
-    // Check if the transform is already in the buffer
-    auto it = buffer_.find(key);
-    if (it != buffer_.end()) {
-      eigen_transform = it->second;
-      return true;
-    }
-
-    // Check if the inverse transform is already in the buffer
-    auto it_inv = buffer_.find(key_inv);
-    if (it_inv != buffer_.end()) {
-      eigen_transform = it_inv->second.inverse();
-      buffer_[key] = eigen_transform;
-      return true;
-    }
-
-    // Check if transform is needed
-    if (target_frame == source_frame) {
-      eigen_transform = Eigen::Matrix4f::Identity();
-      buffer_[key] = eigen_transform;
-      return true;
-    }
-
-    // Get the transform from the TF tree
-    tf_listener_ = std::make_unique<autoware::universe_utils::TransformListener>(node_);
-    auto tf = tf_listener_->getTransform(
-      target_frame, source_frame, rclcpp::Time(0), rclcpp::Duration(1000ms));
-    tf_listener_.reset();
-    RCLCPP_DEBUG(
-      node_->get_logger(), "Trying to enqueue %s -> %s transform to static TFs buffer...",
-      target_frame.c_str(), source_frame.c_str());
-    if (tf == nullptr) {
-      eigen_transform = Eigen::Matrix4f::Identity();
-      return false;
-    }
-    pcl_ros::transformAsMatrix(*tf, eigen_transform);
-    buffer_[key] = eigen_transform;
-    return true;
-  }
-
-  /** @brief Retrieves a transform between two dynamic frames.
+  /** @brief Default ROS-ish lookupTransform trigger.
    *
-   * This function attempts to retrieve a transform between the target frame and the source frame.
-   * If successful, the transformation matrix is assigned to the output parameter, and the function
-   * returns true. Otherwise, the transformation matrix is set to the identity and the function
-   * returns false.
-   *
-   * @param target_frame The target frame.
-   * @param source_frame The source frame.
-   * @param eigen_transform The output Eigen transformation matrix. It is set to the identity if the
-   * transform is not found.
-   * @return True if the transform was successfully retrieved, false otherwise.
+   * @param[in] target_frame the frame to which data should be transformed
+   * @param[in] source_frame the frame where the data originated
+   * @param[in] time the time at which the value of the transform is desired (0 will get the latest)
+   * @param[in] timeout how long to block before failing
+   * @return an optional containing the transform if successful, or empty if not
    */
-  bool getDynamicTransform(
+  std::optional<TransformStamped> lookupTransform(
     const std::string & target_frame, const std::string & source_frame,
-    Eigen::Matrix4f & eigen_transform)
-  {
-    auto tf = tf_listener_->getTransform(
-      target_frame, source_frame, rclcpp::Time(0), rclcpp::Duration(1000ms));
-    if (tf == nullptr) {
-      eigen_transform = Eigen::Matrix4f::Identity();
-      return false;
-    }
-    pcl_ros::transformAsMatrix(*tf, eigen_transform);
-    return true;
-  }
+    const rclcpp::Time & time = rclcpp::Time(0),
+    const rclcpp::Duration & timeout = default_timeout) const;
 
-  TFMap buffer_;
+  /** @brief Traverse TF tree built by local TF listener.
+   *
+   * @param[in] target_frame the frame to which data should be transformed
+   * @param[in] source_frame the frame where the data originated
+   * @param[in] timeout how long to block before failing
+   * @return a traverse result indicating if the transform is possible and if it is static
+   */
+  TraverseResult traverseTree(
+    const std::string & target_frame, const std::string & source_frame,
+    const rclcpp::Duration & timeout = default_timeout);
+
+  /** @brief Get a dynamic transform from the TF buffer.
+   *
+   * @param[in] target_frame the frame to which data should be transformed
+   * @param[in] source_frame the frame where the data originated
+   * @param[in] time the time at which the value of the transform is desired (0 will get the latest)
+   * @param[in] timeout how long to block before failing
+   * @return an optional containing the transform if successful, or empty if not
+   */
+  std::optional<TransformStamped> getDynamicTransform(
+    const std::string & target_frame, const std::string & source_frame,
+    const rclcpp::Time & time = rclcpp::Time(0),
+    const rclcpp::Duration & timeout = default_timeout);
+
+  /** @brief Get a static transform from local TF buffer.
+   *
+   * @param[in] target_frame the frame to which data should be transformed
+   * @param[in] source_frame the frame where the data originated
+   * @return an optional containing the transform if successful, or empty if not
+   */
+  std::optional<TransformStamped> getStaticTransform(
+    const std::string & target_frame, const std::string & source_frame);
+
+  /** @brief Get an unknown (static or dynamic) transform.
+   *
+   * @param[in] target_frame the frame to which data should be transformed
+   * @param[in] source_frame the frame where the data originated
+   * @param[in] time the time at which the value of the transform is desired (0 will get the latest)
+   * @param[in] timeout how long to block before failing
+   * @return an optional containing the transform if successful, or empty if not
+   */
+  std::optional<TransformStamped> getUnknownTransform(
+    const std::string & target_frame, const std::string & source_frame,
+    const rclcpp::Time & time = rclcpp::Time(0),
+    const rclcpp::Duration & timeout = default_timeout);
+
+  rclcpp::CallbackGroup::SharedPtr callback_group_{nullptr};
   rclcpp::Node * const node_;
-  std::unique_ptr<autoware::universe_utils::TransformListener> tf_listener_;
-  std::function<bool(const std::string &, const std::string &, Eigen::Matrix4f &)> get_transform_;
+  rclcpp::Node::SharedPtr managed_listener_node_{nullptr};
+  rclcpp::NodeOptions options_;
+  rclcpp::Subscription<tf2_msgs::msg::TFMessage>::SharedPtr tf_static_sub_{nullptr};
+  rclcpp::Subscription<tf2_msgs::msg::TFMessage>::SharedPtr tf_sub_{nullptr};
+  rclcpp::SubscriptionOptionsWithAllocator<std::allocator<void>> tf_options_;
+  rclcpp::SubscriptionOptionsWithAllocator<std::allocator<void>> tf_static_options_;
+  rclcpp::executors::SingleThreadedExecutor::SharedPtr executor_{nullptr};
+  std::function<std::optional<TransformStamped>(
+    const std::string &, const std::string &, const rclcpp::Time &, const rclcpp::Duration &)>
+    get_transform_;
+  std::function<void(tf2_msgs::msg::TFMessage::SharedPtr)> cb_;
+  std::function<void(tf2_msgs::msg::TFMessage::SharedPtr)> cb_static_;
+  std::unique_ptr<std::thread> dedicated_listener_thread_;
+  std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
+  std::unique_ptr<tf2_ros::TransformListener> tf_listener_;
+  std::unique_ptr<TFMap> static_tf_buffer_;
+  std::unique_ptr<TreeMap> tf_tree_;
+  std::shared_mutex shared_mutex_;
 };
 
 }  // namespace autoware::universe_utils

@@ -169,9 +169,6 @@ protected:
    * if input.header.frame_id is different. */
   std::string tf_output_frame_;
 
-  /** \brief The flag to indicate if only static TF are used. */
-  bool has_static_tf_only_;
-
   /** \brief Internal mutex. */
   std::mutex mutex_;
 

@@ -72,7 +72,6 @@ autoware::pointcloud_preprocessor::Filter::Filter(
   {
     tf_input_frame_ = static_cast<std::string>(declare_parameter("input_frame", ""));
     tf_output_frame_ = static_cast<std::string>(declare_parameter("output_frame", ""));
-    has_static_tf_only_ = static_cast<bool>(declare_parameter("has_static_tf_only", false));
     max_queue_size_ = static_cast<std::size_t>(declare_parameter("max_queue_size", 5));
 
     // ---[ Optional parameters
@@ -115,17 +114,7 @@ autoware::pointcloud_preprocessor::Filter::Filter(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void autoware::pointcloud_preprocessor::Filter::setupTF()
 {
-  // Always consider static TF if in & out frames are same
-  if (tf_input_frame_ == tf_output_frame_) {
-    if (!has_static_tf_only_) {
-      RCLCPP_INFO(
-        this->get_logger(),
-        "Input and output frames are the same. Overriding has_static_tf_only to true.");
-    }
-    has_static_tf_only_ = true;
-  }
-  managed_tf_buffer_ =
-    std::make_unique<autoware::universe_utils::ManagedTransformBuffer>(this, has_static_tf_only_);
+  managed_tf_buffer_ = std::make_unique<autoware::universe_utils::ManagedTransformBuffer>(this);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -309,11 +298,12 @@ bool autoware::pointcloud_preprocessor::Filter::calculate_transform_matrix(
     this->get_logger(), "[get_transform_matrix] Transforming input dataset from %s to %s.",
     from.header.frame_id.c_str(), target_frame.c_str());
 
-  if (!managed_tf_buffer_->getTransform(
-        target_frame, from.header.frame_id, transform_info.eigen_transform)) {
+  auto eigen_transform =
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>(target_frame, from.header.frame_id);
+  if (!eigen_transform.has_value()) {
     return false;
   }
-
+  transform_info.eigen_transform = eigen_transform.value();
   transform_info.need_transform = true;
   return true;
 }
