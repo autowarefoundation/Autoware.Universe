@@ -1926,7 +1926,6 @@ bool RouteHandler::planPathLaneletsBetweenCheckpoints(
   }
 
   lanelet::Optional<lanelet::routing::Route> optional_route;
-  std::vector<lanelet::ConstLanelets> candidate_paths;
   lanelet::routing::LaneletPath shortest_path;
   bool is_route_found = false;
 

@@ -15,6 +15,7 @@
 #include "autoware/traffic_light_arbiter/traffic_light_arbiter.hpp"
 
 #include <ament_index_cpp/get_package_share_directory.hpp>
+#include <autoware_lanelet2_extension/utility/message_conversion.hpp>
 #include <autoware_test_utils/autoware_test_utils.hpp>
 
 #include <gtest/gtest.h>
