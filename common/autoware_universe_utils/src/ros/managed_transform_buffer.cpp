@@ -217,7 +217,7 @@ TraverseResult ManagedTransformBuffer::traverseTree(
           node_->get_logger(), "Traverse depth exceeded for %s -> %s", t1.c_str(), t2.c_str());
         return {false, false};
       }
-    };
+    }
   };
 
   std::this_thread::sleep_for(timeout.to_chrono<std::chrono::milliseconds>());
