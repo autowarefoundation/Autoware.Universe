@@ -86,7 +86,7 @@ using geometry_msgs::msg::TransformStamped;
 using TFMap = std::unordered_map<Key, TransformStamped, std::hash<Key>, PairEqual>;
 using TreeMap = std::unordered_map<std::string, TreeNode>;
 constexpr std::size_t max_depth = 10000;
-constexpr std::chrono::milliseconds default_timeout = 50ms;
+constexpr std::chrono::milliseconds default_timeout = 10ms;
 
 /**
  * @brief A managed TF buffer that handles listener node lifetime. This buffer triggers listener
