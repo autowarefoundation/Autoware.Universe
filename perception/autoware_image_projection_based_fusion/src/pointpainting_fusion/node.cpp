@@ -14,7 +14,7 @@
 
 #include "autoware/image_projection_based_fusion/pointpainting_fusion/node.hpp"
 
-#include "autoware_point_types/types.hpp"
+#include "autoware/point_types/types.hpp"
 
 #include <autoware/image_projection_based_fusion/utils/geometry.hpp>
 #include <autoware/image_projection_based_fusion/utils/utils.hpp>
@@ -293,15 +293,15 @@ void PointPaintingFusionNode::fuseOnSingleImage(
   // sensor_msgs::msg::PointCloud2 transformed_pointcloud;
   // tf2::doTransform(painted_pointcloud_msg, transformed_pointcloud, transform_stamped);
 
-  const auto x_offset =
-    painted_pointcloud_msg.fields.at(static_cast<size_t>(autoware_point_types::PointXYZIRCIndex::X))
-      .offset;
-  const auto y_offset =
-    painted_pointcloud_msg.fields.at(static_cast<size_t>(autoware_point_types::PointXYZIRCIndex::Y))
-      .offset;
-  const auto z_offset =
-    painted_pointcloud_msg.fields.at(static_cast<size_t>(autoware_point_types::PointXYZIRCIndex::Z))
-      .offset;
+  const auto x_offset = painted_pointcloud_msg.fields
+                          .at(static_cast<size_t>(autoware::point_types::PointXYZIRCIndex::X))
+                          .offset;
+  const auto y_offset = painted_pointcloud_msg.fields
+                          .at(static_cast<size_t>(autoware::point_types::PointXYZIRCIndex::Y))
+                          .offset;
+  const auto z_offset = painted_pointcloud_msg.fields
+                          .at(static_cast<size_t>(autoware::point_types::PointXYZIRCIndex::Z))
+                          .offset;
   const auto class_offset = painted_pointcloud_msg.fields.at(4).offset;
   const auto p_step = painted_pointcloud_msg.point_step;
   // projection matrix

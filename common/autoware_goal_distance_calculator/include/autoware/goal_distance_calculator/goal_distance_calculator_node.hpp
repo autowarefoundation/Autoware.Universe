@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_NODE_HPP_
-#define GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_NODE_HPP_
+#ifndef AUTOWARE__GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_NODE_HPP_
+#define AUTOWARE__GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_NODE_HPP_
 
-#include "goal_distance_calculator/goal_distance_calculator.hpp"
+#include "autoware/goal_distance_calculator/goal_distance_calculator.hpp"
 
 #include <autoware/universe_utils/ros/debug_publisher.hpp>
 #include <autoware/universe_utils/ros/polling_subscriber.hpp>
@@ -30,7 +30,7 @@
 
 #include <memory>
 
-namespace goal_distance_calculator
+namespace autoware::goal_distance_calculator
 {
 struct NodeParam
 {
@@ -66,5 +66,5 @@ private:
   // Core
   std::unique_ptr<GoalDistanceCalculator> goal_distance_calculator_;
 };
-}  // namespace goal_distance_calculator
-#endif  // GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_NODE_HPP_
+}  // namespace autoware::goal_distance_calculator
+#endif  // AUTOWARE__GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_NODE_HPP_

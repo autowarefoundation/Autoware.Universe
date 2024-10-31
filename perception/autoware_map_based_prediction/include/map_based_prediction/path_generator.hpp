@@ -15,6 +15,8 @@
 #ifndef MAP_BASED_PREDICTION__PATH_GENERATOR_HPP_
 #define MAP_BASED_PREDICTION__PATH_GENERATOR_HPP_
 
+#include "map_based_prediction/data_structure.hpp"
+
 #include <Eigen/Eigen>
 #include <autoware/universe_utils/system/time_keeper.hpp>
 #include <rclcpp/rclcpp.hpp>
@@ -80,11 +82,11 @@ struct CrosswalkEdgePoints
 };
 
 using FrenetPath = std::vector<FrenetPoint>;
-using PosePath = std::vector<geometry_msgs::msg::Pose>;
 
 class PathGenerator
 {
 public:
+  explicit PathGenerator(const double sampling_time_interval);
   PathGenerator(const double sampling_time_interval, const double min_crosswalk_user_velocity);
 
   void setTimeKeeper(std::shared_ptr<autoware::universe_utils::TimeKeeper> time_keeper_ptr);

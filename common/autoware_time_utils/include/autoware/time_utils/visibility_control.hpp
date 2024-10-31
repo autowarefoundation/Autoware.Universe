@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef TIME_UTILS__VISIBILITY_CONTROL_HPP_
-#define TIME_UTILS__VISIBILITY_CONTROL_HPP_
+#ifndef AUTOWARE__TIME_UTILS__VISIBILITY_CONTROL_HPP_
+#define AUTOWARE__TIME_UTILS__VISIBILITY_CONTROL_HPP_
 
 #if defined(__WIN32)
 #if defined(TIME_UTILS_BUILDING_DLL) || defined(TIME_UTILS_EXPORTS)
@@ -33,4 +33,4 @@
 #error "Unsupported Build Configuration"
 #endif  // defined(_WINDOWS)
 
-#endif  // TIME_UTILS__VISIBILITY_CONTROL_HPP_
+#endif  // AUTOWARE__TIME_UTILS__VISIBILITY_CONTROL_HPP_

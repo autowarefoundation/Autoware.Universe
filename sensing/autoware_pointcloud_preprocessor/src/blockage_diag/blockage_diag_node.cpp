@@ -14,14 +14,14 @@
 
 #include "autoware/pointcloud_preprocessor/blockage_diag/blockage_diag_node.hpp"
 
-#include "autoware_point_types/types.hpp"
+#include "autoware/point_types/types.hpp"
 
 #include <algorithm>
 #include <numeric>
 
 namespace autoware::pointcloud_preprocessor
 {
-using autoware_point_types::PointXYZIRCAEDT;
+using autoware::point_types::PointXYZIRCAEDT;
 using diagnostic_msgs::msg::DiagnosticStatus;
 
 BlockageDiagComponent::BlockageDiagComponent(const rclcpp::NodeOptions & options)

@@ -13,20 +13,20 @@
 // limitations under the License.
 //
 // Co-developed by Tier IV, Inc. and Apex.AI, Inc.
-#ifndef TIME_UTILS__TIME_UTILS_HPP_
-#define TIME_UTILS__TIME_UTILS_HPP_
+#ifndef AUTOWARE__TIME_UTILS__TIME_UTILS_HPP_
+#define AUTOWARE__TIME_UTILS__TIME_UTILS_HPP_
 
+#include <autoware/time_utils/visibility_control.hpp>
 #include <builtin_interfaces/msg/duration.hpp>
 #include <builtin_interfaces/msg/time.hpp>
-#include <time_utils/visibility_control.hpp>
 
 #include <chrono>
 
-namespace time_utils
+namespace autoware::time_utils
 {
 /// Standard interpolation
 TIME_UTILS_PUBLIC std::chrono::nanoseconds interpolate(
   std::chrono::nanoseconds a, std::chrono::nanoseconds b, float t) noexcept;
-}  // namespace time_utils
+}  // namespace autoware::time_utils
 
-#endif  // TIME_UTILS__TIME_UTILS_HPP_
+#endif  // AUTOWARE__TIME_UTILS__TIME_UTILS_HPP_

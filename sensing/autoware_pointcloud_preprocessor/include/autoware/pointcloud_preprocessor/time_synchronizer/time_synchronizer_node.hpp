@@ -61,10 +61,10 @@
 #include <vector>
 
 // ROS includes
+#include <autoware/point_types/types.hpp>
 #include <autoware/universe_utils/ros/debug_publisher.hpp>
 #include <autoware/universe_utils/ros/managed_transform_buffer.hpp>
 #include <autoware/universe_utils/system/stop_watch.hpp>
-#include <autoware_point_types/types.hpp>
 #include <diagnostic_updater/diagnostic_updater.hpp>
 #include <point_cloud_msg_wrapper/point_cloud_msg_wrapper.hpp>
 
@@ -87,7 +87,7 @@
 
 namespace autoware::pointcloud_preprocessor
 {
-using autoware_point_types::PointXYZIRC;
+using autoware::point_types::PointXYZIRC;
 using point_cloud_msg_wrapper::PointCloud2Modifier;
 // cspell:ignore Yoshi
 /** \brief @b PointCloudDataSynchronizerComponent is a special form of data

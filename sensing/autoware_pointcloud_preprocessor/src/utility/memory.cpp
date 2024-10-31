@@ -14,14 +14,14 @@
 
 #include "autoware/pointcloud_preprocessor/utility/memory.hpp"
 
-#include <autoware_point_types/types.hpp>
+#include <autoware/point_types/types.hpp>
 
 namespace autoware::pointcloud_preprocessor::utils
 {
 bool is_data_layout_compatible_with_point_xyzi(const sensor_msgs::msg::PointCloud2 & input)
 {
-  using PointIndex = autoware_point_types::PointXYZIIndex;
-  using autoware_point_types::PointXYZI;
+  using PointIndex = autoware::point_types::PointXYZIIndex;
+  using autoware::point_types::PointXYZI;
   if (input.fields.size() < 4) {
     return false;
   }
@@ -51,8 +51,8 @@ bool is_data_layout_compatible_with_point_xyzi(const sensor_msgs::msg::PointClou
 
 bool is_data_layout_compatible_with_point_xyzirc(const sensor_msgs::msg::PointCloud2 & input)
 {
-  using PointIndex = autoware_point_types::PointXYZIRCIndex;
-  using autoware_point_types::PointXYZIRC;
+  using PointIndex = autoware::point_types::PointXYZIRCIndex;
+  using autoware::point_types::PointXYZIRC;
   if (input.fields.size() < 6) {
     return false;
   }
@@ -93,8 +93,8 @@ bool is_data_layout_compatible_with_point_xyzirc(const sensor_msgs::msg::PointCl
 
 bool is_data_layout_compatible_with_point_xyziradrt(const sensor_msgs::msg::PointCloud2 & input)
 {
-  using PointIndex = autoware_point_types::PointXYZIRADRTIndex;
-  using autoware_point_types::PointXYZIRADRT;
+  using PointIndex = autoware::point_types::PointXYZIRADRTIndex;
+  using autoware::point_types::PointXYZIRADRT;
   if (input.fields.size() < 9) {
     return false;
   }
@@ -149,8 +149,8 @@ bool is_data_layout_compatible_with_point_xyziradrt(const sensor_msgs::msg::Poin
 
 bool is_data_layout_compatible_with_point_xyzircaedt(const sensor_msgs::msg::PointCloud2 & input)
 {
-  using PointIndex = autoware_point_types::PointXYZIRCAEDTIndex;
-  using autoware_point_types::PointXYZIRCAEDT;
+  using PointIndex = autoware::point_types::PointXYZIRCAEDTIndex;
+  using autoware::point_types::PointXYZIRCAEDT;
   if (input.fields.size() != 10) {
     return false;
   }

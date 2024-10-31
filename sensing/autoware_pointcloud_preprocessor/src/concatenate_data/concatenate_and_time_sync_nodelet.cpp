@@ -479,7 +479,7 @@ void PointCloudConcatenateDataSynchronizerComponent::convertToXYZIRCCloud(
 {
   output_ptr->header = input_ptr->header;
 
-  PointCloud2Modifier<PointXYZIRC, autoware_point_types::PointXYZIRCGenerator> output_modifier{
+  PointCloud2Modifier<PointXYZIRC, autoware::point_types::PointXYZIRCGenerator> output_modifier{
     *output_ptr, input_ptr->header.frame_id};
   output_modifier.reserve(input_ptr->width);
 

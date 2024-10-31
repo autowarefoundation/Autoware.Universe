@@ -14,7 +14,7 @@
 
 #include "autoware/euclidean_cluster/voxel_grid_based_euclidean_cluster.hpp"
 
-#include <autoware_point_types/types.hpp>
+#include <autoware/point_types/types.hpp>
 #include <experimental/random>
 
 #include <sensor_msgs/msg/point_cloud2.hpp>
@@ -23,7 +23,7 @@
 
 #include <gtest/gtest.h>
 
-using autoware_point_types::PointXYZI;
+using autoware::point_types::PointXYZI;
 void setPointCloud2Fields(sensor_msgs::msg::PointCloud2 & pointcloud)
 {
   pointcloud.fields.resize(4);

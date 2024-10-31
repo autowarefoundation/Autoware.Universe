@@ -15,7 +15,7 @@
 #include "../src/voxel_based_approximate_compare_map_filter/node.hpp"
 
 #include <ament_index_cpp/get_package_share_directory.hpp>
-#include <autoware_point_types/types.hpp>
+#include <autoware/point_types/types.hpp>
 #include <autoware_test_utils/autoware_test_utils.hpp>
 #include <point_cloud_msg_wrapper/point_cloud_msg_wrapper.hpp>
 
@@ -24,8 +24,8 @@
 #include <gtest/gtest.h>
 
 using autoware::compare_map_segmentation::VoxelBasedApproximateCompareMapFilterComponent;
-using autoware_point_types::PointXYZIRC;
-using autoware_point_types::PointXYZIRCGenerator;
+using autoware::point_types::PointXYZIRC;
+using autoware::point_types::PointXYZIRCGenerator;
 using point_cloud_msg_wrapper::PointCloud2Modifier;
 using sensor_msgs::msg::PointCloud2;
 

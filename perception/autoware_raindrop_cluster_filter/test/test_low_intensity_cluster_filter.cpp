@@ -15,7 +15,7 @@
 #include "../src/low_intensity_cluster_filter_node.hpp"
 
 #include <ament_index_cpp/get_package_share_directory.hpp>
-#include <autoware_point_types/types.hpp>
+#include <autoware/point_types/types.hpp>
 #include <autoware_test_utils/autoware_test_utils.hpp>
 #include <point_cloud_msg_wrapper/point_cloud_msg_wrapper.hpp>
 
@@ -27,9 +27,9 @@
 #include <vector>
 
 using autoware::low_intensity_cluster_filter::LowIntensityClusterFilter;
+using autoware::point_types::PointXYZIRC;
+using autoware::point_types::PointXYZIRCGenerator;
 using autoware_perception_msgs::msg::ObjectClassification;
-using autoware_point_types::PointXYZIRC;
-using autoware_point_types::PointXYZIRCGenerator;
 using point_cloud_msg_wrapper::PointCloud2Modifier;
 using tier4_perception_msgs::msg::DetectedObjectsWithFeature;
 using tier4_perception_msgs::msg::DetectedObjectWithFeature;
@@ -64,7 +64,7 @@ DetectedObjectsWithFeature create_cluster(
   feature_obj.object.classification.resize(1);
   feature_obj.object.classification[0].label = label;
   sensor_msgs::msg::PointCloud2 cluster;
-  PointCloud2Modifier<PointXYZIRC, autoware_point_types::PointXYZIRCGenerator> modifier(
+  PointCloud2Modifier<PointXYZIRC, autoware::point_types::PointXYZIRCGenerator> modifier(
     cluster, "base_link");
   for (int i = 0; i < cluster_size; i++) {
     PointXYZIRC point;

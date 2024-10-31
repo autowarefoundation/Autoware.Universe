@@ -17,7 +17,7 @@
 
 #include "autoware/lidar_transfusion/utils.hpp"
 
-#include <autoware_point_types/types.hpp>
+#include <autoware/point_types/types.hpp>
 
 #include <autoware_perception_msgs/msg/detected_object_kinematics.hpp>
 #include <autoware_perception_msgs/msg/detected_objects.hpp>
@@ -45,10 +45,10 @@ namespace autoware::lidar_transfusion
 {
 using sensor_msgs::msg::PointField;
 
-CHECK_FIELD(0, float, autoware_point_types::PointXYZIRCAEDT, x);
-CHECK_FIELD(4, float, autoware_point_types::PointXYZIRCAEDT, y);
-CHECK_FIELD(8, float, autoware_point_types::PointXYZIRCAEDT, z);
-CHECK_FIELD(12, uint8_t, autoware_point_types::PointXYZIRCAEDT, intensity);
+CHECK_FIELD(0, float, autoware::point_types::PointXYZIRCAEDT, x);
+CHECK_FIELD(4, float, autoware::point_types::PointXYZIRCAEDT, y);
+CHECK_FIELD(8, float, autoware::point_types::PointXYZIRCAEDT, z);
+CHECK_FIELD(12, uint8_t, autoware::point_types::PointXYZIRCAEDT, intensity);
 
 struct CloudInfo
 {
@@ -64,7 +64,7 @@ struct CloudInfo
   uint8_t y_count{1};
   uint8_t z_count{1};
   uint8_t intensity_count{1};
-  uint32_t point_step{sizeof(autoware_point_types::PointXYZIRCAEDT)};
+  uint32_t point_step{sizeof(autoware::point_types::PointXYZIRCAEDT)};
   bool is_bigendian{false};
 
   bool operator!=(const CloudInfo & rhs) const

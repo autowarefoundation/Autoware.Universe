@@ -149,8 +149,6 @@ BehaviorModuleOutput PlannerManager::run(const std::shared_ptr<PlannerData> & da
     generateCombinedDrivableArea(result_output, data);
     return result_output;
   }
-  std::vector<SceneModulePtr>
-    deleted_modules;  // store the scene modules deleted from approved modules
 
   SlotOutput result_output = SlotOutput{
     getReferencePath(data),

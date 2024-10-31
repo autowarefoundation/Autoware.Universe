@@ -18,7 +18,7 @@
 #include "autoware/lidar_transfusion/utils.hpp"
 #include "gtest/gtest.h"
 
-#include <autoware_point_types/types.hpp>
+#include <autoware/point_types/types.hpp>
 
 #include "sensor_msgs/point_cloud2_iterator.hpp"
 
@@ -52,7 +52,7 @@ void VoxelGeneratorTest::SetUp()
 
   // Set up the fields
   point_cloud_msg_wrapper::PointCloud2Modifier<
-    autoware_point_types::PointXYZIRCAEDT, autoware_point_types::PointXYZIRCAEDTGenerator>
+    autoware::point_types::PointXYZIRCAEDT, autoware::point_types::PointXYZIRCAEDTGenerator>
     modifier{*cloud1_, lidar_frame_};
 
   // Resize the cloud to hold points_per_pointcloud_ points

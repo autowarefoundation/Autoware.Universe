@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "goal_distance_calculator/goal_distance_calculator_node.hpp"
+#include "autoware/goal_distance_calculator/goal_distance_calculator_node.hpp"
 
 #include <autoware/universe_utils/math/unit_conversion.hpp>
 #include <rclcpp/rclcpp.hpp>
@@ -26,7 +26,7 @@
 #include <string>
 #include <utility>
 
-namespace goal_distance_calculator
+namespace autoware::goal_distance_calculator
 {
 GoalDistanceCalculatorNode::GoalDistanceCalculatorNode(const rclcpp::NodeOptions & options)
 : Node("goal_distance_calculator", options),
@@ -117,7 +117,7 @@ void GoalDistanceCalculatorNode::onTimer()
     rclcpp::shutdown();
   }
 }
-}  // namespace goal_distance_calculator
+}  // namespace autoware::goal_distance_calculator
 
 #include <rclcpp_components/register_node_macro.hpp>
-RCLCPP_COMPONENTS_REGISTER_NODE(goal_distance_calculator::GoalDistanceCalculatorNode)
+RCLCPP_COMPONENTS_REGISTER_NODE(autoware::goal_distance_calculator::GoalDistanceCalculatorNode)

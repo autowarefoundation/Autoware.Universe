@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_HPP_
-#define GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_HPP_
+#ifndef AUTOWARE__GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_HPP_
+#define AUTOWARE__GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_HPP_
 
 #include <autoware/universe_utils/geometry/pose_deviation.hpp>
 #include <rclcpp/rclcpp.hpp>
@@ -23,7 +23,7 @@
 
 #include <boost/optional.hpp>
 
-namespace goal_distance_calculator
+namespace autoware::goal_distance_calculator
 {
 using autoware::universe_utils::PoseDeviation;
 
@@ -52,6 +52,6 @@ public:
 private:
   Param param_;
 };
-}  // namespace goal_distance_calculator
+}  // namespace autoware::goal_distance_calculator
 
-#endif  // GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_HPP_
+#endif  // AUTOWARE__GOAL_DISTANCE_CALCULATOR__GOAL_DISTANCE_CALCULATOR_HPP_

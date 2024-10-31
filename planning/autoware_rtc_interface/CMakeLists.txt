@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 project(autoware_rtc_interface)
 
+find_package(autoware_cmake REQUIRED)
+autoware_package()
+
 ### Compile options
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -18,8 +21,12 @@ ament_auto_add_library(autoware_rtc_interface SHARED
 
 # Test
 if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
+  ament_add_ros_isolated_gtest(test_${PROJECT_NAME}
+  test/test_rtc_interface.cpp
+  )
+  target_link_libraries(test_${PROJECT_NAME}
+    ${PROJECT_NAME}
+  )
 endif()
 
 ament_auto_package()

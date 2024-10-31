@@ -54,7 +54,7 @@ public:
   void publishCooperateStatus(const rclcpp::Time & stamp);
   void updateCooperateStatus(
     const UUID & uuid, const bool safe, const uint8_t state, const double start_distance,
-    const double finish_distance, const rclcpp::Time & stamp);
+    const double finish_distance, const rclcpp::Time & stamp, const bool requested = false);
   void removeCooperateStatus(const UUID & uuid);
   void removeExpiredCooperateStatus();
   void clearCooperateStatus();
@@ -103,6 +103,9 @@ private:
   std::string enable_auto_mode_namespace_ = "/planning/enable_auto_mode";
 
   mutable std::mutex mutex_;
+
+public:
+  friend class RTCInterfaceTest;
 };
 
 }  // namespace autoware::rtc_interface

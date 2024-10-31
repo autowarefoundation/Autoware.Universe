@@ -14,7 +14,7 @@
 
 #include "autoware/pointcloud_preprocessor/outlier_filter/dual_return_outlier_filter_node.hpp"
 
-#include "autoware_point_types/types.hpp"
+#include "autoware/point_types/types.hpp"
 
 #include <std_msgs/msg/header.hpp>
 
@@ -28,8 +28,8 @@
 
 namespace autoware::pointcloud_preprocessor
 {
-using autoware_point_types::PointXYZIRCAEDT;
-using autoware_point_types::ReturnType;
+using autoware::point_types::PointXYZIRCAEDT;
+using autoware::point_types::ReturnType;
 using diagnostic_msgs::msg::DiagnosticStatus;
 
 DualReturnOutlierFilterComponent::DualReturnOutlierFilterComponent(

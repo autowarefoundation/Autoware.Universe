@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "goal_distance_calculator/goal_distance_calculator.hpp"
+#include "autoware/goal_distance_calculator/goal_distance_calculator.hpp"
 
-namespace goal_distance_calculator
+namespace autoware::goal_distance_calculator
 {
 Output GoalDistanceCalculator::update(const Input & input)
 {
@@ -26,4 +26,4 @@ Output GoalDistanceCalculator::update(const Input & input)
   return output;
 }
 
-}  // namespace goal_distance_calculator
+}  // namespace autoware::goal_distance_calculator

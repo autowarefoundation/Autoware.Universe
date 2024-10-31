@@ -25,6 +25,12 @@ namespace autoware::map_based_prediction
 {
 using autoware::universe_utils::ScopedTimeTrack;
 
+PathGenerator::PathGenerator(const double sampling_time_interval)
+: sampling_time_interval_(sampling_time_interval)
+{
+  min_crosswalk_user_velocity_ = 0.1;
+}
+
 PathGenerator::PathGenerator(
   const double sampling_time_interval, const double min_crosswalk_user_velocity)
 : sampling_time_interval_(sampling_time_interval),

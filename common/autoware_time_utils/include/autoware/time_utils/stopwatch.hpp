@@ -14,10 +14,10 @@
 //
 // Co-developed by Tier IV, Inc. and Apex.AI, Inc.
 
-#ifndef TIME_UTILS__STOPWATCH_HPP_
-#define TIME_UTILS__STOPWATCH_HPP_
+#ifndef AUTOWARE__TIME_UTILS__STOPWATCH_HPP_
+#define AUTOWARE__TIME_UTILS__STOPWATCH_HPP_
 
-#include <time_utils/visibility_control.hpp>
+#include <autoware/time_utils/visibility_control.hpp>
 
 #include <chrono>
 #include <type_traits>
@@ -26,7 +26,7 @@ namespace autoware
 {
 namespace common
 {
-namespace time_utils
+namespace autoware::time_utils
 {
 
 namespace detail
@@ -81,8 +81,8 @@ private:
   TimePoint m_start{Clock::now()};
 };
 
-}  // namespace time_utils
+}  // namespace autoware::time_utils
 }  // namespace common
 }  // namespace autoware
 
-#endif  // TIME_UTILS__STOPWATCH_HPP_
+#endif  // AUTOWARE__TIME_UTILS__STOPWATCH_HPP_

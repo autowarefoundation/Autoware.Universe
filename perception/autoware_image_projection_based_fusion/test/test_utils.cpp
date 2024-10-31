@@ -13,11 +13,11 @@
 // limitations under the License.
 
 #include <autoware/image_projection_based_fusion/utils/utils.hpp>
-#include <autoware_point_types/types.hpp>
+#include <autoware/point_types/types.hpp>
 
 #include <gtest/gtest.h>
 
-using autoware_point_types::PointXYZI;
+using autoware::point_types::PointXYZI;
 
 void setPointCloud2Fields(sensor_msgs::msg::PointCloud2 & pointcloud)
 {

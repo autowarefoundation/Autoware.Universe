@@ -1,4 +1,4 @@
-# goal_distance_calculator
+# autoware_goal_distance_calculator
 
 ## Purpose
 

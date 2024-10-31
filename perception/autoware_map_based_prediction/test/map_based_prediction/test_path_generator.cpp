@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "map_based_prediction/data_structure.hpp"
 #include "map_based_prediction/path_generator.hpp"
 
 #include <glog/logging.h>

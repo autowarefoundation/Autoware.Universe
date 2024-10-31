@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "autoware_point_types/types.hpp"
+#include "autoware/point_types/types.hpp"
 
 #include <gtest/gtest.h>
 
@@ -20,7 +20,7 @@
 
 TEST(PointEquality, PointXYZI)
 {
-  using autoware_point_types::PointXYZI;
+  using autoware::point_types::PointXYZI;
 
   PointXYZI pt0{0, 1, 2, 3};
   PointXYZI pt1{0, 1, 2, 3};
@@ -29,7 +29,7 @@ TEST(PointEquality, PointXYZI)
 
 TEST(PointEquality, PointXYZIRADRT)
 {
-  using autoware_point_types::PointXYZIRADRT;
+  using autoware::point_types::PointXYZIRADRT;
 
   PointXYZIRADRT pt0{0, 1, 2, 3, 4, 5, 6, 7, 8};
   PointXYZIRADRT pt1{0, 1, 2, 3, 4, 5, 6, 7, 8};
@@ -38,7 +38,7 @@ TEST(PointEquality, PointXYZIRADRT)
 
 TEST(PointEquality, PointXYZIRCAEDT)
 {
-  using autoware_point_types::PointXYZIRCAEDT;
+  using autoware::point_types::PointXYZIRCAEDT;
 
   PointXYZIRCAEDT pt0{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
   PointXYZIRCAEDT pt1{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -48,19 +48,19 @@ TEST(PointEquality, PointXYZIRCAEDT)
 TEST(PointEquality, FloatEq)
 {
   // test template
-  EXPECT_TRUE(autoware_point_types::float_eq<float>(1, 1));
-  EXPECT_TRUE(autoware_point_types::float_eq<double>(1, 1));
+  EXPECT_TRUE(autoware::point_types::float_eq<float>(1, 1));
+  EXPECT_TRUE(autoware::point_types::float_eq<double>(1, 1));
 
   // test floating point error
-  EXPECT_TRUE(autoware_point_types::float_eq<float>(1, 1 + std::numeric_limits<float>::epsilon()));
+  EXPECT_TRUE(autoware::point_types::float_eq<float>(1, 1 + std::numeric_limits<float>::epsilon()));
 
   // test difference of sign
-  EXPECT_FALSE(autoware_point_types::float_eq<float>(2, -2));
-  EXPECT_FALSE(autoware_point_types::float_eq<float>(-2, 2));
+  EXPECT_FALSE(autoware::point_types::float_eq<float>(2, -2));
+  EXPECT_FALSE(autoware::point_types::float_eq<float>(-2, 2));
 
   // small value difference
-  EXPECT_FALSE(autoware_point_types::float_eq<float>(2, 2 + 10e-6));
+  EXPECT_FALSE(autoware::point_types::float_eq<float>(2, 2 + 10e-6));
 
   // expect same value if epsilon is larger than difference
-  EXPECT_TRUE(autoware_point_types::float_eq<float>(2, 2 + 10e-6, 10e-5));
+  EXPECT_TRUE(autoware::point_types::float_eq<float>(2, 2 + 10e-6, 10e-5));
 }

@@ -11,13 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#include "time_utils/time_utils.hpp"
+#include "autoware/time_utils/time_utils.hpp"
 
 #include <algorithm>
 #include <limits>
 #include <stdexcept>
 
-namespace time_utils
+namespace autoware::time_utils
 {
 ////////////////////////////////////////////////////////////////////////////////
 std::chrono::nanoseconds interpolate(
@@ -30,4 +30,4 @@ std::chrono::nanoseconds interpolate(
   return a + del_;
 }
 
-}  // namespace time_utils
+}  // namespace autoware::time_utils
