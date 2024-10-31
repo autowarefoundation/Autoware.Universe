@@ -17,8 +17,9 @@
 
 #include "autoware/localization_util/diagnostics_module.hpp"
 #include "autoware/localization_util/util_func.hpp"
-#include "autoware/ndt_scan_matcher/hyper_parameters.hpp"
-#include "autoware/ndt_scan_matcher/particle.hpp"
+#include "hyper_parameters.hpp"
+#include "ndt_omp/multigrid_ndt_omp.h"
+#include "particle.hpp"
 
 #include <autoware/universe_utils/ros/marker_helper.hpp>
 #include <autoware/universe_utils/transform/transforms.hpp>
@@ -30,7 +31,6 @@
 #include <visualization_msgs/msg/marker_array.hpp>
 
 #include <fmt/format.h>
-#include <multigrid_pclomp/multigrid_ndt_omp.h>
 #include <pcl_conversions/pcl_conversions.h>
 
 #include <map>

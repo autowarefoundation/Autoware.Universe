@@ -45,6 +45,15 @@ Duration parse(const YAML::Node & node)
 }
 
 template <>
+Time parse(const YAML::Node & node)
+{
+  Time msg;
+  msg.sec = node["sec"].as<int>();
+  msg.nanosec = node["nanosec"].as<int>();
+  return msg;
+}
+
+template <>
 std::array<double, 36> parse(const YAML::Node & node)
 {
   std::array<double, 36> msg{};
@@ -318,6 +327,54 @@ PredictedObjects parse(const YAML::Node & node)
   for (const auto & object_node : node["objects"]) {
     msg.objects.push_back(parse<PredictedObject>(object_node));
   }
+  return msg;
+}
+
+template <>
+TrafficLightElement parse(const YAML::Node & node)
+{
+  TrafficLightElement msg;
+  msg.color = node["color"].as<uint8_t>();
+  msg.shape = node["shape"].as<uint8_t>();
+  msg.status = node["status"].as<uint8_t>();
+  msg.confidence = node["confidence"].as<float>();
+  return msg;
+}
+
+template <>
+TrafficLightGroup parse(const YAML::Node & node)
+{
+  TrafficLightGroup msg;
+  msg.traffic_light_group_id = node["traffic_light_group_id"].as<int>();
+  for (const auto & element_node : node["elements"]) {
+    msg.elements.push_back(parse<TrafficLightElement>(element_node));
+  }
+  return msg;
+}
+
+template <>
+TrafficLightGroupArray parse(const YAML::Node & node)
+{
+  TrafficLightGroupArray msg;
+  msg.stamp = parse<Time>(node["stamp"]);
+  for (const auto & traffic_light_group_node : node["traffic_light_groups"]) {
+    msg.traffic_light_groups.push_back(parse<TrafficLightGroup>(traffic_light_group_node));
+  }
+  return msg;
+}
+
+template <>
+OperationModeState parse(const YAML::Node & node)
+{
+  OperationModeState msg;
+  msg.stamp = parse<Time>(node["stamp"]);
+  msg.mode = node["mode"].as<uint8_t>();
+  msg.is_autoware_control_enabled = node["is_autoware_control_enabled"].as<bool>();
+  msg.is_in_transition = node["is_in_transition"].as<bool>();
+  msg.is_stop_mode_available = node["is_stop_mode_available"].as<bool>();
+  msg.is_autonomous_mode_available = node["is_autonomous_mode_available"].as<bool>();
+  msg.is_local_mode_available = node["is_local_mode_available"].as<bool>();
+  msg.is_remote_mode_available = node["is_remote_mode_available"].as<bool>();
   return msg;
 }
 

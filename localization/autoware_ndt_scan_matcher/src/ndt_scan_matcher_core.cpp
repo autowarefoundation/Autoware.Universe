@@ -17,11 +17,11 @@
 #include "autoware/localization_util/matrix_type.hpp"
 #include "autoware/localization_util/tree_structured_parzen_estimator.hpp"
 #include "autoware/localization_util/util_func.hpp"
+#include "autoware/ndt_scan_matcher/ndt_omp/estimate_covariance.hpp"
 #include "autoware/ndt_scan_matcher/particle.hpp"
 
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware/universe_utils/transform/transforms.hpp>
-#include <estimate_covariance/estimate_covariance.hpp>
 
 #include <pcl_conversions/pcl_conversions.h>
 

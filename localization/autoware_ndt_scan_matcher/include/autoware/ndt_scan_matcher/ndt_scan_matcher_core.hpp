@@ -19,8 +19,9 @@
 
 #include "autoware/localization_util/diagnostics_module.hpp"
 #include "autoware/localization_util/smart_pose_buffer.hpp"
-#include "autoware/ndt_scan_matcher/hyper_parameters.hpp"
-#include "autoware/ndt_scan_matcher/map_update_module.hpp"
+#include "hyper_parameters.hpp"
+#include "map_update_module.hpp"
+#include "ndt_omp/multigrid_ndt_omp.h"
 
 #include <autoware/universe_utils/ros/logger_level_configure.hpp>
 #include <rclcpp/rclcpp.hpp>
@@ -38,7 +39,6 @@
 #include <visualization_msgs/msg/marker_array.hpp>
 
 #include <fmt/format.h>
-#include <multigrid_pclomp/multigrid_ndt_omp.h>
 #include <pcl/point_types.h>
 #include <tf2/transform_datatypes.h>
 #include <tf2_ros/buffer.h>

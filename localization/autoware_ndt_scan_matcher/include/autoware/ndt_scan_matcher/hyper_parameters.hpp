@@ -15,9 +15,9 @@
 #ifndef AUTOWARE__NDT_SCAN_MATCHER__HYPER_PARAMETERS_HPP_
 #define AUTOWARE__NDT_SCAN_MATCHER__HYPER_PARAMETERS_HPP_
 
-#include <rclcpp/rclcpp.hpp>
+#include "ndt_omp/multigrid_ndt_omp.h"
 
-#include <multigrid_pclomp/multigrid_ndt_omp.h>
+#include <rclcpp/rclcpp.hpp>
 
 #include <algorithm>
 #include <sstream>
