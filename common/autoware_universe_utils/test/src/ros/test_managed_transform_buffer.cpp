@@ -22,6 +22,7 @@
 #include <gtest/gtest.h>
 #include <tf2_ros/static_transform_broadcaster.h>
 
+#include <chrono>
 #include <memory>
 
 class TestManagedTransformBuffer : public ::testing::Test
@@ -33,6 +34,9 @@ protected:
   geometry_msgs::msg::TransformStamped tf_base_to_lidar_;
   Eigen::Matrix4f eigen_base_to_lidar_;
   std::unique_ptr<sensor_msgs::msg::PointCloud2> cloud_in_;
+  rclcpp::Time time_;
+  std::chrono::milliseconds timeout_;
+  double precision_;
 
   geometry_msgs::msg::TransformStamped generateTransformMsg(
     const int32_t seconds, const uint32_t nanoseconds, const std::string & parent_frame,
@@ -64,8 +68,10 @@ protected:
     tf_base_to_lidar_ = generateTransformMsg(
       10, 100'000'000, "base_link", "lidar_top", 0.690, 0.000, 2.100, -0.007, -0.007, 0.692, 0.722);
     eigen_base_to_lidar_ = tf2::transformToEigen(tf_base_to_lidar_).matrix().cast<float>();
-    tf_broadcaster_->sendTransform(tf_base_to_lidar_);
     cloud_in_ = std::make_unique<sensor_msgs::msg::PointCloud2>();
+    time_ = rclcpp::Time(0);
+    timeout_ = std::chrono::milliseconds(100);
+    precision_ = 0.01;
 
     // Set up the fields for x, y, and z coordinates
     cloud_in_->fields.resize(3);
@@ -99,109 +105,160 @@ protected:
 
 TEST_F(TestManagedTransformBuffer, TestReturn)
 {
+  tf_broadcaster_->sendTransform(tf_base_to_lidar_);
+
   auto eigen_transform =
-    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "lidar_top");
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "lidar_top", time_, timeout_);
   EXPECT_TRUE(eigen_transform.has_value());
-  auto tf2_transform = managed_tf_buffer_->getTransform<tf2::Transform>("base_link", "lidar_top");
+  auto tf2_transform =
+    managed_tf_buffer_->getTransform<tf2::Transform>("base_link", "lidar_top", time_, timeout_);
+  ;
   EXPECT_TRUE(tf2_transform.has_value());
   auto tf_msg_transform = managed_tf_buffer_->getTransform<geometry_msgs::msg::TransformStamped>(
-    "base_link", "lidar_top");
+    "base_link", "lidar_top", time_, timeout_);
+  ;
   EXPECT_TRUE(tf_msg_transform.has_value());
 }
 
 TEST_F(TestManagedTransformBuffer, TestTransformNoExist)
 {
+  tf_broadcaster_->sendTransform(tf_base_to_lidar_);
+
   auto eigen_transform =
-    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "fake_link");
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "fake_link", time_, timeout_);
+  ;
   EXPECT_FALSE(eigen_transform.has_value());
 }
 
 TEST_F(TestManagedTransformBuffer, TestTransformBase)
 {
+  tf_broadcaster_->sendTransform(tf_base_to_lidar_);
+
   auto eigen_base_to_lidar =
-    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "lidar_top");
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "lidar_top", time_, timeout_);
+  ;
   ASSERT_TRUE(eigen_base_to_lidar.has_value());
-  EXPECT_TRUE(eigen_base_to_lidar.value().isApprox(eigen_base_to_lidar_, 0.001));
+  EXPECT_TRUE(eigen_base_to_lidar.value().isApprox(eigen_base_to_lidar_, precision_));
 }
 
 TEST_F(TestManagedTransformBuffer, TestTransformSameFrame)
 {
+  tf_broadcaster_->sendTransform(tf_base_to_lidar_);
+
   auto eigen_base_to_base =
-    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "base_link");
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "base_link", time_, timeout_);
+  ;
   ASSERT_TRUE(eigen_base_to_base.has_value());
-  EXPECT_TRUE(eigen_base_to_base.value().isApprox(Eigen::Matrix4f::Identity(), 0.001));
+  EXPECT_TRUE(eigen_base_to_base.value().isApprox(Eigen::Matrix4f::Identity(), precision_));
 }
 
 TEST_F(TestManagedTransformBuffer, TestTransformInverse)
 {
+  tf_broadcaster_->sendTransform(tf_base_to_lidar_);
+
   auto eigen_lidar_to_base =
-    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("lidar_top", "base_link");
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("lidar_top", "base_link", time_, timeout_);
+  ;
   ASSERT_TRUE(eigen_lidar_to_base.has_value());
-  EXPECT_TRUE(eigen_lidar_to_base.value().isApprox(eigen_base_to_lidar_.inverse(), 0.001));
+  EXPECT_TRUE(eigen_lidar_to_base.value().isApprox(eigen_base_to_lidar_.inverse(), precision_));
 }
 
 TEST_F(TestManagedTransformBuffer, TestTransformMultipleCall)
 {
+  tf_broadcaster_->sendTransform(tf_base_to_lidar_);
+
   std::optional<Eigen::Matrix4f> eigen_transform;
-  eigen_transform = managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "fake_link");
+  eigen_transform =
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "fake_link", time_, timeout_);
+  ;
   EXPECT_FALSE(eigen_transform.has_value());
-  eigen_transform = managed_tf_buffer_->getTransform<Eigen::Matrix4f>("lidar_top", "base_link");
+  eigen_transform =
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("lidar_top", "base_link", time_, timeout_);
+  ;
   ASSERT_TRUE(eigen_transform.has_value());
-  EXPECT_TRUE(eigen_transform.value().isApprox(eigen_base_to_lidar_.inverse(), 0.001));
-  eigen_transform = managed_tf_buffer_->getTransform<Eigen::Matrix4f>("fake_link", "fake_link");
+  EXPECT_TRUE(eigen_transform.value().isApprox(eigen_base_to_lidar_.inverse(), precision_));
+  eigen_transform =
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("fake_link", "fake_link", time_, timeout_);
+  ;
   ASSERT_TRUE(eigen_transform.has_value());
-  EXPECT_TRUE(eigen_transform.value().isApprox(Eigen::Matrix4f::Identity(), 0.001));
-  eigen_transform = managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "lidar_top");
+  EXPECT_TRUE(eigen_transform.value().isApprox(Eigen::Matrix4f::Identity(), precision_));
+  eigen_transform =
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "lidar_top", time_, timeout_);
+  ;
   ASSERT_TRUE(eigen_transform.has_value());
-  EXPECT_TRUE(eigen_transform.value().isApprox(eigen_base_to_lidar_, 0.001));
-  eigen_transform = managed_tf_buffer_->getTransform<Eigen::Matrix4f>("fake_link", "lidar_top");
+  EXPECT_TRUE(eigen_transform.value().isApprox(eigen_base_to_lidar_, precision_));
+  eigen_transform =
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("fake_link", "lidar_top", time_, timeout_);
+  ;
   EXPECT_FALSE(eigen_transform.has_value());
-  eigen_transform = managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "lidar_top");
+  eigen_transform =
+    managed_tf_buffer_->getTransform<Eigen::Matrix4f>("base_link", "lidar_top", time_, timeout_);
+  ;
   ASSERT_TRUE(eigen_transform.has_value());
-  EXPECT_TRUE(eigen_transform.value().isApprox(eigen_base_to_lidar_, 0.001));
+  EXPECT_TRUE(eigen_transform.value().isApprox(eigen_base_to_lidar_, precision_));
 }
 
 TEST_F(TestManagedTransformBuffer, TestTransformEmptyPointCloud)
 {
+  tf_broadcaster_->sendTransform(tf_base_to_lidar_);
+
   auto cloud_in = std::make_unique<sensor_msgs::msg::PointCloud2>();
   cloud_in->header.frame_id = "lidar_top";
   cloud_in->header.stamp = rclcpp::Time(10, 100'000'000);
   auto cloud_out = std::make_unique<sensor_msgs::msg::PointCloud2>();
 
-  EXPECT_FALSE(managed_tf_buffer_->transformPointcloud("lidar_top", *cloud_in, *cloud_out));
-  EXPECT_FALSE(managed_tf_buffer_->transformPointcloud("base_link", *cloud_in, *cloud_out));
-  EXPECT_FALSE(managed_tf_buffer_->transformPointcloud("fake_link", *cloud_in, *cloud_out));
+  EXPECT_FALSE(
+    managed_tf_buffer_->transformPointcloud("lidar_top", *cloud_in, *cloud_out, time_, timeout_));
+  EXPECT_FALSE(
+    managed_tf_buffer_->transformPointcloud("base_link", *cloud_in, *cloud_out, time_, timeout_));
+  EXPECT_FALSE(
+    managed_tf_buffer_->transformPointcloud("fake_link", *cloud_in, *cloud_out, time_, timeout_));
 }
 
 TEST_F(TestManagedTransformBuffer, TestTransformEmptyPointCloudNoHeader)
 {
+  tf_broadcaster_->sendTransform(tf_base_to_lidar_);
+
   auto cloud_in = std::make_unique<sensor_msgs::msg::PointCloud2>();
   auto cloud_out = std::make_unique<sensor_msgs::msg::PointCloud2>();
 
-  EXPECT_FALSE(managed_tf_buffer_->transformPointcloud("lidar_top", *cloud_in, *cloud_out));
-  EXPECT_FALSE(managed_tf_buffer_->transformPointcloud("base_link", *cloud_in, *cloud_out));
-  EXPECT_FALSE(managed_tf_buffer_->transformPointcloud("fake_link", *cloud_in, *cloud_out));
+  EXPECT_FALSE(
+    managed_tf_buffer_->transformPointcloud("lidar_top", *cloud_in, *cloud_out, time_, timeout_));
+  EXPECT_FALSE(
+    managed_tf_buffer_->transformPointcloud("base_link", *cloud_in, *cloud_out, time_, timeout_));
+  EXPECT_FALSE(
+    managed_tf_buffer_->transformPointcloud("fake_link", *cloud_in, *cloud_out, time_, timeout_));
 }
 
 TEST_F(TestManagedTransformBuffer, TestTransformPointCloud)
 {
+  tf_broadcaster_->sendTransform(tf_base_to_lidar_);
+
   auto cloud_out = std::make_unique<sensor_msgs::msg::PointCloud2>();
 
   // Transform cloud with header
-  EXPECT_TRUE(managed_tf_buffer_->transformPointcloud("lidar_top", *cloud_in_, *cloud_out));
-  EXPECT_TRUE(managed_tf_buffer_->transformPointcloud("base_link", *cloud_in_, *cloud_out));
-  EXPECT_FALSE(managed_tf_buffer_->transformPointcloud("fake_link", *cloud_in_, *cloud_out));
+  EXPECT_TRUE(
+    managed_tf_buffer_->transformPointcloud("lidar_top", *cloud_in_, *cloud_out, time_, timeout_));
+  EXPECT_TRUE(
+    managed_tf_buffer_->transformPointcloud("base_link", *cloud_in_, *cloud_out, time_, timeout_));
+  EXPECT_FALSE(
+    managed_tf_buffer_->transformPointcloud("fake_link", *cloud_in_, *cloud_out, time_, timeout_));
 }
 
 TEST_F(TestManagedTransformBuffer, TestTransformPointCloudNoHeader)
 {
+  tf_broadcaster_->sendTransform(tf_base_to_lidar_);
+
   auto cloud_out = std::make_unique<sensor_msgs::msg::PointCloud2>();
 
   // Transform cloud without header
   auto cloud_in = std::make_unique<sensor_msgs::msg::PointCloud2>(*cloud_in_);
   cloud_in->header.frame_id = "";
   cloud_in->header.stamp = rclcpp::Time(0, 0);
-  EXPECT_FALSE(managed_tf_buffer_->transformPointcloud("lidar_top", *cloud_in, *cloud_out));
-  EXPECT_FALSE(managed_tf_buffer_->transformPointcloud("base_link", *cloud_in, *cloud_out));
-  EXPECT_FALSE(managed_tf_buffer_->transformPointcloud("fake_link", *cloud_in, *cloud_out));
+  EXPECT_FALSE(
+    managed_tf_buffer_->transformPointcloud("lidar_top", *cloud_in, *cloud_out, time_, timeout_));
+  EXPECT_FALSE(
+    managed_tf_buffer_->transformPointcloud("base_link", *cloud_in, *cloud_out, time_, timeout_));
+  EXPECT_FALSE(
+    managed_tf_buffer_->transformPointcloud("fake_link", *cloud_in, *cloud_out, time_, timeout_));
 }
