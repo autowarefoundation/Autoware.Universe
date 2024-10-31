@@ -213,7 +213,7 @@ TraverseResult ManagedTransformBuffer::traverseTree(
         depth = 0;
         continue;
       }
-      only_static_requested &= frame_it->second.is_static;
+      only_static_requested = only_static_requested && frame_it->second.is_static;
       current_frame = frame_it->second.parent;
       if (current_frame == t2) {  // Found
         return {true, only_static_requested};
