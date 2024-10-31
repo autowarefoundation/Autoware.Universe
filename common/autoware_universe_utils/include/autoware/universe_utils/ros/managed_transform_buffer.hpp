@@ -84,7 +84,6 @@ using std::chrono_literals::operator""ms;
 using geometry_msgs::msg::TransformStamped;
 using TFMap = std::unordered_map<Key, TransformStamped, std::hash<Key>, PairEqual>;
 using TreeMap = std::unordered_map<std::string, TreeNode>;
-constexpr std::chrono::milliseconds default_timeout = 10ms;
 
 /**
  * @brief A managed TF buffer that handles listener node lifetime. This buffer triggers listener
@@ -257,6 +256,7 @@ private:
   std::unique_ptr<tf2_ros::TransformListener> tf_listener_;
   std::unique_ptr<TFMap> static_tf_buffer_;
   std::unique_ptr<TreeMap> tf_tree_;
+  static std::chrono::milliseconds default_timeout;
 };
 
 }  // namespace autoware::universe_utils

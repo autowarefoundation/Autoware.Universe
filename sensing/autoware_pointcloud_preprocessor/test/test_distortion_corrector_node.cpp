@@ -42,6 +42,8 @@
 
 #include <cassert>
 
+std::chrono::milliseconds autoware::universe_utils::ManagedTransformBuffer::default_timeout =
+  std::chrono::milliseconds(100);  // Relax timeout for CI
 enum AngleCoordinateSystem { HESAI, VELODYNE, CARTESIAN };
 class DistortionCorrectorTest : public ::testing::Test
 {

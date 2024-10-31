@@ -32,6 +32,8 @@
 namespace autoware::universe_utils
 {
 
+std::chrono::milliseconds ManagedTransformBuffer::default_timeout = 10ms;
+
 ManagedTransformBuffer::ManagedTransformBuffer(rclcpp::Node * node, bool managed) : node_(node)
 {
   get_transform_ = [this, managed](
