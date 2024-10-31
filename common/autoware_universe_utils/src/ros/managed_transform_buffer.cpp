@@ -212,7 +212,7 @@ TraverseResult ManagedTransformBuffer::traverseTree(
         return {true, only_static_requested};
       }
       depth++;
-      if (depth > max_depth) {
+      if (depth > tf2::BufferCore::MAX_GRAPH_DEPTH) {
         RCLCPP_ERROR(
           node_->get_logger(), "Traverse depth exceeded for %s -> %s", t1.c_str(), t2.c_str());
         return {false, false};
