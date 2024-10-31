@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <atomic>
 #include <chrono>
+#include <cstdint>
 #include <future>
 
 namespace autoware::universe_utils
@@ -203,7 +204,7 @@ TraverseResult ManagedTransformBuffer::traverseTree(
 
   auto traverse = [this, &timeout_reached](std::string t1, std::string t2) -> TraverseResult {
     bool only_static_requested{true};
-    std::size_t depth = 0;
+    uint32_t depth = 0;
     auto current_frame = t1;
     while (!timeout_reached) {
       auto current_tf_tree = *tf_tree_;  // Avoid race condition (mutex would lock callbacks)
