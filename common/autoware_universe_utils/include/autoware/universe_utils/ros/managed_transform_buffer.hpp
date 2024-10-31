@@ -29,7 +29,6 @@
 #include <functional>
 #include <memory>
 #include <optional>
-#include <shared_mutex>
 #include <string>
 #include <thread>
 #include <type_traits>
@@ -258,7 +257,6 @@ private:
   std::unique_ptr<tf2_ros::TransformListener> tf_listener_;
   std::unique_ptr<TFMap> static_tf_buffer_;
   std::unique_ptr<TreeMap> tf_tree_;
-  std::shared_mutex shared_mutex_;
 };
 
 }  // namespace autoware::universe_utils

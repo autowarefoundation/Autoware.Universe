@@ -24,9 +24,10 @@
 #include <tf2/exceptions.h>
 #include <tf2_ros/create_timer_ros.h>
 
+#include <algorithm>
+#include <atomic>
 #include <chrono>
 #include <future>
-#include <mutex>
 
 namespace autoware::universe_utils
 {
@@ -172,7 +173,6 @@ void ManagedTransformBuffer::deactivateLocalListener()
 void ManagedTransformBuffer::tfCallback(
   const tf2_msgs::msg::TFMessage::SharedPtr msg, const bool is_static)
 {
-  std::shared_lock<std::shared_mutex> lock(shared_mutex_);
   for (const auto & transform : msg->transforms) {
     tf_tree_->emplace(transform.child_frame_id, TreeNode{transform.header.frame_id, is_static});
   }
@@ -197,40 +197,44 @@ TraverseResult ManagedTransformBuffer::traverseTree(
   const std::string & target_frame, const std::string & source_frame,
   const rclcpp::Duration & timeout)
 {
-  auto traverse = [this](const std::string & t1, const std::string & t2) -> TraverseResult {
+  std::atomic<bool> timeout_reached{false};
+
+  auto traverse = [this, &timeout_reached](std::string t1, std::string t2) -> TraverseResult {
     bool only_static_requested{true};
     std::size_t depth = 0;
-    auto frame = t1;
-    while (true) {
-      auto frame_it = tf_tree_->find(frame);
-      if (frame_it == tf_tree_->end()) {
-        return {false, false};
+    auto current_frame = t1;
+    while (!timeout_reached) {
+      auto current_tf_tree = *tf_tree_;  // Avoid race condition (mutex would lock callbacks)
+      auto frame_it = current_tf_tree.find(current_frame);
+      if (frame_it == current_tf_tree.end()) {  // Not found, reset states and reverse the search
+        std::swap(t1, t2);
+        current_frame = t1;
+        only_static_requested = true;
+        depth = 0;
+        continue;
       }
       only_static_requested &= frame_it->second.is_static;
-      frame = frame_it->second.parent;
-      if (frame == t2) {
+      current_frame = frame_it->second.parent;
+      if (current_frame == t2) {  // Found
         return {true, only_static_requested};
       }
       depth++;
-      if (depth > tf2::BufferCore::MAX_GRAPH_DEPTH) {
+      if (depth > tf2::BufferCore::MAX_GRAPH_DEPTH) {  // Possibly TF tree loop occurred
         RCLCPP_ERROR(
           node_->get_logger(), "Traverse depth exceeded for %s -> %s", t1.c_str(), t2.c_str());
         return {false, false};
       }
     }
+    return {false, false};
   };
 
-  std::this_thread::sleep_for(timeout.to_chrono<std::chrono::milliseconds>());
-  std::unique_lock<std::shared_mutex> lock(shared_mutex_);
-  auto result_forward = traverse(target_frame, source_frame);
-  auto result_reverse = traverse(source_frame, target_frame);
-
-  if (result_forward.success) {
-    return result_forward;
+  std::future<TraverseResult> future =
+    std::async(std::launch::async, traverse, target_frame, source_frame);
+  if (
+    future.wait_for(timeout.to_chrono<std::chrono::milliseconds>()) == std::future_status::ready) {
+    return future.get();
   }
-  if (result_reverse.success) {
-    return result_reverse;
-  }
+  timeout_reached = true;
   return {false, false};
 }
 
