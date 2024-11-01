@@ -279,6 +279,7 @@ void RTCInterface::updateCooperateStatus(
   auto update_status = [&](auto & status) {
     status.stamp = stamp;
     status.safe = safe;
+    status.requested = requested;
     status.state.type = state;
     status.start_distance = start_distance;
     status.finish_distance = finish_distance;

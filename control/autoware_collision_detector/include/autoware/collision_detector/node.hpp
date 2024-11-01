@@ -15,6 +15,7 @@
 #ifndef AUTOWARE__COLLISION_DETECTOR__NODE_HPP_
 #define AUTOWARE__COLLISION_DETECTOR__NODE_HPP_
 
+#include <autoware/universe_utils/ros/polling_subscriber.hpp>
 #include <autoware_vehicle_info_utils/vehicle_info_utils.hpp>
 #include <diagnostic_updater/diagnostic_updater.hpp>
 #include <rclcpp/rclcpp.hpp>
@@ -91,12 +92,6 @@ private:
 
   void checkCollision(diagnostic_updater::DiagnosticStatusWrapper & stat);
 
-  void onPointCloud(const sensor_msgs::msg::PointCloud2::ConstSharedPtr msg);
-
-  void onDynamicObjects(const PredictedObjects::ConstSharedPtr msg);
-
-  void onOperationMode(const OperationModeState::ConstSharedPtr msg);
-
   boost::optional<Obstacle> getNearestObstacle() const;
 
   boost::optional<Obstacle> getNearestObstacleByPointCloud() const;
@@ -113,9 +108,13 @@ private:
   rclcpp::TimerBase::SharedPtr timer_;
 
   // publisher and subscriber
-  rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr sub_pointcloud_;
-  rclcpp::Subscription<PredictedObjects>::SharedPtr sub_dynamic_objects_;
-  rclcpp::Subscription<OperationModeState>::SharedPtr sub_operation_mode_;
+  autoware::universe_utils::InterProcessPollingSubscriber<sensor_msgs::msg::PointCloud2>
+    sub_pointcloud_{this, "~/input/pointcloud", autoware::universe_utils::SingleDepthSensorQoS()};
+  autoware::universe_utils::InterProcessPollingSubscriber<PredictedObjects> sub_dynamic_objects_{
+    this, "~/input/objects"};
+  autoware::universe_utils::InterProcessPollingSubscriber<
+    autoware_adapi_v1_msgs::msg::OperationModeState>
+    sub_operation_mode_{this, "/api/operation_mode/state", rclcpp::QoS{1}.transient_local()};
 
   // parameter
   NodeParam node_param_;

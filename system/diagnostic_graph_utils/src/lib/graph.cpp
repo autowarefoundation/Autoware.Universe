@@ -38,6 +38,10 @@ DiagUnit::DiagnosticStatus DiagLeaf::create_diagnostic_status() const
 
 void DiagGraph::create(const DiagGraphStruct & msg)
 {
+  nodes_.clear();
+  diags_.clear();
+  links_.clear();
+
   created_stamp_ = msg.stamp;
   id_ = msg.id;
   for (const auto & node : msg.nodes) nodes_.push_back(std::make_unique<DiagNode>(node));

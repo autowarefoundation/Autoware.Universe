@@ -593,6 +593,8 @@ struct AvoidancePlanningData
   double to_start_point{std::numeric_limits<double>::lowest()};
 
   double to_return_point{std::numeric_limits<double>::max()};
+
+  bool request_operator{false};
 };
 
 /*

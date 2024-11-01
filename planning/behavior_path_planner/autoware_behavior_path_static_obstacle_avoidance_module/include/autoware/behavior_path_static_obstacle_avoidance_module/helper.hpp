@@ -334,37 +334,43 @@ public:
     });
   }
 
-  bool isReady(const ObjectDataArray & objects) const
+  /**
+   * @brief Check if the module is ready to avoid the target object.
+   * @param [in] objects Target objects.
+   * @return first is whether it is ready, and second is if the object is ambiguous
+   */
+  [[nodiscard]] std::pair<bool, bool> isReady(const ObjectDataArray & objects) const
   {
     if (objects.empty()) {
-      return true;
+      return std::make_pair(true, false);
     }
 
-    const auto object = objects.front();
+    const auto & object = objects.front();
 
     // if the object is NOT ambiguous, this module doesn't wait operator approval if RTC is running
     // as AUTO mode.
     if (!object.is_ambiguous) {
-      return true;
+      return std::make_pair(true, false);
     }
 
     // check only front objects.
     if (object.longitudinal < 0.0) {
-      return true;
+      return std::make_pair(true, false);
     }
 
     // if the policy is "manual", this module generates candidate path and waits approval.
     if (parameters_->policy_ambiguous_vehicle == "manual") {
-      return false;
+      return std::make_pair(false, true);
     }
 
     // don't delay avoidance start position if it's not MERGING or DEVIATING vehicle.
     if (!isWaitAndSeeTarget(object)) {
-      return true;
+      return std::make_pair(true, false);
     }
 
     if (!object.avoid_margin.has_value()) {
-      return true;
+      return std::make_pair(true, false);
+      ;
     }
 
     const auto is_object_on_right = utils::static_obstacle_avoidance::isOnRight(object);
@@ -375,8 +381,10 @@ public:
     const auto constant_distance = getFrontConstantDistance(object);
     const auto avoidance_distance = getMinAvoidanceDistance(desire_shift_length);
 
-    return object.longitudinal < prepare_distance + constant_distance + avoidance_distance +
-                                   parameters_->wait_and_see_th_closest_distance;
+    const bool enough_distance =
+      object.longitudinal < prepare_distance + constant_distance + avoidance_distance +
+                              parameters_->wait_and_see_th_closest_distance;
+    return std::make_pair(enough_distance, false);
   }
 
   bool isWaitAndSeeTarget(const ObjectData & object) const

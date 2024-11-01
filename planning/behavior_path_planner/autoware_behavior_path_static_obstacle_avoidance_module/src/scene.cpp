@@ -531,8 +531,10 @@ void StaticObstacleAvoidanceModule::fillShiftLine(
    */
   data.comfortable = helper_->isComfortable(data.new_shift_line);
   data.safe = isSafePath(data.candidate_path, debug);
+  const auto avoidance_ready = helper_->isReady(data.target_objects);
   data.ready = helper_->isReady(data.new_shift_line, path_shifter_.getLastShiftLength()) &&
-               helper_->isReady(data.target_objects);
+               avoidance_ready.first;
+  data.request_operator = avoidance_ready.second;
 }
 
 void StaticObstacleAvoidanceModule::fillEgoStatus(

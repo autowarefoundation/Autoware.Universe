@@ -153,19 +153,6 @@ CollisionDetectorNode::CollisionDetectorNode(const rclcpp::NodeOptions & node_op
   }
 
   vehicle_info_ = autoware::vehicle_info_utils::VehicleInfoUtils(*this).getVehicleInfo();
-
-  // Subscribers
-  sub_pointcloud_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-    "~/input/pointcloud", rclcpp::SensorDataQoS(),
-    std::bind(&CollisionDetectorNode::onPointCloud, this, std::placeholders::_1));
-  sub_dynamic_objects_ = this->create_subscription<PredictedObjects>(
-    "~/input/objects", 1,
-    std::bind(&CollisionDetectorNode::onDynamicObjects, this, std::placeholders::_1));
-
-  sub_operation_mode_ = this->create_subscription<autoware_adapi_v1_msgs::msg::OperationModeState>(
-    "/api/operation_mode/state", rclcpp::QoS{1}.transient_local(),
-    std::bind(&CollisionDetectorNode::onOperationMode, this, std::placeholders::_1));
-
   last_obstacle_found_stamp_ = this->now();
 
   // Diagnostics Updater
@@ -325,6 +312,10 @@ bool CollisionDetectorNode::shouldBeExcluded(
 
 void CollisionDetectorNode::checkCollision(diagnostic_updater::DiagnosticStatusWrapper & stat)
 {
+  pointcloud_ptr_ = sub_pointcloud_.takeData();
+  object_ptr_ = sub_dynamic_objects_.takeData();
+  operation_mode_ptr_ = sub_operation_mode_.takeData();
+
   if (node_param_.use_pointcloud && !pointcloud_ptr_) {
     RCLCPP_WARN_THROTTLE(
       this->get_logger(), *this->get_clock(), 5000 /* ms */, "waiting for pointcloud info...");
@@ -370,21 +361,6 @@ void CollisionDetectorNode::checkCollision(diagnostic_updater::DiagnosticStatusW
   }
 
   stat.summary(status.level, status.message);
-}
-
-void CollisionDetectorNode::onPointCloud(const sensor_msgs::msg::PointCloud2::ConstSharedPtr msg)
-{
-  pointcloud_ptr_ = msg;
-}
-
-void CollisionDetectorNode::onDynamicObjects(const PredictedObjects::ConstSharedPtr msg)
-{
-  object_ptr_ = msg;
-}
-
-void CollisionDetectorNode::onOperationMode(const OperationModeState::ConstSharedPtr msg)
-{
-  operation_mode_ptr_ = msg;
 }
 
 boost::optional<Obstacle> CollisionDetectorNode::getNearestObstacle() const

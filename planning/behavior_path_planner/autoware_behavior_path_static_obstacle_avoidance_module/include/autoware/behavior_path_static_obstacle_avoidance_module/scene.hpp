@@ -89,7 +89,7 @@ private:
       rtc_interface_ptr_map_.at("left")->updateCooperateStatus(
         uuid_map_.at("left"), isExecutionReady(), State::WAITING_FOR_EXECUTION,
         candidate.start_distance_to_path_change, candidate.finish_distance_to_path_change,
-        clock_->now());
+        clock_->now(), avoid_data_.request_operator);
       candidate_uuid_ = uuid_map_.at("left");
       return;
     }
@@ -97,7 +97,7 @@ private:
       rtc_interface_ptr_map_.at("right")->updateCooperateStatus(
         uuid_map_.at("right"), isExecutionReady(), State::WAITING_FOR_EXECUTION,
         candidate.start_distance_to_path_change, candidate.finish_distance_to_path_change,
-        clock_->now());
+        clock_->now(), avoid_data_.request_operator);
       candidate_uuid_ = uuid_map_.at("right");
       return;
     }

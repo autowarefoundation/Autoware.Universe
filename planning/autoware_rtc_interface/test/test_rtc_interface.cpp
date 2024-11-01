@@ -153,7 +153,7 @@ TEST_F(RTCInterfaceTest, uuid_to_string)
   // allowed)
   rtc_interface_->updateCooperateStatus(
     uuid, true, State::WAITING_FOR_EXECUTION, 10.0, 100.0, stamp, true);
-  rtc_interface_->updateCooperateStatus(uuid, true, State::RUNNING, 10.0, 100.0, stamp);
+  rtc_interface_->updateCooperateStatus(uuid, true, State::RUNNING, 10.0, 100.0, stamp, true);
   EXPECT_TRUE(rtc_interface_->isRegistered(uuid));
   EXPECT_FALSE(rtc_interface_->isActivated(uuid));
   EXPECT_FALSE(rtc_interface_->isForceActivated(uuid));
