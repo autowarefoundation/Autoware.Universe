@@ -41,7 +41,7 @@ namespace bp = boost::process;
 HddMonitor::HddMonitor(const rclcpp::NodeOptions & options)
 : Node("hdd_monitor", options),
   updater_(this),
-  hdd_reader_port_(declare_parameter<int>("hdd_reader_port", 7635)),
+  hdd_reader_port_(declare_parameter<int>("hdd_reader_port")),
   last_hdd_stat_update_time_{0, 0, this->get_clock()->get_clock_type()}
 {
   using namespace std::literals::chrono_literals;
@@ -498,36 +498,36 @@ void HddMonitor::checkConnection(diagnostic_updater::DiagnosticStatusWrapper & s
 
 void HddMonitor::getHddParams()
 {
-  const auto num_disks = this->declare_parameter("num_disks", 0);
+  const auto num_disks = this->declare_parameter<int>("num_disks");
   for (auto i = 0; i < num_disks; ++i) {
     const auto prefix = "disks.disk" + std::to_string(i);
-    const auto mount_point = declare_parameter<std::string>(prefix + ".name", "/");
+    const auto mount_point = declare_parameter<std::string>(prefix + ".name");
 
     HddParam param;
-    param.temp_warn_ = declare_parameter<float>(prefix + ".temp_warn", 55.0f);
-    param.temp_error_ = declare_parameter<float>(prefix + ".temp_error", 70.0f);
-    param.power_on_hours_warn_ = declare_parameter<int>(prefix + ".power_on_hours_warn", 3000000);
+    param.temp_warn_ = declare_parameter<float>(prefix + ".temp_warn");
+    param.temp_error_ = declare_parameter<float>(prefix + ".temp_error");
+    param.power_on_hours_warn_ = declare_parameter<int>(prefix + ".power_on_hours_warn");
     param.total_data_written_safety_factor_ =
-      declare_parameter<float>(prefix + ".total_data_written_safety_factor", 0.05f);
+      declare_parameter<float>(prefix + ".total_data_written_safety_factor");
     int64_t total_data_written_warn_org =
-      declare_parameter<int64_t>(prefix + ".total_data_written_warn", 4915200);
+      declare_parameter<int64_t>(prefix + ".total_data_written_warn");
     param.total_data_written_warn_ = static_cast<uint64_t>(
       total_data_written_warn_org * (1.0f - param.total_data_written_safety_factor_));
-    param.recovered_error_warn_ = declare_parameter<int>(prefix + ".recovered_error_warn", 1);
-    param.free_warn_ = declare_parameter<int>(prefix + ".free_warn", 5120);
-    param.free_error_ = declare_parameter<int>(prefix + ".free_error", 100);
-    param.read_data_rate_warn_ = declare_parameter<float>(prefix + ".read_data_rate_warn", 360.0);
-    param.write_data_rate_warn_ = declare_parameter<float>(prefix + ".write_data_rate_warn", 103.5);
-    param.read_iops_warn_ = declare_parameter<float>(prefix + ".read_iops_warn", 63360.0);
-    param.write_iops_warn_ = declare_parameter<float>(prefix + ".write_iops_warn", 24120.0);
-    param.temp_attribute_id_ =
-      static_cast<uint8_t>(declare_parameter<int>(prefix + ".temp_attribute_id", 0xC2));
-    param.power_on_hours_attribute_id_ =
-      static_cast<uint8_t>(declare_parameter<int>(prefix + ".power_on_hours_attribute_id", 0x09));
-    param.total_data_written_attribute_id_ = static_cast<uint8_t>(
-      declare_parameter<int>(prefix + ".total_data_written_attribute_id", 0xF1));
-    param.recovered_error_attribute_id_ =
-      static_cast<uint8_t>(declare_parameter<int>(prefix + ".recovered_error_attribute_id", 0xC3));
+    param.recovered_error_warn_ = declare_parameter<int>(prefix + ".recovered_error_warn");
+    param.free_warn_ = declare_parameter<int>(prefix + ".free_warn");
+    param.free_error_ = declare_parameter<int>(prefix + ".free_error");
+    param.read_data_rate_warn_ = declare_parameter<float>(prefix + ".read_data_rate_warn");
+    param.write_data_rate_warn_ = declare_parameter<float>(prefix + ".write_data_rate_warn");
+    param.read_iops_warn_ = declare_parameter<float>(prefix + ".read_iops_warn");
+    param.write_iops_warn_ = declare_parameter<float>(prefix + ".write_iops_warn");
+    param.temp_attribute_id_ = static_cast<uint8_t>(
+      std::stoi(declare_parameter<std::string>(prefix + ".temp_attribute_id"), nullptr, 16));
+    param.power_on_hours_attribute_id_ = static_cast<uint8_t>(std::stoi(
+      declare_parameter<std::string>(prefix + ".power_on_hours_attribute_id"), nullptr, 16));
+    param.total_data_written_attribute_id_ = static_cast<uint8_t>(std::stoi(
+      declare_parameter<std::string>(prefix + ".total_data_written_attribute_id"), nullptr, 16));
+    param.recovered_error_attribute_id_ = static_cast<uint8_t>(std::stoi(
+      declare_parameter<std::string>(prefix + ".recovered_error_attribute_id"), nullptr, 16));
 
     hdd_params_[mount_point] = param;
 

@@ -1,0 +1,345 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for system monitor",
+  "type": "object",
+  "definitions": {
+    "cpu_monitor": {
+      "type": "object",
+      "properties": {
+        "usage_warn": {
+          "type": "number",
+          "default": 0.9,
+          "description": "Generates warning when CPU usage reaches a specified value or higher and last for usage_warn_count counts."
+        },
+        "usage_error": {
+          "type": "number",
+          "default": 1.0,
+          "description": "Generates error when CPU usage reaches a specified value or higher and last for usage_error_count counts."
+        },
+        "usage_warn_count": {
+          "type": "integer",
+          "default": 2,
+          "description": "Generates warning when CPU usage reaches usage_warn value or higher and last for a specified counts."
+        },
+        "usage_error_count": {
+          "type": "integer",
+          "default": 2,
+          "description": "Generates error when CPU usage reaches usage_error value or higher and last for a specified counts."
+        },
+        "usage_avg": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, the monitor will use the average CPU usage of all cores. If false, the monitor will use the CPU usage of the first core."
+        },
+        "msr_reader_port": {
+          "type": "integer",
+          "default": 7634,
+          "description": "Port number to connect to msr_reader."
+        }
+      },
+      "required": [
+        "usage_warn",
+        "usage_error",
+        "usage_warn_count",
+        "usage_error_count",
+        "usage_avg",
+        "msr_reader_port"
+      ],
+      "additionalProperties": false
+    },
+    "mem_monitor": {
+      "type": "object",
+      "properties": {
+        "available_size": {
+          "type": "integer",
+          "default": 1024,
+          "description": "Generates warning when available memory size is less than the specified value."
+        }
+      },
+      "required": ["available_size"],
+      "additionalProperties": false
+    },
+    "net_monitor": {
+      "type": "object",
+      "properties": {
+        "device": {
+          "type": "array",
+          "default": ["*"],
+          "description": "The name of network interface to monitor. (e.g. eth0, * for all network interfaces)"
+        },
+        "monitor_program": {
+          "type": "string",
+          "default": "greengrass",
+          "description": "program name to be monitored by nethogs name."
+        },
+        "crc_error_check_duration": {
+          "type": "integer",
+          "default": 1,
+          "description": "CRC error check duration."
+        },
+        "crc_error_count_threshold": {
+          "type": "integer",
+          "default": 1,
+          "description": "Generates warning when count of CRC errors during CRC error check duration reaches a specified value or higher."
+        },
+        "reassembles_failed_check_duration": {
+          "type": "integer",
+          "default": 1,
+          "description": "IP packet reassembles failed check duration."
+        },
+        "reassembles_failed_check_count": {
+          "type": "integer",
+          "default": 1,
+          "description": "Generates warning when count of IP packet reassembles failed during IP packet reassembles failed check duration reaches a specified value or higher."
+        }
+      },
+      "required": [
+        "device",
+        "monitor_program",
+        "crc_error_check_duration",
+        "crc_error_count_threshold",
+        "reassembles_failed_check_duration",
+        "reassembles_failed_check_count"
+      ],
+      "additionalProperties": false
+    },
+    "ntp_monitor": {
+      "type": "object",
+      "properties": {
+        "offset_warn": {
+          "type": "number",
+          "default": 0.1,
+          "description": "Generates warning when NTP offset reaches a specified value or higher. (default is 100ms)"
+        },
+        "offset_error": {
+          "type": "number",
+          "default": 5.0,
+          "description": "Generates warning when NTP offset reaches a specified value or higher. (default is 5sec)"
+        },
+        "timeout": {
+          "type": "integer",
+          "default": 5,
+          "description": "Timeout for NTP query."
+        }
+      },
+      "required": ["offset_warn", "offset_error", "timeout"],
+      "additionalProperties": false
+    },
+    "process_monitor": {
+      "type": "object",
+      "properties": {
+        "num_of_procs": {
+          "type": "integer",
+          "default": 5,
+          "description": "The number of processes to generate High-load Proc[0-9] and High-mem Proc[0-9]."
+        }
+      },
+      "required": ["num_of_procs"],
+      "additionalProperties": false
+    },
+    "hdd_monitor": {
+      "type": "object",
+      "properties": {
+        "disks": {
+          "type": "object",
+          "properties": {
+            "disk0": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "/",
+                  "description": "The disk name to monitor temperature. (e.g. /dev/sda)"
+                },
+                "temp_attribute_id": {
+                  "type": "string",
+                  "default": "0xC2",
+                  "description": "S.M.A.R.T attribute ID of temperature."
+                },
+                "temp_warn": {
+                  "type": "number",
+                  "default": 55.0,
+                  "description": "Generates warning when HDD temperature reaches a specified value or higher."
+                },
+                "temp_error": {
+                  "type": "number",
+                  "default": 70.0,
+                  "description": "Generates error when HDD temperature reaches a specified value or higher."
+                },
+                "power_on_hours_attribute_id": {
+                  "type": "string",
+                  "default": "0x09",
+                  "description": "S.M.A.R.T attribute ID of power-on hours."
+                },
+                "power_on_hours_warn": {
+                  "type": "integer",
+                  "default": 3000000,
+                  "description": "Generates warning when HDD power-on hours reaches a specified value or higher."
+                },
+                "total_data_written_attribute_id": {
+                  "type": "string",
+                  "default": "0xF1",
+                  "description": "S.M.A.R.T attribute ID of total data written."
+                },
+                "total_data_written_warn": {
+                  "type": "integer",
+                  "default": 4915200,
+                  "description": "Generates warning when HDD total data written reaches a specified value or higher."
+                },
+                "total_data_written_safety_factor": {
+                  "type": "number",
+                  "default": 0.05,
+                  "description": "Safety factor of HDD total data written."
+                },
+                "recovered_error_attribute_id": {
+                  "type": "string",
+                  "default": "0xC3",
+                  "description": "S.M.A.R.T attribute ID of recovered error."
+                },
+                "recovered_error_warn": {
+                  "type": "integer",
+                  "default": 1,
+                  "description": "Generates warning when HDD recovered error reaches a specified value or higher."
+                },
+                "free_warn": {
+                  "type": "integer",
+                  "default": 5120,
+                  "description": "Generates warning when HDD free space reaches a specified value or lower."
+                },
+                "free_error": {
+                  "type": "integer",
+                  "default": 100,
+                  "description": "Generates error when HDD free space reaches a specified value or lower."
+                },
+                "read_data_rate_warn": {
+                  "type": "number",
+                  "default": 360.0,
+                  "description": "Generates warning when HDD read data rate reaches a specified value or higher."
+                },
+                "write_data_rate_warn": {
+                  "type": "number",
+                  "default": 103.5,
+                  "description": "Generates warning when HDD write data rate reaches a specified value or higher."
+                },
+                "read_iops_warn": {
+                  "type": "number",
+                  "default": 63360.0,
+                  "description": "Generates warning when HDD read IOPS reaches a specified value or higher."
+                },
+                "write_iops_warn": {
+                  "type": "number",
+                  "default": 24120.0,
+                  "description": "Generates warning when HDD write IOPS reaches a specified value or higher."
+                }
+              },
+              "required": [
+                "name",
+                "temp_attribute_id",
+                "temp_warn",
+                "temp_error",
+                "power_on_hours_attribute_id",
+                "power_on_hours_warn",
+                "total_data_written_attribute_id",
+                "total_data_written_warn",
+                "total_data_written_safety_factor",
+                "recovered_error_attribute_id",
+                "recovered_error_warn",
+                "free_warn",
+                "free_error",
+                "read_data_rate_warn",
+                "write_data_rate_warn",
+                "read_iops_warn",
+                "write_iops_warn"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": ["disk0"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["disks"],
+      "additionalProperties": false
+    },
+    "gpu_monitor": {
+      "type": "object",
+      "properties": {
+        "temp_warn": {
+          "type": "number",
+          "default": 90.0,
+          "description": "Generates warning when GPU temperature reaches a specified value or higher."
+        },
+        "temp_error": {
+          "type": "number",
+          "default": 95.0,
+          "description": "Generates error when GPU temperature reaches a specified value or higher."
+        },
+        "gpu_usage_warn": {
+          "type": "number",
+          "default": 0.9,
+          "description": "Generates warning when GPU usage reaches a specified value or higher."
+        },
+        "gpu_usage_error": {
+          "type": "number",
+          "default": 1.0,
+          "description": "Generates error when GPU usage reaches a specified value or higher."
+        },
+        "memory_usage_warn": {
+          "type": "number",
+          "default": 0.95,
+          "description": "Generates warning when GPU memory usage reaches a specified value or higher."
+        },
+        "memory_usage_error": {
+          "type": "number",
+          "default": 0.99,
+          "description": "Generates error when GPU memory usage reaches a specified value or higher."
+        }
+      },
+      "required": [
+        "temp_warn",
+        "temp_error",
+        "gpu_usage_warn",
+        "gpu_usage_error",
+        "memory_usage_warn",
+        "memory_usage_error"
+      ],
+      "additionalProperties": false
+    },
+    "voltage_monitor": {
+      "type": "object",
+      "properties": {
+        "cmos_battery_warn": {
+          "type": "number",
+          "default": 2.9,
+          "description": "Generates warning when voltage of CMOS Battery is lower."
+        },
+        "cmos_battery_error": {
+          "type": "number",
+          "default": 2.7,
+          "description": "Generates error when voltage of CMOS Battery is lower."
+        },
+        "cmos_battery_label": {
+          "type": "string",
+          "default": "",
+          "description": "voltage string in sensors command outputs. if empty no voltage will be checked."
+        }
+      },
+      "required": ["cmos_battery_warn", "cmos_battery_error", "cmos_battery_label"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/system_monitor"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

@@ -33,7 +33,7 @@ namespace bp = boost::process;
 MemMonitor::MemMonitor(const rclcpp::NodeOptions & options)
 : Node("mem_monitor", options),
   updater_(this),
-  available_size_(declare_parameter<int>("available_size", 1024) * 1024 * 1024)
+  available_size_(declare_parameter<int>("available_size") * 1024 * 1024)
 {
   gethostname(hostname_, sizeof(hostname_));
   updater_.setHardwareID(hostname_);

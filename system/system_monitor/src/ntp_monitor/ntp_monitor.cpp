@@ -36,9 +36,9 @@ namespace fs = boost::filesystem;
 NTPMonitor::NTPMonitor(const rclcpp::NodeOptions & options)
 : Node("ntp_monitor", options),
   updater_(this),
-  offset_warn_(declare_parameter<float>("offset_warn", 0.1)),
-  offset_error_(declare_parameter<float>("offset_error", 5.0)),
-  timeout_(declare_parameter<int>("timeout", 5)),
+  offset_warn_(declare_parameter<float>("offset_warn")),
+  offset_error_(declare_parameter<float>("offset_error")),
+  timeout_(declare_parameter<int>("timeout")),
   timeout_expired_(false)
 {
   using namespace std::literals::chrono_literals;

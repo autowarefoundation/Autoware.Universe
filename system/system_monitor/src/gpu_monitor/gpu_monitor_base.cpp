@@ -27,12 +27,12 @@ GPUMonitorBase::GPUMonitorBase(const std::string & node_name, const rclcpp::Node
 : Node(node_name, options),
   updater_(this),
   hostname_{""},
-  temp_warn_(declare_parameter<float>("temp_warn", 90.0)),
-  temp_error_(declare_parameter<float>("temp_error", 95.0)),
-  gpu_usage_warn_(declare_parameter<float>("gpu_usage_warn", 0.90)),
-  gpu_usage_error_(declare_parameter<float>("gpu_usage_error", 1.00)),
-  memory_usage_warn_(declare_parameter<float>("memory_usage_warn", 0.95)),
-  memory_usage_error_(declare_parameter<float>("memory_usage_error", 0.99))
+  temp_warn_(declare_parameter<float>("temp_warn")),
+  temp_error_(declare_parameter<float>("temp_error")),
+  gpu_usage_warn_(declare_parameter<float>("gpu_usage_warn")),
+  gpu_usage_error_(declare_parameter<float>("gpu_usage_error")),
+  memory_usage_warn_(declare_parameter<float>("memory_usage_warn")),
+  memory_usage_error_(declare_parameter<float>("memory_usage_error"))
 {
   gethostname(hostname_, sizeof(hostname_));
 

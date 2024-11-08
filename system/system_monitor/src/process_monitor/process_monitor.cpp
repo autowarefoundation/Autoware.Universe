@@ -33,7 +33,7 @@
 ProcessMonitor::ProcessMonitor(const rclcpp::NodeOptions & options)
 : Node("process_monitor", options),
   updater_(this),
-  num_of_procs_(declare_parameter<int>("num_of_procs", 5)),
+  num_of_procs_(declare_parameter<int>("num_of_procs")),
   is_top_error_(false),
   is_pipe2_error_(false)
 {

@@ -38,17 +38,15 @@ NetMonitor::NetMonitor(const rclcpp::NodeOptions & options)
   updater_(this),
   hostname_(),
   last_update_time_{0, 0, this->get_clock()->get_clock_type()},
-  device_params_(
-    declare_parameter<std::vector<std::string>>("devices", std::vector<std::string>())),
+  device_params_(declare_parameter<std::vector<std::string>>("devices")),
   getifaddrs_error_code_(0),
-  monitor_program_(declare_parameter<std::string>("monitor_program", "greengrass")),
+  monitor_program_(declare_parameter<std::string>("monitor_program")),
   socket_path_(declare_parameter("socket_path", traffic_reader_service::socket_path)),
-  crc_error_check_duration_(declare_parameter<int>("crc_error_check_duration", 1)),
-  crc_error_count_threshold_(declare_parameter<int>("crc_error_count_threshold", 1)),
+  crc_error_check_duration_(declare_parameter<int>("crc_error_check_duration")),
+  crc_error_count_threshold_(declare_parameter<int>("crc_error_count_threshold")),
   last_reassembles_failed_(0),
-  reassembles_failed_check_duration_(
-    declare_parameter<int>("reassembles_failed_check_duration", 1)),
-  reassembles_failed_check_count_(declare_parameter<int>("reassembles_failed_check_count", 1)),
+  reassembles_failed_check_duration_(declare_parameter<int>("reassembles_failed_check_duration")),
+  reassembles_failed_check_count_(declare_parameter<int>("reassembles_failed_check_count")),
   reassembles_failed_column_index_(0)
 {
   if (monitor_program_.empty()) {

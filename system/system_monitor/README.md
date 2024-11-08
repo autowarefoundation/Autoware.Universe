@@ -90,7 +90,7 @@ Every topic is published in 1 minute interval.
 
 ## ROS parameters
 
-See [ROS parameters](docs/ros_parameters.md).
+{{ json_to_markdown("system/system_monitor/schema/system_monitor.schema.json") }}
 
 ## Notes
 

@@ -45,11 +45,11 @@ CPUMonitorBase::CPUMonitorBase(const std::string & node_name, const rclcpp::Node
   temps_(),
   freqs_(),
   mpstat_exists_(false),
-  usage_warn_(declare_parameter<float>("usage_warn", 0.96)),
-  usage_error_(declare_parameter<float>("usage_error", 0.96)),
-  usage_warn_count_(declare_parameter<int>("usage_warn_count", 1)),
-  usage_error_count_(declare_parameter<int>("usage_error_count", 2)),
-  usage_avg_(declare_parameter<bool>("usage_avg", true))
+  usage_warn_(declare_parameter<float>("usage_warn")),
+  usage_error_(declare_parameter<float>("usage_error")),
+  usage_warn_count_(declare_parameter<int>("usage_warn_count")),
+  usage_error_count_(declare_parameter<int>("usage_error_count")),
+  usage_avg_(declare_parameter<bool>("usage_avg"))
 {
   gethostname(hostname_, sizeof(hostname_));
   num_cores_ = boost::thread::hardware_concurrency();
