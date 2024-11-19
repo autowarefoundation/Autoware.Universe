@@ -43,14 +43,8 @@ using GoalCandidates = std::vector<GoalCandidate>;
 class GoalSearcherBase
 {
 public:
-  explicit GoalSearcherBase(const GoalPlannerParameters & parameters) { parameters_ = parameters; }
+  explicit GoalSearcherBase(const GoalPlannerParameters & parameters) : parameters_{parameters} {}
   virtual ~GoalSearcherBase() = default;
-
-  void setReferenceGoal(const Pose & reference_goal_pose)
-  {
-    reference_goal_pose_ = reference_goal_pose;
-  }
-  const Pose & getReferenceGoal() const { return reference_goal_pose_; }
 
   MultiPolygon2d getAreaPolygons() const { return area_polygons_; }
   virtual GoalCandidates search(const std::shared_ptr<const PlannerData> & planner_data) = 0;
@@ -72,8 +66,7 @@ public:
     const PredictedObjects & objects) const = 0;
 
 protected:
-  GoalPlannerParameters parameters_{};
-  Pose reference_goal_pose_{};
+  const GoalPlannerParameters parameters_;
   MultiPolygon2d area_polygons_{};
 };
 }  // namespace autoware::behavior_path_planner

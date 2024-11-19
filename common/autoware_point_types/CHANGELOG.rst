@@ -5,8 +5,8 @@ Changelog for package autoware_point_types
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* refactor(autoware_point_types): prefix namespace with autoware::point_types (`#9169 <https://github.com/youtalk/autoware.universe/issues/9169>`_)
-* feat: migrating pointcloud types (`#6996 <https://github.com/youtalk/autoware.universe/issues/6996>`_)
+* refactor(autoware_point_types): prefix namespace with autoware::point_types (`#9169 <https://github.com/autowarefoundation/autoware.universe/issues/9169>`_)
+* feat: migrating pointcloud types (`#6996 <https://github.com/autowarefoundation/autoware.universe/issues/6996>`_)
   * feat: changed most of sensing to the new type
   * chore: started applying changes to the perception stack
   * feat: confirmed operation until centerpoint
@@ -26,8 +26,8 @@ Changelog for package autoware_point_types
   ---------
   Co-authored-by: kminoda <44218668+kminoda@users.noreply.github.com>
   Co-authored-by: badai nguyen <94814556+badai-nguyen@users.noreply.github.com>
-* chore: updated maintainers for the autoware_point_types package (`#7797 <https://github.com/youtalk/autoware.universe/issues/7797>`_)
-* docs(common): adding .pages file (`#7148 <https://github.com/youtalk/autoware.universe/issues/7148>`_)
+* chore: updated maintainers for the autoware_point_types package (`#7797 <https://github.com/autowarefoundation/autoware.universe/issues/7797>`_)
+* docs(common): adding .pages file (`#7148 <https://github.com/autowarefoundation/autoware.universe/issues/7148>`_)
   * docs(common): adding .pages file
   * fix naming
   * fix naming
@@ -40,7 +40,7 @@ Changelog for package autoware_point_types
 
 0.26.0 (2024-04-03)
 -------------------
-* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/youtalk/autoware.universe/issues/3616>`_)
+* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/autowarefoundation/autoware.universe/issues/3616>`_)
   * build: mark autoware_cmake as <buildtool_depend>
   with <build_depend>, autoware_cmake is automatically exported with ament_target_dependencies() (unecessary)
   * style(pre-commit): autofix
@@ -48,15 +48,15 @@ Changelog for package autoware_point_types
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-* feat: isolate gtests in all packages (`#693 <https://github.com/youtalk/autoware.universe/issues/693>`_)
-* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/youtalk/autoware.universe/issues/856>`_)
-* refactor: use autoware cmake (`#849 <https://github.com/youtalk/autoware.universe/issues/849>`_)
+* feat: isolate gtests in all packages (`#693 <https://github.com/autowarefoundation/autoware.universe/issues/693>`_)
+* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/autowarefoundation/autoware.universe/issues/856>`_)
+* refactor: use autoware cmake (`#849 <https://github.com/autowarefoundation/autoware.universe/issues/849>`_)
   * remove autoware_auto_cmake
   * add build_depend of autoware_cmake
   * use autoware_cmake in CMakeLists.txt
   * fix bugs
   * fix cmake lint errors
-* feat: add blockage diagnostics (`#461 <https://github.com/youtalk/autoware.universe/issues/461>`_)
+* feat: add blockage diagnostics (`#461 <https://github.com/autowarefoundation/autoware.universe/issues/461>`_)
   * feat!: add blockage diagnostic
   * fix: typo
   * docs: add documentation
@@ -83,7 +83,7 @@ Changelog for package autoware_point_types
   * docs: add limits
   * chore: check overflow
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* ci: check include guard (`#438 <https://github.com/youtalk/autoware.universe/issues/438>`_)
+* ci: check include guard (`#438 <https://github.com/autowarefoundation/autoware.universe/issues/438>`_)
   * ci: check include guard
   * apply pre-commit
   * Update .pre-commit-config.yaml
@@ -91,7 +91,7 @@ Changelog for package autoware_point_types
   * fix: pre-commit
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
   Co-authored-by: Kenji Miyake <31987104+kenji-miyake@users.noreply.github.com>
-* feat: add point_types for wrapper (`#784 <https://github.com/youtalk/autoware.universe/issues/784>`_) (`#215 <https://github.com/youtalk/autoware.universe/issues/215>`_)
+* feat: add point_types for wrapper (`#784 <https://github.com/autowarefoundation/autoware.universe/issues/784>`_) (`#215 <https://github.com/autowarefoundation/autoware.universe/issues/215>`_)
   * add point_types
   * Revert "add point_types"
   This reverts commit 5810000cd1cbd876bc22372e2bb74ccaca06187b.

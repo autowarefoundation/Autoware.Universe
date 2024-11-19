@@ -87,6 +87,7 @@ private:
   std::string world_frame_id_;  // tracking frame
   std::unique_ptr<DataAssociation> association_;
   std::unique_ptr<TrackerProcessor> processor_;
+  bool enable_odometry_uncertainty_;
 
   // input manager
   std::unique_ptr<InputManager> input_manager_;

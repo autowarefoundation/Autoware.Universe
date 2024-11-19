@@ -5,33 +5,33 @@ Changelog for package mrm_handler
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* fix(mrm_handler, emergency_handler): remove unnecessary depend (`#8099 <https://github.com/youtalk/autoware.universe/issues/8099>`_)
+* fix(mrm_handler, emergency_handler): remove unnecessary depend (`#8099 <https://github.com/autowarefoundation/autoware.universe/issues/8099>`_)
   * fix(mrm_handler): remove unnecessary depends
   * fix(emergency_handler): remove unnecessary depends
   ---------
-* feat(mrm_handler): input gear command (`#8080 <https://github.com/youtalk/autoware.universe/issues/8080>`_)
+* feat(mrm_handler): input gear command (`#8080 <https://github.com/autowarefoundation/autoware.universe/issues/8080>`_)
   * feat(mrm_handler): input gear command
   * style(pre-commit): autofix
   * fix minor
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(mrm_handler): add check for autonomous mode and do some refactoring (`#8067 <https://github.com/youtalk/autoware.universe/issues/8067>`_)
+* fix(mrm_handler): add check for autonomous mode and do some refactoring (`#8067 <https://github.com/autowarefoundation/autoware.universe/issues/8067>`_)
   * add check for autonomous mode and do some refactoring
   * add comments
   * fix comment
   ---------
-* feat(mrm_handler): operate mrm only when autonomous operation mode (`#7784 <https://github.com/youtalk/autoware.universe/issues/7784>`_)
+* feat(mrm_handler): operate mrm only when autonomous operation mode (`#7784 <https://github.com/autowarefoundation/autoware.universe/issues/7784>`_)
   * feat: add isOperationModeAutonomous() function to MRM handler core
   The code changes add a new function `isOperationModeAutonomous()` to the MRM handler core. This function is used to check if the operation mode is set to autonomous.
   ---------
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* fix(mrm_handler): fix multiCondition warning (`#7543 <https://github.com/youtalk/autoware.universe/issues/7543>`_)
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* fix(mrm_handler): fix multiCondition warning (`#7543 <https://github.com/autowarefoundation/autoware.universe/issues/7543>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* fix(mrm_handler): fix stop judgement (`#7362 <https://github.com/youtalk/autoware.universe/issues/7362>`_)
+* fix(mrm_handler): fix stop judgement (`#7362 <https://github.com/autowarefoundation/autoware.universe/issues/7362>`_)
   fix stop judgement
   Co-authored-by: Autumn60 <akiro.harada@tier4.jp>
-* feat(emergency_handler, mrm_handler): change to read topic by polling (`#7297 <https://github.com/youtalk/autoware.universe/issues/7297>`_)
+* feat(emergency_handler, mrm_handler): change to read topic by polling (`#7297 <https://github.com/autowarefoundation/autoware.universe/issues/7297>`_)
   * replace Subscription to InterProcessPollingSubscriber
   * sort depend packages list in package.xml
   * fix end of file
@@ -40,29 +40,29 @@ Changelog for package mrm_handler
   * replace Subscription to InterProcessPollingSubscriber (mrm_handler)
   ---------
   Co-authored-by: Autumn60 <akiro.harada@tier4.jp>
-* refactor(mrm_handler): use switch for state machine (`#7277 <https://github.com/youtalk/autoware.universe/issues/7277>`_)
+* refactor(mrm_handler): use switch for state machine (`#7277 <https://github.com/autowarefoundation/autoware.universe/issues/7277>`_)
   * refactor nested if elses
   * delete other commits
   * return for consistency
   ---------
-* fix(emergency_handler,mrm_handler): check for ego speed when determining the gear command (`#7264 <https://github.com/youtalk/autoware.universe/issues/7264>`_)
+* fix(emergency_handler,mrm_handler): check for ego speed when determining the gear command (`#7264 <https://github.com/autowarefoundation/autoware.universe/issues/7264>`_)
   * check for ego speed when determining the gear command
   * add gear history
   * update msg types
   ---------
   Co-authored-by: veqcc <ryuta.kambe@tier4.jp>
-* feat!: replace autoware_auto_msgs with autoware_msgs for system modules (`#7249 <https://github.com/youtalk/autoware.universe/issues/7249>`_)
+* feat!: replace autoware_auto_msgs with autoware_msgs for system modules (`#7249 <https://github.com/autowarefoundation/autoware.universe/issues/7249>`_)
   Co-authored-by: Cynthia Liu <cynthia.liu@autocore.ai>
   Co-authored-by: NorahXiong <norah.xiong@autocore.ai>
   Co-authored-by: beginningfan <beginning.fan@autocore.ai>
-* feat: componentize-mrm-handler (`#7018 <https://github.com/youtalk/autoware.universe/issues/7018>`_)
+* feat: componentize-mrm-handler (`#7018 <https://github.com/autowarefoundation/autoware.universe/issues/7018>`_)
 * Contributors: Autumn60, Kosuke Takeuchi, Kyoichi Sugahara, Ryohsuke Mitsudome, Ryuta Kambe, Takayuki Murooka, TetsuKawa, Yutaka Kondo, danielsanchezaran
 
 0.26.0 (2024-04-03)
 -------------------
-* fix(mrm_handler): fix bug in operation mode availability timeout (`#6513 <https://github.com/youtalk/autoware.universe/issues/6513>`_)
+* fix(mrm_handler): fix bug in operation mode availability timeout (`#6513 <https://github.com/autowarefoundation/autoware.universe/issues/6513>`_)
   * fix operation mode availability timeout
-* feat: add timeouts of request services (`#6532 <https://github.com/youtalk/autoware.universe/issues/6532>`_)
+* feat: add timeouts of request services (`#6532 <https://github.com/autowarefoundation/autoware.universe/issues/6532>`_)
   * feat: add timeouts of request services
   * style(pre-commit): autofix
   * feat: replace define with enum
@@ -74,11 +74,11 @@ Changelog for package mrm_handler
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Takagi, Isamu <43976882+isamu-takagi@users.noreply.github.com>
   Co-authored-by: Ryuta Kambe <veqcc.c@gmail.com>
-* refactor(mrm_handler): delete control_cmd publish function (`#6514 <https://github.com/youtalk/autoware.universe/issues/6514>`_)
+* refactor(mrm_handler): delete control_cmd publish function (`#6514 <https://github.com/autowarefoundation/autoware.universe/issues/6514>`_)
   * refactor(mrm_handler): delete control_cmd publish function
-* feat(mrm_handler, emergency_handler): remove takeover (`#6522 <https://github.com/youtalk/autoware.universe/issues/6522>`_)
+* feat(mrm_handler, emergency_handler): remove takeover (`#6522 <https://github.com/autowarefoundation/autoware.universe/issues/6522>`_)
   update(mrm_handler, emergency_handler): remove takeover
-* feat(mrm_handler): add mrm_handler (`#6400 <https://github.com/youtalk/autoware.universe/issues/6400>`_)
+* feat(mrm_handler): add mrm_handler (`#6400 <https://github.com/autowarefoundation/autoware.universe/issues/6400>`_)
   * feat: add mrm_handler
   * style(pre-commit): autofix
   * modify: update README

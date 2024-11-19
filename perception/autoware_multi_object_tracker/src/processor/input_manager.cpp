@@ -14,6 +14,8 @@
 
 #include "input_manager.hpp"
 
+#include <autoware/multi_object_tracker/uncertainty/uncertainty_processor.hpp>
+
 #include <cassert>
 
 namespace autoware::multi_object_tracker
@@ -49,8 +51,13 @@ void InputStream::init(const InputChannel & input_channel)
 void InputStream::onMessage(
   const autoware_perception_msgs::msg::DetectedObjects::ConstSharedPtr msg)
 {
-  const DetectedObjects objects = *msg;
-  objects_que_.push_back(objects);
+  const DetectedObjects & objects = *msg;
+
+  // Model the object uncertainty only if it is not available
+  DetectedObjects objects_with_uncertainty = uncertainty::modelUncertainty(objects);
+
+  // Move the objects_with_uncertainty to the objects queue
+  objects_que_.push_back(std::move(objects_with_uncertainty));
   while (objects_que_.size() > que_size_) {
     objects_que_.pop_front();
   }

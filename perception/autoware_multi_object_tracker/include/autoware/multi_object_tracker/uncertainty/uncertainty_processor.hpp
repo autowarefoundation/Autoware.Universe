@@ -23,6 +23,7 @@
 #include <autoware/object_recognition_utils/object_recognition_utils.hpp>
 
 #include <autoware_perception_msgs/msg/detected_objects.hpp>
+#include <nav_msgs/msg/odometry.hpp>
 
 namespace autoware::multi_object_tracker
 {
@@ -34,6 +35,7 @@ using autoware::multi_object_tracker::object_model::ObjectModel;
 using autoware_perception_msgs::msg::DetectedObject;
 using autoware_perception_msgs::msg::DetectedObjects;
 using autoware_perception_msgs::msg::ObjectClassification;
+using nav_msgs::msg::Odometry;
 
 ObjectModel decodeObjectModel(const ObjectClassification & object_class);
 
@@ -44,6 +46,7 @@ object_model::StateCovariance covarianceFromObjectClass(
 
 void normalizeUncertainty(DetectedObjects & detected_objects);
 
+void addOdometryUncertainty(const Odometry & odometry, DetectedObjects & detected_objects);
 }  // namespace uncertainty
 
 }  // namespace autoware::multi_object_tracker

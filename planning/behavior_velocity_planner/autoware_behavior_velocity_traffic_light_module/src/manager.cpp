@@ -15,6 +15,7 @@
 #include "manager.hpp"
 
 #include <autoware/behavior_velocity_planner_common/utilization/util.hpp>
+#include <autoware/motion_utils/trajectory/trajectory.hpp>
 #include <autoware/universe_utils/ros/parameter.hpp>
 
 #include <tf2/utils.h>
@@ -60,7 +61,7 @@ void TrafficLightModuleManager::modifyPathVelocity(tier4_planning_msgs::msg::Pat
   stop_reason_array.header.frame_id = "map";
   stop_reason_array.header.stamp = path->header.stamp;
 
-  first_stop_path_point_index_ = static_cast<int>(path->points.size() - 1);
+  first_stop_path_point_distance_ = autoware::motion_utils::calcArcLength(path->points);
   nearest_ref_stop_path_point_index_ = static_cast<int>(path->points.size() - 1);
   for (const auto & scene_module : scene_modules_) {
     tier4_planning_msgs::msg::StopReason stop_reason;
@@ -79,8 +80,10 @@ void TrafficLightModuleManager::modifyPathVelocity(tier4_planning_msgs::msg::Pat
       stop_reason_array.stop_reasons.emplace_back(stop_reason);
     }
 
-    if (traffic_light_scene_module->getFirstStopPathPointIndex() < first_stop_path_point_index_) {
-      first_stop_path_point_index_ = traffic_light_scene_module->getFirstStopPathPointIndex();
+    if (
+      traffic_light_scene_module->getFirstStopPathPointDistance() <
+      first_stop_path_point_distance_) {
+      first_stop_path_point_distance_ = traffic_light_scene_module->getFirstStopPathPointDistance();
     }
     if (
       traffic_light_scene_module->getFirstRefStopPathPointIndex() <

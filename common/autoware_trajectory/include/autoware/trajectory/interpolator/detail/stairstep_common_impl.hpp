@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// clang-format off
-#ifndef AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__STAIRSTEP_COMMON_IMPL_HPP_  // NOLINT
-#define AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__STAIRSTEP_COMMON_IMPL_HPP_  // NOLINT
-// clang-format on
+#ifndef AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__STAIRSTEP_COMMON_IMPL_HPP_
+#define AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__STAIRSTEP_COMMON_IMPL_HPP_
 
 #include "autoware/trajectory/interpolator/detail/interpolator_mixin.hpp"
 
@@ -80,6 +78,4 @@ public:
 }  // namespace detail
 }  // namespace autoware::trajectory::interpolator
 
-// clang-format off
-#endif  // AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__STAIRSTEP_COMMON_IMPL_HPP_  // NOLINT
-// clang-format on
+#endif  // AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__STAIRSTEP_COMMON_IMPL_HPP_

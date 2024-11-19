@@ -5,20 +5,20 @@ Changelog for package tier4_localization_launch
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* refactor(ndt_scan_matcher)!: prefix package and namespace with autoware (`#8904 <https://github.com/youtalk/autoware.universe/issues/8904>`_)
+* refactor(ndt_scan_matcher)!: prefix package and namespace with autoware (`#8904 <https://github.com/autowarefoundation/autoware.universe/issues/8904>`_)
   add autoware\_ prefix
-* refactor(ekf_localizer)!: prefix package and namespace with autoware (`#8888 <https://github.com/youtalk/autoware.universe/issues/8888>`_)
+* refactor(ekf_localizer)!: prefix package and namespace with autoware (`#8888 <https://github.com/autowarefoundation/autoware.universe/issues/8888>`_)
   * import lanelet2_map_preprocessor
   * move headers to include/autoware/efk_localier
   ---------
-* refactor(pose_initializer)!: prefix package and namespace with autoware (`#8701 <https://github.com/youtalk/autoware.universe/issues/8701>`_)
+* refactor(pose_initializer)!: prefix package and namespace with autoware (`#8701 <https://github.com/autowarefoundation/autoware.universe/issues/8701>`_)
   * add autoware\_ prefix
   * fix link
   ---------
   Co-authored-by: SakodaShintaro <shintaro.sakoda@tier4.jp>
-* chore(stop_filter): extract stop_filter.param.yaml to autoware_launch (`#8681 <https://github.com/youtalk/autoware.universe/issues/8681>`_)
+* chore(stop_filter): extract stop_filter.param.yaml to autoware_launch (`#8681 <https://github.com/autowarefoundation/autoware.universe/issues/8681>`_)
   Extract stop_filter.param.yaml to autoware_launch
-* feat(localization): add `lidar_marker_localizer` (`#5573 <https://github.com/youtalk/autoware.universe/issues/5573>`_)
+* feat(localization): add `lidar_marker_localizer` (`#5573 <https://github.com/autowarefoundation/autoware.universe/issues/5573>`_)
   * Added lidar_marker_localizer
   * style(pre-commit): autofix
   * fix launch file
@@ -140,39 +140,39 @@ Changelog for package tier4_localization_launch
   Co-authored-by: yamato-ando <Yamato ANDO>
   Co-authored-by: Yamato Ando <yamato.ando@gmail.com>
   Co-authored-by: yamato-ando <yamato.ando@tier4.jp>
-* refactor(pose_instability_detector)!: prefix package and namespace with autoware (`#8568 <https://github.com/youtalk/autoware.universe/issues/8568>`_)
+* refactor(pose_instability_detector)!: prefix package and namespace with autoware (`#8568 <https://github.com/autowarefoundation/autoware.universe/issues/8568>`_)
   * add autoware\_ prefix
   * add autoware\_ prefix
   ---------
   Co-authored-by: SakodaShintaro <shintaro.sakoda@tier4.jp>
-* refactor(pose_estimator_arbiter)!: prefix package and namespace with autoware (`#8386 <https://github.com/youtalk/autoware.universe/issues/8386>`_)
+* refactor(pose_estimator_arbiter)!: prefix package and namespace with autoware (`#8386 <https://github.com/autowarefoundation/autoware.universe/issues/8386>`_)
   * add autoware\_ prefix
   * add autoware\_ prefix
   * fix link for landmark_based_localizer
   * remove Shadowing
   ---------
   Co-authored-by: SakodaShintaro <shintaro.sakoda@tier4.jp>
-* refactor(gyro_odometer)!: prefix package and namespace with autoware (`#8340 <https://github.com/youtalk/autoware.universe/issues/8340>`_)
+* refactor(gyro_odometer)!: prefix package and namespace with autoware (`#8340 <https://github.com/autowarefoundation/autoware.universe/issues/8340>`_)
   * add autoware\_ prefix
   * add missing header
   * use target_include_directories instead
   * add autoware\_ prefix
   ---------
-* refactor(localization_error_monitor)!: prefix package and namespace with autoware (`#8423 <https://github.com/youtalk/autoware.universe/issues/8423>`_)
+* refactor(localization_error_monitor)!: prefix package and namespace with autoware (`#8423 <https://github.com/autowarefoundation/autoware.universe/issues/8423>`_)
   add autoware\_ prefix
-* refactor(geo_pose_projector)!: prefix package and namespace with autoware (`#8334 <https://github.com/youtalk/autoware.universe/issues/8334>`_)
+* refactor(geo_pose_projector)!: prefix package and namespace with autoware (`#8334 <https://github.com/autowarefoundation/autoware.universe/issues/8334>`_)
   * add autoware\_ prefix
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: SakodaShintaro <shintaro.sakoda@tier4.jp>
-* refactor(twist2accel)!: prefix package and namespace with autoware (`#8299 <https://github.com/youtalk/autoware.universe/issues/8299>`_)
+* refactor(twist2accel)!: prefix package and namespace with autoware (`#8299 <https://github.com/autowarefoundation/autoware.universe/issues/8299>`_)
   * add autoware\_ prefix
   * add autoware\_ prefix
   * add autoware\_ prefix
   ---------
   Co-authored-by: SakodaShintaro <shintaro.sakoda@tier4.jp>
-* refactor(pointcloud_preprocessor): prefix package and namespace with autoware (`#7983 <https://github.com/youtalk/autoware.universe/issues/7983>`_)
+* refactor(pointcloud_preprocessor): prefix package and namespace with autoware (`#7983 <https://github.com/autowarefoundation/autoware.universe/issues/7983>`_)
   * refactor(pointcloud_preprocessor)!: prefix package and namespace with autoware
   * style(pre-commit): autofix
   * style(pointcloud_preprocessor): suppress line length check for macros
@@ -186,25 +186,25 @@ Changelog for package tier4_localization_launch
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Kenzo Lobos Tsunekawa <kenzo.lobos@tier4.jp>
-* chore(localization, map): remove maintainer (`#7940 <https://github.com/youtalk/autoware.universe/issues/7940>`_)
-* refactor(stop_filter): prefix package and namespace with autoware (`#7789 <https://github.com/youtalk/autoware.universe/issues/7789>`_)
+* chore(localization, map): remove maintainer (`#7940 <https://github.com/autowarefoundation/autoware.universe/issues/7940>`_)
+* refactor(stop_filter): prefix package and namespace with autoware (`#7789 <https://github.com/autowarefoundation/autoware.universe/issues/7789>`_)
   * refactor(stop_filter): prefix package and namespace with autoware
   * fix launch files and update CODEOWNERS
   ---------
-* refactor(ar_tag_based_localizer): add prefix "autoware\_" to ar_tag_based_localizer (`#7483 <https://github.com/youtalk/autoware.universe/issues/7483>`_)
+* refactor(ar_tag_based_localizer): add prefix "autoware\_" to ar_tag_based_localizer (`#7483 <https://github.com/autowarefoundation/autoware.universe/issues/7483>`_)
   * Added prefix "autoware\_" to ar_tag_based_localizer
   * style(pre-commit): autofix
   * Fixed localization_launch
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(autoware_pose_covariance_modifier): add new node to early fuse gnss and ndt poses (`#6570 <https://github.com/youtalk/autoware.universe/issues/6570>`_)
+* feat(autoware_pose_covariance_modifier): add new node to early fuse gnss and ndt poses (`#6570 <https://github.com/autowarefoundation/autoware.universe/issues/6570>`_)
   Co-authored-by: M. Fatih Cırıt <mfc@leodrive.ai>
 * Contributors: Amadeusz Szymko, Esteve Fernandez, Masaki Baba, SakodaShintaro, TaikiYamada4, Yutaka Kondo, kminoda, melike tanrikulu
 
 0.26.0 (2024-04-03)
 -------------------
-* feat(pose_initilizer): set intial pose directly (`#6692 <https://github.com/youtalk/autoware.universe/issues/6692>`_)
+* feat(pose_initilizer): set intial pose directly (`#6692 <https://github.com/autowarefoundation/autoware.universe/issues/6692>`_)
   * feat(pose_initilizer): set intial pose directly
   * style(pre-commit): autofix
   * fix arg order
@@ -223,25 +223,25 @@ Changelog for package tier4_localization_launch
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(tier4_localization_launch):  change the default input pointcloud of localization into the concatenated pointcloud (`#6528 <https://github.com/youtalk/autoware.universe/issues/6528>`_)
+* feat(tier4_localization_launch):  change the default input pointcloud of localization into the concatenated pointcloud (`#6528 <https://github.com/autowarefoundation/autoware.universe/issues/6528>`_)
   refactor lacun argument lidar_container_name to localization_pointcloud_container_name
-* fix(ar_tag_based_localizer): add ar tag based localizer param (`#6390 <https://github.com/youtalk/autoware.universe/issues/6390>`_)
+* fix(ar_tag_based_localizer): add ar tag based localizer param (`#6390 <https://github.com/autowarefoundation/autoware.universe/issues/6390>`_)
   Added ar_tag_based_localizer_param_path
-* chore(tier4_localization_launch): add maintainer (`#6350 <https://github.com/youtalk/autoware.universe/issues/6350>`_)
+* chore(tier4_localization_launch): add maintainer (`#6350 <https://github.com/autowarefoundation/autoware.universe/issues/6350>`_)
   add maintainer
-* chore(ndt scan matcher): rename config path (`#6333 <https://github.com/youtalk/autoware.universe/issues/6333>`_)
+* chore(ndt scan matcher): rename config path (`#6333 <https://github.com/autowarefoundation/autoware.universe/issues/6333>`_)
   * refactor(tier4_localization_launch): use util.launch.xml instead of util.launch.py
   * style(pre-commit): autofix
   * chore(ndt_scan_matcher): rename config path
   * rename path
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* refactor(tier4_localization_launch): use util.launch.xml instead of util.launch.py (`#6287 <https://github.com/youtalk/autoware.universe/issues/6287>`_)
+* refactor(tier4_localization_launch): use util.launch.xml instead of util.launch.py (`#6287 <https://github.com/autowarefoundation/autoware.universe/issues/6287>`_)
   * refactor(tier4_localization_launch): use util.launch.xml instead of util.launch.py
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(pose_estimator_arbiter): add pose_estimator_arbiter with simple switching rule (`#6144 <https://github.com/youtalk/autoware.universe/issues/6144>`_)
+* feat(pose_estimator_arbiter): add pose_estimator_arbiter with simple switching rule (`#6144 <https://github.com/autowarefoundation/autoware.universe/issues/6144>`_)
   * implement pose_estimator_manager pkg
   * tmp
   * swap ndt & yabloc
@@ -364,7 +364,7 @@ Changelog for package tier4_localization_launch
   * remove obsolete args
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* chore(twist2accel): rework parameters (`#6266 <https://github.com/youtalk/autoware.universe/issues/6266>`_)
+* chore(twist2accel): rework parameters (`#6266 <https://github.com/autowarefoundation/autoware.universe/issues/6266>`_)
   * Added twist2accel.param.yaml
   * Added twist2accel.schema.json
   * Fixed README.md and description
@@ -372,7 +372,7 @@ Changelog for package tier4_localization_launch
   * Removed default parameters
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat: always separate lidar preprocessing from pointcloud_container (`#6091 <https://github.com/youtalk/autoware.universe/issues/6091>`_)
+* feat: always separate lidar preprocessing from pointcloud_container (`#6091 <https://github.com/autowarefoundation/autoware.universe/issues/6091>`_)
   * feat!: replace use_pointcloud_container
   * feat: remove from planning
   * fix: fix to remove all use_pointcloud_container
@@ -390,21 +390,21 @@ Changelog for package tier4_localization_launch
   * fix: fix pre-commit
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* chore: add localization & mapping maintainers (`#6085 <https://github.com/youtalk/autoware.universe/issues/6085>`_)
+* chore: add localization & mapping maintainers (`#6085 <https://github.com/autowarefoundation/autoware.universe/issues/6085>`_)
   * Added lm maintainers
   * Add more
   * Fixed maintainer
   ---------
-* refactor(ndt_scan_matcher): fixed ndt_scan_matcher.launch.xml (`#6041 <https://github.com/youtalk/autoware.universe/issues/6041>`_)
+* refactor(ndt_scan_matcher): fixed ndt_scan_matcher.launch.xml (`#6041 <https://github.com/autowarefoundation/autoware.universe/issues/6041>`_)
   Fixed ndt_scan_matcher.launch.xml
-* refactor(ar_tag_based_localizer): refactor pub/sub and so on (`#5854 <https://github.com/youtalk/autoware.universe/issues/5854>`_)
+* refactor(ar_tag_based_localizer): refactor pub/sub and so on (`#5854 <https://github.com/autowarefoundation/autoware.universe/issues/5854>`_)
   * Fixed ar_tag_based_localizer pub/sub
   * Remove dependency on image_transport
   ---------
-* refactor(localization_launch, ground_segmentation_launch): rename lidar topic (`#5781 <https://github.com/youtalk/autoware.universe/issues/5781>`_)
+* refactor(localization_launch, ground_segmentation_launch): rename lidar topic (`#5781 <https://github.com/autowarefoundation/autoware.universe/issues/5781>`_)
   rename lidar topic
   Co-authored-by: yamato-ando <Yamato ANDO>
-* feat(localization): add `pose_instability_detector` (`#5439 <https://github.com/youtalk/autoware.universe/issues/5439>`_)
+* feat(localization): add `pose_instability_detector` (`#5439 <https://github.com/autowarefoundation/autoware.universe/issues/5439>`_)
   * Added pose_instability_detector
   * Renamed files
   * Fixed parameter name
@@ -447,7 +447,7 @@ Changelog for package tier4_localization_launch
   * Updated rqt_runtime_monitor.png
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(geo_pose_projector): use geo_pose_projector in eagleye (`#5513 <https://github.com/youtalk/autoware.universe/issues/5513>`_)
+* feat(geo_pose_projector): use geo_pose_projector in eagleye (`#5513 <https://github.com/autowarefoundation/autoware.universe/issues/5513>`_)
   * feat(tier4_geo_pose_projector): use tier4_geo_pose_projector in eagleye
   * style(pre-commit): autofix
   * fix(eagleye): split fix2pose
@@ -469,7 +469,7 @@ Changelog for package tier4_localization_launch
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(eagleye): split fix2pose (`#5506 <https://github.com/youtalk/autoware.universe/issues/5506>`_)
+* feat(eagleye): split fix2pose (`#5506 <https://github.com/autowarefoundation/autoware.universe/issues/5506>`_)
   * fix(eagleye): split fix2pose
   * style(pre-commit): autofix
   * fix name: fuser -> fusion
@@ -478,7 +478,7 @@ Changelog for package tier4_localization_launch
   * fix typo
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* refactor(landmark_based_localizer): refactored landmark_tf_caster (`#5414 <https://github.com/youtalk/autoware.universe/issues/5414>`_)
+* refactor(landmark_based_localizer): refactored landmark_tf_caster (`#5414 <https://github.com/autowarefoundation/autoware.universe/issues/5414>`_)
   * Removed landmark_tf_caster node
   * Added maintainer
   * style(pre-commit): autofix
@@ -492,18 +492,18 @@ Changelog for package tier4_localization_launch
   * Fixed Marker to MarkerArray
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(yabloc_image_processing): support both of  raw and compressed image input (`#5209 <https://github.com/youtalk/autoware.universe/issues/5209>`_)
+* feat(yabloc_image_processing): support both of  raw and compressed image input (`#5209 <https://github.com/autowarefoundation/autoware.universe/issues/5209>`_)
   * add raw image subscriber
   * update README
   * improve format and variable names
   ---------
-* feat(pose_twist_estimator): automatically initialize pose only with gnss (`#5115 <https://github.com/youtalk/autoware.universe/issues/5115>`_)
-* fix(tier4_localization_launch):  fixed exec_depend (`#5075 <https://github.com/youtalk/autoware.universe/issues/5075>`_)
+* feat(pose_twist_estimator): automatically initialize pose only with gnss (`#5115 <https://github.com/autowarefoundation/autoware.universe/issues/5115>`_)
+* fix(tier4_localization_launch):  fixed exec_depend (`#5075 <https://github.com/autowarefoundation/autoware.universe/issues/5075>`_)
   * Fixed exec_depend
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(ar_tag_based_localizer): split the package `ar_tag_based_localizer` (`#5043 <https://github.com/youtalk/autoware.universe/issues/5043>`_)
+* feat(ar_tag_based_localizer): split the package `ar_tag_based_localizer` (`#5043 <https://github.com/autowarefoundation/autoware.universe/issues/5043>`_)
   * Fix package name
   * Removed utils
   * Renamed tag_tf_caster to landmark_tf_caster
@@ -519,7 +519,7 @@ Changelog for package tier4_localization_launch
   * Fixed ArTagDetector to ArTagBasedLocalizer
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(ar_tag_based_localizer): add ekf_pose subscriber (`#4946 <https://github.com/youtalk/autoware.universe/issues/4946>`_)
+* feat(ar_tag_based_localizer): add ekf_pose subscriber (`#4946 <https://github.com/autowarefoundation/autoware.universe/issues/4946>`_)
   * Fixed qos
   * Fixed camera_frame\_
   * Fixed for awsim
@@ -540,7 +540,7 @@ Changelog for package tier4_localization_launch
   * Added comments to param.yaml
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(ar_tag_based_localizer): added small changes (`#4885 <https://github.com/youtalk/autoware.universe/issues/4885>`_)
+* fix(ar_tag_based_localizer): added small changes (`#4885 <https://github.com/autowarefoundation/autoware.universe/issues/4885>`_)
   * Fixed qos
   * Fixed camera_frame\_
   * Fixed for awsim
@@ -551,7 +551,7 @@ Changelog for package tier4_localization_launch
   * Updated README.md
   * Fixed distance_threshold to 13m
   ---------
-* feat(localization): add a new localization package `ar_tag_based_localizer` (`#4347 <https://github.com/youtalk/autoware.universe/issues/4347>`_)
+* feat(localization): add a new localization package `ar_tag_based_localizer` (`#4347 <https://github.com/autowarefoundation/autoware.universe/issues/4347>`_)
   * Added ar_tag_based_localizer
   * style(pre-commit): autofix
   * Added include
@@ -604,7 +604,7 @@ Changelog for package tier4_localization_launch
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: kminoda <44218668+kminoda@users.noreply.github.com>
-* feat(yabloc_monitor): add yabloc_monitor (`#4395 <https://github.com/youtalk/autoware.universe/issues/4395>`_)
+* feat(yabloc_monitor): add yabloc_monitor (`#4395 <https://github.com/autowarefoundation/autoware.universe/issues/4395>`_)
   * feat(yabloc_monitor): add yabloc_monitor
   * style(pre-commit): autofix
   * add readme
@@ -638,14 +638,14 @@ Changelog for package tier4_localization_launch
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* refactor(tier4_localization_launch): change input/pointcloud param (`#4411 <https://github.com/youtalk/autoware.universe/issues/4411>`_)
+* refactor(tier4_localization_launch): change input/pointcloud param (`#4411 <https://github.com/autowarefoundation/autoware.universe/issues/4411>`_)
   * refactor(tier4_localization_launch): change input/pointcloud param
   * parameter renaming moved util.launch.py
-* feat(yabloc): change namespace (`#4389 <https://github.com/youtalk/autoware.universe/issues/4389>`_)
+* feat(yabloc): change namespace (`#4389 <https://github.com/autowarefoundation/autoware.universe/issues/4389>`_)
   * fix(yabloc): update namespace
   * fix
   ---------
-* feat: use `pose_source` and `twist_source` for selecting localization methods (`#4257 <https://github.com/youtalk/autoware.universe/issues/4257>`_)
+* feat: use `pose_source` and `twist_source` for selecting localization methods (`#4257 <https://github.com/autowarefoundation/autoware.universe/issues/4257>`_)
   * feat(tier4_localization_launch): add pose_twist_estimator.launch.py
   * update format
   * update launcher
@@ -670,7 +670,7 @@ Changelog for package tier4_localization_launch
   * Update yabloc document
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(yabloc): add camera and vector map localization (`#3946 <https://github.com/youtalk/autoware.universe/issues/3946>`_)
+* feat(yabloc): add camera and vector map localization (`#3946 <https://github.com/autowarefoundation/autoware.universe/issues/3946>`_)
   * adopt scane_case to undistort, segment_filter
   * adopt scane_case to ground_server, ll2_decomposer
   * adopt scane_case to twist_converter, twist_estimator
@@ -816,26 +816,26 @@ Changelog for package tier4_localization_launch
   * update README and some sample images
   * update README.md
   * fix override_camera_frame_id bahaviors
-  * fix some bugs (`#4 <https://github.com/youtalk/autoware.universe/issues/4>`_)
-  * fix: use initialpose from Rviz (`#6 <https://github.com/youtalk/autoware.universe/issues/6>`_)
+  * fix some bugs (`#4 <https://github.com/autowarefoundation/autoware.universe/issues/4>`_)
+  * fix: use initialpose from Rviz (`#6 <https://github.com/autowarefoundation/autoware.universe/issues/6>`_)
   * use initialpose from Rviz to init
   * add description about how-to-set-initialpose
   ---------
-  * misc: add license (`#7 <https://github.com/youtalk/autoware.universe/issues/7>`_)
+  * misc: add license (`#7 <https://github.com/autowarefoundation/autoware.universe/issues/7>`_)
   * WIP: add license description
   * add license description
   * add description about license in README
   ---------
-  * add quick start demo (`#8 <https://github.com/youtalk/autoware.universe/issues/8>`_)
-  * refactor(launch) remove & update obsolete launch files (`#9 <https://github.com/youtalk/autoware.universe/issues/9>`_)
+  * add quick start demo (`#8 <https://github.com/autowarefoundation/autoware.universe/issues/8>`_)
+  * refactor(launch) remove & update obsolete launch files (`#9 <https://github.com/autowarefoundation/autoware.universe/issues/9>`_)
   * delete obsolete launch files
   * update documents
   ---------
-  * docs(readme): update architecture image (`#10 <https://github.com/youtalk/autoware.universe/issues/10>`_)
+  * docs(readme): update architecture image (`#10 <https://github.com/autowarefoundation/autoware.universe/issues/10>`_)
   * replace architecture image in README
   * update some images
   ---------
-  * refactor(pcdless_launc/scripts): remove unnecessary scripts (`#11 <https://github.com/youtalk/autoware.universe/issues/11>`_)
+  * refactor(pcdless_launc/scripts): remove unnecessary scripts (`#11 <https://github.com/autowarefoundation/autoware.universe/issues/11>`_)
   * remove not useful scripts
   * rename scripts &  add descriptions
   * little change
@@ -846,18 +846,18 @@ Changelog for package tier4_localization_launch
   * fix(twist_estimator): use velocity_report by default
   * fix bug
   * debugged, now works
-  * update sample rosbag link (`#14 <https://github.com/youtalk/autoware.universe/issues/14>`_)
-  * feature(graph_segment, gnss_particle_corrector): make some features switchable (`#17 <https://github.com/youtalk/autoware.universe/issues/17>`_)
+  * update sample rosbag link (`#14 <https://github.com/autowarefoundation/autoware.universe/issues/14>`_)
+  * feature(graph_segment, gnss_particle_corrector): make some features switchable (`#17 <https://github.com/autowarefoundation/autoware.universe/issues/17>`_)
   * make additional-graph-segment-pickup disablable
   * enlarge gnss_mahalanobis_distance_threshold in expressway.launch
   ---------
-  * fix: minor fix for multi camera support (`#18 <https://github.com/youtalk/autoware.universe/issues/18>`_)
+  * fix: minor fix for multi camera support (`#18 <https://github.com/autowarefoundation/autoware.universe/issues/18>`_)
   * fix: minor fix for multi camera support
   * update
   * update
   * fix typo
   ---------
-  * refactor(retroactive_resampler): more readable (`#19 <https://github.com/youtalk/autoware.universe/issues/19>`_)
+  * refactor(retroactive_resampler): more readable (`#19 <https://github.com/autowarefoundation/autoware.universe/issues/19>`_)
   * make Hisotry class
   * use boost:adaptors::indexed()
   * add many comment in resampling()
@@ -865,42 +865,42 @@ Changelog for package tier4_localization_launch
   * rename interface of resampler
   * circular_buffer is unnecessary
   ---------
-  * refactor(mpf::predictor) resampling interval control in out of resampler (`#20 <https://github.com/youtalk/autoware.universe/issues/20>`_)
+  * refactor(mpf::predictor) resampling interval control in out of resampler (`#20 <https://github.com/autowarefoundation/autoware.universe/issues/20>`_)
   * resampling interval management should be done out of resample()
   * resampler class throw exeption rather than optional
   * split files for resampling_history
   * split files for experimental/suspention_adaptor
   ---------
-  * refactor(mpf::predictor): just refactoring (`#21 <https://github.com/youtalk/autoware.universe/issues/21>`_)
+  * refactor(mpf::predictor): just refactoring (`#21 <https://github.com/autowarefoundation/autoware.universe/issues/21>`_)
   * remove obsolete functions
   * remove test of predictor
   * remove remapping in pf.launch.xml for suspension_adapator
   * add some comments
   ---------
-  * fix(twist_estimator): remove stop filter for velocity (`#23 <https://github.com/youtalk/autoware.universe/issues/23>`_)
-  * feat(pcdless_launch): add multi camera launcher (`#22 <https://github.com/youtalk/autoware.universe/issues/22>`_)
+  * fix(twist_estimator): remove stop filter for velocity (`#23 <https://github.com/autowarefoundation/autoware.universe/issues/23>`_)
+  * feat(pcdless_launch): add multi camera launcher (`#22 <https://github.com/autowarefoundation/autoware.universe/issues/22>`_)
   * feat(pcdless_launch): add multi camera launcher
   * minor fix
   ---------
-  * refactor(CMakeListx.txt): just refactoring (`#24 <https://github.com/youtalk/autoware.universe/issues/24>`_)
+  * refactor(CMakeListx.txt): just refactoring (`#24 <https://github.com/autowarefoundation/autoware.universe/issues/24>`_)
   * refactor imgproc/*/CMakeListx.txt
   * refactor initializer/*/CMakeListx.txt & add gnss_pose_initializer pkg
   * rename some files in twist/ & refactor pf/*/cmakelist
   * refactor validation/*/CMakeListx.txt
   * fix some obsolete executor name
   ---------
-  * fix: rename lsd variables and files (`#26 <https://github.com/youtalk/autoware.universe/issues/26>`_)
-  * misc: reame pcdless to yabloc (`#25 <https://github.com/youtalk/autoware.universe/issues/25>`_)
+  * fix: rename lsd variables and files (`#26 <https://github.com/autowarefoundation/autoware.universe/issues/26>`_)
+  * misc: reame pcdless to yabloc (`#25 <https://github.com/autowarefoundation/autoware.universe/issues/25>`_)
   * rename pcdless to yabloc
   * fix conflict miss
   ---------
-  * visualize path (`#28 <https://github.com/youtalk/autoware.universe/issues/28>`_)
-  * docs: update readme about particle filter (`#30 <https://github.com/youtalk/autoware.universe/issues/30>`_)
+  * visualize path (`#28 <https://github.com/autowarefoundation/autoware.universe/issues/28>`_)
+  * docs: update readme about particle filter (`#30 <https://github.com/autowarefoundation/autoware.universe/issues/30>`_)
   * update mpf/README.md
   * update gnss_corrector/README.md
   * update camera_corrector/README.md
   ---------
-  * feat(segment_filter): publish images with lines and refactor (`#29 <https://github.com/youtalk/autoware.universe/issues/29>`_)
+  * feat(segment_filter): publish images with lines and refactor (`#29 <https://github.com/autowarefoundation/autoware.universe/issues/29>`_)
   * feat(segment_filter): publish images with lines
   * update validation
   * update imgproc (reverted)
@@ -914,47 +914,47 @@ Changelog for package tier4_localization_launch
   * no throw runtime_error (unintentionaly applying format)
   ---------
   Co-authored-by: Kento Yabuuchi <kento.yabuuchi.2@tier4.jp>
-  * catch runtime_error when particle id is invalid (`#31 <https://github.com/youtalk/autoware.universe/issues/31>`_)
-  * return if info is nullopt (`#32 <https://github.com/youtalk/autoware.universe/issues/32>`_)
-  * pose_buffer is sometimes empty (`#33 <https://github.com/youtalk/autoware.universe/issues/33>`_)
-  * use_yaw_of_initialpose (`#34 <https://github.com/youtalk/autoware.universe/issues/34>`_)
-  * feat(interface):  remove incompatible interface (`#35 <https://github.com/youtalk/autoware.universe/issues/35>`_)
+  * catch runtime_error when particle id is invalid (`#31 <https://github.com/autowarefoundation/autoware.universe/issues/31>`_)
+  * return if info is nullopt (`#32 <https://github.com/autowarefoundation/autoware.universe/issues/32>`_)
+  * pose_buffer is sometimes empty (`#33 <https://github.com/autowarefoundation/autoware.universe/issues/33>`_)
+  * use_yaw_of_initialpose (`#34 <https://github.com/autowarefoundation/autoware.universe/issues/34>`_)
+  * feat(interface):  remove incompatible interface (`#35 <https://github.com/autowarefoundation/autoware.universe/issues/35>`_)
   * not use ublox_msg when run as autoware
   * remove twist/kalman/twist & use twist_estimator/twist_with_covariance
   * update particle_array stamp even if the time stamp seems wrong
   ---------
-  * fix: suppress info/warn_stream (`#37 <https://github.com/youtalk/autoware.universe/issues/37>`_)
+  * fix: suppress info/warn_stream (`#37 <https://github.com/autowarefoundation/autoware.universe/issues/37>`_)
   * does not stream undistortion time
   * improve warn stream when skip particle weighting
   * surpress frequency of  warnings during synchronized particle searching
   * fix camera_pose_initializer
   ---------
-  * /switch must not be nice name (`#39 <https://github.com/youtalk/autoware.universe/issues/39>`_)
-  * misc(readme): update readme (`#41 <https://github.com/youtalk/autoware.universe/issues/41>`_)
+  * /switch must not be nice name (`#39 <https://github.com/autowarefoundation/autoware.universe/issues/39>`_)
+  * misc(readme): update readme (`#41 <https://github.com/autowarefoundation/autoware.universe/issues/41>`_)
   * add youtube link and change thumbnail
   * improve input/output topics
   * quick start demo screen image
   * add abstruct architecture and detail architecture
   ---------
-  * docs(rosdep): fix package.xml to ensure build success (`#44 <https://github.com/youtalk/autoware.universe/issues/44>`_)
+  * docs(rosdep): fix package.xml to ensure build success (`#44 <https://github.com/autowarefoundation/autoware.universe/issues/44>`_)
   * fix package.xml to success build
   * add 'rosdep install' in how-to-build
   ---------
-  * add geographiclib in package.xml (`#46 <https://github.com/youtalk/autoware.universe/issues/46>`_)
-  * fix path search error in build stage (`#45 <https://github.com/youtalk/autoware.universe/issues/45>`_)
+  * add geographiclib in package.xml (`#46 <https://github.com/autowarefoundation/autoware.universe/issues/46>`_)
+  * fix path search error in build stage (`#45 <https://github.com/autowarefoundation/autoware.universe/issues/45>`_)
   * fix path search error in build stage
   * fix https://github.com/tier4/YabLoc/pull/45#issuecomment-1546808419
-  * Feature/remove submodule (`#47 <https://github.com/youtalk/autoware.universe/issues/47>`_)
+  * Feature/remove submodule (`#47 <https://github.com/autowarefoundation/autoware.universe/issues/47>`_)
   * remove submodules
   * remove doppler converter
   ---------
-  * feature: change node namespace to /localization/yabloc/** from /localization/** (`#48 <https://github.com/youtalk/autoware.universe/issues/48>`_)
+  * feature: change node namespace to /localization/yabloc/** from /localization/** (`#48 <https://github.com/autowarefoundation/autoware.universe/issues/48>`_)
   * change node namespace
   * update namespace for autoware-mode
   * update namespace in multi_camera.launch
   ---------
-  * removed unstable packages (`#49 <https://github.com/youtalk/autoware.universe/issues/49>`_)
-  * feature: add *.param.yaml to manage parameters (`#50 <https://github.com/youtalk/autoware.universe/issues/50>`_)
+  * removed unstable packages (`#49 <https://github.com/autowarefoundation/autoware.universe/issues/49>`_)
+  * feature: add *.param.yaml to manage parameters (`#50 <https://github.com/autowarefoundation/autoware.universe/issues/50>`_)
   * make *.param.yaml in imgproc packages
   * make *.param.yaml in initializer packages
   * make *.param.yaml in map packages
@@ -965,8 +965,8 @@ Changelog for package tier4_localization_launch
   * remove default parameters
   * fix some remaining invalida parameters
   ---------
-  * does not estimate twist (`#51 <https://github.com/youtalk/autoware.universe/issues/51>`_)
-  * feat(particle_initializer): merge particle_initializer into mpf (`#52 <https://github.com/youtalk/autoware.universe/issues/52>`_)
+  * does not estimate twist (`#51 <https://github.com/autowarefoundation/autoware.universe/issues/51>`_)
+  * feat(particle_initializer): merge particle_initializer into mpf (`#52 <https://github.com/autowarefoundation/autoware.universe/issues/52>`_)
   * feat(particle_initializer): merge particle_initializer to modulalized_particle_filter
   * remove particle_initializer
   * remove debug message
@@ -975,8 +975,8 @@ Changelog for package tier4_localization_launch
   * rename publishing topic
   ---------
   Co-authored-by: Kento Yabuuchi <kento.yabuuchi.2@tier4.jp>
-  * fix: remove ll2_transition_area (`#54 <https://github.com/youtalk/autoware.universe/issues/54>`_)
-  * feature(initializer): combine some initializer packages (`#56 <https://github.com/youtalk/autoware.universe/issues/56>`_)
+  * fix: remove ll2_transition_area (`#54 <https://github.com/autowarefoundation/autoware.universe/issues/54>`_)
+  * feature(initializer): combine some initializer packages (`#56 <https://github.com/autowarefoundation/autoware.universe/issues/56>`_)
   * combine some package about initializer
   * yabloc_pose_initializer works well
   * remove old initializer packages
@@ -984,15 +984,15 @@ Changelog for package tier4_localization_launch
   * fix bug
   * revert initializer mode
   ---------
-  * feature(imgproc): reudce imgproc packages (`#57 <https://github.com/youtalk/autoware.universe/issues/57>`_)
+  * feature(imgproc): reudce imgproc packages (`#57 <https://github.com/autowarefoundation/autoware.universe/issues/57>`_)
   * combine some imgproc packages
   * combine overlay monitors into imgproc
   ---------
-  * feature(validation): remove validation packages (`#58 <https://github.com/youtalk/autoware.universe/issues/58>`_)
+  * feature(validation): remove validation packages (`#58 <https://github.com/autowarefoundation/autoware.universe/issues/58>`_)
   * remove validation packages
   * remove path visualization
   ---------
-  * feature(pf): combine some packages related to particle filter (`#59 <https://github.com/youtalk/autoware.universe/issues/59>`_)
+  * feature(pf): combine some packages related to particle filter (`#59 <https://github.com/autowarefoundation/autoware.universe/issues/59>`_)
   * create yabloc_particle_filter
   * combine gnss_particle_corrector
   * combine ll2_cost_map
@@ -1001,7 +1001,7 @@ Changelog for package tier4_localization_launch
   * split README & remove obsolete scripts
   * fix config path of multi_camera mode
   ---------
-  * feature: combine map and twist packages (`#60 <https://github.com/youtalk/autoware.universe/issues/60>`_)
+  * feature: combine map and twist packages (`#60 <https://github.com/autowarefoundation/autoware.universe/issues/60>`_)
   * removed some twist nodes & rename remains to yabloc_twist
   * fix launch files for yabloc_twist
   * move map packages to yabloc_common
@@ -1085,13 +1085,13 @@ Changelog for package tier4_localization_launch
   Co-authored-by: Akihiro Komori <akihiro.komori@unity3d.com>
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Takagi, Isamu <43976882+isamu-takagi@users.noreply.github.com>
-* style: fix typos (`#3617 <https://github.com/youtalk/autoware.universe/issues/3617>`_)
+* style: fix typos (`#3617 <https://github.com/autowarefoundation/autoware.universe/issues/3617>`_)
   * style: fix typos in documents
   * style: fix typos in package.xml
   * style: fix typos in launch files
   * style: fix typos in comments
   ---------
-* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/youtalk/autoware.universe/issues/3616>`_)
+* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/autowarefoundation/autoware.universe/issues/3616>`_)
   * build: mark autoware_cmake as <buildtool_depend>
   with <build_depend>, autoware_cmake is automatically exported with ament_target_dependencies() (unecessary)
   * style(pre-commit): autofix
@@ -1099,7 +1099,7 @@ Changelog for package tier4_localization_launch
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-* feat: add gnss/imu localizer  (`#3063 <https://github.com/youtalk/autoware.universe/issues/3063>`_)
+* feat: add gnss/imu localizer  (`#3063 <https://github.com/autowarefoundation/autoware.universe/issues/3063>`_)
   * Add gnss_imu_localizar
   * Fix twist switching bug
   * Fix spell and reformat
@@ -1134,19 +1134,19 @@ Changelog for package tier4_localization_launch
   * List the packages that depend on map4_localization_launch correctly
   * Ran precommit locally
   ---------
-* chore(tier4_localization_launch): add maintainer (`#3133 <https://github.com/youtalk/autoware.universe/issues/3133>`_)
-* chore(ekf_localizer): move parameters to its dedicated yaml file (`#3039 <https://github.com/youtalk/autoware.universe/issues/3039>`_)
+* chore(tier4_localization_launch): add maintainer (`#3133 <https://github.com/autowarefoundation/autoware.universe/issues/3133>`_)
+* chore(ekf_localizer): move parameters to its dedicated yaml file (`#3039 <https://github.com/autowarefoundation/autoware.universe/issues/3039>`_)
   * chores(ekf_localizer): move parameters to its dedicated yaml file
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(pose_initializer): enable pose initialization while running (only for sim) (`#3038 <https://github.com/youtalk/autoware.universe/issues/3038>`_)
+* feat(pose_initializer): enable pose initialization while running (only for sim) (`#3038 <https://github.com/autowarefoundation/autoware.universe/issues/3038>`_)
   * feat(pose_initializer): enable pose initialization while running (only for sim)
   * both logsim and psim params
   * only one pose_initializer_param_path arg
   * use two param files for pose_initializer
   ---------
-* feat(pose_initilizer): support gnss/imu pose estimator (`#2904 <https://github.com/youtalk/autoware.universe/issues/2904>`_)
+* feat(pose_initilizer): support gnss/imu pose estimator (`#2904 <https://github.com/autowarefoundation/autoware.universe/issues/2904>`_)
   * Support GNSS/IMU pose estimator
   * style(pre-commit): autofix
   * Revert gnss/imu support
@@ -1174,7 +1174,7 @@ Changelog for package tier4_localization_launch
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Ryohei Sasaki <ryohei.sasaki@map4.jp>
   Co-authored-by: Takagi, Isamu <43976882+isamu-takagi@users.noreply.github.com>
-* feat(tier4_localization_launch): remove configs and move to autoware_launch (`#2537 <https://github.com/youtalk/autoware.universe/issues/2537>`_)
+* feat(tier4_localization_launch): remove configs and move to autoware_launch (`#2537 <https://github.com/autowarefoundation/autoware.universe/issues/2537>`_)
   * feat(tier4_localization_launch): remove configs and move to autoware_launch
   * update readme
   * Update launch/tier4_localization_launch/README.md
@@ -1184,18 +1184,18 @@ Changelog for package tier4_localization_launch
   * update readme
   * pre-commit
   Co-authored-by: Yamato Ando <yamato.ando@gmail.com>
-* feat(tier4_localization_launch): pass pc container to localization (`#2114 <https://github.com/youtalk/autoware.universe/issues/2114>`_)
+* feat(tier4_localization_launch): pass pc container to localization (`#2114 <https://github.com/autowarefoundation/autoware.universe/issues/2114>`_)
   * feature(tier4_localization_launch): pass pc container to localization
   * ci(pre-commit): autofix
   * feature(tier4_localization_launch): update util.launch.xml
   * feature(tier4_localization_launch): update use container param value
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* ci(pre-commit): format SVG files (`#2172 <https://github.com/youtalk/autoware.universe/issues/2172>`_)
+* ci(pre-commit): format SVG files (`#2172 <https://github.com/autowarefoundation/autoware.universe/issues/2172>`_)
   * ci(pre-commit): format SVG files
   * ci(pre-commit): autofix
   * apply pre-commit
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(ndt): remove ndt package (`#2053 <https://github.com/youtalk/autoware.universe/issues/2053>`_)
+* feat(ndt): remove ndt package (`#2053 <https://github.com/autowarefoundation/autoware.universe/issues/2053>`_)
   * first commit
   * CMakeLists.txt does not work........
   * build works
@@ -1210,8 +1210,8 @@ Changelog for package tier4_localization_launch
   * removed default parameter from search_method
   * small fix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix: add adapi dependency (`#1892 <https://github.com/youtalk/autoware.universe/issues/1892>`_)
-* feat(pose_initializer)!: support ad api (`#1500 <https://github.com/youtalk/autoware.universe/issues/1500>`_)
+* fix: add adapi dependency (`#1892 <https://github.com/autowarefoundation/autoware.universe/issues/1892>`_)
+* feat(pose_initializer)!: support ad api (`#1500 <https://github.com/autowarefoundation/autoware.universe/issues/1500>`_)
   * feat(pose_initializer): support ad api
   * docs: update readme
   * fix: build error
@@ -1227,18 +1227,18 @@ Changelog for package tier4_localization_launch
   * fix: fix build error
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(tier4_localization_launch): manual sync with tier4/localization_launch (`#1442 <https://github.com/youtalk/autoware.universe/issues/1442>`_)
+* feat(tier4_localization_launch): manual sync with tier4/localization_launch (`#1442 <https://github.com/autowarefoundation/autoware.universe/issues/1442>`_)
   * feat(tier4_localization_launch): manual sync with tier4/localization_launch
   * ci(pre-commit): autofix
   * fix
   * revert modification
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(ekf_localizer): rename biased pose topics (`#1787 <https://github.com/youtalk/autoware.universe/issues/1787>`_)
+* fix(ekf_localizer): rename biased pose topics (`#1787 <https://github.com/autowarefoundation/autoware.universe/issues/1787>`_)
   * fix(ekf_localizer): rename biased pose topics
   * Update topic descriptions in README
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: kminoda <44218668+kminoda@users.noreply.github.com>
-* feat(default_ad_api): add localization api  (`#1431 <https://github.com/youtalk/autoware.universe/issues/1431>`_)
+* feat(default_ad_api): add localization api  (`#1431 <https://github.com/autowarefoundation/autoware.universe/issues/1431>`_)
   * feat(default_ad_api): add localization api
   * docs: add readme
   * feat: add auto initial pose
@@ -1258,7 +1258,7 @@ Changelog for package tier4_localization_launch
   * fix: remove needless keyword
   * feat: change api helper node namespace
   * fix: fix launch file path
-* chore(localization packages, etc): modify maintainer and e-mail address (`#1661 <https://github.com/youtalk/autoware.universe/issues/1661>`_)
+* chore(localization packages, etc): modify maintainer and e-mail address (`#1661 <https://github.com/autowarefoundation/autoware.universe/issues/1661>`_)
   * chore(localization packages, etc): modify maintainer and e-mail address
   * remove indent
   * add authors
@@ -1271,7 +1271,7 @@ Changelog for package tier4_localization_launch
   * add author
   Co-authored-by: Yukihiro Saito <yukky.saito@gmail.com>
   Co-authored-by: kminoda <44218668+kminoda@users.noreply.github.com>
-* fix(ekf_localizer): enable enable_yaw_bias (`#1601 <https://github.com/youtalk/autoware.universe/issues/1601>`_)
+* fix(ekf_localizer): enable enable_yaw_bias (`#1601 <https://github.com/autowarefoundation/autoware.universe/issues/1601>`_)
   * fix(ekf_localizer): enable enable_yaw_bias
   * remove proc_stddev_yaw_bias from ekf
   * ci(pre-commit): autofix
@@ -1280,33 +1280,33 @@ Changelog for package tier4_localization_launch
   * fixed minor bugs
   * change default parameter
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(ndt_scan_matcher): fix default parameter to 0.0225 (`#1583 <https://github.com/youtalk/autoware.universe/issues/1583>`_)
+* fix(ndt_scan_matcher): fix default parameter to 0.0225 (`#1583 <https://github.com/autowarefoundation/autoware.universe/issues/1583>`_)
   * fix(ndt_scan_matcher): fix default parameter to 0.0225
   * added a sidenote
   * added a sidenote
-* feat(localization_error_monitor): change subscribing topic type (`#1532 <https://github.com/youtalk/autoware.universe/issues/1532>`_)
+* feat(localization_error_monitor): change subscribing topic type (`#1532 <https://github.com/autowarefoundation/autoware.universe/issues/1532>`_)
   * feat(localization_error_monitor): change subscribing topic type
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(tier4_localization_launch): declare param path argument (`#1404 <https://github.com/youtalk/autoware.universe/issues/1404>`_)
+* feat(tier4_localization_launch): declare param path argument (`#1404 <https://github.com/autowarefoundation/autoware.universe/issues/1404>`_)
   * first commit
   * added arguments in each launch files
   * finished implementation
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(tier4_localization_launch): change rectified pointcloud to outlier_filtered pointcloud (`#1365 <https://github.com/youtalk/autoware.universe/issues/1365>`_)
-* fix(tier4_localization_launch): add group tag (`#1237 <https://github.com/youtalk/autoware.universe/issues/1237>`_)
+* feat(tier4_localization_launch): change rectified pointcloud to outlier_filtered pointcloud (`#1365 <https://github.com/autowarefoundation/autoware.universe/issues/1365>`_)
+* fix(tier4_localization_launch): add group tag (`#1237 <https://github.com/autowarefoundation/autoware.universe/issues/1237>`_)
   * fix(tier4_localization_launch): add group tag
   * add more args into group
-* feat(localization_error_monitor): add a config file (`#1282 <https://github.com/youtalk/autoware.universe/issues/1282>`_)
+* feat(localization_error_monitor): add a config file (`#1282 <https://github.com/autowarefoundation/autoware.universe/issues/1282>`_)
   * feat(localization_error_monitor): add a config file
   * ci(pre-commit): autofix
   * feat(localization_error_monitor): add a config file in tier4_localization_launch too
   * ci(pre-commit): autofix
   * debugged
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(tier4_localization_launch): remove unnecessary param from pose_twist_fusion_filter.launch (`#1224 <https://github.com/youtalk/autoware.universe/issues/1224>`_)
-* feat(ekf_localizer): allow multi sensor inputs in ekf_localizer (`#1027 <https://github.com/youtalk/autoware.universe/issues/1027>`_)
+* fix(tier4_localization_launch): remove unnecessary param from pose_twist_fusion_filter.launch (`#1224 <https://github.com/autowarefoundation/autoware.universe/issues/1224>`_)
+* feat(ekf_localizer): allow multi sensor inputs in ekf_localizer (`#1027 <https://github.com/autowarefoundation/autoware.universe/issues/1027>`_)
   * first commit
   * ci(pre-commit): autofix
   * updated
@@ -1346,7 +1346,7 @@ Changelog for package tier4_localization_launch
   * change the default gnss covariance to the previous one
   * pre-commit
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(distortion_corrector): use gyroscope for correcting LiDAR distortion (`#1120 <https://github.com/youtalk/autoware.universe/issues/1120>`_)
+* feat(distortion_corrector): use gyroscope for correcting LiDAR distortion (`#1120 <https://github.com/autowarefoundation/autoware.universe/issues/1120>`_)
   * first commit
   * ci(pre-commit): autofix
   * check if angular_velocity_queue\_ is empty or not
@@ -1356,7 +1356,7 @@ Changelog for package tier4_localization_launch
   * ci(pre-commit): autofix
   * reflected reviews
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat: regularized NDT matching (`#1006 <https://github.com/youtalk/autoware.universe/issues/1006>`_)
+* feat: regularized NDT matching (`#1006 <https://github.com/autowarefoundation/autoware.universe/issues/1006>`_)
   * add interface of gnss regularization in ndt class
   * gnss pose is applied to regularize NDT
   * add descriptions in ndt_scan_matcher/README
@@ -1368,7 +1368,7 @@ Changelog for package tier4_localization_launch
   * modify README to visualize well
   * fixed descriptions about principle of regularization
   Co-authored-by: Kento Yabuuchi <kento.yabuuchi.2@tier4.jp>
-* feat(twist2accel)!: add new package for estimating acceleration in localization module (`#1089 <https://github.com/youtalk/autoware.universe/issues/1089>`_)
+* feat(twist2accel)!: add new package for estimating acceleration in localization module (`#1089 <https://github.com/autowarefoundation/autoware.universe/issues/1089>`_)
   * first commit
   * update launch arg names
   * use lowpassfilter in signalprocessing
@@ -1386,26 +1386,26 @@ Changelog for package tier4_localization_launch
   * added future work
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/youtalk/autoware.universe/issues/856>`_)
-* refactor: use autoware cmake (`#849 <https://github.com/youtalk/autoware.universe/issues/849>`_)
+* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/autowarefoundation/autoware.universe/issues/856>`_)
+* refactor: use autoware cmake (`#849 <https://github.com/autowarefoundation/autoware.universe/issues/849>`_)
   * remove autoware_auto_cmake
   * add build_depend of autoware_cmake
   * use autoware_cmake in CMakeLists.txt
   * fix bugs
   * fix cmake lint errors
-* style: fix format of package.xml (`#844 <https://github.com/youtalk/autoware.universe/issues/844>`_)
-* feat: added raw twist in gyro_odometer (`#676 <https://github.com/youtalk/autoware.universe/issues/676>`_)
+* style: fix format of package.xml (`#844 <https://github.com/autowarefoundation/autoware.universe/issues/844>`_)
+* feat: added raw twist in gyro_odometer (`#676 <https://github.com/autowarefoundation/autoware.universe/issues/676>`_)
   * feat: added raw twist output from gyro_odometer
   * fix: prettier
-* fix: localization and perception launch for tutorial (`#645 <https://github.com/youtalk/autoware.universe/issues/645>`_)
+* fix: localization and perception launch for tutorial (`#645 <https://github.com/autowarefoundation/autoware.universe/issues/645>`_)
   * fix: localization and perception launch for tutorial
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* ci(pre-commit): update pre-commit-hooks-ros (`#625 <https://github.com/youtalk/autoware.universe/issues/625>`_)
+* ci(pre-commit): update pre-commit-hooks-ros (`#625 <https://github.com/autowarefoundation/autoware.universe/issues/625>`_)
   * ci(pre-commit): update pre-commit-hooks-ros
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(ndt_scan_matcher): add nearest voxel transfromation probability (`#364 <https://github.com/youtalk/autoware.universe/issues/364>`_)
+* feat(ndt_scan_matcher): add nearest voxel transfromation probability (`#364 <https://github.com/autowarefoundation/autoware.universe/issues/364>`_)
   * feat(ndt_scan_matcher): add nearest voxel transfromation probability
   * add calculateTransformationProbability funcs
   * add calculateTransformationProbability funcs
@@ -1422,7 +1422,7 @@ Changelog for package tier4_localization_launch
   * ci(pre-commit): autofix
   * avoid a warning unused parameter
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(ndt_scan_matcher): add tolerance of initial pose (`#408 <https://github.com/youtalk/autoware.universe/issues/408>`_)
+* feat(ndt_scan_matcher): add tolerance of initial pose (`#408 <https://github.com/autowarefoundation/autoware.universe/issues/408>`_)
   * feat(ndt_scan_matcher): add tolerance of initial pose
   * move codes
   * modify the default value
@@ -1432,15 +1432,15 @@ Changelog for package tier4_localization_launch
   * add depend fmt
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(ndt_scan_matcher): add particles param (`#330 <https://github.com/youtalk/autoware.universe/issues/330>`_)
+* feat(ndt_scan_matcher): add particles param (`#330 <https://github.com/autowarefoundation/autoware.universe/issues/330>`_)
   * feat(ndt_scan_matcher): add particles param
   * fix data type
   * ci(pre-commit): autofix
   * fix data type
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix: remove unused param (`#291 <https://github.com/youtalk/autoware.universe/issues/291>`_)
-* fix: typo in localization util.launch.py (`#277 <https://github.com/youtalk/autoware.universe/issues/277>`_)
-* feat: add covariance param (`#281 <https://github.com/youtalk/autoware.universe/issues/281>`_)
+* fix: remove unused param (`#291 <https://github.com/autowarefoundation/autoware.universe/issues/291>`_)
+* fix: typo in localization util.launch.py (`#277 <https://github.com/autowarefoundation/autoware.universe/issues/277>`_)
+* feat: add covariance param (`#281 <https://github.com/autowarefoundation/autoware.universe/issues/281>`_)
   * add covariance param
   * add description
   * add description
@@ -1448,7 +1448,7 @@ Changelog for package tier4_localization_launch
   * refactor
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat: change launch package name (`#186 <https://github.com/youtalk/autoware.universe/issues/186>`_)
+* feat: change launch package name (`#186 <https://github.com/autowarefoundation/autoware.universe/issues/186>`_)
   * rename launch folder
   * autoware_launch -> tier4_autoware_launch
   * integration_launch -> tier4_integration_launch

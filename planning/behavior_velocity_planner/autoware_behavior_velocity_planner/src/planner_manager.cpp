@@ -14,9 +14,13 @@
 
 #include "planner_manager.hpp"
 
+#include <autoware/motion_utils/trajectory/interpolation.hpp>
+#include <autoware/motion_utils/trajectory/trajectory.hpp>
+
 #include <boost/format.hpp>
 
 #include <memory>
+#include <optional>
 #include <string>
 
 namespace autoware::behavior_velocity_planner
@@ -103,24 +107,28 @@ tier4_planning_msgs::msg::PathWithLaneId BehaviorVelocityPlannerManager::planPat
 {
   tier4_planning_msgs::msg::PathWithLaneId output_path_msg = input_path_msg;
 
-  int first_stop_path_point_index = static_cast<int>(output_path_msg.points.size() - 1);
+  double first_stop_path_point_distance =
+    autoware::motion_utils::calcArcLength(output_path_msg.points);
   std::string stop_reason_msg("path_end");
 
   for (const auto & plugin : scene_manager_plugins_) {
     plugin->updateSceneModuleInstances(planner_data, input_path_msg);
     plugin->plan(&output_path_msg);
-    const auto firstStopPathPointIndex = plugin->getFirstStopPathPointIndex();
+    const std::optional<double> firstStopPathPointDistance =
+      plugin->getFirstStopPathPointDistance();
 
-    if (firstStopPathPointIndex) {
-      if (firstStopPathPointIndex.value() < first_stop_path_point_index) {
-        first_stop_path_point_index = firstStopPathPointIndex.value();
+    if (firstStopPathPointDistance.has_value()) {
+      if (firstStopPathPointDistance.value() < first_stop_path_point_distance) {
+        first_stop_path_point_distance = firstStopPathPointDistance.value();
         stop_reason_msg = plugin->getModuleName();
       }
     }
   }
 
-  stop_reason_diag_ = makeStopReasonDiag(
-    stop_reason_msg, output_path_msg.points[first_stop_path_point_index].point.pose);
+  const geometry_msgs::msg::Pose stop_pose = autoware::motion_utils::calcInterpolatedPose(
+    output_path_msg.points, first_stop_path_point_distance);
+
+  stop_reason_diag_ = makeStopReasonDiag(stop_reason_msg, stop_pose);
 
   return output_path_msg;
 }

@@ -5,51 +5,51 @@ Changelog for package autoware_mpc_lateral_controller
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* refactor(osqp_interface): added autoware prefix to osqp_interface (`#8958 <https://github.com/youtalk/autoware.universe/issues/8958>`_)
-* fix(autoware_mpc_lateral_controller): fix calculation method of predicted trajectory (`#9048 <https://github.com/youtalk/autoware.universe/issues/9048>`_)
+* refactor(osqp_interface): added autoware prefix to osqp_interface (`#8958 <https://github.com/autowarefoundation/autoware.universe/issues/8958>`_)
+* fix(autoware_mpc_lateral_controller): fix calculation method of predicted trajectory (`#9048 <https://github.com/autowarefoundation/autoware.universe/issues/9048>`_)
   * fix(vehicle_model): fix calculation method of predicted trajectory
   ---------
-* refactor(autoware_interpolation): prefix package and namespace with autoware (`#8088 <https://github.com/youtalk/autoware.universe/issues/8088>`_)
+* refactor(autoware_interpolation): prefix package and namespace with autoware (`#8088 <https://github.com/autowarefoundation/autoware.universe/issues/8088>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* chore(mpc_lateral_controller): consistent parameters with autoware_launch (`#8914 <https://github.com/youtalk/autoware.universe/issues/8914>`_)
-* chore: remove duplicate line in mpc_lateral_controller.cpp (`#8916 <https://github.com/youtalk/autoware.universe/issues/8916>`_)
+* chore(mpc_lateral_controller): consistent parameters with autoware_launch (`#8914 <https://github.com/autowarefoundation/autoware.universe/issues/8914>`_)
+* chore: remove duplicate line in mpc_lateral_controller.cpp (`#8916 <https://github.com/autowarefoundation/autoware.universe/issues/8916>`_)
   remove duplicate line in mpc_lateral_controller.cpp
-* feat(autoware_mpc_lateral_controller): add predicted trajectory acconts for input delay (`#8436 <https://github.com/youtalk/autoware.universe/issues/8436>`_)
+* feat(autoware_mpc_lateral_controller): add predicted trajectory acconts for input delay (`#8436 <https://github.com/autowarefoundation/autoware.universe/issues/8436>`_)
   * feat: enable delayed initial state for predicted trajectory
   * feat: enable debug publishing of predicted and resampled reference trajectories
   ---------
-* fix(autoware_mpc_lateral_controller): fix cppcheck warnings (`#8149 <https://github.com/youtalk/autoware.universe/issues/8149>`_)
+* fix(autoware_mpc_lateral_controller): fix cppcheck warnings (`#8149 <https://github.com/autowarefoundation/autoware.universe/issues/8149>`_)
   * fix(autoware_mpc_lateral_controller): fix cppcheck warnings
   * Update control/autoware_mpc_lateral_controller/src/lowpass_filter.cpp
   Co-authored-by: Takayuki Murooka <takayuki5168@gmail.com>
   ---------
   Co-authored-by: Takayuki Murooka <takayuki5168@gmail.com>
-* fix(autoware_mpc_lateral_controller): add timestamp and frame ID to published trajectory (`#8164 <https://github.com/youtalk/autoware.universe/issues/8164>`_)
+* fix(autoware_mpc_lateral_controller): add timestamp and frame ID to published trajectory (`#8164 <https://github.com/autowarefoundation/autoware.universe/issues/8164>`_)
   add timestamp and frame ID to published trajectory
-* fix(controller): revival of dry steering (`#7903 <https://github.com/youtalk/autoware.universe/issues/7903>`_)
-  * Revert "fix(autoware_mpc_lateral_controller): delete the zero speed constraint (`#7673 <https://github.com/youtalk/autoware.universe/issues/7673>`_)"
+* fix(controller): revival of dry steering (`#7903 <https://github.com/autowarefoundation/autoware.universe/issues/7903>`_)
+  * Revert "fix(autoware_mpc_lateral_controller): delete the zero speed constraint (`#7673 <https://github.com/autowarefoundation/autoware.universe/issues/7673>`_)"
   This reverts commit 69258bd92cb8a0ff8320df9b2302db72975e027f.
   * dry steering
   * add comments
   * add minor fix and modify unit test for dry steering
   ---------
-* fix(autoware_mpc_lateral_controller): delete the zero speed constraint (`#7673 <https://github.com/youtalk/autoware.universe/issues/7673>`_)
+* fix(autoware_mpc_lateral_controller): delete the zero speed constraint (`#7673 <https://github.com/autowarefoundation/autoware.universe/issues/7673>`_)
   * delete steer rate limit when vel = 0
   * delete unnecessary variable
   * pre-commit
   ---------
-* fix(autoware_mpc_lateral_controller): relax the steering rate constraint at zero speed (`#7581 <https://github.com/youtalk/autoware.universe/issues/7581>`_)
+* fix(autoware_mpc_lateral_controller): relax the steering rate constraint at zero speed (`#7581 <https://github.com/autowarefoundation/autoware.universe/issues/7581>`_)
   * constraint for zero velocity updated
   * correct the comment
   ---------
-* fix(autoware_mpc_lateral_controller): fix duplicateExpression warning (`#7542 <https://github.com/youtalk/autoware.universe/issues/7542>`_)
+* fix(autoware_mpc_lateral_controller): fix duplicateExpression warning (`#7542 <https://github.com/autowarefoundation/autoware.universe/issues/7542>`_)
   * fix(autoware_mpc_lateral_controller): fix duplicateExpression warning
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(autoware_mpc_lateral_controller): fix duplicateAssignExpression warning (`#7572 <https://github.com/youtalk/autoware.universe/issues/7572>`_)
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* fix(mpc_lateral_controller): align the MPC steering angle when the car is controlled manually. (`#7109 <https://github.com/youtalk/autoware.universe/issues/7109>`_)
+* fix(autoware_mpc_lateral_controller): fix duplicateAssignExpression warning (`#7572 <https://github.com/autowarefoundation/autoware.universe/issues/7572>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* fix(mpc_lateral_controller): align the MPC steering angle when the car is controlled manually. (`#7109 <https://github.com/autowarefoundation/autoware.universe/issues/7109>`_)
   * align the MPC steering angle when the car is controlled manually.
   * update the condition for is_driving_manually
   * STOP mode included
@@ -62,7 +62,7 @@ Changelog for package autoware_mpc_lateral_controller
   * unchange the unrelevant line
   * pre-commit
   ---------
-* feat(mpc_lateral_controller): signal a MRM when MPC fails. (`#7016 <https://github.com/youtalk/autoware.universe/issues/7016>`_)
+* feat(mpc_lateral_controller): signal a MRM when MPC fails. (`#7016 <https://github.com/autowarefoundation/autoware.universe/issues/7016>`_)
   * mpc fail checker diagnostic added
   * fix some scope issues
   * member attribute added.
@@ -79,27 +79,27 @@ Changelog for package autoware_mpc_lateral_controller
   * pre-commit
   ---------
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
-* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/youtalk/autoware.universe/issues/7539>`_)
+* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/autowarefoundation/autoware.universe/issues/7539>`_)
   refactor(motion_utils): add autoware prefix and include dir
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(control)!: refactor directory structures of the trajectory followers (`#7521 <https://github.com/youtalk/autoware.universe/issues/7521>`_)
+* refactor(control)!: refactor directory structures of the trajectory followers (`#7521 <https://github.com/autowarefoundation/autoware.universe/issues/7521>`_)
   * control_traj
   * add follower_node
   * fix
   ---------
-* refactor(trajectory_follower_node): trajectory follower node add autoware prefix (`#7344 <https://github.com/youtalk/autoware.universe/issues/7344>`_)
+* refactor(trajectory_follower_node): trajectory follower node add autoware prefix (`#7344 <https://github.com/autowarefoundation/autoware.universe/issues/7344>`_)
   * rename trajectory follower node package
   * update dependencies, launch files, and README files
   * fix formats
   * remove autoware\_ prefix from launch arg option
   ---------
-* refactor(trajectory_follower_base): trajectory follower base add autoware prefix (`#7343 <https://github.com/youtalk/autoware.universe/issues/7343>`_)
+* refactor(trajectory_follower_base): trajectory follower base add autoware prefix (`#7343 <https://github.com/autowarefoundation/autoware.universe/issues/7343>`_)
   * rename trajectory follower base package
   * update dependencies and includes
   * fix formats
   ---------
-* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/youtalk/autoware.universe/issues/7353>`_)
+* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/autowarefoundation/autoware.universe/issues/7353>`_)
   * chore(autoware_vehicle_info_utils): rename header
   * chore(bpp-common): vehicle info
   * chore(path_optimizer): vehicle info
@@ -134,7 +134,7 @@ Changelog for package autoware_mpc_lateral_controller
   * chore(sensing): vehicle info
   * fix(autoware_joy_controller): remove unused deps
   ---------
-* refactor(mpc_lateral_controller, trajectory_follower_node)!: prefix package and namespace with autoware (`#7306 <https://github.com/youtalk/autoware.universe/issues/7306>`_)
+* refactor(mpc_lateral_controller, trajectory_follower_node)!: prefix package and namespace with autoware (`#7306 <https://github.com/autowarefoundation/autoware.universe/issues/7306>`_)
   * add the prefix to the folder
   * named to autoware_mpc_lateral_controller
   * rename the folder in the include

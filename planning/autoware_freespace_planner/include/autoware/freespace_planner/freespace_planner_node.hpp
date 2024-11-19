@@ -45,6 +45,7 @@
 #include <nav_msgs/msg/occupancy_grid.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <std_msgs/msg/bool.hpp>
+#include <tier4_debug_msgs/msg/float64_stamped.hpp>
 #include <tier4_planning_msgs/msg/scenario.hpp>
 
 #ifdef ROS_DISTRO_GALACTIC
@@ -111,6 +112,7 @@ private:
   rclcpp::Publisher<PoseArray>::SharedPtr debug_pose_array_pub_;
   rclcpp::Publisher<PoseArray>::SharedPtr debug_partial_pose_array_pub_;
   rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr parking_state_pub_;
+  rclcpp::Publisher<tier4_debug_msgs::msg::Float64Stamped>::SharedPtr processing_time_pub_;
 
   rclcpp::Subscription<LaneletRoute>::SharedPtr route_sub_;
 

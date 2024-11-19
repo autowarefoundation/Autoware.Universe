@@ -311,7 +311,8 @@ VoxelGridDynamicMapLoader::VoxelGridDynamicMapLoader(
     RCLCPP_INFO(logger_, "service not available, waiting again ...");
   }
 
-  const auto period_ns = rclcpp::Rate(timer_interval_ms).period();
+  const auto period_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
+    std::chrono::milliseconds(timer_interval_ms));
   timer_callback_group_ = node->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
   map_update_timer_ = rclcpp::create_timer(
     node, node->get_clock(), period_ns, std::bind(&VoxelGridDynamicMapLoader::timer_callback, this),

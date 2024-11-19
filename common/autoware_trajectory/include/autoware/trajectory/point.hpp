@@ -244,7 +244,7 @@ public:
    * @param min_points Minimum number of points
    * @return Vector of points
    */
-  [[nodiscard]] std::vector<PointType> restore(const size_t & min_points = 100) const;
+  [[nodiscard]] std::vector<PointType> restore(const size_t & min_points = 4) const;
 
   void crop(const double & start, const double & length);
 

@@ -364,7 +364,7 @@ void TrafficLightPublishPanel::onTimer()
 void TrafficLightPublishPanel::onVectorMap(const LaneletMapBin::ConstSharedPtr msg)
 {
   if (received_vector_map_) return;
-  // NOTE: examples from map_loader/lanelet2_map_visualization_node.cpp
+  // NOTE: examples from autoware_lanelet2_map_visualizer/lanelet2_map_visualization_node.cpp
   lanelet::LaneletMapPtr lanelet_map(new lanelet::LaneletMap);
   lanelet::utils::conversion::fromBinMsg(*msg, lanelet_map);
   lanelet::ConstLanelets all_lanelets = lanelet::utils::query::laneletLayer(lanelet_map);

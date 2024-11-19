@@ -45,8 +45,8 @@ PointType Trajectory<PointType>::compute(double s) const
 {
   PointType result;
   result.position = BaseClass::compute(s);
-  result.orientation = orientation_interpolator_->compute(s);
   s = clamp(s);
+  result.orientation = orientation_interpolator_->compute(s);
   return result;
 }
 

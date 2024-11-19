@@ -37,6 +37,7 @@
 #include <unique_identifier_msgs/msg/uuid.hpp>
 
 #include <memory>
+#include <optional>
 #include <set>
 #include <string>
 #include <unordered_map>
@@ -115,7 +116,7 @@ public:
 
   std::shared_ptr<universe_utils::TimeKeeper> getTimeKeeper() { return time_keeper_; }
 
-  std::optional<int> getFirstStopPathPointIndex() { return first_stop_path_point_index_; }
+  std::optional<double> getFirstStopPathPointDistance() { return first_stop_path_point_distance_; }
 
   void setActivation(const bool activated) { activated_ = activated; }
   void setRTCEnabled(const bool enable_rtc) { rtc_enabled_ = enable_rtc; }
@@ -138,7 +139,7 @@ protected:
   rclcpp::Clock::SharedPtr clock_;
   std::shared_ptr<const PlannerData> planner_data_;
   std::optional<tier4_v2x_msgs::msg::InfrastructureCommand> infrastructure_command_;
-  std::optional<int> first_stop_path_point_index_;
+  std::optional<double> first_stop_path_point_distance_;
   autoware::motion_utils::VelocityFactorInterface velocity_factor_;
   std::vector<ObjectOfInterest> objects_of_interest_;
   mutable std::shared_ptr<universe_utils::TimeKeeper> time_keeper_;
@@ -173,7 +174,7 @@ public:
 
   virtual const char * getModuleName() = 0;
 
-  std::optional<int> getFirstStopPathPointIndex() { return first_stop_path_point_index_; }
+  std::optional<double> getFirstStopPathPointDistance() { return first_stop_path_point_distance_; }
 
   void updateSceneModuleInstances(
     const std::shared_ptr<const PlannerData> & planner_data,
@@ -207,7 +208,7 @@ protected:
   std::shared_ptr<const PlannerData> planner_data_;
   autoware::motion_utils::VirtualWallMarkerCreator virtual_wall_marker_creator_;
 
-  std::optional<int> first_stop_path_point_index_;
+  std::optional<double> first_stop_path_point_distance_;
   rclcpp::Node & node_;
   rclcpp::Clock::SharedPtr clock_;
   // Debug

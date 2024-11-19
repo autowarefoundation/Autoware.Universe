@@ -17,6 +17,9 @@
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
 namespace autoware::behavior_velocity_planner::run_out_utils
 {
+/**
+ * This function returns the point with the smallest (signed) longitudinal distance
+ */
 geometry_msgs::msg::Point findLongitudinalNearestPoint(
   const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points,
   const geometry_msgs::msg::Point & src_point,

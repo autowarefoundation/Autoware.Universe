@@ -2,35 +2,34 @@ nav:
   - 'Introduction': common
   - 'Testing Libraries':
     - 'autoware_testing': common/autoware_testing/design/autoware_testing-design
-    - 'fake_test_node': common/fake_test_node/design/fake_test_node-design
+    - 'autoware_fake_test_node': common/autoware_fake_test_node/design/fake_test_node-design
     - 'Test Utils': common/autoware_test_utils
   - 'Common Libraries':
     - 'autoware_auto_common':
       - 'comparisons': common/autoware_auto_common/design/comparisons
     - 'autoware_grid_map_utils': common/autoware_grid_map_utils
     - 'autoware_point_types': common/autoware_point_types
-    - 'Geography Utils': common/geography_utils
+    - 'Geography Utils': common/autoware_geography_utils
     - 'Global Parameter Loader': common/global_parameter_loader/Readme
     - 'Glog Component': common/glog_component
-    - 'interpolation': common/interpolation
-    - 'Kalman Filter': common/kalman_filter
+    - 'interpolation': common/autoware_interpolation
+    - 'Kalman Filter': common/autoware_kalman_filter
     - 'Motion Utils': common/autoware_motion_utils
     - 'Vehicle Utils': common/autoware_motion_utils/docs/vehicle/vehicle
-    - 'Object Recognition Utils': common/object_recognition_utils
-    - 'OSQP Interface': common/osqp_interface/design/osqp_interface-design
-    - 'Perception Utils': common/perception_utils
-    - 'QP Interface': common/qp_interface/design/qp_interface-design
+    - 'Object Recognition Utils': common/autoware_object_recognition_utils
+    - 'OSQP Interface': common/autoware_osqp_interface/design/osqp_interface-design
+    - 'QP Interface': common/autoware_qp_interface/design/qp_interface-design
     - 'Signal Processing':
-      - 'Introduction': common/signal_processing
-      - 'Butterworth Filter': common/signal_processing/documentation/ButterworthFilter
+      - 'Introduction': common/autoware_signal_processing
+      - 'Butterworth Filter': common/autoware_signal_processing/documentation/ButterworthFilter
+    - 'autoware_traffic_light_utils': common/autoware_traffic_light_utils
     - 'autoware_universe_utils': common/autoware_universe_utils
-    - 'traffic_light_utils': common/traffic_light_utils
   - 'RVIZ2 Plugins':
     - 'autoware_perception_rviz_plugin': common/autoware_perception_rviz_plugin
     - 'autoware_overlay_rviz_plugin': common/autoware_overlay_rviz_plugin/autoware_overlay_rviz_plugin
     - 'autoware_mission_details_overlay_rviz_plugin': common/autoware_overlay_rviz_plugin/autoware_mission_details_overlay_rviz_plugin
     - 'bag_time_manager_rviz_plugin': common/bag_time_manager_rviz_plugin
-    - 'polar_grid': common/polar_grid/Readme
+    - 'polar_grid': common/autoware_polar_grid/Readme
     - 'tier4_adapi_rviz_plugin': common/tier4_adapi_rviz_plugin
     - 'tier4_api_utils': common/tier4_api_utils
     - 'tier4_camera_view_rviz_plugin': common/tier4_camera_view_rviz_plugin
@@ -43,10 +42,10 @@ nav:
     - 'tier4_vehicle_rviz_plugin': common/tier4_vehicle_rviz_plugin
     - 'traffic_light_recognition_marker_publisher': common/traffic_light_recognition_marker_publisher/Readme
   - 'Node':
-    - 'Goal Distance Calculator': common/goal_distance_calculator/Readme
+    - 'Goal Distance Calculator': common/autoware_goal_distance_calculator/Readme
     - 'Path Distance Calculator': common/autoware_path_distance_calculator/Readme
   - 'Others':
     - 'autoware_adapi_specs': common/autoware_adapi_specs
-    - 'component_interface_specs': common/component_interface_specs
-    - 'component_interface_tools': common/component_interface_tools
-    - 'component_interface_utils': common/component_interface_utils
+    - 'autoware_component_interface_specs': common/autoware_component_interface_specs
+    - 'autoware_component_interface_tools': common/autoware_component_interface_tools
+    - 'autoware_component_interface_utils': common/autoware_component_interface_utils

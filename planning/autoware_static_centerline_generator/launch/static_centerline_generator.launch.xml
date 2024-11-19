@@ -20,7 +20,7 @@
   <arg name="lanelet2_map_topic" default="/map/vector_map"/>
   <arg name="lanelet2_map_marker_topic" default="/map/vector_map_marker"/>
   <!-- param -->
-  <arg name="map_loader_param" default="$(find-pkg-share map_loader)/config/lanelet2_map_loader.param.yaml"/>
+  <arg name="map_loader_param" default="$(find-pkg-share autoware_map_loader)/config/lanelet2_map_loader.param.yaml"/>
   <arg
     name="behavior_path_planner_param"
     default="$(find-pkg-share autoware_launch)/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/behavior_path_planner.param.yaml"

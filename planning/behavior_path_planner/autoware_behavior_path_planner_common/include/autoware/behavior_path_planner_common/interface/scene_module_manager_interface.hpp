@@ -23,6 +23,8 @@
 #include <rclcpp/parameter.hpp>
 #include <rclcpp/publisher.hpp>
 
+#include <autoware_adapi_v1_msgs/msg/steering_factor_array.hpp>
+#include <autoware_adapi_v1_msgs/msg/velocity_factor_array.hpp>
 #include <unique_identifier_msgs/msg/uuid.hpp>
 
 #include <cstddef>
@@ -40,6 +42,8 @@ using autoware::motion_utils::createDeadLineVirtualWallMarker;
 using autoware::motion_utils::createSlowDownVirtualWallMarker;
 using autoware::motion_utils::createStopVirtualWallMarker;
 using autoware::universe_utils::toHexString;
+using autoware_adapi_v1_msgs::msg::SteeringFactorArray;
+using autoware_adapi_v1_msgs::msg::VelocityFactorArray;
 using unique_identifier_msgs::msg::UUID;
 using SceneModulePtr = std::shared_ptr<SceneModuleInterface>;
 using SceneModuleObserver = std::weak_ptr<SceneModuleInterface>;
@@ -100,6 +104,46 @@ public:
         ptr->publishCooperateStatus(rclcpp::Clock(RCL_ROS_TIME).now());
       }
     }
+  }
+
+  void publishSteeringFactor()
+  {
+    SteeringFactorArray steering_factor_array;
+    steering_factor_array.header.frame_id = "map";
+    steering_factor_array.header.stamp = node_->now();
+
+    for (const auto & m : observers_) {
+      if (m.expired()) {
+        continue;
+      }
+
+      const auto steering_factor = m.lock()->get_steering_factor();
+      if (steering_factor.behavior != PlanningBehavior::UNKNOWN) {
+        steering_factor_array.factors.emplace_back(steering_factor);
+      }
+    }
+
+    pub_steering_factors_->publish(steering_factor_array);
+  }
+
+  void publishVelocityFactor()
+  {
+    VelocityFactorArray velocity_factor_array;
+    velocity_factor_array.header.frame_id = "map";
+    velocity_factor_array.header.stamp = node_->now();
+
+    for (const auto & m : observers_) {
+      if (m.expired()) {
+        continue;
+      }
+
+      const auto velocity_factor = m.lock()->get_velocity_factor();
+      if (velocity_factor.behavior != PlanningBehavior::UNKNOWN) {
+        velocity_factor_array.factors.emplace_back(velocity_factor);
+      }
+    }
+
+    pub_velocity_factors_->publish(velocity_factor_array);
   }
 
   void publishVirtualWall() const
@@ -262,13 +306,15 @@ protected:
 
   rclcpp::Publisher<MarkerArray>::SharedPtr pub_drivable_lanes_;
 
+  rclcpp::Publisher<SteeringFactorArray>::SharedPtr pub_steering_factors_;
+
+  rclcpp::Publisher<VelocityFactorArray>::SharedPtr pub_velocity_factors_;
+
   rclcpp::Publisher<universe_utils::ProcessingTimeDetail>::SharedPtr pub_processing_time_;
 
   std::string name_;
 
   std::shared_ptr<PlannerData> planner_data_;
-
-  std::shared_ptr<SteeringFactorInterface> steering_factor_interface_ptr_;
 
   std::vector<SceneModuleObserver> observers_;
 

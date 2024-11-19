@@ -117,6 +117,7 @@ component_management:
         # - control/control_performance_analysis/**
         - control/obstacle_collision_checker/**
         # - control/predicted_path_checker/**
+        - control/autoware_collision_detector/**
 
     - component_id: localization-tier-iv-maintained-packages
       name: Localization TIER IV Maintained Packages
@@ -215,7 +216,7 @@ component_management:
         - planning/behavior_path_planner/autoware_behavior_path_goal_planner_module/**
         - planning/behavior_path_planner/autoware_behavior_path_planner_common/**
         - planning/behavior_path_planner/autoware_behavior_path_start_planner_module/**
-        - planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/**
+        # - planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/**
         - planning/behavior_path_planner/autoware_behavior_path_lane_change_module/**
         # - planning/behavior_path_planner/autoware_behavior_path_sampling_planner_module/**
         - planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/**
@@ -245,3 +246,5 @@ component_management:
         - planning/motion_velocity_planner/autoware_motion_velocity_out_of_lane_module/**
         - planning/motion_velocity_planner/autoware_motion_velocity_planner_common/**
         - planning/motion_velocity_planner/autoware_motion_velocity_planner_node/**
+        #### sampling_based_planner
+        - planning/sampling_based_planner/autoware_bezier_sampler/**

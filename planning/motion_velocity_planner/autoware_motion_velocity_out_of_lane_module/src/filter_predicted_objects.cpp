@@ -15,8 +15,8 @@
 #include "filter_predicted_objects.hpp"
 
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
+#include <autoware/traffic_light_utils/traffic_light_utils.hpp>
 #include <autoware/universe_utils/geometry/boost_geometry.hpp>
-#include <traffic_light_utils/traffic_light_utils.hpp>
 
 #include <boost/geometry/algorithms/detail/intersects/interface.hpp>
 #include <boost/geometry/algorithms/intersects.hpp>

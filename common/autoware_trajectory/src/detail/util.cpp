@@ -30,7 +30,7 @@ geometry_msgs::msg::Point to_point(const geometry_msgs::msg::Pose & p)
   return p.position;
 }
 
-geometry_msgs::msg::Point to_point(const Eigen::Ref<const Eigen::Vector2d> & p)
+geometry_msgs::msg::Point to_point(const Eigen::Vector2d & p)
 {
   geometry_msgs::msg::Point point;
   point.x = p(0);

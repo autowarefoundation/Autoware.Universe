@@ -104,8 +104,15 @@ void VelocitySteeringFactorsPanel::onVelocityFactors(const VelocityFactorArray::
   velocity_factors_table_->clearContents();
   velocity_factors_table_->setRowCount(msg->factors.size());
 
-  for (std::size_t i = 0; i < msg->factors.size(); i++) {
-    const auto & e = msg->factors.at(i);
+  auto sorted = *msg;
+
+  // sort by distance to the decel/stop point.
+  std::sort(sorted.factors.begin(), sorted.factors.end(), [](const auto & a, const auto & b) {
+    return a.distance < b.distance;
+  });
+
+  for (std::size_t i = 0; i < sorted.factors.size(); i++) {
+    const auto & e = sorted.factors.at(i);
 
     // behavior
     {
@@ -157,8 +164,15 @@ void VelocitySteeringFactorsPanel::onSteeringFactors(const SteeringFactorArray::
   steering_factors_table_->clearContents();
   steering_factors_table_->setRowCount(msg->factors.size());
 
-  for (std::size_t i = 0; i < msg->factors.size(); i++) {
-    const auto & e = msg->factors.at(i);
+  auto sorted = *msg;
+
+  // sort by distance to the point where it starts moving the steering.
+  std::sort(sorted.factors.begin(), sorted.factors.end(), [](const auto & a, const auto & b) {
+    return a.distance.front() < b.distance.front();
+  });
+
+  for (std::size_t i = 0; i < sorted.factors.size(); i++) {
+    const auto & e = sorted.factors.at(i);
 
     // behavior
     {

@@ -5,58 +5,58 @@ Changelog for package autoware_pid_longitudinal_controller
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* refactor(autoware_interpolation): prefix package and namespace with autoware (`#8088 <https://github.com/youtalk/autoware.universe/issues/8088>`_)
+* refactor(autoware_interpolation): prefix package and namespace with autoware (`#8088 <https://github.com/autowarefoundation/autoware.universe/issues/8088>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* fix(pid_longitudinal_controller): fix the same point error (`#8758 <https://github.com/youtalk/autoware.universe/issues/8758>`_)
+* fix(pid_longitudinal_controller): fix the same point error (`#8758 <https://github.com/autowarefoundation/autoware.universe/issues/8758>`_)
   * fix same point
-* feat(pid_longitudinal_controller)!: add acceleration feedback block (`#8325 <https://github.com/youtalk/autoware.universe/issues/8325>`_)
-* refactor(control/pid_longitudinal_controller): rework parameters (`#6707 <https://github.com/youtalk/autoware.universe/issues/6707>`_)
+* feat(pid_longitudinal_controller)!: add acceleration feedback block (`#8325 <https://github.com/autowarefoundation/autoware.universe/issues/8325>`_)
+* refactor(control/pid_longitudinal_controller): rework parameters (`#6707 <https://github.com/autowarefoundation/autoware.universe/issues/6707>`_)
   * reset and re-apply refactoring
   * style(pre-commit): autofix
   * .
   * .
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(pid_longitudinal_controller): re-organize diff limit structure and fix state change condition (`#7718 <https://github.com/youtalk/autoware.universe/issues/7718>`_)
+* feat(pid_longitudinal_controller): re-organize diff limit structure and fix state change condition (`#7718 <https://github.com/autowarefoundation/autoware.universe/issues/7718>`_)
   change diff limit structure
   change stopped condition
   define a new param
-* fix(controller): revival of dry steering (`#7903 <https://github.com/youtalk/autoware.universe/issues/7903>`_)
-  * Revert "fix(autoware_mpc_lateral_controller): delete the zero speed constraint (`#7673 <https://github.com/youtalk/autoware.universe/issues/7673>`_)"
+* fix(controller): revival of dry steering (`#7903 <https://github.com/autowarefoundation/autoware.universe/issues/7903>`_)
+  * Revert "fix(autoware_mpc_lateral_controller): delete the zero speed constraint (`#7673 <https://github.com/autowarefoundation/autoware.universe/issues/7673>`_)"
   This reverts commit 69258bd92cb8a0ff8320df9b2302db72975e027f.
   * dry steering
   * add comments
   * add minor fix and modify unit test for dry steering
   ---------
-* fix(autoware_pid_longitudinal_controller, autoware_trajectory_follower_node): unite diagnostic_updater\_ in PID and MPC. (`#7674 <https://github.com/youtalk/autoware.universe/issues/7674>`_)
+* fix(autoware_pid_longitudinal_controller, autoware_trajectory_follower_node): unite diagnostic_updater\_ in PID and MPC. (`#7674 <https://github.com/autowarefoundation/autoware.universe/issues/7674>`_)
   * diag_updater\_ added in PID
   * correct the pointer form
   * pre-commit
   ---------
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/youtalk/autoware.universe/issues/7539>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/autowarefoundation/autoware.universe/issues/7539>`_)
   refactor(motion_utils): add autoware prefix and include dir
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(control)!: refactor directory structures of the trajectory followers (`#7521 <https://github.com/youtalk/autoware.universe/issues/7521>`_)
+* refactor(control)!: refactor directory structures of the trajectory followers (`#7521 <https://github.com/autowarefoundation/autoware.universe/issues/7521>`_)
   * control_traj
   * add follower_node
   * fix
   ---------
-* ci(pre-commit): autoupdate (`#7499 <https://github.com/youtalk/autoware.universe/issues/7499>`_)
+* ci(pre-commit): autoupdate (`#7499 <https://github.com/autowarefoundation/autoware.universe/issues/7499>`_)
   Co-authored-by: M. Fatih Cırıt <mfc@leodrive.ai>
-* refactor(trajectory_follower_node): trajectory follower node add autoware prefix (`#7344 <https://github.com/youtalk/autoware.universe/issues/7344>`_)
+* refactor(trajectory_follower_node): trajectory follower node add autoware prefix (`#7344 <https://github.com/autowarefoundation/autoware.universe/issues/7344>`_)
   * rename trajectory follower node package
   * update dependencies, launch files, and README files
   * fix formats
   * remove autoware\_ prefix from launch arg option
   ---------
-* refactor(trajectory_follower_base): trajectory follower base add autoware prefix (`#7343 <https://github.com/youtalk/autoware.universe/issues/7343>`_)
+* refactor(trajectory_follower_base): trajectory follower base add autoware prefix (`#7343 <https://github.com/autowarefoundation/autoware.universe/issues/7343>`_)
   * rename trajectory follower base package
   * update dependencies and includes
   * fix formats
   ---------
-* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/youtalk/autoware.universe/issues/7353>`_)
+* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/autowarefoundation/autoware.universe/issues/7353>`_)
   * chore(autoware_vehicle_info_utils): rename header
   * chore(bpp-common): vehicle info
   * chore(path_optimizer): vehicle info
@@ -91,7 +91,7 @@ Changelog for package autoware_pid_longitudinal_controller
   * chore(sensing): vehicle info
   * fix(autoware_joy_controller): remove unused deps
   ---------
-* refactor(pid_longitudinal_controller)!: prefix package and namespace with autoware (`#7383 <https://github.com/youtalk/autoware.universe/issues/7383>`_)
+* refactor(pid_longitudinal_controller)!: prefix package and namespace with autoware (`#7383 <https://github.com/autowarefoundation/autoware.universe/issues/7383>`_)
   * add prefix
   * fix
   * fix trajectory follower node param

@@ -81,12 +81,20 @@ PlanningNode::PlanningNode(const rclcpp::NodeOptions & options) : Node("planning
     "/planning/velocity_factors/obstacle_stop",
     "/planning/velocity_factors/obstacle_cruise",
     "/planning/velocity_factors/occlusion_spot",
+    "/planning/velocity_factors/run_out",
     "/planning/velocity_factors/stop_line",
     "/planning/velocity_factors/surround_obstacle",
     "/planning/velocity_factors/traffic_light",
     "/planning/velocity_factors/virtual_traffic_light",
     "/planning/velocity_factors/walkway",
-    "/planning/velocity_factors/motion_velocity_planner"};
+    "/planning/velocity_factors/motion_velocity_planner",
+    "/planning/velocity_factors/static_obstacle_avoidance",
+    "/planning/velocity_factors/dynamic_obstacle_avoidance",
+    "/planning/velocity_factors/avoidance_by_lane_change",
+    "/planning/velocity_factors/lane_change_left",
+    "/planning/velocity_factors/lane_change_right",
+    "/planning/velocity_factors/start_planner",
+    "/planning/velocity_factors/goal_planner"};
 
   std::vector<std::string> steering_factor_topics = {
     "/planning/steering_factor/static_obstacle_avoidance",

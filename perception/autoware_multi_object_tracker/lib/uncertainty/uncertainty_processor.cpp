@@ -17,6 +17,9 @@
 
 #include "autoware/multi_object_tracker/uncertainty/uncertainty_processor.hpp"
 
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+
 namespace autoware::multi_object_tracker
 {
 namespace uncertainty
@@ -132,6 +135,104 @@ void normalizeUncertainty(DetectedObjects & detected_objects)
     auto & twist_cov = object.kinematics.twist_with_covariance.covariance;
     twist_cov[XYZRPY_COV_IDX::X_X] = std::max(twist_cov[XYZRPY_COV_IDX::X_X], min_cov_vel);
     twist_cov[XYZRPY_COV_IDX::Y_Y] = std::max(twist_cov[XYZRPY_COV_IDX::Y_Y], min_cov_vel);
+  }
+}
+
+void addOdometryUncertainty(const Odometry & odometry, DetectedObjects & detected_objects)
+{
+  const auto & odom_pose = odometry.pose.pose;
+  const auto & odom_pose_cov = odometry.pose.covariance;
+  const auto & odom_twist = odometry.twist.twist;
+  const auto & odom_twist_cov = odometry.twist.covariance;
+
+  // ego motion uncertainty, velocity multiplied by time uncertainty
+  const double ego_yaw = tf2::getYaw(odom_pose.orientation);
+  const double dt =
+    (rclcpp::Time(odometry.header.stamp) - rclcpp::Time(detected_objects.header.stamp)).seconds();
+  const double dt2 = dt * dt;
+  Eigen::MatrixXd m_rot_ego = Eigen::Rotation2D(ego_yaw).toRotationMatrix();
+  Eigen::MatrixXd m_cov_motion = Eigen::MatrixXd(2, 2);
+  m_cov_motion << odom_twist.linear.x * odom_twist.linear.x * dt2, 0, 0,
+    odom_twist.linear.y * odom_twist.linear.y * dt2;
+
+  // ego position uncertainty, position covariance + motion covariance
+  Eigen::MatrixXd m_cov_ego_pose = Eigen::MatrixXd(2, 2);
+  m_cov_ego_pose << odom_pose_cov[0], odom_pose_cov[1], odom_pose_cov[6], odom_pose_cov[7];
+  m_cov_ego_pose = m_cov_ego_pose + m_rot_ego * m_cov_motion * m_rot_ego.transpose();
+
+  // ego yaw uncertainty, position covariance + yaw motion covariance
+  const double & cov_ego_yaw = odom_pose_cov[35];
+  const double cov_yaw = cov_ego_yaw + odom_twist.angular.z * odom_twist.angular.z * dt2;
+
+  // ego velocity uncertainty, velocity covariance
+  Eigen::MatrixXd m_cov_ego_twist = Eigen::MatrixXd(2, 2);
+  m_cov_ego_twist << odom_twist_cov[0], odom_twist_cov[1], odom_twist_cov[6], odom_twist_cov[7];
+  const double & cov_yaw_rate = odom_twist_cov[35];
+
+  for (auto & object : detected_objects.objects) {
+    auto & object_pose = object.kinematics.pose_with_covariance.pose;
+    auto & object_pose_cov = object.kinematics.pose_with_covariance.covariance;
+    const double dx = object_pose.position.x - odom_pose.position.x;
+    const double dy = object_pose.position.y - odom_pose.position.y;
+    const double r2 = dx * dx + dy * dy;
+    const double theta = std::atan2(dy, dx);
+
+    // 1. add odometry position and motion uncertainty to the object position covariance
+    Eigen::MatrixXd m_pose_cov = Eigen::MatrixXd(2, 2);
+    m_pose_cov << object_pose_cov[XYZRPY_COV_IDX::X_X], object_pose_cov[XYZRPY_COV_IDX::X_Y],
+      object_pose_cov[XYZRPY_COV_IDX::Y_X], object_pose_cov[XYZRPY_COV_IDX::Y_Y];
+
+    // 1-a. add odometry position uncertainty to the object position covariance
+    // object position and it covariance is based on the world frame (map)
+    m_pose_cov = m_pose_cov + m_cov_ego_pose;
+
+    // 1-b. add odometry heading uncertainty to the object position covariance
+    // uncertainty is proportional to the distance and the uncertainty orientation is vertical to
+    // the vector to the object
+    {
+      const double cov_by_yaw = cov_ego_yaw * r2;
+      // rotate the covariance matrix, add the yaw uncertainty, and rotate back
+      Eigen::MatrixXd m_rot_theta = Eigen::Rotation2D(theta).toRotationMatrix();
+      Eigen::MatrixXd m_cov_rot = m_rot_theta.transpose() * m_pose_cov * m_rot_theta;
+      m_cov_rot(1, 1) += cov_by_yaw;  // yaw uncertainty is added to y-y element
+      m_pose_cov = m_rot_theta * m_cov_rot * m_rot_theta.transpose();
+    }
+    // 1-c. add odometry yaw uncertainty to the object yaw covariance
+    object_pose_cov[XYZRPY_COV_IDX::YAW_YAW] += cov_yaw;  // yaw-yaw
+
+    // update the covariance matrix
+    object_pose_cov[XYZRPY_COV_IDX::X_X] = m_pose_cov(0, 0);
+    object_pose_cov[XYZRPY_COV_IDX::X_Y] = m_pose_cov(0, 1);
+    object_pose_cov[XYZRPY_COV_IDX::Y_X] = m_pose_cov(1, 0);
+    object_pose_cov[XYZRPY_COV_IDX::Y_Y] = m_pose_cov(1, 1);
+
+    // 2. add odometry velocity uncertainty to the object velocity covariance
+    auto & object_twist_cov = object.kinematics.twist_with_covariance.covariance;
+    Eigen::MatrixXd m_twist_cov = Eigen::MatrixXd(2, 2);
+    m_twist_cov << object_twist_cov[XYZRPY_COV_IDX::X_X], object_twist_cov[XYZRPY_COV_IDX::X_Y],
+      object_twist_cov[XYZRPY_COV_IDX::Y_X], object_twist_cov[XYZRPY_COV_IDX::Y_Y];
+
+    // 2-a. add odometry velocity uncertainty to the object linear twist covariance
+    {
+      const double obj_yaw = tf2::getYaw(object_pose.orientation);  // object yaw is global frame
+      Eigen::MatrixXd m_rot_theta = Eigen::Rotation2D(obj_yaw - ego_yaw).toRotationMatrix();
+      m_twist_cov = m_twist_cov + m_rot_theta.transpose() * m_cov_ego_twist * m_rot_theta;
+    }
+
+    // 2-b. add odometry yaw rate uncertainty to the object linear twist covariance
+    {
+      const double cov_by_yaw_rate = cov_yaw_rate * r2;
+      Eigen::MatrixXd m_rot_theta = Eigen::Rotation2D(theta).toRotationMatrix();
+      Eigen::MatrixXd m_twist_cov_rot = m_rot_theta.transpose() * m_twist_cov * m_rot_theta;
+      m_twist_cov_rot(1, 1) += cov_by_yaw_rate;  // yaw rate uncertainty is added to y-y element
+      m_twist_cov = m_rot_theta * m_twist_cov_rot * m_rot_theta.transpose();
+    }
+
+    // update the covariance matrix
+    object_twist_cov[XYZRPY_COV_IDX::X_X] = m_twist_cov(0, 0);
+    object_twist_cov[XYZRPY_COV_IDX::X_Y] = m_twist_cov(0, 1);
+    object_twist_cov[XYZRPY_COV_IDX::Y_X] = m_twist_cov(1, 0);
+    object_twist_cov[XYZRPY_COV_IDX::Y_Y] = m_twist_cov(1, 1);
   }
 }
 

@@ -14,6 +14,8 @@
 
 #include "mrm_comfortable_stop_operator/mrm_comfortable_stop_operator_core.hpp"
 
+#include <autoware/universe_utils/ros/update_param.hpp>
+
 namespace mrm_comfortable_stop_operator
 {
 
@@ -48,6 +50,10 @@ MrmComfortableStopOperator::MrmComfortableStopOperator(const rclcpp::NodeOptions
 
   // Initialize
   status_.state = tier4_system_msgs::msg::MrmBehaviorStatus::AVAILABLE;
+
+  // Parameter Callback
+  set_param_res_ = add_on_set_parameters_callback(
+    std::bind(&MrmComfortableStopOperator::onParameter, this, std::placeholders::_1));
 }
 
 void MrmComfortableStopOperator::operateComfortableStop(
@@ -63,6 +69,20 @@ void MrmComfortableStopOperator::operateComfortableStop(
     status_.state = tier4_system_msgs::msg::MrmBehaviorStatus::AVAILABLE;
     response->response.success = true;
   }
+}
+
+rcl_interfaces::msg::SetParametersResult MrmComfortableStopOperator::onParameter(
+  const std::vector<rclcpp::Parameter> & parameters)
+{
+  using autoware::universe_utils::updateParam;
+  updateParam<double>(parameters, "min_acceleration", params_.min_acceleration);
+  updateParam<double>(parameters, "max_jerk", params_.max_jerk);
+  updateParam<double>(parameters, "min_jerk", params_.min_jerk);
+
+  rcl_interfaces::msg::SetParametersResult result;
+  result.successful = true;
+  result.reason = "success";
+  return result;
 }
 
 void MrmComfortableStopOperator::publishStatus() const

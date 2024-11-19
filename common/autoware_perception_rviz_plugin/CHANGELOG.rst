@@ -5,35 +5,35 @@ Changelog for package autoware_perception_rviz_plugin
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* fix(autoware_perception_rviz_plugin): fix unusedFunction (`#8784 <https://github.com/youtalk/autoware.universe/issues/8784>`_)
+* fix(autoware_perception_rviz_plugin): fix unusedFunction (`#8784 <https://github.com/autowarefoundation/autoware.universe/issues/8784>`_)
   fix: unusedFunction
-* feat(autoware_perception_rviz_plugin): rviz predicted path mark as triangle (`#8536 <https://github.com/youtalk/autoware.universe/issues/8536>`_)
+* feat(autoware_perception_rviz_plugin): rviz predicted path mark as triangle (`#8536 <https://github.com/autowarefoundation/autoware.universe/issues/8536>`_)
   * refactor: predicted path mark replace to triangle
   * chore: clean up
   ---------
-* fix(autoware_perception_rviz_plugin): fix passedByValue (`#8192 <https://github.com/youtalk/autoware.universe/issues/8192>`_)
+* fix(autoware_perception_rviz_plugin): fix passedByValue (`#8192 <https://github.com/autowarefoundation/autoware.universe/issues/8192>`_)
   * fix: passedByValue
   * fix:passedByValue
   ---------
   Co-authored-by: kobayu858 <yutaro.kobayashi@tier4.jp>
-* chore(autoware_perception_rviz_plugin): delete maintainer (`#7900 <https://github.com/youtalk/autoware.universe/issues/7900>`_)
-* fix(autoware_perception_rviz_plugin): fix duplicateBranch warnings (`#7695 <https://github.com/youtalk/autoware.universe/issues/7695>`_)
+* chore(autoware_perception_rviz_plugin): delete maintainer (`#7900 <https://github.com/autowarefoundation/autoware.universe/issues/7900>`_)
+* fix(autoware_perception_rviz_plugin): fix duplicateBranch warnings (`#7695 <https://github.com/autowarefoundation/autoware.universe/issues/7695>`_)
   * fix(autoware_perception_rviz_plugin): fix duplicateBranch warnings
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat!: replace autoware_auto_msgs with autoware_msgs for common modules (`#7239 <https://github.com/youtalk/autoware.universe/issues/7239>`_)
+* feat!: replace autoware_auto_msgs with autoware_msgs for common modules (`#7239 <https://github.com/autowarefoundation/autoware.universe/issues/7239>`_)
   Co-authored-by: Cynthia Liu <cynthia.liu@autocore.ai>
   Co-authored-by: NorahXiong <norah.xiong@autocore.ai>
   Co-authored-by: beginningfan <beginning.fan@autocore.ai>
-* feat(autoware_auto_perception_rviz_plugin)!: rename package to autoware_perception_rviz_plugin (`#7221 <https://github.com/youtalk/autoware.universe/issues/7221>`_)
+* feat(autoware_auto_perception_rviz_plugin)!: rename package to autoware_perception_rviz_plugin (`#7221 <https://github.com/autowarefoundation/autoware.universe/issues/7221>`_)
   feat(autoware_auto_perception_rviz_plugin): rename package to autoware_perception_rviz_plugin
   Co-authored-by: Yukihiro Saito <yukky.saito@gmail.com>
 * Contributors: Hayate TOBA, Nagi70, Ryohsuke Mitsudome, Ryuta Kambe, Satoshi Tanaka, Taekjin LEE, Yutaka Kondo
 
 0.26.0 (2024-04-03)
 -------------------
-* feat: add rviz plugin packages (`#3 <https://github.com/youtalk/autoware.universe/issues/3>`_)
+* feat: add rviz plugin packages (`#3 <https://github.com/autowarefoundation/autoware.universe/issues/3>`_)
   * release v0.4.0
   * remove ROS1 packages temporarily
   * add sample ros2 packages
@@ -41,55 +41,55 @@ Changelog for package autoware_perception_rviz_plugin
   * Revert "remove ROS1 packages temporarily"
   This reverts commit 7eacbcea261a65d6c305c7b0d069591ca3a2ee3a.
   * add COLCON_IGNORE to ros1 packages
-  * Port autoware-perception-rviz-plugin (`#100 <https://github.com/youtalk/autoware.universe/issues/100>`_)
+  * Port autoware-perception-rviz-plugin (`#100 <https://github.com/autowarefoundation/autoware.universe/issues/100>`_)
   * Port to ROS2
   * Update namespaces
-  * Port autoware-planning-rviz-plugin (`#103 <https://github.com/youtalk/autoware.universe/issues/103>`_)
+  * Port autoware-planning-rviz-plugin (`#103 <https://github.com/autowarefoundation/autoware.universe/issues/103>`_)
   * Port to ROS2
   * Update deprecated
   * Update namespaces
-  * Adjust copyright notice on 532 out of 699 source files (`#143 <https://github.com/youtalk/autoware.universe/issues/143>`_)
-  * Use quotes for includes where appropriate (`#144 <https://github.com/youtalk/autoware.universe/issues/144>`_)
+  * Adjust copyright notice on 532 out of 699 source files (`#143 <https://github.com/autowarefoundation/autoware.universe/issues/143>`_)
+  * Use quotes for includes where appropriate (`#144 <https://github.com/autowarefoundation/autoware.universe/issues/144>`_)
   * Use quotes for includes where appropriate
   * Fix lint tests
   * Make tests pass hopefully
-  * Run uncrustify on the entire Pilot.Auto codebase (`#151 <https://github.com/youtalk/autoware.universe/issues/151>`_)
+  * Run uncrustify on the entire Pilot.Auto codebase (`#151 <https://github.com/autowarefoundation/autoware.universe/issues/151>`_)
   * Run uncrustify on the entire Pilot.Auto codebase
   * Exclude open PRs
-  * Fix rviz plugins (`#175 <https://github.com/youtalk/autoware.universe/issues/175>`_)
+  * Fix rviz plugins (`#175 <https://github.com/autowarefoundation/autoware.universe/issues/175>`_)
   * [autoware_perception_rviz_plugin] make library to shared and fix library name in plugin_description.xml
   * [autoware_planning_rviz_plugin] make library to shared and fix library name in plugin_description.xml
-  * Port autoware vehicle rviz plugin (`#111 <https://github.com/youtalk/autoware.universe/issues/111>`_)
+  * Port autoware vehicle rviz plugin (`#111 <https://github.com/autowarefoundation/autoware.universe/issues/111>`_)
   * Port to ROS2
   * Amend buildtool
   * Fix license
   * Fix
   * Fixes
-  * adding linters to autoware_planning_rviz_plugin (`#224 <https://github.com/youtalk/autoware.universe/issues/224>`_)
-  * adding linters to autoware_perception_rviz_plugin (`#225 <https://github.com/youtalk/autoware.universe/issues/225>`_)
-  * [autoware_perception_rviz_plugin] make plugin library SHARED (`#236 <https://github.com/youtalk/autoware.universe/issues/236>`_)
-  * Fix bugs in autoware vehicle rviz plugin (`#246 <https://github.com/youtalk/autoware.universe/issues/246>`_)
-  * Ros2 v0.8.0 autoware vehicle rviz plugin (`#333 <https://github.com/youtalk/autoware.universe/issues/333>`_)
+  * adding linters to autoware_planning_rviz_plugin (`#224 <https://github.com/autowarefoundation/autoware.universe/issues/224>`_)
+  * adding linters to autoware_perception_rviz_plugin (`#225 <https://github.com/autowarefoundation/autoware.universe/issues/225>`_)
+  * [autoware_perception_rviz_plugin] make plugin library SHARED (`#236 <https://github.com/autowarefoundation/autoware.universe/issues/236>`_)
+  * Fix bugs in autoware vehicle rviz plugin (`#246 <https://github.com/autowarefoundation/autoware.universe/issues/246>`_)
+  * Ros2 v0.8.0 autoware vehicle rviz plugin (`#333 <https://github.com/autowarefoundation/autoware.universe/issues/333>`_)
   * add test depend
-  * fix console meter size (`#909 <https://github.com/youtalk/autoware.universe/issues/909>`_)
-  * update to change font scale (`#910 <https://github.com/youtalk/autoware.universe/issues/910>`_)
-  * Fix typos in common modules (`#914 <https://github.com/youtalk/autoware.universe/issues/914>`_)
+  * fix console meter size (`#909 <https://github.com/autowarefoundation/autoware.universe/issues/909>`_)
+  * update to change font scale (`#910 <https://github.com/autowarefoundation/autoware.universe/issues/910>`_)
+  * Fix typos in common modules (`#914 <https://github.com/autowarefoundation/autoware.universe/issues/914>`_)
   * fix typos in common modules
   * minor fix (lowercasing)
   * revert changes in PathPoint.msg
-  * Fix memory leaks in turn signal plugin (`#932 <https://github.com/youtalk/autoware.universe/issues/932>`_)
+  * Fix memory leaks in turn signal plugin (`#932 <https://github.com/autowarefoundation/autoware.universe/issues/932>`_)
   * fix memory leak (QPointF)
   * convert raw pointers to smart pointers
-  * update handle image (`#948 <https://github.com/youtalk/autoware.universe/issues/948>`_)
-  * reduce calc cost rviz plugin (`#947 <https://github.com/youtalk/autoware.universe/issues/947>`_)
+  * update handle image (`#948 <https://github.com/autowarefoundation/autoware.universe/issues/948>`_)
+  * reduce calc cost rviz plugin (`#947 <https://github.com/autowarefoundation/autoware.universe/issues/947>`_)
   * reduce calc cost
   * cosmetic change
   * cosmetic change
   * Use CMAKE_CXX_STANDARD to enable C++14 for Qt
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-  * change font size independency desplay (`#946 <https://github.com/youtalk/autoware.universe/issues/946>`_)
-  * bug fix (wrong unit conversion) (`#956 <https://github.com/youtalk/autoware.universe/issues/956>`_)
-  * Refactor autoware_vehicle_rviz_plugin (`#967 <https://github.com/youtalk/autoware.universe/issues/967>`_)
+  * change font size independency desplay (`#946 <https://github.com/autowarefoundation/autoware.universe/issues/946>`_)
+  * bug fix (wrong unit conversion) (`#956 <https://github.com/autowarefoundation/autoware.universe/issues/956>`_)
+  * Refactor autoware_vehicle_rviz_plugin (`#967 <https://github.com/autowarefoundation/autoware.universe/issues/967>`_)
   * Refactor autoware_vehicle_rviz_plugin
   - change smart pointers to raw pointers according to Qt convention
   - remove unused headers
@@ -97,7 +97,7 @@ Changelog for package autoware_perception_rviz_plugin
   - cosmetic changes according to Google C++ Style Guide
   - use the range-based for statement
   - replace push_back with emplace_back
-  See also: `#932 <https://github.com/youtalk/autoware.universe/issues/932>`_, `#964 <https://github.com/youtalk/autoware.universe/issues/964>`_
+  See also: `#932 <https://github.com/autowarefoundation/autoware.universe/issues/932>`_, `#964 <https://github.com/autowarefoundation/autoware.universe/issues/964>`_
   * Apply clang-format
   * Change a variable name to clarify: history -> histories
   * add build testing
@@ -107,28 +107,28 @@ Changelog for package autoware_perception_rviz_plugin
   Co-authored-by: Yukihiro Saito <yukky.saito@gmail.com>
   Co-authored-by: Kazuki Miyahara <kmiya@outlook.com>
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-  * Ros2 v0.8.0 autoware perception rviz plugin (`#334 <https://github.com/youtalk/autoware.universe/issues/334>`_)
-  * Fix typos in common modules (`#914 <https://github.com/youtalk/autoware.universe/issues/914>`_)
+  * Ros2 v0.8.0 autoware perception rviz plugin (`#334 <https://github.com/autowarefoundation/autoware.universe/issues/334>`_)
+  * Fix typos in common modules (`#914 <https://github.com/autowarefoundation/autoware.universe/issues/914>`_)
   * fix typos in common modules
   * minor fix (lowercasing)
   * revert changes in PathPoint.msg
   * ament_cmake_cppcheck  -> ament_lint_common
   * apply lint
   Co-authored-by: Kazuki Miyahara <kmiya@outlook.com>
-  * Ros2 v0.8.0 autoware planning rviz plugin (`#336 <https://github.com/youtalk/autoware.universe/issues/336>`_)
-  * add speed limit visualizer (`#908 <https://github.com/youtalk/autoware.universe/issues/908>`_)
+  * Ros2 v0.8.0 autoware planning rviz plugin (`#336 <https://github.com/autowarefoundation/autoware.universe/issues/336>`_)
+  * add speed limit visualizer (`#908 <https://github.com/autowarefoundation/autoware.universe/issues/908>`_)
   * add speed limit visualizer
   * :put_litter_in_its_place:
   * add max velocity output
   * fix bug
   * update visualizer
   Co-authored-by: tomoya.kimura <tomoya.kimura@tier4.jp>
-  * change font size independency desplay (`#946 <https://github.com/youtalk/autoware.universe/issues/946>`_)
+  * change font size independency desplay (`#946 <https://github.com/autowarefoundation/autoware.universe/issues/946>`_)
   * ament_cmake_cppcheck -> ament_lint_common
   * apply lint
   * change topic type
   Co-authored-by: Yukihiro Saito <yukky.saito@gmail.com>
-  * Ros2 v0.8.0 remove std msgs awapi (`#348 <https://github.com/youtalk/autoware.universe/issues/348>`_)
+  * Ros2 v0.8.0 remove std msgs awapi (`#348 <https://github.com/autowarefoundation/autoware.universe/issues/348>`_)
   * [autoware_vehicle_msgs] add BatteryStatus msg
   * [autoware_planning_msgs] add ExpandStopRange and StopSpeedExceeded messages
   * [autoware_api_msgs] add DoorControlCommand, StopCommand, and VelocityLimit messages
@@ -137,24 +137,24 @@ Changelog for package autoware_perception_rviz_plugin
   * fix build failure
   * fix test failures
   * address review commends
-  * Ros2 v0.9.0 pose history (`#387 <https://github.com/youtalk/autoware.universe/issues/387>`_)
+  * Ros2 v0.9.0 pose history (`#387 <https://github.com/autowarefoundation/autoware.universe/issues/387>`_)
   * Port pose history to ROS2
-  * pose_history (`#1169 <https://github.com/youtalk/autoware.universe/issues/1169>`_)
+  * pose_history (`#1169 <https://github.com/autowarefoundation/autoware.universe/issues/1169>`_)
   * change pkg name
   * add alpha
   Co-authored-by: Yukihiro Saito <yukky.saito@gmail.com>
-  * fix max velocity visualization (`#397 <https://github.com/youtalk/autoware.universe/issues/397>`_)
+  * fix max velocity visualization (`#397 <https://github.com/autowarefoundation/autoware.universe/issues/397>`_)
   * fix max velocity vis
   * apply lint-format
-  * Ros2 rtd plugin (`#444 <https://github.com/youtalk/autoware.universe/issues/444>`_)
+  * Ros2 rtd plugin (`#444 <https://github.com/autowarefoundation/autoware.universe/issues/444>`_)
   * Use RTD instead of MFD
-  * Sync public repo (`#1228 <https://github.com/youtalk/autoware.universe/issues/1228>`_)
-  * [simple_planning_simulator] add readme (`#424 <https://github.com/youtalk/autoware.universe/issues/424>`_)
+  * Sync public repo (`#1228 <https://github.com/autowarefoundation/autoware.universe/issues/1228>`_)
+  * [simple_planning_simulator] add readme (`#424 <https://github.com/autowarefoundation/autoware.universe/issues/424>`_)
   * add readme of simple_planning_simulator
   * Update simulator/simple_planning_simulator/README.md
-  * set transit_margin_time to intersect. planner (`#460 <https://github.com/youtalk/autoware.universe/issues/460>`_)
-  * Fix pose2twist (`#462 <https://github.com/youtalk/autoware.universe/issues/462>`_)
-  * Ros2 vehicle info param server (`#447 <https://github.com/youtalk/autoware.universe/issues/447>`_)
+  * set transit_margin_time to intersect. planner (`#460 <https://github.com/autowarefoundation/autoware.universe/issues/460>`_)
+  * Fix pose2twist (`#462 <https://github.com/autowarefoundation/autoware.universe/issues/462>`_)
+  * Ros2 vehicle info param server (`#447 <https://github.com/autowarefoundation/autoware.universe/issues/447>`_)
   * add vehicle_info_param_server
   * update vehicle info
   * apply format
@@ -162,7 +162,7 @@ Changelog for package autoware_perception_rviz_plugin
   * skip unnecessary search
   * delete vehicle param file
   * fix bug
-  * Ros2 fix topic name part2 (`#425 <https://github.com/youtalk/autoware.universe/issues/425>`_)
+  * Ros2 fix topic name part2 (`#425 <https://github.com/autowarefoundation/autoware.universe/issues/425>`_)
   * Fix topic name of traffic_light_classifier
   * Fix topic name of traffic_light_visualization
   * Fix topic name of traffic_light_ssd_fine_detector
@@ -172,19 +172,19 @@ Changelog for package autoware_perception_rviz_plugin
   * Fix lint traffic_light_classifier
   * Fix lint traffic_light_classifier
   * Fix lint traffic_light_ssd_fine_detector
-  * Fix issues in hdd_reader (`#466 <https://github.com/youtalk/autoware.universe/issues/466>`_)
+  * Fix issues in hdd_reader (`#466 <https://github.com/autowarefoundation/autoware.universe/issues/466>`_)
   * Fix some issues detected by Coverity Scan and Clang-Tidy
   * Update launch command
   * Add more `close(new_sock)`
   * Simplify the definitions of struct
-  * fix: re-construct laneletMapLayer for reindex RTree (`#463 <https://github.com/youtalk/autoware.universe/issues/463>`_)
-  * Rviz overlay render fix (`#461 <https://github.com/youtalk/autoware.universe/issues/461>`_)
+  * fix: re-construct laneletMapLayer for reindex RTree (`#463 <https://github.com/autowarefoundation/autoware.universe/issues/463>`_)
+  * Rviz overlay render fix (`#461 <https://github.com/autowarefoundation/autoware.universe/issues/461>`_)
   * Moved painiting in SteeringAngle plugin to update()
   * super class now back to MFD
   * uncrustified
   * acquire data in mutex
   * back to RTD as superclass
-  * Rviz overlay render in update (`#465 <https://github.com/youtalk/autoware.universe/issues/465>`_)
+  * Rviz overlay render in update (`#465 <https://github.com/autowarefoundation/autoware.universe/issues/465>`_)
   * Moved painiting in SteeringAngle plugin to update()
   * super class now back to MFD
   * uncrustified
@@ -198,29 +198,29 @@ Changelog for package autoware_perception_rviz_plugin
   Co-authored-by: Kazuki Miyahara <kmiya@outlook.com>
   Co-authored-by: Makoto Tokunaga <vios-fish@users.noreply.github.com>
   Co-authored-by: Adam Dąbrowski <adam.dabrowski@robotec.ai>
-  * Unify Apache-2.0 license name (`#1242 <https://github.com/youtalk/autoware.universe/issues/1242>`_)
-  * Porting trajectory rviz plugin (`#1295 <https://github.com/youtalk/autoware.universe/issues/1295>`_)
-  * update trajectory rviz plugin to show velocity (`#1257 <https://github.com/youtalk/autoware.universe/issues/1257>`_)
+  * Unify Apache-2.0 license name (`#1242 <https://github.com/autowarefoundation/autoware.universe/issues/1242>`_)
+  * Porting trajectory rviz plugin (`#1295 <https://github.com/autowarefoundation/autoware.universe/issues/1295>`_)
+  * update trajectory rviz plugin to show velocity (`#1257 <https://github.com/autowarefoundation/autoware.universe/issues/1257>`_)
   * update trajectory rviz plugin to show velocity
   * use size_t instead of int to remove warning during compiling
   * not show velocity on rviz unless check button is enabled
-  * modify visibility of velocity (`#1258 <https://github.com/youtalk/autoware.universe/issues/1258>`_)
+  * modify visibility of velocity (`#1258 <https://github.com/autowarefoundation/autoware.universe/issues/1258>`_)
   * fix plugin
   * add dependency
   Co-authored-by: Takayuki Murooka <takayuki5168@gmail.com>
   Co-authored-by: tomoya.kimura <tomoya.kimura@tier4.jp>
-  * Fix msgs (`#1379 <https://github.com/youtalk/autoware.universe/issues/1379>`_)
+  * Fix msgs (`#1379 <https://github.com/autowarefoundation/autoware.universe/issues/1379>`_)
   * Fix msgs
   * [autoware_planning_rviz_plugin]: Fix lint
   Co-authored-by: wep21 <border_goldenmarket@yahoo.co.jp>
-  * Fix topic name of autoware_perception_rviz_plugin (`#1277 <https://github.com/youtalk/autoware.universe/issues/1277>`_) (`#1479 <https://github.com/youtalk/autoware.universe/issues/1479>`_)
+  * Fix topic name of autoware_perception_rviz_plugin (`#1277 <https://github.com/autowarefoundation/autoware.universe/issues/1277>`_) (`#1479 <https://github.com/autowarefoundation/autoware.universe/issues/1479>`_)
   Co-authored-by: Kenji Miyake <31987104+kenji-miyake@users.noreply.github.com>
-  * Porting polar grid to ros2 (`#1507 <https://github.com/youtalk/autoware.universe/issues/1507>`_)
-  * Add dummy unknown publisher (`#1470 <https://github.com/youtalk/autoware.universe/issues/1470>`_)
+  * Porting polar grid to ros2 (`#1507 <https://github.com/autowarefoundation/autoware.universe/issues/1507>`_)
+  * Add dummy unknown publisher (`#1470 <https://github.com/autowarefoundation/autoware.universe/issues/1470>`_)
   * Add dummy unknown publisher
   * Fix lint
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-  * Add pre-commit (`#1560 <https://github.com/youtalk/autoware.universe/issues/1560>`_)
+  * Add pre-commit (`#1560 <https://github.com/autowarefoundation/autoware.universe/issues/1560>`_)
   * add pre-commit
   * add pre-commit-config
   * add additional settings for private repository
@@ -240,18 +240,18 @@ Changelog for package autoware_perception_rviz_plugin
   Co-authored-by: Kazuki Miyahara <kmiya@outlook.com>
   Co-authored-by: pre-commit <pre-commit@example.com>
   Co-authored-by: Kenji Miyake <31987104+kenji-miyake@users.noreply.github.com>
-  * Fix -Wunused-parameter (`#1836 <https://github.com/youtalk/autoware.universe/issues/1836>`_)
+  * Fix -Wunused-parameter (`#1836 <https://github.com/autowarefoundation/autoware.universe/issues/1836>`_)
   * Fix -Wunused-parameter
   * Fix mistake
   * fix spell
   * Fix lint issues
   * Ignore flake8 warnings
   Co-authored-by: Hiroki OTA <hiroki.ota@tier4.jp>
-  * suppress warnings for common packages (`#1891 <https://github.com/youtalk/autoware.universe/issues/1891>`_)
+  * suppress warnings for common packages (`#1891 <https://github.com/autowarefoundation/autoware.universe/issues/1891>`_)
   * add maybe unused
   * add Werror
   * fix for uncrustify
-  * add sort-package-xml hook in pre-commit (`#1881 <https://github.com/youtalk/autoware.universe/issues/1881>`_)
+  * add sort-package-xml hook in pre-commit (`#1881 <https://github.com/autowarefoundation/autoware.universe/issues/1881>`_)
   * add sort xml hook in pre-commit
   * change retval to exit_status
   * rename
@@ -265,7 +265,7 @@ Changelog for package autoware_perception_rviz_plugin
   * move prettier-xml to pre-commit-hooks-ros
   * update version for bug-fix
   * apply pre-commit
-  * add autoware_state_rviz_plugin (`#2160 <https://github.com/youtalk/autoware.universe/issues/2160>`_)
+  * add autoware_state_rviz_plugin (`#2160 <https://github.com/autowarefoundation/autoware.universe/issues/2160>`_)
   * initial commit
   * fix
   * use raw pointer
@@ -274,11 +274,11 @@ Changelog for package autoware_perception_rviz_plugin
   * fix style
   * fix style
   * fix header arrangement
-  * add gear check and prefix label (`#2173 <https://github.com/youtalk/autoware.universe/issues/2173>`_)
+  * add gear check and prefix label (`#2173 <https://github.com/autowarefoundation/autoware.universe/issues/2173>`_)
   * add gear and prefix label
   * add subscription
   * fix for cpplint
-  * add engage button and status (`#2257 <https://github.com/youtalk/autoware.universe/issues/2257>`_)
+  * add engage button and status (`#2257 <https://github.com/autowarefoundation/autoware.universe/issues/2257>`_)
   * fix style
   * add engage button and engage status
   * use api
@@ -288,14 +288,14 @@ Changelog for package autoware_perception_rviz_plugin
   * fix for cpplint
   * fix for cpplint
   * fix coding style
-  * Add datetime panel (`#2275 <https://github.com/youtalk/autoware.universe/issues/2275>`_)
+  * Add datetime panel (`#2275 <https://github.com/autowarefoundation/autoware.universe/issues/2275>`_)
   * Add datetime panel
-  * Fix/ros time (`#2276 <https://github.com/youtalk/autoware.universe/issues/2276>`_)
+  * Fix/ros time (`#2276 <https://github.com/autowarefoundation/autoware.universe/issues/2276>`_)
   * Fix ros time
   * Add icon
   Co-authored-by: Daisuke Nishimatsu <42202095+wep21@users.noreply.github.com>
-  * add footprint in trajectory msg of rviz plugin (`#1553 <https://github.com/youtalk/autoware.universe/issues/1553>`_) (`#1684 <https://github.com/youtalk/autoware.universe/issues/1684>`_)
-  * add footprint in trajectory msg of rviz plugin (`#1553 <https://github.com/youtalk/autoware.universe/issues/1553>`_)
+  * add footprint in trajectory msg of rviz plugin (`#1553 <https://github.com/autowarefoundation/autoware.universe/issues/1553>`_) (`#1684 <https://github.com/autowarefoundation/autoware.universe/issues/1684>`_)
+  * add footprint in trajectory msg of rviz plugin (`#1553 <https://github.com/autowarefoundation/autoware.universe/issues/1553>`_)
   * add footprint in trajectory msg of rviz plugin
   * update
   * trajectory -> footprint
@@ -306,11 +306,11 @@ Changelog for package autoware_perception_rviz_plugin
   * update
   * Add min value
   Co-authored-by: Takayuki Murooka <takayuki5168@gmail.com>
-  * Feature/trajectory point rviz plugin (`#2123 <https://github.com/youtalk/autoware.universe/issues/2123>`_)
+  * Feature/trajectory point rviz plugin (`#2123 <https://github.com/autowarefoundation/autoware.universe/issues/2123>`_)
   * add trajectory point
   * set trajectory point view false by default
-  * add pull over/out module (`#2147 <https://github.com/youtalk/autoware.universe/issues/2147>`_)
-  * Change formatter to clang-format and black (`#2332 <https://github.com/youtalk/autoware.universe/issues/2332>`_)
+  * add pull over/out module (`#2147 <https://github.com/autowarefoundation/autoware.universe/issues/2147>`_)
+  * Change formatter to clang-format and black (`#2332 <https://github.com/autowarefoundation/autoware.universe/issues/2332>`_)
   * Revert "Temporarily comment out pre-commit hooks"
   This reverts commit 748e9cdb145ce12f8b520bcbd97f5ff899fc28a3.
   * Replace ament_lint_common with autoware_lint_common
@@ -322,27 +322,27 @@ Changelog for package autoware_perception_rviz_plugin
   * Fix include double quotes to angle brackets
   * Apply clang-format
   * Fix build errors
-  * remove unused depends (`#496 <https://github.com/youtalk/autoware.universe/issues/496>`_)
-  * Add COLCON_IGNORE (`#500 <https://github.com/youtalk/autoware.universe/issues/500>`_)
-  * port planning rviz plugins (`#492 <https://github.com/youtalk/autoware.universe/issues/492>`_)
+  * remove unused depends (`#496 <https://github.com/autowarefoundation/autoware.universe/issues/496>`_)
+  * Add COLCON_IGNORE (`#500 <https://github.com/autowarefoundation/autoware.universe/issues/500>`_)
+  * port planning rviz plugins (`#492 <https://github.com/autowarefoundation/autoware.universe/issues/492>`_)
   * port planning rviz plugins
   * remove COLCON_IGNORE
   Co-authored-by: Takayuki Murooka <takayuki.murooka@tier4.jp>
-  * port autoware vehicle rviz plugin (`#542 <https://github.com/youtalk/autoware.universe/issues/542>`_)
-  * [ polar grid ] add readme polar grid remove colcon ignore (`#559 <https://github.com/youtalk/autoware.universe/issues/559>`_)
+  * port autoware vehicle rviz plugin (`#542 <https://github.com/autowarefoundation/autoware.universe/issues/542>`_)
+  * [ polar grid ] add readme polar grid remove colcon ignore (`#559 <https://github.com/autowarefoundation/autoware.universe/issues/559>`_)
   * remove ignore
   * add readme
   * fix invalid link
-  * port autoware_state_rviz_plugin (`#563 <https://github.com/youtalk/autoware.universe/issues/563>`_)
-  * remove COLCON_IGNORE form rviz plugins (`#544 <https://github.com/youtalk/autoware.universe/issues/544>`_)
-  * port autoware_perception_rviz_plugin (`#581 <https://github.com/youtalk/autoware.universe/issues/581>`_)
-  * add readme in rviz plugin (`#591 <https://github.com/youtalk/autoware.universe/issues/591>`_)
-  * [autoware_vehicle_rviz_plugin/route_handler/simple_planning_simulator]fix some packages (`#606 <https://github.com/youtalk/autoware.universe/issues/606>`_)
+  * port autoware_state_rviz_plugin (`#563 <https://github.com/autowarefoundation/autoware.universe/issues/563>`_)
+  * remove COLCON_IGNORE form rviz plugins (`#544 <https://github.com/autowarefoundation/autoware.universe/issues/544>`_)
+  * port autoware_perception_rviz_plugin (`#581 <https://github.com/autowarefoundation/autoware.universe/issues/581>`_)
+  * add readme in rviz plugin (`#591 <https://github.com/autowarefoundation/autoware.universe/issues/591>`_)
+  * [autoware_vehicle_rviz_plugin/route_handler/simple_planning_simulator]fix some packages (`#606 <https://github.com/autowarefoundation/autoware.universe/issues/606>`_)
   * fix console meter
   * fix velocity_history
   * fix route handler
   * change topic name
-  * adding autoware_auto_perception_rviz_plugin (`#574 <https://github.com/youtalk/autoware.universe/issues/574>`_)
+  * adding autoware_auto_perception_rviz_plugin (`#574 <https://github.com/autowarefoundation/autoware.universe/issues/574>`_)
   * [152] Implement BoundingBoxArray rviz display plugin.
   * [285] Clear bounding box markers before adding new markers on new message
   * [274] Trajectory visualization plugin
@@ -354,7 +354,7 @@ Changelog for package autoware_perception_rviz_plugin
   8d15f49d Add weights to acceleration and steer controls; loosen simulation test case:
   git-subtree-dir: src/external/mpc
   git-subtree-split: eaa5908bdd987051a9dcd9c505f99bfd7f028547
-  * [`#404 <https://github.com/youtalk/autoware.universe/issues/404>`_] apply ament_auto macro to autoware_rviz_plugins
+  * [`#404 <https://github.com/autowarefoundation/autoware.universe/issues/404>`_] apply ament_auto macro to autoware_rviz_plugins
   * Adding missing dependency on rviz2.
   * Squashed 'src/external/autoware_auto_msgs/' changes from 56550efd..f40970ea
   f40970ea Adding velocity_mps to VehicleControlCommand.
@@ -363,9 +363,9 @@ Changelog for package autoware_perception_rviz_plugin
   * Update copyright headers to transfer ownership to Autoware Foundation
   * Add CHANGELOG and update package versions for release
   Add CHANGELOG and update package versions for release
-  * [`#286 <https://github.com/youtalk/autoware.universe/issues/286>`_] Parameterize boundingbox colors from rviz
+  * [`#286 <https://github.com/autowarefoundation/autoware.universe/issues/286>`_] Parameterize boundingbox colors from rviz
   - Add visualization colours via Qt
-  * [`#813 <https://github.com/youtalk/autoware.universe/issues/813>`_] use autoware_set_compile_options() for nearly all compiled tests
+  * [`#813 <https://github.com/autowarefoundation/autoware.universe/issues/813>`_] use autoware_set_compile_options() for nearly all compiled tests
   - fix a few causes of warnings and disable warning flags as needed for
   other tests
   - set CXX_STANDARD strictly and only in a single place
@@ -373,13 +373,13 @@ Changelog for package autoware_perception_rviz_plugin
   - update building instructions and MR template
   - fix nasty initialization error of static constexpr member in `GenericState`
   of Kalman filter
-  * [`#910 <https://github.com/youtalk/autoware.universe/issues/910>`_] remove private compilation warning ignore flags
-  * [`#900 <https://github.com/youtalk/autoware.universe/issues/900>`_] Implement rviz plugin to visualize TrackedObjects
-  * [`#1110 <https://github.com/youtalk/autoware.universe/issues/1110>`_] Implement rviz plugin for DetectedObjects msg
+  * [`#910 <https://github.com/autowarefoundation/autoware.universe/issues/910>`_] remove private compilation warning ignore flags
+  * [`#900 <https://github.com/autowarefoundation/autoware.universe/issues/900>`_] Implement rviz plugin to visualize TrackedObjects
+  * [`#1110 <https://github.com/autowarefoundation/autoware.universe/issues/1110>`_] Implement rviz plugin for DetectedObjects msg
   * Resolve "Clarify meaning of pose in *ObjectKinematics messages"
-  * [`#1221 <https://github.com/youtalk/autoware.universe/issues/1221>`_] Add co-developed entry to copyright
-  * [`#1282 <https://github.com/youtalk/autoware.universe/issues/1282>`_] Fix double free in ObjectPolygonDisplayBase rviz plugin
-  * [`#1355 <https://github.com/youtalk/autoware.universe/issues/1355>`_] Make DetectedObject shape corners be in object-local coordinates
+  * [`#1221 <https://github.com/autowarefoundation/autoware.universe/issues/1221>`_] Add co-developed entry to copyright
+  * [`#1282 <https://github.com/autowarefoundation/autoware.universe/issues/1282>`_] Fix double free in ObjectPolygonDisplayBase rviz plugin
+  * [`#1355 <https://github.com/autowarefoundation/autoware.universe/issues/1355>`_] Make DetectedObject shape corners be in object-local coordinates
   * porting AAP perception visualization from https://github.com/tier4/AutowareArchitectureProposal.iv/blob/main/perception/util/visualizer/dynamic_object_visualization/include/dynamic_object_visualization/dynamic_object_visualizer.hpp
   * rename to autoware_auto_perception_rviz_plugin
   * fix copyright
@@ -415,19 +415,19 @@ Changelog for package autoware_perception_rviz_plugin
   Co-authored-by: Nikolai Morin <nikolai.morin@apex.ai>
   Co-authored-by: Igor Bogoslavskyi <igor.bogoslavskyi@gmail.com>
   Co-authored-by: Daisuke Nishimatsu <42202095+wep21@users.noreply.github.com>
-  * add autoware_auto_perception_rviz_plugin README (`#631 <https://github.com/youtalk/autoware.universe/issues/631>`_)
-  * fix readme sentence grammar (`#634 <https://github.com/youtalk/autoware.universe/issues/634>`_)
-  * Auto/fix perception viz (`#639 <https://github.com/youtalk/autoware.universe/issues/639>`_)
+  * add autoware_auto_perception_rviz_plugin README (`#631 <https://github.com/autowarefoundation/autoware.universe/issues/631>`_)
+  * fix readme sentence grammar (`#634 <https://github.com/autowarefoundation/autoware.universe/issues/634>`_)
+  * Auto/fix perception viz (`#639 <https://github.com/autowarefoundation/autoware.universe/issues/639>`_)
   * add ns of uuid
   * remove dynamic_object_visualization
-  * update to support velocity report header (`#655 <https://github.com/youtalk/autoware.universe/issues/655>`_)
+  * update to support velocity report header (`#655 <https://github.com/autowarefoundation/autoware.universe/issues/655>`_)
   * update to support velocity report header
   * Update simulator/simple_planning_simulator/src/simple_planning_simulator/simple_planning_simulator_core.cpp
   Co-authored-by: tkimura4 <tomoya.kimura@tier4.jp>
   * use maybe_unused
   * fix precommit
   Co-authored-by: tkimura4 <tomoya.kimura@tier4.jp>
-  * adapt to actuation cmd/status as control msg (`#646 <https://github.com/youtalk/autoware.universe/issues/646>`_)
+  * adapt to actuation cmd/status as control msg (`#646 <https://github.com/autowarefoundation/autoware.universe/issues/646>`_)
   * adapt to actuation cmd/status as control msg
   * fix readme
   * fix topics
@@ -438,35 +438,35 @@ Changelog for package autoware_perception_rviz_plugin
   * revert gyro_odometer_change
   * revert twist topic change
   * revert unchanged package
-  * FIx vehicle status topic name/type (`#658 <https://github.com/youtalk/autoware.universe/issues/658>`_)
+  * FIx vehicle status topic name/type (`#658 <https://github.com/autowarefoundation/autoware.universe/issues/658>`_)
   * shift -> gear_status
   * twist -> velocity_status
-  * Sync .auto branch with the latest branch in internal repository (`#691 <https://github.com/youtalk/autoware.universe/issues/691>`_)
-  * add trajectory point offset in rviz plugin (`#2270 <https://github.com/youtalk/autoware.universe/issues/2270>`_)
-  * sync rc rc/v0.23.0 (`#2258 <https://github.com/youtalk/autoware.universe/issues/2258>`_)
-  * fix interpolation for insert point (`#2228 <https://github.com/youtalk/autoware.universe/issues/2228>`_)
+  * Sync .auto branch with the latest branch in internal repository (`#691 <https://github.com/autowarefoundation/autoware.universe/issues/691>`_)
+  * add trajectory point offset in rviz plugin (`#2270 <https://github.com/autowarefoundation/autoware.universe/issues/2270>`_)
+  * sync rc rc/v0.23.0 (`#2258 <https://github.com/autowarefoundation/autoware.universe/issues/2258>`_)
+  * fix interpolation for insert point (`#2228 <https://github.com/autowarefoundation/autoware.universe/issues/2228>`_)
   * fix interpolation for insert point
   * to prev interpolation pkg
   * Revert "to prev interpolation pkg"
   This reverts commit 9eb145b5d36e297186015fb17c267ccd5b3c21ef.
   Co-authored-by: taikitanaka3 <65527974+taikitanaka3@users.noreply.github.com>
   Co-authored-by: taikitanaka <ttatcoder@outlook.jp>
-  * fix topic name (`#2266 <https://github.com/youtalk/autoware.universe/issues/2266>`_)
-  * Add namespace to diag for dual_return_filter (`#2269 <https://github.com/youtalk/autoware.universe/issues/2269>`_)
-  * Add a function to make 'geometry_msgs::msg::TransformStamped' (`#2250 <https://github.com/youtalk/autoware.universe/issues/2250>`_)
+  * fix topic name (`#2266 <https://github.com/autowarefoundation/autoware.universe/issues/2266>`_)
+  * Add namespace to diag for dual_return_filter (`#2269 <https://github.com/autowarefoundation/autoware.universe/issues/2269>`_)
+  * Add a function to make 'geometry_msgs::msg::TransformStamped' (`#2250 <https://github.com/autowarefoundation/autoware.universe/issues/2250>`_)
   * Add a function to make 'geometry_msgs::msg::TransformStamped'
   * Add 'child_frame_id' as an argument of 'pose2transform'
-  * Simplify marker scale initialization (`#2286 <https://github.com/youtalk/autoware.universe/issues/2286>`_)
-  * Fix/crosswalk polygon (`#2279 <https://github.com/youtalk/autoware.universe/issues/2279>`_)
+  * Simplify marker scale initialization (`#2286 <https://github.com/autowarefoundation/autoware.universe/issues/2286>`_)
+  * Fix/crosswalk polygon (`#2279 <https://github.com/autowarefoundation/autoware.universe/issues/2279>`_)
   * extend crosswalk polygon
   * improve readability
   * fix polygon shape
-  * Add warning when decel distance calculation fails (`#2289 <https://github.com/youtalk/autoware.universe/issues/2289>`_)
-  * [motion_velocity_smoother] ignore debug print (`#2292 <https://github.com/youtalk/autoware.universe/issues/2292>`_)
+  * Add warning when decel distance calculation fails (`#2289 <https://github.com/autowarefoundation/autoware.universe/issues/2289>`_)
+  * [motion_velocity_smoother] ignore debug print (`#2292 <https://github.com/autowarefoundation/autoware.universe/issues/2292>`_)
   * cosmetic change
   * cahnge severity from WARN to DEBUG for debug info
   * use util for stop_watch
-  * fix map based prediction (`#2200 <https://github.com/youtalk/autoware.universe/issues/2200>`_)
+  * fix map based prediction (`#2200 <https://github.com/autowarefoundation/autoware.universe/issues/2200>`_)
   * fix map based prediction
   * fix format
   * change map based prediction
@@ -497,18 +497,18 @@ Changelog for package autoware_perception_rviz_plugin
   Co-authored-by: Kazuki Miyahara <kmiya@outlook.com>
   Co-authored-by: tkimura4 <tomoya.kimura@tier4.jp>
   Co-authored-by: Kazuki Miyahara <kmiya@outlook.com>
-  * remove failure condition for 0 velocity trajectory (`#2295 <https://github.com/youtalk/autoware.universe/issues/2295>`_)
-  * [mpc_follower] remove stop distance condition from stopState decision (`#1916 <https://github.com/youtalk/autoware.universe/issues/1916>`_)
+  * remove failure condition for 0 velocity trajectory (`#2295 <https://github.com/autowarefoundation/autoware.universe/issues/2295>`_)
+  * [mpc_follower] remove stop distance condition from stopState decision (`#1916 <https://github.com/autowarefoundation/autoware.universe/issues/1916>`_)
   * [mpc_follower] remove stop distance condition from stopState decision
   * add invalid index handling
-  * Move the debug marker initialization part to another file (`#2288 <https://github.com/youtalk/autoware.universe/issues/2288>`_)
+  * Move the debug marker initialization part to another file (`#2288 <https://github.com/autowarefoundation/autoware.universe/issues/2288>`_)
   * Move the debug marker initialization part to 'debug.cpp'
-  * Make 'isLocalOptimalSolutionOscillation' independent from 'NDTScanMatcher' (`#2300 <https://github.com/youtalk/autoware.universe/issues/2300>`_)
-  * Remove an unused function 'getTransform' (`#2301 <https://github.com/youtalk/autoware.universe/issues/2301>`_)
-  * Simplify iteration of initial poses (`#2310 <https://github.com/youtalk/autoware.universe/issues/2310>`_)
-  * Make a transform object const (`#2311 <https://github.com/youtalk/autoware.universe/issues/2311>`_)
-  * Represent poses in 'std::vector' instead of 'geometry_msgs::msg::PoseArray' (`#2312 <https://github.com/youtalk/autoware.universe/issues/2312>`_)
-  * Feature/no stopping area (`#2163 <https://github.com/youtalk/autoware.universe/issues/2163>`_)
+  * Make 'isLocalOptimalSolutionOscillation' independent from 'NDTScanMatcher' (`#2300 <https://github.com/autowarefoundation/autoware.universe/issues/2300>`_)
+  * Remove an unused function 'getTransform' (`#2301 <https://github.com/autowarefoundation/autoware.universe/issues/2301>`_)
+  * Simplify iteration of initial poses (`#2310 <https://github.com/autowarefoundation/autoware.universe/issues/2310>`_)
+  * Make a transform object const (`#2311 <https://github.com/autowarefoundation/autoware.universe/issues/2311>`_)
+  * Represent poses in 'std::vector' instead of 'geometry_msgs::msg::PoseArray' (`#2312 <https://github.com/autowarefoundation/autoware.universe/issues/2312>`_)
+  * Feature/no stopping area (`#2163 <https://github.com/autowarefoundation/autoware.universe/issues/2163>`_)
   * add no stopping area module to behavior velocity planner
   * apply utils
   * add polygon interpolation module order stopline around area is considered
@@ -543,8 +543,8 @@ Changelog for package autoware_perception_rviz_plugin
   * precommit fix
   * cpplint
   Co-authored-by: Yukihiro Saito <yukky.saito@gmail.com>
-  * sync rc rc/v0.23.0 (`#2281 <https://github.com/youtalk/autoware.universe/issues/2281>`_)
-  * Fix side shift planner (`#2171 <https://github.com/youtalk/autoware.universe/issues/2171>`_) (`#2172 <https://github.com/youtalk/autoware.universe/issues/2172>`_)
+  * sync rc rc/v0.23.0 (`#2281 <https://github.com/autowarefoundation/autoware.universe/issues/2281>`_)
+  * Fix side shift planner (`#2171 <https://github.com/autowarefoundation/autoware.universe/issues/2171>`_) (`#2172 <https://github.com/autowarefoundation/autoware.universe/issues/2172>`_)
   * add print debug
   * remove forward shift points when adding new point
   * remove debug print
@@ -552,11 +552,11 @@ Changelog for package autoware_perception_rviz_plugin
   * Fix remove threshold
   Co-authored-by: Fumiya Watanabe <rej55.g@gmail.com>
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
-  * Fix/pull out and pull over (`#2175 <https://github.com/youtalk/autoware.universe/issues/2175>`_)
+  * Fix/pull out and pull over (`#2175 <https://github.com/autowarefoundation/autoware.universe/issues/2175>`_)
   * delete unnecessary check
   * fix condition of starting pull out
-  * Add emergency status API (`#2174 <https://github.com/youtalk/autoware.universe/issues/2174>`_) (`#2182 <https://github.com/youtalk/autoware.universe/issues/2182>`_)
-  * Fix/mpc reset prev result (`#2185 <https://github.com/youtalk/autoware.universe/issues/2185>`_) (`#2195 <https://github.com/youtalk/autoware.universe/issues/2195>`_)
+  * Add emergency status API (`#2174 <https://github.com/autowarefoundation/autoware.universe/issues/2174>`_) (`#2182 <https://github.com/autowarefoundation/autoware.universe/issues/2182>`_)
+  * Fix/mpc reset prev result (`#2185 <https://github.com/autowarefoundation/autoware.universe/issues/2185>`_) (`#2195 <https://github.com/autowarefoundation/autoware.universe/issues/2195>`_)
   * reset prev result
   * clean code
   * reset only raw_steer_cmd
@@ -564,37 +564,37 @@ Changelog for package autoware_perception_rviz_plugin
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
-  * [hotfix] 1 path point exception after resampling (`#2204 <https://github.com/youtalk/autoware.universe/issues/2204>`_)
+  * [hotfix] 1 path point exception after resampling (`#2204 <https://github.com/autowarefoundation/autoware.universe/issues/2204>`_)
   * fix 1 path point exception after resampling
   * Apply suggestions from code review
   * Apply suggestions from code review
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
   Co-authored-by: tkimura4 <tomoya.kimura@tier4.jp>
-  * [hotfix] Fix lane ids (`#2211 <https://github.com/youtalk/autoware.universe/issues/2211>`_)
+  * [hotfix] Fix lane ids (`#2211 <https://github.com/autowarefoundation/autoware.universe/issues/2211>`_)
   * Fix lane ids
-  * Prevent acceleration on avoidance (`#2214 <https://github.com/youtalk/autoware.universe/issues/2214>`_)
+  * Prevent acceleration on avoidance (`#2214 <https://github.com/autowarefoundation/autoware.universe/issues/2214>`_)
   * prevent acceleration on avoidance
   * fix param name
   * parametrize avoidance acc
   * change param name
   * fix typo
-  * Fix qos in roi cluster fusion (`#2218 <https://github.com/youtalk/autoware.universe/issues/2218>`_)
-  * fix confidence (`#2220 <https://github.com/youtalk/autoware.universe/issues/2220>`_)
-  * too high confidence (`#2229 <https://github.com/youtalk/autoware.universe/issues/2229>`_)
-  * Fix/obstacle stop 0.23.0 (`#2232 <https://github.com/youtalk/autoware.universe/issues/2232>`_)
-  * fix unexpected slow down in sharp curves (`#2181 <https://github.com/youtalk/autoware.universe/issues/2181>`_)
-  * Fix/insert implementation (`#2186 <https://github.com/youtalk/autoware.universe/issues/2186>`_)
+  * Fix qos in roi cluster fusion (`#2218 <https://github.com/autowarefoundation/autoware.universe/issues/2218>`_)
+  * fix confidence (`#2220 <https://github.com/autowarefoundation/autoware.universe/issues/2220>`_)
+  * too high confidence (`#2229 <https://github.com/autowarefoundation/autoware.universe/issues/2229>`_)
+  * Fix/obstacle stop 0.23.0 (`#2232 <https://github.com/autowarefoundation/autoware.universe/issues/2232>`_)
+  * fix unexpected slow down in sharp curves (`#2181 <https://github.com/autowarefoundation/autoware.universe/issues/2181>`_)
+  * Fix/insert implementation (`#2186 <https://github.com/autowarefoundation/autoware.universe/issues/2186>`_)
   Co-authored-by: Satoshi OTA <44889564+satoshi-ota@users.noreply.github.com>
-  * [hotfix] Remove exception in avoidance module (`#2233 <https://github.com/youtalk/autoware.universe/issues/2233>`_)
+  * [hotfix] Remove exception in avoidance module (`#2233 <https://github.com/autowarefoundation/autoware.universe/issues/2233>`_)
   * Remove exception
   * Fix clock
   * Remove blank line
-  * Update traffic light state if ref stop point is ahead of previous one (`#2197 <https://github.com/youtalk/autoware.universe/issues/2197>`_)
-  * fix interpolation for insert point (`#2228 <https://github.com/youtalk/autoware.universe/issues/2228>`_)
+  * Update traffic light state if ref stop point is ahead of previous one (`#2197 <https://github.com/autowarefoundation/autoware.universe/issues/2197>`_)
+  * fix interpolation for insert point (`#2228 <https://github.com/autowarefoundation/autoware.universe/issues/2228>`_)
   * fix interpolation for insert point
   * to prev interpolation pkg
-  * fix index (`#2265 <https://github.com/youtalk/autoware.universe/issues/2265>`_)
-  * turn signal calculation (`#2280 <https://github.com/youtalk/autoware.universe/issues/2280>`_)
+  * fix index (`#2265 <https://github.com/autowarefoundation/autoware.universe/issues/2265>`_)
+  * turn signal calculation (`#2280 <https://github.com/autowarefoundation/autoware.universe/issues/2280>`_)
   * add turn signal funtion in path shifter
   * add ros parameters
   Co-authored-by: Fumiya Watanabe <rej55.g@gmail.com>
@@ -606,7 +606,7 @@ Changelog for package autoware_perception_rviz_plugin
   Co-authored-by: Satoshi OTA <44889564+satoshi-ota@users.noreply.github.com>
   Co-authored-by: taikitanaka3 <65527974+taikitanaka3@users.noreply.github.com>
   Co-authored-by: Sugatyon <32741405+Sugatyon@users.noreply.github.com>
-  * [behavior_path_planner] fix sudden path change around ego (`#2305 <https://github.com/youtalk/autoware.universe/issues/2305>`_) (`#2318 <https://github.com/youtalk/autoware.universe/issues/2318>`_)
+  * [behavior_path_planner] fix sudden path change around ego (`#2305 <https://github.com/autowarefoundation/autoware.universe/issues/2305>`_) (`#2318 <https://github.com/autowarefoundation/autoware.universe/issues/2318>`_)
   * fix return-from-ego shift point generation logic
   * change param for trimSimilarGradShiftPoint
   * add comment for issue
@@ -622,13 +622,13 @@ Changelog for package autoware_perception_rviz_plugin
   Co-authored-by: Kazuki Miyahara <kmiya@outlook.com>
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
   Co-authored-by: Kazuki Miyahara <kmiya@outlook.com>
-  * Add functions to make stamped scalar messages (`#2317 <https://github.com/youtalk/autoware.universe/issues/2317>`_)
-  * Fix/object yaw in intersection module (`#2294 <https://github.com/youtalk/autoware.universe/issues/2294>`_)
+  * Add functions to make stamped scalar messages (`#2317 <https://github.com/autowarefoundation/autoware.universe/issues/2317>`_)
+  * Fix/object yaw in intersection module (`#2294 <https://github.com/autowarefoundation/autoware.universe/issues/2294>`_)
   * fix object orientation
   * fix function name
-  * add guard (`#2321 <https://github.com/youtalk/autoware.universe/issues/2321>`_)
-  * reduce cost (double to float) (`#2298 <https://github.com/youtalk/autoware.universe/issues/2298>`_)
-  * Add detail collision check (`#2274 <https://github.com/youtalk/autoware.universe/issues/2274>`_)
+  * add guard (`#2321 <https://github.com/autowarefoundation/autoware.universe/issues/2321>`_)
+  * reduce cost (double to float) (`#2298 <https://github.com/autowarefoundation/autoware.universe/issues/2298>`_)
+  * Add detail collision check (`#2274 <https://github.com/autowarefoundation/autoware.universe/issues/2274>`_)
   * Add detail collision check
   * Remove unused function
   * Fix arc length
@@ -639,7 +639,7 @@ Changelog for package autoware_perception_rviz_plugin
   * Run pre-commit
   * Fix cpplint
   * Add return for empty polygon
-  * update CenterPoint  (`#2222 <https://github.com/youtalk/autoware.universe/issues/2222>`_)
+  * update CenterPoint  (`#2222 <https://github.com/autowarefoundation/autoware.universe/issues/2222>`_)
   * update to model trained by mmdet3d
   * add vizualizer (debug)
   * for multi-frame inputs
@@ -656,7 +656,7 @@ Changelog for package autoware_perception_rviz_plugin
   * chage lint package
   * fix test error
   * commit suggestion
-  * Feature/lane change detection (`#2331 <https://github.com/youtalk/autoware.universe/issues/2331>`_)
+  * Feature/lane change detection (`#2331 <https://github.com/autowarefoundation/autoware.universe/issues/2331>`_)
   * add old information deleter
   * fix access bug
   * change to deque
@@ -678,7 +678,7 @@ Changelog for package autoware_perception_rviz_plugin
   * change funciton name
   * add lane change description
   Co-authored-by: Kazuki Miyahara <kmiya@outlook.com>
-  * Add Planning Evaluator  (`#2293 <https://github.com/youtalk/autoware.universe/issues/2293>`_)
+  * Add Planning Evaluator  (`#2293 <https://github.com/autowarefoundation/autoware.universe/issues/2293>`_)
   * Add prototype planning evaluator
   Produced data for dist between points, curvature, and relative angle
   * Cleanup the code to make adding metrics easier
@@ -714,12 +714,12 @@ Changelog for package autoware_perception_rviz_plugin
   * Update planning/planning_diagnostics/planning_evaluator/test/test_planning_evaluator_node.cpp
   * change lint format to autoware_lint_common
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
-  * Add keep braking function at driving state (`#2346 <https://github.com/youtalk/autoware.universe/issues/2346>`_)
+  * Add keep braking function at driving state (`#2346 <https://github.com/autowarefoundation/autoware.universe/issues/2346>`_)
   * Add keep braking function at driving state
   * Remove debug messages
   * Fix format
-  * Change diag_updater's pediod from default to 0.1sec (`#2348 <https://github.com/youtalk/autoware.universe/issues/2348>`_)
-  * add cross judgement and common signal function (`#2319 <https://github.com/youtalk/autoware.universe/issues/2319>`_)
+  * Change diag_updater's pediod from default to 0.1sec (`#2348 <https://github.com/autowarefoundation/autoware.universe/issues/2348>`_)
+  * add cross judgement and common signal function (`#2319 <https://github.com/autowarefoundation/autoware.universe/issues/2319>`_)
   * merge branch turn_signal_common
   * add turn signal function in signal decider
   * add cross judge in path_utilities and delete from turn_signal_decider
@@ -739,27 +739,27 @@ Changelog for package autoware_perception_rviz_plugin
   * fix typo
   * decrease nest
   * run pre commit
-  * Add 0 limit at forward jerk velocity filter (`#2340 <https://github.com/youtalk/autoware.universe/issues/2340>`_)
-  * add time offset param to point cloud concatenation (`#2303 <https://github.com/youtalk/autoware.universe/issues/2303>`_)
+  * Add 0 limit at forward jerk velocity filter (`#2340 <https://github.com/autowarefoundation/autoware.universe/issues/2340>`_)
+  * add time offset param to point cloud concatenation (`#2303 <https://github.com/autowarefoundation/autoware.universe/issues/2303>`_)
   * add offset param
   * clang-format
   Co-authored-by: Akihito OHSATO <aohsato@gmail.com>
-  * Feature/add doc for keep braking function at driving state (`#2366 <https://github.com/youtalk/autoware.universe/issues/2366>`_)
+  * Feature/add doc for keep braking function at driving state (`#2366 <https://github.com/autowarefoundation/autoware.universe/issues/2366>`_)
   * Add the description of brake keeping
   * Add the english document
   * Improve description
   * Add english description
-  * Fix include files (`#2339 <https://github.com/youtalk/autoware.universe/issues/2339>`_)
+  * Fix include files (`#2339 <https://github.com/autowarefoundation/autoware.universe/issues/2339>`_)
   * fix behavior intersection module
   * fix behavior no stopping area module
   * fix planning_evaluator
   * fix motion_velocity_smoother
   * rename variable
-  * Revert "[mpc_follower] remove stop distance condition from stopState decision (`#1916 <https://github.com/youtalk/autoware.universe/issues/1916>`_)"
+  * Revert "[mpc_follower] remove stop distance condition from stopState decision (`#1916 <https://github.com/autowarefoundation/autoware.universe/issues/1916>`_)"
   This reverts commit ff4f0b5a844d1f835f1b93bd3b36a76747b0cd02.
-  * Revert "Add keep braking function at driving state (`#2346 <https://github.com/youtalk/autoware.universe/issues/2346>`_)"
+  * Revert "Add keep braking function at driving state (`#2346 <https://github.com/autowarefoundation/autoware.universe/issues/2346>`_)"
   This reverts commit f0478187db4c28bf6092c198723dcc5ec11a9c70.
-  * Revert "Feature/add doc for keep braking function at driving state (`#2366 <https://github.com/youtalk/autoware.universe/issues/2366>`_)"
+  * Revert "Feature/add doc for keep braking function at driving state (`#2366 <https://github.com/autowarefoundation/autoware.universe/issues/2366>`_)"
   This reverts commit 66de2f3924a479049fce2d5c5c6b579cacbd3e49.
   * Fix orientation availability in centerpoint
   * fix test_trajectory.cpp
@@ -789,17 +789,17 @@ Changelog for package autoware_perception_rviz_plugin
   Co-authored-by: Shinnosuke Hirakawa <8327162+0x126@users.noreply.github.com>
   Co-authored-by: Akihito OHSATO <aohsato@gmail.com>
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-  * [autoware_auto_perception_rviz_plugin]fix bug (`#721 <https://github.com/youtalk/autoware.universe/issues/721>`_)
+  * [autoware_auto_perception_rviz_plugin]fix bug (`#721 <https://github.com/autowarefoundation/autoware.universe/issues/721>`_)
   * fix perception_marker
   * fix missing commit
   * apply format
-  * patch for PR721 (`#722 <https://github.com/youtalk/autoware.universe/issues/722>`_)
+  * patch for PR721 (`#722 <https://github.com/autowarefoundation/autoware.universe/issues/722>`_)
   * fix id_map erase operation
   * fix code to use c++11 function
   * update tracked_objects_display
   * fix bug
   Co-authored-by: Taichi Higashide <taichi.higashide@tier4.jp>
-  * fix rviz plugin (`#743 <https://github.com/youtalk/autoware.universe/issues/743>`_)
+  * fix rviz plugin (`#743 <https://github.com/autowarefoundation/autoware.universe/issues/743>`_)
   * move plugin packages
   * add ignore file to apply pre-commit
   Co-authored-by: mitsudome-r <ryohsuke.mitsudome@tier4.jp>

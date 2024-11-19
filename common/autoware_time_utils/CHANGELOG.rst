@@ -5,19 +5,19 @@ Changelog for package time_utils
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* fix(time_utils): fix unusedFunction (`#8606 <https://github.com/youtalk/autoware.universe/issues/8606>`_)
+* fix(time_utils): fix unusedFunction (`#8606 <https://github.com/autowarefoundation/autoware.universe/issues/8606>`_)
   fix:unusedFunction
 * Contributors: Yutaka Kondo, kobayu858
 
 0.26.0 (2024-04-03)
 -------------------
-* chore: add maintainer (`#4234 <https://github.com/youtalk/autoware.universe/issues/4234>`_)
+* chore: add maintainer (`#4234 <https://github.com/autowarefoundation/autoware.universe/issues/4234>`_)
   * chore: add maintainer
   * Update evaluator/localization_evaluator/package.xml
   Co-authored-by: kminoda <44218668+kminoda@users.noreply.github.com>
   ---------
   Co-authored-by: kminoda <44218668+kminoda@users.noreply.github.com>
-* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/youtalk/autoware.universe/issues/3616>`_)
+* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/autowarefoundation/autoware.universe/issues/3616>`_)
   * build: mark autoware_cmake as <buildtool_depend>
   with <build_depend>, autoware_cmake is automatically exported with ament_target_dependencies() (unecessary)
   * style(pre-commit): autofix
@@ -25,16 +25,16 @@ Changelog for package time_utils
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-* feat: isolate gtests in all packages (`#693 <https://github.com/youtalk/autoware.universe/issues/693>`_)
-* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/youtalk/autoware.universe/issues/856>`_)
-* refactor: use autoware cmake (`#849 <https://github.com/youtalk/autoware.universe/issues/849>`_)
+* feat: isolate gtests in all packages (`#693 <https://github.com/autowarefoundation/autoware.universe/issues/693>`_)
+* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/autowarefoundation/autoware.universe/issues/856>`_)
+* refactor: use autoware cmake (`#849 <https://github.com/autowarefoundation/autoware.universe/issues/849>`_)
   * remove autoware_auto_cmake
   * add build_depend of autoware_cmake
   * use autoware_cmake in CMakeLists.txt
   * fix bugs
   * fix cmake lint errors
-* style: fix format of package.xml (`#844 <https://github.com/youtalk/autoware.universe/issues/844>`_)
-* ci(pre-commit): clear the exclude option (`#426 <https://github.com/youtalk/autoware.universe/issues/426>`_)
+* style: fix format of package.xml (`#844 <https://github.com/autowarefoundation/autoware.universe/issues/844>`_)
+* ci(pre-commit): clear the exclude option (`#426 <https://github.com/autowarefoundation/autoware.universe/issues/426>`_)
   * ci(pre-commit): remove unnecessary excludes
   * ci(pre-commit): autofix
   * ci(pre-commit): autofix
@@ -46,60 +46,60 @@ Changelog for package time_utils
   * fix build
   * use autoware_lint_common
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat: add autoware auto dependencies (`#185 <https://github.com/youtalk/autoware.universe/issues/185>`_)
-  * Back port .auto control packages (`#571 <https://github.com/youtalk/autoware.universe/issues/571>`_)
+* feat: add autoware auto dependencies (`#185 <https://github.com/autowarefoundation/autoware.universe/issues/185>`_)
+  * Back port .auto control packages (`#571 <https://github.com/autowarefoundation/autoware.universe/issues/571>`_)
   * Implement Lateral and Longitudinal Control Muxer
-  * [`#570 <https://github.com/youtalk/autoware.universe/issues/570>`_] Porting wf_simulator
-  * [`#1189 <https://github.com/youtalk/autoware.universe/issues/1189>`_] Deactivate flaky test in 'trajectory_follower_nodes'
-  * [`#1189 <https://github.com/youtalk/autoware.universe/issues/1189>`_] Fix flacky test in 'trajectory_follower_nodes/latlon_muxer'
-  * [`#1057 <https://github.com/youtalk/autoware.universe/issues/1057>`_] Add osqp_interface package
-  * [`#1057 <https://github.com/youtalk/autoware.universe/issues/1057>`_] Add library code for MPC-based lateral control
-  * [`#1271 <https://github.com/youtalk/autoware.universe/issues/1271>`_] Use std::abs instead of abs
-  * [`#1057 <https://github.com/youtalk/autoware.universe/issues/1057>`_] Implement Lateral Controller for Cargo ODD
-  * [`#1246 <https://github.com/youtalk/autoware.universe/issues/1246>`_] Resolve "Test case names currently use snake_case but should be CamelCase"
-  * [`#1325 <https://github.com/youtalk/autoware.universe/issues/1325>`_] Deactivate flaky smoke test in 'trajectory_follower_nodes'
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Add library code of longitudinal controller
+  * [`#570 <https://github.com/autowarefoundation/autoware.universe/issues/570>`_] Porting wf_simulator
+  * [`#1189 <https://github.com/autowarefoundation/autoware.universe/issues/1189>`_] Deactivate flaky test in 'trajectory_follower_nodes'
+  * [`#1189 <https://github.com/autowarefoundation/autoware.universe/issues/1189>`_] Fix flacky test in 'trajectory_follower_nodes/latlon_muxer'
+  * [`#1057 <https://github.com/autowarefoundation/autoware.universe/issues/1057>`_] Add osqp_interface package
+  * [`#1057 <https://github.com/autowarefoundation/autoware.universe/issues/1057>`_] Add library code for MPC-based lateral control
+  * [`#1271 <https://github.com/autowarefoundation/autoware.universe/issues/1271>`_] Use std::abs instead of abs
+  * [`#1057 <https://github.com/autowarefoundation/autoware.universe/issues/1057>`_] Implement Lateral Controller for Cargo ODD
+  * [`#1246 <https://github.com/autowarefoundation/autoware.universe/issues/1246>`_] Resolve "Test case names currently use snake_case but should be CamelCase"
+  * [`#1325 <https://github.com/autowarefoundation/autoware.universe/issues/1325>`_] Deactivate flaky smoke test in 'trajectory_follower_nodes'
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Add library code of longitudinal controller
   * Fix build error for trajectory follower
   * Fix build error for trajectory follower nodes
-  * [`#1272 <https://github.com/youtalk/autoware.universe/issues/1272>`_] Add AckermannControlCommand support to simple_planning_simulator
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Add Longitudinal Controller node
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Rename velocity_controller -> longitudinal_controller
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Update CMakeLists.txt for the longitudinal_controller_node
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Add smoke test python launch file
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Use LowPassFilter1d from trajectory_follower
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Use autoware_auto_msgs
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Changes for .auto (debug msg tmp fix, common func, tf listener)
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Remove unused parameters
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Fix ros test
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Rm default params from declare_parameters + use autoware types
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Use default param file to setup NodeOptions in the ros test
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Fix docstring
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Replace receiving a Twist with a VehicleKinematicState
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Change class variables format to m\_ prefix
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Fix plugin name of LongitudinalController in CMakeLists.txt
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Fix copyright dates
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Reorder includes
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Add some tests (~89% coverage without disabling flaky tests)
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Add more tests (90+% coverage without disabling flaky tests)
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Use Float32MultiArrayDiagnostic message for debug and slope
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Calculate wheel_base value from vehicle parameters
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Cleanup redundant logger setting in tests
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Set ROS_DOMAIN_ID when running tests to prevent CI failures
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Remove TF listener and use published vehicle state instead
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Change smoke tests to use autoware_testing
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Add plotjuggler cfg for both lateral and longitudinal control
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Improve design documents
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Disable flaky test
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Properly transform vehicle state in longitudinal node
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Fix TF buffer of lateral controller
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Tuning of lateral controller for LGSVL
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Fix formating
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Fix /tf_static sub to be transient_local
-  * [`#1058 <https://github.com/youtalk/autoware.universe/issues/1058>`_] Fix yaw recalculation of reverse trajs in the lateral controller
+  * [`#1272 <https://github.com/autowarefoundation/autoware.universe/issues/1272>`_] Add AckermannControlCommand support to simple_planning_simulator
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Add Longitudinal Controller node
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Rename velocity_controller -> longitudinal_controller
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Update CMakeLists.txt for the longitudinal_controller_node
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Add smoke test python launch file
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Use LowPassFilter1d from trajectory_follower
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Use autoware_auto_msgs
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Changes for .auto (debug msg tmp fix, common func, tf listener)
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Remove unused parameters
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Fix ros test
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Rm default params from declare_parameters + use autoware types
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Use default param file to setup NodeOptions in the ros test
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Fix docstring
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Replace receiving a Twist with a VehicleKinematicState
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Change class variables format to m\_ prefix
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Fix plugin name of LongitudinalController in CMakeLists.txt
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Fix copyright dates
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Reorder includes
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Add some tests (~89% coverage without disabling flaky tests)
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Add more tests (90+% coverage without disabling flaky tests)
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Use Float32MultiArrayDiagnostic message for debug and slope
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Calculate wheel_base value from vehicle parameters
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Cleanup redundant logger setting in tests
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Set ROS_DOMAIN_ID when running tests to prevent CI failures
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Remove TF listener and use published vehicle state instead
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Change smoke tests to use autoware_testing
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Add plotjuggler cfg for both lateral and longitudinal control
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Improve design documents
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Disable flaky test
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Properly transform vehicle state in longitudinal node
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Fix TF buffer of lateral controller
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Tuning of lateral controller for LGSVL
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Fix formating
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Fix /tf_static sub to be transient_local
+  * [`#1058 <https://github.com/autowarefoundation/autoware.universe/issues/1058>`_] Fix yaw recalculation of reverse trajs in the lateral controller
   * modify trajectory_follower for galactic build
-  * [`#1379 <https://github.com/youtalk/autoware.universe/issues/1379>`_] Update trajectory_follower
-  * [`#1379 <https://github.com/youtalk/autoware.universe/issues/1379>`_] Update simple_planning_simulator
-  * [`#1379 <https://github.com/youtalk/autoware.universe/issues/1379>`_] Update trajectory_follower_nodes
+  * [`#1379 <https://github.com/autowarefoundation/autoware.universe/issues/1379>`_] Update trajectory_follower
+  * [`#1379 <https://github.com/autowarefoundation/autoware.universe/issues/1379>`_] Update simple_planning_simulator
+  * [`#1379 <https://github.com/autowarefoundation/autoware.universe/issues/1379>`_] Update trajectory_follower_nodes
   * apply trajectory msg modification in control
   * move directory
   * remote control/trajectory_follower level dorectpry
@@ -123,7 +123,7 @@ Changelog for package time_utils
   Co-authored-by: MIURA Yasuyuki <kokosabu@gmail.com>
   Co-authored-by: wep21 <border_goldenmarket@yahoo.co.jp>
   Co-authored-by: tomoya.kimura <tomoya.kimura@tier4.jp>
-  * Port parking planner packages from .Auto (`#600 <https://github.com/youtalk/autoware.universe/issues/600>`_)
+  * Port parking planner packages from .Auto (`#600 <https://github.com/autowarefoundation/autoware.universe/issues/600>`_)
   * Copy code of 'vehicle_constants_manager'
   * Fix vehicle_constants_manager for ROS galactic
   * Rm .iv costmap_generator freespace_planner freespace_planning_aglorihtms

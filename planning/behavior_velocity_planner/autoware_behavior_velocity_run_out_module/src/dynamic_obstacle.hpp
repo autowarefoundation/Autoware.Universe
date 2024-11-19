@@ -40,6 +40,7 @@
 #include <tf2_ros/transform_listener.h>
 
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace autoware::behavior_velocity_planner
@@ -170,6 +171,58 @@ private:
   // obstacle points
   pcl::PointCloud<pcl::PointXYZ> obstacle_points_map_filtered_;
 };
+
+geometry_msgs::msg::Quaternion createQuaternionFacingToTrajectory(
+  const PathPointsWithLaneId & path_points, const geometry_msgs::msg::Point & point);
+
+std::vector<geometry_msgs::msg::Pose> createPredictedPath(
+  const geometry_msgs::msg::Pose & initial_pose, const float time_step,
+  const float max_velocity_mps, const float max_prediction_time);
+
+pcl::PointCloud<pcl::PointXYZ> applyVoxelGridFilter(
+  const pcl::PointCloud<pcl::PointXYZ> & input_points);
+
+pcl::PointCloud<pcl::PointXYZ> applyVoxelGridFilter(
+  const sensor_msgs::msg::PointCloud2 & input_points);
+
+bool isAheadOf(
+  const geometry_msgs::msg::Point & target_point, const geometry_msgs::msg::Pose & base_pose);
+
+pcl::PointCloud<pcl::PointXYZ> extractObstaclePointsWithinPolygon(
+  const pcl::PointCloud<pcl::PointXYZ> & input_points, const Polygons2d & polys);
+
+std::vector<pcl::PointCloud<pcl::PointXYZ>> groupPointsWithNearestSegmentIndex(
+  const pcl::PointCloud<pcl::PointXYZ> & input_points, const PathPointsWithLaneId & path_points);
+
+pcl::PointXYZ calculateLateralNearestPoint(
+  const pcl::PointCloud<pcl::PointXYZ> & input_points, const geometry_msgs::msg::Pose & base_pose);
+
+pcl::PointCloud<pcl::PointXYZ> selectLateralNearestPoints(
+  const std::vector<pcl::PointCloud<pcl::PointXYZ>> & points_with_index,
+  const PathPointsWithLaneId & path_points);
+
+pcl::PointCloud<pcl::PointXYZ> extractLateralNearestPoints(
+  const pcl::PointCloud<pcl::PointXYZ> & input_points, const PathWithLaneId & path,
+  const float interval);
+
+std::optional<Eigen::Affine3f> getTransformMatrix(
+  const tf2_ros::Buffer & tf_buffer, const std::string & target_frame_id,
+  const std::string & source_frame_id, const builtin_interfaces::msg::Time & stamp);
+
+pcl::PointCloud<pcl::PointXYZ> transformPointCloud(
+  const PointCloud2 & input_pointcloud, const Eigen::Affine3f & transform_matrix);
+
+PointCloud2 concatPointCloud(
+  const pcl::PointCloud<pcl::PointXYZ> & cloud1, const pcl::PointCloud<pcl::PointXYZ> & cloud2);
+
+void calculateMinAndMaxVelFromCovariance(
+  const geometry_msgs::msg::TwistWithCovariance & twist_with_covariance,
+  const double std_dev_multiplier, run_out_utils::DynamicObstacle & dynamic_obstacle);
+
+double convertDurationToDouble(const builtin_interfaces::msg::Duration & duration);
+
+std::vector<geometry_msgs::msg::Pose> createPathToPredictionTime(
+  const autoware_perception_msgs::msg::PredictedPath & predicted_path, double prediction_time);
 
 }  // namespace autoware::behavior_velocity_planner
 

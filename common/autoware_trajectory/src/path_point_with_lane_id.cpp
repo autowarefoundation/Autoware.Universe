@@ -16,6 +16,8 @@
 
 #include "autoware/trajectory/detail/utils.hpp"
 
+#include <vector>
+
 namespace autoware::trajectory
 {
 

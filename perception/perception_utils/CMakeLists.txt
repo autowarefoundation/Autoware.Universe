@@ -13,6 +13,11 @@ target_link_libraries(${PROJECT_NAME}
   ${OpenCV_LIBS}
 )
 
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
+
 if(BUILD_TESTING)
   ament_auto_add_gtest(test_utils
     test/test_utils.cpp

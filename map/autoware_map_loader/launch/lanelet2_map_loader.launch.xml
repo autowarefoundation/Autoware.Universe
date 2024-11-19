@@ -1,0 +1,15 @@
+<launch>
+  <arg name="lanelet2_map_loader_param_path" default="$(find-pkg-share autoware_map_loader)/config/lanelet2_map_loader.param.yaml"/>
+  <arg name="lanelet2_map_path"/>
+  <arg name="lanelet2_map_topic" default="vector_map"/>
+  <arg name="lanelet2_map_marker_topic" default="vector_map_marker"/>
+
+  <node pkg="autoware_map_loader" exec="map_hash_generator" name="map_hash_generator" output="both">
+    <param from="$(var lanelet2_map_loader_param_path)" allow_substs="true"/>
+  </node>
+
+  <node pkg="autoware_map_loader" exec="lanelet2_map_loader" name="lanelet2_map_loader" output="both">
+    <remap from="output/lanelet2_map" to="$(var lanelet2_map_topic)"/>
+    <param from="$(var lanelet2_map_loader_param_path)" allow_substs="true"/>
+  </node>
+</launch>

@@ -5,53 +5,53 @@ Changelog for package autoware_test_utils
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* feat(autoware_test_utils): add parser for PredictedObjects (`#9176 <https://github.com/youtalk/autoware.universe/issues/9176>`_)
+* feat(autoware_test_utils): add parser for PredictedObjects (`#9176 <https://github.com/autowarefoundation/autoware.universe/issues/9176>`_)
   feat(autoware_test_utils): add parser for predicted objects
-* refactor(autoware_test_utils): sanitizer header (`#9174 <https://github.com/youtalk/autoware.universe/issues/9174>`_)
-* refactor(component_interface_specs): prefix package and namespace with autoware (`#9094 <https://github.com/youtalk/autoware.universe/issues/9094>`_)
-* fix(autoware_test_utils): remove unnecessary cppcheck suppression (`#9165 <https://github.com/youtalk/autoware.universe/issues/9165>`_)
-* feat(autoware_test_utils): add parser for geometry_msgs and others (`#9167 <https://github.com/youtalk/autoware.universe/issues/9167>`_)
-* feat(autoware_test_utils): add path with lane id parser (`#9098 <https://github.com/youtalk/autoware.universe/issues/9098>`_)
+* refactor(autoware_test_utils): sanitizer header (`#9174 <https://github.com/autowarefoundation/autoware.universe/issues/9174>`_)
+* refactor(component_interface_specs): prefix package and namespace with autoware (`#9094 <https://github.com/autowarefoundation/autoware.universe/issues/9094>`_)
+* fix(autoware_test_utils): remove unnecessary cppcheck suppression (`#9165 <https://github.com/autowarefoundation/autoware.universe/issues/9165>`_)
+* feat(autoware_test_utils): add parser for geometry_msgs and others (`#9167 <https://github.com/autowarefoundation/autoware.universe/issues/9167>`_)
+* feat(autoware_test_utils): add path with lane id parser (`#9098 <https://github.com/autowarefoundation/autoware.universe/issues/9098>`_)
   * add path with lane id parser
   * refactor parse to use template
   ---------
-* feat(autoware_test_utils): move test_map, add launcher for test_map (`#9045 <https://github.com/youtalk/autoware.universe/issues/9045>`_)
-* feat(test_utils): add simple path with lane id generator (`#9113 <https://github.com/youtalk/autoware.universe/issues/9113>`_)
+* feat(autoware_test_utils): move test_map, add launcher for test_map (`#9045 <https://github.com/autowarefoundation/autoware.universe/issues/9045>`_)
+* feat(test_utils): add simple path with lane id generator (`#9113 <https://github.com/autowarefoundation/autoware.universe/issues/9113>`_)
   * add simple path with lane id generator
   * chnage to explicit template
   * fix
   * add static cast
   * remove header file
   ---------
-* fix(autoware_test_utils): missing ament_index_cpp dependency (`#8618 <https://github.com/youtalk/autoware.universe/issues/8618>`_)
-* fix(autoware_test_utils): fix unusedFunction (`#8857 <https://github.com/youtalk/autoware.universe/issues/8857>`_)
+* fix(autoware_test_utils): missing ament_index_cpp dependency (`#8618 <https://github.com/autowarefoundation/autoware.universe/issues/8618>`_)
+* fix(autoware_test_utils): fix unusedFunction (`#8857 <https://github.com/autowarefoundation/autoware.universe/issues/8857>`_)
   fix:unusedFunction
-* fix(autoware_test_utils): fix unusedFunction (`#8816 <https://github.com/youtalk/autoware.universe/issues/8816>`_)
+* fix(autoware_test_utils): fix unusedFunction (`#8816 <https://github.com/autowarefoundation/autoware.universe/issues/8816>`_)
   fix: unusedFunction
-* test(autoware_route_handler): add unit test for autoware route handler function (`#8271 <https://github.com/youtalk/autoware.universe/issues/8271>`_)
+* test(autoware_route_handler): add unit test for autoware route handler function (`#8271 <https://github.com/autowarefoundation/autoware.universe/issues/8271>`_)
   * remove unused functions in route handler
   * add docstring for function getShoulderLaneletsAtPose
   * update test map to include shoulder lanelet
   * add unit test for function getShoulderLaneletsAtPose
   * add test case for getCenterLinePath to improve branch coverage
   ---------
-* feat(autoware_test_utils): add qos handler in pub/sub (`#7856 <https://github.com/youtalk/autoware.universe/issues/7856>`_)
+* feat(autoware_test_utils): add qos handler in pub/sub (`#7856 <https://github.com/autowarefoundation/autoware.universe/issues/7856>`_)
   * feat: add qos handler in pub/sub
   * style(pre-commit): autofix
   * feat: update test_pub_msg function to not use setpublisher function
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat: add `autoware\_` prefix to `lanelet2_extension` (`#7640 <https://github.com/youtalk/autoware.universe/issues/7640>`_)
-* feat(auoware_test_utils): add jump_clock interface (`#7638 <https://github.com/youtalk/autoware.universe/issues/7638>`_)
+* feat: add `autoware\_` prefix to `lanelet2_extension` (`#7640 <https://github.com/autowarefoundation/autoware.universe/issues/7640>`_)
+* feat(auoware_test_utils): add jump_clock interface (`#7638 <https://github.com/autowarefoundation/autoware.universe/issues/7638>`_)
   * feat(auoware_test_utils): add jump_clock interface
   * add comment
   ---------
-* feat(route_handler): add unit test for lane change related functions (`#7504 <https://github.com/youtalk/autoware.universe/issues/7504>`_)
+* feat(route_handler): add unit test for lane change related functions (`#7504 <https://github.com/autowarefoundation/autoware.universe/issues/7504>`_)
   * RT1-6230 feat(route_handler): add unit test for lane change related functions
   * fix spell check
   * fix spellcheck
   ---------
-* feat(autoware_test_utils): add autoware test manager (`#7597 <https://github.com/youtalk/autoware.universe/issues/7597>`_)
+* feat(autoware_test_utils): add autoware test manager (`#7597 <https://github.com/autowarefoundation/autoware.universe/issues/7597>`_)
   * feat(detected_object_validation): add test
   * move to autoware_test_utils
   * remove perception
@@ -63,11 +63,11 @@ Changelog for package autoware_test_utils
   * avoid using void and static_pointer_cast
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(autoware_test_utils): function to load paths from folder (`#7474 <https://github.com/youtalk/autoware.universe/issues/7474>`_)
-* fix(route_handler): route handler overlap removal is too conservative (`#7156 <https://github.com/youtalk/autoware.universe/issues/7156>`_)
+* refactor(autoware_test_utils): function to load paths from folder (`#7474 <https://github.com/autowarefoundation/autoware.universe/issues/7474>`_)
+* fix(route_handler): route handler overlap removal is too conservative (`#7156 <https://github.com/autowarefoundation/autoware.universe/issues/7156>`_)
   * add flag to enable/disable loop check in getLaneletSequence functions
   * implement function to get closest route lanelet based on previous closest lanelet
   * refactor DefaultPlanner::plan function
@@ -84,7 +84,7 @@ Changelog for package autoware_test_utils
   * format fix
   * move test map to autoware_test_utils
   ---------
-* refactor(test_utils): move to common folder (`#7158 <https://github.com/youtalk/autoware.universe/issues/7158>`_)
+* refactor(test_utils): move to common folder (`#7158 <https://github.com/autowarefoundation/autoware.universe/issues/7158>`_)
   * Move autoware planning test manager to autoware namespace
   * fix package share directory for behavior path planner
   * renaming files and directory

@@ -36,7 +36,7 @@ namespace autoware::trajectory::detail
  */
 geometry_msgs::msg::Point to_point(const geometry_msgs::msg::Point & p);
 geometry_msgs::msg::Point to_point(const geometry_msgs::msg::Pose & p);
-geometry_msgs::msg::Point to_point(const Eigen::Ref<const Eigen::Vector2d> & p);
+geometry_msgs::msg::Point to_point(const Eigen::Vector2d & p);
 geometry_msgs::msg::Point to_point(const autoware_planning_msgs::msg::PathPoint & p);
 geometry_msgs::msg::Point to_point(const tier4_planning_msgs::msg::PathPointWithLaneId & p);
 geometry_msgs::msg::Point to_point(const lanelet::BasicPoint2d & p);

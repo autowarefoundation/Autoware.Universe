@@ -15,6 +15,7 @@
 #include "manager.hpp"
 
 #include "autoware/universe_utils/ros/parameter.hpp"
+#include "autoware_lanelet2_extension/utility/query.hpp"
 
 #include <memory>
 #include <set>
@@ -57,7 +58,7 @@ std::vector<StopLineWithLaneId> StopLineModuleManager::getStopLinesWithLaneIdOnP
     }
 
     for (const auto & stop_line : traffic_sign_reg_elem->refLines()) {
-      stop_lines_with_lane_id.push_back(std::make_pair(stop_line, lane_id));
+      stop_lines_with_lane_id.emplace_back(stop_line, lane_id);
     }
   }
 

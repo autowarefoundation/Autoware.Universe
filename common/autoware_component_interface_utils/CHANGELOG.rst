@@ -5,25 +5,25 @@ Changelog for package component_interface_utils
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* ci(pre-commit): autoupdate (`#7499 <https://github.com/youtalk/autoware.universe/issues/7499>`_)
+* ci(pre-commit): autoupdate (`#7499 <https://github.com/autowarefoundation/autoware.universe/issues/7499>`_)
   Co-authored-by: M. Fatih Cırıt <mfc@leodrive.ai>
 * Contributors: Yutaka Kondo, awf-autoware-bot[bot]
 
 0.26.0 (2024-04-03)
 -------------------
-* chore: update api package maintainers (`#6086 <https://github.com/youtalk/autoware.universe/issues/6086>`_)
+* chore: update api package maintainers (`#6086 <https://github.com/autowarefoundation/autoware.universe/issues/6086>`_)
   * update api maintainers
   * fix
   ---------
-* chore(component_interface_utils): set log level of debug printing to DEBUG (`#5995 <https://github.com/youtalk/autoware.universe/issues/5995>`_)
-* feat: add common interface utils test (`#5173 <https://github.com/youtalk/autoware.universe/issues/5173>`_)
+* chore(component_interface_utils): set log level of debug printing to DEBUG (`#5995 <https://github.com/autowarefoundation/autoware.universe/issues/5995>`_)
+* feat: add common interface utils test (`#5173 <https://github.com/autowarefoundation/autoware.universe/issues/5173>`_)
   * add interface utils test
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(autoware_api_specs): change topic depth of route state api and localization state api (`#3757 <https://github.com/youtalk/autoware.universe/issues/3757>`_)
+* feat(autoware_api_specs): change topic depth of route state api and localization state api (`#3757 <https://github.com/autowarefoundation/autoware.universe/issues/3757>`_)
   fix depth
-* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/youtalk/autoware.universe/issues/3616>`_)
+* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/autowarefoundation/autoware.universe/issues/3616>`_)
   * build: mark autoware_cmake as <buildtool_depend>
   with <build_depend>, autoware_cmake is automatically exported with ament_target_dependencies() (unecessary)
   * style(pre-commit): autofix
@@ -31,15 +31,15 @@ Changelog for package component_interface_utils
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-* chore: update codeowners (`#3513 <https://github.com/youtalk/autoware.universe/issues/3513>`_)
-* feat(component_interface_tools): add service log checker  (`#2503 <https://github.com/youtalk/autoware.universe/issues/2503>`_)
+* chore: update codeowners (`#3513 <https://github.com/autowarefoundation/autoware.universe/issues/3513>`_)
+* feat(component_interface_tools): add service log checker  (`#2503 <https://github.com/autowarefoundation/autoware.universe/issues/2503>`_)
   * feat(component_interface_utils): add service log checker
   * feat(component_interface_tools): add service log checker
   * feat(component_interface_tools): add diagnostics
   * feat: update system error monitor config
-* chore: add api maintainers (`#2361 <https://github.com/youtalk/autoware.universe/issues/2361>`_)
-* fix(component_interface_utils): fix error level (`#2322 <https://github.com/youtalk/autoware.universe/issues/2322>`_)
-* feat(operation_mode_transition_manager): support ad api (`#1535 <https://github.com/youtalk/autoware.universe/issues/1535>`_)
+* chore: add api maintainers (`#2361 <https://github.com/autowarefoundation/autoware.universe/issues/2361>`_)
+* fix(component_interface_utils): fix error level (`#2322 <https://github.com/autowarefoundation/autoware.universe/issues/2322>`_)
+* feat(operation_mode_transition_manager): support ad api (`#1535 <https://github.com/autowarefoundation/autoware.universe/issues/1535>`_)
   * feat(operation_mode_transition_manager): support ad api
   * fix: merge operation mode state message
   * feat(autoware_ad_api_msgs): define operation mode interface
@@ -58,7 +58,7 @@ Changelog for package component_interface_utils
   * fix: fix operation mode change when disable autoware control
   * fix: fix operation mode change when autoware control is disabled
   Co-authored-by: Kenji Miyake <31987104+kenji-miyake@users.noreply.github.com>
-* feat(default_ad_api): add motion api  (`#1809 <https://github.com/youtalk/autoware.universe/issues/1809>`_)
+* feat(default_ad_api): add motion api  (`#1809 <https://github.com/autowarefoundation/autoware.universe/issues/1809>`_)
   * feat(autoware_ad_api_specs): define motion interface
   * feat(default_ad_api): add motion api
   * feat: modify motion api
@@ -74,20 +74,20 @@ Changelog for package component_interface_utils
   * feat: add option
   * feat: modify state name
   Co-authored-by: Kenji Miyake <31987104+kenji-miyake@users.noreply.github.com>
-* feat(component_interface_utils): change service log output (`#2022 <https://github.com/youtalk/autoware.universe/issues/2022>`_)
+* feat(component_interface_utils): change service log output (`#2022 <https://github.com/autowarefoundation/autoware.universe/issues/2022>`_)
   * feat(component_interface_utils): change client log
   * feat(component_interface_utils): change server log
   * feat(component_interface_utils): add interface
   * feat: add console log
-* feat(component_interface_utils): apply message change (`#1921 <https://github.com/youtalk/autoware.universe/issues/1921>`_)
+* feat(component_interface_utils): apply message change (`#1921 <https://github.com/autowarefoundation/autoware.universe/issues/1921>`_)
   * feat(component_interface_utils): apply message change
   * feat: add error category
-* feat(autoware_ad_api_msgs): replace adapi message (`#1897 <https://github.com/youtalk/autoware.universe/issues/1897>`_)
-* feat(autoware_ad_api_specs): define routing interface (`#1559 <https://github.com/youtalk/autoware.universe/issues/1559>`_)
+* feat(autoware_ad_api_msgs): replace adapi message (`#1897 <https://github.com/autowarefoundation/autoware.universe/issues/1897>`_)
+* feat(autoware_ad_api_specs): define routing interface (`#1559 <https://github.com/autowarefoundation/autoware.universe/issues/1559>`_)
   * feat(autoware_ad_api_msgs): define routing interface
   * feat: rename route body message
   * feat: rename route state
-* feat(component_interface_utils): update service utility (`#1429 <https://github.com/youtalk/autoware.universe/issues/1429>`_)
+* feat(component_interface_utils): update service utility (`#1429 <https://github.com/autowarefoundation/autoware.universe/issues/1429>`_)
   * feat(component_interface_utils): add exceptions, relay, and synchronous service call
   * feat(autoware_ad_api_msgs): add status code
   * feat(component_interface_utils): fix for hubmle
@@ -99,7 +99,7 @@ Changelog for package component_interface_utils
   * feat(component_interface_utils): use optional for no timeout
   * docs(component_interface_utils): update readme
   * feat(component_interface_utils): add bind function
-* feat(component_interface_utils): add interface classes  (`#899 <https://github.com/youtalk/autoware.universe/issues/899>`_)
+* feat(component_interface_utils): add interface classes  (`#899 <https://github.com/autowarefoundation/autoware.universe/issues/899>`_)
   * feat(component_interface_utils): add interface classes
   * feat(default_ad_api): apply the changes of interface utils
   * fix(component_interface_utils): remove old comment
@@ -107,21 +107,21 @@ Changelog for package component_interface_utils
   * fix(component_interface_utils): remove unimplemented message
   * docs(component_interface_utils): add design policy
   * docs(component_interface_utils): add comment
-* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/youtalk/autoware.universe/issues/856>`_)
-* refactor: simplify Rolling support (`#854 <https://github.com/youtalk/autoware.universe/issues/854>`_)
-* refactor: use autoware cmake (`#849 <https://github.com/youtalk/autoware.universe/issues/849>`_)
+* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/autowarefoundation/autoware.universe/issues/856>`_)
+* refactor: simplify Rolling support (`#854 <https://github.com/autowarefoundation/autoware.universe/issues/854>`_)
+* refactor: use autoware cmake (`#849 <https://github.com/autowarefoundation/autoware.universe/issues/849>`_)
   * remove autoware_auto_cmake
   * add build_depend of autoware_cmake
   * use autoware_cmake in CMakeLists.txt
   * fix bugs
   * fix cmake lint errors
-* fix: apply fixes for rolling (`#821 <https://github.com/youtalk/autoware.universe/issues/821>`_)
+* fix: apply fixes for rolling (`#821 <https://github.com/autowarefoundation/autoware.universe/issues/821>`_)
   * fix(component_interface_utils): add USE_DEPRECATED_TO_YAML
   * fix(lidar_apollo_instance_segmentation): add USE_TF2_GEOMETRY_MSGS_DEPRECATED_HEADER
   * add rclcpp_components to package.xml
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(default_ad_api): add interface version (`#704 <https://github.com/youtalk/autoware.universe/issues/704>`_)
+* feat(default_ad_api): add interface version (`#704 <https://github.com/autowarefoundation/autoware.universe/issues/704>`_)
   * feat(default_ad_api): add interface version
   * feat(default_ad_api): add http server
   * feat(default_ad_api): add message readme

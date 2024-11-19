@@ -52,6 +52,8 @@ BehaviorPathPlannerNode::BehaviorPathPlannerNode(const rclcpp::NodeOptions & nod
   modified_goal_publisher_ =
     create_publisher<PoseWithUuidStamped>("~/output/modified_goal", durable_qos);
   stop_reason_publisher_ = create_publisher<StopReasonArray>("~/output/stop_reasons", 1);
+  pub_steering_factors_ =
+    create_publisher<SteeringFactorArray>("/planning/steering_factor/intersection", 1);
   reroute_availability_publisher_ =
     create_publisher<RerouteAvailability>("~/output/is_reroute_available", 1);
   debug_avoidance_msg_array_publisher_ =
@@ -114,7 +116,7 @@ BehaviorPathPlannerNode::BehaviorPathPlannerNode(const rclcpp::NodeOptions & nod
       turn_signal_search_time, turn_signal_intersection_angle_threshold_deg);
   }
 
-  steering_factor_interface_ptr_ = std::make_unique<SteeringFactorInterface>(this, "intersection");
+  steering_factor_interface_.init(PlanningBehavior::INTERSECTION);
 
   // Start timer
   {
@@ -473,13 +475,23 @@ void BehaviorPathPlannerNode::publish_steering_factor(
     const auto [intersection_pose, intersection_distance] =
       planner_data->turn_signal_decider.getIntersectionPoseAndDistance();
 
-    steering_factor_interface_ptr_->updateSteeringFactor(
+    steering_factor_interface_.set(
       {intersection_pose, intersection_pose}, {intersection_distance, intersection_distance},
-      PlanningBehavior::INTERSECTION, steering_factor_direction, SteeringFactor::TURNING, "");
+      steering_factor_direction, SteeringFactor::TURNING, "");
   } else {
-    steering_factor_interface_ptr_->clearSteeringFactors();
+    steering_factor_interface_.reset();
   }
-  steering_factor_interface_ptr_->publishSteeringFactor(get_clock()->now());
+
+  autoware_adapi_v1_msgs::msg::SteeringFactorArray steering_factor_array;
+  steering_factor_array.header.frame_id = "map";
+  steering_factor_array.header.stamp = this->now();
+
+  const auto steering_factor = steering_factor_interface_.get();
+  if (steering_factor.behavior != PlanningBehavior::UNKNOWN) {
+    steering_factor_array.factors.emplace_back(steering_factor);
+  }
+
+  pub_steering_factors_->publish(steering_factor_array);
 }
 
 void BehaviorPathPlannerNode::publish_reroute_availability() const

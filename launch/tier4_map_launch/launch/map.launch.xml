@@ -20,7 +20,7 @@
     <push-ros-namespace namespace="map"/>
 
     <node_container pkg="rclcpp_components" exec="$(var container_type)" name="map_container" namespace="" output="both">
-      <composable_node pkg="map_loader" plugin="PointCloudMapLoaderNode" name="pointcloud_map_loader">
+      <composable_node pkg="autoware_map_loader" plugin="autoware::map_loader::PointCloudMapLoaderNode" name="pointcloud_map_loader">
         <param from="$(var pointcloud_map_loader_param_path)"/>
         <param name="pcd_paths_or_directory" value="[$(var pointcloud_map_path)]"/>
         <param name="pcd_metadata_path" value="$(var pointcloud_map_metadata_path)"/>
@@ -31,13 +31,13 @@
         <remap from="service/get_selected_pcd_map" to="/map/get_selected_pointcloud_map"/>
       </composable_node>
 
-      <composable_node pkg="map_loader" plugin="Lanelet2MapLoaderNode" name="lanelet2_map_loader">
+      <composable_node pkg="autoware_map_loader" plugin="autoware::map_loader::Lanelet2MapLoaderNode" name="lanelet2_map_loader">
         <param from="$(var lanelet2_map_loader_param_path)"/>
         <param name="lanelet2_map_path" value="$(var lanelet2_map_path)"/>
         <remap from="output/lanelet2_map" to="vector_map"/>
       </composable_node>
 
-      <composable_node pkg="map_loader" plugin="Lanelet2MapVisualizationNode" name="lanelet2_map_visualization">
+      <composable_node pkg="autoware_lanelet2_map_visualizer" plugin="autoware::lanelet2_map_visualizer::Lanelet2MapVisualizationNode" name="lanelet2_map_visualization">
         <remap from="input/lanelet2_map" to="vector_map"/>
         <remap from="output/lanelet2_map_marker" to="vector_map_marker"/>
       </composable_node>
@@ -47,7 +47,7 @@
       </composable_node>
     </node_container>
 
-    <node pkg="map_loader" exec="map_hash_generator" name="map_hash_generator">
+    <node pkg="autoware_map_loader" exec="map_hash_generator" name="map_hash_generator">
       <param name="lanelet2_map_path" value="$(var lanelet2_map_path)"/>
       <param name="pointcloud_map_path" value="$(var pointcloud_map_path)"/>
     </node>

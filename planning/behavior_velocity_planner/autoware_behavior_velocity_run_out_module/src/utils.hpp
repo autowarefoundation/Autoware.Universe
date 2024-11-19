@@ -255,7 +255,8 @@ std::optional<std::vector<geometry_msgs::msg::Point>> createDetectionAreaPolygon
 
 // extend path to the pose of goal
 PathWithLaneId extendPath(const PathWithLaneId & input, const double extend_distance);
-PathPoint createExtendPathPoint(const double extend_distance, const PathPoint & goal_point);
+PathPointWithLaneId createExtendPathPoint(
+  const double extend_distance, const PathPointWithLaneId & goal_point);
 
 DetectionMethod toEnum(const std::string & detection_method);
 

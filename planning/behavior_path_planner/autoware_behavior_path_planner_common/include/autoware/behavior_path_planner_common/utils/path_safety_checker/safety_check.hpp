@@ -128,6 +128,9 @@ ExtendedPredictedObjects filterObjectPredictedPathByTimeHorizon(
   const ExtendedPredictedObjects & objects, const double time_horizon,
   const bool check_all_predicted_path);
 
+std::vector<PoseWithVelocityStamped> filterPredictedPathAfterTargetPose(
+  const std::vector<PoseWithVelocityStamped> & path, const Pose & target_pose);
+
 bool checkSafetyWithRSS(
   const PathWithLaneId & planned_path,
   const std::vector<PoseWithVelocityStamped> & ego_predicted_path,

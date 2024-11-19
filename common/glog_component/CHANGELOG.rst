@@ -5,12 +5,12 @@ Changelog for package glog_component
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* chore(glog): add initialization check (`#6792 <https://github.com/youtalk/autoware.universe/issues/6792>`_)
+* chore(glog): add initialization check (`#6792 <https://github.com/autowarefoundation/autoware.universe/issues/6792>`_)
 * Contributors: Takamasa Horibe, Yutaka Kondo
 
 0.26.0 (2024-04-03)
 -------------------
-* feat(glog): add glog in planning and control modules (`#4714 <https://github.com/youtalk/autoware.universe/issues/4714>`_)
+* feat(glog): add glog in planning and control modules (`#4714 <https://github.com/autowarefoundation/autoware.universe/issues/4714>`_)
   * feat(glog): add glog component
   * formatting
   * remove namespace

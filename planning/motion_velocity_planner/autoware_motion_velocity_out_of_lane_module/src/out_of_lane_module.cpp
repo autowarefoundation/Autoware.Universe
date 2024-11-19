@@ -26,11 +26,11 @@
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
 #include <autoware/motion_velocity_planner_common/planner_data.hpp>
 #include <autoware/route_handler/route_handler.hpp>
+#include <autoware/traffic_light_utils/traffic_light_utils.hpp>
 #include <autoware/universe_utils/geometry/boost_geometry.hpp>
 #include <autoware/universe_utils/ros/parameter.hpp>
 #include <autoware/universe_utils/ros/update_param.hpp>
 #include <autoware/universe_utils/system/stop_watch.hpp>
-#include <traffic_light_utils/traffic_light_utils.hpp>
 
 #include <boost/geometry/algorithms/envelope.hpp>
 #include <boost/geometry/algorithms/intersects.hpp>
@@ -179,7 +179,8 @@ void prepare_stop_lines_rtree(
       const auto traffic_signal_stamped = planner_data.get_traffic_signal(element->id());
       if (
         traffic_signal_stamped.has_value() && element->stopLine().has_value() &&
-        traffic_light_utils::isTrafficSignalStop(ll, traffic_signal_stamped.value().signal)) {
+        autoware::traffic_light_utils::isTrafficSignalStop(
+          ll, traffic_signal_stamped.value().signal)) {
         stop_line_node.second.stop_line.clear();
         for (const auto & p : element->stopLine()->basicLineString()) {
           stop_line_node.second.stop_line.emplace_back(p.x(), p.y());

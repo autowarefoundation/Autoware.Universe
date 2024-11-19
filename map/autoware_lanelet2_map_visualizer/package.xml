@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>autoware_lanelet2_map_visualizer</name>
+  <version>0.1.0</version>
+  <description>The autoware_lanelet2_map_visualizer package</description>
+  <maintainer email="yamato.ando@tier4.jp">Yamato Ando</maintainer>
+  <maintainer email="ryu.yamamoto@tier4.jp">Ryu Yamamoto</maintainer>
+  <maintainer email="masahiro.sakamoto@tier4.jp">Masahiro Sakamoto</maintainer>
+  <maintainer email="kento.yabuuchi.2@tier4.jp">Kento Yabuuchi</maintainer>
+  <maintainer email="anh.nguyen.2@tier4.jp">NGUYEN Viet Anh</maintainer>
+  <maintainer email="taiki.yamada@tier4.jp">Taiki Yamada</maintainer>
+  <maintainer email="shintaro.sakoda@tier4.jp">Shintaro Sakoda</maintainer>
+  <maintainer email="mamoru.sobue@tier4.jp">Mamoru Sobue</maintainer>
+
+  <license>Apache License 2.0</license>
+  <author email="ryohsuke.mitsudome@tier4.jp">Ryohsuke Mitsudome</author>
+  <author email="koji.minoda@tier4.jp">Koji Minoda</author>
+
+  <buildtool_depend>ament_cmake_auto</buildtool_depend>
+  <buildtool_depend>autoware_cmake</buildtool_depend>
+
+  <depend>autoware_lanelet2_extension</depend>
+  <depend>autoware_map_msgs</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>tier4_map_msgs</depend>
+  <depend>visualization_msgs</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>autoware_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

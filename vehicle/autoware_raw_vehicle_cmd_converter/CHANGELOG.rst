@@ -5,9 +5,9 @@ Changelog for package autoware_raw_vehicle_cmd_converter
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* fix(simple_planning_simulator, raw_vehicle_cmd_converter): swap row index and column index for csv loader  (`#8963 <https://github.com/youtalk/autoware.universe/issues/8963>`_)
+* fix(simple_planning_simulator, raw_vehicle_cmd_converter): swap row index and column index for csv loader  (`#8963 <https://github.com/autowarefoundation/autoware.universe/issues/8963>`_)
   swap row and column
-* test(raw_vehicle_cmd_converter): add tests (`#8951 <https://github.com/youtalk/autoware.universe/issues/8951>`_)
+* test(raw_vehicle_cmd_converter): add tests (`#8951 <https://github.com/autowarefoundation/autoware.universe/issues/8951>`_)
   * remove header file according to clangd warning
   * add test
   * fix
@@ -15,18 +15,18 @@ Changelog for package autoware_raw_vehicle_cmd_converter
   * apply clang tidy
   * fix test content
   ---------
-* refactor(autoware_interpolation): prefix package and namespace with autoware (`#8088 <https://github.com/youtalk/autoware.universe/issues/8088>`_)
+* refactor(autoware_interpolation): prefix package and namespace with autoware (`#8088 <https://github.com/autowarefoundation/autoware.universe/issues/8088>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(start_planner,raw_vechile_cmd_converter): align parameter with autoware_launch's parameter (`#8913 <https://github.com/youtalk/autoware.universe/issues/8913>`_)
+* refactor(start_planner,raw_vechile_cmd_converter): align parameter with autoware_launch's parameter (`#8913 <https://github.com/autowarefoundation/autoware.universe/issues/8913>`_)
   * align autoware_raw_vehicle_cmd_converter's parameter
   * align start_planner's parameter
   ---------
-* fix(raw_vehicle_cmd_converter): fix convert_steer_cmd_method condition (`#8813 <https://github.com/youtalk/autoware.universe/issues/8813>`_)
-* fix(raw_vehicle_cmd_converter): fix null check (`#8677 <https://github.com/youtalk/autoware.universe/issues/8677>`_)
-* chore(raw_vehicle_cmd_converter): add maintainer (`#8671 <https://github.com/youtalk/autoware.universe/issues/8671>`_)
-* feat(raw_vehicle_cmd_converter): set convert_actuation_to_steering_status false by default (`#8668 <https://github.com/youtalk/autoware.universe/issues/8668>`_)
-* feat(raw_vehicle_cmd_converter): disable actuation to steering (`#8588 <https://github.com/youtalk/autoware.universe/issues/8588>`_)
-* feat(raw_vehicle_cmd_converter): add steer command conversion with VGR (`#8504 <https://github.com/youtalk/autoware.universe/issues/8504>`_)
+* fix(raw_vehicle_cmd_converter): fix convert_steer_cmd_method condition (`#8813 <https://github.com/autowarefoundation/autoware.universe/issues/8813>`_)
+* fix(raw_vehicle_cmd_converter): fix null check (`#8677 <https://github.com/autowarefoundation/autoware.universe/issues/8677>`_)
+* chore(raw_vehicle_cmd_converter): add maintainer (`#8671 <https://github.com/autowarefoundation/autoware.universe/issues/8671>`_)
+* feat(raw_vehicle_cmd_converter): set convert_actuation_to_steering_status false by default (`#8668 <https://github.com/autowarefoundation/autoware.universe/issues/8668>`_)
+* feat(raw_vehicle_cmd_converter): disable actuation to steering (`#8588 <https://github.com/autowarefoundation/autoware.universe/issues/8588>`_)
+* feat(raw_vehicle_cmd_converter): add steer command conversion with VGR (`#8504 <https://github.com/autowarefoundation/autoware.universe/issues/8504>`_)
   * feat(raw_vehicle_cmd_converter): add steer command conversion with VGR
   * make class and add test
   * remove member vgr_coef from node
@@ -39,17 +39,17 @@ Changelog for package autoware_raw_vehicle_cmd_converter
   * add comment for using normal sub for steering status
   ---------
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* feat(raw_vehicle_cmd_converter): use polling subscriber (`#7319 <https://github.com/youtalk/autoware.universe/issues/7319>`_)
+* feat(raw_vehicle_cmd_converter): use polling subscriber (`#7319 <https://github.com/autowarefoundation/autoware.universe/issues/7319>`_)
   * replace subscription
   * fix document
   * sum up functions
   * add maintainer
   ---------
   Co-authored-by: Shumpei Wakabayashi <42209144+shmpwk@users.noreply.github.com>
-* refactor(accel_brake_map_calibrator)!: add autoware\_ prefix (`#7351 <https://github.com/youtalk/autoware.universe/issues/7351>`_)
+* refactor(accel_brake_map_calibrator)!: add autoware\_ prefix (`#7351 <https://github.com/autowarefoundation/autoware.universe/issues/7351>`_)
   * add prefix to the codes
   change dir name
   update
@@ -60,7 +60,7 @@ Changelog for package autoware_raw_vehicle_cmd_converter
   * restore
   * poi
   ---------
-* refactor(raw_vehicle_cmd_converter)!: prefix package and namespace with autoware (`#7385 <https://github.com/youtalk/autoware.universe/issues/7385>`_)
+* refactor(raw_vehicle_cmd_converter)!: prefix package and namespace with autoware (`#7385 <https://github.com/autowarefoundation/autoware.universe/issues/7385>`_)
   * add prefix
   * fix other packages
   * fix cppcheck

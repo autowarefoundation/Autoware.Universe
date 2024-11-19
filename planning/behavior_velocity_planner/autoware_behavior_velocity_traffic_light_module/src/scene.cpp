@@ -18,7 +18,7 @@
 
 #include <autoware/behavior_velocity_planner_common/utilization/util.hpp>
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
-#include <traffic_light_utils/traffic_light_utils.hpp>
+#include <autoware/traffic_light_utils/traffic_light_utils.hpp>
 
 #include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
@@ -58,7 +58,7 @@ bool TrafficLightModule::modifyPathVelocity(PathWithLaneId * path, StopReason * 
 {
   debug_data_ = DebugData();
   debug_data_.base_link2front = planner_data_->vehicle_info_.max_longitudinal_offset_m;
-  first_stop_path_point_index_ = static_cast<int>(path->points.size()) - 1;
+  first_stop_path_point_distance_ = autoware::motion_utils::calcArcLength(path->points);
   first_ref_stop_path_point_index_ = static_cast<int>(path->points.size()) - 1;
   *stop_reason = planning_utils::initializeStopReason(StopReason::TRAFFIC_LIGHT);
 
@@ -177,7 +177,7 @@ bool TrafficLightModule::isStopSignal()
   }
 
   // Check if the current traffic signal state requires stopping
-  return traffic_light_utils::isTrafficSignalStop(lane_, looking_tl_state_);
+  return autoware::traffic_light_utils::isTrafficSignalStop(lane_, looking_tl_state_);
 }
 
 void TrafficLightModule::updateTrafficSignal()
@@ -291,8 +291,11 @@ tier4_planning_msgs::msg::PathWithLaneId TrafficLightModule::insertStopPose(
   // Insert stop pose into path or replace with zero velocity
   size_t insert_index = insert_target_point_idx;
   planning_utils::insertVelocity(modified_path, target_point_with_lane_id, 0.0, insert_index);
-  if (static_cast<int>(target_velocity_point_idx) < first_stop_path_point_index_) {
-    first_stop_path_point_index_ = static_cast<int>(target_velocity_point_idx);
+
+  const double target_velocity_point_distance = autoware::motion_utils::calcArcLength(std::vector(
+    modified_path.points.begin(), modified_path.points.begin() + target_velocity_point_idx));
+  if (target_velocity_point_distance < first_stop_path_point_distance_) {
+    first_stop_path_point_distance_ = target_velocity_point_distance;
     debug_data_.first_stop_pose = target_point_with_lane_id.point.pose;
   }
 

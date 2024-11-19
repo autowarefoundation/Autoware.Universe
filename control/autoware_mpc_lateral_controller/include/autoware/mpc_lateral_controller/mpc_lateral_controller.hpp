@@ -22,6 +22,7 @@
 #include "autoware/trajectory_follower_base/lateral_controller_base.hpp"
 #include "rclcpp/rclcpp.hpp"
 
+#include <autoware/trajectory_follower_base/control_horizon.hpp>
 #include <diagnostic_updater/diagnostic_updater.hpp>
 
 #include "autoware_control_msgs/msg/lateral.hpp"
@@ -49,6 +50,7 @@ using autoware_vehicle_msgs::msg::SteeringReport;
 using nav_msgs::msg::Odometry;
 using tier4_debug_msgs::msg::Float32MultiArrayStamped;
 using tier4_debug_msgs::msg::Float32Stamped;
+using trajectory_follower::LateralHorizon;
 
 class MpcLateralController : public trajectory_follower::LateralControllerBase
 {
@@ -213,6 +215,13 @@ private:
    * @return Created control command.
    */
   Lateral createCtrlCmdMsg(const Lateral & ctrl_cmd);
+
+  /**
+   * @brief Create the control command horizon message.
+   * @param ctrl_cmd_horizon Control command horizon to be created.
+   * @return Created control command horizon.
+   */
+  LateralHorizon createCtrlCmdHorizonMsg(const LateralHorizon & ctrl_cmd_horizon) const;
 
   /**
    * @brief Publish the predicted future trajectory.

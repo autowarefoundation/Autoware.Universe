@@ -122,7 +122,6 @@ public:
     double stop_distance_from_object_preferred;
     double stop_distance_from_object_limit;
     double stop_distance_from_crosswalk;
-    double far_object_threshold;
     double stop_position_threshold;
     double min_acc_preferred;
     double min_jerk_preferred;

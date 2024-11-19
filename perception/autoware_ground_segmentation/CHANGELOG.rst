@@ -5,7 +5,7 @@ Changelog for package autoware_ground_segmentation
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* feat(autoware_ground_segmentation): implementing linear least square fitting for local gradient calculation (`#9116 <https://github.com/youtalk/autoware.universe/issues/9116>`_)
+* feat(autoware_ground_segmentation): implementing linear least square fitting for local gradient calculation (`#9116 <https://github.com/autowarefoundation/autoware.universe/issues/9116>`_)
   * refactor: calculate local ground gradient in classifyPointCloudGridScan
   Calculate the local ground gradient by fitting a line to the ground grids in the classifyPointCloudGridScan function. This improves the accuracy of the gradient calculation and ensures more precise extrapolation of the ground height.
   * refactor: calculate local ground gradient in classifyPointCloudGridScan
@@ -16,7 +16,7 @@ Changelog for package autoware_ground_segmentation
   * refactor: fix ground gradient calculation in checkContinuousGndGrid function
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(autoware_ground_segmentation): fix scan ground filter logic  (`#9084 <https://github.com/youtalk/autoware.universe/issues/9084>`_)
+* fix(autoware_ground_segmentation): fix scan ground filter logic  (`#9084 <https://github.com/autowarefoundation/autoware.universe/issues/9084>`_)
   * refactor: initialize gnd_grids in ScanGroundFilterComponent::initializeFirstGndGrids
   Initialize gnd_grids vector in the ScanGroundFilterComponent::initializeFirstGndGrids function to ensure it is empty and has the correct capacity. This improves the efficiency of the function and ensures accurate grid initialization.
   * refactor: initialize gnd_grids vector in initializeFirstGndGrids function
@@ -35,7 +35,7 @@ Changelog for package autoware_ground_segmentation
   * refactor: fix logic description comment
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* chore(autoware_ground_segmentation): scan ground filter refactoring (`#9061 <https://github.com/youtalk/autoware.universe/issues/9061>`_)
+* chore(autoware_ground_segmentation): scan ground filter refactoring (`#9061 <https://github.com/autowarefoundation/autoware.universe/issues/9061>`_)
   * chore: Add comment classification logic for point cloud grid scan
   * chore: renamed horizontal angle to azimuth angle
   * chore: rename offset to data_index
@@ -54,7 +54,7 @@ Changelog for package autoware_ground_segmentation
   * chore: reduce scope
   * refactor: align structure between convertPointcloud and convertPointcloudGridScan
   ---------
-* feat(ground_segmentation): add time_keeper (`#8585 <https://github.com/youtalk/autoware.universe/issues/8585>`_)
+* feat(ground_segmentation): add time_keeper (`#8585 <https://github.com/autowarefoundation/autoware.universe/issues/8585>`_)
   * add time_keeper
   * add timekeeper option
   * add autoware_universe_utils
@@ -63,17 +63,17 @@ Changelog for package autoware_ground_segmentation
   * remove debug code
   * remove some timekeeper and mod block comment
   ---------
-* fix(autoware_pointcloud_preprocessor): static TF listener as Filter option (`#8678 <https://github.com/youtalk/autoware.universe/issues/8678>`_)
-* fix(ground-segmentation): missing ament_index_cpp dependency (`#8587 <https://github.com/youtalk/autoware.universe/issues/8587>`_)
-* fix(autoware_ground_segmentation): fix unusedFunction (`#8566 <https://github.com/youtalk/autoware.universe/issues/8566>`_)
+* fix(autoware_pointcloud_preprocessor): static TF listener as Filter option (`#8678 <https://github.com/autowarefoundation/autoware.universe/issues/8678>`_)
+* fix(ground-segmentation): missing ament_index_cpp dependency (`#8587 <https://github.com/autowarefoundation/autoware.universe/issues/8587>`_)
+* fix(autoware_ground_segmentation): fix unusedFunction (`#8566 <https://github.com/autowarefoundation/autoware.universe/issues/8566>`_)
   fix:unusedFunction
-* fix(ground_segmentation): missing default parameters ERROR (`#8538 <https://github.com/youtalk/autoware.universe/issues/8538>`_)
+* fix(ground_segmentation): missing default parameters ERROR (`#8538 <https://github.com/autowarefoundation/autoware.universe/issues/8538>`_)
   fix(ground_segmentation): remove unused params
-* fix(autoware_ground_segmentation): fix unreadVariable (`#8353 <https://github.com/youtalk/autoware.universe/issues/8353>`_)
+* fix(autoware_ground_segmentation): fix unreadVariable (`#8353 <https://github.com/autowarefoundation/autoware.universe/issues/8353>`_)
   * fix:unreadVariable
   * fix:unreadVariable
   ---------
-* perf(autoware_pointcloud_preprocessor): lazy & managed TF listeners (`#8174 <https://github.com/youtalk/autoware.universe/issues/8174>`_)
+* perf(autoware_pointcloud_preprocessor): lazy & managed TF listeners (`#8174 <https://github.com/autowarefoundation/autoware.universe/issues/8174>`_)
   * perf(autoware_pointcloud_preprocessor): lazy & managed TF listeners
   * fix(autoware_pointcloud_preprocessor): param names & reverse frames transform logic
   * fix(autoware_ground_segmentation): add missing TF listener
@@ -83,11 +83,11 @@ Changelog for package autoware_ground_segmentation
   * fix(autoware_universe_utils): change checks order
   * doc(autoware_universe_utils): add docstring
   ---------
-* fix(autoware_ground_segmentation): fix uninitMemberVar (`#8336 <https://github.com/youtalk/autoware.universe/issues/8336>`_)
+* fix(autoware_ground_segmentation): fix uninitMemberVar (`#8336 <https://github.com/autowarefoundation/autoware.universe/issues/8336>`_)
   fix:uninitMemberVar
-* fix(autoware_ground_segmentation): fix functionConst (`#8291 <https://github.com/youtalk/autoware.universe/issues/8291>`_)
+* fix(autoware_ground_segmentation): fix functionConst (`#8291 <https://github.com/autowarefoundation/autoware.universe/issues/8291>`_)
   fix:functionConst
-* refactor(ground_segmentation)!: add package name prefix of autoware\_ (`#8135 <https://github.com/youtalk/autoware.universe/issues/8135>`_)
+* refactor(ground_segmentation)!: add package name prefix of autoware\_ (`#8135 <https://github.com/autowarefoundation/autoware.universe/issues/8135>`_)
   * refactor(ground_segmentation): add package name prefix of autoware\_
   * fix: update prefix cmake
   ---------

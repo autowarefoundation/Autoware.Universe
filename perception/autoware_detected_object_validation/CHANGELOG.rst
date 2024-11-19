@@ -5,8 +5,8 @@ Changelog for package autoware_detected_object_validation
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* refactor(object_recognition_utils): add autoware prefix to object_recognition_utils (`#8946 <https://github.com/youtalk/autoware.universe/issues/8946>`_)
-* refactor(detected_object_validation): rework parameters (`#7750 <https://github.com/youtalk/autoware.universe/issues/7750>`_)
+* refactor(object_recognition_utils): add autoware prefix to object_recognition_utils (`#8946 <https://github.com/autowarefoundation/autoware.universe/issues/8946>`_)
+* refactor(detected_object_validation): rework parameters (`#7750 <https://github.com/autowarefoundation/autoware.universe/issues/7750>`_)
   * refactor(detected_object_validation): rework parameters
   * style(pre-commit): autofix
   * Update perception/detected_object_validation/schema/object_lanelet_filter.schema.json
@@ -22,13 +22,13 @@ Changelog for package autoware_detected_object_validation
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(autoware_detected_object_validation): fix functionStatic (`#8482 <https://github.com/youtalk/autoware.universe/issues/8482>`_)
+* fix(autoware_detected_object_validation): fix functionStatic (`#8482 <https://github.com/autowarefoundation/autoware.universe/issues/8482>`_)
   fix:functionStatic
-* fix(autoware_detected_object_validation): fix cppcheck warnings of functionStatic (`#8256 <https://github.com/youtalk/autoware.universe/issues/8256>`_)
+* fix(autoware_detected_object_validation): fix cppcheck warnings of functionStatic (`#8256 <https://github.com/autowarefoundation/autoware.universe/issues/8256>`_)
   fix: deal with functionStatic warnings
-* fix(autoware_detected_object_validation): fix functionConst (`#8285 <https://github.com/youtalk/autoware.universe/issues/8285>`_)
+* fix(autoware_detected_object_validation): fix functionConst (`#8285 <https://github.com/autowarefoundation/autoware.universe/issues/8285>`_)
   fix: functionConst
-* perf(autoware_detected_object_validation): reduce lanelet_filter processing time  (`#8240 <https://github.com/youtalk/autoware.universe/issues/8240>`_)
+* perf(autoware_detected_object_validation): reduce lanelet_filter processing time  (`#8240 <https://github.com/autowarefoundation/autoware.universe/issues/8240>`_)
   * add local r-tree for fast searching
   change to _func\_\_
   add more debug
@@ -46,7 +46,7 @@ Changelog for package autoware_detected_object_validation
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Taekjin LEE <taekjin.lee@tier4.jp>
-* refactor(probabilistic_occupancy_grid_map, occupancy_grid_map_outlier_filter): add autoware\_ prefix to package name (`#8183 <https://github.com/youtalk/autoware.universe/issues/8183>`_)
+* refactor(probabilistic_occupancy_grid_map, occupancy_grid_map_outlier_filter): add autoware\_ prefix to package name (`#8183 <https://github.com/autowarefoundation/autoware.universe/issues/8183>`_)
   * chore: fix package name probabilistic occupancy grid map
   * fix: solve launch error
   * chore: update occupancy_grid_map_outlier_filter
@@ -56,7 +56,7 @@ Changelog for package autoware_detected_object_validation
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Taekjin LEE <taekjin.lee@tier4.jp>
-* refactor(detected_object_validation)!: add package name prefix of autoware\_ (`#8122 <https://github.com/youtalk/autoware.universe/issues/8122>`_)
+* refactor(detected_object_validation)!: add package name prefix of autoware\_ (`#8122 <https://github.com/autowarefoundation/autoware.universe/issues/8122>`_)
   refactor: rename detected_object_validation to autoware_detected_object_validation
 * Contributors: Batuhan Beytekin, Esteve Fernandez, Hayate TOBA, Masaki Baba, Taekjin LEE, Yoshi Ri, Yutaka Kondo, kobayu858, taisa1
 

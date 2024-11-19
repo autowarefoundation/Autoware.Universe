@@ -36,6 +36,7 @@
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware/universe_utils/geometry/pose_deviation.hpp>
+#include <autoware/universe_utils/system/stop_watch.hpp>
 
 #include <algorithm>
 #include <deque>
@@ -94,6 +95,8 @@ FreespacePlannerNode::FreespacePlannerNode(const rclcpp::NodeOptions & node_opti
     debug_pose_array_pub_ = create_publisher<PoseArray>("~/debug/pose_array", qos);
     debug_partial_pose_array_pub_ = create_publisher<PoseArray>("~/debug/partial_pose_array", qos);
     parking_state_pub_ = create_publisher<std_msgs::msg::Bool>("is_completed", qos);
+    processing_time_pub_ =
+      create_publisher<tier4_debug_msgs::msg::Float64Stamped>("~/debug/processing_time_ms", 1);
   }
 
   // TF
@@ -277,6 +280,8 @@ bool FreespacePlannerNode::isDataReady()
 
 void FreespacePlannerNode::onTimer()
 {
+  autoware::universe_utils::StopWatch<std::chrono::milliseconds> stop_watch;
+
   scenario_ = scenario_sub_.takeData();
   if (!utils::is_active(scenario_)) {
     reset();
@@ -355,6 +360,12 @@ void FreespacePlannerNode::onTimer()
   debug_partial_pose_array_pub_->publish(utils::trajectory_to_pose_array(partial_trajectory_));
 
   is_new_parking_cycle_ = false;
+
+  // Publish ProcessingTime
+  tier4_debug_msgs::msg::Float64Stamped processing_time_msg;
+  processing_time_msg.stamp = get_clock()->now();
+  processing_time_msg.data = stop_watch.toc();
+  processing_time_pub_->publish(processing_time_msg);
 }
 
 void FreespacePlannerNode::planTrajectory()

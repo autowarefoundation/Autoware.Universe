@@ -5,19 +5,19 @@ Changelog for package topic_state_monitor
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* chore(topic_state_monitor): enrich error log message (`#7236 <https://github.com/youtalk/autoware.universe/issues/7236>`_)
+* chore(topic_state_monitor): enrich error log message (`#7236 <https://github.com/autowarefoundation/autoware.universe/issues/7236>`_)
 * Contributors: Takamasa Horibe, Yutaka Kondo
 
 0.26.0 (2024-04-03)
 -------------------
-* refactor(topic_state_monitor): add state log message (`#5378 <https://github.com/youtalk/autoware.universe/issues/5378>`_)
+* refactor(topic_state_monitor): add state log message (`#5378 <https://github.com/autowarefoundation/autoware.universe/issues/5378>`_)
   * refactor(topic_state_monitor): add state log message
   * add debug print
   ---------
-* docs(topic_state_monitor): rename readme to README (`#4225 <https://github.com/youtalk/autoware.universe/issues/4225>`_)
-* chore: update maintainer (`#4140 <https://github.com/youtalk/autoware.universe/issues/4140>`_)
+* docs(topic_state_monitor): rename readme to README (`#4225 <https://github.com/autowarefoundation/autoware.universe/issues/4225>`_)
+* chore: update maintainer (`#4140 <https://github.com/autowarefoundation/autoware.universe/issues/4140>`_)
   Co-authored-by: Ryohsuke Mitsudome <43976834+mitsudome-r@users.noreply.github.com>
-* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/youtalk/autoware.universe/issues/3616>`_)
+* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/autowarefoundation/autoware.universe/issues/3616>`_)
   * build: mark autoware_cmake as <buildtool_depend>
   with <build_depend>, autoware_cmake is automatically exported with ament_target_dependencies() (unecessary)
   * style(pre-commit): autofix
@@ -25,27 +25,27 @@ Changelog for package topic_state_monitor
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-* chore: sync files (`#3227 <https://github.com/youtalk/autoware.universe/issues/3227>`_)
+* chore: sync files (`#3227 <https://github.com/autowarefoundation/autoware.universe/issues/3227>`_)
   * chore: sync files
   * style(pre-commit): autofix
   ---------
   Co-authored-by: kenji-miyake <kenji-miyake@users.noreply.github.com>
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(topic_state_monitor): support transform topic check (`#1586 <https://github.com/youtalk/autoware.universe/issues/1586>`_)
-* refactor(topic_state_monitor): move the parameter group to match implementation (`#1909 <https://github.com/youtalk/autoware.universe/issues/1909>`_)
-* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/youtalk/autoware.universe/issues/856>`_)
-* refactor: use autoware cmake (`#849 <https://github.com/youtalk/autoware.universe/issues/849>`_)
+* feat(topic_state_monitor): support transform topic check (`#1586 <https://github.com/autowarefoundation/autoware.universe/issues/1586>`_)
+* refactor(topic_state_monitor): move the parameter group to match implementation (`#1909 <https://github.com/autowarefoundation/autoware.universe/issues/1909>`_)
+* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/autowarefoundation/autoware.universe/issues/856>`_)
+* refactor: use autoware cmake (`#849 <https://github.com/autowarefoundation/autoware.universe/issues/849>`_)
   * remove autoware_auto_cmake
   * add build_depend of autoware_cmake
   * use autoware_cmake in CMakeLists.txt
   * fix bugs
   * fix cmake lint errors
-* style: fix format of package.xml (`#844 <https://github.com/youtalk/autoware.universe/issues/844>`_)
-* ci(pre-commit): update pre-commit-hooks-ros (`#625 <https://github.com/youtalk/autoware.universe/issues/625>`_)
+* style: fix format of package.xml (`#844 <https://github.com/autowarefoundation/autoware.universe/issues/844>`_)
+* ci(pre-commit): update pre-commit-hooks-ros (`#625 <https://github.com/autowarefoundation/autoware.universe/issues/625>`_)
   * ci(pre-commit): update pre-commit-hooks-ros
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* chore: replace legacy timer (`#329 <https://github.com/youtalk/autoware.universe/issues/329>`_)
+* chore: replace legacy timer (`#329 <https://github.com/autowarefoundation/autoware.universe/issues/329>`_)
   * chore(goal_distance_calculator): replace legacy timer
   * chore(path_distance_calculator): replace legacy timer
   * chore(control_performance_analysis): replace legacy timer
@@ -80,28 +80,28 @@ Changelog for package topic_state_monitor
   * chore(external_cmd_converter): replace legacy timer
   * chore(pacmod_interface): replace legacy timer
   * chore(lint): apply pre-commit
-* feat: add topic_state_monitor package (`#15 <https://github.com/youtalk/autoware.universe/issues/15>`_)
-  * Ros2 v0.8.0 topic state monitor (`#283 <https://github.com/youtalk/autoware.universe/issues/283>`_)
-  * Add node_name_suffix to topic_state_monitor.launch (`#1157 <https://github.com/youtalk/autoware.universe/issues/1157>`_) (`#370 <https://github.com/youtalk/autoware.universe/issues/370>`_)
-  * fix launch file (`#411 <https://github.com/youtalk/autoware.universe/issues/411>`_)
-  * add transient local option to topic state monitor (`#410 <https://github.com/youtalk/autoware.universe/issues/410>`_)
+* feat: add topic_state_monitor package (`#15 <https://github.com/autowarefoundation/autoware.universe/issues/15>`_)
+  * Ros2 v0.8.0 topic state monitor (`#283 <https://github.com/autowarefoundation/autoware.universe/issues/283>`_)
+  * Add node_name_suffix to topic_state_monitor.launch (`#1157 <https://github.com/autowarefoundation/autoware.universe/issues/1157>`_) (`#370 <https://github.com/autowarefoundation/autoware.universe/issues/370>`_)
+  * fix launch file (`#411 <https://github.com/autowarefoundation/autoware.universe/issues/411>`_)
+  * add transient local option to topic state monitor (`#410 <https://github.com/autowarefoundation/autoware.universe/issues/410>`_)
   * add transient local option to topic state monitor
   * sort parameters
   * sort parameter
-  * [topic_state_monitor]: Add best effort option (`#430 <https://github.com/youtalk/autoware.universe/issues/430>`_)
+  * [topic_state_monitor]: Add best effort option (`#430 <https://github.com/autowarefoundation/autoware.universe/issues/430>`_)
   Co-authored-by: autoware <autoware@example.com>
-  * add use_sim-time option (`#454 <https://github.com/youtalk/autoware.universe/issues/454>`_)
-  * Fix for rolling (`#1226 <https://github.com/youtalk/autoware.universe/issues/1226>`_)
+  * add use_sim-time option (`#454 <https://github.com/autowarefoundation/autoware.universe/issues/454>`_)
+  * Fix for rolling (`#1226 <https://github.com/autowarefoundation/autoware.universe/issues/1226>`_)
   * Replace doc by description
   * Replace ns by push-ros-namespace
-  * change to composable node (`#1233 <https://github.com/youtalk/autoware.universe/issues/1233>`_)
-  * Unify Apache-2.0 license name (`#1242 <https://github.com/youtalk/autoware.universe/issues/1242>`_)
-  * Remove use_sim_time for set_parameter (`#1260 <https://github.com/youtalk/autoware.universe/issues/1260>`_)
-  * Fix lint errors (`#1378 <https://github.com/youtalk/autoware.universe/issues/1378>`_)
+  * change to composable node (`#1233 <https://github.com/autowarefoundation/autoware.universe/issues/1233>`_)
+  * Unify Apache-2.0 license name (`#1242 <https://github.com/autowarefoundation/autoware.universe/issues/1242>`_)
+  * Remove use_sim_time for set_parameter (`#1260 <https://github.com/autowarefoundation/autoware.universe/issues/1260>`_)
+  * Fix lint errors (`#1378 <https://github.com/autowarefoundation/autoware.universe/issues/1378>`_)
   * Fix lint errors
   * Fix variable names
-  * Use integrated generic subscription (`#1342 <https://github.com/youtalk/autoware.universe/issues/1342>`_)
-  * suppress warnings for declare parameters (`#1724 <https://github.com/youtalk/autoware.universe/issues/1724>`_)
+  * Use integrated generic subscription (`#1342 <https://github.com/autowarefoundation/autoware.universe/issues/1342>`_)
+  * suppress warnings for declare parameters (`#1724 <https://github.com/autowarefoundation/autoware.universe/issues/1724>`_)
   * fix for lanelet2_extension
   * fix for traffic light ssd fine detector
   * fix for topic_state_monitor
@@ -120,14 +120,14 @@ Changelog for package topic_state_monitor
   * add Werror
   * add Werror
   * fix style
-  * Fix -Wunused-parameter (`#1836 <https://github.com/youtalk/autoware.universe/issues/1836>`_)
+  * Fix -Wunused-parameter (`#1836 <https://github.com/autowarefoundation/autoware.universe/issues/1836>`_)
   * Fix -Wunused-parameter
   * Fix mistake
   * fix spell
   * Fix lint issues
   * Ignore flake8 warnings
   Co-authored-by: Hiroki OTA <hiroki.ota@tier4.jp>
-  * Change formatter to clang-format and black (`#2332 <https://github.com/youtalk/autoware.universe/issues/2332>`_)
+  * Change formatter to clang-format and black (`#2332 <https://github.com/autowarefoundation/autoware.universe/issues/2332>`_)
   * Revert "Temporarily comment out pre-commit hooks"
   This reverts commit 748e9cdb145ce12f8b520bcbd97f5ff899fc28a3.
   * Replace ament_lint_common with autoware_lint_common
@@ -139,9 +139,9 @@ Changelog for package topic_state_monitor
   * Fix include double quotes to angle brackets
   * Apply clang-format
   * Fix build errors
-  * Add COLCON_IGNORE (`#500 <https://github.com/youtalk/autoware.universe/issues/500>`_)
-  * remove COLCON_IGNORE in system_packages and map_tf_generator (`#532 <https://github.com/youtalk/autoware.universe/issues/532>`_)
-  * [topic_state_monitor]add readme (`#565 <https://github.com/youtalk/autoware.universe/issues/565>`_)
+  * Add COLCON_IGNORE (`#500 <https://github.com/autowarefoundation/autoware.universe/issues/500>`_)
+  * remove COLCON_IGNORE in system_packages and map_tf_generator (`#532 <https://github.com/autowarefoundation/autoware.universe/issues/532>`_)
+  * [topic_state_monitor]add readme (`#565 <https://github.com/autowarefoundation/autoware.universe/issues/565>`_)
   * add readme
   * Update system/topic_state_monitor/Readme.md
   Co-authored-by: Kazuki Miyahara <kmiya@outlook.com>

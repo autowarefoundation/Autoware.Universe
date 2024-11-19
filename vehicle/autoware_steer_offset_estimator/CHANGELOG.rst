@@ -5,15 +5,15 @@ Changelog for package autoware_steer_offset_estimator
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* refactor(pose2twist)!: prefix package and namespace with autoware (`#8347 <https://github.com/youtalk/autoware.universe/issues/8347>`_)
+* refactor(pose2twist)!: prefix package and namespace with autoware (`#8347 <https://github.com/autowarefoundation/autoware.universe/issues/8347>`_)
   * add autoware\_ prefix
   * use target_include_directories instead
   ---------
   Co-authored-by: SakodaShintaro <shintaro.sakoda@tier4.jp>
-* fix(steer_offset_estimator): fix link to json schema in README (`#7655 <https://github.com/youtalk/autoware.universe/issues/7655>`_)
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* fix(steer_offset_estimator): fix link to json schema in README (`#7655 <https://github.com/autowarefoundation/autoware.universe/issues/7655>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/youtalk/autoware.universe/issues/7353>`_)
+* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/autowarefoundation/autoware.universe/issues/7353>`_)
   * chore(autoware_vehicle_info_utils): rename header
   * chore(bpp-common): vehicle info
   * chore(path_optimizer): vehicle info
@@ -48,7 +48,7 @@ Changelog for package autoware_steer_offset_estimator
   * chore(sensing): vehicle info
   * fix(autoware_joy_controller): remove unused deps
   ---------
-* chore(steer_offset_estimator): add prefix autoware\_ to steer_offset_estimator (`#7342 <https://github.com/youtalk/autoware.universe/issues/7342>`_)
+* chore(steer_offset_estimator): add prefix autoware\_ to steer_offset_estimator (`#7342 <https://github.com/autowarefoundation/autoware.universe/issues/7342>`_)
   * add perfix
   * fix directory structrue
   * fix include guard

@@ -5,17 +5,17 @@ Changelog for package predicted_path_checker
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* refactor(component_interface_specs): prefix package and namespace with autoware (`#9094 <https://github.com/youtalk/autoware.universe/issues/9094>`_)
-* refactor(autoware_interpolation): prefix package and namespace with autoware (`#8088 <https://github.com/youtalk/autoware.universe/issues/8088>`_)
+* refactor(component_interface_specs): prefix package and namespace with autoware (`#9094 <https://github.com/autowarefoundation/autoware.universe/issues/9094>`_)
+* refactor(autoware_interpolation): prefix package and namespace with autoware (`#8088 <https://github.com/autowarefoundation/autoware.universe/issues/8088>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* fix(predicted_path_checker): fix constParameterReference  (`#8038 <https://github.com/youtalk/autoware.universe/issues/8038>`_)
+* fix(predicted_path_checker): fix constParameterReference  (`#8038 <https://github.com/autowarefoundation/autoware.universe/issues/8038>`_)
   fix:constParameterReference
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/youtalk/autoware.universe/issues/7539>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/autowarefoundation/autoware.universe/issues/7539>`_)
   refactor(motion_utils): add autoware prefix and include dir
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/youtalk/autoware.universe/issues/7353>`_)
+* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/autowarefoundation/autoware.universe/issues/7353>`_)
   * chore(autoware_vehicle_info_utils): rename header
   * chore(bpp-common): vehicle info
   * chore(path_optimizer): vehicle info
@@ -50,7 +50,7 @@ Changelog for package predicted_path_checker
   * chore(sensing): vehicle info
   * fix(autoware_joy_controller): remove unused deps
   ---------
-* feat!: replace autoware_auto_msgs with autoware_msgs for control modules (`#7240 <https://github.com/youtalk/autoware.universe/issues/7240>`_)
+* feat!: replace autoware_auto_msgs with autoware_msgs for control modules (`#7240 <https://github.com/autowarefoundation/autoware.universe/issues/7240>`_)
   Co-authored-by: Cynthia Liu <cynthia.liu@autocore.ai>
   Co-authored-by: NorahXiong <norah.xiong@autocore.ai>
   Co-authored-by: beginningfan <beginning.fan@autocore.ai>
@@ -58,10 +58,10 @@ Changelog for package predicted_path_checker
 
 0.26.0 (2024-04-03)
 -------------------
-* fix(predicted_path_checker): check if trajectory size (`#6730 <https://github.com/youtalk/autoware.universe/issues/6730>`_)
+* fix(predicted_path_checker): check if trajectory size (`#6730 <https://github.com/autowarefoundation/autoware.universe/issues/6730>`_)
   check trajectory size
   Co-authored-by: beyza <bnk@leodrive.ai>
-* refactor(motion_utils): change directory name of tmp_conversion (`#5908 <https://github.com/youtalk/autoware.universe/issues/5908>`_)
+* refactor(motion_utils): change directory name of tmp_conversion (`#5908 <https://github.com/autowarefoundation/autoware.universe/issues/5908>`_)
   * change .hpp name
   * change .cpp name
   * correct the #inlcude and #ifndef
@@ -72,8 +72,8 @@ Changelog for package predicted_path_checker
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(predicted_path_checker): check predicted trajectory to avoid collisions planning can not handle (`#2528 <https://github.com/youtalk/autoware.universe/issues/2528>`_)
-  * feat(predicted_path_checker): check predicted trajectory to avoid collisions planning can not handle (`#2528 <https://github.com/youtalk/autoware.universe/issues/2528>`_)
+* feat(predicted_path_checker): check predicted trajectory to avoid collisions planning can not handle (`#2528 <https://github.com/autowarefoundation/autoware.universe/issues/2528>`_)
+  * feat(predicted_path_checker): check predicted trajectory to avoid collisions planning can not handle (`#2528 <https://github.com/autowarefoundation/autoware.universe/issues/2528>`_)
   * Added pkg to control.launch.py
   ---------
 * Contributors: Berkay Karaman, Zhe Shen, beyzanurkaya

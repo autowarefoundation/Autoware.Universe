@@ -5,38 +5,38 @@ Changelog for package autoware_behavior_path_start_planner_module
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* feat(start_planner): update param to match launch (`#9158 <https://github.com/youtalk/autoware.universe/issues/9158>`_)
+* feat(start_planner): update param to match launch (`#9158 <https://github.com/autowarefoundation/autoware.universe/issues/9158>`_)
   update param to match launch
-* refactor(bpp_common, motion_utils): move path shifter util functions to autoware::motion_utils (`#9081 <https://github.com/youtalk/autoware.universe/issues/9081>`_)
+* refactor(bpp_common, motion_utils): move path shifter util functions to autoware::motion_utils (`#9081 <https://github.com/autowarefoundation/autoware.universe/issues/9081>`_)
   * remove unused function
   * mover path shifter utils function to autoware motion utils
   * minor change in license header
   * fix warning message
   * remove header file
   ---------
-* fix(behavior_path_planner_common): swap boolean for filterObjectsByVelocity (`#9036 <https://github.com/youtalk/autoware.universe/issues/9036>`_)
+* fix(behavior_path_planner_common): swap boolean for filterObjectsByVelocity (`#9036 <https://github.com/autowarefoundation/autoware.universe/issues/9036>`_)
   fix filter object by velocity
-* refactor(bpp): simplify ExtendedPredictedObject and add new member variables (`#8889 <https://github.com/youtalk/autoware.universe/issues/8889>`_)
+* refactor(bpp): simplify ExtendedPredictedObject and add new member variables (`#8889 <https://github.com/autowarefoundation/autoware.universe/issues/8889>`_)
   * simplify ExtendedPredictedObject and add new member variables
   * replace self polygon to initial polygon
   * comment
   * add comments to dist of ego
   ---------
-* refactor(start_planner,raw_vechile_cmd_converter): align parameter with autoware_launch's parameter (`#8913 <https://github.com/youtalk/autoware.universe/issues/8913>`_)
+* refactor(start_planner,raw_vechile_cmd_converter): align parameter with autoware_launch's parameter (`#8913 <https://github.com/autowarefoundation/autoware.universe/issues/8913>`_)
   * align autoware_raw_vehicle_cmd_converter's parameter
   * align start_planner's parameter
   ---------
-* feat(start_planner): add skip_rear_vehicle_check parameter (`#8863 <https://github.com/youtalk/autoware.universe/issues/8863>`_)
+* feat(start_planner): add skip_rear_vehicle_check parameter (`#8863 <https://github.com/autowarefoundation/autoware.universe/issues/8863>`_)
   Add the skip_rear_vehicle_check parameter to the start planner module configuration. This parameter allows disabling the rear vehicle check during collision detection. By default, the rear vehicle check is enabled.
-* fix(autoware_behavior_path_planner): align the parameters with launcher (`#8790 <https://github.com/youtalk/autoware.universe/issues/8790>`_)
+* fix(autoware_behavior_path_planner): align the parameters with launcher (`#8790 <https://github.com/autowarefoundation/autoware.universe/issues/8790>`_)
   parameters in behavior_path_planner aligned
-* fix(autoware_behavior_path_start_planner_module): fix unusedFunction (`#8709 <https://github.com/youtalk/autoware.universe/issues/8709>`_)
+* fix(autoware_behavior_path_start_planner_module): fix unusedFunction (`#8709 <https://github.com/autowarefoundation/autoware.universe/issues/8709>`_)
   * fix:checkCollisionBetweenPathFootprintsAndObjects
   * fix:add const
   * fix:unusedFunction
   ---------
-* fix(bpp): use common steering factor interface for same scene modules (`#8675 <https://github.com/youtalk/autoware.universe/issues/8675>`_)
-* refactor(start_planner, lane_departure_checker): remove redundant calculation in fuseLaneletPolygon (`#8682 <https://github.com/youtalk/autoware.universe/issues/8682>`_)
+* fix(bpp): use common steering factor interface for same scene modules (`#8675 <https://github.com/autowarefoundation/autoware.universe/issues/8675>`_)
+* refactor(start_planner, lane_departure_checker): remove redundant calculation in fuseLaneletPolygon (`#8682 <https://github.com/autowarefoundation/autoware.universe/issues/8682>`_)
   * remove redundant fused lanelet calculation
   * remove unnecessary change
   * add new function
@@ -46,13 +46,13 @@ Changelog for package autoware_behavior_path_start_planner_module
   * add comment for better understanding
   * fix cppcheck
   ---------
-* fix(autoware_behavior_path_start_planner_module): fix unusedFunction (`#8659 <https://github.com/youtalk/autoware.universe/issues/8659>`_)
+* fix(autoware_behavior_path_start_planner_module): fix unusedFunction (`#8659 <https://github.com/autowarefoundation/autoware.universe/issues/8659>`_)
   fix:unusedFunction
-* refactor(start_planner): remove redundant calculation in shift pull out  (`#8623 <https://github.com/youtalk/autoware.universe/issues/8623>`_)
+* refactor(start_planner): remove redundant calculation in shift pull out  (`#8623 <https://github.com/autowarefoundation/autoware.universe/issues/8623>`_)
   * fix redundant calculation
   * fix unneccesary modification for comment
   ---------
-* feat(freespace_planning_algorithms): implement option for backward search from goal to start (`#8091 <https://github.com/youtalk/autoware.universe/issues/8091>`_)
+* feat(freespace_planning_algorithms): implement option for backward search from goal to start (`#8091 <https://github.com/autowarefoundation/autoware.universe/issues/8091>`_)
   * refactor freespace planning algorithms
   * fix error
   * use vector instead of map for a-star node graph
@@ -118,14 +118,14 @@ Changelog for package autoware_behavior_path_start_planner_module
   * minor refactor
   ---------
   Co-authored-by: Maxime CLEMENT <78338830+maxime-clem@users.noreply.github.com>
-* feat(start_planner): add time_keeper (`#8254 <https://github.com/youtalk/autoware.universe/issues/8254>`_)
+* feat(start_planner): add time_keeper (`#8254 <https://github.com/autowarefoundation/autoware.universe/issues/8254>`_)
   * feat(start_planner): add time_keeper
   * fix
   * fix
   * fix shadow variables
   ---------
-* fix(start/goal_planner): fix freespace planning error handling (`#8246 <https://github.com/youtalk/autoware.universe/issues/8246>`_)
-* refactor(freespace_planning_algorithm): refactor and improve astar search (`#8068 <https://github.com/youtalk/autoware.universe/issues/8068>`_)
+* fix(start/goal_planner): fix freespace planning error handling (`#8246 <https://github.com/autowarefoundation/autoware.universe/issues/8246>`_)
+* refactor(freespace_planning_algorithm): refactor and improve astar search (`#8068 <https://github.com/autowarefoundation/autoware.universe/issues/8068>`_)
   * refactor freespace planning algorithms
   * fix error
   * use vector instead of map for a-star node graph
@@ -158,7 +158,7 @@ Changelog for package autoware_behavior_path_start_planner_module
   * check goal pose validity before setting collision free distance map
   * declare variables as const where necessary
   ---------
-* fix(autoware_behavior_path_start_planner_module): fix shadowVariable (`#7982 <https://github.com/youtalk/autoware.universe/issues/7982>`_)
+* fix(autoware_behavior_path_start_planner_module): fix shadowVariable (`#7982 <https://github.com/autowarefoundation/autoware.universe/issues/7982>`_)
   * fix:shadowVariable
   * fix:shadowVariable
   * refactor:clang format
@@ -172,7 +172,7 @@ Changelog for package autoware_behavior_path_start_planner_module
   * refactor: namespace
   * refactor:clang format
   ---------
-* feat(start_planner): add end_pose_curvature_threshold  (`#7901 <https://github.com/youtalk/autoware.universe/issues/7901>`_)
+* feat(start_planner): add end_pose_curvature_threshold  (`#7901 <https://github.com/autowarefoundation/autoware.universe/issues/7901>`_)
   * feat(start_planner): add end_pose_curvature_threshold
   * Update planning/behavior_path_planner/autoware_behavior_path_start_planner_module/README.md
   Co-authored-by: Kyoichi Sugahara <kyoichi.sugahara@tier4.jp>
@@ -180,8 +180,8 @@ Changelog for package autoware_behavior_path_start_planner_module
   * update readme
   ---------
   Co-authored-by: Kyoichi Sugahara <kyoichi.sugahara@tier4.jp>
-* feat(start_planner): check current_pose and estimated_stop_pose for isPreventingRearVehicleFromPassingThrough (`#8112 <https://github.com/youtalk/autoware.universe/issues/8112>`_)
-* fix(start/goal_planner): fix addition of duplicate segments in calcBeforeShiftedArcLength (`#7902 <https://github.com/youtalk/autoware.universe/issues/7902>`_)
+* feat(start_planner): check current_pose and estimated_stop_pose for isPreventingRearVehicleFromPassingThrough (`#8112 <https://github.com/autowarefoundation/autoware.universe/issues/8112>`_)
+* fix(start/goal_planner): fix addition of duplicate segments in calcBeforeShiftedArcLength (`#7902 <https://github.com/autowarefoundation/autoware.universe/issues/7902>`_)
   * fix(start/goal_planner): fix addition of duplicate segments in calcBeforeShiftedArcLength
   * Update trajectory.hpp
   Co-authored-by: Kyoichi Sugahara <kyoichi.sugahara@tier4.jp>
@@ -189,12 +189,12 @@ Changelog for package autoware_behavior_path_start_planner_module
   Co-authored-by: Kyoichi Sugahara <kyoichi.sugahara@tier4.jp>
   ---------
   Co-authored-by: Kyoichi Sugahara <kyoichi.sugahara@tier4.jp>
-* feat(safety_check): filter safety check targe objects by yaw deviation between pose and lane (`#7828 <https://github.com/youtalk/autoware.universe/issues/7828>`_)
+* feat(safety_check): filter safety check targe objects by yaw deviation between pose and lane (`#7828 <https://github.com/autowarefoundation/autoware.universe/issues/7828>`_)
   * fix(safety_check): filter by yaw deviation to check object belongs to lane
   * fix(static_obstacle_avoidance): check yaw only when the object is moving
   ---------
-* feat: add `autoware\_` prefix to `lanelet2_extension` (`#7640 <https://github.com/youtalk/autoware.universe/issues/7640>`_)
-* feat(start_planner): yaw threshold for rss check (`#7657 <https://github.com/youtalk/autoware.universe/issues/7657>`_)
+* feat: add `autoware\_` prefix to `lanelet2_extension` (`#7640 <https://github.com/autowarefoundation/autoware.universe/issues/7640>`_)
+* feat(start_planner): yaw threshold for rss check (`#7657 <https://github.com/autowarefoundation/autoware.universe/issues/7657>`_)
   * add param to customize yaw th
   * add param to other modules
   * docs
@@ -202,15 +202,15 @@ Changelog for package autoware_behavior_path_start_planner_module
   * fix LC README
   * use normalized yaw diff
   ---------
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* fix(autoware_behavior_path_start_planner_module): fix duplicateBreak warning (`#7583 <https://github.com/youtalk/autoware.universe/issues/7583>`_)
-* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/youtalk/autoware.universe/issues/7539>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* fix(autoware_behavior_path_start_planner_module): fix duplicateBreak warning (`#7583 <https://github.com/autowarefoundation/autoware.universe/issues/7583>`_)
+* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/autowarefoundation/autoware.universe/issues/7539>`_)
   refactor(motion_utils): add autoware prefix and include dir
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(route_handler)!: rename to include/autoware/{package_name}  (`#7530 <https://github.com/youtalk/autoware.universe/issues/7530>`_)
+* refactor(route_handler)!: rename to include/autoware/{package_name}  (`#7530 <https://github.com/autowarefoundation/autoware.universe/issues/7530>`_)
   refactor(route_handler)!: rename to include/autoware/{package_name}
-* refactor(freespace_planner)!: rename to include/autoware/{package_name}  (`#7525 <https://github.com/youtalk/autoware.universe/issues/7525>`_)
+* refactor(freespace_planner)!: rename to include/autoware/{package_name}  (`#7525 <https://github.com/autowarefoundation/autoware.universe/issues/7525>`_)
   refactor(freespace_planner)!: rename to include/autoware/{package_name}
   refactor(start_planner): make autoware include dir
   refactor(goal_planner): make autoware include dir
@@ -227,14 +227,14 @@ Changelog for package autoware_behavior_path_start_planner_module
   fix build
   autoware_freespace_planner
   freespace_planning_algorithms
-* refactor(control)!: refactor directory structures of the control checkers (`#7524 <https://github.com/youtalk/autoware.universe/issues/7524>`_)
+* refactor(control)!: refactor directory structures of the control checkers (`#7524 <https://github.com/autowarefoundation/autoware.universe/issues/7524>`_)
   * aeb
   * control_validator
   * lane_departure_checker
   * shift_decider
   * fix
   ---------
-* refactor(behaivor_path_planner)!: rename to include/autoware/{package_name} (`#7522 <https://github.com/youtalk/autoware.universe/issues/7522>`_)
+* refactor(behaivor_path_planner)!: rename to include/autoware/{package_name} (`#7522 <https://github.com/autowarefoundation/autoware.universe/issues/7522>`_)
   * refactor(behavior_path_planner)!: make autoware dir in include
   * refactor(start_planner): make autoware include dir
   * refactor(goal_planner): make autoware include dir

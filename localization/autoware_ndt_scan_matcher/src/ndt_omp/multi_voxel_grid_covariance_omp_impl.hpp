@@ -441,7 +441,7 @@ void pclomp::MultiVoxelGridCovariance<PointT>::computeLeafParams(
   // Normalize Eigen Val such that max no more than 100x min.
   eigensolver.compute(leaf.cov_);
   Eigen::Matrix3d eigen_val = eigensolver.eigenvalues().asDiagonal();
-  leaf.evecs_ = eigensolver.eigenvectors();
+  Eigen::Matrix3d eigen_vec = eigensolver.eigenvectors();
 
   if (eigen_val(0, 0) < 0 || eigen_val(1, 1) < 0 || eigen_val(2, 2) <= 0) {
     leaf.nr_points_ = -1;
@@ -457,9 +457,8 @@ void pclomp::MultiVoxelGridCovariance<PointT>::computeLeafParams(
       eigen_val(1, 1) = min_covar_eigvalue;
     }
 
-    leaf.cov_ = leaf.evecs_ * eigen_val * leaf.evecs_.inverse();
+    leaf.cov_ = eigen_vec * eigen_val * eigen_vec.inverse();
   }
-  leaf.evals_ = eigen_val.diagonal();
 
   leaf.icov_ = leaf.cov_.inverse();
   if (

@@ -5,13 +5,13 @@ Changelog for package autoware_gnss_poser
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* refactor(component_interface_specs): prefix package and namespace with autoware (`#9094 <https://github.com/youtalk/autoware.universe/issues/9094>`_)
-* chore(autoware_gnss_poser): make source codes follow the coding rules (`#8703 <https://github.com/youtalk/autoware.universe/issues/8703>`_)
+* refactor(component_interface_specs): prefix package and namespace with autoware (`#9094 <https://github.com/autowarefoundation/autoware.universe/issues/9094>`_)
+* chore(autoware_gnss_poser): make source codes follow the coding rules (`#8703 <https://github.com/autowarefoundation/autoware.universe/issues/8703>`_)
   * Follow the coding rules in autoware_gnss_poser
   * Edit _core to _node inside files
   * Fixed AUTOWARE__GNSS_POSER__GNSS_POSER_NODE_HPP\_ part
   ---------
-* chore(gnss_poser): add autoware prefix to gnss_poser (`#8323 <https://github.com/youtalk/autoware.universe/issues/8323>`_)
+* chore(gnss_poser): add autoware prefix to gnss_poser (`#8323 <https://github.com/autowarefoundation/autoware.universe/issues/8323>`_)
   * add "autoware" prefix to gnss_poser
   * Fixed typos and left overs
   * Fixed directory mistake

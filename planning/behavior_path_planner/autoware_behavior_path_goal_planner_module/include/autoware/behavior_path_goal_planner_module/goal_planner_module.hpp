@@ -142,8 +142,7 @@ public:
     const std::shared_ptr<GoalPlannerParameters> & parameters,
     const std::unordered_map<std::string, std::shared_ptr<RTCInterface>> & rtc_interface_ptr_map,
     std::unordered_map<std::string, std::shared_ptr<ObjectsOfInterestMarkerInterface>> &
-      objects_of_interest_marker_interface_ptr_map,
-    std::shared_ptr<SteeringFactorInterface> & steering_factor_interface_ptr);
+      objects_of_interest_marker_interface_ptr_map);
 
   ~GoalPlannerModule()
   {
@@ -234,10 +233,11 @@ private:
     ModuleStatus current_status;
     BehaviorModuleOutput previous_module_output;
     BehaviorModuleOutput last_previous_module_output;  //<! previous "previous_module_output"
+    GoalCandidates goal_candidates;  //<! only the positional information of goal_candidates
+
     // collision detector
     // need to be shared_ptr to be used in planner and goal searcher
     std::shared_ptr<OccupancyGridBasedCollisionDetector> occupancy_grid_map;
-    std::shared_ptr<GoalSearcherBase> goal_searcher;
 
     const BehaviorModuleOutput & getPreviousModuleOutput() const { return previous_module_output; }
     const ModuleStatus & getCurrentStatus() const { return current_status; }
@@ -246,8 +246,8 @@ private:
     void update(
       const GoalPlannerParameters & parameters, const PlannerData & planner_data,
       const ModuleStatus & current_status, const BehaviorModuleOutput & previous_module_output,
-      const std::shared_ptr<GoalSearcherBase> goal_searcher_,
-      const autoware::universe_utils::LinearRing2d & vehicle_footprint);
+      const autoware::universe_utils::LinearRing2d & vehicle_footprint,
+      const GoalCandidates & goal_candidates);
 
   private:
     void initializeOccupancyGridMap(
@@ -312,6 +312,7 @@ private:
 
   // goal searcher
   std::shared_ptr<GoalSearcherBase> goal_searcher_;
+  GoalCandidates goal_candidates_{};
 
   // NOTE: this is latest occupancy_grid_map pointer which the local planner_data on
   // onFreespaceParkingTimer thread storage may point to while calculation.
@@ -412,7 +413,7 @@ private:
   // freespace parking
   bool planFreespacePath(
     std::shared_ptr<const PlannerData> planner_data,
-    const std::shared_ptr<GoalSearcherBase> goal_searcher,
+    const std::shared_ptr<GoalSearcherBase> goal_searcher, const GoalCandidates & goal_candidates,
     const std::shared_ptr<OccupancyGridBasedCollisionDetector> occupancy_grid_map);
   bool canReturnToLaneParking(const PullOverContextData & context_data);
 

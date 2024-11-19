@@ -12,8 +12,8 @@
     grid_length_y: 70.0
     grid_position_x: 0.0
     grid_position_y: 0.0
-    maximum_lidar_height_thres: 0.3
-    minimum_lidar_height_thres: -2.2
+    maximum_lidar_height_thres: 2.5  # [m] when use_points is true, ignore points with a z value above this (in the vehicle_frame)
+    minimum_lidar_height_thres: 0.0  # [m] when use_points is true, ignore points with a z value bellow this (in the vehicle_frame)
     use_wayarea: true
     use_parkinglot: true
     use_objects: true

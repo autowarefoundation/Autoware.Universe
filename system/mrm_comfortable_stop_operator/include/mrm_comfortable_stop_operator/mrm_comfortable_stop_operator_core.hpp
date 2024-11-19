@@ -17,6 +17,7 @@
 
 // Core
 #include <memory>
+#include <vector>
 
 // Autoware
 #include <tier4_planning_msgs/msg/velocity_limit.hpp>
@@ -55,6 +56,9 @@ private:
     const tier4_system_msgs::srv::OperateMrm::Request::SharedPtr request,
     const tier4_system_msgs::srv::OperateMrm::Response::SharedPtr response);
 
+  rcl_interfaces::msg::SetParametersResult onParameter(
+    const std::vector<rclcpp::Parameter> & parameters);
+
   // Publisher
   rclcpp::Publisher<tier4_system_msgs::msg::MrmBehaviorStatus>::SharedPtr pub_status_;
   rclcpp::Publisher<tier4_planning_msgs::msg::VelocityLimit>::SharedPtr pub_velocity_limit_;
@@ -72,6 +76,9 @@ private:
 
   // States
   tier4_system_msgs::msg::MrmBehaviorStatus status_;
+
+  // Parameter callback
+  OnSetParametersCallbackHandle::SharedPtr set_param_res_;
 };
 
 }  // namespace mrm_comfortable_stop_operator

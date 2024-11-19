@@ -5,8 +5,8 @@ Changelog for package yabloc_monitor
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* chore(localization, map): remove maintainer (`#7940 <https://github.com/youtalk/autoware.universe/issues/7940>`_)
-* feat(yabloc_monitor): componentize yabloc_monitor node (`#7509 <https://github.com/youtalk/autoware.universe/issues/7509>`_)
+* chore(localization, map): remove maintainer (`#7940 <https://github.com/autowarefoundation/autoware.universe/issues/7940>`_)
+* feat(yabloc_monitor): componentize yabloc_monitor node (`#7509 <https://github.com/autowarefoundation/autoware.universe/issues/7509>`_)
   * change node to component
   * fix launch file & cmake
   ---------
@@ -14,7 +14,7 @@ Changelog for package yabloc_monitor
 
 0.26.0 (2024-04-03)
 -------------------
-* chore(yabloc): rework parameters (`#6170 <https://github.com/youtalk/autoware.universe/issues/6170>`_)
+* chore(yabloc): rework parameters (`#6170 <https://github.com/autowarefoundation/autoware.universe/issues/6170>`_)
   * introduce json schema for ground_server
   * introduce json schema for ll2_decomposer
   * style(pre-commit): autofix
@@ -37,13 +37,13 @@ Changelog for package yabloc_monitor
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* chore: add localization & mapping maintainers (`#6085 <https://github.com/youtalk/autoware.universe/issues/6085>`_)
+* chore: add localization & mapping maintainers (`#6085 <https://github.com/autowarefoundation/autoware.universe/issues/6085>`_)
   * Added lm maintainers
   * Add more
   * Fixed maintainer
   ---------
-* chore: add maintainer in localization and map packages (`#4501 <https://github.com/youtalk/autoware.universe/issues/4501>`_)
-* feat(yabloc_monitor): add yabloc_monitor (`#4395 <https://github.com/youtalk/autoware.universe/issues/4395>`_)
+* chore: add maintainer in localization and map packages (`#4501 <https://github.com/autowarefoundation/autoware.universe/issues/4501>`_)
+* feat(yabloc_monitor): add yabloc_monitor (`#4395 <https://github.com/autowarefoundation/autoware.universe/issues/4395>`_)
   * feat(yabloc_monitor): add yabloc_monitor
   * style(pre-commit): autofix
   * add readme

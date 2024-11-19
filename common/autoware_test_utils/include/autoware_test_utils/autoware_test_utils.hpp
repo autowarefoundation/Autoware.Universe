@@ -331,6 +331,19 @@ void updateNodeOptions(
 PathWithLaneId loadPathWithLaneIdInYaml();
 
 /**
+ * @brief create a straight lanelet from 2 segments defined by 4 points
+ * @param [in] left0 start of the left segment
+ * @param [in] left1 end of the left segment
+ * @param [in] right0 start of the right segment
+ * @param [in] right1 end of the right segment
+ * @return a ConstLanelet with the given left and right bounds and a unique lanelet id
+ *
+ */
+lanelet::ConstLanelet make_lanelet(
+  const lanelet::BasicPoint2d & left0, const lanelet::BasicPoint2d & left1,
+  const lanelet::BasicPoint2d & right0, const lanelet::BasicPoint2d & right1);
+
+/**
  * @brief Generates a trajectory with specified parameters.
  *
  * This function generates a trajectory of type T with a given number of points,

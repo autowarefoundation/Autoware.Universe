@@ -153,12 +153,14 @@ bool NoStoppingAreaModule::modifyPathVelocity(PathWithLaneId * path, StopReason 
 
     // Create legacy StopReason
     {
-      const auto insert_idx = stop_point->first + 1;
+      const double stop_path_point_distance = autoware::motion_utils::calcSignedArcLength(
+        path->points, 0, stop_pose.position, stop_point->first);
+
       if (
-        !first_stop_path_point_index_ ||
-        static_cast<int>(insert_idx) < first_stop_path_point_index_) {
-        debug_data_.first_stop_pose = stop_pose;
-        first_stop_path_point_index_ = static_cast<int>(insert_idx);
+        !first_stop_path_point_distance_ ||
+        stop_path_point_distance < first_stop_path_point_distance_.value()) {
+        debug_data_.first_stop_pose = stop_point->second;
+        first_stop_path_point_distance_ = stop_path_point_distance;
       }
     }
   } else if (state_machine_.getState() == StateMachine::State::GO) {

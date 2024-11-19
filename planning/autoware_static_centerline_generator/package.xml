@@ -19,6 +19,7 @@
   <depend>autoware_geography_utils</depend>
   <depend>autoware_interpolation</depend>
   <depend>autoware_lanelet2_extension</depend>
+  <depend>autoware_map_loader</depend>
   <depend>autoware_map_msgs</depend>
   <depend>autoware_map_projection_loader</depend>
   <depend>autoware_mission_planner</depend>
@@ -33,7 +34,6 @@
   <depend>autoware_vehicle_info_utils</depend>
   <depend>geometry_msgs</depend>
   <depend>global_parameter_loader</depend>
-  <depend>map_loader</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
   <depend>tier4_map_msgs</depend>

@@ -19,11 +19,13 @@
 
 #include <autoware/route_handler/route_handler.hpp>
 #include <autoware/universe_utils/ros/polling_subscriber.hpp>
+#include <autoware/universe_utils/system/stop_watch.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include "geometry_msgs/msg/accel_with_covariance_stamped.hpp"
 #include <autoware_planning_msgs/msg/lanelet_route.hpp>
 #include <nav_msgs/msg/odometry.hpp>
+#include <tier4_debug_msgs/msg/float64_stamped.hpp>
 #include <tier4_metric_msgs/msg/metric.hpp>
 #include <tier4_metric_msgs/msg/metric_array.hpp>
 
@@ -77,6 +79,7 @@ private:
     LaneletMapBin, autoware::universe_utils::polling_policy::Newest>
     vector_map_subscriber_{this, "~/input/vector_map", rclcpp::QoS{1}.transient_local()};
 
+  rclcpp::Publisher<tier4_debug_msgs::msg::Float64Stamped>::SharedPtr processing_time_pub_;
   rclcpp::Publisher<MetricArrayMsg>::SharedPtr metrics_pub_;
 
   // update Route Handler

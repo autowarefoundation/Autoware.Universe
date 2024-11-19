@@ -5,7 +5,7 @@ Changelog for package autoware_freespace_planner
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* test(freespace_planner): make unit tests for member functions (`#9060 <https://github.com/youtalk/autoware.universe/issues/9060>`_)
+* test(freespace_planner): make unit tests for member functions (`#9060 <https://github.com/autowarefoundation/autoware.universe/issues/9060>`_)
   * refactor freespace planner
   * implement unit tests for freespace planner util functions
   * add freespace planner utils namespace
@@ -14,7 +14,7 @@ Changelog for package autoware_freespace_planner
   * implement unit tests for FreespacePlanner member functions
   * add docstring for functions
   ---------
-* test(freespace_planner): add unit tests for util functions (`#9059 <https://github.com/youtalk/autoware.universe/issues/9059>`_)
+* test(freespace_planner): add unit tests for util functions (`#9059 <https://github.com/autowarefoundation/autoware.universe/issues/9059>`_)
   * refactor freespace planner
   * add function is_near_target to freespace planner utils
   * add freespace planner utils namespace
@@ -22,19 +22,19 @@ Changelog for package autoware_freespace_planner
   * implement unit tests for freespace planner util functions
   * add freespace planner utils namespace
   ---------
-* refactor(freespace_planner): move functions to utils (`#9058 <https://github.com/youtalk/autoware.universe/issues/9058>`_)
+* refactor(freespace_planner): move functions to utils (`#9058 <https://github.com/autowarefoundation/autoware.universe/issues/9058>`_)
   * refactor freespace planner
   * add function is_near_target to freespace planner utils
   * add freespace planner utils namespace
   * fix function call
   ---------
-* fix(other_planning_packages): align the parameters with launcher (`#8793 <https://github.com/youtalk/autoware.universe/issues/8793>`_)
+* fix(other_planning_packages): align the parameters with launcher (`#8793 <https://github.com/autowarefoundation/autoware.universe/issues/8793>`_)
   * parameters in planning/others aligned
   * update json
   ---------
-* fix(freespace_planner): fix free space planner spamming message (`#8614 <https://github.com/youtalk/autoware.universe/issues/8614>`_)
+* fix(freespace_planner): fix free space planner spamming message (`#8614 <https://github.com/autowarefoundation/autoware.universe/issues/8614>`_)
   check data availability only when scenario is active
-* feat(freespace_planning_algorithms): implement support for multiple goal candidates in A star planner (`#8092 <https://github.com/youtalk/autoware.universe/issues/8092>`_)
+* feat(freespace_planning_algorithms): implement support for multiple goal candidates in A star planner (`#8092 <https://github.com/autowarefoundation/autoware.universe/issues/8092>`_)
   * refactor freespace planning algorithms
   * fix error
   * use vector instead of map for a-star node graph
@@ -112,7 +112,7 @@ Changelog for package autoware_freespace_planner
   * minor refactor
   ---------
   Co-authored-by: Maxime CLEMENT <78338830+maxime-clem@users.noreply.github.com>
-* feat(freespace_planning_algorithms): implement option for backward search from goal to start (`#8091 <https://github.com/youtalk/autoware.universe/issues/8091>`_)
+* feat(freespace_planning_algorithms): implement option for backward search from goal to start (`#8091 <https://github.com/autowarefoundation/autoware.universe/issues/8091>`_)
   * refactor freespace planning algorithms
   * fix error
   * use vector instead of map for a-star node graph
@@ -178,7 +178,7 @@ Changelog for package autoware_freespace_planner
   * minor refactor
   ---------
   Co-authored-by: Maxime CLEMENT <78338830+maxime-clem@users.noreply.github.com>
-* feat(scenario_selector, freespace_planner): improve freespace planner edge case behavior (`#8348 <https://github.com/youtalk/autoware.universe/issues/8348>`_)
+* feat(scenario_selector, freespace_planner): improve freespace planner edge case behavior (`#8348 <https://github.com/autowarefoundation/autoware.universe/issues/8348>`_)
   * refactor free space planner subscribers
   * implement scenario switching for edge cases
   * fix scenario selector test
@@ -189,8 +189,8 @@ Changelog for package autoware_freespace_planner
   * improve near target logic
   * use timer based implementation for obstacle check
   ---------
-* refactor(autoware_freespace_planner): rework parameters (`#8296 <https://github.com/youtalk/autoware.universe/issues/8296>`_)
-* feat(freespace_planning_algorithms): use distance to nearest obstacle to improve path planning (`#8089 <https://github.com/youtalk/autoware.universe/issues/8089>`_)
+* refactor(autoware_freespace_planner): rework parameters (`#8296 <https://github.com/autowarefoundation/autoware.universe/issues/8296>`_)
+* feat(freespace_planning_algorithms): use distance to nearest obstacle to improve path planning (`#8089 <https://github.com/autowarefoundation/autoware.universe/issues/8089>`_)
   * refactor freespace planning algorithms
   * fix error
   * use vector instead of map for a-star node graph
@@ -244,8 +244,8 @@ Changelog for package autoware_freespace_planner
   * suppress spell check
   ---------
   Co-authored-by: Maxime CLEMENT <78338830+maxime-clem@users.noreply.github.com>
-* fix(freespace_planner): disable randomly failing tests (`#8337 <https://github.com/youtalk/autoware.universe/issues/8337>`_)
-* refactor(freespace_planning_algorithm): refactor and improve astar search (`#8068 <https://github.com/youtalk/autoware.universe/issues/8068>`_)
+* fix(freespace_planner): disable randomly failing tests (`#8337 <https://github.com/autowarefoundation/autoware.universe/issues/8337>`_)
+* refactor(freespace_planning_algorithm): refactor and improve astar search (`#8068 <https://github.com/autowarefoundation/autoware.universe/issues/8068>`_)
   * refactor freespace planning algorithms
   * fix error
   * use vector instead of map for a-star node graph
@@ -278,14 +278,14 @@ Changelog for package autoware_freespace_planner
   * check goal pose validity before setting collision free distance map
   * declare variables as const where necessary
   ---------
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/youtalk/autoware.universe/issues/7539>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/autowarefoundation/autoware.universe/issues/7539>`_)
   refactor(motion_utils): add autoware prefix and include dir
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(route_handler)!: rename to include/autoware/{package_name}  (`#7530 <https://github.com/youtalk/autoware.universe/issues/7530>`_)
+* refactor(route_handler)!: rename to include/autoware/{package_name}  (`#7530 <https://github.com/autowarefoundation/autoware.universe/issues/7530>`_)
   refactor(route_handler)!: rename to include/autoware/{package_name}
-* refactor(freespace_planner)!: rename to include/autoware/{package_name}  (`#7525 <https://github.com/youtalk/autoware.universe/issues/7525>`_)
+* refactor(freespace_planner)!: rename to include/autoware/{package_name}  (`#7525 <https://github.com/autowarefoundation/autoware.universe/issues/7525>`_)
   refactor(freespace_planner)!: rename to include/autoware/{package_name}
   refactor(start_planner): make autoware include dir
   refactor(goal_planner): make autoware include dir
@@ -302,7 +302,7 @@ Changelog for package autoware_freespace_planner
   fix build
   autoware_freespace_planner
   freespace_planning_algorithms
-* refactor(test_utils): move to common folder (`#7158 <https://github.com/youtalk/autoware.universe/issues/7158>`_)
+* refactor(test_utils): move to common folder (`#7158 <https://github.com/autowarefoundation/autoware.universe/issues/7158>`_)
   * Move autoware planning test manager to autoware namespace
   * fix package share directory for behavior path planner
   * renaming files and directory
@@ -314,7 +314,7 @@ Changelog for package autoware_freespace_planner
   * removed obstacle velocity limiter test artifact
   * remove namespace from planning validator, it has using keyword
   ---------
-* refactor(route_handler): route handler add autoware prefix (`#7341 <https://github.com/youtalk/autoware.universe/issues/7341>`_)
+* refactor(route_handler): route handler add autoware prefix (`#7341 <https://github.com/autowarefoundation/autoware.universe/issues/7341>`_)
   * rename route handler package
   * update packages dependencies
   * update include guards
@@ -323,7 +323,7 @@ Changelog for package autoware_freespace_planner
   * fix formats
   * keep header and source file name as before
   ---------
-* refactor(freespace_planner)!: add autoware prefix (`#7376 <https://github.com/youtalk/autoware.universe/issues/7376>`_)
+* refactor(freespace_planner)!: add autoware prefix (`#7376 <https://github.com/autowarefoundation/autoware.universe/issues/7376>`_)
   refactor(freespace_planner)!: add autoawre prefix
 * Contributors: Batuhan Beytekin, Kosuke Takeuchi, Maxime CLEMENT, Takayuki Murooka, Yutaka Kondo, Zhe Shen, Zulfaqar Azmi, mkquda
 

@@ -147,7 +147,8 @@ public:
 
   PathWithLaneId cropPointsOutsideOfLanes(
     const lanelet::LaneletMapPtr lanelet_map_ptr, const PathWithLaneId & path,
-    const size_t end_index);
+    const size_t end_index, std::vector<lanelet::Id> & fused_lanelets_id,
+    std::optional<autoware::universe_utils::Polygon2d> & fused_lanelets_polygon);
 
   static bool isOutOfLane(
     const lanelet::ConstLanelets & candidate_lanelets, const LinearRing2d & vehicle_footprint);

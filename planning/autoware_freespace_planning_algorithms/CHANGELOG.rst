@@ -5,7 +5,7 @@ Changelog for package autoware_freespace_planning_algorithms
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* feat(freespace_planning_algorithms): implement support for multiple goal candidates in A star planner (`#8092 <https://github.com/youtalk/autoware.universe/issues/8092>`_)
+* feat(freespace_planning_algorithms): implement support for multiple goal candidates in A star planner (`#8092 <https://github.com/autowarefoundation/autoware.universe/issues/8092>`_)
   * refactor freespace planning algorithms
   * fix error
   * use vector instead of map for a-star node graph
@@ -83,7 +83,7 @@ Changelog for package autoware_freespace_planning_algorithms
   * minor refactor
   ---------
   Co-authored-by: Maxime CLEMENT <78338830+maxime-clem@users.noreply.github.com>
-* feat(freespace_planning_algorithms): implement option for backward search from goal to start (`#8091 <https://github.com/youtalk/autoware.universe/issues/8091>`_)
+* feat(freespace_planning_algorithms): implement option for backward search from goal to start (`#8091 <https://github.com/autowarefoundation/autoware.universe/issues/8091>`_)
   * refactor freespace planning algorithms
   * fix error
   * use vector instead of map for a-star node graph
@@ -149,11 +149,11 @@ Changelog for package autoware_freespace_planning_algorithms
   * minor refactor
   ---------
   Co-authored-by: Maxime CLEMENT <78338830+maxime-clem@users.noreply.github.com>
-* fix(autoware_freespace_planning_algorithms): fix variableScope (`#8431 <https://github.com/youtalk/autoware.universe/issues/8431>`_)
+* fix(autoware_freespace_planning_algorithms): fix variableScope (`#8431 <https://github.com/autowarefoundation/autoware.universe/issues/8431>`_)
   fix: variableScope
   Co-authored-by: kobayu858 <129580202+kobayu858@users.noreply.github.com>
-* chore(autoware_freespace_planning_algorithms): add missing dependency (`#8494 <https://github.com/youtalk/autoware.universe/issues/8494>`_)
-* feat(freespace_planning_algorithms): use distance to nearest obstacle to improve path planning (`#8089 <https://github.com/youtalk/autoware.universe/issues/8089>`_)
+* chore(autoware_freespace_planning_algorithms): add missing dependency (`#8494 <https://github.com/autowarefoundation/autoware.universe/issues/8494>`_)
+* feat(freespace_planning_algorithms): use distance to nearest obstacle to improve path planning (`#8089 <https://github.com/autowarefoundation/autoware.universe/issues/8089>`_)
   * refactor freespace planning algorithms
   * fix error
   * use vector instead of map for a-star node graph
@@ -207,13 +207,13 @@ Changelog for package autoware_freespace_planning_algorithms
   * suppress spell check
   ---------
   Co-authored-by: Maxime CLEMENT <78338830+maxime-clem@users.noreply.github.com>
-* fix(autoware_freespace_planning_algorithms): fix unreadVariable (`#8360 <https://github.com/youtalk/autoware.universe/issues/8360>`_)
+* fix(autoware_freespace_planning_algorithms): fix unreadVariable (`#8360 <https://github.com/autowarefoundation/autoware.universe/issues/8360>`_)
   * fix:unreadVariable
   * fix:clang format
   ---------
-* fix(autoware_freespace_planning_algorithms): fix functionConst (`#8281 <https://github.com/youtalk/autoware.universe/issues/8281>`_)
+* fix(autoware_freespace_planning_algorithms): fix functionConst (`#8281 <https://github.com/autowarefoundation/autoware.universe/issues/8281>`_)
   fix:functionConst
-* refactor(freespace_planning_algorithm): refactor and improve astar search (`#8068 <https://github.com/youtalk/autoware.universe/issues/8068>`_)
+* refactor(freespace_planning_algorithm): refactor and improve astar search (`#8068 <https://github.com/autowarefoundation/autoware.universe/issues/8068>`_)
   * refactor freespace planning algorithms
   * fix error
   * use vector instead of map for a-star node graph
@@ -246,28 +246,28 @@ Changelog for package autoware_freespace_planning_algorithms
   * check goal pose validity before setting collision free distance map
   * declare variables as const where necessary
   ---------
-* fix(autoware_freespace_planning_algorithms): fix shadowVariable (`#7949 <https://github.com/youtalk/autoware.universe/issues/7949>`_)
+* fix(autoware_freespace_planning_algorithms): fix shadowVariable (`#7949 <https://github.com/autowarefoundation/autoware.universe/issues/7949>`_)
   * fix:shadowVariable
   * fix:shadowVariable
   * fix:shadowVariable
   ---------
-* chore(freespace_planning_algorithm): modify A* script for standalone running (`#7070 <https://github.com/youtalk/autoware.universe/issues/7070>`_)
+* chore(freespace_planning_algorithm): modify A* script for standalone running (`#7070 <https://github.com/autowarefoundation/autoware.universe/issues/7070>`_)
   * modify astar for standalone running
   move clearNoe() from setMap to makePlan().
   * small modification
   * run pre-commit
   ---------
   Co-authored-by: Takumi Ito <takumi.ito@tier4.jp>
-* feat(freespace_planning_algorithms): add is_back flag into the return of A* python wrapper (`#7831 <https://github.com/youtalk/autoware.universe/issues/7831>`_)
+* feat(freespace_planning_algorithms): add is_back flag into the return of A* python wrapper (`#7831 <https://github.com/autowarefoundation/autoware.universe/issues/7831>`_)
   add is_back flag to the return of getWaypoints
   Co-authored-by: Takumi Ito <takumi.ito@tier4.jp>
-* fix(autoware_freespace_planning_algorithms): fix syntaxError (`#7812 <https://github.com/youtalk/autoware.universe/issues/7812>`_)
-* fix(autoware_freespace_planning_algorithms): fix constStatement warning (`#7580 <https://github.com/youtalk/autoware.universe/issues/7580>`_)
-* fix(autoware_freespace_planning_algorithms): fix unusedScopedObject bug (`#7562 <https://github.com/youtalk/autoware.universe/issues/7562>`_)
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* fix(autoware_freespace_planning_algorithms): fix syntaxError (`#7812 <https://github.com/autowarefoundation/autoware.universe/issues/7812>`_)
+* fix(autoware_freespace_planning_algorithms): fix constStatement warning (`#7580 <https://github.com/autowarefoundation/autoware.universe/issues/7580>`_)
+* fix(autoware_freespace_planning_algorithms): fix unusedScopedObject bug (`#7562 <https://github.com/autowarefoundation/autoware.universe/issues/7562>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(freespace_planner)!: rename to include/autoware/{package_name}  (`#7525 <https://github.com/youtalk/autoware.universe/issues/7525>`_)
+* refactor(freespace_planner)!: rename to include/autoware/{package_name}  (`#7525 <https://github.com/autowarefoundation/autoware.universe/issues/7525>`_)
   refactor(freespace_planner)!: rename to include/autoware/{package_name}
   refactor(start_planner): make autoware include dir
   refactor(goal_planner): make autoware include dir
@@ -284,7 +284,7 @@ Changelog for package autoware_freespace_planning_algorithms
   fix build
   autoware_freespace_planner
   freespace_planning_algorithms
-* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/youtalk/autoware.universe/issues/7353>`_)
+* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/autowarefoundation/autoware.universe/issues/7353>`_)
   * chore(autoware_vehicle_info_utils): rename header
   * chore(bpp-common): vehicle info
   * chore(path_optimizer): vehicle info
@@ -319,7 +319,7 @@ Changelog for package autoware_freespace_planning_algorithms
   * chore(sensing): vehicle info
   * fix(autoware_joy_controller): remove unused deps
   ---------
-* refactor(freespace_planning_algorithms)!: add autoware prefix (`#7375 <https://github.com/youtalk/autoware.universe/issues/7375>`_)
+* refactor(freespace_planning_algorithms)!: add autoware prefix (`#7375 <https://github.com/autowarefoundation/autoware.universe/issues/7375>`_)
 * Contributors: Kosuke Takeuchi, M. Fatih Cırıt, Nagi70, Ryuta Kambe, Satoshi OTA, Takayuki Murooka, TakumIto, Yutaka Kondo, kobayu858, mkquda
 
 0.26.0 (2024-04-03)

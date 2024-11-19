@@ -56,7 +56,7 @@ public:
    * @brief Restore the trajectory poses
    * @return Vector of poses
    */
-  [[nodiscard]] std::vector<PointType> restore(const size_t & min_points = 100) const;
+  [[nodiscard]] std::vector<PointType> restore(const size_t & min_points = 4) const;
 
   /**
    * @brief Align the orientation with the direction

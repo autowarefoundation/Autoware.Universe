@@ -5,7 +5,7 @@ Changelog for package autoware_tensorrt_common
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* refactor(tensorrt_common)!: fix namespace, directory structure & move to perception namespace (`#9099 <https://github.com/youtalk/autoware.universe/issues/9099>`_)
+* refactor(tensorrt_common)!: fix namespace, directory structure & move to perception namespace (`#9099 <https://github.com/autowarefoundation/autoware.universe/issues/9099>`_)
   * refactor(tensorrt_common)!: fix namespace, directory structure & move to perception namespace
   * refactor(tensorrt_common): directory structure
   * style(pre-commit): autofix

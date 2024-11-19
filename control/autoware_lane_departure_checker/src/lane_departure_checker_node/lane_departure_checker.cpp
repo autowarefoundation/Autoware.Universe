@@ -340,13 +340,21 @@ bool LaneDepartureChecker::checkPathWillLeaveLane(
 }
 
 PathWithLaneId LaneDepartureChecker::cropPointsOutsideOfLanes(
-  const lanelet::LaneletMapPtr lanelet_map_ptr, const PathWithLaneId & path, const size_t end_index)
+  const lanelet::LaneletMapPtr lanelet_map_ptr, const PathWithLaneId & path, const size_t end_index,
+  std::vector<lanelet::Id> & fused_lanelets_id,
+  std::optional<autoware::universe_utils::Polygon2d> & fused_lanelets_polygon)
 {
   universe_utils::ScopedTimeTrack st(__func__, *time_keeper_);
 
   PathWithLaneId temp_path;
-  const auto fused_lanelets_polygon = getFusedLaneletPolygonForPath(lanelet_map_ptr, path);
-  if (path.points.empty() || !fused_lanelets_polygon) return temp_path;
+
+  // Update the lanelet polygon for the current path
+  if (
+    path.points.empty() || !updateFusedLaneletPolygonForPath(
+                             lanelet_map_ptr, path, fused_lanelets_id, fused_lanelets_polygon)) {
+    return temp_path;
+  }
+
   const auto vehicle_footprints =
     utils::createVehicleFootprints(path, *vehicle_info_ptr_, param_.footprint_extra_margin);
 

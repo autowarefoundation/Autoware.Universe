@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// clang-format off
-#ifndef AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__INTERPOLATOR_MIXIN_HPP_  // NOLINT
-#define AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__INTERPOLATOR_MIXIN_HPP_  // NOLINT
-// clang-format on
+#ifndef AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__INTERPOLATOR_MIXIN_HPP_
+#define AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__INTERPOLATOR_MIXIN_HPP_
 
 #include "autoware/trajectory/interpolator/interpolator.hpp"
 
@@ -40,7 +38,7 @@ namespace autoware::trajectory::interpolator::detail
 template <class InterpolatorType, class T>
 struct InterpolatorMixin : public InterpolatorInterface<T>
 {
-  std::shared_ptr<InterpolatorInterface<T>> clone() const override
+  [[nodiscard]] std::shared_ptr<InterpolatorInterface<T>> clone() const override
   {
     return std::make_shared<InterpolatorType>(static_cast<const InterpolatorType &>(*this));
   }
@@ -85,6 +83,4 @@ struct InterpolatorMixin : public InterpolatorInterface<T>
 
 }  // namespace autoware::trajectory::interpolator::detail
 
-// clang-format off
-#endif  // AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__INTERPOLATOR_MIXIN_HPP_  // NOLINT
-// clang-format on
+#endif  // AUTOWARE__TRAJECTORY__INTERPOLATOR__DETAIL__INTERPOLATOR_MIXIN_HPP_

@@ -8,7 +8,6 @@ find_package(magic_enum CONFIG REQUIRED)
 
 ament_auto_add_library(${PROJECT_NAME} SHARED
   src/turn_signal_decider.cpp
-  src/interface/steering_factor_interface.cpp
   src/interface/scene_module_visitor.cpp
   src/interface/scene_module_interface.cpp
   src/interface/scene_module_manager_interface.cpp
@@ -45,6 +44,7 @@ if(BUILD_TESTING)
   ament_add_ros_isolated_gmock(test_${PROJECT_NAME}_drivable_area_expansion
     test/test_drivable_area_expansion.cpp
     test/test_footprints.cpp
+    test/test_static_drivable_area.cpp
   )
 
   target_link_libraries(test_${PROJECT_NAME}_drivable_area_expansion

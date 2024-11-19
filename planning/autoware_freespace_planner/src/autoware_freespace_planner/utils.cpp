@@ -171,8 +171,8 @@ bool is_stopped(
 
 bool is_near_target(const Pose & target_pose, const Pose & current_pose, const double th_distance_m)
 {
-  const double long_disp_to_target =
-    autoware::universe_utils::calcLongitudinalDeviation(target_pose, current_pose.position);
-  return std::abs(long_disp_to_target) < th_distance_m;
+  const auto pose_dev = autoware::universe_utils::calcPoseDeviation(target_pose, current_pose);
+  return abs(pose_dev.yaw) < M_PI_2 && abs(pose_dev.longitudinal) < th_distance_m &&
+         abs(pose_dev.lateral) < th_distance_m;
 }
 }  // namespace autoware::freespace_planner::utils

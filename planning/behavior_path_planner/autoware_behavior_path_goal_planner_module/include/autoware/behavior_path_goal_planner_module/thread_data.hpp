@@ -106,7 +106,6 @@ public:
     const std::lock_guard<std::recursive_mutex> lock(mutex_);
     pull_over_path_ = nullptr;
     pull_over_path_candidates_.clear();
-    goal_candidates_.clear();
     last_path_update_time_ = std::nullopt;
     closest_start_pose_ = std::nullopt;
     prev_data_ = PathDecisionState{};
@@ -115,6 +114,7 @@ public:
   // main --> lane/freespace
   DEFINE_SETTER_GETTER_WITH_MUTEX(PredictedObjects, static_target_objects)
   DEFINE_SETTER_GETTER_WITH_MUTEX(PredictedObjects, dynamic_target_objects)
+
   // main --> lane
   DEFINE_SETTER_GETTER_WITH_MUTEX(PathDecisionState, prev_data)
 
@@ -125,8 +125,6 @@ public:
   // main <--> lane/freespace
   DEFINE_GETTER_WITH_MUTEX(std::shared_ptr<PullOverPath>, pull_over_path)
   DEFINE_GETTER_WITH_MUTEX(std::optional<rclcpp::Time>, last_path_update_time)
-
-  DEFINE_SETTER_GETTER_WITH_MUTEX(GoalCandidates, goal_candidates)
   DEFINE_SETTER_GETTER_WITH_MUTEX(
     utils::path_safety_checker::CollisionCheckDebugMap, collision_check)
 
@@ -144,7 +142,6 @@ private:
     last_path_update_time_ = clock_->now();
   }
 
-  void set_no_lock(const GoalCandidates & arg) { goal_candidates_ = arg; }
   void set_no_lock(const std::vector<PullOverPath> & arg) { pull_over_path_candidates_ = arg; }
   void set_no_lock(const std::shared_ptr<PullOverPath> & arg) { set_pull_over_path_no_lock(arg); }
   void set_no_lock(const PullOverPath & arg) { set_pull_over_path_no_lock(arg); }
@@ -155,7 +152,6 @@ private:
 
   std::shared_ptr<PullOverPath> pull_over_path_{nullptr};
   std::vector<PullOverPath> pull_over_path_candidates_;
-  GoalCandidates goal_candidates_{};
   std::optional<rclcpp::Time> last_path_update_time_;
   std::optional<Pose> closest_start_pose_{};
   utils::path_safety_checker::CollisionCheckDebugMap collision_check_{};

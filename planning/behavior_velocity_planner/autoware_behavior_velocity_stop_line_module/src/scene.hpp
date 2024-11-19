@@ -15,23 +15,20 @@
 #ifndef SCENE_HPP_
 #define SCENE_HPP_
 
+#include "autoware/behavior_velocity_planner_common/scene_module_interface.hpp"
+#include "autoware/behavior_velocity_planner_common/utilization/boost_geometry_helper.hpp"
+#include "autoware/behavior_velocity_planner_common/utilization/util.hpp"
+
 #include <memory>
-#include <string>
-#include <unordered_map>
 #include <utility>
 #include <vector>
 
 #define EIGEN_MPL2_ONLY
 #include <Eigen/Core>
 #include <Eigen/Geometry>
-#include <autoware/behavior_velocity_planner_common/scene_module_interface.hpp>
-#include <autoware/behavior_velocity_planner_common/utilization/boost_geometry_helper.hpp>
-#include <autoware/behavior_velocity_planner_common/utilization/util.hpp>
-#include <autoware_lanelet2_extension/utility/query.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <lanelet2_core/LaneletMap.h>
-#include <lanelet2_routing/RoutingGraph.h>
 
 namespace autoware::behavior_velocity_planner
 {
@@ -41,24 +38,6 @@ class StopLineModule : public SceneModuleInterface
 
 public:
   enum class State { APPROACH, STOPPED, START };
-
-  struct SegmentIndexWithPose
-  {
-    size_t index;
-    geometry_msgs::msg::Pose pose;
-  };
-
-  struct SegmentIndexWithPoint2d
-  {
-    size_t index;
-    Point2d point;
-  };
-
-  struct SegmentIndexWithOffset
-  {
-    size_t index;
-    double offset;
-  };
 
   struct DebugData
   {
@@ -77,10 +56,9 @@ public:
     bool show_stop_line_collision_check;
   };
 
-public:
   StopLineModule(
-    const int64_t module_id, const size_t lane_id, const lanelet::ConstLineString3d & stop_line,
-    const PlannerParam & planner_param, const rclcpp::Logger logger,
+    const int64_t module_id, const size_t lane_id, lanelet::ConstLineString3d stop_line,
+    const PlannerParam & planner_param, const rclcpp::Logger & logger,
     const rclcpp::Clock::SharedPtr clock);
 
   bool modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason) override;

@@ -276,8 +276,10 @@ trajectory_follower::LateralOutput MpcLateralController::run(
     m_is_ctrl_cmd_prev_initialized = true;
   }
 
+  trajectory_follower::LateralHorizon ctrl_cmd_horizon{};
   const bool is_mpc_solved = m_mpc->calculateMPC(
-    m_current_steering, m_current_kinematic_state, ctrl_cmd, predicted_traj, debug_values);
+    m_current_steering, m_current_kinematic_state, ctrl_cmd, predicted_traj, debug_values,
+    ctrl_cmd_horizon);
 
   m_is_mpc_solved = is_mpc_solved;  // for diagnostic updater
 
@@ -304,9 +306,13 @@ trajectory_follower::LateralOutput MpcLateralController::run(
   publishPredictedTraj(predicted_traj);
   publishDebugValues(debug_values);
 
-  const auto createLateralOutput = [this](const auto & cmd, const bool is_mpc_solved) {
+  const auto createLateralOutput =
+    [this](
+      const auto & cmd, const bool is_mpc_solved,
+      const auto & cmd_horizon) -> trajectory_follower::LateralOutput {
     trajectory_follower::LateralOutput output;
     output.control_cmd = createCtrlCmdMsg(cmd);
+    output.control_cmd_horizon = createCtrlCmdHorizonMsg(cmd_horizon);
     // To be sure current steering of the vehicle is desired steering angle, we need to check
     // following conditions.
     // 1. At the last loop, mpc should be solved because command should be optimized output.
@@ -325,7 +331,7 @@ trajectory_follower::LateralOutput MpcLateralController::run(
     }
     // Use previous command value as previous raw steer command
     m_mpc->m_raw_steer_cmd_prev = m_ctrl_cmd_prev.steering_tire_angle;
-    return createLateralOutput(m_ctrl_cmd_prev, false);
+    return createLateralOutput(m_ctrl_cmd_prev, false, ctrl_cmd_horizon);
   }
 
   if (!is_mpc_solved) {
@@ -334,7 +340,7 @@ trajectory_follower::LateralOutput MpcLateralController::run(
   }
 
   m_ctrl_cmd_prev = ctrl_cmd;
-  return createLateralOutput(ctrl_cmd, is_mpc_solved);
+  return createLateralOutput(ctrl_cmd, is_mpc_solved, ctrl_cmd_horizon);
 }
 
 bool MpcLateralController::isSteerConverged(const Lateral & cmd) const
@@ -462,6 +468,17 @@ Lateral MpcLateralController::createCtrlCmdMsg(const Lateral & ctrl_cmd)
   auto out = ctrl_cmd;
   out.stamp = clock_->now();
   m_steer_cmd_prev = out.steering_tire_angle;
+  return out;
+}
+
+LateralHorizon MpcLateralController::createCtrlCmdHorizonMsg(
+  const LateralHorizon & ctrl_cmd_horizon) const
+{
+  auto out = ctrl_cmd_horizon;
+  const auto now = clock_->now();
+  for (auto & cmd : out.controls) {
+    cmd.stamp = now;
+  }
   return out;
 }
 

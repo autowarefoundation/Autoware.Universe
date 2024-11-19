@@ -5,41 +5,41 @@ Changelog for package autoware_static_centerline_generator
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* refactor(osqp_interface): added autoware prefix to osqp_interface (`#8958 <https://github.com/youtalk/autoware.universe/issues/8958>`_)
-* refactor(autoware_interpolation): prefix package and namespace with autoware (`#8088 <https://github.com/youtalk/autoware.universe/issues/8088>`_)
+* refactor(osqp_interface): added autoware prefix to osqp_interface (`#8958 <https://github.com/autowarefoundation/autoware.universe/issues/8958>`_)
+* refactor(autoware_interpolation): prefix package and namespace with autoware (`#8088 <https://github.com/autowarefoundation/autoware.universe/issues/8088>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* fix(other_planning_packages): align the parameters with launcher (`#8793 <https://github.com/youtalk/autoware.universe/issues/8793>`_)
+* fix(other_planning_packages): align the parameters with launcher (`#8793 <https://github.com/autowarefoundation/autoware.universe/issues/8793>`_)
   * parameters in planning/others aligned
   * update json
   ---------
-* refactor(map_projection_loader)!: prefix package and namespace with autoware (`#8420 <https://github.com/youtalk/autoware.universe/issues/8420>`_)
+* refactor(map_projection_loader)!: prefix package and namespace with autoware (`#8420 <https://github.com/autowarefoundation/autoware.universe/issues/8420>`_)
   * add autoware\_ prefix
   * add autoware\_ prefix
   ---------
   Co-authored-by: SakodaShintaro <shintaro.sakoda@tier4.jp>
-* fix(autoware_static_centerline_generator): fix unusedFunction (`#8647 <https://github.com/youtalk/autoware.universe/issues/8647>`_)
+* fix(autoware_static_centerline_generator): fix unusedFunction (`#8647 <https://github.com/autowarefoundation/autoware.universe/issues/8647>`_)
   * fix:unusedFunction
   * fix:unusedFunction
   * fix:compile error
   ---------
-* refactor(geography_utils): prefix package and namespace with autoware (`#7790 <https://github.com/youtalk/autoware.universe/issues/7790>`_)
+* refactor(geography_utils): prefix package and namespace with autoware (`#7790 <https://github.com/autowarefoundation/autoware.universe/issues/7790>`_)
   * refactor(geography_utils): prefix package and namespace with autoware
   * move headers to include/autoware/
   ---------
-* fix(autoware_static_centerline_generator): fix funcArgNamesDifferent (`#8019 <https://github.com/youtalk/autoware.universe/issues/8019>`_)
+* fix(autoware_static_centerline_generator): fix funcArgNamesDifferent (`#8019 <https://github.com/autowarefoundation/autoware.universe/issues/8019>`_)
   fix:funcArgNamesDifferent
-* fix(static_centerline_generator): save_map only once (`#7770 <https://github.com/youtalk/autoware.universe/issues/7770>`_)
-* refactor(static_centerline_optimizer): clean up the code (`#7756 <https://github.com/youtalk/autoware.universe/issues/7756>`_)
-* feat: add `autoware\_` prefix to `lanelet2_extension` (`#7640 <https://github.com/youtalk/autoware.universe/issues/7640>`_)
-* feat(static_centerline_generator): organize AUTO/GUI/VMB modes (`#7432 <https://github.com/youtalk/autoware.universe/issues/7432>`_)
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/youtalk/autoware.universe/issues/7539>`_)
+* fix(static_centerline_generator): save_map only once (`#7770 <https://github.com/autowarefoundation/autoware.universe/issues/7770>`_)
+* refactor(static_centerline_optimizer): clean up the code (`#7756 <https://github.com/autowarefoundation/autoware.universe/issues/7756>`_)
+* feat: add `autoware\_` prefix to `lanelet2_extension` (`#7640 <https://github.com/autowarefoundation/autoware.universe/issues/7640>`_)
+* feat(static_centerline_generator): organize AUTO/GUI/VMB modes (`#7432 <https://github.com/autowarefoundation/autoware.universe/issues/7432>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/autowarefoundation/autoware.universe/issues/7539>`_)
   refactor(motion_utils): add autoware prefix and include dir
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(route_handler)!: rename to include/autoware/{package_name}  (`#7530 <https://github.com/youtalk/autoware.universe/issues/7530>`_)
+* refactor(route_handler)!: rename to include/autoware/{package_name}  (`#7530 <https://github.com/autowarefoundation/autoware.universe/issues/7530>`_)
   refactor(route_handler)!: rename to include/autoware/{package_name}
-* feat(map_loader): add waypoints flag (`#7480 <https://github.com/youtalk/autoware.universe/issues/7480>`_)
+* feat(map_loader): add waypoints flag (`#7480 <https://github.com/autowarefoundation/autoware.universe/issues/7480>`_)
   * feat(map_loader): handle centelrine and waypoints
   * update README
   * fix doc
@@ -47,12 +47,12 @@ Changelog for package autoware_static_centerline_generator
   * fix
   * fix
   ---------
-* feat(path_optimizer): rename to include/autoware/{package_name} (`#7529 <https://github.com/youtalk/autoware.universe/issues/7529>`_)
-* feat(path_smoother): rename to include/autoware/{package_name} (`#7527 <https://github.com/youtalk/autoware.universe/issues/7527>`_)
+* feat(path_optimizer): rename to include/autoware/{package_name} (`#7529 <https://github.com/autowarefoundation/autoware.universe/issues/7529>`_)
+* feat(path_smoother): rename to include/autoware/{package_name} (`#7527 <https://github.com/autowarefoundation/autoware.universe/issues/7527>`_)
   * feat(path_smoother): rename to include/autoware/{package_name}
   * fix
   ---------
-* refactor(behaivor_path_planner)!: rename to include/autoware/{package_name} (`#7522 <https://github.com/youtalk/autoware.universe/issues/7522>`_)
+* refactor(behaivor_path_planner)!: rename to include/autoware/{package_name} (`#7522 <https://github.com/autowarefoundation/autoware.universe/issues/7522>`_)
   * refactor(behavior_path_planner)!: make autoware dir in include
   * refactor(start_planner): make autoware include dir
   * refactor(goal_planner): make autoware include dir
@@ -68,17 +68,17 @@ Changelog for package autoware_static_centerline_generator
   * fix pre-commit
   * fix build
   ---------
-* feat(mission_planner): rename to include/autoware/{package_name} (`#7513 <https://github.com/youtalk/autoware.universe/issues/7513>`_)
+* feat(mission_planner): rename to include/autoware/{package_name} (`#7513 <https://github.com/autowarefoundation/autoware.universe/issues/7513>`_)
   * feat(mission_planner): rename to include/autoware/{package_name}
   * feat(mission_planner): rename to include/autoware/{package_name}
   * feat(mission_planner): rename to include/autoware/{package_name}
   ---------
-* fix(static_centerline_generator): fix dependency (`#7442 <https://github.com/youtalk/autoware.universe/issues/7442>`_)
+* fix(static_centerline_generator): fix dependency (`#7442 <https://github.com/autowarefoundation/autoware.universe/issues/7442>`_)
   * fix: deps
   * fix: package name
   * fix: package name
   ---------
-* refactor(route_handler): route handler add autoware prefix (`#7341 <https://github.com/youtalk/autoware.universe/issues/7341>`_)
+* refactor(route_handler): route handler add autoware prefix (`#7341 <https://github.com/autowarefoundation/autoware.universe/issues/7341>`_)
   * rename route handler package
   * update packages dependencies
   * update include guards
@@ -87,11 +87,11 @@ Changelog for package autoware_static_centerline_generator
   * fix formats
   * keep header and source file name as before
   ---------
-* refactor(mission_planner)!: add autoware prefix and namespace (`#7414 <https://github.com/youtalk/autoware.universe/issues/7414>`_)
+* refactor(mission_planner)!: add autoware prefix and namespace (`#7414 <https://github.com/autowarefoundation/autoware.universe/issues/7414>`_)
   * refactor(mission_planner)!: add autoware prefix and namespace
   * fix svg
   ---------
-* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/youtalk/autoware.universe/issues/7353>`_)
+* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/autowarefoundation/autoware.universe/issues/7353>`_)
   * chore(autoware_vehicle_info_utils): rename header
   * chore(bpp-common): vehicle info
   * chore(path_optimizer): vehicle info
@@ -126,7 +126,7 @@ Changelog for package autoware_static_centerline_generator
   * chore(sensing): vehicle info
   * fix(autoware_joy_controller): remove unused deps
   ---------
-* refactor(path_smoother)!: prefix package and namespace with autoware (`#7381 <https://github.com/youtalk/autoware.universe/issues/7381>`_)
+* refactor(path_smoother)!: prefix package and namespace with autoware (`#7381 <https://github.com/autowarefoundation/autoware.universe/issues/7381>`_)
   * git mv
   * fix
   * fix launch
@@ -136,11 +136,11 @@ Changelog for package autoware_static_centerline_generator
   * fix static_centerline_optimizer
   * fix
   ---------
-* refactor(path_optimizer, velocity_smoother)!: prefix package and namespace with autoware (`#7354 <https://github.com/youtalk/autoware.universe/issues/7354>`_)
+* refactor(path_optimizer, velocity_smoother)!: prefix package and namespace with autoware (`#7354 <https://github.com/autowarefoundation/autoware.universe/issues/7354>`_)
   * chore(autoware_velocity_smoother): update namespace
   * chore(autoware_path_optimizer): update namespace
   ---------
-* chore(bpp): add prefix `autoware\_` (`#7288 <https://github.com/youtalk/autoware.universe/issues/7288>`_)
+* chore(bpp): add prefix `autoware\_` (`#7288 <https://github.com/autowarefoundation/autoware.universe/issues/7288>`_)
   * chore(common): rename package
   * fix(static_obstacle_avoidance): fix header
   * fix(dynamic_obstacle_avoidance): fix header
@@ -155,11 +155,11 @@ Changelog for package autoware_static_centerline_generator
   * fix(static_centerline_generator): fix header
   * fix(.pages): update link
   ---------
-* feat!: replace autoware_auto_msgs with autoware_msgs for planning modules (`#7246 <https://github.com/youtalk/autoware.universe/issues/7246>`_)
+* feat!: replace autoware_auto_msgs with autoware_msgs for planning modules (`#7246 <https://github.com/autowarefoundation/autoware.universe/issues/7246>`_)
   Co-authored-by: Cynthia Liu <cynthia.liu@autocore.ai>
   Co-authored-by: NorahXiong <norah.xiong@autocore.ai>
   Co-authored-by: beginningfan <beginning.fan@autocore.ai>
-* chore(autoware_velocity_smoother, autoware_path_optimizer): rename packages (`#7202 <https://github.com/youtalk/autoware.universe/issues/7202>`_)
+* chore(autoware_velocity_smoother, autoware_path_optimizer): rename packages (`#7202 <https://github.com/autowarefoundation/autoware.universe/issues/7202>`_)
   * chore(autoware_path_optimizer): rename package and namespace
   * chore(autoware_static_centerline_generator): rename package and namespace
   * chore: update module name
@@ -170,13 +170,13 @@ Changelog for package autoware_static_centerline_generator
   * fix: test
   * fix: test
   ---------
-* refactor(behavior_velocity_planner)!: prefix package and namespace with autoware\_ (`#6693 <https://github.com/youtalk/autoware.universe/issues/6693>`_)
-* fix(autoware_static_centerline_generator): update the centerline correctly with map projector (`#6825 <https://github.com/youtalk/autoware.universe/issues/6825>`_)
+* refactor(behavior_velocity_planner)!: prefix package and namespace with autoware\_ (`#6693 <https://github.com/autowarefoundation/autoware.universe/issues/6693>`_)
+* fix(autoware_static_centerline_generator): update the centerline correctly with map projector (`#6825 <https://github.com/autowarefoundation/autoware.universe/issues/6825>`_)
   * fix(static_centerline_generator): fixed the bug of offset lat/lon values
   * fix typo
   ---------
-* fix(autoware_static_centerline_generator): remove prefix from topics and node names (`#7028 <https://github.com/youtalk/autoware.universe/issues/7028>`_)
-* build(static_centerline_generator): prefix package and namespace with autoware\_ (`#6817 <https://github.com/youtalk/autoware.universe/issues/6817>`_)
+* fix(autoware_static_centerline_generator): remove prefix from topics and node names (`#7028 <https://github.com/autowarefoundation/autoware.universe/issues/7028>`_)
+* build(static_centerline_generator): prefix package and namespace with autoware\_ (`#6817 <https://github.com/autowarefoundation/autoware.universe/issues/6817>`_)
   * build(static_centerline_generator): prefix package and namespace with autoware\_
   * style(pre-commit): autofix
   * build: fix CMake target

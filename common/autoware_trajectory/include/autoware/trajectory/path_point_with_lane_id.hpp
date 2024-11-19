@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// clang-format off
-#ifndef AUTOWARE__TRAJECTORY__PATH_POINT_WITH_LANE_ID_HPP_  // NOLINT
-#define AUTOWARE__TRAJECTORY__PATH_POINT_WITH_LANE_ID_HPP_  // NOLINT
-// clang-format on
+#ifndef AUTOWARE__TRAJECTORY__PATH_POINT_WITH_LANE_ID_HPP_
+#define AUTOWARE__TRAJECTORY__PATH_POINT_WITH_LANE_ID_HPP_
 
 #include "autoware/trajectory/path_point.hpp"
 #include "autoware/trajectory/point.hpp"
@@ -58,7 +56,7 @@ public:
    * @param min_points Minimum number of points
    * @return Vector of points
    */
-  [[nodiscard]] std::vector<PointType> restore(const size_t & min_points = 100) const;
+  [[nodiscard]] std::vector<PointType> restore(const size_t & min_points = 4) const;
 
   class Builder
   {
@@ -149,6 +147,4 @@ public:
 };
 }  // namespace autoware::trajectory
 
-// clang-format off
-#endif  // AUTOWARE__TRAJECTORY__PATH_POINT_WITH_LANE_ID_HPP_  // NOLINT
-// clang-format on
+#endif  // AUTOWARE__TRAJECTORY__PATH_POINT_WITH_LANE_ID_HPP_

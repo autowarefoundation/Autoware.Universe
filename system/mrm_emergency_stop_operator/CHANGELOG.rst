@@ -5,29 +5,29 @@ Changelog for package mrm_emergency_stop_operator
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* feat!: replace autoware_auto_msgs with autoware_msgs for system modules (`#7249 <https://github.com/youtalk/autoware.universe/issues/7249>`_)
+* feat!: replace autoware_auto_msgs with autoware_msgs for system modules (`#7249 <https://github.com/autowarefoundation/autoware.universe/issues/7249>`_)
   Co-authored-by: Cynthia Liu <cynthia.liu@autocore.ai>
   Co-authored-by: NorahXiong <norah.xiong@autocore.ai>
   Co-authored-by: beginningfan <beginning.fan@autocore.ai>
-* feat(mrm_emergency_stop_operator): add support for real time param reconfigure for mrm_emergency_stop (`#6994 <https://github.com/youtalk/autoware.universe/issues/6994>`_)
+* feat(mrm_emergency_stop_operator): add support for real time param reconfigure for mrm_emergency_stop (`#6994 <https://github.com/autowarefoundation/autoware.universe/issues/6994>`_)
   add support for real time param reconfigure for mrm_emergency_stop
 * Contributors: Kosuke Takeuchi, Ryohsuke Mitsudome, Takayuki Murooka, Yutaka Kondo, danielsanchezaran
 
 0.26.0 (2024-04-03)
 -------------------
-* chore(mrm_emergency_stop_operator): add a maintainer for mrm operator… (`#3489 <https://github.com/youtalk/autoware.universe/issues/3489>`_)
+* chore(mrm_emergency_stop_operator): add a maintainer for mrm operator… (`#3489 <https://github.com/autowarefoundation/autoware.universe/issues/3489>`_)
   chore(mrm_emergency_stop_operator): add a maintainer for mrm operator packages
-* docs(mrm_emergency_stop_operator): fix file name (`#4226 <https://github.com/youtalk/autoware.universe/issues/4226>`_)
-* style: fix typos (`#3617 <https://github.com/youtalk/autoware.universe/issues/3617>`_)
+* docs(mrm_emergency_stop_operator): fix file name (`#4226 <https://github.com/autowarefoundation/autoware.universe/issues/4226>`_)
+* style: fix typos (`#3617 <https://github.com/autowarefoundation/autoware.universe/issues/3617>`_)
   * style: fix typos in documents
   * style: fix typos in package.xml
   * style: fix typos in launch files
   * style: fix typos in comments
   ---------
-* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/youtalk/autoware.universe/issues/3616>`_)
+* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/autowarefoundation/autoware.universe/issues/3616>`_)
   * build: mark autoware_cmake as <buildtool_depend>
   with <build_depend>, autoware_cmake is automatically exported with ament_target_dependencies() (unecessary)
   * style(pre-commit): autofix
@@ -35,13 +35,13 @@ Changelog for package mrm_emergency_stop_operator
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-* fix(mrm_emergency_stop_operator): fix parameter loading in mrm operators (`#2378 <https://github.com/youtalk/autoware.universe/issues/2378>`_)
+* fix(mrm_emergency_stop_operator): fix parameter loading in mrm operators (`#2378 <https://github.com/autowarefoundation/autoware.universe/issues/2378>`_)
   * fix(mrm_emergency_stop_operator): fix parameter loading in mrm operators
   * ci(pre-commit): autofix
   * fix(mrm_emergency_stop_operator): remove os import
   * fix(mrm_emergency_stop_operator): remove unused packages
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(emergency_handler): add a selector for multiple MRM behaviors (`#2070 <https://github.com/youtalk/autoware.universe/issues/2070>`_)
+* feat(emergency_handler): add a selector for multiple MRM behaviors (`#2070 <https://github.com/autowarefoundation/autoware.universe/issues/2070>`_)
   * feat(emergency_handler): add mrm command and status publishers
   * feat(autoware_ad_api_msgs): define mrm operation srv and mrm status msg
   * feat(emergency_handler): add mrm clients and subscribers

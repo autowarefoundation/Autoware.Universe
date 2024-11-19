@@ -44,6 +44,9 @@ public:
     const std::vector<PointType> & points, const Pose & curr_pose, const Pose & stop_pose,
     const VelocityFactorStatus status, const std::string & detail = "");
 
+  void set(
+    const double & distance, const VelocityFactorStatus & status, const std::string & detail = "");
+
 private:
   VelocityFactorBehavior behavior_{VelocityFactor::UNKNOWN};
   VelocityFactor velocity_factor_{};

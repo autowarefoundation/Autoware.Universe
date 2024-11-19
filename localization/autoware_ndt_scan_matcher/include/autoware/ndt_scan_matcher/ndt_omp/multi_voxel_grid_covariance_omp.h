@@ -130,19 +130,12 @@ public:
       mean_(Eigen::Vector3d::Zero()),
       centroid_(),
       cov_(Eigen::Matrix3d::Identity()),
-      icov_(Eigen::Matrix3d::Zero()),
-      evecs_(Eigen::Matrix3d::Identity()),
-      evals_(Eigen::Vector3d::Zero())
+      icov_(Eigen::Matrix3d::Zero())
     {
     }
 
     Leaf(const Leaf & other)
-    : mean_(other.mean_),
-      centroid_(other.centroid_),
-      cov_(other.cov_),
-      icov_(other.icov_),
-      evecs_(other.evecs_),
-      evals_(other.evals_)
+    : mean_(other.mean_), centroid_(other.centroid_), cov_(other.cov_), icov_(other.icov_)
     {
       nr_points_ = other.nr_points_;
     }
@@ -151,9 +144,7 @@ public:
     : mean_(std::move(other.mean_)),
       centroid_(std::move(other.centroid_)),
       cov_(std::move(other.cov_)),
-      icov_(std::move(other.icov_)),
-      evecs_(std::move(other.evecs_)),
-      evals_(std::move(other.evals_))
+      icov_(std::move(other.icov_))
     {
       nr_points_ = other.nr_points_;
     }
@@ -164,8 +155,6 @@ public:
       centroid_ = other.centroid_;
       cov_ = other.cov_;
       icov_ = other.icov_;
-      evecs_ = other.evecs_;
-      evals_ = other.evals_;
       nr_points_ = other.nr_points_;
 
       return *this;
@@ -177,8 +166,6 @@ public:
       centroid_ = std::move(other.centroid_);
       cov_ = std::move(other.cov_);
       icov_ = std::move(other.icov_);
-      evecs_ = std::move(other.evecs_);
-      evals_ = std::move(other.evals_);
       nr_points_ = other.nr_points_;
 
       return *this;
@@ -204,22 +191,6 @@ public:
 
     Eigen::Vector3d & getMean() { return (mean_); }
 
-    /** \brief Get the eigen vectors of the voxel covariance.
-     * \note Order corresponds with \ref getEvals
-     * \return matrix whose columns contain eigen vectors
-     */
-    const Eigen::Matrix3d & getEvecs() const { return (evecs_); }
-
-    Eigen::Matrix3d & getEvecs() { return (evecs_); }
-
-    /** \brief Get the eigen values of the voxel covariance.
-     * \note Order corresponds with \ref getEvecs
-     * \return vector of eigen values
-     */
-    const Eigen::Vector3d & getEvals() const { return (evals_); }
-
-    Eigen::Vector3d & getEvals() { return (evals_); }
-
     /** \brief Get the number of points contained by this voxel.
      * \return number of points
      */
@@ -241,12 +212,6 @@ public:
 
     /** \brief Inverse of voxel covariance matrix */
     Eigen::Matrix3d icov_;
-
-    /** \brief Eigen vectors of voxel covariance matrix */
-    Eigen::Matrix3d evecs_;
-
-    /** \brief Eigen values of voxel covariance matrix */
-    Eigen::Vector3d evals_;
   };
 
   /** \brief Pointer to MultiVoxelGridCovariance leaf structure */

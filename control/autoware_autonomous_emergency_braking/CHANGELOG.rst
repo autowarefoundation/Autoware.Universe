@@ -5,12 +5,12 @@ Changelog for package autoware_autonomous_emergency_braking
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* fix(autonomous_emergency_braking): fix no backward imu path and wrong back distance usage (`#9141 <https://github.com/youtalk/autoware.universe/issues/9141>`_)
+* fix(autonomous_emergency_braking): fix no backward imu path and wrong back distance usage (`#9141 <https://github.com/autowarefoundation/autoware.universe/issues/9141>`_)
   * fix no backward imu path and wrong back distance usage
   * use the motion utils isDrivingForward function
   ---------
-* refactor(autoware_autonomous_emergency_braking): rename info_marker_publisher to virtual_wall_publisher (`#9078 <https://github.com/youtalk/autoware.universe/issues/9078>`_)
-* feat(autonomous_emergency_braking): set max imu path length (`#9004 <https://github.com/youtalk/autoware.universe/issues/9004>`_)
+* refactor(autoware_autonomous_emergency_braking): rename info_marker_publisher to virtual_wall_publisher (`#9078 <https://github.com/autowarefoundation/autoware.universe/issues/9078>`_)
+* feat(autonomous_emergency_braking): set max imu path length (`#9004 <https://github.com/autowarefoundation/autoware.universe/issues/9004>`_)
   * set a limit to the imu path length
   * fix test and add a new one
   * update readme
@@ -19,9 +19,9 @@ Changelog for package autoware_autonomous_emergency_braking
   * refactor to reduce repeated code
   * cleaning code
   ---------
-* feat(autonomous_emergency_braking): add sanity chackes (`#8998 <https://github.com/youtalk/autoware.universe/issues/8998>`_)
+* feat(autonomous_emergency_braking): add sanity chackes (`#8998 <https://github.com/autowarefoundation/autoware.universe/issues/8998>`_)
   add sanity chackes
-* feat(autonomous_emergency_braking): calculate the object's velocity in the search area (`#8591 <https://github.com/youtalk/autoware.universe/issues/8591>`_)
+* feat(autonomous_emergency_braking): calculate the object's velocity in the search area (`#8591 <https://github.com/autowarefoundation/autoware.universe/issues/8591>`_)
   * refactor PR
   * WIP
   * change using polygon to lateral offset
@@ -31,45 +31,45 @@ Changelog for package autoware_autonomous_emergency_braking
   * fix empty path points in short parking scenario
   * fix readme conflicts
   ---------
-* docs(autonomous_emergency_braking): add missing params to README (`#8950 <https://github.com/youtalk/autoware.universe/issues/8950>`_)
+* docs(autonomous_emergency_braking): add missing params to README (`#8950 <https://github.com/autowarefoundation/autoware.universe/issues/8950>`_)
   add missing params
-* feat(autonomous_emergency_braking): make hull markers 3d (`#8930 <https://github.com/youtalk/autoware.universe/issues/8930>`_)
+* feat(autonomous_emergency_braking): make hull markers 3d (`#8930 <https://github.com/autowarefoundation/autoware.universe/issues/8930>`_)
   make hull markers 3d
-* docs(autonomous_emergency_braking): make a clearer image for aeb when localization is faulty (`#8873 <https://github.com/youtalk/autoware.universe/issues/8873>`_)
+* docs(autonomous_emergency_braking): make a clearer image for aeb when localization is faulty (`#8873 <https://github.com/autowarefoundation/autoware.universe/issues/8873>`_)
   make a clearer image for aeb when localization is faulty
-* feat(autonomous_emergency_braking): add markers showing aeb convex hull polygons for debugging purposes (`#8865 <https://github.com/youtalk/autoware.universe/issues/8865>`_)
+* feat(autonomous_emergency_braking): add markers showing aeb convex hull polygons for debugging purposes (`#8865 <https://github.com/autowarefoundation/autoware.universe/issues/8865>`_)
   * add markers showing aeb convex hull polygons for debugging purposes
   * fix briefs
   * fix typo
   ---------
-* fix(control): align the parameters with launcher (`#8789 <https://github.com/youtalk/autoware.universe/issues/8789>`_)
+* fix(control): align the parameters with launcher (`#8789 <https://github.com/autowarefoundation/autoware.universe/issues/8789>`_)
   align the control parameters
-* feat(autonomous_emergency_braking): speed up aeb (`#8778 <https://github.com/youtalk/autoware.universe/issues/8778>`_)
+* feat(autonomous_emergency_braking): speed up aeb (`#8778 <https://github.com/autowarefoundation/autoware.universe/issues/8778>`_)
   * add missing rclcpp::Time(0)
   * refactor to reduce cropping to once per iteration
   * add LookUpTransform to utils
   * separate object creation and clustering
   * error handling of empty pointcloud
   ---------
-* feat(autonomous_emergency_braking): increase aeb speed by getting last transform (`#8734 <https://github.com/youtalk/autoware.universe/issues/8734>`_)
+* feat(autonomous_emergency_braking): increase aeb speed by getting last transform (`#8734 <https://github.com/autowarefoundation/autoware.universe/issues/8734>`_)
   set stamp to 0 to get the latest stamp instead of waiting for the stamp
-* feat(autonomous_emergency_braking): add timekeeper to AEB (`#8706 <https://github.com/youtalk/autoware.universe/issues/8706>`_)
+* feat(autonomous_emergency_braking): add timekeeper to AEB (`#8706 <https://github.com/autowarefoundation/autoware.universe/issues/8706>`_)
   * add timekeeper to AEB
   * add more info to output
   ---------
-* docs(autoware_autonomous_emergency_braking): improve AEB module's README (`#8612 <https://github.com/youtalk/autoware.universe/issues/8612>`_)
+* docs(autoware_autonomous_emergency_braking): improve AEB module's README (`#8612 <https://github.com/autowarefoundation/autoware.universe/issues/8612>`_)
   * docs: improve AEB module's README
   * update rss distance length
   ---------
-* fix(autonomous_emergency_braking): fix debug marker visual bug (`#8611 <https://github.com/youtalk/autoware.universe/issues/8611>`_)
+* fix(autonomous_emergency_braking): fix debug marker visual bug (`#8611 <https://github.com/autowarefoundation/autoware.universe/issues/8611>`_)
   fix bug by using the collision data keeper
-* feat(autonomous_emergency_braking): enable aeb with only one req path (`#8569 <https://github.com/youtalk/autoware.universe/issues/8569>`_)
+* feat(autonomous_emergency_braking): enable aeb with only one req path (`#8569 <https://github.com/autowarefoundation/autoware.universe/issues/8569>`_)
   * make it so AEB works with only one req path type (imu or MPC)
   * fix missing mpc path return
   * add check
   * modify no path msg
   ---------
-* feat(autonomous_emergency_braking): add some tests to aeb (`#8126 <https://github.com/youtalk/autoware.universe/issues/8126>`_)
+* feat(autonomous_emergency_braking): add some tests to aeb (`#8126 <https://github.com/autowarefoundation/autoware.universe/issues/8126>`_)
   * add initial tests
   * add more tests
   * more tests
@@ -84,11 +84,11 @@ Changelog for package autoware_autonomous_emergency_braking
   * add briefs
   * delete repeated test
   ---------
-* docs(autonomous_emergency_braking): update readme for new param (`#8330 <https://github.com/youtalk/autoware.universe/issues/8330>`_)
+* docs(autonomous_emergency_braking): update readme for new param (`#8330 <https://github.com/autowarefoundation/autoware.universe/issues/8330>`_)
   update readme for new param
-* feat(autonomous_emergency_braking): add info marker and override for state (`#8312 <https://github.com/youtalk/autoware.universe/issues/8312>`_)
+* feat(autonomous_emergency_braking): add info marker and override for state (`#8312 <https://github.com/autowarefoundation/autoware.universe/issues/8312>`_)
   add info marker and override for state
-* refactor(pointcloud_preprocessor): prefix package and namespace with autoware (`#7983 <https://github.com/youtalk/autoware.universe/issues/7983>`_)
+* refactor(pointcloud_preprocessor): prefix package and namespace with autoware (`#7983 <https://github.com/autowarefoundation/autoware.universe/issues/7983>`_)
   * refactor(pointcloud_preprocessor)!: prefix package and namespace with autoware
   * style(pre-commit): autofix
   * style(pointcloud_preprocessor): suppress line length check for macros
@@ -102,23 +102,23 @@ Changelog for package autoware_autonomous_emergency_braking
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Kenzo Lobos Tsunekawa <kenzo.lobos@tier4.jp>
-* feat(autonomous_emergency_braking): add virtual stop wall to aeb (`#7894 <https://github.com/youtalk/autoware.universe/issues/7894>`_)
+* feat(autonomous_emergency_braking): add virtual stop wall to aeb (`#7894 <https://github.com/autowarefoundation/autoware.universe/issues/7894>`_)
   * add virtual stop wall to aeb
   * add maintainer
   * add uppercase
   * use motion utils function instead of shiftPose
   ---------
-* chore(autonomous_emergency_braking): apply clangd suggestions to aeb (`#7703 <https://github.com/youtalk/autoware.universe/issues/7703>`_)
+* chore(autonomous_emergency_braking): apply clangd suggestions to aeb (`#7703 <https://github.com/autowarefoundation/autoware.universe/issues/7703>`_)
   * apply clangd suggestions
   * add maintainer
   ---------
-* feat(autonomous_emergency_braking): aeb add support negative speeds (`#7707 <https://github.com/youtalk/autoware.universe/issues/7707>`_)
+* feat(autonomous_emergency_braking): aeb add support negative speeds (`#7707 <https://github.com/autowarefoundation/autoware.universe/issues/7707>`_)
   * add support for negative speeds
   * remove negative speed check for predicted obj
   ---------
-* fix(autonomous_emergency_braking): aeb strange mpc polygon (`#7740 <https://github.com/youtalk/autoware.universe/issues/7740>`_)
+* fix(autonomous_emergency_braking): aeb strange mpc polygon (`#7740 <https://github.com/autowarefoundation/autoware.universe/issues/7740>`_)
   change resize to reserve
-* feat(autonomous_emergency_braking): add cluster min height for aeb (`#7605 <https://github.com/youtalk/autoware.universe/issues/7605>`_)
+* feat(autonomous_emergency_braking): add cluster min height for aeb (`#7605 <https://github.com/autowarefoundation/autoware.universe/issues/7605>`_)
   * add minimum cluster height threshold
   * add update param option
   * use param
@@ -126,8 +126,8 @@ Changelog for package autoware_autonomous_emergency_braking
   * update README
   * add cluster height description
   ---------
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* feat(autonomous_emergency_braking): add predicted object support for aeb (`#7548 <https://github.com/youtalk/autoware.universe/issues/7548>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* feat(autonomous_emergency_braking): add predicted object support for aeb (`#7548 <https://github.com/autowarefoundation/autoware.universe/issues/7548>`_)
   * add polling sub to predicted objects
   * WIP requires changing path frame to map
   * add parameters and reuse predicted obj speed
@@ -142,34 +142,34 @@ Changelog for package autoware_autonomous_emergency_braking
   * add utils.cpp
   * remove _ for non member variable
   ---------
-* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/youtalk/autoware.universe/issues/7539>`_)
+* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/autowarefoundation/autoware.universe/issues/7539>`_)
   refactor(motion_utils): add autoware prefix and include dir
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(control)!: refactor directory structures of the control checkers (`#7524 <https://github.com/youtalk/autoware.universe/issues/7524>`_)
+* refactor(control)!: refactor directory structures of the control checkers (`#7524 <https://github.com/autowarefoundation/autoware.universe/issues/7524>`_)
   * aeb
   * control_validator
   * lane_departure_checker
   * shift_decider
   * fix
   ---------
-* feat(autonomous_emergency_braking): aeb disable obj velocity calc w param (`#7493 <https://github.com/youtalk/autoware.universe/issues/7493>`_)
-  * feat(autonomous_emergenct_braking): update README and imgs of aeb (`#7482 <https://github.com/youtalk/autoware.universe/issues/7482>`_)
+* feat(autonomous_emergency_braking): aeb disable obj velocity calc w param (`#7493 <https://github.com/autowarefoundation/autoware.universe/issues/7493>`_)
+  * feat(autonomous_emergenct_braking): update README and imgs of aeb (`#7482 <https://github.com/autowarefoundation/autoware.universe/issues/7482>`_)
   update README
   * add param to toggle on or off object speed calc for aeb
   * pre-commit readme
   ---------
-* fix(planning): set single depth sensor data qos for pointlcoud polling subscribers (`#7490 <https://github.com/youtalk/autoware.universe/issues/7490>`_)
+* fix(planning): set single depth sensor data qos for pointlcoud polling subscribers (`#7490 <https://github.com/autowarefoundation/autoware.universe/issues/7490>`_)
   set single depth sensor data qos for pointlcoud polling subscribers
-* feat(autonomous_emergenct_braking): update README and imgs of aeb (`#7482 <https://github.com/youtalk/autoware.universe/issues/7482>`_)
+* feat(autonomous_emergenct_braking): update README and imgs of aeb (`#7482 <https://github.com/autowarefoundation/autoware.universe/issues/7482>`_)
   update README
-* feat(autonomous_emergency_braking): aeb for backwards driving (`#7279 <https://github.com/youtalk/autoware.universe/issues/7279>`_)
+* feat(autonomous_emergency_braking): aeb for backwards driving (`#7279 <https://github.com/autowarefoundation/autoware.universe/issues/7279>`_)
   * add support for backward path AEB
   * fix sign)
   * add abs and protect against nan
   * solve sign problem with relative speed
   ---------
-* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/youtalk/autoware.universe/issues/7353>`_)
+* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/autowarefoundation/autoware.universe/issues/7353>`_)
   * chore(autoware_vehicle_info_utils): rename header
   * chore(bpp-common): vehicle info
   * chore(path_optimizer): vehicle info
@@ -204,7 +204,7 @@ Changelog for package autoware_autonomous_emergency_braking
   * chore(sensing): vehicle info
   * fix(autoware_joy_controller): remove unused deps
   ---------
-* feat(autonomous_emergency_braking): prefix package and namespace with autoware\_ (`#7294 <https://github.com/youtalk/autoware.universe/issues/7294>`_)
+* feat(autonomous_emergency_braking): prefix package and namespace with autoware\_ (`#7294 <https://github.com/autowarefoundation/autoware.universe/issues/7294>`_)
   * change package name
   * add the prefix
   * change option

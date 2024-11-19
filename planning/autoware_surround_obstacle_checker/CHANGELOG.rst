@@ -5,26 +5,26 @@ Changelog for package autoware_surround_obstacle_checker
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* feat(costmap_generator, control_validator, scenario_selector, surround_obstacle_checker, vehicle_cmd_gate): add processing time pub. (`#9065 <https://github.com/youtalk/autoware.universe/issues/9065>`_)
+* feat(costmap_generator, control_validator, scenario_selector, surround_obstacle_checker, vehicle_cmd_gate): add processing time pub. (`#9065 <https://github.com/autowarefoundation/autoware.universe/issues/9065>`_)
   * feat(costmap_generator, control_validator, scenario_selector, surround_obstacle_checker, vehicle_cmd_gate): Add: processing_time_pub
   * fix: pre-commit
   * feat(costmap_generator): fix: No output when not Active.
   * fix: clang-format
   * Re: fix: clang-format
   ---------
-* test(surround_obstacle_checker): add unit tests (`#9039 <https://github.com/youtalk/autoware.universe/issues/9039>`_)
+* test(surround_obstacle_checker): add unit tests (`#9039 <https://github.com/autowarefoundation/autoware.universe/issues/9039>`_)
   * refactor: isStopRequired
   * test: write test for isStopRequired
   * refactor: use universe utils
   * fix: shutdown
   ---------
-* fix(other_planning_packages): align the parameters with launcher (`#8793 <https://github.com/youtalk/autoware.universe/issues/8793>`_)
+* fix(other_planning_packages): align the parameters with launcher (`#8793 <https://github.com/autowarefoundation/autoware.universe/issues/8793>`_)
   * parameters in planning/others aligned
   * update json
   ---------
-* fix(autoware_surround_obstacle_checker): fix unusedFunction (`#8774 <https://github.com/youtalk/autoware.universe/issues/8774>`_)
+* fix(autoware_surround_obstacle_checker): fix unusedFunction (`#8774 <https://github.com/autowarefoundation/autoware.universe/issues/8774>`_)
   fix:unusedFunction
-* feat(surround_obstacle_checker): integrate generate_parameter_library (`#8719 <https://github.com/youtalk/autoware.universe/issues/8719>`_)
+* feat(surround_obstacle_checker): integrate generate_parameter_library (`#8719 <https://github.com/autowarefoundation/autoware.universe/issues/8719>`_)
   * add generate_parameter_library to package
   * add parameter file generator script
   * use mapped parameters
@@ -35,25 +35,25 @@ Changelog for package autoware_surround_obstacle_checker
   * fix variable shadowing
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(autoware_surround_obstacle_checker): fix passedByValue (`#8206 <https://github.com/youtalk/autoware.universe/issues/8206>`_)
+* fix(autoware_surround_obstacle_checker): fix passedByValue (`#8206 <https://github.com/autowarefoundation/autoware.universe/issues/8206>`_)
   fix:passedByValue
-* fix(autoware_surround_obstacle_checker): fix constVariableReference (`#8059 <https://github.com/youtalk/autoware.universe/issues/8059>`_)
+* fix(autoware_surround_obstacle_checker): fix constVariableReference (`#8059 <https://github.com/autowarefoundation/autoware.universe/issues/8059>`_)
   fix:constVariableReference
-* fix(autoware_surround_obstacle_checker): fix funcArgNamesDifferent (`#8020 <https://github.com/youtalk/autoware.universe/issues/8020>`_)
+* fix(autoware_surround_obstacle_checker): fix funcArgNamesDifferent (`#8020 <https://github.com/autowarefoundation/autoware.universe/issues/8020>`_)
   fix:funcArgNamesDifferent
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/youtalk/autoware.universe/issues/7539>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* refactor(motion_utils)!: add autoware prefix and include dir (`#7539 <https://github.com/autowarefoundation/autoware.universe/issues/7539>`_)
   refactor(motion_utils): add autoware prefix and include dir
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* feat(surround_obstacle_checker): remove include directory (`#7507 <https://github.com/youtalk/autoware.universe/issues/7507>`_)
+* feat(surround_obstacle_checker): remove include directory (`#7507 <https://github.com/autowarefoundation/autoware.universe/issues/7507>`_)
   * feat(surround_obstacle_checker): remove include directory
   * fix
   * fix
   ---------
-* fix(planning): set single depth sensor data qos for pointlcoud polling subscribers (`#7490 <https://github.com/youtalk/autoware.universe/issues/7490>`_)
+* fix(planning): set single depth sensor data qos for pointlcoud polling subscribers (`#7490 <https://github.com/autowarefoundation/autoware.universe/issues/7490>`_)
   set single depth sensor data qos for pointlcoud polling subscribers
-* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/youtalk/autoware.universe/issues/7353>`_)
+* refactor(vehicle_info_utils)!: prefix package and namespace with autoware (`#7353 <https://github.com/autowarefoundation/autoware.universe/issues/7353>`_)
   * chore(autoware_vehicle_info_utils): rename header
   * chore(bpp-common): vehicle info
   * chore(path_optimizer): vehicle info
@@ -88,7 +88,7 @@ Changelog for package autoware_surround_obstacle_checker
   * chore(sensing): vehicle info
   * fix(autoware_joy_controller): remove unused deps
   ---------
-* refactor(surround_obstacle_checker)!: prefix package and namespace with autoware (`#7298 <https://github.com/youtalk/autoware.universe/issues/7298>`_)
+* refactor(surround_obstacle_checker)!: prefix package and namespace with autoware (`#7298 <https://github.com/autowarefoundation/autoware.universe/issues/7298>`_)
   * fix(autoware_surround_obstacle_checker): rename
   * fix(autoware_surround_obstacle_checker): rename header
   * fix(launch): update package name

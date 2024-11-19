@@ -16,9 +16,9 @@ include_directories(
 )
 
 ament_auto_add_library(costmap_generator_lib SHARED
-  nodes/autoware_costmap_generator/points_to_costmap.cpp
-  nodes/autoware_costmap_generator/objects_to_costmap.cpp
-  nodes/autoware_costmap_generator/object_map_utils.cpp
+  src/utils/points_to_costmap.cpp
+  src/utils/objects_to_costmap.cpp
+  src/utils/object_map_utils.cpp
 )
 target_link_libraries(costmap_generator_lib
   ${PCL_LIBRARIES}
@@ -37,7 +37,7 @@ generate_parameter_library(costmap_generator_node_parameters
 )
 
 ament_auto_add_library(costmap_generator_node SHARED
-  nodes/autoware_costmap_generator/costmap_generator_node.cpp
+  src/costmap_generator.cpp
 )
 target_link_libraries(costmap_generator_node
   ${PCL_LIBRARIES}
@@ -56,25 +56,29 @@ rclcpp_components_register_node(costmap_generator_node
 if(BUILD_TESTING)
   find_package(ament_cmake_ros REQUIRED)
 
-  ament_add_ros_isolated_gtest(test_points_to_costmap
+  ament_add_ros_isolated_gtest(test_costmap_generator_lib
     test/test_points_to_costmap.cpp
-  )
-
-  target_link_libraries(test_points_to_costmap
-    costmap_generator_lib
-  )
-
-  ament_add_ros_isolated_gtest(test_objects_to_costmap
     test/test_objects_to_costmap.cpp
+    test/test_object_map_utils.cpp
+  )
+  target_link_libraries(test_costmap_generator_lib
+    costmap_generator_lib
   )
 
-  target_link_libraries(test_objects_to_costmap
-    costmap_generator_lib
+  ament_add_ros_isolated_gtest(test_${PROJECT_NAME}
+    test/test_costmap_generator.cpp
+  )
+  target_link_libraries(test_${PROJECT_NAME}
+    costmap_generator_node
+    costmap_generator_node_parameters
+  )
+  target_compile_options(test_${PROJECT_NAME} PUBLIC
+    -Wno-error=deprecated-declarations
   )
 endif()
 
 ament_auto_package(
-        INSTALL_TO_SHARE
-        launch
-        config
+  INSTALL_TO_SHARE
+  launch
+  config
 )

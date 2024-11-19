@@ -20,6 +20,7 @@
 #include "autoware/mpc_lateral_controller/qp_solver/qp_solver_interface.hpp"
 #include "autoware/mpc_lateral_controller/steering_predictor.hpp"
 #include "autoware/mpc_lateral_controller/vehicle_model/vehicle_model_interface.hpp"
+#include "autoware/trajectory_follower_base/control_horizon.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 #include "autoware_control_msgs/msg/lateral.hpp"
@@ -38,6 +39,7 @@
 namespace autoware::motion::control::mpc_lateral_controller
 {
 
+using autoware::motion::control::trajectory_follower::LateralHorizon;
 using autoware_control_msgs::msg::Lateral;
 using autoware_planning_msgs::msg::Trajectory;
 using autoware_vehicle_msgs::msg::SteeringReport;
@@ -450,7 +452,8 @@ public:
    */
   bool calculateMPC(
     const SteeringReport & current_steer, const Odometry & current_kinematics, Lateral & ctrl_cmd,
-    Trajectory & predicted_trajectory, Float32MultiArrayStamped & diagnostic);
+    Trajectory & predicted_trajectory, Float32MultiArrayStamped & diagnostic,
+    LateralHorizon & ctrl_cmd_horizon);
 
   /**
    * @brief Set the reference trajectory to be followed.

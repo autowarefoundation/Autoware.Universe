@@ -5,31 +5,31 @@ Changelog for package yabloc_pose_initializer
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* feat(pose_initializer, ndt_scan_matcher): check initial pose result and publish diag (`#8275 <https://github.com/youtalk/autoware.universe/issues/8275>`_)
+* feat(pose_initializer, ndt_scan_matcher): check initial pose result and publish diag (`#8275 <https://github.com/autowarefoundation/autoware.universe/issues/8275>`_)
   * feat(localization): check initial pose result and publish diag
   * fix: refactor
   * feat: update README
   * fix: rename reliability to reliable
   * feat: always return true in yabloc module
   ---------
-* refactor(yabloc_pose_initializer): apply static analysis (`#7719 <https://github.com/youtalk/autoware.universe/issues/7719>`_)
+* refactor(yabloc_pose_initializer): apply static analysis (`#7719 <https://github.com/autowarefoundation/autoware.universe/issues/7719>`_)
   * refactor based on linter
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat: add `autoware\_` prefix to `lanelet2_extension` (`#7640 <https://github.com/youtalk/autoware.universe/issues/7640>`_)
-* fix: replace deprecated header in Jazzy (`#7603 <https://github.com/youtalk/autoware.universe/issues/7603>`_)
+* feat: add `autoware\_` prefix to `lanelet2_extension` (`#7640 <https://github.com/autowarefoundation/autoware.universe/issues/7640>`_)
+* fix: replace deprecated header in Jazzy (`#7603 <https://github.com/autowarefoundation/autoware.universe/issues/7603>`_)
   * Use cv_bridge.hpp if available
   * Fix image_geometry deprecated header
   * Add comment for __has_include
   ---------
   Co-authored-by: Kotaro Yoshimoto <pythagora.yoshimoto@gmail.com>
-* feat(yabloc_pose_initializer): componentize yabloc_pose_initializer node (`#7506 <https://github.com/youtalk/autoware.universe/issues/7506>`_)
+* feat(yabloc_pose_initializer): componentize yabloc_pose_initializer node (`#7506 <https://github.com/autowarefoundation/autoware.universe/issues/7506>`_)
   * change the node to component
   * remove useless node.cpp
   * add rclcpp_components as dependency
   ---------
-* fix(yabloc): suppress no viable conversion error (`#7299 <https://github.com/youtalk/autoware.universe/issues/7299>`_)
+* fix(yabloc): suppress no viable conversion error (`#7299 <https://github.com/autowarefoundation/autoware.universe/issues/7299>`_)
   * use tier4_autoware_utils instead of yabloc::Color
   * use static_cast to convert Color to RGBA
   * use tier4_autoware_utils instead of yabloc::Color
@@ -37,17 +37,17 @@ Changelog for package yabloc_pose_initializer
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat!: replace autoware_auto_msgs with autoware_msgs for localization modules (`#7243 <https://github.com/youtalk/autoware.universe/issues/7243>`_)
+* feat!: replace autoware_auto_msgs with autoware_msgs for localization modules (`#7243 <https://github.com/autowarefoundation/autoware.universe/issues/7243>`_)
   Co-authored-by: Cynthia Liu <cynthia.liu@autocore.ai>
   Co-authored-by: NorahXiong <norah.xiong@autocore.ai>
   Co-authored-by: beginningfan <beginning.fan@autocore.ai>
-* perf(yabloc): fix performance warning of iterateByValue (`#6929 <https://github.com/youtalk/autoware.universe/issues/6929>`_)
+* perf(yabloc): fix performance warning of iterateByValue (`#6929 <https://github.com/autowarefoundation/autoware.universe/issues/6929>`_)
 * Contributors: Kento Yabuuchi, Masaki Baba, Ryohsuke Mitsudome, RyuYamamoto, Ryuta Kambe, Yutaka Kondo, ぐるぐる
 
 0.26.0 (2024-04-03)
 -------------------
-* build(yabloc_pose_initializer): fix dependencies (`#6190 <https://github.com/youtalk/autoware.universe/issues/6190>`_)
-* chore(yabloc): rework parameters (`#6170 <https://github.com/youtalk/autoware.universe/issues/6170>`_)
+* build(yabloc_pose_initializer): fix dependencies (`#6190 <https://github.com/autowarefoundation/autoware.universe/issues/6190>`_)
+* chore(yabloc): rework parameters (`#6170 <https://github.com/autowarefoundation/autoware.universe/issues/6170>`_)
   * introduce json schema for ground_server
   * introduce json schema for ll2_decomposer
   * style(pre-commit): autofix
@@ -70,19 +70,19 @@ Changelog for package yabloc_pose_initializer
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* chore: add localization & mapping maintainers (`#6085 <https://github.com/youtalk/autoware.universe/issues/6085>`_)
+* chore: add localization & mapping maintainers (`#6085 <https://github.com/autowarefoundation/autoware.universe/issues/6085>`_)
   * Added lm maintainers
   * Add more
   * Fixed maintainer
   ---------
-* refactor(localization_packages): remove unused <depend> in packages.xml files (`#5171 <https://github.com/youtalk/autoware.universe/issues/5171>`_)
+* refactor(localization_packages): remove unused <depend> in packages.xml files (`#5171 <https://github.com/autowarefoundation/autoware.universe/issues/5171>`_)
   Co-authored-by: yamato-ando <Yamato ANDO>
-* build(yabloc_pose_initializer): remove downloading logic from CMake (`#4905 <https://github.com/youtalk/autoware.universe/issues/4905>`_)
+* build(yabloc_pose_initializer): remove downloading logic from CMake (`#4905 <https://github.com/autowarefoundation/autoware.universe/issues/4905>`_)
   * remove downloading logic from Cmake
   * build(yabloc_pose_initializer): remove downloading logic from CMake
   * build(yabloc_pose_initializer): update default model path in launch file
   ---------
-* refactor(yabloc_pose_initializer): use cpp DNN module instead of python (`#5025 <https://github.com/youtalk/autoware.universe/issues/5025>`_)
+* refactor(yabloc_pose_initializer): use cpp DNN module instead of python (`#5025 <https://github.com/autowarefoundation/autoware.universe/issues/5025>`_)
   * cannot include yabloc_pose_initializer.srv
   * launch semantic_segmentation_cpp
   * implement DNN inference as C++
@@ -98,16 +98,16 @@ Changelog for package yabloc_pose_initializer
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* chore: add maintainer in localization and map packages (`#4501 <https://github.com/youtalk/autoware.universe/issues/4501>`_)
-* refactor(yabloc): replace deprecated rosidl API (`#4423 <https://github.com/youtalk/autoware.universe/issues/4423>`_)
+* chore: add maintainer in localization and map packages (`#4501 <https://github.com/autowarefoundation/autoware.universe/issues/4501>`_)
+* refactor(yabloc): replace deprecated rosidl API (`#4423 <https://github.com/autowarefoundation/autoware.universe/issues/4423>`_)
   * refactor(yabloc_particle_filter): remove deprecated cmake ros2idl API
   * refactor(yabloc_pose_initializer): remove deprecated cmake ros2idl API
   ---------
-* feat(yabloc): change namespace (`#4389 <https://github.com/youtalk/autoware.universe/issues/4389>`_)
+* feat(yabloc): change namespace (`#4389 <https://github.com/autowarefoundation/autoware.universe/issues/4389>`_)
   * fix(yabloc): update namespace
   * fix
   ---------
-* feat(yabloc_pose_initializer): make yabloc independent of dnn model by default (`#4296 <https://github.com/youtalk/autoware.universe/issues/4296>`_)
+* feat(yabloc_pose_initializer): make yabloc independent of dnn model by default (`#4296 <https://github.com/autowarefoundation/autoware.universe/issues/4296>`_)
   * care no dnn model exists
   * modify segmentation_srv to inform inference failure
   * add documentation
@@ -116,7 +116,7 @@ Changelog for package yabloc_pose_initializer
   * make const variable be capital
   * use std::optional rather than reference arg
   ---------
-* fix(yabloc): fix typo (`#4281 <https://github.com/youtalk/autoware.universe/issues/4281>`_)
+* fix(yabloc): fix typo (`#4281 <https://github.com/autowarefoundation/autoware.universe/issues/4281>`_)
   * fix(yabloc): fix typo
   * fix Kinv and mean_pose
   * style(pre-commit): autofix
@@ -127,7 +127,7 @@ Changelog for package yabloc_pose_initializer
   * fix typo
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat: use `pose_source` and `twist_source` for selecting localization methods (`#4257 <https://github.com/youtalk/autoware.universe/issues/4257>`_)
+* feat: use `pose_source` and `twist_source` for selecting localization methods (`#4257 <https://github.com/autowarefoundation/autoware.universe/issues/4257>`_)
   * feat(tier4_localization_launch): add pose_twist_estimator.launch.py
   * update format
   * update launcher
@@ -152,9 +152,9 @@ Changelog for package yabloc_pose_initializer
   * Update yabloc document
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(yabloc_pose_initializer): disable downloading artifacts by default (`#4110 <https://github.com/youtalk/autoware.universe/issues/4110>`_)
+* fix(yabloc_pose_initializer): disable downloading artifacts by default (`#4110 <https://github.com/autowarefoundation/autoware.universe/issues/4110>`_)
   Co-authored-by: Esteve Fernandez <esteve.fernadnez@tier4.jp>
-* feat(yabloc): add camera and vector map localization (`#3946 <https://github.com/youtalk/autoware.universe/issues/3946>`_)
+* feat(yabloc): add camera and vector map localization (`#3946 <https://github.com/autowarefoundation/autoware.universe/issues/3946>`_)
   * adopt scane_case to undistort, segment_filter
   * adopt scane_case to ground_server, ll2_decomposer
   * adopt scane_case to twist_converter, twist_estimator
@@ -300,26 +300,26 @@ Changelog for package yabloc_pose_initializer
   * update README and some sample images
   * update README.md
   * fix override_camera_frame_id bahaviors
-  * fix some bugs (`#4 <https://github.com/youtalk/autoware.universe/issues/4>`_)
-  * fix: use initialpose from Rviz (`#6 <https://github.com/youtalk/autoware.universe/issues/6>`_)
+  * fix some bugs (`#4 <https://github.com/autowarefoundation/autoware.universe/issues/4>`_)
+  * fix: use initialpose from Rviz (`#6 <https://github.com/autowarefoundation/autoware.universe/issues/6>`_)
   * use initialpose from Rviz to init
   * add description about how-to-set-initialpose
   ---------
-  * misc: add license (`#7 <https://github.com/youtalk/autoware.universe/issues/7>`_)
+  * misc: add license (`#7 <https://github.com/autowarefoundation/autoware.universe/issues/7>`_)
   * WIP: add license description
   * add license description
   * add description about license in README
   ---------
-  * add quick start demo (`#8 <https://github.com/youtalk/autoware.universe/issues/8>`_)
-  * refactor(launch) remove & update obsolete launch files (`#9 <https://github.com/youtalk/autoware.universe/issues/9>`_)
+  * add quick start demo (`#8 <https://github.com/autowarefoundation/autoware.universe/issues/8>`_)
+  * refactor(launch) remove & update obsolete launch files (`#9 <https://github.com/autowarefoundation/autoware.universe/issues/9>`_)
   * delete obsolete launch files
   * update documents
   ---------
-  * docs(readme): update architecture image (`#10 <https://github.com/youtalk/autoware.universe/issues/10>`_)
+  * docs(readme): update architecture image (`#10 <https://github.com/autowarefoundation/autoware.universe/issues/10>`_)
   * replace architecture image in README
   * update some images
   ---------
-  * refactor(pcdless_launc/scripts): remove unnecessary scripts (`#11 <https://github.com/youtalk/autoware.universe/issues/11>`_)
+  * refactor(pcdless_launc/scripts): remove unnecessary scripts (`#11 <https://github.com/autowarefoundation/autoware.universe/issues/11>`_)
   * remove not useful scripts
   * rename scripts &  add descriptions
   * little change
@@ -330,18 +330,18 @@ Changelog for package yabloc_pose_initializer
   * fix(twist_estimator): use velocity_report by default
   * fix bug
   * debugged, now works
-  * update sample rosbag link (`#14 <https://github.com/youtalk/autoware.universe/issues/14>`_)
-  * feature(graph_segment, gnss_particle_corrector): make some features switchable (`#17 <https://github.com/youtalk/autoware.universe/issues/17>`_)
+  * update sample rosbag link (`#14 <https://github.com/autowarefoundation/autoware.universe/issues/14>`_)
+  * feature(graph_segment, gnss_particle_corrector): make some features switchable (`#17 <https://github.com/autowarefoundation/autoware.universe/issues/17>`_)
   * make additional-graph-segment-pickup disablable
   * enlarge gnss_mahalanobis_distance_threshold in expressway.launch
   ---------
-  * fix: minor fix for multi camera support (`#18 <https://github.com/youtalk/autoware.universe/issues/18>`_)
+  * fix: minor fix for multi camera support (`#18 <https://github.com/autowarefoundation/autoware.universe/issues/18>`_)
   * fix: minor fix for multi camera support
   * update
   * update
   * fix typo
   ---------
-  * refactor(retroactive_resampler): more readable (`#19 <https://github.com/youtalk/autoware.universe/issues/19>`_)
+  * refactor(retroactive_resampler): more readable (`#19 <https://github.com/autowarefoundation/autoware.universe/issues/19>`_)
   * make Hisotry class
   * use boost:adaptors::indexed()
   * add many comment in resampling()
@@ -349,42 +349,42 @@ Changelog for package yabloc_pose_initializer
   * rename interface of resampler
   * circular_buffer is unnecessary
   ---------
-  * refactor(mpf::predictor) resampling interval control in out of resampler (`#20 <https://github.com/youtalk/autoware.universe/issues/20>`_)
+  * refactor(mpf::predictor) resampling interval control in out of resampler (`#20 <https://github.com/autowarefoundation/autoware.universe/issues/20>`_)
   * resampling interval management should be done out of resample()
   * resampler class throw exeption rather than optional
   * split files for resampling_history
   * split files for experimental/suspention_adaptor
   ---------
-  * refactor(mpf::predictor): just refactoring (`#21 <https://github.com/youtalk/autoware.universe/issues/21>`_)
+  * refactor(mpf::predictor): just refactoring (`#21 <https://github.com/autowarefoundation/autoware.universe/issues/21>`_)
   * remove obsolete functions
   * remove test of predictor
   * remove remapping in pf.launch.xml for suspension_adapator
   * add some comments
   ---------
-  * fix(twist_estimator): remove stop filter for velocity (`#23 <https://github.com/youtalk/autoware.universe/issues/23>`_)
-  * feat(pcdless_launch): add multi camera launcher (`#22 <https://github.com/youtalk/autoware.universe/issues/22>`_)
+  * fix(twist_estimator): remove stop filter for velocity (`#23 <https://github.com/autowarefoundation/autoware.universe/issues/23>`_)
+  * feat(pcdless_launch): add multi camera launcher (`#22 <https://github.com/autowarefoundation/autoware.universe/issues/22>`_)
   * feat(pcdless_launch): add multi camera launcher
   * minor fix
   ---------
-  * refactor(CMakeListx.txt): just refactoring (`#24 <https://github.com/youtalk/autoware.universe/issues/24>`_)
+  * refactor(CMakeListx.txt): just refactoring (`#24 <https://github.com/autowarefoundation/autoware.universe/issues/24>`_)
   * refactor imgproc/*/CMakeListx.txt
   * refactor initializer/*/CMakeListx.txt & add gnss_pose_initializer pkg
   * rename some files in twist/ & refactor pf/*/cmakelist
   * refactor validation/*/CMakeListx.txt
   * fix some obsolete executor name
   ---------
-  * fix: rename lsd variables and files (`#26 <https://github.com/youtalk/autoware.universe/issues/26>`_)
-  * misc: reame pcdless to yabloc (`#25 <https://github.com/youtalk/autoware.universe/issues/25>`_)
+  * fix: rename lsd variables and files (`#26 <https://github.com/autowarefoundation/autoware.universe/issues/26>`_)
+  * misc: reame pcdless to yabloc (`#25 <https://github.com/autowarefoundation/autoware.universe/issues/25>`_)
   * rename pcdless to yabloc
   * fix conflict miss
   ---------
-  * visualize path (`#28 <https://github.com/youtalk/autoware.universe/issues/28>`_)
-  * docs: update readme about particle filter (`#30 <https://github.com/youtalk/autoware.universe/issues/30>`_)
+  * visualize path (`#28 <https://github.com/autowarefoundation/autoware.universe/issues/28>`_)
+  * docs: update readme about particle filter (`#30 <https://github.com/autowarefoundation/autoware.universe/issues/30>`_)
   * update mpf/README.md
   * update gnss_corrector/README.md
   * update camera_corrector/README.md
   ---------
-  * feat(segment_filter): publish images with lines and refactor (`#29 <https://github.com/youtalk/autoware.universe/issues/29>`_)
+  * feat(segment_filter): publish images with lines and refactor (`#29 <https://github.com/autowarefoundation/autoware.universe/issues/29>`_)
   * feat(segment_filter): publish images with lines
   * update validation
   * update imgproc (reverted)
@@ -398,47 +398,47 @@ Changelog for package yabloc_pose_initializer
   * no throw runtime_error (unintentionaly applying format)
   ---------
   Co-authored-by: Kento Yabuuchi <kento.yabuuchi.2@tier4.jp>
-  * catch runtime_error when particle id is invalid (`#31 <https://github.com/youtalk/autoware.universe/issues/31>`_)
-  * return if info is nullopt (`#32 <https://github.com/youtalk/autoware.universe/issues/32>`_)
-  * pose_buffer is sometimes empty (`#33 <https://github.com/youtalk/autoware.universe/issues/33>`_)
-  * use_yaw_of_initialpose (`#34 <https://github.com/youtalk/autoware.universe/issues/34>`_)
-  * feat(interface):  remove incompatible interface (`#35 <https://github.com/youtalk/autoware.universe/issues/35>`_)
+  * catch runtime_error when particle id is invalid (`#31 <https://github.com/autowarefoundation/autoware.universe/issues/31>`_)
+  * return if info is nullopt (`#32 <https://github.com/autowarefoundation/autoware.universe/issues/32>`_)
+  * pose_buffer is sometimes empty (`#33 <https://github.com/autowarefoundation/autoware.universe/issues/33>`_)
+  * use_yaw_of_initialpose (`#34 <https://github.com/autowarefoundation/autoware.universe/issues/34>`_)
+  * feat(interface):  remove incompatible interface (`#35 <https://github.com/autowarefoundation/autoware.universe/issues/35>`_)
   * not use ublox_msg when run as autoware
   * remove twist/kalman/twist & use twist_estimator/twist_with_covariance
   * update particle_array stamp even if the time stamp seems wrong
   ---------
-  * fix: suppress info/warn_stream (`#37 <https://github.com/youtalk/autoware.universe/issues/37>`_)
+  * fix: suppress info/warn_stream (`#37 <https://github.com/autowarefoundation/autoware.universe/issues/37>`_)
   * does not stream undistortion time
   * improve warn stream when skip particle weighting
   * surpress frequency of  warnings during synchronized particle searching
   * fix camera_pose_initializer
   ---------
-  * /switch must not be nice name (`#39 <https://github.com/youtalk/autoware.universe/issues/39>`_)
-  * misc(readme): update readme (`#41 <https://github.com/youtalk/autoware.universe/issues/41>`_)
+  * /switch must not be nice name (`#39 <https://github.com/autowarefoundation/autoware.universe/issues/39>`_)
+  * misc(readme): update readme (`#41 <https://github.com/autowarefoundation/autoware.universe/issues/41>`_)
   * add youtube link and change thumbnail
   * improve input/output topics
   * quick start demo screen image
   * add abstruct architecture and detail architecture
   ---------
-  * docs(rosdep): fix package.xml to ensure build success (`#44 <https://github.com/youtalk/autoware.universe/issues/44>`_)
+  * docs(rosdep): fix package.xml to ensure build success (`#44 <https://github.com/autowarefoundation/autoware.universe/issues/44>`_)
   * fix package.xml to success build
   * add 'rosdep install' in how-to-build
   ---------
-  * add geographiclib in package.xml (`#46 <https://github.com/youtalk/autoware.universe/issues/46>`_)
-  * fix path search error in build stage (`#45 <https://github.com/youtalk/autoware.universe/issues/45>`_)
+  * add geographiclib in package.xml (`#46 <https://github.com/autowarefoundation/autoware.universe/issues/46>`_)
+  * fix path search error in build stage (`#45 <https://github.com/autowarefoundation/autoware.universe/issues/45>`_)
   * fix path search error in build stage
   * fix https://github.com/tier4/YabLoc/pull/45#issuecomment-1546808419
-  * Feature/remove submodule (`#47 <https://github.com/youtalk/autoware.universe/issues/47>`_)
+  * Feature/remove submodule (`#47 <https://github.com/autowarefoundation/autoware.universe/issues/47>`_)
   * remove submodules
   * remove doppler converter
   ---------
-  * feature: change node namespace to /localization/yabloc/** from /localization/** (`#48 <https://github.com/youtalk/autoware.universe/issues/48>`_)
+  * feature: change node namespace to /localization/yabloc/** from /localization/** (`#48 <https://github.com/autowarefoundation/autoware.universe/issues/48>`_)
   * change node namespace
   * update namespace for autoware-mode
   * update namespace in multi_camera.launch
   ---------
-  * removed unstable packages (`#49 <https://github.com/youtalk/autoware.universe/issues/49>`_)
-  * feature: add *.param.yaml to manage parameters (`#50 <https://github.com/youtalk/autoware.universe/issues/50>`_)
+  * removed unstable packages (`#49 <https://github.com/autowarefoundation/autoware.universe/issues/49>`_)
+  * feature: add *.param.yaml to manage parameters (`#50 <https://github.com/autowarefoundation/autoware.universe/issues/50>`_)
   * make *.param.yaml in imgproc packages
   * make *.param.yaml in initializer packages
   * make *.param.yaml in map packages
@@ -449,8 +449,8 @@ Changelog for package yabloc_pose_initializer
   * remove default parameters
   * fix some remaining invalida parameters
   ---------
-  * does not estimate twist (`#51 <https://github.com/youtalk/autoware.universe/issues/51>`_)
-  * feat(particle_initializer): merge particle_initializer into mpf (`#52 <https://github.com/youtalk/autoware.universe/issues/52>`_)
+  * does not estimate twist (`#51 <https://github.com/autowarefoundation/autoware.universe/issues/51>`_)
+  * feat(particle_initializer): merge particle_initializer into mpf (`#52 <https://github.com/autowarefoundation/autoware.universe/issues/52>`_)
   * feat(particle_initializer): merge particle_initializer to modulalized_particle_filter
   * remove particle_initializer
   * remove debug message
@@ -459,8 +459,8 @@ Changelog for package yabloc_pose_initializer
   * rename publishing topic
   ---------
   Co-authored-by: Kento Yabuuchi <kento.yabuuchi.2@tier4.jp>
-  * fix: remove ll2_transition_area (`#54 <https://github.com/youtalk/autoware.universe/issues/54>`_)
-  * feature(initializer): combine some initializer packages (`#56 <https://github.com/youtalk/autoware.universe/issues/56>`_)
+  * fix: remove ll2_transition_area (`#54 <https://github.com/autowarefoundation/autoware.universe/issues/54>`_)
+  * feature(initializer): combine some initializer packages (`#56 <https://github.com/autowarefoundation/autoware.universe/issues/56>`_)
   * combine some package about initializer
   * yabloc_pose_initializer works well
   * remove old initializer packages
@@ -468,15 +468,15 @@ Changelog for package yabloc_pose_initializer
   * fix bug
   * revert initializer mode
   ---------
-  * feature(imgproc): reudce imgproc packages (`#57 <https://github.com/youtalk/autoware.universe/issues/57>`_)
+  * feature(imgproc): reudce imgproc packages (`#57 <https://github.com/autowarefoundation/autoware.universe/issues/57>`_)
   * combine some imgproc packages
   * combine overlay monitors into imgproc
   ---------
-  * feature(validation): remove validation packages (`#58 <https://github.com/youtalk/autoware.universe/issues/58>`_)
+  * feature(validation): remove validation packages (`#58 <https://github.com/autowarefoundation/autoware.universe/issues/58>`_)
   * remove validation packages
   * remove path visualization
   ---------
-  * feature(pf): combine some packages related to particle filter (`#59 <https://github.com/youtalk/autoware.universe/issues/59>`_)
+  * feature(pf): combine some packages related to particle filter (`#59 <https://github.com/autowarefoundation/autoware.universe/issues/59>`_)
   * create yabloc_particle_filter
   * combine gnss_particle_corrector
   * combine ll2_cost_map
@@ -485,7 +485,7 @@ Changelog for package yabloc_pose_initializer
   * split README & remove obsolete scripts
   * fix config path of multi_camera mode
   ---------
-  * feature: combine map and twist packages (`#60 <https://github.com/youtalk/autoware.universe/issues/60>`_)
+  * feature: combine map and twist packages (`#60 <https://github.com/autowarefoundation/autoware.universe/issues/60>`_)
   * removed some twist nodes & rename remains to yabloc_twist
   * fix launch files for yabloc_twist
   * move map packages to yabloc_common

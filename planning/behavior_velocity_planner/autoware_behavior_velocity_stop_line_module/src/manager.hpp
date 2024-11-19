@@ -15,11 +15,11 @@
 #ifndef MANAGER_HPP_
 #define MANAGER_HPP_
 
+#include "autoware/behavior_velocity_planner_common/plugin_interface.hpp"
+#include "autoware/behavior_velocity_planner_common/plugin_wrapper.hpp"
+#include "autoware/behavior_velocity_planner_common/scene_module_interface.hpp"
 #include "scene.hpp"
 
-#include <autoware/behavior_velocity_planner_common/plugin_interface.hpp>
-#include <autoware/behavior_velocity_planner_common/plugin_wrapper.hpp>
-#include <autoware/behavior_velocity_planner_common/scene_module_interface.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>

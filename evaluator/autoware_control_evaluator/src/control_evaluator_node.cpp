@@ -29,6 +29,8 @@ ControlEvaluatorNode::ControlEvaluatorNode(const rclcpp::NodeOptions & node_opti
   using std::placeholders::_1;
 
   // Publisher
+  processing_time_pub_ =
+    this->create_publisher<tier4_debug_msgs::msg::Float64Stamped>("~/debug/processing_time_ms", 1);
   metrics_pub_ = create_publisher<MetricArrayMsg>("~/metrics", 1);
 
   // Timer callback to publish evaluator diagnostics
@@ -196,6 +198,7 @@ void ControlEvaluatorNode::AddGoalYawDeviationMetricMsg(const Pose & ego_pose)
 
 void ControlEvaluatorNode::onTimer()
 {
+  autoware::universe_utils::StopWatch<std::chrono::milliseconds> stop_watch;
   const auto traj = traj_sub_.takeData();
   const auto odom = odometry_sub_.takeData();
   const auto acc = accel_sub_.takeData();
@@ -225,6 +228,12 @@ void ControlEvaluatorNode::onTimer()
   metrics_msg_.stamp = now();
   metrics_pub_->publish(metrics_msg_);
   metrics_msg_ = MetricArrayMsg{};
+
+  // Publish processing time
+  tier4_debug_msgs::msg::Float64Stamped processing_time_msg;
+  processing_time_msg.stamp = get_clock()->now();
+  processing_time_msg.data = stop_watch.toc();
+  processing_time_pub_->publish(processing_time_msg);
 }
 }  // namespace control_diagnostics
 

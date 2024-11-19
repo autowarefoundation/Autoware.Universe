@@ -87,6 +87,7 @@ MultiObjectTracker::MultiObjectTracker(const rclcpp::NodeOptions & node_options)
   double publish_rate = declare_parameter<double>("publish_rate");  // [hz]
   world_frame_id_ = declare_parameter<std::string>("world_frame_id");
   bool enable_delay_compensation{declare_parameter<bool>("enable_delay_compensation")};
+  enable_odometry_uncertainty_ = declare_parameter<bool>("consider_odometry_uncertainty");
 
   declare_parameter("selected_input_channels", std::vector<std::string>());
   std::vector<std::string> selected_input_channels =
@@ -274,18 +275,48 @@ void MultiObjectTracker::runProcess(
     return;
   }
 
-  // Model the object uncertainty if it is empty
-  DetectedObjects input_objects_with_uncertainty = uncertainty::modelUncertainty(input_objects);
-
-  // Normalize the object uncertainty
-  uncertainty::normalizeUncertainty(input_objects_with_uncertainty);
-
   // Transform the objects to the world frame
   DetectedObjects transformed_objects;
   if (!autoware::object_recognition_utils::transformObjects(
-        input_objects_with_uncertainty, world_frame_id_, tf_buffer_, transformed_objects)) {
+        input_objects, world_frame_id_, tf_buffer_, transformed_objects)) {
     return;
   }
+
+  // the object uncertainty
+  if (enable_odometry_uncertainty_) {
+    // Create a modeled odometry message
+    nav_msgs::msg::Odometry odometry;
+    odometry.header.stamp = measurement_time + rclcpp::Duration::from_seconds(0.001);
+
+    // set odometry pose from self_transform
+    auto & odom_pose = odometry.pose.pose;
+    odom_pose.position.x = self_transform->translation.x;
+    odom_pose.position.y = self_transform->translation.y;
+    odom_pose.position.z = self_transform->translation.z;
+    odom_pose.orientation = self_transform->rotation;
+
+    // set odometry twist
+    auto & odom_twist = odometry.twist.twist;
+    odom_twist.linear.x = 10.0;  // m/s
+    odom_twist.linear.y = 0.1;   // m/s
+    odom_twist.angular.z = 0.1;  // rad/s
+
+    // model the uncertainty
+    auto & odom_pose_cov = odometry.pose.covariance;
+    odom_pose_cov[0] = 0.1;      // x-x
+    odom_pose_cov[7] = 0.1;      // y-y
+    odom_pose_cov[35] = 0.0001;  // yaw-yaw
+
+    auto & odom_twist_cov = odometry.twist.covariance;
+    odom_twist_cov[0] = 2.0;     // x-x [m^2/s^2]
+    odom_twist_cov[7] = 0.2;     // y-y [m^2/s^2]
+    odom_twist_cov[35] = 0.001;  // yaw-yaw [rad^2/s^2]
+
+    // Add the odometry uncertainty to the object uncertainty
+    uncertainty::addOdometryUncertainty(odometry, transformed_objects);
+  }
+  // Normalize the object uncertainty
+  uncertainty::normalizeUncertainty(transformed_objects);
 
   /* prediction */
   processor_->predict(measurement_time);

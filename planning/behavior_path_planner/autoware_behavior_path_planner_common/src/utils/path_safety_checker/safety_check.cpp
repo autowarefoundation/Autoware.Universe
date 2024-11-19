@@ -470,6 +470,22 @@ ExtendedPredictedObjects filterObjectPredictedPathByTimeHorizon(
   return filtered_objects;
 }
 
+std::vector<PoseWithVelocityStamped> filterPredictedPathAfterTargetPose(
+  const std::vector<PoseWithVelocityStamped> & path, const Pose & target_pose)
+{
+  std::vector<PoseWithVelocityStamped> filtered_path;
+
+  const auto target_idx =
+    std::min_element(path.begin(), path.end(), [&target_pose](const auto & a, const auto & b) {
+      return calcDistance2d(a.pose.position, target_pose.position) <
+             calcDistance2d(b.pose.position, target_pose.position);
+    });
+
+  std::copy(target_idx, path.end(), std::back_inserter(filtered_path));
+
+  return filtered_path;
+};
+
 bool checkSafetyWithRSS(
   const PathWithLaneId & planned_path,
   const std::vector<PoseWithVelocityStamped> & ego_predicted_path,
@@ -606,13 +622,15 @@ std::vector<Polygon2d> get_collided_polygons(
 
     // check intersects
     if (boost::geometry::intersects(ego_polygon, obj_polygon)) {
-      debug.unsafe_reason = "overlap_polygon";
+      if (collided_polygons.empty()) {
+        debug.unsafe_reason = "overlap_polygon";
+        debug.expected_ego_pose = ego_pose;
+        debug.expected_obj_pose = obj_pose;
+        debug.extended_ego_polygon = ego_polygon;
+        debug.extended_obj_polygon = obj_polygon;
+      }
       collided_polygons.push_back(obj_polygon);
 
-      debug.expected_ego_pose = ego_pose;
-      debug.expected_obj_pose = obj_pose;
-      debug.extended_ego_polygon = ego_polygon;
-      debug.extended_obj_polygon = obj_polygon;
       continue;
     }
 
@@ -660,14 +678,17 @@ std::vector<Polygon2d> get_collided_polygons(
 
     // check intersects with extended polygon
     if (boost::geometry::intersects(extended_ego_polygon, extended_obj_polygon)) {
-      debug.unsafe_reason = "overlap_extended_polygon";
+      if (collided_polygons.empty()) {
+        debug.unsafe_reason = "overlap_extended_polygon";
+        debug.rss_longitudinal = rss_dist;
+        debug.inter_vehicle_distance = min_lon_length;
+        debug.expected_ego_pose = ego_pose;
+        debug.expected_obj_pose = obj_pose;
+        debug.extended_ego_polygon = extended_ego_polygon;
+        debug.extended_obj_polygon = extended_obj_polygon;
+        debug.is_front = is_object_front;
+      }
       collided_polygons.push_back(obj_polygon);
-
-      debug.rss_longitudinal = rss_dist;
-      debug.inter_vehicle_distance = min_lon_length;
-      debug.extended_ego_polygon = extended_ego_polygon;
-      debug.extended_obj_polygon = extended_obj_polygon;
-      debug.is_front = is_object_front;
     }
   }
 

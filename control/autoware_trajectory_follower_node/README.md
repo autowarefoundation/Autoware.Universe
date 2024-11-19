@@ -136,6 +136,7 @@ Giving the longitudinal controller information about steer convergence allows it
 #### Outputs
 
 - `autoware_control_msgs/Control`: message containing both lateral and longitudinal commands.
+- `autoware_control_msgs/ControlHorizon`: message containing both lateral and longitudinal horizon commands. this is NOT published by default. by using this, the performance of vehicle control may be improved, and by turning the default on, it can be used as an experimental topic.
 
 #### Parameter
 
@@ -146,6 +147,7 @@ Giving the longitudinal controller information about steer convergence allows it
     2. The last received commands are not older than defined by `timeout_thr_sec`.
 - `lateral_controller_mode`: `mpc` or `pure_pursuit`
   - (currently there is only `PID` for longitudinal controller)
+- `enable_control_cmd_horizon_pub`: publish `ControlHorizon` or not (default: false)
 
 ## Debugging
 

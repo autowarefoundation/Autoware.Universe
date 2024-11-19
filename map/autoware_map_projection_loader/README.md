@@ -11,7 +11,7 @@ This is necessary information especially when you want to convert from global (g
 
 ## Map projector info file specification
 
-You need to provide a YAML file, namely `map_projector_info.yaml` under the `map_path` directory. For `pointcloud_map_metadata.yaml`, please refer to the Readme of `map_loader`.
+You need to provide a YAML file, namely `map_projector_info.yaml` under the `map_path` directory. For `pointcloud_map_metadata.yaml`, please refer to the Readme of `autoware_map_loader`.
 
 ```bash
 sample-map-rosbag

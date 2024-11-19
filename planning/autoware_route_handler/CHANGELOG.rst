@@ -5,17 +5,17 @@ Changelog for package autoware_route_handler
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* fix(autoware_route_handler): fix cppcheck unusedVariable (`#9191 <https://github.com/youtalk/autoware.universe/issues/9191>`_)
-* feat(mission_planner): reroute with current route start pose when triggered by modifed goal (`#9136 <https://github.com/youtalk/autoware.universe/issues/9136>`_)
+* fix(autoware_route_handler): fix cppcheck unusedVariable (`#9191 <https://github.com/autowarefoundation/autoware.universe/issues/9191>`_)
+* feat(mission_planner): reroute with current route start pose when triggered by modifed goal (`#9136 <https://github.com/autowarefoundation/autoware.universe/issues/9136>`_)
   * feat(mission_planner): reroute with current route start pose when triggered by modifed goal
   * check new ego goal is in original preffered lane as much as possible
   * check goal is in goal_lane
   ---------
-* feat(autoware_test_utils): add path with lane id parser (`#9098 <https://github.com/youtalk/autoware.universe/issues/9098>`_)
+* feat(autoware_test_utils): add path with lane id parser (`#9098 <https://github.com/autowarefoundation/autoware.universe/issues/9098>`_)
   * add path with lane id parser
   * refactor parse to use template
   ---------
-* refactor(lane_change): refactor getLaneChangePaths function (`#8909 <https://github.com/youtalk/autoware.universe/issues/8909>`_)
+* refactor(lane_change): refactor getLaneChangePaths function (`#8909 <https://github.com/autowarefoundation/autoware.universe/issues/8909>`_)
   * refactor lane change utility funcions
   * LC utility function to get distance to next regulatory element
   * don't activate LC module when close to regulatory element
@@ -45,29 +45,29 @@ Changelog for package autoware_route_handler
   * add colors to flow chart in README
   ---------
   Co-authored-by: Zulfaqar Azmi <93502286+zulfaqar-azmi-t4@users.noreply.github.com>
-* test(autoware_route_handler): add unit test for autoware route handler function (`#8271 <https://github.com/youtalk/autoware.universe/issues/8271>`_)
+* test(autoware_route_handler): add unit test for autoware route handler function (`#8271 <https://github.com/autowarefoundation/autoware.universe/issues/8271>`_)
   * remove unused functions in route handler
   * add docstring for function getShoulderLaneletsAtPose
   * update test map to include shoulder lanelet
   * add unit test for function getShoulderLaneletsAtPose
   * add test case for getCenterLinePath to improve branch coverage
   ---------
-* fix(route_handler): make new route continuous with previous route (`#8238 <https://github.com/youtalk/autoware.universe/issues/8238>`_)
-* feat(map_loader, route_handler)!: add format_version validation (`#7074 <https://github.com/youtalk/autoware.universe/issues/7074>`_)
+* fix(route_handler): make new route continuous with previous route (`#8238 <https://github.com/autowarefoundation/autoware.universe/issues/8238>`_)
+* feat(map_loader, route_handler)!: add format_version validation (`#7074 <https://github.com/autowarefoundation/autoware.universe/issues/7074>`_)
   Co-authored-by: Yamato Ando <yamato.ando@gmail.com>
-* feat: add `autoware\_` prefix to `lanelet2_extension` (`#7640 <https://github.com/youtalk/autoware.universe/issues/7640>`_)
-* feat(route_handler): add unit test for lane change related functions (`#7504 <https://github.com/youtalk/autoware.universe/issues/7504>`_)
+* feat: add `autoware\_` prefix to `lanelet2_extension` (`#7640 <https://github.com/autowarefoundation/autoware.universe/issues/7640>`_)
+* feat(route_handler): add unit test for lane change related functions (`#7504 <https://github.com/autowarefoundation/autoware.universe/issues/7504>`_)
   * RT1-6230 feat(route_handler): add unit test for lane change related functions
   * fix spell check
   * fix spellcheck
   ---------
-* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/youtalk/autoware.universe/issues/7594>`_)
-* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/youtalk/autoware.universe/issues/7538>`_)
+* refactor(universe_utils/motion_utils)!: add autoware namespace (`#7594 <https://github.com/autowarefoundation/autoware.universe/issues/7594>`_)
+* feat(autoware_universe_utils)!: rename from tier4_autoware_utils (`#7538 <https://github.com/autowarefoundation/autoware.universe/issues/7538>`_)
   Co-authored-by: kosuke55 <kosuke.tnp@gmail.com>
-* refactor(route_handler)!: rename to include/autoware/{package_name}  (`#7530 <https://github.com/youtalk/autoware.universe/issues/7530>`_)
+* refactor(route_handler)!: rename to include/autoware/{package_name}  (`#7530 <https://github.com/autowarefoundation/autoware.universe/issues/7530>`_)
   refactor(route_handler)!: rename to include/autoware/{package_name}
-* chore(route_handler, lane_change): add codeowner (`#7475 <https://github.com/youtalk/autoware.universe/issues/7475>`_)
-* fix(route_handler): route handler overlap removal is too conservative (`#7156 <https://github.com/youtalk/autoware.universe/issues/7156>`_)
+* chore(route_handler, lane_change): add codeowner (`#7475 <https://github.com/autowarefoundation/autoware.universe/issues/7475>`_)
+* fix(route_handler): route handler overlap removal is too conservative (`#7156 <https://github.com/autowarefoundation/autoware.universe/issues/7156>`_)
   * add flag to enable/disable loop check in getLaneletSequence functions
   * implement function to get closest route lanelet based on previous closest lanelet
   * refactor DefaultPlanner::plan function
@@ -84,7 +84,7 @@ Changelog for package autoware_route_handler
   * format fix
   * move test map to autoware_test_utils
   ---------
-* refactor(test_utils): move to common folder (`#7158 <https://github.com/youtalk/autoware.universe/issues/7158>`_)
+* refactor(test_utils): move to common folder (`#7158 <https://github.com/autowarefoundation/autoware.universe/issues/7158>`_)
   * Move autoware planning test manager to autoware namespace
   * fix package share directory for behavior path planner
   * renaming files and directory
@@ -96,7 +96,7 @@ Changelog for package autoware_route_handler
   * removed obstacle velocity limiter test artifact
   * remove namespace from planning validator, it has using keyword
   ---------
-* refactor(route_handler): route handler add autoware prefix (`#7341 <https://github.com/youtalk/autoware.universe/issues/7341>`_)
+* refactor(route_handler): route handler add autoware prefix (`#7341 <https://github.com/autowarefoundation/autoware.universe/issues/7341>`_)
   * rename route handler package
   * update packages dependencies
   * update include guards

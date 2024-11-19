@@ -5,9 +5,9 @@ Changelog for package tier4_planning_launch
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0
-* fix(autoware_obstacle_stop_planner): register obstacle stop planner node with autoware scoping (`#8512 <https://github.com/youtalk/autoware.universe/issues/8512>`_)
+* fix(autoware_obstacle_stop_planner): register obstacle stop planner node with autoware scoping (`#8512 <https://github.com/autowarefoundation/autoware.universe/issues/8512>`_)
   Register node plugin with autoware scoping
-* feat(scenario_selector, freespace_planner): improve freespace planner edge case behavior (`#8348 <https://github.com/youtalk/autoware.universe/issues/8348>`_)
+* feat(scenario_selector, freespace_planner): improve freespace planner edge case behavior (`#8348 <https://github.com/autowarefoundation/autoware.universe/issues/8348>`_)
   * refactor free space planner subscribers
   * implement scenario switching for edge cases
   * fix scenario selector test
@@ -18,11 +18,11 @@ Changelog for package tier4_planning_launch
   * improve near target logic
   * use timer based implementation for obstacle check
   ---------
-* refactor(compare_map_segmentation): add package name prefix of autoware\_ (`#8005 <https://github.com/youtalk/autoware.universe/issues/8005>`_)
+* refactor(compare_map_segmentation): add package name prefix of autoware\_ (`#8005 <https://github.com/autowarefoundation/autoware.universe/issues/8005>`_)
   * refactor(compare_map_segmentation): add package name prefix of autoware\_
   * docs: update Readme
   ---------
-* refactor(pointcloud_preprocessor): prefix package and namespace with autoware (`#7983 <https://github.com/youtalk/autoware.universe/issues/7983>`_)
+* refactor(pointcloud_preprocessor): prefix package and namespace with autoware (`#7983 <https://github.com/autowarefoundation/autoware.universe/issues/7983>`_)
   * refactor(pointcloud_preprocessor)!: prefix package and namespace with autoware
   * style(pre-commit): autofix
   * style(pointcloud_preprocessor): suppress line length check for macros
@@ -36,15 +36,15 @@ Changelog for package tier4_planning_launch
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Kenzo Lobos Tsunekawa <kenzo.lobos@tier4.jp>
-* refactor(compare_map_segmentation)!: fix namespace and directory structure (`#7910 <https://github.com/youtalk/autoware.universe/issues/7910>`_)
+* refactor(compare_map_segmentation)!: fix namespace and directory structure (`#7910 <https://github.com/autowarefoundation/autoware.universe/issues/7910>`_)
   * feat: update namespace and directory structure for compare_map_segmentation code
   * refactor: update  directory structure
   * fix: add missing include
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(frenet_planner): fix mistake in the curvature calculation (`#7920 <https://github.com/youtalk/autoware.universe/issues/7920>`_)
-* feat(obstacle_cruise_planner): support pointcloud-based obstacles (`#6907 <https://github.com/youtalk/autoware.universe/issues/6907>`_)
+* fix(frenet_planner): fix mistake in the curvature calculation (`#7920 <https://github.com/autowarefoundation/autoware.universe/issues/7920>`_)
+* feat(obstacle_cruise_planner): support pointcloud-based obstacles (`#6907 <https://github.com/autowarefoundation/autoware.universe/issues/6907>`_)
   * add pointcloud to obstacle properties
   * add tf listener & pointcloud subscriber
   * add parameters for pointcloud obstacle
@@ -116,18 +116,18 @@ Changelog for package tier4_planning_launch
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Takagi, Isamu <isamu.takagi@tier4.jp>
   Co-authored-by: Satoshi OTA <44889564+satoshi-ota@users.noreply.github.com>
-* refactor(autoware_obstacle_stop_planner): prefix package and namespace with autoware (`#7565 <https://github.com/youtalk/autoware.universe/issues/7565>`_)
+* refactor(autoware_obstacle_stop_planner): prefix package and namespace with autoware (`#7565 <https://github.com/autowarefoundation/autoware.universe/issues/7565>`_)
   * refactor(autoware_obstacle_stop_planner): prefix package and namespace with autoware
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(planning_evaluator): rename to include/autoware/{package_name} (`#7518 <https://github.com/youtalk/autoware.universe/issues/7518>`_)
+* feat(planning_evaluator): rename to include/autoware/{package_name} (`#7518 <https://github.com/autowarefoundation/autoware.universe/issues/7518>`_)
   * fix
   * fix
   ---------
-* refactor(dynamic_obstacle_stop): move to motion_velocity_planner (`#7460 <https://github.com/youtalk/autoware.universe/issues/7460>`_)
-* feat(obstacle_velocity_limiter): move to motion_velocity_planner (`#7439 <https://github.com/youtalk/autoware.universe/issues/7439>`_)
-* refactor(bpp): add namespace `autoware::` (`#7437 <https://github.com/youtalk/autoware.universe/issues/7437>`_)
+* refactor(dynamic_obstacle_stop): move to motion_velocity_planner (`#7460 <https://github.com/autowarefoundation/autoware.universe/issues/7460>`_)
+* feat(obstacle_velocity_limiter): move to motion_velocity_planner (`#7439 <https://github.com/autowarefoundation/autoware.universe/issues/7439>`_)
+* refactor(bpp): add namespace `autoware::` (`#7437 <https://github.com/autowarefoundation/autoware.universe/issues/7437>`_)
   * refactor: add namespace autoware::
   * refactor(bpp-common): add namespace autoware::
   * refactor(ablc): add namespace autoware::
@@ -141,24 +141,24 @@ Changelog for package tier4_planning_launch
   * refactor(tier4_planning_launch): add namespace autoware::
   * refactor(sbp): add namespace autoware::
   ---------
-* refactor(behavior_path_planner): prefix autoware\_ to behavior_path_planner package (`#7433 <https://github.com/youtalk/autoware.universe/issues/7433>`_)
+* refactor(behavior_path_planner): prefix autoware\_ to behavior_path_planner package (`#7433 <https://github.com/autowarefoundation/autoware.universe/issues/7433>`_)
   * move dir
   * fix pluginlib
   ---------
-* refactor(obstacle_cruise_planner)!: add autoware\_ prefix (`#7419 <https://github.com/youtalk/autoware.universe/issues/7419>`_)
-* refactor(behavior_path_sampling_planner_module): add autoware prefix (`#7392 <https://github.com/youtalk/autoware.universe/issues/7392>`_)
-* refactor(mission_planner)!: add autoware prefix and namespace (`#7414 <https://github.com/youtalk/autoware.universe/issues/7414>`_)
+* refactor(obstacle_cruise_planner)!: add autoware\_ prefix (`#7419 <https://github.com/autowarefoundation/autoware.universe/issues/7419>`_)
+* refactor(behavior_path_sampling_planner_module): add autoware prefix (`#7392 <https://github.com/autowarefoundation/autoware.universe/issues/7392>`_)
+* refactor(mission_planner)!: add autoware prefix and namespace (`#7414 <https://github.com/autowarefoundation/autoware.universe/issues/7414>`_)
   * refactor(mission_planner)!: add autoware prefix and namespace
   * fix svg
   ---------
-* refactor(freespace_planner)!: add autoware prefix (`#7376 <https://github.com/youtalk/autoware.universe/issues/7376>`_)
+* refactor(freespace_planner)!: add autoware prefix (`#7376 <https://github.com/autowarefoundation/autoware.universe/issues/7376>`_)
   refactor(freespace_planner)!: add autoawre prefix
-* refactor(external_cmd_selector): prefix package and namespace with au… (`#7384 <https://github.com/youtalk/autoware.universe/issues/7384>`_)
+* refactor(external_cmd_selector): prefix package and namespace with au… (`#7384 <https://github.com/autowarefoundation/autoware.universe/issues/7384>`_)
   refactor(external_cmd_selector): prefix package and namespace with autoware\_
-* refactor(scenario_selector): prefix package and namespace with autoware\_ (`#7379 <https://github.com/youtalk/autoware.universe/issues/7379>`_)
-* fix(motion_planning.launch): fix input traj of obstacle_velocity_limiter (`#7386 <https://github.com/youtalk/autoware.universe/issues/7386>`_)
-* refactor(out_of_lane): remove from behavior_velocity (`#7359 <https://github.com/youtalk/autoware.universe/issues/7359>`_)
-* refactor(path_smoother)!: prefix package and namespace with autoware (`#7381 <https://github.com/youtalk/autoware.universe/issues/7381>`_)
+* refactor(scenario_selector): prefix package and namespace with autoware\_ (`#7379 <https://github.com/autowarefoundation/autoware.universe/issues/7379>`_)
+* fix(motion_planning.launch): fix input traj of obstacle_velocity_limiter (`#7386 <https://github.com/autowarefoundation/autoware.universe/issues/7386>`_)
+* refactor(out_of_lane): remove from behavior_velocity (`#7359 <https://github.com/autowarefoundation/autoware.universe/issues/7359>`_)
+* refactor(path_smoother)!: prefix package and namespace with autoware (`#7381 <https://github.com/autowarefoundation/autoware.universe/issues/7381>`_)
   * git mv
   * fix
   * fix launch
@@ -168,47 +168,47 @@ Changelog for package tier4_planning_launch
   * fix static_centerline_optimizer
   * fix
   ---------
-* fix(tier4_planning_launch): unexpected modules were registered (`#7377 <https://github.com/youtalk/autoware.universe/issues/7377>`_)
-* refactor(costmap_generator)!: add autoware prefix (`#7329 <https://github.com/youtalk/autoware.universe/issues/7329>`_)
+* fix(tier4_planning_launch): unexpected modules were registered (`#7377 <https://github.com/autowarefoundation/autoware.universe/issues/7377>`_)
+* refactor(costmap_generator)!: add autoware prefix (`#7329 <https://github.com/autowarefoundation/autoware.universe/issues/7329>`_)
   refactor(costmap_generator): add autoware prefix
-* refactor(path_optimizer, velocity_smoother)!: prefix package and namespace with autoware (`#7354 <https://github.com/youtalk/autoware.universe/issues/7354>`_)
+* refactor(path_optimizer, velocity_smoother)!: prefix package and namespace with autoware (`#7354 <https://github.com/autowarefoundation/autoware.universe/issues/7354>`_)
   * chore(autoware_velocity_smoother): update namespace
   * chore(autoware_path_optimizer): update namespace
   ---------
-* refactor(planning_validator)!: prefix package and namespace with autoware (`#7320 <https://github.com/youtalk/autoware.universe/issues/7320>`_)
+* refactor(planning_validator)!: prefix package and namespace with autoware (`#7320 <https://github.com/autowarefoundation/autoware.universe/issues/7320>`_)
   * add autoware\_ prefix to planning_validator
   * add prefix to package name in .pages
   * fix link of the image
   ---------
-* refactor(behavior_velocity_planner_common)!: prefix package and namespace with autoware (`#7314 <https://github.com/youtalk/autoware.universe/issues/7314>`_)
+* refactor(behavior_velocity_planner_common)!: prefix package and namespace with autoware (`#7314 <https://github.com/autowarefoundation/autoware.universe/issues/7314>`_)
   * refactor(behavior_velocity_planner_common): add autoware prefix
   * refactor(behavior_velocity_planner_common): fix run_out module
   * refactor(behavior_velocity_planner_common): fix for autoware_behavior_velocity_walkway_module
   * refactor(behavior_velocity_planner_common): remove unnecessary using
   ---------
-* refactor(sampling_based_planner): add autoware prefix (`#7348 <https://github.com/youtalk/autoware.universe/issues/7348>`_)
-* refactor(surround_obstacle_checker)!: prefix package and namespace with autoware (`#7298 <https://github.com/youtalk/autoware.universe/issues/7298>`_)
+* refactor(sampling_based_planner): add autoware prefix (`#7348 <https://github.com/autowarefoundation/autoware.universe/issues/7348>`_)
+* refactor(surround_obstacle_checker)!: prefix package and namespace with autoware (`#7298 <https://github.com/autowarefoundation/autoware.universe/issues/7298>`_)
   * fix(autoware_surround_obstacle_checker): rename
   * fix(autoware_surround_obstacle_checker): rename header
   * fix(launch): update package name
   ---------
-* refactor(autoware_velocity_walkway_module): prefix package with autoware\_ and move code to the autoware namespace (`#7153 <https://github.com/youtalk/autoware.universe/issues/7153>`_)
+* refactor(autoware_velocity_walkway_module): prefix package with autoware\_ and move code to the autoware namespace (`#7153 <https://github.com/autowarefoundation/autoware.universe/issues/7153>`_)
   * refactor(autoware_velocity_walkway_module): prefix package with autoware\_ and move code to the autoware namespace
   * style(pre-commit): autofix
   * fix: fix issue loading packages that have been prefixed
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* chore(autoware_planning_topic_converter): add prefix `autoware\_` (`#7296 <https://github.com/youtalk/autoware.universe/issues/7296>`_)
+* chore(autoware_planning_topic_converter): add prefix `autoware\_` (`#7296 <https://github.com/autowarefoundation/autoware.universe/issues/7296>`_)
   chore(autoware_planning_topic_converter): rename
-* chore(autoware_external_velocity_limit_selector): add prefix `autoware\_` (`#7295 <https://github.com/youtalk/autoware.universe/issues/7295>`_)
+* chore(autoware_external_velocity_limit_selector): add prefix `autoware\_` (`#7295 <https://github.com/autowarefoundation/autoware.universe/issues/7295>`_)
   chore(autoware_external_velocity_limit_selector): rename
-* refactor(autoware_velocity_run_out_module): prefix package with autoware\_ and move code to the autoware namespace (`#7154 <https://github.com/youtalk/autoware.universe/issues/7154>`_)
+* refactor(autoware_velocity_run_out_module): prefix package with autoware\_ and move code to the autoware namespace (`#7154 <https://github.com/autowarefoundation/autoware.universe/issues/7154>`_)
   * refactor(autoware_velocity_run_out_module): prefix package with autoware\_ and move code to the autoware namespace
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* refactor(autoware_velocity_virtual_traffic_light_module): prefix package with autoware\_ and move code to the autoware namespace (`#7155 <https://github.com/youtalk/autoware.universe/issues/7155>`_)
-* feat!: replace autoware_auto_msgs with autoware_msgs for launch files (`#7242 <https://github.com/youtalk/autoware.universe/issues/7242>`_)
+* refactor(autoware_velocity_virtual_traffic_light_module): prefix package with autoware\_ and move code to the autoware namespace (`#7155 <https://github.com/autowarefoundation/autoware.universe/issues/7155>`_)
+* feat!: replace autoware_auto_msgs with autoware_msgs for launch files (`#7242 <https://github.com/autowarefoundation/autoware.universe/issues/7242>`_)
   * feat!: replace autoware_auto_msgs with autoware_msgs for launch files
   Co-authored-by: Cynthia Liu <cynthia.liu@autocore.ai>
   Co-authored-by: NorahXiong <norah.xiong@autocore.ai>
@@ -219,7 +219,7 @@ Changelog for package tier4_planning_launch
   Co-authored-by: NorahXiong <norah.xiong@autocore.ai>
   Co-authored-by: beginningfan <beginning.fan@autocore.ai>
   Co-authored-by: Yukihiro Saito <yukky.saito@gmail.com>
-* chore(autoware_velocity_smoother, autoware_path_optimizer): rename packages (`#7202 <https://github.com/youtalk/autoware.universe/issues/7202>`_)
+* chore(autoware_velocity_smoother, autoware_path_optimizer): rename packages (`#7202 <https://github.com/autowarefoundation/autoware.universe/issues/7202>`_)
   * chore(autoware_path_optimizer): rename package and namespace
   * chore(autoware_static_centerline_generator): rename package and namespace
   * chore: update module name
@@ -230,7 +230,7 @@ Changelog for package tier4_planning_launch
   * fix: test
   * fix: test
   ---------
-* chore(static_obstacle_avoidance, dynamic_obstacle_avoidance): rename avoidance package (`#7168 <https://github.com/youtalk/autoware.universe/issues/7168>`_)
+* chore(static_obstacle_avoidance, dynamic_obstacle_avoidance): rename avoidance package (`#7168 <https://github.com/autowarefoundation/autoware.universe/issues/7168>`_)
   * chore(autoware_behavior_path_static_obstacle_avoidance_module): rename package and namespace
   * chore(autoware_behavior_path_dynamic_obstacle_avoidance_module): rename package and namespace
   * chore(tier4_planning_launch): update module name
@@ -240,13 +240,13 @@ Changelog for package tier4_planning_launch
   * fix(AbLC): fix file name
   * docs: update module name
   ---------
-* feat(motion_velocity_planner): add new motion velocity planning (`#7064 <https://github.com/youtalk/autoware.universe/issues/7064>`_)
-* refactor(behavior_velocity_planner)!: prefix package and namespace with autoware\_ (`#6693 <https://github.com/youtalk/autoware.universe/issues/6693>`_)
-* build(behavior_path_external_request_lane_change_module): prefix package and namespace with autoware\_ (`#6636 <https://github.com/youtalk/autoware.universe/issues/6636>`_)
-* feat: add autoware_remaining_distance_time_calculator and overlay (`#6855 <https://github.com/youtalk/autoware.universe/issues/6855>`_)
-* revert: "feat(logger_level_configure): make it possible to change level of container logger (`#6823 <https://github.com/youtalk/autoware.universe/issues/6823>`_)" (`#6842 <https://github.com/youtalk/autoware.universe/issues/6842>`_)
+* feat(motion_velocity_planner): add new motion velocity planning (`#7064 <https://github.com/autowarefoundation/autoware.universe/issues/7064>`_)
+* refactor(behavior_velocity_planner)!: prefix package and namespace with autoware\_ (`#6693 <https://github.com/autowarefoundation/autoware.universe/issues/6693>`_)
+* build(behavior_path_external_request_lane_change_module): prefix package and namespace with autoware\_ (`#6636 <https://github.com/autowarefoundation/autoware.universe/issues/6636>`_)
+* feat: add autoware_remaining_distance_time_calculator and overlay (`#6855 <https://github.com/autowarefoundation/autoware.universe/issues/6855>`_)
+* revert: "feat(logger_level_configure): make it possible to change level of container logger (`#6823 <https://github.com/autowarefoundation/autoware.universe/issues/6823>`_)" (`#6842 <https://github.com/autowarefoundation/autoware.universe/issues/6842>`_)
   This reverts commit 51b5f830780eb69bd1a7dfe60e295773f394fd8e.
-* feat(logger_level_configure): make it possible to change level of container logger (`#6823 <https://github.com/youtalk/autoware.universe/issues/6823>`_)
+* feat(logger_level_configure): make it possible to change level of container logger (`#6823 <https://github.com/autowarefoundation/autoware.universe/issues/6823>`_)
   * feat(launch): add logging_demo::LoggerConfig into container
   * fix(logger_level_reconfigure_plugin): fix yaml
   * feat(logging_level_configure): add composable node
@@ -255,13 +255,13 @@ Changelog for package tier4_planning_launch
 
 0.26.0 (2024-04-03)
 -------------------
-* chore(tier4_planning_launch): set log output both (`#6685 <https://github.com/youtalk/autoware.universe/issues/6685>`_)
-* feat(traffic_light): depend on is_simulation for scenario simulator (`#6498 <https://github.com/youtalk/autoware.universe/issues/6498>`_)
+* chore(tier4_planning_launch): set log output both (`#6685 <https://github.com/autowarefoundation/autoware.universe/issues/6685>`_)
+* feat(traffic_light): depend on is_simulation for scenario simulator (`#6498 <https://github.com/autowarefoundation/autoware.universe/issues/6498>`_)
   * feat(traffic_light): depend on is_simulation for scenario simulator
   * fix comments
   * fix
   ---------
-* feat(mission_planner)!: introduce route_selector node (`#6363 <https://github.com/youtalk/autoware.universe/issues/6363>`_)
+* feat(mission_planner)!: introduce route_selector node (`#6363 <https://github.com/autowarefoundation/autoware.universe/issues/6363>`_)
   * feat(mission_planner): introduce route_selector node
   * remove unused file
   * fix use goal pose only when resuming
@@ -274,7 +274,7 @@ Changelog for package tier4_planning_launch
   * remove debug code
   * use full license text instead of spdx
   ---------
-* feat: remove use_pointcloud_container (`#6115 <https://github.com/youtalk/autoware.universe/issues/6115>`_)
+* feat: remove use_pointcloud_container (`#6115 <https://github.com/autowarefoundation/autoware.universe/issues/6115>`_)
   * feat!: remove use_pointcloud_container
   * fix pre-commit
   * fix: completely remove use_pointcloud_container after merge main
@@ -282,7 +282,7 @@ Changelog for package tier4_planning_launch
   * revert: revert change in probabilistic_occupancy_grid_map
   * revert change in launcher of ogm
   ---------
-* feat(behavior_path_sampling_module): add sampling based planner  (`#6131 <https://github.com/youtalk/autoware.universe/issues/6131>`_)
+* feat(behavior_path_sampling_module): add sampling based planner  (`#6131 <https://github.com/autowarefoundation/autoware.universe/issues/6131>`_)
   * first commit: add only necessary bpp code for template
   * change name of file
   * delete more unrelated code
@@ -400,27 +400,27 @@ Changelog for package tier4_planning_launch
   * remove unused commented code
   ---------
   Co-authored-by: Maxime CLEMENT <maxime.clement@tier4.jp>
-* feat(behavior_velocity_planner): add enable_all_modules_auto_mode argument to launch files for behavior velocity planner modules (`#6094 <https://github.com/youtalk/autoware.universe/issues/6094>`_)
+* feat(behavior_velocity_planner): add enable_all_modules_auto_mode argument to launch files for behavior velocity planner modules (`#6094 <https://github.com/autowarefoundation/autoware.universe/issues/6094>`_)
   * set default value for enable_all_modules_auto_mode
   * fix enable_rtc configuration in scene_module_manager_interface.hpp
   * Refactor scene module managers to use getEnableRTC function
   ---------
-* feat(behavior_path_planner): add enable_all_modules_auto_mode argument to launch files for behavior path planner modules (`#6093 <https://github.com/youtalk/autoware.universe/issues/6093>`_)
+* feat(behavior_path_planner): add enable_all_modules_auto_mode argument to launch files for behavior path planner modules (`#6093 <https://github.com/autowarefoundation/autoware.universe/issues/6093>`_)
   * Add enable_all_modules_auto_mode argument to launch files
   * set default value for enable_all_modules_auto_mode
   * fix enable_rtc configuration in scene_module_manager_interface.hpp
   ---------
-* refactor(tier4_planning_launch): remove duplicate arguments in launchfile (`#6040 <https://github.com/youtalk/autoware.universe/issues/6040>`_)
-* feat(behavior_velocity_planner): add new 'dynamic_obstacle_stop' module (`#5835 <https://github.com/youtalk/autoware.universe/issues/5835>`_)
-* refactor(behavior_path_planner): remove use_experimental_lane_change_function (`#5889 <https://github.com/youtalk/autoware.universe/issues/5889>`_)
-* fix(behavior, launch): fix launch error (`#5847 <https://github.com/youtalk/autoware.universe/issues/5847>`_)
+* refactor(tier4_planning_launch): remove duplicate arguments in launchfile (`#6040 <https://github.com/autowarefoundation/autoware.universe/issues/6040>`_)
+* feat(behavior_velocity_planner): add new 'dynamic_obstacle_stop' module (`#5835 <https://github.com/autowarefoundation/autoware.universe/issues/5835>`_)
+* refactor(behavior_path_planner): remove use_experimental_lane_change_function (`#5889 <https://github.com/autowarefoundation/autoware.universe/issues/5889>`_)
+* fix(behavior, launch): fix launch error (`#5847 <https://github.com/autowarefoundation/autoware.universe/issues/5847>`_)
   * fix(launch): set null to avoid launch error
   * fix(behavior): check null
   * chore(behavior): add comment
   * fix(launch): set  at the end of list
   * fix(launch): fill empty string at the end of module list
   ---------
-* refactor(bpp): use pluginlib to load scene module (`#5771 <https://github.com/youtalk/autoware.universe/issues/5771>`_)
+* refactor(bpp): use pluginlib to load scene module (`#5771 <https://github.com/autowarefoundation/autoware.universe/issues/5771>`_)
   * refactor(bpp): use pluginlib
   * refactor(tier4_planning_launch): update launcher
   * refactor(avoidance): support pluginlib
@@ -432,30 +432,30 @@ Changelog for package tier4_planning_launch
   * refactor(bpp): move interface
   * fix(bpp): add const
   ---------
-* fix(tier4_planning_launch): obstacle_cruise_planner pipeline is not connected (`#5542 <https://github.com/youtalk/autoware.universe/issues/5542>`_)
-* refactor(tier4_planning_launch): align argument name (`#5505 <https://github.com/youtalk/autoware.universe/issues/5505>`_)
+* fix(tier4_planning_launch): obstacle_cruise_planner pipeline is not connected (`#5542 <https://github.com/autowarefoundation/autoware.universe/issues/5542>`_)
+* refactor(tier4_planning_launch): align argument name (`#5505 <https://github.com/autowarefoundation/autoware.universe/issues/5505>`_)
   * chore(tier4_planning_launch): align arument name
   * refactor(tier4_planning_launch): pass params directly
   ---------
-* refactor(tier4_planning_launch): use xml style launch (`#5502 <https://github.com/youtalk/autoware.universe/issues/5502>`_)
+* refactor(tier4_planning_launch): use xml style launch (`#5502 <https://github.com/autowarefoundation/autoware.universe/issues/5502>`_)
   * refactor(tier4_planning_launch): use xml style launch
   * refactor(tier4_planning_launch): remove python style launch
   * fix(tier4_planning_launch): enable console output
   ---------
-* chore(planning modules): remove maintainer... (`#5458 <https://github.com/youtalk/autoware.universe/issues/5458>`_)
+* chore(planning modules): remove maintainer... (`#5458 <https://github.com/autowarefoundation/autoware.universe/issues/5458>`_)
   remove shimizu-san from maintainer and add maintainer for stop line and turn signal decider
-* refactor(tier4_planning_launch): use xml style launch (`#5470 <https://github.com/youtalk/autoware.universe/issues/5470>`_)
+* refactor(tier4_planning_launch): use xml style launch (`#5470 <https://github.com/autowarefoundation/autoware.universe/issues/5470>`_)
   * refactor(tier4_planning_launch): use xml style launch
   * refactor(tier4_planning_launch): remove python style launch
   * fix(tier4_plannning_launch): fix namespace
   ---------
-* refactor(tier4_planning_launch): use xml style launch (`#5448 <https://github.com/youtalk/autoware.universe/issues/5448>`_)
+* refactor(tier4_planning_launch): use xml style launch (`#5448 <https://github.com/autowarefoundation/autoware.universe/issues/5448>`_)
   * refactor(tier4_planning_launch): use xml style launch
   * refactor(tier4_planning_launch): remove python style launch
   ---------
-* feat(behavior_path_planner): subscribe traffic light recognition result (`#5436 <https://github.com/youtalk/autoware.universe/issues/5436>`_)
+* feat(behavior_path_planner): subscribe traffic light recognition result (`#5436 <https://github.com/autowarefoundation/autoware.universe/issues/5436>`_)
   feat(avoidance): use traffic light signal info
-* feat(rtc_auto_mode_manager): eliminate rtc auto mode manager (`#5235 <https://github.com/youtalk/autoware.universe/issues/5235>`_)
+* feat(rtc_auto_mode_manager): eliminate rtc auto mode manager (`#5235 <https://github.com/autowarefoundation/autoware.universe/issues/5235>`_)
   * change namespace of auto_mode
   * delete RTC auto mode manager package
   * delete rtc_replayer.param
@@ -464,7 +464,7 @@ Changelog for package tier4_planning_launch
   * fix typo
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(behavior_velocity): support new traffic signal interface (`#4133 <https://github.com/youtalk/autoware.universe/issues/4133>`_)
+* feat(behavior_velocity): support new traffic signal interface (`#4133 <https://github.com/autowarefoundation/autoware.universe/issues/4133>`_)
   * feat(behavior_velocity): support new traffic signal interface
   * style(pre-commit): autofix
   * add missing dependency
@@ -481,12 +481,12 @@ Changelog for package tier4_planning_launch
   * add debug log when the signal data is outdated
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(mission_planning.launch): add glog in mission planner (`#4745 <https://github.com/youtalk/autoware.universe/issues/4745>`_)
-* feat(motion_velocity_smoother.launch): add glog component (`#4746 <https://github.com/youtalk/autoware.universe/issues/4746>`_)
+* feat(mission_planning.launch): add glog in mission planner (`#4745 <https://github.com/autowarefoundation/autoware.universe/issues/4745>`_)
+* feat(motion_velocity_smoother.launch): add glog component (`#4746 <https://github.com/autowarefoundation/autoware.universe/issues/4746>`_)
   * use node instead of include
   * use container & add glog component
   ---------
-* feat(glog): add glog in planning and control modules (`#4714 <https://github.com/youtalk/autoware.universe/issues/4714>`_)
+* feat(glog): add glog in planning and control modules (`#4714 <https://github.com/autowarefoundation/autoware.universe/issues/4714>`_)
   * feat(glog): add glog component
   * formatting
   * remove namespace
@@ -502,9 +502,9 @@ Changelog for package tier4_planning_launch
   * add copyright
   ---------
   Co-authored-by: Daisuke Nishimatsu <42202095+wep21@users.noreply.github.com>
-* chore(tier4_planning_launch): enable to abort lane change from a parameter file (`#4469 <https://github.com/youtalk/autoware.universe/issues/4469>`_)
-* refactor(behavior_path_planner): remove unused config files (`#4241 <https://github.com/youtalk/autoware.universe/issues/4241>`_)
-* refactor(obstacle_avoidance_planner): move the elastic band smoothing to a new package (`#4114 <https://github.com/youtalk/autoware.universe/issues/4114>`_)
+* chore(tier4_planning_launch): enable to abort lane change from a parameter file (`#4469 <https://github.com/autowarefoundation/autoware.universe/issues/4469>`_)
+* refactor(behavior_path_planner): remove unused config files (`#4241 <https://github.com/autowarefoundation/autoware.universe/issues/4241>`_)
+* refactor(obstacle_avoidance_planner): move the elastic band smoothing to a new package (`#4114 <https://github.com/autowarefoundation/autoware.universe/issues/4114>`_)
   * Add path_smoothing package
   * Add elastic band smoother node
   * Add Debug section to elastic band documentation
@@ -515,13 +515,13 @@ Changelog for package tier4_planning_launch
   * Publish path with backward paths
   * Rename path_smoothing -> path_smoother
   ---------
-* fix(obstacle_velocity_limiter): remove hardcoded parameter (`#4098 <https://github.com/youtalk/autoware.universe/issues/4098>`_)
-* refactor(lane_change): add namespace for lane-change-cancel (`#4090 <https://github.com/youtalk/autoware.universe/issues/4090>`_)
+* fix(obstacle_velocity_limiter): remove hardcoded parameter (`#4098 <https://github.com/autowarefoundation/autoware.universe/issues/4098>`_)
+* refactor(lane_change): add namespace for lane-change-cancel (`#4090 <https://github.com/autowarefoundation/autoware.universe/issues/4090>`_)
   * refactor(lane_change): add namespace for lane-change-cancel
   * fix indent
   * lane_change_cancel -> cancel
   ---------
-* refactor(behavior_velocity_planner): update launch and parameter files for plugin (`#3811 <https://github.com/youtalk/autoware.universe/issues/3811>`_)
+* refactor(behavior_velocity_planner): update launch and parameter files for plugin (`#3811 <https://github.com/autowarefoundation/autoware.universe/issues/3811>`_)
   * feat: move param files
   * WIP
   * feat: use behavior velocity module param file list
@@ -535,22 +535,22 @@ Changelog for package tier4_planning_launch
   * move param
   * add test depend
   ---------
-* refactor(start_planner): rename pull out to start planner (`#3908 <https://github.com/youtalk/autoware.universe/issues/3908>`_)
-* feat: handle invalid areas / lanelets (`#3000 <https://github.com/youtalk/autoware.universe/issues/3000>`_)
-* feat(behavior_path_planner): output stop reasons (`#3807 <https://github.com/youtalk/autoware.universe/issues/3807>`_)
+* refactor(start_planner): rename pull out to start planner (`#3908 <https://github.com/autowarefoundation/autoware.universe/issues/3908>`_)
+* feat: handle invalid areas / lanelets (`#3000 <https://github.com/autowarefoundation/autoware.universe/issues/3000>`_)
+* feat(behavior_path_planner): output stop reasons (`#3807 <https://github.com/autowarefoundation/autoware.universe/issues/3807>`_)
   * feat(launch): remap stop reasons
   * feat(behavior_path_planner): add interface to output stop reasons
   * feat(behavior_path_planner): add interface to output stop reasons
   * feat(avoidance): output stop reason
   ---------
-* feat(path_sampler): add a sampling based path planner (`#3532 <https://github.com/youtalk/autoware.universe/issues/3532>`_)
-* style: fix typos (`#3617 <https://github.com/youtalk/autoware.universe/issues/3617>`_)
+* feat(path_sampler): add a sampling based path planner (`#3532 <https://github.com/autowarefoundation/autoware.universe/issues/3532>`_)
+* style: fix typos (`#3617 <https://github.com/autowarefoundation/autoware.universe/issues/3617>`_)
   * style: fix typos in documents
   * style: fix typos in package.xml
   * style: fix typos in launch files
   * style: fix typos in comments
   ---------
-* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/youtalk/autoware.universe/issues/3616>`_)
+* build: mark autoware_cmake as <buildtool_depend> (`#3616 <https://github.com/autowarefoundation/autoware.universe/issues/3616>`_)
   * build: mark autoware_cmake as <buildtool_depend>
   with <build_depend>, autoware_cmake is automatically exported with ament_target_dependencies() (unecessary)
   * style(pre-commit): autofix
@@ -558,7 +558,7 @@ Changelog for package tier4_planning_launch
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-* feat(behavior_path_planner): add dynamic obstacle avoidance module (`#3415 <https://github.com/youtalk/autoware.universe/issues/3415>`_)
+* feat(behavior_path_planner): add dynamic obstacle avoidance module (`#3415 <https://github.com/autowarefoundation/autoware.universe/issues/3415>`_)
   * implement dynamic avoidance module
   * update
   * update
@@ -576,18 +576,18 @@ Changelog for package tier4_planning_launch
   * fix
   ---------
   Co-authored-by: Satoshi OTA <44889564+satoshi-ota@users.noreply.github.com>
-* refactor(behavior_path_planner): rename pull_over to goal_planner (`#3501 <https://github.com/youtalk/autoware.universe/issues/3501>`_)
-* refactor(behavior_path_planeer): use common.params for lane change (`#3520 <https://github.com/youtalk/autoware.universe/issues/3520>`_)
+* refactor(behavior_path_planner): rename pull_over to goal_planner (`#3501 <https://github.com/autowarefoundation/autoware.universe/issues/3501>`_)
+* refactor(behavior_path_planeer): use common.params for lane change (`#3520 <https://github.com/autowarefoundation/autoware.universe/issues/3520>`_)
   * refactor(behavior_path_planeer): use common.params for lane change
   * update
   ---------
-* feat(behavior_path_planner): move lane_following_params to behavior path params (`#3445 <https://github.com/youtalk/autoware.universe/issues/3445>`_)
+* feat(behavior_path_planner): move lane_following_params to behavior path params (`#3445 <https://github.com/autowarefoundation/autoware.universe/issues/3445>`_)
   * feat(behavior_path_planner): move lane_following_params to behavior path params
   * fix missing pakage include
   * fix test
   ---------
-* chore(planning_evaluator): add dependency (`#3388 <https://github.com/youtalk/autoware.universe/issues/3388>`_)
-* feat(behavior_velocity_planner): add out of lane module (`#3191 <https://github.com/youtalk/autoware.universe/issues/3191>`_)
+* chore(planning_evaluator): add dependency (`#3388 <https://github.com/autowarefoundation/autoware.universe/issues/3388>`_)
+* feat(behavior_velocity_planner): add out of lane module (`#3191 <https://github.com/autowarefoundation/autoware.universe/issues/3191>`_)
   * Add OutOfLane module to the behavior_velocity_planner
   * Add functions for calculating path footprint and overlaps (WIP)
   * Update behavior_planning launch file to add out_of_lane param file
@@ -650,7 +650,7 @@ Changelog for package tier4_planning_launch
   * Remove default value for declare_parameter of 'launch_run_out'
   ---------
   Co-authored-by: Satoshi OTA <44889564+satoshi-ota@users.noreply.github.com>
-* feat(avoidance_by_lc): add new module to avoid obstacle by lane change (`#3125 <https://github.com/youtalk/autoware.universe/issues/3125>`_)
+* feat(avoidance_by_lc): add new module to avoid obstacle by lane change (`#3125 <https://github.com/autowarefoundation/autoware.universe/issues/3125>`_)
   * feat(rtc_interface): add new module avoidance by lc
   * feat(launch): add new param files
   * feat(avoidance_by_lc): add avoidance by lane change module
@@ -660,12 +660,12 @@ Changelog for package tier4_planning_launch
   * fix request condition
   * fix build error
   ---------
-* feat(behavior_path_planner): update behavior param file (`#3220 <https://github.com/youtalk/autoware.universe/issues/3220>`_)
+* feat(behavior_path_planner): update behavior param file (`#3220 <https://github.com/autowarefoundation/autoware.universe/issues/3220>`_)
   * feat(behavior_path_planner): add new config file for manger
   * feat(launch): add config path
   * fix(behavior_path_planner): add missing param file
   ---------
-* feat(diagnostic_converter): add converter to use planning_evaluator's output for scenario's condition (`#2514 <https://github.com/youtalk/autoware.universe/issues/2514>`_)
+* feat(diagnostic_converter): add converter to use planning_evaluator's output for scenario's condition (`#2514 <https://github.com/autowarefoundation/autoware.universe/issues/2514>`_)
   * add original diagnostic_convertor
   * add test
   * fix typo
@@ -715,8 +715,8 @@ Changelog for package tier4_planning_launch
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Maxime CLEMENT <78338830+maxime-clem@users.noreply.github.com>
-* feat(mission_planner): refine goal pose with parameter and add config file (`#2603 <https://github.com/youtalk/autoware.universe/issues/2603>`_)
-* feat(behavior_path_planner): pull over freespace parking (`#2879 <https://github.com/youtalk/autoware.universe/issues/2879>`_)
+* feat(mission_planner): refine goal pose with parameter and add config file (`#2603 <https://github.com/autowarefoundation/autoware.universe/issues/2603>`_)
+* feat(behavior_path_planner): pull over freespace parking (`#2879 <https://github.com/autowarefoundation/autoware.universe/issues/2879>`_)
   * feat(behavior_path_planner): pull over freespace parking
   * Update planning/behavior_path_planner/include/behavior_path_planner/scene_module/pull_over/pull_over_module.hpp
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
@@ -729,19 +729,19 @@ Changelog for package tier4_planning_launch
   * pre-commit
   ---------
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
-* refactor(obstacle_avoidance_planner): clean up the code (`#2796 <https://github.com/youtalk/autoware.universe/issues/2796>`_)
+* refactor(obstacle_avoidance_planner): clean up the code (`#2796 <https://github.com/autowarefoundation/autoware.universe/issues/2796>`_)
   * update obstacle avoidance planner, static centerline optimizer, tier4_planning_launch
   * update velocity on joint and correct trajectory z
   * update
   * minor change
   * pre-commit
   ---------
-* refactor(planning_error_monitor): remove pkg (`#2604 <https://github.com/youtalk/autoware.universe/issues/2604>`_)
+* refactor(planning_error_monitor): remove pkg (`#2604 <https://github.com/autowarefoundation/autoware.universe/issues/2604>`_)
   * remove planning_error_monitor
   * remove launch
   ---------
-* fix(tier4_planning_launch): remove unnecessary config (`#2910 <https://github.com/youtalk/autoware.universe/issues/2910>`_)
-* feat(behavior_velocity): add mandatory detection area for run out module (`#2864 <https://github.com/youtalk/autoware.universe/issues/2864>`_)
+* fix(tier4_planning_launch): remove unnecessary config (`#2910 <https://github.com/autowarefoundation/autoware.universe/issues/2910>`_)
+* feat(behavior_velocity): add mandatory detection area for run out module (`#2864 <https://github.com/autowarefoundation/autoware.universe/issues/2864>`_)
   * feat: add mandatory detection area
   * change the topic order to subscribe compare map filtered points
   * define function for transform pointcloud
@@ -763,12 +763,12 @@ Changelog for package tier4_planning_launch
   * style(pre-commit): autofix
   ---------
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(behavior_path_planner): expand the drivable area based on the vehicle footprint (`#2609 <https://github.com/youtalk/autoware.universe/issues/2609>`_)
-* ci(pre-commit): autoupdate (`#2819 <https://github.com/youtalk/autoware.universe/issues/2819>`_)
+* feat(behavior_path_planner): expand the drivable area based on the vehicle footprint (`#2609 <https://github.com/autowarefoundation/autoware.universe/issues/2609>`_)
+* ci(pre-commit): autoupdate (`#2819 <https://github.com/autowarefoundation/autoware.universe/issues/2819>`_)
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* chore(tier4_planning_launch): add missing params and sort params of costmap generator (`#2764 <https://github.com/youtalk/autoware.universe/issues/2764>`_)
-* refactor(behavior_path_planner): set occupancy grid map topic name from launch (`#2725 <https://github.com/youtalk/autoware.universe/issues/2725>`_)
-* feat(behavior_path_planner): external request lane change (`#2442 <https://github.com/youtalk/autoware.universe/issues/2442>`_)
+* chore(tier4_planning_launch): add missing params and sort params of costmap generator (`#2764 <https://github.com/autowarefoundation/autoware.universe/issues/2764>`_)
+* refactor(behavior_path_planner): set occupancy grid map topic name from launch (`#2725 <https://github.com/autowarefoundation/autoware.universe/issues/2725>`_)
+* feat(behavior_path_planner): external request lane change (`#2442 <https://github.com/autowarefoundation/autoware.universe/issues/2442>`_)
   * feature(behavior_path_planner): add external request lane change module
   feature(behavior_path_planner): fix for RTC
   feature(behavior_path_planner): fix decision logic
@@ -790,7 +790,7 @@ Changelog for package tier4_planning_launch
   * Update rtc_auto_mode_manager.param.yaml
   * fix(route_handler): remove redundant code
   * fix(behavior_path_planner): fix for turn signal
-* feat(planning_validator): add planning validator package (`#1947 <https://github.com/youtalk/autoware.universe/issues/1947>`_)
+* feat(planning_validator): add planning validator package (`#1947 <https://github.com/autowarefoundation/autoware.universe/issues/1947>`_)
   * feat(planning_validator): add planning validator package
   * remove planning_error_monitor
   * pre-commit
@@ -827,21 +827,21 @@ Changelog for package tier4_planning_launch
   * update doc!
   * fix readme
   * update
-* feat(behavior_path_planner): modified goal with uuid (`#2602 <https://github.com/youtalk/autoware.universe/issues/2602>`_)
+* feat(behavior_path_planner): modified goal with uuid (`#2602 <https://github.com/autowarefoundation/autoware.universe/issues/2602>`_)
   * feat(behavior_path_planner): modified goal with uuid
   * fix typo
   * fix for top header
   * change to PoseWithUuidStamped
-* fix(tier4_planning_launch): make use_experimental_lane_change_function available (`#2676 <https://github.com/youtalk/autoware.universe/issues/2676>`_)
-* refactor(tier4_planning_launch): organize arguments (`#2666 <https://github.com/youtalk/autoware.universe/issues/2666>`_)
+* fix(tier4_planning_launch): make use_experimental_lane_change_function available (`#2676 <https://github.com/autowarefoundation/autoware.universe/issues/2676>`_)
+* refactor(tier4_planning_launch): organize arguments (`#2666 <https://github.com/autowarefoundation/autoware.universe/issues/2666>`_)
   * refactor(tier4_planning_launch): organize arguments
   * update
-* feat(behavior_path_planner): param to skip some linestring types when expanding the drivable area (`#2288 <https://github.com/youtalk/autoware.universe/issues/2288>`_)
-* feat(behavior_velocity_planner): add speed bump module (`#647 <https://github.com/youtalk/autoware.universe/issues/647>`_)
+* feat(behavior_path_planner): param to skip some linestring types when expanding the drivable area (`#2288 <https://github.com/autowarefoundation/autoware.universe/issues/2288>`_)
+* feat(behavior_velocity_planner): add speed bump module (`#647 <https://github.com/autowarefoundation/autoware.universe/issues/647>`_)
   Co-authored-by: Kosuke Takeuchi <kosuke.tnp@gmail.com>
   Co-authored-by: Takayuki Murooka <takayuki5168@gmail.com>
-* fix(tier4_planning_launch): remove unintended config file (`#2554 <https://github.com/youtalk/autoware.universe/issues/2554>`_)
-* feat(tier4_planning_launch): remove configs and move to autoware_launch (`#2543 <https://github.com/youtalk/autoware.universe/issues/2543>`_)
+* fix(tier4_planning_launch): remove unintended config file (`#2554 <https://github.com/autowarefoundation/autoware.universe/issues/2554>`_)
+* feat(tier4_planning_launch): remove configs and move to autoware_launch (`#2543 <https://github.com/autowarefoundation/autoware.universe/issues/2543>`_)
   * feat(tier4_planning_launch): remove configs and move to autoware_launch
   * fix
   * remove config
@@ -849,15 +849,15 @@ Changelog for package tier4_planning_launch
   * Update launch/tier4_planning_launch/README.md
   Co-authored-by: kminoda <44218668+kminoda@users.noreply.github.com>
   Co-authored-by: kminoda <44218668+kminoda@users.noreply.github.com>
-* fix(intersection): fixed stuck vehicle detection area (`#2463 <https://github.com/youtalk/autoware.universe/issues/2463>`_)
-* feat(behavior_path_planner): remove unnecessary parameters (`#2516 <https://github.com/youtalk/autoware.universe/issues/2516>`_)
+* fix(intersection): fixed stuck vehicle detection area (`#2463 <https://github.com/autowarefoundation/autoware.universe/issues/2463>`_)
+* feat(behavior_path_planner): remove unnecessary parameters (`#2516 <https://github.com/autowarefoundation/autoware.universe/issues/2516>`_)
   * feat(behavior_path_planner): remove unnecessary parameters
   * remove from static_centerline_optimizer
-* feat(obstacle_cruies_planner): improve pid_based cruise planner (`#2507 <https://github.com/youtalk/autoware.universe/issues/2507>`_)
+* feat(obstacle_cruies_planner): improve pid_based cruise planner (`#2507 <https://github.com/autowarefoundation/autoware.universe/issues/2507>`_)
   * feat(obstacle_cruies_planner): improve pid_based cruise planner
   * fix
   * update param in tier4_planning_launch
-* feat(behavior_path_planner, obstacle_avoidance_planner): add new drivable area (`#2472 <https://github.com/youtalk/autoware.universe/issues/2472>`_)
+* feat(behavior_path_planner, obstacle_avoidance_planner): add new drivable area (`#2472 <https://github.com/autowarefoundation/autoware.universe/issues/2472>`_)
   * update
   * update
   * update
@@ -878,14 +878,14 @@ Changelog for package tier4_planning_launch
   * fix some codes
   * change to makerker array
   * change avoidance utils
-* refactor(behavior_path_planner): move turn_signal_on_swerving param to bpp.param.yaml (`#2406 <https://github.com/youtalk/autoware.universe/issues/2406>`_)
+* refactor(behavior_path_planner): move turn_signal_on_swerving param to bpp.param.yaml (`#2406 <https://github.com/autowarefoundation/autoware.universe/issues/2406>`_)
   * move turn_signal_on_swerving param to bpp.param.yaml
   * change default value to true
   * add description
   * ci(pre-commit): autofix
   Co-authored-by: beyza <bnk@leodrive.ai>
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(avoidance): improve avoidance target filter (`#2329 <https://github.com/youtalk/autoware.universe/issues/2329>`_)
+* feat(avoidance): improve avoidance target filter (`#2329 <https://github.com/autowarefoundation/autoware.universe/issues/2329>`_)
   * feat(route_handler): add getMostLeftLanelet()
   * feat(avoidance): calc shiftable ratio in avoidance target filtering process
   * feat(avoidance): output object's debug info for rviz
@@ -893,7 +893,7 @@ Changelog for package tier4_planning_launch
   * feat(tier4_planning_launch): add new params for avoidance
   * fix(avoidance): reorder params for readability
   * fix(tier4_planning_launch): reorder params for readability
-* feat(behavior_path_planner): update path when object is gone (`#2314 <https://github.com/youtalk/autoware.universe/issues/2314>`_)
+* feat(behavior_path_planner): update path when object is gone (`#2314 <https://github.com/autowarefoundation/autoware.universe/issues/2314>`_)
   * feat(behavior_path_planner): update state with obstacles.
   feat(behavior_path_planner): update path when obstacle is gone
   * ci(pre-commit): autofix
@@ -911,7 +911,7 @@ Changelog for package tier4_planning_launch
   * ci(pre-commit): autofix
   * fix typos
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(behavior_path_planner): add option to turn signal while obstacle swerving (`#2333 <https://github.com/youtalk/autoware.universe/issues/2333>`_)
+* feat(behavior_path_planner): add option to turn signal while obstacle swerving (`#2333 <https://github.com/autowarefoundation/autoware.universe/issues/2333>`_)
   * add turn_signal_on_swerving param
   * add option for signals
   * get turn_signal_on_swerving param from config file
@@ -919,27 +919,27 @@ Changelog for package tier4_planning_launch
   * ci(pre-commit): autofix
   Co-authored-by: beyza <bnk@leodrive.ai>
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(obstacle_avoidance_planner): apply dynamic path length to fixed trajectory in eb (`#2357 <https://github.com/youtalk/autoware.universe/issues/2357>`_)
+* fix(obstacle_avoidance_planner): apply dynamic path length to fixed trajectory in eb (`#2357 <https://github.com/autowarefoundation/autoware.universe/issues/2357>`_)
   * fix(obstacle_avoidance_planner): apply dynamic path length to fixed trajectory in eb
   * add flag to enable clipping fixed trajectory
   * add maintainer
-* fix(slow_down_planner): improper parameter used in slow down (`#2276 <https://github.com/youtalk/autoware.universe/issues/2276>`_)
+* fix(slow_down_planner): improper parameter used in slow down (`#2276 <https://github.com/autowarefoundation/autoware.universe/issues/2276>`_)
   * fix(slow_down_planner): improper parameter used in slow down
   * fix(tier4_planning_launch): remove hardcoded param enable_slow_down from launch.py
-* feat(obstacle_avoidance_planner): parameterize non_fixed_trajectory_length (`#2349 <https://github.com/youtalk/autoware.universe/issues/2349>`_)
-* fix(behavior_path_planner): replace object_hold_max_count with object_last_seen_threshold (`#2345 <https://github.com/youtalk/autoware.universe/issues/2345>`_)
+* feat(obstacle_avoidance_planner): parameterize non_fixed_trajectory_length (`#2349 <https://github.com/autowarefoundation/autoware.universe/issues/2349>`_)
+* fix(behavior_path_planner): replace object_hold_max_count with object_last_seen_threshold (`#2345 <https://github.com/autowarefoundation/autoware.universe/issues/2345>`_)
   fix: replace object_hold_max_count with object_last_seen_threshold
-* feat(behavior_velocity_planner): parameterize ego_yield_query_stop_duration for crosswalk module (`#2346 <https://github.com/youtalk/autoware.universe/issues/2346>`_)
+* feat(behavior_velocity_planner): parameterize ego_yield_query_stop_duration for crosswalk module (`#2346 <https://github.com/autowarefoundation/autoware.universe/issues/2346>`_)
   feat: parameterize ego_yield_query_stop_duration for crosswalk module
-* feat(avoidance): improve avoidance target filter (`#2282 <https://github.com/youtalk/autoware.universe/issues/2282>`_)
+* feat(avoidance): improve avoidance target filter (`#2282 <https://github.com/autowarefoundation/autoware.universe/issues/2282>`_)
   * feat(avoidance): use envelope polygon for measure against perception noise
   * feat(avoidance): use moving time for measure against perception noise
   * feat(tier4_planning_launch): add new params for avoidance
   * fix(avoidance): reserve marker array size
-* feat(motion_velocity_smoother): tunable deceleration limit for curve … (`#2278 <https://github.com/youtalk/autoware.universe/issues/2278>`_)
+* feat(motion_velocity_smoother): tunable deceleration limit for curve … (`#2278 <https://github.com/autowarefoundation/autoware.universe/issues/2278>`_)
   feat(motion_velocity_smoother): tunable deceleration limit for curve deceleration
-* feat(tier4_planning/control_launch): add missing dependency (`#2201 <https://github.com/youtalk/autoware.universe/issues/2201>`_)
-* feat: add 'obstacle_velocity_limiter' package (`#1579 <https://github.com/youtalk/autoware.universe/issues/1579>`_)
+* feat(tier4_planning/control_launch): add missing dependency (`#2201 <https://github.com/autowarefoundation/autoware.universe/issues/2201>`_)
+* feat: add 'obstacle_velocity_limiter' package (`#1579 <https://github.com/autowarefoundation/autoware.universe/issues/1579>`_)
   * Initial commit with barebone SafeVelocityAdjustorNode
   * Add debug topics, launch file, and config file
   * Fix debug markers
@@ -1041,33 +1041,33 @@ Changelog for package tier4_planning_launch
   * Update copyright notice: Tier IV -> TIER IV
   * Remove use_sim_time param from node launch file
   * Update launch files to run in the motion_planner + add launch config
-* feat(motion_velocity_smoother): change osqp parameter (`#2157 <https://github.com/youtalk/autoware.universe/issues/2157>`_)
-* ci(pre-commit): format SVG files (`#2172 <https://github.com/youtalk/autoware.universe/issues/2172>`_)
+* feat(motion_velocity_smoother): change osqp parameter (`#2157 <https://github.com/autowarefoundation/autoware.universe/issues/2157>`_)
+* ci(pre-commit): format SVG files (`#2172 <https://github.com/autowarefoundation/autoware.universe/issues/2172>`_)
   * ci(pre-commit): format SVG files
   * ci(pre-commit): autofix
   * apply pre-commit
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(motion_velocity_smoother): change max_lateral_accel from 0.8 to 1.0 (`#2057 <https://github.com/youtalk/autoware.universe/issues/2057>`_)
-* feat(behavior_path_planner): params to expand drivable area in each module (`#1973 <https://github.com/youtalk/autoware.universe/issues/1973>`_)
-* feat(behavior_path_planner): add turn signal parameters (`#2086 <https://github.com/youtalk/autoware.universe/issues/2086>`_)
+* feat(motion_velocity_smoother): change max_lateral_accel from 0.8 to 1.0 (`#2057 <https://github.com/autowarefoundation/autoware.universe/issues/2057>`_)
+* feat(behavior_path_planner): params to expand drivable area in each module (`#1973 <https://github.com/autowarefoundation/autoware.universe/issues/1973>`_)
+* feat(behavior_path_planner): add turn signal parameters (`#2086 <https://github.com/autowarefoundation/autoware.universe/issues/2086>`_)
   * feat(behavior_path_planner): add and change parameters
   * update
   * update
-* feat(behavior_path_planner): pull_over lateral goal search (`#2036 <https://github.com/youtalk/autoware.universe/issues/2036>`_)
+* feat(behavior_path_planner): pull_over lateral goal search (`#2036 <https://github.com/autowarefoundation/autoware.universe/issues/2036>`_)
   * feat(behavior_path_planner): pull_over lateral goal search
   * fix werror of humble
-* feat(obstacle_cruise_planner): add an explanation (`#2034 <https://github.com/youtalk/autoware.universe/issues/2034>`_)
+* feat(obstacle_cruise_planner): add an explanation (`#2034 <https://github.com/autowarefoundation/autoware.universe/issues/2034>`_)
   * feat(obstacle_cruise_planner): add an explanation
   * update readme
-* feat(run_out): avoid chattering of state transition (`#1975 <https://github.com/youtalk/autoware.universe/issues/1975>`_)
+* feat(run_out): avoid chattering of state transition (`#1975 <https://github.com/autowarefoundation/autoware.universe/issues/1975>`_)
   * feat: keep approach state to avoid chattering of detection
   * add parameter
   * update parameter
   * update documents
   * revert changed parameter
-* feat(obstacle_cruise_planner): add goal safe distance (`#2031 <https://github.com/youtalk/autoware.universe/issues/2031>`_)
-* chore(behavior_velocity): add maintainer for run out module (`#1967 <https://github.com/youtalk/autoware.universe/issues/1967>`_)
-* refactor(run_out): add state machine class for state transition  (`#1884 <https://github.com/youtalk/autoware.universe/issues/1884>`_)
+* feat(obstacle_cruise_planner): add goal safe distance (`#2031 <https://github.com/autowarefoundation/autoware.universe/issues/2031>`_)
+* chore(behavior_velocity): add maintainer for run out module (`#1967 <https://github.com/autowarefoundation/autoware.universe/issues/1967>`_)
+* refactor(run_out): add state machine class for state transition  (`#1884 <https://github.com/autowarefoundation/autoware.universe/issues/1884>`_)
   * refactor(run_out): add state machine class for state transition
   * remove debug print
   * move parameters
@@ -1076,7 +1076,7 @@ Changelog for package tier4_planning_launch
   * fix conflict
   * remove unused argument
   * fix parameter value
-* feat(behavior_path_planner): add pull_over base class (`#1911 <https://github.com/youtalk/autoware.universe/issues/1911>`_)
+* feat(behavior_path_planner): add pull_over base class (`#1911 <https://github.com/autowarefoundation/autoware.universe/issues/1911>`_)
   * feat(behavior_path_planner): add pull_over base class
   * modify calculation of velocity abs
   * modify from review
@@ -1089,9 +1089,9 @@ Changelog for package tier4_planning_launch
   * fix werror
   * fix build for main
   Co-authored-by: Zulfaqar Azmi <93502286+zulfaqar-azmi-t4@users.noreply.github.com>
-* chore(tier4_planning_launch): add maintainers (`#1955 <https://github.com/youtalk/autoware.universe/issues/1955>`_)
-* feat(intersection): use intersection_area if available (`#1733 <https://github.com/youtalk/autoware.universe/issues/1733>`_)
-* refactor: replace acc calculation in planning control modules (`#1213 <https://github.com/youtalk/autoware.universe/issues/1213>`_)
+* chore(tier4_planning_launch): add maintainers (`#1955 <https://github.com/autowarefoundation/autoware.universe/issues/1955>`_)
+* feat(intersection): use intersection_area if available (`#1733 <https://github.com/autowarefoundation/autoware.universe/issues/1733>`_)
+* refactor: replace acc calculation in planning control modules (`#1213 <https://github.com/autowarefoundation/autoware.universe/issues/1213>`_)
   * [obstacle_cruise_planner] replace acceleration calculation
   * [obstacle_stop_planner] replace acceleration calculation
   * [trajectory_follower] replace acceleration calculation
@@ -1099,17 +1099,17 @@ Changelog for package tier4_planning_launch
   * fix nullptr check
   * fix controller test
   * fix
-* fix: fix missing dependency (`#1891 <https://github.com/youtalk/autoware.universe/issues/1891>`_)
+* fix: fix missing dependency (`#1891 <https://github.com/autowarefoundation/autoware.universe/issues/1891>`_)
   * fix: fix missing dependency
   * fix
-* feat(obstacle_avoidance_planner): fix can be applied to the first trajectory point (`#1775 <https://github.com/youtalk/autoware.universe/issues/1775>`_)
+* feat(obstacle_avoidance_planner): fix can be applied to the first trajectory point (`#1775 <https://github.com/autowarefoundation/autoware.universe/issues/1775>`_)
   * add bicycle model collision avoidance and single fixed point
   * refactor manual warm start
   * add calculation cost plotter
   * fix
   * fix
   * update params
-* feat(rtc_auto_mode_manager): add rtc_auto_mode_manager and fix auto mode behavior (`#1541 <https://github.com/youtalk/autoware.universe/issues/1541>`_)
+* feat(rtc_auto_mode_manager): add rtc_auto_mode_manager and fix auto mode behavior (`#1541 <https://github.com/autowarefoundation/autoware.universe/issues/1541>`_)
   * feat(rtc_auto_mode_manager): add rtc_auto_mode_manager and fix auto mode behavior
   * ci(pre-commit): autofix
   * fix(rtc_auto_mode_manager): fix typo
@@ -1124,19 +1124,19 @@ Changelog for package tier4_planning_launch
   * feat(rtc_auto_mode_manager): fix initialization
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: taikitanaka3 <65527974+taikitanaka3@users.noreply.github.com>
-* feat(behavior_planning): use acceleration from localization module (`#1859 <https://github.com/youtalk/autoware.universe/issues/1859>`_)
+* feat(behavior_planning): use acceleration from localization module (`#1859 <https://github.com/autowarefoundation/autoware.universe/issues/1859>`_)
   * feat(behavior_path_planner): subscribe acceleration from localization module
   * feat(behavior_velocity_planner): subscribe acceleration from localization module
-* refactor(run_out): remove unused parameter (`#1836 <https://github.com/youtalk/autoware.universe/issues/1836>`_)
-* feat(obstacle_cruise_planner): add terminal collision checker (`#1807 <https://github.com/youtalk/autoware.universe/issues/1807>`_)
+* refactor(run_out): remove unused parameter (`#1836 <https://github.com/autowarefoundation/autoware.universe/issues/1836>`_)
+* feat(obstacle_cruise_planner): add terminal collision checker (`#1807 <https://github.com/autowarefoundation/autoware.universe/issues/1807>`_)
   * feat(motion_utils): add new search zero velocity
   * change arguments
   * feat(obstacle_cruise_planner): add terminal collision checker
   * add parameters
   * change parameters
-* feat(behavior_path_planner): change pull over params (`#1815 <https://github.com/youtalk/autoware.universe/issues/1815>`_)
-* feat(motion_velocity_smoother): add steering rate limit while planning velocity (`#1071 <https://github.com/youtalk/autoware.universe/issues/1071>`_)
-  * feat(motion_velocity_smoother): add steering rate limit while planning velocity (`#1071 <https://github.com/youtalk/autoware.universe/issues/1071>`_)
+* feat(behavior_path_planner): change pull over params (`#1815 <https://github.com/autowarefoundation/autoware.universe/issues/1815>`_)
+* feat(motion_velocity_smoother): add steering rate limit while planning velocity (`#1071 <https://github.com/autowarefoundation/autoware.universe/issues/1071>`_)
+  * feat(motion_velocity_smoother): add steering rate limit while planning velocity (`#1071 <https://github.com/autowarefoundation/autoware.universe/issues/1071>`_)
   function added,
   not turning
   fix the always positive curvature problem
@@ -1180,14 +1180,14 @@ Changelog for package tier4_planning_launch
   * ci(pre-commit): autofix
   Co-authored-by: Berkay <berkay@leodrive.ai>
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(behavior_path_planner): check goal to objects logitudinal distance for pull_over (`#1796 <https://github.com/youtalk/autoware.universe/issues/1796>`_)
+* feat(behavior_path_planner): check goal to objects logitudinal distance for pull_over (`#1796 <https://github.com/autowarefoundation/autoware.universe/issues/1796>`_)
   * feat(behavior_path_planner): check goal to objects logitudinal distance for pull_over
   * Update planning/behavior_path_planner/src/utilities.cpp
   Co-authored-by: Shumpei Wakabayashi <42209144+shmpwk@users.noreply.github.com>
   * rename to goal_to_obstacle_margin
   * fix rear check
   Co-authored-by: Shumpei Wakabayashi <42209144+shmpwk@users.noreply.github.com>
-* refactor(obstacle_stop_planner): update params name for readability (`#1720 <https://github.com/youtalk/autoware.universe/issues/1720>`_)
+* refactor(obstacle_stop_planner): update params name for readability (`#1720 <https://github.com/autowarefoundation/autoware.universe/issues/1720>`_)
   * refactor(obstacle_stop_planner): update parameter name for readability
   * docs(obstacle_stop_planner): update module documentation
   * docs(obstacle_stop_planner): update figure
@@ -1195,8 +1195,8 @@ Changelog for package tier4_planning_launch
   * fix(tier4_planning_launch): separate params by namespace
   * refactor(obstacle_stop_planner): remove default value from declare_parameter
   * refactor(obstacle_stop_planner): add params to config
-* fix(behavior_path_planner): fix pull_over request_length and maximum_deceleration (`#1789 <https://github.com/youtalk/autoware.universe/issues/1789>`_)
-* feat(behavior_path_planner): use object recognition for pull_over (`#1777 <https://github.com/youtalk/autoware.universe/issues/1777>`_)
+* fix(behavior_path_planner): fix pull_over request_length and maximum_deceleration (`#1789 <https://github.com/autowarefoundation/autoware.universe/issues/1789>`_)
+* feat(behavior_path_planner): use object recognition for pull_over (`#1777 <https://github.com/autowarefoundation/autoware.universe/issues/1777>`_)
   * feat(behavior_path_planner): use object recognition for pull_over
   * Update planning/behavior_path_planner/src/scene_module/pull_over/pull_over_module.cpp
   Co-authored-by: Shumpei Wakabayashi <42209144+shmpwk@users.noreply.github.com>
@@ -1205,7 +1205,7 @@ Changelog for package tier4_planning_launch
   * remove unnecessary lines
   * update warn message
   Co-authored-by: Shumpei Wakabayashi <42209144+shmpwk@users.noreply.github.com>
-* feat(behavior_path_planner): update pull out (`#1438 <https://github.com/youtalk/autoware.universe/issues/1438>`_)
+* feat(behavior_path_planner): update pull out (`#1438 <https://github.com/autowarefoundation/autoware.universe/issues/1438>`_)
   * feat(behavior_path_planner): update pull out
   * refactor(behavior_path_planner): rename pull_out params
   * update from review
@@ -1215,10 +1215,10 @@ Changelog for package tier4_planning_launch
   * fix debug marker
   * add seach priority
   * change before_pull_out_straight_distance to 0.0
-* refactor(behavior_path_planner): rename pull_over params (`#1747 <https://github.com/youtalk/autoware.universe/issues/1747>`_)
-* feat(intersection): continue detection after pass judge (`#1719 <https://github.com/youtalk/autoware.universe/issues/1719>`_)
-* feat(behavior_path_palnner): update geometric parallel parking for pull_out module (`#1534 <https://github.com/youtalk/autoware.universe/issues/1534>`_)
-* chore(planning/control packages): organized authors and maintainers (`#1610 <https://github.com/youtalk/autoware.universe/issues/1610>`_)
+* refactor(behavior_path_planner): rename pull_over params (`#1747 <https://github.com/autowarefoundation/autoware.universe/issues/1747>`_)
+* feat(intersection): continue detection after pass judge (`#1719 <https://github.com/autowarefoundation/autoware.universe/issues/1719>`_)
+* feat(behavior_path_palnner): update geometric parallel parking for pull_out module (`#1534 <https://github.com/autowarefoundation/autoware.universe/issues/1534>`_)
+* chore(planning/control packages): organized authors and maintainers (`#1610 <https://github.com/autowarefoundation/autoware.universe/issues/1610>`_)
   * organized planning authors and maintainers
   * organized control authors and maintainers
   * fix typo
@@ -1251,9 +1251,9 @@ Changelog for package tier4_planning_launch
   * fix
   Co-authored-by: Kenji Miyake <31987104+kenji-miyake@users.noreply.github.com>
   Co-authored-by: Kenji Miyake <kenji.miyake@tier4.jp>
-* feat(behavior_path_planner): enable pull_over backward_parking by default (`#1653 <https://github.com/youtalk/autoware.universe/issues/1653>`_)
-* feat(obstacle_avoidance_planne): enable plan_from_ego by default (`#1673 <https://github.com/youtalk/autoware.universe/issues/1673>`_)
-* feat: add vector map inside area filter (`#1530 <https://github.com/youtalk/autoware.universe/issues/1530>`_)
+* feat(behavior_path_planner): enable pull_over backward_parking by default (`#1653 <https://github.com/autowarefoundation/autoware.universe/issues/1653>`_)
+* feat(obstacle_avoidance_planne): enable plan_from_ego by default (`#1673 <https://github.com/autowarefoundation/autoware.universe/issues/1673>`_)
+* feat: add vector map inside area filter (`#1530 <https://github.com/autowarefoundation/autoware.universe/issues/1530>`_)
   * feat: add no detection area filter
   * ci(pre-commit): autofix
   * chore: add documents
@@ -1277,10 +1277,10 @@ Changelog for package tier4_planning_launch
   * chore: using namespace of PolygonCgal for readability
   * feat: add functions for multiple polygons
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* refactor(mission_planner): prepare to support ad api (`#1561 <https://github.com/youtalk/autoware.universe/issues/1561>`_)
+* refactor(mission_planner): prepare to support ad api (`#1561 <https://github.com/autowarefoundation/autoware.universe/issues/1561>`_)
   * refactor(mission_planner): prepare to support ad api
   * fix node name
-* feat(surround_obstacle_checker): add vehicle footprint with offset (`#1577 <https://github.com/youtalk/autoware.universe/issues/1577>`_)
+* feat(surround_obstacle_checker): add vehicle footprint with offset (`#1577 <https://github.com/autowarefoundation/autoware.universe/issues/1577>`_)
   * fix: right and left overhang fix in SelfPolygon func
   * feat: init base polygon
   * ci(pre-commit): autofix
@@ -1291,32 +1291,32 @@ Changelog for package tier4_planning_launch
   * feat: add footprint publish boolean param to config
   * docs: update readme
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(behavior_path_planner): resample output path (`#1604 <https://github.com/youtalk/autoware.universe/issues/1604>`_)
+* feat(behavior_path_planner): resample output path (`#1604 <https://github.com/autowarefoundation/autoware.universe/issues/1604>`_)
   * feat(behavior_path_planner): resample output path
   * update param
-* fix(behavior_velocity_planner): disable debug path publisher by default (`#1680 <https://github.com/youtalk/autoware.universe/issues/1680>`_)
-* fix(behavior_path_planner): pull_over shift parking (`#1652 <https://github.com/youtalk/autoware.universe/issues/1652>`_)
+* fix(behavior_velocity_planner): disable debug path publisher by default (`#1680 <https://github.com/autowarefoundation/autoware.universe/issues/1680>`_)
+* fix(behavior_path_planner): pull_over shift parking (`#1652 <https://github.com/autowarefoundation/autoware.universe/issues/1652>`_)
   * fix(behavior_path_planner): pull_over shift parking
   * check lane_depature for each shift path
   * change pull_over_velocity to 3.0
-* feat(obstacle_cruise_planner): add velocity_threshold to outside obstacle (`#1646 <https://github.com/youtalk/autoware.universe/issues/1646>`_)
+* feat(obstacle_cruise_planner): add velocity_threshold to outside obstacle (`#1646 <https://github.com/autowarefoundation/autoware.universe/issues/1646>`_)
   * feat(obstacle_cruise_planner): add velocity_threshold to outside obstacle
   * add parameter to config
   * update readme
-* feat(behavior_velocity): publish internal debug path (`#1635 <https://github.com/youtalk/autoware.universe/issues/1635>`_)
+* feat(behavior_velocity): publish internal debug path (`#1635 <https://github.com/autowarefoundation/autoware.universe/issues/1635>`_)
   * feat(behavior_velocity): publish internal path as debug path
   * feat(behavior_velocity): add debug internal scene module path
   * feat(behavior_velcoity, planning_debug_tools): add params for debug path
-* feat(run_out): add lateral nearest points filter  (`#1527 <https://github.com/youtalk/autoware.universe/issues/1527>`_)
+* feat(run_out): add lateral nearest points filter  (`#1527 <https://github.com/autowarefoundation/autoware.universe/issues/1527>`_)
   * feat(run_out): add lateral nearest points filter
   * chore: update documents
   * chore: pre-commit fix
   * chore: fix typo
-* fix(tier4_planning_launch): change parameter to enable abort lane change (`#1602 <https://github.com/youtalk/autoware.universe/issues/1602>`_)
-* feat(tier4_planning_launch): add nearest search param (`#1582 <https://github.com/youtalk/autoware.universe/issues/1582>`_)
+* fix(tier4_planning_launch): change parameter to enable abort lane change (`#1602 <https://github.com/autowarefoundation/autoware.universe/issues/1602>`_)
+* feat(tier4_planning_launch): add nearest search param (`#1582 <https://github.com/autowarefoundation/autoware.universe/issues/1582>`_)
   * feat(tier4_planning_launch): add nearest search param
   * fix
-* feat(obstacle_cruise_planner): delete shape from target obstacle (`#1558 <https://github.com/youtalk/autoware.universe/issues/1558>`_)
+* feat(obstacle_cruise_planner): delete shape from target obstacle (`#1558 <https://github.com/autowarefoundation/autoware.universe/issues/1558>`_)
   * delete is on ego traj
   * update
   * feat(obstacle_cruise_planner): delete shape
@@ -1328,24 +1328,24 @@ Changelog for package tier4_planning_launch
   * fix terminal point
   * update
   * update parameters
-* fix(behavior_velocity_planner, tier4_planning_launch): modify delay_resopnse_time (`#1557 <https://github.com/youtalk/autoware.universe/issues/1557>`_)
+* fix(behavior_velocity_planner, tier4_planning_launch): modify delay_resopnse_time (`#1557 <https://github.com/autowarefoundation/autoware.universe/issues/1557>`_)
   * fix(behavior_velocity_planner): modify delay_resopnse_time
   * fix(tier4_planning_launch): modify delay_resopnse_time
-* fix(costmap_generator): restrict costmap within parking lot (`#996 <https://github.com/youtalk/autoware.universe/issues/996>`_)
+* fix(costmap_generator): restrict costmap within parking lot (`#996 <https://github.com/autowarefoundation/autoware.universe/issues/996>`_)
   * fix(costmap_generator): restrict costmap within parking lot
   * add parameters for free space planning area selection
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(obstacle_cruise_planner): add missing param (`#1515 <https://github.com/youtalk/autoware.universe/issues/1515>`_)
-* fix(behavior_path_planner): fix turn singal output in a avoidance sequence (`#1511 <https://github.com/youtalk/autoware.universe/issues/1511>`_)
+* fix(obstacle_cruise_planner): add missing param (`#1515 <https://github.com/autowarefoundation/autoware.universe/issues/1515>`_)
+* fix(behavior_path_planner): fix turn singal output in a avoidance sequence (`#1511 <https://github.com/autowarefoundation/autoware.universe/issues/1511>`_)
   * remove search distance for turn signal
   * set distance to max when a lane_attriute is straight
-* refactor(obstacle_avoidance_planner): use max_steer_angle in common (`#1423 <https://github.com/youtalk/autoware.universe/issues/1423>`_)
+* refactor(obstacle_avoidance_planner): use max_steer_angle in common (`#1423 <https://github.com/autowarefoundation/autoware.universe/issues/1423>`_)
   * refactor(obstacle_avoidance_planner): use max_steer_angle in common
   * fix runtime error
   * fix
   * fix yaml file
-* feat(behavior_velocitiy_planner): predict front vehicle deceleration in intersection and temporarily stop (`#1194 <https://github.com/youtalk/autoware.universe/issues/1194>`_)
+* feat(behavior_velocitiy_planner): predict front vehicle deceleration in intersection and temporarily stop (`#1194 <https://github.com/autowarefoundation/autoware.universe/issues/1194>`_)
   * calculating stopping distance for frontcar from estimated velocity
   * calc stopping_point_projected and stopping_point along centerline
   * create stuck_vehicle_detect_area in modifyVelocity(TODO: use pose of frontcar at stopping_position
@@ -1360,21 +1360,21 @@ Changelog for package tier4_planning_launch
   * fixed the order of isAheadOf, working in scenario test as well
   * added description in stuck vehicle detection section
   * reflected comments: (1) use vector of ids (2) changed intersection.param.yaml
-* feat(tier4_planning_launch): declare param path argument (`#1337 <https://github.com/youtalk/autoware.universe/issues/1337>`_)
+* feat(tier4_planning_launch): declare param path argument (`#1337 <https://github.com/autowarefoundation/autoware.universe/issues/1337>`_)
   * feat(tier4_planning_launch): declare param path argument
   * Update launch/tier4_planning_launch/launch/planning.launch.xml
   Co-authored-by: Kenji Miyake <31987104+kenji-miyake@users.noreply.github.com>
   * Update launch/tier4_planning_launch/launch/planning.launch.xml
   Co-authored-by: Kenji Miyake <31987104+kenji-miyake@users.noreply.github.com>
   Co-authored-by: Kenji Miyake <31987104+kenji-miyake@users.noreply.github.com>
-* fix(behavior_path_planner): remove unnecessary publisher and subscriber  (`#1371 <https://github.com/youtalk/autoware.universe/issues/1371>`_)
+* fix(behavior_path_planner): remove unnecessary publisher and subscriber  (`#1371 <https://github.com/autowarefoundation/autoware.universe/issues/1371>`_)
   * fix(behavior_path_planner): remove unnecessary publisher and subscriber
   * fix(tier4_planning_launch): fix launch file
   * fix(tier4_planning_launch): fix xml file
-* fix: fix parameter names of motion_velocity_smoother (`#1376 <https://github.com/youtalk/autoware.universe/issues/1376>`_)
+* fix: fix parameter names of motion_velocity_smoother (`#1376 <https://github.com/autowarefoundation/autoware.universe/issues/1376>`_)
   * fix: fix parameter names of motion_velocity_smoother
   * fix indent
-* feat(intersection_module): add option to change the stopline position (`#1364 <https://github.com/youtalk/autoware.universe/issues/1364>`_)
+* feat(intersection_module): add option to change the stopline position (`#1364 <https://github.com/autowarefoundation/autoware.universe/issues/1364>`_)
   * use constexpr
   * add stopline before intersection
   * feat(intersection_module): add update stopline index before intersection
@@ -1385,19 +1385,19 @@ Changelog for package tier4_planning_launch
   * reduce nest
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* fix(tier4_planning_launch): add group tag (`#1239 <https://github.com/youtalk/autoware.universe/issues/1239>`_)
+* fix(tier4_planning_launch): add group tag (`#1239 <https://github.com/autowarefoundation/autoware.universe/issues/1239>`_)
   * fix(tier4_planning_launch): add group tag
   * move arg
   * move arg inside group
-* fix(behavior_velocity_planner): fix rtc behavior in crosswalk module (`#1296 <https://github.com/youtalk/autoware.universe/issues/1296>`_)
-* feat(behavior_path_planner): update pull_over module (`#873 <https://github.com/youtalk/autoware.universe/issues/873>`_)
+* fix(behavior_velocity_planner): fix rtc behavior in crosswalk module (`#1296 <https://github.com/autowarefoundation/autoware.universe/issues/1296>`_)
+* feat(behavior_path_planner): update pull_over module (`#873 <https://github.com/autowarefoundation/autoware.universe/issues/873>`_)
   * feat(behavior_path_planner): update pull_over module
   * use tf2_geometry_msgs/tf2_geometry_msgs.hpp for humble
   * fix werror of humble
   * fix test
   * fix goal change bug when starting drive
-* feat(tier4_planning_launch): update crosswalk param (`#1265 <https://github.com/youtalk/autoware.universe/issues/1265>`_)
-* feat(behavior_velocity): filter points with detection area (`#1073 <https://github.com/youtalk/autoware.universe/issues/1073>`_)
+* feat(tier4_planning_launch): update crosswalk param (`#1265 <https://github.com/autowarefoundation/autoware.universe/issues/1265>`_)
+* feat(behavior_velocity): filter points with detection area (`#1073 <https://github.com/autowarefoundation/autoware.universe/issues/1073>`_)
   * feat(behavior_velocity): filter points with detection area
   * remove unnecessary functions
   * update documents
@@ -1407,10 +1407,10 @@ Changelog for package tier4_planning_launch
   * update configs
   * return empty points when the detection area polygon is empty
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* chore(obstacle_avoidance_planner): add description of max_plan_from_ego_length (`#1223 <https://github.com/youtalk/autoware.universe/issues/1223>`_)
+* chore(obstacle_avoidance_planner): add description of max_plan_from_ego_length (`#1223 <https://github.com/autowarefoundation/autoware.universe/issues/1223>`_)
   * chore(obstacle_avoidance_planner): add description of max_plan_from_ego_length
   * fix typo
-* feat(obstacle_cruise_planner): implemented common obstacle stop (`#1185 <https://github.com/youtalk/autoware.universe/issues/1185>`_)
+* feat(obstacle_cruise_planner): implemented common obstacle stop (`#1185 <https://github.com/autowarefoundation/autoware.universe/issues/1185>`_)
   * feat(obstacle_cruise_planner): implemented common obstacle stop
   * fix some implementation
   * minor changes
@@ -1418,11 +1418,11 @@ Changelog for package tier4_planning_launch
   * remove unnecessary code
   * fix CI error
   * fix typo
-* refactor(freespace_planner): parameterize margin. (`#1190 <https://github.com/youtalk/autoware.universe/issues/1190>`_)
-* fix(intersection_module): remove decel parameter (`#1188 <https://github.com/youtalk/autoware.universe/issues/1188>`_)
+* refactor(freespace_planner): parameterize margin. (`#1190 <https://github.com/autowarefoundation/autoware.universe/issues/1190>`_)
+* fix(intersection_module): remove decel parameter (`#1188 <https://github.com/autowarefoundation/autoware.universe/issues/1188>`_)
   * fix(intersection_module): remove decel parameter
   * remove unuse parameter
-* feat(obstacle_cruise_planner): some minor updates (`#1136 <https://github.com/youtalk/autoware.universe/issues/1136>`_)
+* feat(obstacle_cruise_planner): some minor updates (`#1136 <https://github.com/autowarefoundation/autoware.universe/issues/1136>`_)
   * checkout latest obstacle cruise changes
   * fix cruise/stop chattering
   * add lpf for cruise wall
@@ -1433,7 +1433,7 @@ Changelog for package tier4_planning_launch
   * update tier4_planning_launch param
   * fix typo
   * fix CI error
-* feat(obstacle_cruise_planner): clean parameters for optimization based cruise planner (`#1059 <https://github.com/youtalk/autoware.universe/issues/1059>`_)
+* feat(obstacle_cruise_planner): clean parameters for optimization based cruise planner (`#1059 <https://github.com/autowarefoundation/autoware.universe/issues/1059>`_)
   * remove unnecessary parameter
   * add new parameter and delete unnecessary constructor
   * remove unnecessary parameter
@@ -1443,7 +1443,7 @@ Changelog for package tier4_planning_launch
   * delete yaw threshold parameter and update license
   * update
   * remove unnecessary checker
-* feat(intersection): add conflicting area with margin debug (`#1021 <https://github.com/youtalk/autoware.universe/issues/1021>`_)
+* feat(intersection): add conflicting area with margin debug (`#1021 <https://github.com/autowarefoundation/autoware.universe/issues/1021>`_)
   * add detection area margin debug
   * extention lanelet in intersection function
   * feat: add conflicting area with margin
@@ -1459,11 +1459,11 @@ Changelog for package tier4_planning_launch
   * refactor: lanelet::utils::resamplePoints -> resamplePoints
   * feat: add right and left margin parameter
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(tier4_planning_launch): launch rtc_auto_approver (`#1046 <https://github.com/youtalk/autoware.universe/issues/1046>`_)
+* feat(tier4_planning_launch): launch rtc_auto_approver (`#1046 <https://github.com/autowarefoundation/autoware.universe/issues/1046>`_)
   * feature(tier4_planning_launch): launch rtc_auto_approver
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(obstacle_cruise_planner): add new package (`#570 <https://github.com/youtalk/autoware.universe/issues/570>`_)
+* feat(obstacle_cruise_planner): add new package (`#570 <https://github.com/autowarefoundation/autoware.universe/issues/570>`_)
   * feat(obstacle_velocity_planner): add obstacle_velocity_planner
   * udpate yaml
   * update dependency
@@ -1483,23 +1483,23 @@ Changelog for package tier4_planning_launch
   * rename to obstacle_cruise_planner
   * fix tier4_planning_launch
   * fix humble CI
-* feat(behavior_velocity): add run out module (`#752 <https://github.com/youtalk/autoware.universe/issues/752>`_)
-  * fix(behavior_velocity): calculate detection area from the nearest point from ego (`#730 <https://github.com/youtalk/autoware.universe/issues/730>`_)
+* feat(behavior_velocity): add run out module (`#752 <https://github.com/autowarefoundation/autoware.universe/issues/752>`_)
+  * fix(behavior_velocity): calculate detection area from the nearest point from ego (`#730 <https://github.com/autowarefoundation/autoware.universe/issues/730>`_)
   * fix(behavior_velocity): calculate lateral distance from the beginning of the path
   * add argument of min_velocity
   * use veloicty from the nearest point from ego
   * pass struct by reference
   * fix to interpolate point in util
-  * fix(longitudinal_controller_node, vehicle_cmd_gate): update stopped condition and behavior (`#700 <https://github.com/youtalk/autoware.universe/issues/700>`_)
+  * fix(longitudinal_controller_node, vehicle_cmd_gate): update stopped condition and behavior (`#700 <https://github.com/autowarefoundation/autoware.universe/issues/700>`_)
   * fix(longitudinal_controller_node): parameterize stopped state entry condition
   * fix(longitudinal_controller_node): simply set stopped velocity in STOPPED STATE
   * fix(vehicle_cmd_gate): check time duration since the vehicle stopped
-  * docs(autoware_testing): fix link (`#741 <https://github.com/youtalk/autoware.universe/issues/741>`_)
+  * docs(autoware_testing): fix link (`#741 <https://github.com/autowarefoundation/autoware.universe/issues/741>`_)
   * docs(autoware_testing): fix link
   * fix typo
   Co-authored-by: Kenji Miyake <31987104+kenji-miyake@users.noreply.github.com>
-  * fix: trajectory visualizer (`#745 <https://github.com/youtalk/autoware.universe/issues/745>`_)
-  * fix(tier4_autoware_utils): modify build error in rolling (`#720 <https://github.com/youtalk/autoware.universe/issues/720>`_)
+  * fix: trajectory visualizer (`#745 <https://github.com/autowarefoundation/autoware.universe/issues/745>`_)
+  * fix(tier4_autoware_utils): modify build error in rolling (`#720 <https://github.com/autowarefoundation/autoware.universe/issues/720>`_)
   * fix(tier4_autoware_utils): modify build error in rolling
   * fix(lanelet2_extension): add target compile definition for geometry2
   * fix(ekf_localizer): add target compile definition for geometry2
@@ -1537,7 +1537,7 @@ Changelog for package tier4_planning_launch
   * fix(planning_error_monitor): add target compile definition for geometry2
   * fix(planning_evaluator): add target compile definition for geometry2
   * fix(lidar_centerpoint): add target compile definition for geometry2
-  * fix(behavior_velocity): handle the case when finding index failed (`#746 <https://github.com/youtalk/autoware.universe/issues/746>`_)
+  * fix(behavior_velocity): handle the case when finding index failed (`#746 <https://github.com/autowarefoundation/autoware.universe/issues/746>`_)
   * feat: add scene module of dynamic obstacle stop
   * fix warnings
   * add temporary debug value
@@ -1644,14 +1644,14 @@ Changelog for package tier4_planning_launch
   Co-authored-by: Yukihiro Saito <yukky.saito@gmail.com>
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
   Co-authored-by: Makoto Kurihara <mkuri8m@gmail.com>
-* feat(tier4_planning_launch): create parameter yaml for behavior_velocity_planner (`#887 <https://github.com/youtalk/autoware.universe/issues/887>`_)
+* feat(tier4_planning_launch): create parameter yaml for behavior_velocity_planner (`#887 <https://github.com/autowarefoundation/autoware.universe/issues/887>`_)
   * feat(tier4_planning_launch): create parameter yaml for behavior_velocity_planner
   * Update launch/tier4_planning_launch/config/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/behavior_velocity_planner.param.yaml
   Co-authored-by: taikitanaka3 <65527974+taikitanaka3@users.noreply.github.com>
   * feat: add param.yaml in behavior_velocity_planner package
   * some fix
   Co-authored-by: taikitanaka3 <65527974+taikitanaka3@users.noreply.github.com>
-* feat(obstacle_avoidance_planner): some fix for narrow driving (`#916 <https://github.com/youtalk/autoware.universe/issues/916>`_)
+* feat(obstacle_avoidance_planner): some fix for narrow driving (`#916 <https://github.com/autowarefoundation/autoware.universe/issues/916>`_)
   * use car like constraints in mpt
   * use not widest bounds for the first bounds
   * organized params
@@ -1661,8 +1661,8 @@ Changelog for package tier4_planning_launch
   * update config
   * remove unnecessary files
   * update tier4_planning_launch params
-* feat(behavior_velocity): find occlusion more efficiently (`#829 <https://github.com/youtalk/autoware.universe/issues/829>`_)
-* feat(surround_obstacle_checker): separate surround_obstacle_checker from hierarchical planning flow (`#830 <https://github.com/youtalk/autoware.universe/issues/830>`_)
+* feat(behavior_velocity): find occlusion more efficiently (`#829 <https://github.com/autowarefoundation/autoware.universe/issues/829>`_)
+* feat(surround_obstacle_checker): separate surround_obstacle_checker from hierarchical planning flow (`#830 <https://github.com/autowarefoundation/autoware.universe/issues/830>`_)
   * fix(surroud_obstacle_checker): use alias
   * feat(surround_obstacle_checker): use velocity limit
   * chore(surround_obstacle_checker): rename publisher, subscriber and callback functions
@@ -1672,26 +1672,26 @@ Changelog for package tier4_planning_launch
   * refactor(surround_obstacle_checker): cleanup polygon handling
   * refactor(surround_obstacle_checker): use marker helper
   * feat(planning_launch): separate surround_obstacle_checker from hierarchical motion planning flow
-* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/youtalk/autoware.universe/issues/856>`_)
-* refactor: use autoware cmake (`#849 <https://github.com/youtalk/autoware.universe/issues/849>`_)
+* chore: upgrade cmake_minimum_required to 3.14 (`#856 <https://github.com/autowarefoundation/autoware.universe/issues/856>`_)
+* refactor: use autoware cmake (`#849 <https://github.com/autowarefoundation/autoware.universe/issues/849>`_)
   * remove autoware_auto_cmake
   * add build_depend of autoware_cmake
   * use autoware_cmake in CMakeLists.txt
   * fix bugs
   * fix cmake lint errors
-* style: fix format of package.xml (`#844 <https://github.com/youtalk/autoware.universe/issues/844>`_)
-* feat(obstacle_avoidance_planner): parameterize bounds search widths (`#807 <https://github.com/youtalk/autoware.universe/issues/807>`_)
+* style: fix format of package.xml (`#844 <https://github.com/autowarefoundation/autoware.universe/issues/844>`_)
+* feat(obstacle_avoidance_planner): parameterize bounds search widths (`#807 <https://github.com/autowarefoundation/autoware.universe/issues/807>`_)
   * feat(obstacle_avoidance_planner): parameterize bounds search widths
   * update bounds search widths
   * update tier4_planning_launch
   * Added parameter description of README.md
-* chore(behavior_velocity): add system delay parameter and minor update (`#764 <https://github.com/youtalk/autoware.universe/issues/764>`_)
+* chore(behavior_velocity): add system delay parameter and minor update (`#764 <https://github.com/autowarefoundation/autoware.universe/issues/764>`_)
   * chore(behavior_velocity): add system delay parameter and minor update
   * doc(behavior_velocity): add system delay discription
-* fix(motion_velocity_smoother): add stop decel parameter (`#739 <https://github.com/youtalk/autoware.universe/issues/739>`_)
+* fix(motion_velocity_smoother): add stop decel parameter (`#739 <https://github.com/autowarefoundation/autoware.universe/issues/739>`_)
   * add stop decel parameter
   * add stop decel parameter
-* feat(behavior_velocity): occlusion spot generate not detection area occupancy grid (`#620 <https://github.com/youtalk/autoware.universe/issues/620>`_)
+* feat(behavior_velocity): occlusion spot generate not detection area occupancy grid (`#620 <https://github.com/autowarefoundation/autoware.universe/issues/620>`_)
   * feat(behavior_velocity): filter dynamic object by default
   * feat(behavior_velocity): raycast object shadow
   * chore(behavior_velocity): replace target vehicle to filtered vehicle in detection area
@@ -1701,22 +1701,22 @@ Changelog for package tier4_planning_launch
   * fix(behavior_velocity): fix launch and stuck vehicle
   * chore(behavior_velocity): use experiment value
   * chore(behavior_velocity): add comment
-* fix(tier4_planning_launch): fix tier4_planning_launch package (`#660 <https://github.com/youtalk/autoware.universe/issues/660>`_)
-* feat(behavior_path_planner): stop lane_driving planners in non-lane-driving scenario (`#668 <https://github.com/youtalk/autoware.universe/issues/668>`_)
+* fix(tier4_planning_launch): fix tier4_planning_launch package (`#660 <https://github.com/autowarefoundation/autoware.universe/issues/660>`_)
+* feat(behavior_path_planner): stop lane_driving planners in non-lane-driving scenario (`#668 <https://github.com/autowarefoundation/autoware.universe/issues/668>`_)
   * stop lanedriving in parking scenario
   * use skip_first
   * add scenario remap in launch
   * replace warn to info
-* ci(pre-commit): update pre-commit-hooks-ros (`#625 <https://github.com/youtalk/autoware.universe/issues/625>`_)
+* ci(pre-commit): update pre-commit-hooks-ros (`#625 <https://github.com/autowarefoundation/autoware.universe/issues/625>`_)
   * ci(pre-commit): update pre-commit-hooks-ros
   * ci(pre-commit): autofix
   Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
-* feat(behavior_path_planner): parametrize avoidance target type (`#574 <https://github.com/youtalk/autoware.universe/issues/574>`_)
+* feat(behavior_path_planner): parametrize avoidance target type (`#574 <https://github.com/autowarefoundation/autoware.universe/issues/574>`_)
   * parametrize avoidance target type
   * add target type parameter in yaml
   * mototbike -> motorcycle
   * apply clang
-* feat(obstacle avoidance planner): fix out curve, make calculation cost low, make optimization stable, refactor, etc. (`#233 <https://github.com/youtalk/autoware.universe/issues/233>`_)
+* feat(obstacle avoidance planner): fix out curve, make calculation cost low, make optimization stable, refactor, etc. (`#233 <https://github.com/autowarefoundation/autoware.universe/issues/233>`_)
   * feat (obstacle avoidance planner) fix out curve, make optimization stable, make computation cost low, etc
   * fix typos
   * remove unnecessary codes
@@ -1729,12 +1729,12 @@ Changelog for package tier4_planning_launch
   * truncate path to detect path change, and tune path change detection
   * disable yaw slerp
   * fix ci error
-* fix(behavior_path_planner): parametrize avoidance lateral distance threshold (`#404 <https://github.com/youtalk/autoware.universe/issues/404>`_)
+* fix(behavior_path_planner): parametrize avoidance lateral distance threshold (`#404 <https://github.com/autowarefoundation/autoware.universe/issues/404>`_)
   * parametrize lateral threshold
   * format readme
   * apply clang format
-* refactor(scenario_planning.launch.xml): add parameter description (`#464 <https://github.com/youtalk/autoware.universe/issues/464>`_)
-* feat(behavior_path_planner): make drivable area coordinate fixed to the map coordinate and make its size dynamic (`#360 <https://github.com/youtalk/autoware.universe/issues/360>`_)
+* refactor(scenario_planning.launch.xml): add parameter description (`#464 <https://github.com/autowarefoundation/autoware.universe/issues/464>`_)
+* feat(behavior_path_planner): make drivable area coordinate fixed to the map coordinate and make its size dynamic (`#360 <https://github.com/autowarefoundation/autoware.universe/issues/360>`_)
   * make drivable area not to oscillate and its size dynamic
   * update README for new parameters
   * remove getLaneletScope from route_handler
@@ -1743,7 +1743,7 @@ Changelog for package tier4_planning_launch
   * rename function and put it in proper namespace
   * update param for tier4_planning_launch
   Co-authored-by: Takamasa Horibe <horibe.takamasa@gmail.com>
-* feat(behavior_path_planner): better avoidance drivable areas extension in behavior path planning (`#287 <https://github.com/youtalk/autoware.universe/issues/287>`_)
+* feat(behavior_path_planner): better avoidance drivable areas extension in behavior path planning (`#287 <https://github.com/autowarefoundation/autoware.universe/issues/287>`_)
   * feat: Increases the flexibility of the function in dealing with several scenarios
   The implementation updates generateExtendedDrivableArea
   this is a part of .iv PR (`tier4/autoware.iv#2383 <https://github.com/tier4/autoware.iv/issues/2383>`_) port
@@ -1770,8 +1770,8 @@ Changelog for package tier4_planning_launch
   The decision to increase is based on discussion with the planning control team
   and also from input by FI team.
   Co-authored-by: taikitanaka3 <65527974+taikitanaka3@users.noreply.github.com>
-* fix: use autoware_auto_msgs (`#197 <https://github.com/youtalk/autoware.universe/issues/197>`_)
-* feat: change launch package name (`#186 <https://github.com/youtalk/autoware.universe/issues/186>`_)
+* fix: use autoware_auto_msgs (`#197 <https://github.com/autowarefoundation/autoware.universe/issues/197>`_)
+* feat: change launch package name (`#186 <https://github.com/autowarefoundation/autoware.universe/issues/186>`_)
   * rename launch folder
   * autoware_launch -> tier4_autoware_launch
   * integration_launch -> tier4_integration_launch

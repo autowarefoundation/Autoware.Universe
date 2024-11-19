@@ -145,7 +145,7 @@ lanelet::BasicPolygon2d create_polygon(
 
 ExtendedPredictedObject transform(
   const PredictedObject & object, const BehaviorPathPlannerParameters & common_parameters,
-  const LaneChangeParameters & lane_change_parameters, const bool check_at_prepare_phase);
+  const LaneChangeParameters & lane_change_parameters);
 
 bool is_collided_polygons_in_lanelet(
   const std::vector<Polygon2d> & collided_polygons, const lanelet::BasicPolygon2d & lanes_polygon);
@@ -249,8 +249,7 @@ bool is_before_terminal(
 double calc_angle_to_lanelet_segment(const lanelet::ConstLanelets & lanelets, const Pose & pose);
 
 ExtendedPredictedObjects transform_to_extended_objects(
-  const CommonDataPtr & common_data_ptr, const std::vector<PredictedObject> & objects,
-  const bool check_prepare_phase);
+  const CommonDataPtr & common_data_ptr, const std::vector<PredictedObject> & objects);
 
 double get_distance_to_next_regulatory_element(
   const CommonDataPtr & common_data_ptr, const bool ignore_crosswalk = false,

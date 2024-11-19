@@ -420,9 +420,7 @@ std::optional<geometry_msgs::msg::Pose> CrosswalkModule::calcStopPose(
     if (!ped_stop_pref_opt.has_value()) {
       RCLCPP_INFO(logger_, "Failure to calculate pref_stop.");
       return std::nullopt;
-    } else if (
-      default_stop_opt.has_value() && ped_stop_pref_opt->dist > default_stop_opt->dist &&
-      ped_stop_pref_opt->dist < default_stop_opt->dist + planner_param_.far_object_threshold) {
+    } else if (default_stop_opt.has_value() && ped_stop_pref_opt->dist > default_stop_opt->dist) {
       return default_stop_opt;
     } else {
       return ped_stop_pref_opt;

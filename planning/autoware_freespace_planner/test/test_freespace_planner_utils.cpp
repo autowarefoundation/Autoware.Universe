@@ -153,9 +153,11 @@ TEST(FreespacePlannerUtilsTest, testIsNearTarget)
   const auto trajectory = get_trajectory(0ul);
   const auto target_pose = trajectory.points.back().pose;
 
+  static constexpr double eps = 0.01;
   auto current_pose = target_pose;
   current_pose.position.x -= 1.0;
   current_pose.position.y += 1.0;
+  current_pose.orientation = autoware::universe_utils::createQuaternionFromYaw(M_PI_2 + eps);
 
   const double th_distance_m = 0.5;
 
@@ -163,6 +165,14 @@ TEST(FreespacePlannerUtilsTest, testIsNearTarget)
     autoware::freespace_planner::utils::is_near_target(target_pose, current_pose, th_distance_m));
 
   current_pose.position.x += 0.6;
+  EXPECT_FALSE(
+    autoware::freespace_planner::utils::is_near_target(target_pose, current_pose, th_distance_m));
+
+  current_pose.position.y -= 0.6;
+  EXPECT_FALSE(
+    autoware::freespace_planner::utils::is_near_target(target_pose, current_pose, th_distance_m));
+
+  current_pose.orientation = autoware::universe_utils::createQuaternionFromYaw(M_PI_4);
   EXPECT_TRUE(
     autoware::freespace_planner::utils::is_near_target(target_pose, current_pose, th_distance_m));
 }
