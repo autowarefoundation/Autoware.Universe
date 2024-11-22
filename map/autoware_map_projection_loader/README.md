@@ -74,6 +74,8 @@ map_origin:
 
 If you want to use local cartesian WGS84, please specify the map origin as well.
 
+Currently LocalCartesian can only be used in lanelet2_map_loader, packages like gnss_poser doesn't support it right now.
+
 ```yaml
 # map_projector_info.yaml
 projector_type: LocalCartesian
