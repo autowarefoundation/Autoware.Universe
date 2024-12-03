@@ -37,6 +37,7 @@ tier4_map_msgs::msg::MapProjectorInfo load_info_from_yaml(const std::string & fi
 
   } else if (
     msg.projector_type == tier4_map_msgs::msg::MapProjectorInfo::LOCAL_CARTESIAN_UTM ||
+    msg.projector_type == tier4_map_msgs::msg::MapProjectorInfo::LOCAL_CARTESIAN ||
     msg.projector_type == tier4_map_msgs::msg::MapProjectorInfo::TRANSVERSE_MERCATOR) {
     msg.vertical_datum = data["vertical_datum"].as<std::string>();
     msg.map_origin.latitude = data["map_origin"]["latitude"].as<double>();
@@ -48,7 +49,8 @@ tier4_map_msgs::msg::MapProjectorInfo load_info_from_yaml(const std::string & fi
 
   } else {
     throw std::runtime_error(
-      "Invalid map projector type. Currently supported types: MGRS, LocalCartesianUTM, "
+      "Invalid map projector type. Currently supported types: MGRS, LocalCartesian, "
+      "LocalCartesianUTM, "
       "TransverseMercator, and local");
   }
   return msg;

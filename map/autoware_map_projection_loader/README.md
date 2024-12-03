@@ -70,6 +70,22 @@ map_origin:
   altitude: 0.0 # [m]
 ```
 
+### Using LocalCartesian
+
+If you want to use local cartesian WGS84, please specify the map origin as well.
+
+Currently LocalCartesian can only be used in lanelet2_map_loader, packages like gnss_poser doesn't support it right now.
+
+```yaml
+# map_projector_info.yaml
+projector_type: LocalCartesian
+vertical_datum: WGS84
+map_origin:
+  latitude: 35.6762 # [deg]
+  longitude: 139.6503 # [deg]
+  altitude: 0.0 # [m]
+```
+
 ### Using TransverseMercator
 
 If you want to use Transverse Mercator projection, please specify the map origin as well.

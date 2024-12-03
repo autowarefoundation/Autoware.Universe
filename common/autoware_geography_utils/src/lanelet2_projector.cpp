@@ -17,6 +17,7 @@
 #include <autoware_lanelet2_extension/projection/mgrs_projector.hpp>
 #include <autoware_lanelet2_extension/projection/transverse_mercator_projector.hpp>
 
+#include <lanelet2_projection/LocalCartesian.h>
 #include <lanelet2_projection/UTM.h>
 
 namespace autoware::geography_utils
@@ -44,6 +45,13 @@ std::unique_ptr<lanelet::Projector> get_lanelet2_projector(const MapProjectorInf
     lanelet::Origin origin{position};
     lanelet::projection::TransverseMercatorProjector projector{origin};
     return std::make_unique<lanelet::projection::TransverseMercatorProjector>(projector);
+  } else if (projector_info.projector_type == MapProjectorInfo::LOCAL_CARTESIAN) {
+    lanelet::GPSPoint position{
+      projector_info.map_origin.latitude, projector_info.map_origin.longitude,
+      projector_info.map_origin.altitude};
+    lanelet::Origin origin{position};
+    lanelet::projection::LocalCartesianProjector projector{origin};
+    return std::make_unique<lanelet::projection::LocalCartesianProjector>(projector);
   }
   const std::string error_msg =
     "Invalid map projector type: " + projector_info.projector_type +
