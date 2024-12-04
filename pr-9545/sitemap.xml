@@ -61,6 +61,16 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9545/common/autoware_global_parameter_loader/Readme/</loc>
+         <lastmod>2024-12-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9545/common/autoware_glog_component/</loc>
+         <lastmod>2024-12-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9545/common/autoware_goal_distance_calculator/Readme/</loc>
          <lastmod>2024-12-04</lastmod>
          <changefreq>daily</changefreq>
@@ -187,16 +197,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9545/common/bag_time_manager_rviz_plugin/</loc>
-         <lastmod>2024-12-04</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9545/common/global_parameter_loader/Readme/</loc>
-         <lastmod>2024-12-04</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9545/common/glog_component/</loc>
          <lastmod>2024-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>

@@ -856,7 +856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../common/global_parameter_loader/Readme" class="md-nav__link">
+      <a href="../../common/autoware_global_parameter_loader/Readme" class="md-nav__link">
         Global Parameter Loader
       </a>
     </li>
@@ -870,7 +870,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../common/glog_component" class="md-nav__link">
+      <a href="../../common/autoware_glog_component" class="md-nav__link">
         Glog Component
       </a>
     </li>
@@ -13539,7 +13539,7 @@ This ros package enables communication between Autoware and CARLA for autonomous
 <ol>
 <li>Download maps (y-axis inverted version) to arbitrary location</li>
 <li>Change names and create the map folder (example: Town01) inside <code>autoware_map</code>. (<code>point_cloud/Town01.pcd</code> -&gt; <code>autoware_map/Town01/pointcloud_map.pcd</code>, <code>vector_maps/lanelet2/Town01.osm</code>-&gt; <code>autoware_map/Town01/lanelet2_map.osm</code>)</li>
-<li>Create <code>map_projector_info.yaml</code> on the folder and add <code>projector_type: local</code> on the first line.</li>
+<li>Create <code>map_projector_info.yaml</code> on the folder and add <code>projector_type: Local</code> on the first line.</li>
 </ol>
 <h3 id="build">Build<a class="headerlink" href="#build" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code>colcon<span class="w"> </span>build<span class="w"> </span>--symlink-install<span class="w"> </span>--cmake-args<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release

@@ -856,7 +856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../common/global_parameter_loader/Readme" class="md-nav__link">
+      <a href="../../common/autoware_global_parameter_loader/Readme" class="md-nav__link">
         Global Parameter Loader
       </a>
     </li>
@@ -870,7 +870,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../common/glog_component" class="md-nav__link">
+      <a href="../../common/autoware_glog_component" class="md-nav__link">
         Glog Component
       </a>
     </li>
@@ -13546,32 +13546,32 @@ That's why it doesn't interfere with the core logic of autonomous driving.</p>
 <tr>
 <td><code>longitudinal_acceleration</code></td>
 <td>float</td>
-<td>[m / s^2]</td>
+<td><span class="arithmatex">\([ \mathrm{m/s^2} ]\)</span></td>
 </tr>
 <tr>
 <td><code>longitudinal_jerk</code></td>
 <td>float</td>
-<td>[m / s^3]</td>
+<td><span class="arithmatex">\([ \mathrm{m/s^3} ]\)</span></td>
 </tr>
 <tr>
 <td><code>lateral_acceleration</code></td>
 <td>float</td>
-<td>[m / s^2]</td>
+<td><span class="arithmatex">\([ \mathrm{m/s^2} ]\)</span></td>
 </tr>
 <tr>
 <td><code>lateral_jerk</code></td>
 <td>float</td>
-<td>[m / s^3]</td>
+<td><span class="arithmatex">\([ \mathrm{m/s^3} ]\)</span></td>
 </tr>
 <tr>
 <td><code>desired_steering_angle</code></td>
 <td>float</td>
-<td>[rad]</td>
+<td><span class="arithmatex">\([ \mathrm{rad} ]\)</span></td>
 </tr>
 <tr>
 <td><code>controller_processing_time</code></td>
 <td>float</td>
-<td>Timestamp between last two control command messages [ms]</td>
+<td>Timestamp between last two control command messages <span class="arithmatex">\([ \mathrm{ms} ]\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -13588,77 +13588,77 @@ That's why it doesn't interfere with the core logic of autonomous driving.</p>
 <tr>
 <td><code>lateral_error</code></td>
 <td>float</td>
-<td>[m]</td>
+<td><span class="arithmatex">\([ \mathrm{m} ]\)</span></td>
 </tr>
 <tr>
 <td><code>lateral_error_velocity</code></td>
 <td>float</td>
-<td>[m / s]</td>
+<td><span class="arithmatex">\([ \mathrm{m/s} ]\)</span></td>
 </tr>
 <tr>
 <td><code>lateral_error_acceleration</code></td>
 <td>float</td>
-<td>[m / s^2]</td>
+<td><span class="arithmatex">\([ \mathrm{m/s^2} ]\)</span></td>
 </tr>
 <tr>
 <td><code>longitudinal_error</code></td>
 <td>float</td>
-<td>[m]</td>
+<td><span class="arithmatex">\([ \mathrm{m} ]\)</span></td>
 </tr>
 <tr>
 <td><code>longitudinal_error_velocity</code></td>
 <td>float</td>
-<td>[m / s]</td>
+<td><span class="arithmatex">\([ \mathrm{m/s} ]\)</span></td>
 </tr>
 <tr>
 <td><code>longitudinal_error_acceleration</code></td>
 <td>float</td>
-<td>[m / s^2]</td>
+<td><span class="arithmatex">\([ \mathrm{m/s^2} ]\)</span></td>
 </tr>
 <tr>
 <td><code>heading_error</code></td>
 <td>float</td>
-<td>[rad]</td>
+<td><span class="arithmatex">\([ \mathrm{rad} ]\)</span></td>
 </tr>
 <tr>
 <td><code>heading_error_velocity</code></td>
 <td>float</td>
-<td>[rad / s]</td>
+<td><span class="arithmatex">\([ \mathrm{rad/s} ]\)</span></td>
 </tr>
 <tr>
 <td><code>control_effort_energy</code></td>
 <td>float</td>
-<td>[u * R * u^T]</td>
+<td><span class="arithmatex">\([ \mathbf{u}^\top \mathbf{R} \mathbf{u} ]\)</span> simplified to <span class="arithmatex">\([ R \cdot u^2 ]\)</span></td>
 </tr>
 <tr>
 <td><code>error_energy</code></td>
 <td>float</td>
-<td>lateral_error^2 + heading_error^2</td>
+<td><span class="arithmatex">\(e_{\text{lat}}^2 + e_\theta^2\)</span> (squared lateral error + squared heading error)</td>
 </tr>
 <tr>
 <td><code>value_approximation</code></td>
 <td>float</td>
-<td>V = xPx' ; Value function from DARE Lyap matrix P</td>
+<td><span class="arithmatex">\(V = \mathbf{x}^\top \mathbf{P} \mathbf{x}\)</span>; Value function from DARE Lyapunov matrix <span class="arithmatex">\(\mathbf{P}\)</span></td>
 </tr>
 <tr>
 <td><code>curvature_estimate</code></td>
 <td>float</td>
-<td>[1 / m]</td>
+<td><span class="arithmatex">\([ \mathrm{1/m} ]\)</span></td>
 </tr>
 <tr>
 <td><code>curvature_estimate_pp</code></td>
 <td>float</td>
-<td>[1 / m]</td>
+<td><span class="arithmatex">\([ \mathrm{1/m} ]\)</span></td>
 </tr>
 <tr>
 <td><code>vehicle_velocity_error</code></td>
 <td>float</td>
-<td>[m / s]</td>
+<td><span class="arithmatex">\([ \mathrm{m/s} ]\)</span></td>
 </tr>
 <tr>
 <td><code>tracking_curvature_discontinuity_ability</code></td>
 <td>float</td>
-<td>Measures the ability to tracking the curvature changes [<code>abs(delta(curvature)) / (1 + abs(delta(lateral_error))</code>]</td>
+<td>Measures the ability to track curvature changes <span class="arithmatex">\(\frac{\lvert \Delta(\text{curvature}) \rvert}{1 + \lvert \Delta(e_{\text{lat}}) \rvert}\)</span></td>
 </tr>
 </tbody>
 </table>
