@@ -856,7 +856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../common/global_parameter_loader/Readme" class="md-nav__link">
+      <a href="../../common/autoware_global_parameter_loader/Readme" class="md-nav__link">
         Global Parameter Loader
       </a>
     </li>
@@ -870,7 +870,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../common/glog_component" class="md-nav__link">
+      <a href="../../common/autoware_glog_component" class="md-nav__link">
         Glog Component
       </a>
     </li>
@@ -13909,11 +13909,25 @@ ros2<span class="w"> </span>run<span class="w"> </span>autoware_accel_brake_map_
 <p><strong>Advantage</strong> : Only data close enough to each grid is used for calibration, allowing accurate updates at each point.</p>
 <p><strong>Disadvantage</strong> : Calibration is time-consuming due to a large amount of data to be excluded.</p>
 <h4 id="parameters_2">Parameters<a class="headerlink" href="#parameters_2" title="Permanent link">#</a></h4>
-<p>Data selection is determined by the following thresholds.
-| Name | Default Value |
-| ----------------------- | ------------- |
-| velocity_diff_threshold | 0.556 |
-| pedal_diff_threshold | 0.03 |</p>
+<p>Data selection is determined by the following thresholds.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>velocity_diff_threshold</td>
+<td>0.556</td>
+</tr>
+<tr>
+<td>pedal_diff_threshold</td>
+<td>0.03</td>
+</tr>
+</tbody>
+</table>
 <h4 id="update-formula">Update formula<a class="headerlink" href="#update-formula" title="Permanent link">#</a></h4>
 <div class="arithmatex">\[
 \begin{align}

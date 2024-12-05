@@ -856,7 +856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../common/global_parameter_loader/Readme" class="md-nav__link">
+      <a href="../../../../common/autoware_global_parameter_loader/Readme" class="md-nav__link">
         Global Parameter Loader
       </a>
     </li>
@@ -870,7 +870,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../common/glog_component" class="md-nav__link">
+      <a href="../../../../common/autoware_glog_component" class="md-nav__link">
         Glog Component
       </a>
     </li>
@@ -13864,23 +13864,11 @@ Therefore we add linear inequality equations.</p>
 <h3 id="collision-free">Collision free<a class="headerlink" href="#collision-free" title="Permanent link">#</a></h3>
 <p>To realize collision-free trajectory planning, we have to formulate constraints that the vehicle is inside the road and also does not collide with obstacles in linear equations.
 For linearity, we implemented some methods to approximate the vehicle shape with a set of circles, that is reliable and easy to implement.</p>
-<ul>
-<li>
 <ol>
 <li>Bicycle Model</li>
-</ol>
-</li>
-<li>
-<ol>
 <li>Uniform Circles</li>
-</ol>
-</li>
-<li>
-<ol>
 <li>Fitting Uniform Circles</li>
 </ol>
-</li>
-</ul>
 <p><img alt="vehicle_circles" src="../../media/vehicle_circles.svg"></p>
 <p>Now we formulate the linear constraints where a set of circles on each trajectory point is collision-free.
 By using the drivable area, we calculate upper and lower boundaries along reference points, which will be interpolated on any position on the trajectory.

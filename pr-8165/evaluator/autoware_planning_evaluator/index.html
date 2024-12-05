@@ -856,7 +856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../common/global_parameter_loader/Readme" class="md-nav__link">
+      <a href="../../common/autoware_global_parameter_loader/Readme" class="md-nav__link">
         Global Parameter Loader
       </a>
     </li>
@@ -870,7 +870,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../common/glog_component" class="md-nav__link">
+      <a href="../../common/autoware_glog_component" class="md-nav__link">
         Glog Component
       </a>
     </li>
@@ -13545,7 +13545,7 @@ Metrics are calculated using the following information:</p>
 <p>These information are maintained by an instance of class <code>MetricsCalculator</code>
 which is also responsible for calculating metrics.</p>
 <h3 id="stat">Stat<a class="headerlink" href="#stat" title="Permanent link">#</a></h3>
-<p>Each metric is calculated using a <code>Stat</code> instance which contains
+<p>Each metric is calculated using a <code>autoware::universe_utils::Accumulator</code> instance which contains
 the minimum, maximum, and mean values calculated for the metric
 as well as the number of values measured.</p>
 <h3 id="metric-calculation-and-adding-more-metrics">Metric calculation and adding more metrics<a class="headerlink" href="#metric-calculation-and-adding-more-metrics" title="Permanent link">#</a></h3>
@@ -13555,7 +13555,7 @@ This file also defines conversions from/to string as well as human readable desc
 to be used as header of the output file.</p>
 <p>The <code>MetricsCalculator</code> is responsible for calculating metric statistics
 through calls to function:</p>
-<div class="highlight"><pre><span></span><code><span class="n">Stat</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MetricsCalculator</span><span class="o">::</span><span class="n">calculate</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Metric</span><span class="w"> </span><span class="n">metric</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Trajectory</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">traj</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="n">Accumulator</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">MetricsCalculator</span><span class="o">::</span><span class="n">calculate</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Metric</span><span class="w"> </span><span class="n">metric</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Trajectory</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">traj</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 </code></pre></div>
 <p>Adding a new metric <code>M</code> requires the following steps:</p>
 <ul>
@@ -13609,8 +13609,8 @@ through calls to function:</p>
 </tr>
 </tbody>
 </table>
-<p>When shut down, the evaluation node writes the values of the metrics measured during its lifetime
-to a file as specified by the <code>output_file</code> parameter.</p>
+<p>If <code>output_metrics = true</code>, the evaluation node writes the statics of the metrics measured during its lifetime
+to <code>&lt;ros2_logging_directory&gt;/autoware_metrics/&lt;node_name&gt;-&lt;time_stamp&gt;.json</code> when shut down.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
 <table>
 <thead>
@@ -13624,10 +13624,10 @@ to a file as specified by the <code>output_file</code> parameter.</p>
 </thead>
 <tbody>
 <tr>
-<td>output_file</td>
-<td>string</td>
-<td>output metrics file path</td>
-<td></td>
+<td>output_metrics</td>
+<td>boolean</td>
+<td>If true, the evaluation node writes the metrics' statics to <code>&lt;ros2_logging_directory&gt;/autoware_metrics/&lt;node_name&gt;-&lt;time_stamp&gt;.json</code> when the node shut down,</td>
+<td>false</td>
 <td>N/A</td>
 </tr>
 <tr>

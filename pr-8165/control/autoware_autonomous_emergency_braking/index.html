@@ -854,7 +854,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../common/global_parameter_loader/Readme" class="md-nav__link">
+      <a href="../../common/autoware_global_parameter_loader/Readme" class="md-nav__link">
         Global Parameter Loader
       </a>
     </li>
@@ -868,7 +868,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../common/glog_component" class="md-nav__link">
+      <a href="../../common/autoware_glog_component" class="md-nav__link">
         Glog Component
       </a>
     </li>
@@ -13649,36 +13649,133 @@
 <li>When the ego vehicle is not moving (Current Velocity is below a 0.1 m/s threshold)</li>
 </ul>
 <h3 id="2-generate-a-predicted-path-of-the-ego-vehicle">2. Generate a predicted path of the ego vehicle<a class="headerlink" href="#2-generate-a-predicted-path-of-the-ego-vehicle" title="Permanent link">#</a></h3>
+<h4 id="21-overview-of-imu-path-generation">2.1 Overview of IMU Path Generation<a class="headerlink" href="#21-overview-of-imu-path-generation" title="Permanent link">#</a></h4>
 <p>AEB generates a predicted footprint path based on current velocity and current angular velocity obtained from attached sensors. Note that if <code>use_imu_path</code> is <code>false</code>, it skips this step. This predicted path is generated as:</p>
 <div class="arithmatex">\[
 x_{k+1} = x_k + v cos(\theta_k) dt \\
 y_{k+1} = y_k + v sin(\theta_k) dt \\
 \theta_{k+1} = \theta_k + \omega dt
 \]</div>
-<p>where <span class="arithmatex">\(v\)</span> and <span class="arithmatex">\(\omega\)</span> are current longitudinal velocity and angular velocity respectively. <span class="arithmatex">\(dt\)</span> is time interval that users can define in advance.</p>
-<p>On the other hand, if <code>use_predicted_trajectory</code> is set to true, the AEB module will use the predicted path from the MPC as a base to generate a footprint path. Both the IMU footprint path and the MPC footprint path can be used at the same time.</p>
+<p>where <span class="arithmatex">\(v\)</span> and <span class="arithmatex">\(\omega\)</span> are current longitudinal velocity and angular velocity respectively. <span class="arithmatex">\(dt\)</span> is time interval that users can define in advance with the <code>imu_prediction_time_interval</code> parameter. The IMU path is generated considering a time horizon, defined by the <code>imu_prediction_time_horizon</code> parameter.</p>
+<h4 id="22-constraints-and-countermeasures-in-imu-path-generation">2.2 Constraints and Countermeasures in IMU Path Generation<a class="headerlink" href="#22-constraints-and-countermeasures-in-imu-path-generation" title="Permanent link">#</a></h4>
+<p>Since the IMU path generation only uses the ego vehicle's current angular velocity, disregarding the MPC's planner steering, the shape of the IMU path tends to get distorted quite easily and protrude out of the ego vehicle's current lane, possibly causing unwanted emergency stops. There are two countermeasures for this issue:</p>
+<ol>
+<li>
+<p>Control using the <code>max_generated_imu_path_length</code> parameter</p>
+<ul>
+<li>Generation stops when path length exceeds the set value</li>
+<li>Avoid using a large <code>imu_prediction_time_horizon</code></li>
+</ul>
+</li>
+<li>
+<p>Control based on lateral deviation</p>
+<ul>
+<li>Set the <code>limit_imu_path_lat_dev</code> parameter to "true"</li>
+<li>Set deviation threshold using <code>imu_path_lat_dev_threshold</code></li>
+<li>Path generation stops when lateral deviation exceeds the threshold</li>
+</ul>
+</li>
+</ol>
+<h4 id="23-advantages-and-limitations-of-lateral-deviation-control">2.3 Advantages and Limitations of Lateral Deviation Control<a class="headerlink" href="#23-advantages-and-limitations-of-lateral-deviation-control" title="Permanent link">#</a></h4>
+<p>The advantage of setting a lateral deviation limit with the <code>limit_imu_path_lat_dev</code> parameter is that the <code>imu_prediction_time_horizon</code> and the <code>max_generated_imu_path_length</code> can be increased without worries about the IMU predicted path deforming beyond a certain threshold. The downside is that the IMU path will be cut short when the ego has a high angular velocity, in said cases, the AEB module would mostly rely on the MPC path to prevent or mitigate collisions.</p>
+<p>If it is assumed the ego vehicle will mostly travel along the centerline of its lanelets, it can be useful to set the lateral deviation threshold parameter <code>imu_path_lat_dev_threshold</code> to be equal to or smaller than the average lanelet width divided by 2, that way, the chance of the IMU predicted path leaving the current ego lanelet is smaller, and it is possible to increase the <code>imu_prediction_time_horizon</code> to prevent frontal collisions when the ego is mostly traveling in a straight line.</p>
+<p>The lateral deviation is measured using the ego vehicle's current position as a reference, and it measures the distance of the furthermost vertex of the predicted ego footprint to the predicted path. The following image illustrates how the lateral deviation of a given ego pose is measured.</p>
+<p><img alt="measuring_lat_dev" src="image/measuring-lat-dev-on-imu-path.drawio.svg"></p>
+<h4 id="24-imu-path-generation-algorithm">2.4 IMU Path Generation Algorithm<a class="headerlink" href="#24-imu-path-generation-algorithm" title="Permanent link">#</a></h4>
+<h5 id="241-selection-of-lateral-deviation-check-points">2.4.1 Selection of Lateral Deviation Check Points<a class="headerlink" href="#241-selection-of-lateral-deviation-check-points" title="Permanent link">#</a></h5>
+<p>Select vehicle vertices for lateral deviation checks based on the following conditions:</p>
+<ul>
+<li>Forward motion (<span class="arithmatex">\(v &gt; 0\)</span>)<ul>
+<li>Right turn (<span class="arithmatex">\(\omega &gt; 0\)</span>): Right front vertex</li>
+<li>Left turn (<span class="arithmatex">\(\omega &lt; 0\)</span>): Left front vertex</li>
+</ul>
+</li>
+<li>Reverse motion (<span class="arithmatex">\(v &lt; 0\)</span>)<ul>
+<li>Right turn (<span class="arithmatex">\(\omega &gt; 0\)</span>): Right rear vertex</li>
+<li>Left turn (<span class="arithmatex">\(\omega &lt; 0\)</span>): Left rear vertex</li>
+</ul>
+</li>
+<li>Straight motion (<span class="arithmatex">\(\omega = 0\)</span>): Check both front/rear vertices depending on forward/reverse motion</li>
+</ul>
+<h5 id="242-path-generation-process">2.4.2 Path Generation Process<a class="headerlink" href="#242-path-generation-process" title="Permanent link">#</a></h5>
+<p>Execute the following steps at each time step:</p>
+<ol>
+<li>
+<p>State Update</p>
+<ul>
+<li>Calculate next position <span class="arithmatex">\((x_{k+1}, y_{k+1})\)</span> and yaw angle <span class="arithmatex">\(\theta_{k+1}\)</span> based on current velocity <span class="arithmatex">\(v\)</span> and angular velocity <span class="arithmatex">\(\omega\)</span></li>
+<li>Time interval <span class="arithmatex">\(dt\)</span> is based on the <code>imu_prediction_time_interval</code> parameter</li>
+</ul>
+</li>
+<li>
+<p>Vehicle Footprint Generation</p>
+<ul>
+<li>Place vehicle footprint at calculated position</li>
+<li>Calculate check point coordinates</li>
+</ul>
+</li>
+<li>
+<p>Lateral Deviation Calculation</p>
+<ul>
+<li>Calculate lateral deviation from selected vertex to path</li>
+<li>Update path length and elapsed time</li>
+</ul>
+</li>
+<li>
+<p>Evaluation of Termination Conditions</p>
+</li>
+</ol>
+<h5 id="243-termination-conditions">2.4.3 Termination Conditions<a class="headerlink" href="#243-termination-conditions" title="Permanent link">#</a></h5>
+<p>Path generation terminates when any of the following conditions are met:</p>
+<ol>
+<li>
+<p>Basic Termination Conditions (both must be satisfied)</p>
+<ul>
+<li>Predicted time exceeds <code>imu_prediction_time_horizon</code></li>
+<li>AND path length exceeds <code>min_generated_imu_path_length</code></li>
+</ul>
+</li>
+<li>
+<p>Path Length Termination Condition</p>
+<ul>
+<li>Path length exceeds <code>max_generated_imu_path_length</code></li>
+</ul>
+</li>
+<li>
+<p>Lateral Deviation Termination Condition (when <code>limit_imu_path_lat_dev = true</code>)</p>
+<ul>
+<li>Lateral deviation of selected vertex exceeds <code>imu_path_lat_dev_threshold</code></li>
+</ul>
+</li>
+</ol>
+<h4 id="mpc-path-generation">MPC path generation<a class="headerlink" href="#mpc-path-generation" title="Permanent link">#</a></h4>
+<p>If the <code>use_predicted_trajectory</code> parameter is set to true, the AEB module will directly use the predicted path from the MPC as a base to generate a footprint path. It will copy the ego poses generated by the MPC until a given time horizon. The <code>mpc_prediction_time_horizon</code> parameter dictates how far ahead in the future the MPC path will predict the ego vehicle's movement. Both the IMU footprint path and the MPC footprint path can be used at the same time.</p>
 <h3 id="3-get-target-obstacles">3. Get target obstacles<a class="headerlink" href="#3-get-target-obstacles" title="Permanent link">#</a></h3>
 <p>After generating the ego footprint path(s), the target obstacles are identified. There are two methods to find target obstacles: using the input point cloud, or using the predicted object information coming from perception modules.</p>
 <h4 id="pointcloud-obstacle-filtering">Pointcloud obstacle filtering<a class="headerlink" href="#pointcloud-obstacle-filtering" title="Permanent link">#</a></h4>
 <p>The AEB module can filter the input pointcloud to find target obstacles with which the ego vehicle might collide. This method can be enable if the <code>use_pointcloud_data</code> parameter is set to true. The pointcloud obstacle filtering has three major steps, which are rough filtering, noise filtering with clustering and rigorous filtering.</p>
 <h5 id="rough-filtering">Rough filtering<a class="headerlink" href="#rough-filtering" title="Permanent link">#</a></h5>
-<p>In rough filtering step, we select target obstacle with simple filter. Create a search area up to a certain distance (default is half of the ego vehicle width plus the <code>path_footprint_extra_margin</code> parameter) away from the predicted path of the ego vehicle and ignore the point cloud that are not within it. The rough filtering step is illustrated below.</p>
+<p>In rough filtering step, we select target obstacle with simple filter. Create a search area up to a certain distance (default is half of the ego vehicle width plus the <code>path_footprint_extra_margin</code> parameter plus the <code>expand_width</code> parameter) away from the predicted path of the ego vehicle and ignore the point cloud that are not within it. The rough filtering step is illustrated below.</p>
 <p><img alt="rough_filtering" src="image/obstacle_filtering_1.drawio.svg"></p>
 <h5 id="noise-filtering-with-clustering-and-convex-hulls">Noise filtering with clustering and convex hulls<a class="headerlink" href="#noise-filtering-with-clustering-and-convex-hulls" title="Permanent link">#</a></h5>
 <p>To prevent the AEB from considering noisy points, euclidean clustering is performed on the filtered point cloud. The points in the point cloud that are not close enough to other points to form a cluster are discarded. Furthermore, each point in a cluster is compared against the <code>cluster_minimum_height</code> parameter, if no point inside a cluster has a height/z value greater than <code>cluster_minimum_height</code>, the whole cluster of points is discarded. The parameters <code>cluster_tolerance</code>, <code>minimum_cluster_size</code> and <code>maximum_cluster_size</code> can be used to tune the clustering and the size of objects to be ignored, for more information about the clustering method used by the AEB module, please check the official documentation on euclidean clustering of the PCL library: <a href="https://pcl.readthedocs.io/projects/tutorials/en/master/cluster_extraction.html">https://pcl.readthedocs.io/projects/tutorials/en/master/cluster_extraction.html</a>.</p>
 <p>Furthermore, a 2D convex hull is created around each detected cluster, the vertices of each hull represent the most extreme/outside points of the cluster. These vertices are then checked in the next step.</p>
 <h5 id="rigorous-filtering">Rigorous filtering<a class="headerlink" href="#rigorous-filtering" title="Permanent link">#</a></h5>
-<p>After Noise filtering, the module performs a geometric collision check to determine whether the filtered obstacles/hull vertices actually have possibility to collide with the ego vehicle. In this check, the ego vehicle is represented as a rectangle, and the point cloud obstacles are represented as points. Only the vertices with a possibility of collision are kept.</p>
+<p>After Noise filtering, the module performs a geometric collision check to determine whether the filtered obstacles/hull vertices actually have possibility to collide with the ego vehicle. In this check, the ego vehicle is represented as a rectangle, and the point cloud obstacles are represented as points. Only the vertices with a possibility of collision are labeled as target obstacles.</p>
 <p><img alt="rigorous_filtering" src="image/obstacle_filtering_2.drawio.svg"></p>
+<h5 id="obstacle-labeling">Obstacle labeling<a class="headerlink" href="#obstacle-labeling" title="Permanent link">#</a></h5>
+<p>After rigorous filtering, the remaining obstacles are labeled. An obstacle is given a "target" label for collision checking only if it falls within the ego vehicle's defined footprint (made using the ego vehicle's width and the <code>expand_width</code> parameter). For an emergency stop to occur, at least one obstacle needs to be labeled as a target.</p>
+<p><img alt="labeling" src="image/labeling.drawio.svg"></p>
 <h4 id="using-predicted-objects-to-get-target-obstacles">Using predicted objects to get target obstacles<a class="headerlink" href="#using-predicted-objects-to-get-target-obstacles" title="Permanent link">#</a></h4>
-<p>If the <code>use_predicted_object_data</code> parameter is set to true, the AEB can use predicted object data coming from the perception modules, to get target obstacle points. This is done by obtaining the 2D intersection points between the ego's predicted footprint path and each of the predicted objects enveloping polygon or bounding box.</p>
+<p>If the <code>use_predicted_object_data</code> parameter is set to true, the AEB can use predicted object data coming from the perception modules, to get target obstacle points. This is done by obtaining the 2D intersection points between the ego's predicted footprint path (made using the ego vehicle's width and the <code>expand_width</code> parameter) and each of the predicted objects enveloping polygon or bounding box. if there is no intersection, all points are discarded.</p>
 <p><img alt="predicted_object_and_path_intersection" src="image/using-predicted-objects.drawio.svg"></p>
 <h3 id="finding-the-closest-target-obstacle">Finding the closest target obstacle<a class="headerlink" href="#finding-the-closest-target-obstacle" title="Permanent link">#</a></h3>
-<p>Once all target obstacles have been identified, the AEB module chooses the point that is closest to the ego vehicle as the candidate for collision checking. Only the closest point is considered because RSS distance is used to judge if a collision will happen or not, and if the closest vertex to the ego is deemed to be safe from collision, the rest of the target obstacles will also be safe.</p>
+<p>After identifying all possible obstacles using pointcloud data and/or predicted object data, the AEB module selects the closest point to the ego vehicle as the candidate for collision checking. The "closest object" is defined as an obstacle within the ego vehicle's footprint, determined by its width and the <code>expand_width</code> parameter, that is closest to the ego vehicle along the longitudinal axis, using the IMU or MPC path as a reference. Target obstacles are prioritized over those outside the ego path, even if the latter are longitudinally closer. This prioritization ensures that the collision check focuses on objects that pose the highest risk based on the vehicle's trajectory.</p>
+<p>If no target obstacles are found, the AEB module considers other nearby obstacles outside the path. In such cases, it skips the collision check but records the position of the closest obstacle to calculate its speed (Step #4). Note that, obstacles obtained with predicted object data are all target obstacles since they are within the ego footprint path and it is not necessary to calculate their speed (it is already calculated by the perception module). Such obstacles are excluded from step #4.</p>
 <p><img alt="closest_object" src="image/closest-point.drawio.svg"></p>
 <h3 id="4-obstacle-velocity-estimation">4. Obstacle velocity estimation<a class="headerlink" href="#4-obstacle-velocity-estimation" title="Permanent link">#</a></h3>
 <p>To begin calculating the target point's velocity, the point must enter the speed calculation area,
-which is defined by the <code>speed_calculation_expansion_margin</code> parameter.
+which is defined by the <code>speed_calculation_expansion_margin</code> parameter plus the ego vehicles width and the <code>expand_width</code> parameter.
 Depending on the operational environment,
 this margin can reduce unnecessary autonomous emergency braking
 caused by velocity miscalculations during the initial calculation steps.</p>
@@ -13701,14 +13798,17 @@ v_{norm} = d_{x} / d_{t}
 v_{obj} = v_{norm} * Cos(yaw_{diff}) + v_{ego}
 \]</div>
 <p>where <span class="arithmatex">\(yaw_{diff}\)</span> is the difference in yaw between the ego path and the displacement vector <script type="math/tex; mode=display">v_{pos} = o_{pos} - prev_{pos} </script> and <span class="arithmatex">\(v_{ego}\)</span> is the ego's current speed, which accounts for the movement of points caused by the ego moving and not the object. All these equations are performed disregarding the z axis (in 2D).</p>
-<p>Note that, the object velocity is calculated against the ego's current movement direction. If the object moves in the opposite direction to the ego's movement, the object velocity will be negative, which will reduce the rss distance on the next step.</p>
+<p>Note that the object velocity is calculated against the ego's current movement direction. If the object moves in the opposite direction to the ego's movement, the object velocity will be negative, which will reduce the rss distance on the next step.</p>
 <p>The resulting estimated object speed is added to a queue of speeds with timestamps. The AEB then checks for expiration of past speed estimations and eliminates expired speed measurements from the queue, the object expiration is determined by checking if the time elapsed since the speed was first added to the queue is larger than the parameter <code>previous_obstacle_keep_time</code>. Finally, the median speed of the queue is calculated. The median speed will be used to calculate the RSS distance used for collision checking.</p>
 <h3 id="5-collision-check-with-target-obstacles-using-rss-distance">5. Collision check with target obstacles using RSS distance<a class="headerlink" href="#5-collision-check-with-target-obstacles-using-rss-distance" title="Permanent link">#</a></h3>
-<p>In the fourth step, it checks the collision with the closest obstacle point using RSS distance. RSS distance is formulated as:</p>
+<p>In the fifth step, the AEB module checks for collision with the closest target obstacle using RSS distance.
+Only the closest target object is evaluated because RSS distance is used to determine collision risk. If the nearest target point is deemed safe, all other potential obstacles within the path are also assumed to be safe.</p>
+<p>RSS distance is formulated as:</p>
 <div class="arithmatex">\[
 d = v_{ego}*t_{response} + v_{ego}^2/(2*a_{min}) -(sign(v_{obj})) * v_{obj}^2/(2*a_{obj_{min}}) + offset
 \]</div>
-<p>where <span class="arithmatex">\(v_{ego}\)</span> and <span class="arithmatex">\(v_{obj}\)</span> is current ego and obstacle velocity, <span class="arithmatex">\(a_{min}\)</span> and <span class="arithmatex">\(a_{obj_{min}}\)</span> is ego and object minimum acceleration (maximum deceleration), <span class="arithmatex">\(t_{response}\)</span> is response time of the ego vehicle to start deceleration. Therefore the distance from the ego vehicle to the obstacle is smaller than this RSS distance <span class="arithmatex">\(d\)</span>, the ego vehicle send emergency stop signals. This is illustrated in the following picture.</p>
+<p>where <span class="arithmatex">\(v_{ego}\)</span> and <span class="arithmatex">\(v_{obj}\)</span> is current ego and obstacle velocity, <span class="arithmatex">\(a_{min}\)</span> and <span class="arithmatex">\(a_{obj_{min}}\)</span> is ego and object minimum acceleration (maximum deceleration), <span class="arithmatex">\(t_{response}\)</span> is response time of the ego vehicle to start deceleration. Therefore the distance from the ego vehicle to the obstacle is smaller than this RSS distance <span class="arithmatex">\(d\)</span>, the ego vehicle send emergency stop signals.</p>
+<p>Only obstacles classified as "targets" (as defined in Step #3) are considered for RSS distance calculations. Among these "target" obstacles, the one closest to the ego vehicle is used for the calculation. If no "target" obstacles are present—meaning no obstacles fall within the ego vehicle's predicted path (determined by its width and an expanded margin)—this step is skipped. Instead, the position of the closest obstacle is recorded for future speed calculations (Step #4). In this scenario, no emergency stop diagnostic message is generated. The process is illustrated in the accompanying diagram.</p>
 <p><img alt="rss_check" src="image/rss_check.drawio.svg"></p>
 <h3 id="6-send-emergency-stop-signals-to-diagnostics">6. Send emergency stop signals to <code>/diagnostics</code><a class="headerlink" href="#6-send-emergency-stop-signals-to-diagnostics" title="Permanent link">#</a></h3>
 <p>If AEB detects collision with point cloud obstacles in the previous step, it sends emergency signal to <code>/diagnostics</code> in this step. Note that in order to enable emergency stop, it has to send ERROR level emergency. Moreover, AEB user should modify the setting file to keep the emergency level, otherwise Autoware does not hold the emergency state.</p>
@@ -13860,11 +13960,11 @@ d = v_{ego}*t_{response} + v_{ego}^2/(2*a_{min}) -(sign(v_{obj})) * v_{obj}^2/(2
 <td align="left">expand_width</td>
 <td align="left">[m]</td>
 <td align="left">double</td>
-<td align="left">expansion width of the ego vehicle for the collision check</td>
+<td align="left">expansion width of the ego vehicle for collision checking, path cropping and speed calculation</td>
 <td align="left">0.1</td>
 </tr>
 <tr>
-<td align="left">longitudinal_offset</td>
+<td align="left">longitudinal_offset_margin</td>
 <td align="left">[m]</td>
 <td align="left">double</td>
 <td align="left">longitudinal offset distance for collision check</td>
@@ -13930,8 +14030,15 @@ d = v_{ego}*t_{response} + v_{ego}^2/(2*a_{min}) -(sign(v_{obj})) * v_{obj}^2/(2
 <td align="left">speed_calculation_expansion_margin</td>
 <td align="left">[m]</td>
 <td align="left">double</td>
-<td align="left">expansion width of the ego vehicle for the beginning speed calculation</td>
-<td align="left">0.1</td>
+<td align="left">expansion width of the ego vehicle footprint used when calculating the closest object's speed</td>
+<td align="left">0.7</td>
+</tr>
+<tr>
+<td align="left">path_footprint_extra_margin</td>
+<td align="left">[m]</td>
+<td align="left">double</td>
+<td align="left">this parameters expands the ego footprint used to crop the AEB input pointcloud</td>
+<td align="left">1.0</td>
 </tr>
 </tbody>
 </table>
