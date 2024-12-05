@@ -56,11 +56,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/main/common/autoware_geography_utils/</loc>
-         <lastmod>2024-12-05</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/main/common/autoware_global_parameter_loader/Readme/</loc>
          <lastmod>2024-12-05</lastmod>
          <changefreq>daily</changefreq>
