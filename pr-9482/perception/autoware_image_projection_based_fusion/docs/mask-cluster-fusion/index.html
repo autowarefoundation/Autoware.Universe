@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#macro-rendering-error" class="md-skip">
+        <a href="#mask_cluster_fusion" class="md-skip">
           Skip to content
         </a>
       
@@ -6052,9 +6052,88 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          mask_cluster_fusion
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         mask_cluster_fusion
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    Purpose
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithms" class="md-nav__link">
+    Inner-workings / Algorithms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs-outputs" class="md-nav__link">
+    Inputs / Outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Inputs / Outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    Input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    Output
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-known-limits" class="md-nav__link">
+    Assumptions / Known limits
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -13399,6 +13478,69 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    Purpose
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithms" class="md-nav__link">
+    Inner-workings / Algorithms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs-outputs" class="md-nav__link">
+    Inputs / Outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Inputs / Outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    Input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    Output
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-known-limits" class="md-nav__link">
+    Assumptions / Known limits
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -13415,21 +13557,108 @@
   
 
 
-<div><h1 id="macro-rendering-error"><em>Macro Rendering Error</em><a class="headerlink" href="#macro-rendering-error" title="Permanent link">#</a></h1>
-<p><em>File</em>: <code>perception/autoware_image_projection_based_fusion/docs/mask-cluster-fusion.md</code></p>
-<p><em>FileNotFoundError</em>: [Errno 2] No such file or directory: 'perception/autoware_image_projection_based_fusion/schema/mask_cluster_fusion.json'</p>
-<div class="highlight"><pre><span></span><code>Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/mkdocs_macros/plugin.py", line 688, in render
-    return md_template.render(**page_variables)
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 1304, in render
-    self.environment.handle_exception()
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 939, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "&lt;template&gt;", line 36, in top-level template code
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 70, in json_to_markdown
-    with open(json_schema_file_path) as f:
-FileNotFoundError: [Errno 2] No such file or directory: 'perception/autoware_image_projection_based_fusion/schema/mask_cluster_fusion.json'
-</code></pre></div></div>
+<div><h1 id="mask_cluster_fusion">mask_cluster_fusion<a class="headerlink" href="#mask_cluster_fusion" title="Permanent link">#</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
+<p>The <code>mask_cluster_fusion</code> package aims to assign the label of the mask to the cluster by using the mask information from the 2D instance segmentation model.</p>
+<h2 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
+<ol>
+<li>The clusters are projected onto the image plane.</li>
+<li>Find the mask which intersects with the cluster with high IoU.</li>
+<li>Assign the label of the mask to the cluster.</li>
+<li>For all clusters with an assigned label, check if any cluster intersects with the same mask. Reassign the label of the mask to the cluster if its IoU is lower than the previously assigned cluster.</li>
+</ol>
+<p><img alt="mask_cluster_fusion_image" src="../images/mask_cluster_fusion.png"></p>
+<h2 id="inputs-outputs">Inputs / Outputs<a class="headerlink" href="#inputs-outputs" title="Permanent link">#</a></h2>
+<h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input</code></td>
+<td><code>tier4_perception_msgs::msg::DetectedObjectsWithFeature</code></td>
+<td>clustered pointcloud</td>
+</tr>
+<tr>
+<td><code>input/camera_info[0-7]</code></td>
+<td><code>sensor_msgs::msg::CameraInfo</code></td>
+<td>camera information to project 3d points onto image planes</td>
+</tr>
+<tr>
+<td><code>input/masks[0-7]</code></td>
+<td><code>autoware_internal_msgs::msg::SegmentationMask</code></td>
+<td>masks from each image</td>
+</tr>
+<tr>
+<td><code>input/image_raw[0-7]</code></td>
+<td><code>sensor_msgs::msg::Image</code></td>
+<td>images for visualization</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output">Output<a class="headerlink" href="#output" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>output</code></td>
+<td><code>tier4_perception_msgs::msg::DetectedObjectsWithFeature</code></td>
+<td>labeled cluster pointcloud</td>
+</tr>
+<tr>
+<td><code>~/debug/image_raw[0-7]</code></td>
+<td><code>sensor_msgs::msg::Image</code></td>
+<td>images for visualization</td>
+</tr>
+</tbody>
+</table>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fusion_distance</td>
+<td>float</td>
+<td>If the detected object's distance is less than its value, the fusion will be processed.</td>
+<td>100</td>
+<td>≥0.0</td>
+</tr>
+<tr>
+<td>fusion_ratio</td>
+<td>float</td>
+<td>The ratio between the selected cluster points and the total points in the cluster.</td>
+<td>0.4</td>
+<td>≥0.0</td>
+</tr>
+<tr>
+<td>remove_unknown</td>
+<td>boolean</td>
+<td>If this parameter is true, all of objects labeled UNKNOWN will be removed in post-process.</td>
+<td>0</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<h2 id="assumptions-known-limits">Assumptions / Known limits<a class="headerlink" href="#assumptions-known-limits" title="Permanent link">#</a></h2></div>
 
 
 
