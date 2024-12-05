@@ -13825,11 +13825,18 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <td>5.0</td>
 </tr>
 <tr>
-<td align="left"><code>trajectory.prepare_duration</code></td>
-<td>[m]</td>
+<td align="left"><code>trajectory.max_prepare_duration</code></td>
+<td>[s]</td>
 <td>double</td>
-<td>The preparation time for the ego vehicle to be ready to perform lane change.</td>
+<td>The maximum preparation time for the ego vehicle to be ready to perform lane change.</td>
 <td>4.0</td>
+</tr>
+<tr>
+<td align="left"><code>trajectory.min_prepare_duration</code></td>
+<td>[s]</td>
+<td>double</td>
+<td>The minimum preparation time for the ego vehicle to be ready to perform lane change.</td>
+<td>2.0</td>
 </tr>
 <tr>
 <td align="left"><code>trajectory.lateral_jerk</code></td>
