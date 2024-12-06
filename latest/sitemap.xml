@@ -1341,12 +1341,12 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/sensing/livox/autoware_livox_tag_filter/</loc>
+         <loc>https://autowarefoundation.github.io/autoware.universe/latest/sensing/autoware_vehicle_velocity_converter/</loc>
          <lastmod>2024-12-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/sensing/vehicle_velocity_converter/</loc>
+         <loc>https://autowarefoundation.github.io/autoware.universe/latest/sensing/livox/autoware_livox_tag_filter/</loc>
          <lastmod>2024-12-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
