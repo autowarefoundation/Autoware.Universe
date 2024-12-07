@@ -60,6 +60,8 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 find_package(pybind11_vendor REQUIRED)
 find_package(pybind11 REQUIRED)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-ignored-optimization-argument")
+
 pybind11_add_module(${PROJECT_NAME}_pybind SHARED
   scripts/bind/astar_search_pybind.cpp
 )

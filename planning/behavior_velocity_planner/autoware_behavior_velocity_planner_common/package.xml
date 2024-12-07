@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_behavior_velocity_planner_common</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>The autoware_behavior_velocity_planner_common package</description>
 
   <maintainer email="tomoya.kimura@tier4.jp">Tomoya Kimura</maintainer>
@@ -52,6 +52,7 @@
   <test_depend>ament_cmake_ros</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>autoware_lint_common</test_depend>
+  <test_depend>autoware_test_utils</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

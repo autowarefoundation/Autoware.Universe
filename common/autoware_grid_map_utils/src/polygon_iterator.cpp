@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <functional>
 #include <utility>
+#include <vector>
 
 namespace autoware::grid_map_utils
 {

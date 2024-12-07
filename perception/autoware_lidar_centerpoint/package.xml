@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_lidar_centerpoint</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>The autoware_lidar_centerpoint package</description>
   <maintainer email="kenzo.lobos@tier4.jp">Kenzo Lobos-Tsunekawa</maintainer>
   <maintainer email="koji.minoda@tier4.jp">Koji Minoda</maintainer>

@@ -20,6 +20,11 @@
 
 #include <autoware/universe_utils/ros/uuid_helper.hpp>
 
+#include <set>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 namespace perception_diagnostics
 {
 namespace metrics

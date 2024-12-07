@@ -21,6 +21,9 @@
 
 #include <gtest/gtest.h>
 
+#include <string>
+#include <vector>
+
 StopObstacle generate_stop_obstacle(uint8_t label, double dist)
 {
   const std::string uuid{};

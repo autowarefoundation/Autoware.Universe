@@ -2,6 +2,28 @@
 Changelog for package system_monitor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.39.0 (2024-11-25)
+-------------------
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* feat(system_monitor): add on/off config for network traffic monitor (`#9069 <https://github.com/autowarefoundation/autoware.universe/issues/9069>`_)
+  * feat(system_monitor): add config for network traffic monitor
+  * fix: change function name from stop to skip
+  ---------
+* feat(system_monitor): support loopback network interface (`#9067 <https://github.com/autowarefoundation/autoware.universe/issues/9067>`_)
+  * feat(system_monitor): support loopback network interface
+  * style(pre-commit): autofix
+  ---------
+  Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
+* Contributors: Esteve Fernandez, Yutaka Kondo, iwatake
+
 0.38.0 (2024-11-08)
 -------------------
 * remove system_monitor/CHANGELOG.rst

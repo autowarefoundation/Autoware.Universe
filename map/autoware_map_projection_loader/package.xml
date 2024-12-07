@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_map_projection_loader</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>autoware_map_projection_loader package as a ROS 2 node</description>
   <maintainer email="yamato.ando@tier4.jp">Yamato Ando</maintainer>
   <maintainer email="masahiro.sakamoto@tier4.jp">Masahiro Sakamoto</maintainer>
@@ -19,9 +19,9 @@
   <depend>autoware_component_interface_specs</depend>
   <depend>autoware_component_interface_utils</depend>
   <depend>autoware_lanelet2_extension</depend>
+  <depend>autoware_map_msgs</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
-  <depend>tier4_map_msgs</depend>
   <depend>yaml-cpp</depend>
 
   <test_depend>ament_cmake_gmock</test_depend>

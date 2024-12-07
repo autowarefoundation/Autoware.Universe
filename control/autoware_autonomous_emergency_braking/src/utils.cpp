@@ -13,9 +13,12 @@
 // limitations under the License.
 
 #include <autoware/autonomous_emergency_braking/utils.hpp>
+#include <autoware/motion_utils/trajectory/trajectory.hpp>
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
 #include <optional>
+#include <string>
+#include <vector>
 
 namespace autoware::motion::control::autonomous_emergency_braking::utils
 {
@@ -26,6 +29,55 @@ using geometry_msgs::msg::Point;
 using geometry_msgs::msg::Pose;
 using geometry_msgs::msg::TransformStamped;
 using geometry_msgs::msg::Vector3;
+
+std::optional<ObjectData> getObjectOnPathData(
+  const std::vector<Pose> & ego_path, const geometry_msgs::msg::Point & obj_position,
+  const rclcpp::Time & stamp, const double path_length, const double path_width,
+  const double path_expansion, const double longitudinal_offset, const double object_speed)
+{
+  const auto current_p = [&]() {
+    const auto & p = ego_path.front().position;
+    return autoware::universe_utils::createPoint(p.x, p.y, p.z);
+  }();
+  const double obj_arc_length =
+    autoware::motion_utils::calcSignedArcLength(ego_path, current_p, obj_position);
+  if (
+    std::isnan(obj_arc_length) || obj_arc_length < 0.0 ||
+    obj_arc_length > path_length + longitudinal_offset) {
+    return {};
+  }
+
+  // calculate the lateral offset between the ego vehicle and the object
+  const double lateral_offset =
+    std::abs(autoware::motion_utils::calcLateralOffset(ego_path, obj_position));
+
+  // object is outside region of interest
+  if (std::isnan(lateral_offset) || lateral_offset > path_width + path_expansion) {
+    return {};
+  }
+
+  // If the object is behind the ego, we need to use the backward long offset. The distance should
+  // be a positive number in any case
+  const double dist_ego_to_object = obj_arc_length - longitudinal_offset;
+  ObjectData obj;
+  obj.stamp = stamp;
+  obj.position = obj_position;
+  obj.velocity = object_speed;
+  obj.distance_to_object = std::abs(dist_ego_to_object);
+  obj.is_target = (lateral_offset < path_width);
+  return obj;
+}
+
+std::optional<double> getLongitudinalOffset(
+  const std::vector<Pose> & ego_path, const double front_offset, const double rear_offset)
+{
+  const auto ego_is_driving_forward_opt = autoware::motion_utils::isDrivingForward(ego_path);
+  if (!ego_is_driving_forward_opt.has_value()) {
+    return {};
+  }
+  const bool ego_is_driving_forward = ego_is_driving_forward_opt.value();
+  return (ego_is_driving_forward) ? front_offset : rear_offset;
+}
 
 PredictedObject transformObjectFrame(
   const PredictedObject & input, const geometry_msgs::msg::TransformStamped & transform_stamped)

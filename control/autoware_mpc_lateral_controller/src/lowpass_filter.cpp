@@ -14,6 +14,7 @@
 
 #include "autoware/mpc_lateral_controller/lowpass_filter.hpp"
 
+#include <algorithm>
 #include <vector>
 
 namespace autoware::motion::control::mpc_lateral_controller

@@ -17,6 +17,9 @@
 #include "learning_based_vehicle_model/interconnected_model.hpp"
 
 #include <algorithm>
+#include <string>
+#include <tuple>
+#include <vector>
 
 SimModelLearnedSteerVel::SimModelLearnedSteerVel(
   double dt, std::vector<std::string> model_python_paths,

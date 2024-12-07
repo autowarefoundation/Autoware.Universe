@@ -21,6 +21,8 @@
 #include <qt5/QtWidgets/QWidget>
 #include <rviz_common/display_context.hpp>
 
+#include <memory>
+
 namespace rviz_plugins
 {
 BagTimeManagerPanel::BagTimeManagerPanel(QWidget * parent) : rviz_common::Panel(parent)
@@ -82,7 +84,7 @@ void BagTimeManagerPanel::onPauseClicked()
     pause_button_->setStyleSheet("background-color: #00FF00;");
     auto req = std::make_shared<Resume::Request>();
     client_resume_->async_send_request(
-      req, [this]([[maybe_unused]] rclcpp::Client<Resume>::SharedFuture result) {});
+      req, []([[maybe_unused]] rclcpp::Client<Resume>::SharedFuture result) {});
   } else {
     // do pause
     current_state_ = STATE::PAUSE;
@@ -91,7 +93,7 @@ void BagTimeManagerPanel::onPauseClicked()
     pause_button_->setStyleSheet("background-color: #FF0000;");
     auto req = std::make_shared<Pause::Request>();
     client_pause_->async_send_request(
-      req, [this]([[maybe_unused]] rclcpp::Client<Pause>::SharedFuture result) {});
+      req, []([[maybe_unused]] rclcpp::Client<Pause>::SharedFuture result) {});
   }
 }
 

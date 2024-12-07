@@ -50,7 +50,7 @@ public:
   /**
    * @brief destructor
    */
-  ~SimModelInterface() = default;
+  virtual ~SimModelInterface() = default;
 
   /**
    * @brief get state vector of model
@@ -63,12 +63,6 @@ public:
    * @param [out] input input vector
    */
   void getInput(Eigen::VectorXd & input);
-
-  /**
-   * @brief set state vector of model
-   * @param [in] state state vector
-   */
-  void setState(const Eigen::VectorXd & state);
 
   /**
    * @brief set input vector of model
@@ -95,6 +89,14 @@ public:
    * @param [in] input vehicle input
    */
   void updateEuler(const double & dt, const Eigen::VectorXd & input);
+
+  /**
+   * @brief set state vector of model
+   * @details In some sim models, the state member should be updated as well. Therefore, this
+   * function is defined as virtual.
+   * @param [in] state state vector
+   */
+  virtual void setState(const Eigen::VectorXd & state);
 
   /**
    * @brief update vehicle states

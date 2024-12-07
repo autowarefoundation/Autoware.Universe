@@ -3,11 +3,9 @@
   <arg name="output_topic_name" default="/sensing/lidar/top/self_cropped/pointcloud_ex"/>
   <arg name="input_frame" default="base_link"/>
   <arg name="output_frame" default="base_link"/>
-  <arg name="filter_param_file" default="$(find-pkg-share autoware_pointcloud_preprocessor)/config/filter.param.yaml"/>
   <arg name="crop_box_filter_param_file" default="$(find-pkg-share autoware_pointcloud_preprocessor)/config/crop_box_filter_node.param.yaml"/>
   <node pkg="autoware_pointcloud_preprocessor" exec="crop_box_filter_node" name="crop_box_filter_node">
     <param from="$(var crop_box_filter_param_file)"/>
-    <param from="$(var filter_param_file)"/>
     <remap from="input" to="$(var input_topic_name)"/>
     <remap from="output" to="$(var output_topic_name)"/>
     <param name="input_frame" value="$(var input_frame)"/>

@@ -27,6 +27,7 @@
 
 #include "boost/lexical_cast.hpp"
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -53,7 +54,8 @@ protected:
     const auto share_dir =
       ament_index_cpp::get_package_share_directory("autoware_planning_evaluator");
     options.arguments(
-      {"--ros-args", "--params-file", share_dir + "/config/planning_evaluator.param.yaml"});
+      {"--ros-args", "--params-file", share_dir + "/config/planning_evaluator.param.yaml", "-p",
+       "output_metrics:=false"});
 
     dummy_node = std::make_shared<rclcpp::Node>("planning_evaluator_test_node");
     eval_node = std::make_shared<EvalNode>(options);

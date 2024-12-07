@@ -2,6 +2,56 @@
 Changelog for package autoware_motion_utils
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.39.0 (2024-11-25)
+-------------------
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* feat(autoware_trajectory): move trajectory_container from autoware_motion_utils to a new package (`#9253 <https://github.com/autowarefoundation/autoware.universe/issues/9253>`_)
+  * create trajectory container package
+  * update
+  * update
+  * style(pre-commit): autofix
+  * update codeowner
+  * update
+  * fix cmake
+  ---------
+  Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
+* feat(autoware_motion_utils): add new trajectory class (`#8693 <https://github.com/autowarefoundation/autoware.universe/issues/8693>`_)
+  * feat(autoware_motion_utils): add interpolator
+  * use int32_t instead of int
+  * use int32_t instead of int
+  * use int32_t instead of int
+  * add const as much as possible and use `at()` in `vector`
+  * fix directory name
+  * refactor code and add example
+  * update
+  * remove unused include
+  * refactor code
+  * add clone function
+  * fix stairstep
+  * make constructor to public
+  * feat(autoware_motion_utils): add trajectory class
+  * Update CMakeLists.txt
+  * fix
+  * fix package.xml
+  * update crop
+  * revert crtp change
+  * update package.xml
+  * updating...
+  * update
+  * solve build problem
+  * style(pre-commit): autofix
+  ---------
+  Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
+* Contributors: Esteve Fernandez, Yukinari Hisaki, Yutaka Kondo
+
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0

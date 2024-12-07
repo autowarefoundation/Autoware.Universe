@@ -25,6 +25,8 @@
 
 #include <chrono>
 #include <memory>
+#include <string>
+#include <vector>
 
 class TestPointcloudMapLoaderModule : public ::testing::Test
 {

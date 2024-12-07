@@ -16,6 +16,8 @@
 
 #include <rclcpp/rclcpp.hpp>
 
+#include <limits>
+
 namespace autoware::vehicle_info_utils
 {
 autoware::universe_utils::LinearRing2d VehicleInfo::createFootprint(const double margin) const

@@ -19,12 +19,14 @@
 #include "autoware/universe_utils/geometry/geometry.hpp"
 #include "autoware/universe_utils/ros/debug_publisher.hpp"
 #include "autoware/universe_utils/ros/published_time_publisher.hpp"
+#include "autoware/universe_utils/system/stop_watch.hpp"
 #include "autoware_lanelet2_extension/utility/utilities.hpp"
 
 #include <rclcpp/rclcpp.hpp>
 
 #include "autoware_map_msgs/msg/lanelet_map_bin.hpp"
 #include "autoware_perception_msgs/msg/detected_objects.hpp"
+#include <visualization_msgs/msg/marker_array.hpp>
 
 #include <boost/geometry/index/rtree.hpp>
 
@@ -50,7 +52,13 @@ namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 using Point2d = bg::model::point<double, 2, bg::cs::cartesian>;
 using Box = boost::geometry::model::box<Point2d>;
-using BoxAndLanelet = std::pair<Box, lanelet::Lanelet>;
+
+struct PolygonAndLanelet
+{
+  lanelet::BasicPolygon2d polygon;
+  lanelet::ConstLanelet lanelet;
+};
+using BoxAndLanelet = std::pair<Box, PolygonAndLanelet>;
 using RtreeAlgo = bgi::rstar<16>;
 
 class ObjectLaneletFilterNode : public rclcpp::Node
@@ -62,10 +70,16 @@ private:
   void objectCallback(const autoware_perception_msgs::msg::DetectedObjects::ConstSharedPtr);
   void mapCallback(const autoware_map_msgs::msg::LaneletMapBin::ConstSharedPtr);
 
+  void publishDebugMarkers(
+    rclcpp::Time stamp, const LinearRing2d & hull, const std::vector<BoxAndLanelet> & lanelets);
+
   rclcpp::Publisher<autoware_perception_msgs::msg::DetectedObjects>::SharedPtr object_pub_;
+  rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr viz_pub_;
   rclcpp::Subscription<autoware_map_msgs::msg::LaneletMapBin>::SharedPtr map_sub_;
   rclcpp::Subscription<autoware_perception_msgs::msg::DetectedObjects>::SharedPtr object_sub_;
+
   std::unique_ptr<autoware::universe_utils::DebugPublisher> debug_publisher_{nullptr};
+  std::unique_ptr<autoware::universe_utils::StopWatch<std::chrono::milliseconds>> stop_watch_ptr_;
 
   lanelet::LaneletMapPtr lanelet_map_ptr_;
   std::string lanelet_frame_id_;
@@ -80,6 +94,8 @@ private:
     bool lanelet_direction_filter;
     double lanelet_direction_filter_velocity_yaw_threshold;
     double lanelet_direction_filter_object_speed_threshold;
+    bool debug;
+    double lanelet_extra_margin;
   } filter_settings_;
 
   bool filterObject(
@@ -101,6 +117,7 @@ private:
     const bgi::rtree<BoxAndLanelet, RtreeAlgo> & local_rtree);
   geometry_msgs::msg::Polygon setFootprint(const autoware_perception_msgs::msg::DetectedObject &);
 
+  lanelet::BasicPolygon2d getPolygon(const lanelet::ConstLanelet & lanelet);
   std::unique_ptr<autoware::universe_utils::PublishedTimePublisher> published_time_publisher_;
 };
 

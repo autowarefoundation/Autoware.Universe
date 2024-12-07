@@ -34,9 +34,13 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdio>
+#include <limits>
+#include <map>
 #include <memory>
 #include <optional>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -1372,7 +1376,7 @@ TurnSignalInfo StartPlannerModule::calcTurnSignalInfo()
     path.points, status_.pull_out_path.start_pose.position);
   const auto shift_end_idx =
     autoware::motion_utils::findNearestIndex(path.points, status_.pull_out_path.end_pose.position);
-  const lanelet::ConstLanelets current_lanes = utils::getCurrentLanes(planner_data_);
+  const lanelet::ConstLanelets current_lanes = utils::getExtendedCurrentLanes(planner_data_);
 
   const auto is_ignore_signal = [this](const lanelet::Id & id) {
     if (!ignore_signal_.has_value()) {

@@ -52,6 +52,8 @@
 
 #include <rviz_common/logging.hpp>
 
+#include <string>
+
 namespace autoware_overlay_rviz_plugin
 {
 ScopedPixelBuffer::ScopedPixelBuffer(Ogre::HardwarePixelBufferSharedPtr pixel_buffer)

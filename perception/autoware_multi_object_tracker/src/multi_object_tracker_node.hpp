@@ -98,7 +98,6 @@ private:
   // callback functions
   void onTimer();
   void onTrigger();
-  void onMessage(const ObjectsList & objects_list);
 
   // publish processes
   void runProcess(const DetectedObjects & input_objects, const uint & channel_index);

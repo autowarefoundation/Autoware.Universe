@@ -25,6 +25,8 @@
 
 #include <tf2/utils.h>
 
+#include <memory>
+
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_eigen/tf2_eigen.h>
 #else
@@ -54,13 +56,11 @@ TrafficLightModule::TrafficLightModule(
   planner_param_ = planner_param;
 }
 
-bool TrafficLightModule::modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason)
+bool TrafficLightModule::modifyPathVelocity(PathWithLaneId * path)
 {
   debug_data_ = DebugData();
   debug_data_.base_link2front = planner_data_->vehicle_info_.max_longitudinal_offset_m;
-  first_stop_path_point_distance_ = autoware::motion_utils::calcArcLength(path->points);
   first_ref_stop_path_point_index_ = static_cast<int>(path->points.size()) - 1;
-  *stop_reason = planning_utils::initializeStopReason(StopReason::TRAFFIC_LIGHT);
 
   const auto input_path = *path;
 
@@ -133,8 +133,7 @@ bool TrafficLightModule::modifyPathVelocity(PathWithLaneId * path, StopReason * 
 
     // Decide whether to stop or pass even if a stop signal is received.
     if (!isPassthrough(signed_arc_length_to_stop_point)) {
-      *path =
-        insertStopPose(input_path, stop_line.value().first, stop_line.value().second, stop_reason);
+      *path = insertStopPose(input_path, stop_line.value().first, stop_line.value().second);
       is_prev_state_stop_ = true;
     }
     return true;
@@ -275,7 +274,7 @@ bool TrafficLightModule::isTrafficSignalTimedOut() const
 
 tier4_planning_msgs::msg::PathWithLaneId TrafficLightModule::insertStopPose(
   const tier4_planning_msgs::msg::PathWithLaneId & input, const size_t & insert_target_point_idx,
-  const Eigen::Vector2d & target_point, tier4_planning_msgs::msg::StopReason * stop_reason)
+  const Eigen::Vector2d & target_point)
 {
   tier4_planning_msgs::msg::PathWithLaneId modified_path;
   modified_path = input;
@@ -292,24 +291,9 @@ tier4_planning_msgs::msg::PathWithLaneId TrafficLightModule::insertStopPose(
   size_t insert_index = insert_target_point_idx;
   planning_utils::insertVelocity(modified_path, target_point_with_lane_id, 0.0, insert_index);
 
-  const double target_velocity_point_distance = autoware::motion_utils::calcArcLength(std::vector(
-    modified_path.points.begin(), modified_path.points.begin() + target_velocity_point_idx));
-  if (target_velocity_point_distance < first_stop_path_point_distance_) {
-    first_stop_path_point_distance_ = target_velocity_point_distance;
-    debug_data_.first_stop_pose = target_point_with_lane_id.point.pose;
-  }
-
-  // Get stop point and stop factor
-  tier4_planning_msgs::msg::StopFactor stop_factor;
-  stop_factor.stop_pose = debug_data_.first_stop_pose;
-  if (debug_data_.highest_confidence_traffic_light_point != std::nullopt) {
-    stop_factor.stop_factor_points = std::vector<geometry_msgs::msg::Point>{
-      debug_data_.highest_confidence_traffic_light_point.value()};
-  }
   velocity_factor_.set(
     modified_path.points, planner_data_->current_odometry->pose,
     target_point_with_lane_id.point.pose, VelocityFactor::UNKNOWN);
-  planning_utils::appendStopReason(stop_factor, stop_reason);
 
   return modified_path;
 }

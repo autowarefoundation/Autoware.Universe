@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>autoware_motion_velocity_obstacle_velocity_limiter_module</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>Package to adjust velocities of a trajectory in order for the ride to feel safe</description>
 
   <maintainer email="maxime.clement@tier4.jp">Maxime CLEMENT</maintainer>

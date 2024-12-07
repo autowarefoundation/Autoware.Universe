@@ -139,6 +139,13 @@ private:
 
   void set_current_pose();
 
+  /// \brief set position of grid center
+  /// \details computes relative position of ego from current grid center,
+  /// if offset is larger than grid resolution, grid center will be updated
+  /// by a multiple of the grid resolution
+  /// \param[in] tf costmap frame to vehicle frame transform
+  void set_grid_center(const geometry_msgs::msg::TransformStamped & tf);
+
   void onTimer();
 
   bool isActive();
@@ -148,7 +155,9 @@ private:
 
   /// \brief publish ros msg: grid_map::GridMap, and nav_msgs::OccupancyGrid
   /// \param[in] gridmap with calculated cost
-  void publishCostmap(const grid_map::GridMap & costmap);
+  /// \param[in] tf costmap frame to vehicle frame transform
+  void publishCostmap(
+    const grid_map::GridMap & costmap, const geometry_msgs::msg::TransformStamped & tf);
 
   /// \brief fill a vector with road area polygons
   /// \param [in] lanelet_map input lanelet map

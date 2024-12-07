@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <string>
+#include <tuple>
 
 namespace autoware::pose_initializer
 {

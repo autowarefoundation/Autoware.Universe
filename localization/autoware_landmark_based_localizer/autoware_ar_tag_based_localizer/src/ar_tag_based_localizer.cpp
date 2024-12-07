@@ -51,6 +51,10 @@
 #include <opencv4/opencv2/calib3d.hpp>
 #include <opencv4/opencv2/core/quaternion.hpp>
 
+#include <memory>
+#include <string>
+#include <vector>
+
 #if __has_include(<cv_bridge/cv_bridge.hpp>)
 #include <cv_bridge/cv_bridge.hpp>  // for ROS 2 Jazzy or newer
 #else

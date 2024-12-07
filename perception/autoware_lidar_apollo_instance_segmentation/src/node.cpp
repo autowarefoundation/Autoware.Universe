@@ -19,6 +19,8 @@
 #include <autoware/universe_utils/ros/debug_publisher.hpp>
 #include <autoware/universe_utils/system/stop_watch.hpp>
 
+#include <memory>
+
 namespace autoware
 {
 namespace lidar_apollo_instance_segmentation

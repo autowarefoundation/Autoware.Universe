@@ -20,7 +20,9 @@
 
 #include <gtest/gtest.h>
 
+#include <map>
 #include <memory>
+#include <string>
 
 using autoware::map_loader::PartialMapLoaderModule;
 using autoware_map_msgs::srv::GetPartialPointCloudMap;

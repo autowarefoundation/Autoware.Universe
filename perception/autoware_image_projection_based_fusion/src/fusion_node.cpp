@@ -24,6 +24,9 @@
 #include <boost/optional.hpp>
 
 #include <cmath>
+#include <list>
+#include <memory>
+#include <string>
 
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_eigen/tf2_eigen.h>
@@ -212,7 +215,7 @@ void FusionNode<TargetMsg3D, Obj, Msg2D>::subCallback(
   preprocess(*output_msg);
 
   int64_t timestamp_nsec =
-    (*output_msg).header.stamp.sec * (int64_t)1e9 + (*output_msg).header.stamp.nanosec;
+    (*output_msg).header.stamp.sec * static_cast<int64_t>(1e9) + (*output_msg).header.stamp.nanosec;
 
   // if matching rois exist, fuseOnSingle
   // please ask maintainers before parallelize this loop because debugger is not thread safe
@@ -229,14 +232,17 @@ void FusionNode<TargetMsg3D, Obj, Msg2D>::subCallback(
       std::list<int64_t> outdate_stamps;
 
       for (const auto & [k, v] : cached_roi_msgs_.at(roi_i)) {
-        int64_t new_stamp = timestamp_nsec + input_offset_ms_.at(roi_i) * (int64_t)1e6;
-        int64_t interval = abs(int64_t(k) - new_stamp);
+        int64_t new_stamp = timestamp_nsec + input_offset_ms_.at(roi_i) * static_cast<int64_t>(1e6);
+        int64_t interval = abs(static_cast<int64_t>(k) - new_stamp);
 
-        if (interval <= min_interval && interval <= match_threshold_ms_ * (int64_t)1e6) {
+        if (
+          interval <= min_interval && interval <= match_threshold_ms_ * static_cast<int64_t>(1e6)) {
           min_interval = interval;
           matched_stamp = k;
-        } else if (int64_t(k) < new_stamp && interval > match_threshold_ms_ * (int64_t)1e6) {
-          outdate_stamps.push_back(int64_t(k));
+        } else if (
+          static_cast<int64_t>(k) < new_stamp &&
+          interval > match_threshold_ms_ * static_cast<int64_t>(1e6)) {
+          outdate_stamps.push_back(static_cast<int64_t>(k));
         }
       }
 
@@ -290,7 +296,7 @@ void FusionNode<TargetMsg3D, Obj, Msg2D>::subCallback(
       processing_time_ms = 0;
     }
   } else {
-    cached_msg_.first = int64_t(timestamp_nsec);
+    cached_msg_.first = timestamp_nsec;
     cached_msg_.second = output_msg;
     processing_time_ms = stop_watch_ptr_->toc("processing_time", true);
   }
@@ -302,15 +308,16 @@ void FusionNode<TargetMsg3D, Obj, Msg2D>::roiCallback(
 {
   stop_watch_ptr_->toc("processing_time", true);
 
-  int64_t timestamp_nsec =
-    (*input_roi_msg).header.stamp.sec * (int64_t)1e9 + (*input_roi_msg).header.stamp.nanosec;
+  int64_t timestamp_nsec = (*input_roi_msg).header.stamp.sec * static_cast<int64_t>(1e9) +
+                           (*input_roi_msg).header.stamp.nanosec;
 
   // if cached Msg exist, try to match
   if (cached_msg_.second != nullptr) {
-    int64_t new_stamp = cached_msg_.first + input_offset_ms_.at(roi_i) * (int64_t)1e6;
+    int64_t new_stamp = cached_msg_.first + input_offset_ms_.at(roi_i) * static_cast<int64_t>(1e6);
     int64_t interval = abs(timestamp_nsec - new_stamp);
 
-    if (interval < match_threshold_ms_ * (int64_t)1e6 && is_fused_.at(roi_i) == false) {
+    if (
+      interval < match_threshold_ms_ * static_cast<int64_t>(1e6) && is_fused_.at(roi_i) == false) {
       if (camera_info_map_.find(roi_i) == camera_info_map_.end()) {
         RCLCPP_WARN_THROTTLE(
           this->get_logger(), *this->get_clock(), 5000, "no camera info. id is %zu", roi_i);

@@ -26,6 +26,7 @@
 #include <fmt/format.h>
 
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace bp = boost::process;

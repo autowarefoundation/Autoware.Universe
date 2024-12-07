@@ -14,7 +14,10 @@
 
 #include "differential_map_loader_module.hpp"
 
+#include <map>
+#include <string>
 #include <utility>
+#include <vector>
 
 namespace autoware::map_loader
 {

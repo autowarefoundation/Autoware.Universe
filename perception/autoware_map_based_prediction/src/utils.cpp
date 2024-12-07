@@ -22,6 +22,15 @@
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/LaneletMap.h>
 
+#include <algorithm>
+#include <deque>
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
 namespace autoware::map_based_prediction
 {
 namespace utils

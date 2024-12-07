@@ -24,3 +24,6 @@ fields:
   - name: dynamic_object
     type: PredictedObjects # autoware_perception_msgs::msg::PredictedObjects
     topic: /perception/object_recognition/objects
+#  - name: tracked_object
+#    type: TrackedObjects # autoware_perception_msgs::msg::TrackedObjects
+#    topic: /perception/object_recognition/tracking/objects

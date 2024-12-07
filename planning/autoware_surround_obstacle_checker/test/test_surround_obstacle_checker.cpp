@@ -20,6 +20,9 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <utility>
+
 namespace autoware::surround_obstacle_checker
 {
 auto generateTestTargetNode() -> std::shared_ptr<SurroundObstacleCheckerNode>
@@ -48,8 +51,8 @@ public:
 
   auto isStopRequired(
     const bool is_obstacle_found, const bool is_vehicle_stopped, const State & state,
-    const std::optional<rclcpp::Time> & last_obstacle_found_time,
-    const double time_threshold) const -> std::pair<bool, std::optional<rclcpp::Time>>
+    const std::optional<rclcpp::Time> & last_obstacle_found_time, const double time_threshold) const
+    -> std::pair<bool, std::optional<rclcpp::Time>>
   {
     return node_->isStopRequired(
       is_obstacle_found, is_vehicle_stopped, state, last_obstacle_found_time, time_threshold);

@@ -17,8 +17,10 @@
 #include <gtest/gtest.h>
 
 #include <chrono>
+#include <iostream>
 #include <random>
 #include <ratio>
+#include <vector>
 
 constexpr auto TOL = 1E-6;  // 1µm tolerance
 
@@ -103,9 +105,9 @@ TEST(splineTransform, benchFrenet)
       EXPECT_NEAR(frenet_naive.d, frenet_lut.d, precision);
     }
     std::cout << "size = " << size << std::endl;
-    std::cout << "\tnaive: " << std::chrono::duration_cast<std::chrono::milliseconds>(naive).count()
-              << "ms\n";
-    std::cout << "\tlut  : " << std::chrono::duration_cast<std::chrono::milliseconds>(lut).count()
+    std::cout << "\t naive: "
+              << std::chrono::duration_cast<std::chrono::milliseconds>(naive).count() << "ms\n";
+    std::cout << "\t lut  : " << std::chrono::duration_cast<std::chrono::milliseconds>(lut).count()
               << "ms\n";
   }
 }

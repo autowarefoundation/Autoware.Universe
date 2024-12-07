@@ -17,6 +17,8 @@
 
 #include <gtest/gtest.h>
 
+#include <vector>
+
 namespace
 {
 grid_map::GridMap construct_gridmap(

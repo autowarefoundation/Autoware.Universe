@@ -14,6 +14,9 @@
 
 #include "autoware/ndt_scan_matcher/map_update_module.hpp"
 
+#include <memory>
+#include <string>
+
 namespace autoware::ndt_scan_matcher
 {
 

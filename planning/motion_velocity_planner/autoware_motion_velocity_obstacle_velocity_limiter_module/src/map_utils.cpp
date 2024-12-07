@@ -23,6 +23,8 @@
 #include <lanelet2_core/geometry/LaneletMap.h>
 
 #include <algorithm>
+#include <string>
+#include <vector>
 
 namespace autoware::motion_velocity_planner::obstacle_velocity_limiter
 {

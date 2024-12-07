@@ -62,9 +62,6 @@ static const Ogre::Quaternion ROBOT_TO_CAMERA_ROTATION =
   Ogre::Quaternion(Ogre::Radian(-Ogre::Math::HALF_PI), Ogre::Vector3::UNIT_Y) *
   Ogre::Quaternion(Ogre::Radian(-Ogre::Math::HALF_PI), Ogre::Vector3::UNIT_Z);
 
-static const float PITCH_LIMIT_LOW = -Ogre::Math::HALF_PI + 0.001;
-static const float PITCH_LIMIT_HIGH = Ogre::Math::HALF_PI - 0.001;
-
 BirdEyeViewController::BirdEyeViewController() : dragging_(false)
 {
   scale_property_ = new rviz_common::properties::FloatProperty(

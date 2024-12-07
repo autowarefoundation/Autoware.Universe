@@ -68,7 +68,6 @@ static const float PITCH_START = Ogre::Math::HALF_PI / 3;
 static const float YAW_START = Ogre::Math::PI;
 static const float DISTANCE_START = 30;
 static const float FOCAL_SHAPE_SIZE_START = 0.05;
-static const bool FOCAL_SHAPE_FIXED_SIZE = true;
 static const char * TARGET_FRAME_START = "base_link";
 
 // move camera up so the focal point appears in the lower image half

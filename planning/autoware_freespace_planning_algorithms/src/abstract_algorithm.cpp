@@ -19,6 +19,8 @@
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware/universe_utils/math/normalization.hpp>
 
+#include <algorithm>
+#include <iostream>
 #include <limits>
 #include <vector>
 

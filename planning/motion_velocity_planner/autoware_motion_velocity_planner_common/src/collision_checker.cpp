@@ -14,6 +14,10 @@
 
 #include "autoware/motion_velocity_planner_common/collision_checker.hpp"
 
+#include <memory>
+#include <utility>
+#include <vector>
+
 namespace autoware::motion_velocity_planner
 {
 CollisionChecker::CollisionChecker(autoware::universe_utils::MultiPolygon2d trajectory_footprints)

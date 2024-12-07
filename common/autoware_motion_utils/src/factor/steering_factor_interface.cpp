@@ -14,6 +14,8 @@
 
 #include <autoware/motion_utils/factor/steering_factor_interface.hpp>
 
+#include <string>
+
 namespace autoware::motion_utils
 {
 void SteeringFactorInterface::set(

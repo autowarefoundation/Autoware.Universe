@@ -22,6 +22,7 @@
 #include <gtest/gtest.h>
 
 #include <cstddef>
+#include <vector>
 
 using tier4_planning_msgs::msg::PathWithLaneId;
 

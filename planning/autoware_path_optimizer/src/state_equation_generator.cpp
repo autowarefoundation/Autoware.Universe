@@ -16,6 +16,8 @@
 
 #include "autoware/path_optimizer/mpt_optimizer.hpp"
 
+#include <vector>
+
 namespace autoware::path_optimizer
 {
 // state equation: x = B u + W (u includes x_0)

@@ -29,6 +29,14 @@
 #include <lanelet2_core/geometry/Polygon.h>
 #include <lanelet2_routing/RoutingGraphContainer.h>
 
+#include <algorithm>
+#include <limits>
+#include <memory>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
+
 namespace
 {
 template <class T>
@@ -729,10 +737,13 @@ std::vector<DrivableLanes> cutOverlappedLanes(
   }
 
   // Step2. pick up only path points within drivable lanes
+  std::set<size_t> path_point_indices;
   for (const auto & drivable_lanes : shorten_lanes) {
     for (size_t i = start_point_idx; i < original_points.size(); ++i) {
-      if (is_point_in_drivable_lanes(drivable_lanes, original_points.at(i))) {
-        path.points.push_back(original_points.at(i));
+      const auto & p = original_points.at(i);
+      if (is_point_in_drivable_lanes(drivable_lanes, p) && path_point_indices.count(i) == 0) {
+        path.points.push_back(p);
+        path_point_indices.insert(i);
         continue;
       }
       start_point_idx = i;

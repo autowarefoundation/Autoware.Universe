@@ -31,6 +31,7 @@
 
 #include <lanelet2_io/Io.h>
 
+#include <iostream>
 #include <memory>
 #include <string>
 namespace autoware::route_handler::test
@@ -45,7 +46,11 @@ public:
   TestRouteHandler()
   {
     set_route_handler("2km_test.osm");
-    set_test_route(lane_change_right_test_route_filename);
+    try {
+      set_test_route(lane_change_right_test_route_filename);
+    } catch (const std::exception & e) {
+      std::cerr << e.what() << '\n';
+    }
   }
 
   TestRouteHandler(const TestRouteHandler &) = delete;
@@ -68,7 +73,14 @@ public:
   {
     const auto rh_test_route =
       get_absolute_path_to_route(autoware_route_handler_dir, route_filename);
-    route_handler_->setRoute(autoware::test_utils::parse<LaneletRoute>(rh_test_route));
+    if (
+      const auto route_opt =
+        autoware::test_utils::parse<std::optional<LaneletRoute>>(rh_test_route)) {
+      route_handler_->setRoute(*route_opt);
+    } else {
+      throw std::runtime_error(
+        "Failed to parse YAML file: " + rh_test_route + ". The file might be corrupted.");
+    }
   }
 
   lanelet::ConstLanelets get_current_lanes()

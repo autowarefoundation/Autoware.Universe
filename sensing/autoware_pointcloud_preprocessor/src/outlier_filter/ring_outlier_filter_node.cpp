@@ -19,6 +19,8 @@
 #include <sensor_msgs/point_cloud2_iterator.hpp>
 
 #include <algorithm>
+#include <memory>
+#include <utility>
 #include <vector>
 namespace autoware::pointcloud_preprocessor
 {

@@ -26,9 +26,7 @@
 #include <string>
 #include <vector>
 
-namespace autoware::behavior_velocity_planner
-{
-namespace debug
+namespace autoware::behavior_velocity_planner::debug
 {
 visualization_msgs::msg::MarkerArray createPolygonMarkerArray(
   const geometry_msgs::msg::Polygon & polygon, const std::string & ns, const int64_t module_id,
@@ -46,6 +44,6 @@ visualization_msgs::msg::MarkerArray createPointsMarkerArray(
   const std::vector<geometry_msgs::msg::Point> & points, const std::string & ns,
   const int64_t module_id, const rclcpp::Time & now, const double x, const double y, const double z,
   const double r, const double g, const double b);
-}  // namespace debug
-}  // namespace autoware::behavior_velocity_planner
+}  // namespace autoware::behavior_velocity_planner::debug
+
 #endif  // AUTOWARE__BEHAVIOR_VELOCITY_PLANNER_COMMON__UTILIZATION__DEBUG_HPP_

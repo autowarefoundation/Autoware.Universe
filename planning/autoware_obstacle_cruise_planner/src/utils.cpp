@@ -17,6 +17,10 @@
 #include "autoware/object_recognition_utils/predicted_path_utils.hpp"
 #include "autoware/universe_utils/ros/marker_helper.hpp"
 
+#include <limits>
+#include <string>
+#include <vector>
+
 namespace obstacle_cruise_utils
 {
 namespace
@@ -113,4 +117,26 @@ std::vector<StopObstacle> getClosestStopObstacles(const std::vector<StopObstacle
   }
   return candidates;
 }
+
+VelocityFactorArray makeVelocityFactorArray(
+  const rclcpp::Time & time, const std::string & behavior,
+  const std::optional<geometry_msgs::msg::Pose> pose)
+{
+  VelocityFactorArray velocity_factor_array;
+  velocity_factor_array.header.frame_id = "map";
+  velocity_factor_array.header.stamp = time;
+
+  if (pose) {
+    using distance_type = VelocityFactor::_distance_type;
+    VelocityFactor velocity_factor;
+    velocity_factor.behavior = behavior;
+    velocity_factor.pose = pose.value();
+    velocity_factor.distance = std::numeric_limits<distance_type>::quiet_NaN();
+    velocity_factor.status = VelocityFactor::UNKNOWN;
+    velocity_factor.detail = std::string();
+    velocity_factor_array.factors.push_back(velocity_factor);
+  }
+  return velocity_factor_array;
+}
+
 }  // namespace obstacle_cruise_utils

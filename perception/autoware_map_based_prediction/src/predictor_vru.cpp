@@ -19,6 +19,15 @@
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware/universe_utils/ros/uuid_helper.hpp>
 
+#include <algorithm>
+#include <deque>
+#include <limits>
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+
 namespace autoware::map_based_prediction
 {
 using autoware::universe_utils::ScopedTimeTrack;

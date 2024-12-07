@@ -30,6 +30,9 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/utils.h>
 
+#include <string>
+#include <vector>
+
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #else

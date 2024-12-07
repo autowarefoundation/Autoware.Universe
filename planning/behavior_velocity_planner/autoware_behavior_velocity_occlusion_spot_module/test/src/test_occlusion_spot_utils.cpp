@@ -22,6 +22,9 @@
 #include "geometry_msgs/msg/point.hpp"
 #include "geometry_msgs/msg/vector3.hpp"
 
+#include <iostream>
+#include <vector>
+
 using Point = geometry_msgs::msg::Point;
 using Vector3 = geometry_msgs::msg::Vector3;
 using DynamicObjects = autoware_perception_msgs::msg::PredictedObjects;

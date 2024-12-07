@@ -14,6 +14,11 @@
 
 #include "dummy_diag_publisher/dummy_diag_publisher_core.hpp"
 
+#include <set>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>
 

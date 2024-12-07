@@ -14,7 +14,10 @@
 
 #include <autoware/tensorrt_common/simple_profiler.hpp>
 
+#include <algorithm>
 #include <iomanip>
+#include <string>
+#include <vector>
 
 namespace autoware
 {

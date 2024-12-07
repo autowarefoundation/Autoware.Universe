@@ -68,6 +68,7 @@
 #include <string>
 #include <type_traits>
 #include <utility>
+#include <tuple>
 #if __cplusplus >= 201703L
 #include <string_view>
 #endif
@@ -85,7 +86,7 @@
 #ifdef ROBIN_HOOD_TRACE_ENABLED
 #include <iostream>
 #define ROBIN_HOOD_TRACE(...) \
-  std::cout << __FUNCTION__ << "@" << __LINE__ << ": " << __VA_ARGS__ << std::endl;
+  std::cout << __FUNCTION__ << "@" << __LINE__ << ": " << __VA_ARGS__ << std::endl;  // NOLINT
 #else
 #define ROBIN_HOOD_TRACE(x)
 #endif

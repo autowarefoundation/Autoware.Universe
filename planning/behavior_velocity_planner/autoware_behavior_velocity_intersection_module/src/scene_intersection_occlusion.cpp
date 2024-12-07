@@ -23,7 +23,11 @@
 
 #include <lanelet2_core/geometry/Polygon.h>
 
+#include <algorithm>
+#include <limits>
 #include <tuple>
+#include <utility>
+#include <vector>
 
 namespace autoware::behavior_velocity_planner
 {

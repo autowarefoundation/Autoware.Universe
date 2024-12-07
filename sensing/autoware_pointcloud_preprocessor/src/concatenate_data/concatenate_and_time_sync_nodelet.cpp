@@ -58,6 +58,7 @@
 #include <pcl_conversions/pcl_conversions.h>
 
 #include <algorithm>
+#include <map>
 #include <memory>
 #include <string>
 #include <utility>

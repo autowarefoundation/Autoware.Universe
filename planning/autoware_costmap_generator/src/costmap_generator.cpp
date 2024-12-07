@@ -286,11 +286,7 @@ void CostmapGenerator::onTimer()
   }
   time_keeper_->end_track("lookupTransform");
 
-  // Set grid center
-  grid_map::Position p;
-  p.x() = tf.transform.translation.x;
-  p.y() = tf.transform.translation.y;
-  costmap_.setPosition(p);
+  set_grid_center(tf);
 
   if ((param_->use_wayarea || param_->use_parkinglot) && lanelet_map_) {
     autoware::universe_utils::ScopedTimeTrack st("generatePrimitivesCostmap()", *time_keeper_);
@@ -312,7 +308,18 @@ void CostmapGenerator::onTimer()
     costmap_[LayerName::combined] = generateCombinedCostmap();
   }
 
-  publishCostmap(costmap_);
+  publishCostmap(costmap_, tf);
+}
+
+void CostmapGenerator::set_grid_center(const geometry_msgs::msg::TransformStamped & tf)
+{
+  const auto cur_pos = costmap_.getPosition();
+  const grid_map::Position ref_pos(tf.transform.translation.x, tf.transform.translation.y);
+  const auto disp = ref_pos - cur_pos;
+  const auto resolution = costmap_.getResolution();
+  const grid_map::Position offset(
+    std::round(disp.x() / resolution) * resolution, std::round(disp.y() / resolution) * resolution);
+  costmap_.setPosition(cur_pos + offset);
 }
 
 bool CostmapGenerator::isActive()
@@ -324,8 +331,8 @@ bool CostmapGenerator::isActive()
   if (param_->activate_by_scenario) {
     if (!scenario_) return false;
     const auto & s = scenario_->activating_scenarios;
-    return std::any_of(s.begin(), s.end(), [](const auto scen) {
-      return scen == tier4_planning_msgs::msg::Scenario::PARKING;
+    return std::any_of(s.begin(), s.end(), [](const auto scenario) {
+      return scenario == tier4_planning_msgs::msg::Scenario::PARKING;
     });
   }
 
@@ -452,7 +459,8 @@ grid_map::Matrix CostmapGenerator::generateCombinedCostmap()
   return combined_costmap[LayerName::combined];
 }
 
-void CostmapGenerator::publishCostmap(const grid_map::GridMap & costmap)
+void CostmapGenerator::publishCostmap(
+  const grid_map::GridMap & costmap, const geometry_msgs::msg::TransformStamped & tf)
 {
   // Set header
   std_msgs::msg::Header header;
@@ -465,11 +473,13 @@ void CostmapGenerator::publishCostmap(const grid_map::GridMap & costmap)
     costmap, LayerName::combined, param_->grid_min_value, param_->grid_max_value,
     out_occupancy_grid);
   out_occupancy_grid.header = header;
+  out_occupancy_grid.info.origin.position.z = tf.transform.translation.z;
   pub_occupancy_grid_->publish(out_occupancy_grid);
 
   // Publish GridMap
   auto out_gridmap_msg = grid_map::GridMapRosConverter::toMessage(costmap);
   out_gridmap_msg->header = header;
+  out_gridmap_msg->info.pose.position.z = tf.transform.translation.z;
   pub_costmap_->publish(*out_gridmap_msg);
 
   // Publish ProcessingTime

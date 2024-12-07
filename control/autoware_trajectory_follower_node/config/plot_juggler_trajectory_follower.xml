@@ -258,7 +258,7 @@
    <parameters delimiter="0" time_axis=""/>
   </plugin>
   <plugin ID="DataLoad MCAP"/>
-  <plugin ID="DataLoad ROS2 bags">
+  <plugin ID="DataLoad ROS 2 bags">
    <use_header_stamp value="false"/>
    <discard_large_arrays value="true"/>
    <max_array_size value="100"/>
@@ -268,7 +268,7 @@
   </plugin>
   <plugin ID="DataLoad ULog"/>
   <plugin ID="MQTT Subscriber (Mosquitto)"/>
-  <plugin ID="ROS2 Topic Subscriber">
+  <plugin ID="ROS 2 Topic Subscriber">
    <use_header_stamp value="false"/>
    <discard_large_arrays value="false"/>
    <max_array_size value="100"/>
@@ -286,7 +286,7 @@
    <scripts/>
   </plugin>
   <plugin ID="CSV Exporter"/>
-  <plugin ID="ROS2 Topic Re-Publisher"/>
+  <plugin ID="ROS 2 Topic Re-Publisher"/>
  </Plugins>
  <!-- - - - - - - - - - - - - - - -->
  <previouslyLoaded_Datafiles/>

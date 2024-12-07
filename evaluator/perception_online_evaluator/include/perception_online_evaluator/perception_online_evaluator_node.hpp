@@ -15,17 +15,18 @@
 #ifndef PERCEPTION_ONLINE_EVALUATOR__PERCEPTION_ONLINE_EVALUATOR_NODE_HPP_
 #define PERCEPTION_ONLINE_EVALUATOR__PERCEPTION_ONLINE_EVALUATOR_NODE_HPP_
 
+#include "autoware/universe_utils/math/accumulator.hpp"
 #include "perception_online_evaluator/metrics_calculator.hpp"
 #include "perception_online_evaluator/parameters.hpp"
-#include "perception_online_evaluator/stat.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "tf2_ros/buffer.h"
 #include "tf2_ros/transform_listener.h"
 
 #include "autoware_perception_msgs/msg/predicted_objects.hpp"
-#include "diagnostic_msgs/msg/diagnostic_array.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
+#include <tier4_metric_msgs/msg/metric.hpp>
+#include <tier4_metric_msgs/msg/metric_array.hpp>
 
 #include <array>
 #include <deque>
@@ -35,10 +36,9 @@
 
 namespace perception_diagnostics
 {
+using autoware::universe_utils::Accumulator;
 using autoware_perception_msgs::msg::ObjectClassification;
 using autoware_perception_msgs::msg::PredictedObjects;
-using diagnostic_msgs::msg::DiagnosticArray;
-using diagnostic_msgs::msg::DiagnosticStatus;
 using nav_msgs::msg::Odometry;
 using TFMessage = tf2_msgs::msg::TFMessage;
 
@@ -59,15 +59,34 @@ public:
    */
   void onObjects(const PredictedObjects::ConstSharedPtr objects_msg);
 
-  DiagnosticStatus generateDiagnosticStatus(
-    const std::string metric, const Stat<double> & metric_stat) const;
-  DiagnosticStatus generateDiagnosticStatus(
-    const std::string & metric, const double metric_value) const;
+  /**
+   * @brief Convert metric statistic to `tier4_metric_msgs::msg::Metric` and append to
+   * `tier4_metric_msgs::msg::MetricArray`.
+   *
+   * @param metric Metric name.
+   * @param metric_stat Metric statistic.
+   * @param metrics_msg Metrics value container.
+   */
+  void toMetricMsg(
+    const std::string & metric, const Accumulator<double> & metric_stat,
+    tier4_metric_msgs::msg::MetricArray & metrics_msg) const;
+
+  /**
+   * @brief Convert metric value to `tier4_metric_msgs::msg::Metric` and append to
+   * `tier4_metric_msgs::msg::MetricArray
+   *
+   * @param metric Metric name.
+   * @param metric_stat Metric value.
+   * @param metrics_msg Metrics value container.
+   */
+  void toMetricMsg(
+    const std::string & metric, const double metric_value,
+    tier4_metric_msgs::msg::MetricArray & metrics_msg) const;
 
 private:
   // Subscribers and publishers
   rclcpp::Subscription<PredictedObjects>::SharedPtr objects_sub_;
-  rclcpp::Publisher<DiagnosticArray>::SharedPtr metrics_pub_;
+  rclcpp::Publisher<tier4_metric_msgs::msg::MetricArray>::SharedPtr metrics_pub_;
   rclcpp::Publisher<MarkerArray>::SharedPtr pub_marker_;
 
   // TF

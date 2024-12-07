@@ -22,6 +22,10 @@
 
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <algorithm>
+#include <set>
+#include <string>
+
 namespace yabloc::ll2_decomposer
 {
 Ll2Decomposer::Ll2Decomposer(const rclcpp::NodeOptions & options) : Node("ll2_to_image", options)

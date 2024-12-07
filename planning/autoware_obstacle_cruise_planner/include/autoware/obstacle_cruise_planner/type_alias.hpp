@@ -30,8 +30,6 @@
 #include "sensor_msgs/msg/point_cloud2.hpp"
 #include "tier4_debug_msgs/msg/float32_stamped.hpp"
 #include "tier4_debug_msgs/msg/float64_stamped.hpp"
-#include "tier4_planning_msgs/msg/stop_factor.hpp"
-#include "tier4_planning_msgs/msg/stop_reason_array.hpp"
 #include "tier4_planning_msgs/msg/stop_speed_exceeded.hpp"
 #include "tier4_planning_msgs/msg/velocity_limit.hpp"
 #include "tier4_planning_msgs/msg/velocity_limit_clear_command.hpp"
@@ -58,9 +56,6 @@ using nav_msgs::msg::Odometry;
 using sensor_msgs::msg::PointCloud2;
 using tier4_debug_msgs::msg::Float32Stamped;
 using tier4_debug_msgs::msg::Float64Stamped;
-using tier4_planning_msgs::msg::StopFactor;
-using tier4_planning_msgs::msg::StopReason;
-using tier4_planning_msgs::msg::StopReasonArray;
 using tier4_planning_msgs::msg::StopSpeedExceeded;
 using tier4_planning_msgs::msg::VelocityLimit;
 using tier4_planning_msgs::msg::VelocityLimitClearCommand;

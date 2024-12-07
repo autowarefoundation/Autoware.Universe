@@ -22,6 +22,14 @@
 
 #include <magic_enum.hpp>
 
+#include <memory>
+#include <set>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
 namespace autoware::pose_estimator_arbiter
 {
 // Parses ros param to get the estimator set that is running

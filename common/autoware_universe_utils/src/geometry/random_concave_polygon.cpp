@@ -22,7 +22,12 @@
 #include <boost/geometry/algorithms/is_valid.hpp>
 #include <boost/geometry/strategies/agnostic/hull_graham_andrew.hpp>
 
+#include <algorithm>
+#include <limits>
+#include <list>
 #include <random>
+#include <utility>
+#include <vector>
 
 namespace autoware::universe_utils
 {

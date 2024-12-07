@@ -19,6 +19,9 @@
 #include <rclcpp/logging.hpp>
 
 #include <queue>
+#include <set>
+#include <unordered_map>
+#include <vector>
 
 namespace yabloc::graph_segment
 {

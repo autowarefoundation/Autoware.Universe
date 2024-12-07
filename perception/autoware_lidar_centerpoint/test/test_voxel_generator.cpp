@@ -18,6 +18,9 @@
 
 #include "sensor_msgs/point_cloud2_iterator.hpp"
 
+#include <memory>
+#include <vector>
+
 void VoxelGeneratorTest::SetUp()
 {
   // Setup things that should occur before every test instance should go here

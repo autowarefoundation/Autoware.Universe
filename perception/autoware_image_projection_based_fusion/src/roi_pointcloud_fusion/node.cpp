@@ -17,6 +17,8 @@
 #include "autoware/image_projection_based_fusion/utils/geometry.hpp"
 #include "autoware/image_projection_based_fusion/utils/utils.hpp"
 
+#include <vector>
+
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_sensor_msgs/tf2_sensor_msgs.h>
@@ -85,6 +87,8 @@ void RoiPointCloudFusionNode::fuseOnSingleImage(
   if (!checkCameraInfo(camera_info)) return;
 
   std::vector<DetectedObjectWithFeature> output_objs;
+  std::vector<sensor_msgs::msg::RegionOfInterest> debug_image_rois;
+  std::vector<Eigen::Vector2d> debug_image_points;
   // select ROIs for fusion
   for (const auto & feature_obj : input_roi_msg.feature_objects) {
     if (fuse_unknown_only_) {
@@ -92,10 +96,12 @@ void RoiPointCloudFusionNode::fuseOnSingleImage(
                                   autoware_perception_msgs::msg::ObjectClassification::UNKNOWN;
       if (is_roi_label_unknown) {
         output_objs.push_back(feature_obj);
+        debug_image_rois.push_back(feature_obj.feature.roi);
       }
     } else {
       // TODO(badai-nguyen): selected class from a list
       output_objs.push_back(feature_obj);
+      debug_image_rois.push_back(feature_obj.feature.roi);
     }
   }
   if (output_objs.empty()) {
@@ -166,12 +172,25 @@ void RoiPointCloudFusionNode::fuseOnSingleImage(
         clusters_data_size.at(i) += point_step;
       }
     }
+    if (debugger_) {
+      // add all points inside image to debug
+      if (
+        projected_point.x() > 0 && projected_point.x() < camera_info.width &&
+        projected_point.y() > 0 && projected_point.y() < camera_info.height) {
+        debug_image_points.push_back(projected_point);
+      }
+    }
   }
 
   // refine and update output_fused_objects_
   updateOutputFusedObjects(
     output_objs, clusters, clusters_data_size, input_pointcloud_msg, input_roi_msg.header,
     tf_buffer_, min_cluster_size_, max_cluster_size_, cluster_2d_tolerance_, output_fused_objects_);
+  if (debugger_) {
+    debugger_->image_rois_ = debug_image_rois;
+    debugger_->obstacle_points_ = debug_image_points;
+    debugger_->publishImage(image_id, input_roi_msg.header.stamp);
+  }
 }
 
 bool RoiPointCloudFusionNode::out_of_scope(__attribute__((unused))

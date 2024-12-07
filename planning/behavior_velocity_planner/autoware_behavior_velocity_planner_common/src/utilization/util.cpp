@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <autoware/behavior_velocity_planner_common/utilization/boost_geometry_helper.hpp>
-#include <autoware/behavior_velocity_planner_common/utilization/util.hpp>
-#include <autoware/motion_utils/trajectory/trajectory.hpp>
-#include <autoware_lanelet2_extension/utility/query.hpp>
+#include "autoware/behavior_velocity_planner_common/utilization/util.hpp"
+
+#include "autoware/behavior_velocity_planner_common/utilization/boost_geometry_helper.hpp"
+#include "autoware/motion_utils/trajectory/trajectory.hpp"
+#include "autoware_lanelet2_extension/utility/query.hpp"
 
 #include <autoware_planning_msgs/msg/path_point.hpp>
 
@@ -32,7 +33,9 @@
 #endif
 
 #include <algorithm>
-#include <limits>
+#include <cmath>
+#include <iostream>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -64,7 +67,7 @@ PathPoint getLerpPathPointWithLaneId(const PathPoint p0, const PathPoint p1, con
   PathPoint p;
   p.pose = autoware::universe_utils::calcInterpolatedPose(p0, p1, ratio);
   const double v = lerp(p0.longitudinal_velocity_mps, p1.longitudinal_velocity_mps, ratio);
-  p.longitudinal_velocity_mps = v;
+  p.longitudinal_velocity_mps = static_cast<float>(v);
   return p;
 }
 
@@ -91,19 +94,11 @@ geometry_msgs::msg::Pose transformRelCoordinate2D(
 
 }  // namespace
 
-namespace autoware::behavior_velocity_planner
+namespace autoware::behavior_velocity_planner::planning_utils
 {
-namespace planning_utils
-{
-using autoware::motion_utils::calcLongitudinalOffsetToSegment;
 using autoware::motion_utils::calcSignedArcLength;
-using autoware::motion_utils::validateNonEmpty;
-using autoware::universe_utils::calcAzimuthAngle;
 using autoware::universe_utils::calcDistance2d;
 using autoware::universe_utils::calcOffsetPose;
-using autoware::universe_utils::calcSquaredDistance2d;
-using autoware::universe_utils::createQuaternionFromYaw;
-using autoware::universe_utils::getPoint;
 using autoware_planning_msgs::msg::PathPoint;
 
 size_t calcSegmentIndexFromPointIndex(
@@ -154,7 +149,7 @@ bool createDetectionAreaPolygons(
   const double offset_right = (da_range.wheel_tread / 2.0) + da_range.right_overhang;
 
   //! max index is the last index of path point
-  const size_t max_index = static_cast<size_t>(path.points.size() - 1);
+  const auto max_index = static_cast<size_t>(path.points.size() - 1);
   //! avoid bug with same point polygon
   const double eps = 1e-3;
   auto nearest_idx =
@@ -246,10 +241,9 @@ void extractClosePartition(
       close_partition.emplace_back(p);
     }
   }
-  return;
 }
 
-void getAllPartitionLanelets(const lanelet::LaneletMapConstPtr ll, BasicPolygons2d & polys)
+void getAllPartitionLanelets(const lanelet::LaneletMapConstPtr & ll, BasicPolygons2d & polys)
 {
   const lanelet::ConstLineStrings3d partitions = lanelet::utils::query::getAllPartitions(ll);
   for (const auto & partition : partitions) {
@@ -259,7 +253,7 @@ void getAllPartitionLanelets(const lanelet::LaneletMapConstPtr ll, BasicPolygons
     }
     // correct line to calculate distance in accurate
     boost::geometry::correct(line);
-    polys.emplace_back(lanelet::BasicPolygon2d(line));
+    polys.emplace_back(line);
   }
 }
 
@@ -269,7 +263,6 @@ void setVelocityFromIndex(const size_t begin_idx, const double vel, PathWithLane
     input->points.at(i).point.longitudinal_velocity_mps =
       std::min(static_cast<float>(vel), input->points.at(i).point.longitudinal_velocity_mps);
   }
-  return;
 }
 
 void insertVelocity(
@@ -309,7 +302,7 @@ geometry_msgs::msg::Pose getAheadPose(
   const size_t start_idx, const double ahead_dist,
   const tier4_planning_msgs::msg::PathWithLaneId & path)
 {
-  if (path.points.size() == 0) {
+  if (path.points.empty()) {
     return geometry_msgs::msg::Pose{};
   }
 
@@ -327,7 +320,8 @@ geometry_msgs::msg::Pose getAheadPose(
       p.position.x = w_p0 * p0.position.x + w_p1 * p1.position.x;
       p.position.y = w_p0 * p0.position.y + w_p1 * p1.position.y;
       p.position.z = w_p0 * p0.position.z + w_p1 * p1.position.z;
-      tf2::Quaternion q0_tf, q1_tf;
+      tf2::Quaternion q0_tf;
+      tf2::Quaternion q1_tf;
       tf2::fromMsg(p0.orientation, q0_tf);
       tf2::fromMsg(p1.orientation, q1_tf);
       p.orientation = tf2::toMsg(q0_tf.slerp(q1_tf, w_p1));
@@ -424,15 +418,16 @@ double findReachTime(
   const int warn_iter = 100;
   double lower = min;
   double upper = max;
-  double t;
+  double t = NAN;
   int iter = 0;
-  for (int i = 0;; i++) {
+  while (true) {
     t = 0.5 * (lower + upper);
     const double fx = f(t, j, a, v, d);
     // std::cout<<"fx: "<<fx<<" up: "<<upper<<" lo: "<<lower<<" t: "<<t<<std::endl;
     if (std::abs(fx) < eps) {
       break;
-    } else if (fx > 0.0) {
+    }
+    if (fx > 0.0) {
       upper = t;
     } else {
       lower = t;
@@ -475,31 +470,18 @@ double calcDecelerationVelocityFromDistanceToTarget(
     const double t_jerk = findReachTime(j_max, a0, v0, l, 0, t_const_jerk);
     const double velocity = vt(t_jerk, j_max, a0, v0);
     return velocity;
-  } else {
-    const double v1 = vt(t_const_jerk, j_max, a0, v0);
-    const double discriminant_of_stop = 2.0 * a_max * d_const_acc_stop + v1 * v1;
-    // case3: distance to target is farther than distance to stop
-    if (discriminant_of_stop <= 0) {
-      return 0.0;
-    }
-    // case2: distance to target is within constant accel deceleration
-    // solve d = 0.5*a^2+v*t by t
-    const double t_acc = (-v1 + std::sqrt(discriminant_of_stop)) / a_max;
-    return vt(t_acc, 0.0, a_max, v1);
   }
-  return current_velocity;
-}
 
-StopReason initializeStopReason(const std::string & stop_reason)
-{
-  StopReason stop_reason_msg;
-  stop_reason_msg.reason = stop_reason;
-  return stop_reason_msg;
-}
-
-void appendStopReason(const StopFactor stop_factor, StopReason * stop_reason)
-{
-  stop_reason->stop_factors.emplace_back(stop_factor);
+  const double v1 = vt(t_const_jerk, j_max, a0, v0);
+  const double discriminant_of_stop = 2.0 * a_max * d_const_acc_stop + v1 * v1;
+  // case3: distance to target is farther than distance to stop
+  if (discriminant_of_stop <= 0) {
+    return 0.0;
+  }
+  // case2: distance to target is within constant accel deceleration
+  // solve d = 0.5*a^2+v*t by t
+  const double t_acc = (-v1 + std::sqrt(discriminant_of_stop)) / a_max;
+  return vt(t_acc, 0.0, a_max, v1);
 }
 
 std::vector<geometry_msgs::msg::Point> toRosPoints(const PredictedObjects & object)
@@ -558,6 +540,7 @@ std::vector<lanelet::ConstLanelet> getLaneletsOnPath(
   }
 
   std::vector<lanelet::ConstLanelet> lanelets;
+  lanelets.reserve(unique_lane_ids.size());
   for (const auto lane_id : unique_lane_ids) {
     lanelets.push_back(lanelet_map->laneletLayer.get(lane_id));
   }
@@ -599,7 +582,7 @@ std::vector<int64_t> getSubsequentLaneIdsSetOnPath(
 
   // cannot find base_index in all_lane_ids
   if (base_index == all_lane_ids.end()) {
-    return std::vector<int64_t>();
+    return {};
   }
 
   std::vector<int64_t> subsequent_lane_ids;
@@ -673,11 +656,11 @@ std::optional<geometry_msgs::msg::Pose> insertStopPoint(
 }
 
 std::set<lanelet::Id> getAssociativeIntersectionLanelets(
-  lanelet::ConstLanelet lane, const lanelet::LaneletMapPtr lanelet_map,
+  const lanelet::ConstLanelet & lane, const lanelet::LaneletMapPtr lanelet_map,
   const lanelet::routing::RoutingGraphPtr routing_graph)
 {
   const std::string turn_direction = lane.attributeOr("turn_direction", "else");
-  if (turn_direction.compare("else") == 0) {
+  if (turn_direction == "else") {
     return {};
   }
 
@@ -702,7 +685,7 @@ std::set<lanelet::Id> getAssociativeIntersectionLanelets(
 }
 
 lanelet::ConstLanelets getConstLaneletsFromIds(
-  lanelet::LaneletMapConstPtr map, const std::set<lanelet::Id> & ids)
+  const lanelet::LaneletMapConstPtr & map, const std::set<lanelet::Id> & ids)
 {
   lanelet::ConstLanelets ret{};
   for (const auto & id : ids) {
@@ -712,5 +695,4 @@ lanelet::ConstLanelets getConstLaneletsFromIds(
   return ret;
 }
 
-}  // namespace planning_utils
-}  // namespace autoware::behavior_velocity_planner
+}  // namespace autoware::behavior_velocity_planner::planning_utils

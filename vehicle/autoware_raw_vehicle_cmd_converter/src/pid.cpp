@@ -17,6 +17,7 @@
 #include <math.h>
 
 #include <algorithm>
+#include <iostream>
 #include <vector>
 
 namespace autoware::raw_vehicle_cmd_converter

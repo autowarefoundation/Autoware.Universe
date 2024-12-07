@@ -51,7 +51,7 @@
     <group>
       <!-- set a control container to run all required components in the same process -->
       <node_container pkg="rclcpp_components" exec="$(var container_executable)" name="control_container" namespace="">
-        <composable_node pkg="glog_component" plugin="GlogComponent" name="glog_control_container_component"/>
+        <composable_node pkg="autoware_glog_component" plugin="autoware::glog_component::GlogComponent" name="glog_control_container_component"/>
         <!-- shift decider -->
         <composable_node pkg="autoware_shift_decider" plugin="autoware::shift_decider::ShiftDecider" name="autoware_shift_decider">
           <remap from="input/control_cmd" to="/control/trajectory_follower/control_cmd"/>
@@ -177,7 +177,7 @@
     <group>
       <!-- set a control check container to run all control checker components in the same process -->
       <node_container pkg="rclcpp_components" exec="$(var container_executable)" name="control_check_container" namespace="">
-        <composable_node pkg="glog_component" plugin="GlogComponent" name="glog_control_check_container_component"/>
+        <composable_node pkg="autoware_glog_component" plugin="autoware::glog_component::GlogComponent" name="glog_control_check_container_component"/>
       </node_container>
 
       <!-- lane departure checker -->
@@ -269,21 +269,11 @@
           </composable_node>
         </load_composable_node>
       </group>
+    </group>
 
-      <!-- control evaluator -->
-      <group if="$(var launch_control_evaluator)">
-        <load_composable_node target="/control/control_check_container">
-          <composable_node pkg="autoware_control_evaluator" plugin="control_diagnostics::ControlEvaluatorNode" name="control_evaluator">
-            <remap from="~/input/diagnostics" to="/diagnostics"/>
-            <remap from="~/input/odometry" to="/localization/kinematic_state"/>
-            <remap from="~/input/acceleration" to="/localization/acceleration"/>
-            <remap from="~/input/trajectory" to="/planning/scenario_planning/trajectory"/>
-            <remap from="~/metrics" to="/control/control_evaluator/metrics"/>
-            <remap from="~/input/vector_map" to="/map/vector_map"/>
-            <remap from="~/input/route" to="/planning/mission_planning/route"/>
-          </composable_node>
-        </load_composable_node>
-      </group>
+    <!-- control evaluator -->
+    <group if="$(var launch_control_evaluator)">
+      <include file="$(find-pkg-share autoware_control_evaluator)/launch/control_evaluator.launch.xml"/>
     </group>
   </group>
 </launch>

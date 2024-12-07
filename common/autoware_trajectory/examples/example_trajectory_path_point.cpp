@@ -19,6 +19,7 @@
 
 #include <matplotlibcpp17/pyplot.h>
 
+#include <iostream>
 #include <vector>
 
 autoware_planning_msgs::msg::PathPoint path_point(double x, double y)

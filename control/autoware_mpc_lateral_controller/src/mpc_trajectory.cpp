@@ -14,6 +14,8 @@
 
 #include "autoware/mpc_lateral_controller/mpc_trajectory.hpp"
 
+#include <iostream>
+
 namespace autoware::motion::control::mpc_lateral_controller
 {
 void MPCTrajectory::push_back(

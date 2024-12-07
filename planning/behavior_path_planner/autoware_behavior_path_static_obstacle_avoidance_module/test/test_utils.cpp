@@ -26,6 +26,9 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <limits>
+#include <memory>
+
 namespace autoware::behavior_path_planner::utils::static_obstacle_avoidance
 {
 

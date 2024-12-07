@@ -14,6 +14,8 @@
 
 #include "autoware/behavior_path_planner_common/interface/scene_module_interface.hpp"
 
+#include <vector>
+
 namespace autoware::behavior_path_planner
 {
 void SceneModuleInterface::setDrivableLanes(const std::vector<DrivableLanes> & drivable_lanes)
@@ -25,8 +27,6 @@ void SceneModuleInterface::setDrivableLanes(const std::vector<DrivableLanes> & d
 void SceneModuleInterface::onEntry()
 {
   RCLCPP_DEBUG(getLogger(), "%s %s", name_.c_str(), __func__);
-
-  stop_reason_ = StopReason();
 
   processOnEntry();
 }

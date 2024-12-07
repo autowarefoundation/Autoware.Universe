@@ -15,8 +15,8 @@
 #ifndef LOCALIZATION_EVALUATOR__LOCALIZATION_EVALUATOR_NODE_HPP_
 #define LOCALIZATION_EVALUATOR__LOCALIZATION_EVALUATOR_NODE_HPP_
 
+#include "autoware/universe_utils/math/accumulator.hpp"
 #include "localization_evaluator/metrics_calculator.hpp"
-#include "localization_evaluator/stat.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "tf2_ros/buffer.h"
 #include "tf2_ros/transform_listener.h"
@@ -38,6 +38,7 @@
 
 namespace localization_diagnostics
 {
+using autoware::universe_utils::Accumulator;
 using diagnostic_msgs::msg::DiagnosticArray;
 using diagnostic_msgs::msg::DiagnosticStatus;
 using geometry_msgs::msg::PoseWithCovarianceStamped;
@@ -70,7 +71,7 @@ public:
    * @brief publish the given metric statistic
    */
   DiagnosticStatus generateDiagnosticStatus(
-    const Metric & metric, const Stat<double> & metric_stat) const;
+    const Metric & metric, const Accumulator<double> & metric_stat) const;
 
 private:
   // ROS
@@ -93,8 +94,8 @@ private:
   // Metrics
   std::vector<Metric> metrics_;
   std::deque<rclcpp::Time> stamps_;
-  std::array<std::deque<Stat<double>>, static_cast<size_t>(Metric::SIZE)> metric_stats_;
-  std::unordered_map<Metric, Stat<double>> metrics_dict_;
+  std::array<std::deque<Accumulator<double>>, static_cast<size_t>(Metric::SIZE)> metric_stats_;
+  std::unordered_map<Metric, Accumulator<double>> metrics_dict_;
 };
 }  // namespace localization_diagnostics
 

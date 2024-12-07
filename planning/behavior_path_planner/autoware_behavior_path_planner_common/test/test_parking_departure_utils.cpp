@@ -23,6 +23,9 @@
 #include <lanelet2_core/Forward.h>
 
 #include <cstddef>
+#include <memory>
+#include <utility>
+#include <vector>
 
 constexpr double epsilon = 1e-6;
 

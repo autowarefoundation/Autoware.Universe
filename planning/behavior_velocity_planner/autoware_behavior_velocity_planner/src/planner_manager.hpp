@@ -46,14 +46,12 @@ public:
   void launchScenePlugin(rclcpp::Node & node, const std::string & name);
   void removeScenePlugin(rclcpp::Node & node, const std::string & name);
 
+  // cppcheck-suppress functionConst
   tier4_planning_msgs::msg::PathWithLaneId planPathVelocity(
     const std::shared_ptr<const PlannerData> & planner_data,
     const tier4_planning_msgs::msg::PathWithLaneId & input_path_msg);
 
-  diagnostic_msgs::msg::DiagnosticStatus getStopReasonDiag() const;
-
 private:
-  diagnostic_msgs::msg::DiagnosticStatus stop_reason_diag_;
   pluginlib::ClassLoader<PluginInterface> plugin_loader_;
   std::vector<std::shared_ptr<PluginInterface>> scene_manager_plugins_;
 };

@@ -18,6 +18,7 @@
 #include <rclcpp/rclcpp.hpp>
 
 #include <chrono>
+#include <set>
 #include <string>
 #include <vector>
 

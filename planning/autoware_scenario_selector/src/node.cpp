@@ -14,6 +14,7 @@
 
 #include "autoware/scenario_selector/node.hpp"
 
+#include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware_lanelet2_extension/utility/message_conversion.hpp>
 #include <autoware_lanelet2_extension/utility/query.hpp>
 
@@ -63,6 +64,22 @@ bool isInLane(
   static constexpr double margin = 0.01;
 
   return dist_to_nearest_lanelet < margin;
+}
+
+bool isAlongLane(
+  const std::shared_ptr<autoware::route_handler::RouteHandler> & route_handler,
+  const geometry_msgs::msg::Pose & current_pose)
+{
+  lanelet::ConstLanelet closest_lanelet;
+  if (!route_handler->getClosestLaneletWithConstrainsWithinRoute(
+        current_pose, &closest_lanelet, 0.0, M_PI_4)) {
+    return false;
+  }
+  const lanelet::BasicPoint2d src_point(current_pose.position.x, current_pose.position.y);
+  const auto dist_to_centerline =
+    lanelet::geometry::distanceToCenterline2d(closest_lanelet, src_point);
+  static constexpr double margin = 1.0;
+  return dist_to_centerline < margin;
 }
 
 bool isInParkingLot(
@@ -215,10 +232,9 @@ bool ScenarioSelectorNode::isSwitchToParking(const bool is_stopped)
 
 bool ScenarioSelectorNode::isSwitchToLaneDriving()
 {
-  const auto is_in_lane =
-    isInLane(route_handler_->getLaneletMapPtr(), current_pose_->pose.pose.position);
+  const auto is_along_lane = isAlongLane(route_handler_, current_pose_->pose.pose);
 
-  if (!isEmptyParkingTrajectory() || !is_in_lane) {
+  if (!isEmptyParkingTrajectory() || !is_along_lane) {
     empty_parking_trajectory_time_ = {};
     return false;
   }

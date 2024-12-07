@@ -171,12 +171,6 @@ public:
       return *this;
     }
 
-    /** \brief Get the voxel covariance.
-     * \return covariance matrix
-     */
-    const Eigen::Matrix3d & getCov() const { return (cov_); }
-    Eigen::Matrix3d & getCov() { return (cov_); }
-
     /** \brief Get the inverse of the voxel covariance.
      * \return inverse covariance matrix
      */
@@ -190,11 +184,6 @@ public:
     const Eigen::Vector3d & getMean() const { return (mean_); }
 
     Eigen::Vector3d & getMean() { return (mean_); }
-
-    /** \brief Get the number of points contained by this voxel.
-     * \return number of points
-     */
-    int getPointCount() const { return (nr_points_); }
 
     /** \brief Number of points contained by voxel */
     int nr_points_;
@@ -352,6 +341,7 @@ protected:
   }
 
   // A wrapper of the real apply_filter
+  // cppcheck-suppress unusedFunction
   inline bool apply_filter_thread(int tid, GridNodeType & node)
   {
     apply_filter(processing_inputs_[tid], node);

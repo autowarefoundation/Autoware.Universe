@@ -22,6 +22,8 @@
 #include <rviz_common/validate_floats.hpp>
 #include <rviz_rendering/objects/billboard_line.hpp>
 
+#include <memory>
+
 #define EIGEN_MPL2_ONLY
 #include <Eigen/Core>
 #include <Eigen/Geometry>

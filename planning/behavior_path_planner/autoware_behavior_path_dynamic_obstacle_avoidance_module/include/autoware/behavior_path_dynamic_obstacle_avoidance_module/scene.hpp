@@ -28,6 +28,7 @@
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <algorithm>
+#include <iostream>
 #include <memory>
 #include <optional>
 #include <string>

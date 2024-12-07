@@ -22,6 +22,8 @@
 
 #include <algorithm>
 #include <cmath>
+#include <memory>
+#include <utility>
 
 namespace autoware::operation_mode_transition_manager
 {

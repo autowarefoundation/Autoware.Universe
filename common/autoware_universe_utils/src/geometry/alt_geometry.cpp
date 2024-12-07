@@ -14,6 +14,11 @@
 
 #include "autoware/universe_utils/geometry/alt_geometry.hpp"
 
+#include <algorithm>
+#include <limits>
+#include <utility>
+#include <vector>
+
 namespace autoware::universe_utils
 {
 // Alternatives for Boost.Geometry ----------------------------------------------------------------

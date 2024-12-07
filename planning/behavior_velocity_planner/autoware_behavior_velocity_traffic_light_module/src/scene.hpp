@@ -71,7 +71,7 @@ public:
     lanelet::ConstLanelet lane, const PlannerParam & planner_param, const rclcpp::Logger logger,
     const rclcpp::Clock::SharedPtr clock);
 
-  bool modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason) override;
+  bool modifyPathVelocity(PathWithLaneId * path) override;
 
   visualization_msgs::msg::MarkerArray createDebugMarkerArray() override;
   autoware::motion_utils::VirtualWalls createVirtualWalls() override;
@@ -90,7 +90,7 @@ private:
 
   tier4_planning_msgs::msg::PathWithLaneId insertStopPose(
     const tier4_planning_msgs::msg::PathWithLaneId & input, const size_t & insert_target_point_idx,
-    const Eigen::Vector2d & target_point, tier4_planning_msgs::msg::StopReason * stop_reason);
+    const Eigen::Vector2d & target_point);
 
   bool isPassthrough(const double & signed_arc_length) const;
 

@@ -20,6 +20,8 @@
 
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
+#include <string>
+
 namespace autoware::test_utils
 {
 using tier4_planning_msgs::msg::PathWithLaneId;
@@ -459,6 +461,188 @@ operation_mode:
   is_autonomous_mode_available: true
   is_local_mode_available: true
   is_remote_mode_available: true
+tracked_object:
+  header:
+    stamp:
+      sec: 288
+      nanosec: 743249865
+    frame_id: map
+  objects:
+    - object_id:
+        uuid:
+          - 35
+          - 106
+          - 130
+          - 18
+          - 249
+          - 15
+          - 247
+          - 148
+          - 31
+          - 235
+          - 198
+          - 121
+          - 150
+          - 136
+          - 225
+          - 99
+      existence_probability: 0.00000
+      classification:
+        - label: 1
+          probability: 1.00000
+      kinematics:
+        pose_with_covariance:
+          pose:
+            position:
+              x: 269.944
+              y: 376.116
+              z: 101.346
+            orientation:
+              x: 0.00000
+              y: 0.00000
+              z: -0.715560
+              w: 0.698551
+          covariance:
+            - 0.0267953
+            - 0.00119480
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00119480
+            - 0.0831472
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.0100000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.0100000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.0100000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00551386
+        twist_with_covariance:
+          twist:
+            linear:
+              x: 2.99743
+              y: -0.0100529
+              z: 0.00000
+            angular:
+              x: 0.00000
+              y: 0.00000
+              z: -0.00913898
+          covariance:
+            - 0.609089
+            - -0.00201817
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - -0.00183470
+            - -0.00201817
+            - 0.000777658
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.000706962
+            - 0.00000
+            - 0.00000
+            - 0.0100000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.0100000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.0100000
+            - 0.00000
+            - -0.00183470
+            - 0.000706962
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.000642693
+        acceleration_with_covariance:
+          accel:
+            linear:
+              x: 0.00000
+              y: 0.00000
+              z: 0.00000
+            angular:
+              x: 0.00000
+              y: 0.00000
+              z: 0.00000
+          covariance:
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+            - 0.00000
+        orientation_availability: 1
+        is_stationary: false
+      shape:
+        type: 0
+        footprint:
+          points: []
+        dimensions:
+          x: 4.40000
+          y: 1.73071
+          z: 1.00000
 )";
 
 TEST(ParseFunctions, CompleteYAMLTest)
@@ -489,11 +673,12 @@ TEST(ParseFunctions, CompleteYAMLTest)
   // Test parsing of segments
   const auto segments = parse<std::vector<LaneletSegment>>(config["segments"]);
   ASSERT_EQ(
-    segments.size(), uint64_t(1));  // Assuming only one segment in the provided YAML for this test
+    segments.size(),
+    static_cast<uint64_t>(1));  // Assuming only one segment in the provided YAML for this test
 
   const auto & segment0 = segments[0];
   EXPECT_EQ(segment0.preferred_primitive.id, 11);
-  EXPECT_EQ(segment0.primitives.size(), uint64_t(2));
+  EXPECT_EQ(segment0.primitives.size(), static_cast<uint64_t>(2));
   EXPECT_EQ(segment0.primitives[0].id, 22);
   EXPECT_EQ(segment0.primitives[0].primitive_type, "lane");
   EXPECT_EQ(segment0.primitives[1].id, 33);
@@ -572,6 +757,31 @@ TEST(ParseFunctions, CompleteYAMLTest)
   EXPECT_EQ(operation_mode.is_autonomous_mode_available, true);
   EXPECT_EQ(operation_mode.is_local_mode_available, true);
   EXPECT_EQ(operation_mode.is_remote_mode_available, true);
+
+  const auto tracked_objects = parse<TrackedObjects>(config["tracked_object"]);
+  EXPECT_EQ(tracked_objects.header.stamp.sec, 288);
+  EXPECT_EQ(tracked_objects.header.stamp.nanosec, 743249865);
+  EXPECT_EQ(tracked_objects.header.frame_id, "map");
+  EXPECT_EQ(tracked_objects.objects.at(0).object_id.uuid.at(0), 35);
+  EXPECT_FLOAT_EQ(tracked_objects.objects.at(0).existence_probability, 0.0);
+  EXPECT_EQ(tracked_objects.objects.at(0).classification.at(0).label, 1);
+  EXPECT_FLOAT_EQ(tracked_objects.objects.at(0).classification.at(0).probability, 1.0);
+  EXPECT_FLOAT_EQ(
+    tracked_objects.objects.at(0).kinematics.pose_with_covariance.pose.position.x, 269.944);
+  EXPECT_FLOAT_EQ(
+    tracked_objects.objects.at(0).kinematics.pose_with_covariance.covariance.at(0), 0.0267953);
+  EXPECT_FLOAT_EQ(
+    tracked_objects.objects.at(0).kinematics.twist_with_covariance.twist.linear.x, 2.99743);
+  EXPECT_FLOAT_EQ(
+    tracked_objects.objects.at(0).kinematics.twist_with_covariance.twist.angular.z, -0.00913898);
+  EXPECT_FLOAT_EQ(
+    tracked_objects.objects.at(0).kinematics.twist_with_covariance.covariance.at(0), 0.609089);
+  EXPECT_EQ(tracked_objects.objects.at(0).kinematics.orientation_availability, 1);
+  EXPECT_EQ(tracked_objects.objects.at(0).kinematics.is_stationary, false);
+  EXPECT_EQ(tracked_objects.objects.at(0).shape.type, 0);
+  EXPECT_EQ(tracked_objects.objects.at(0).shape.dimensions.x, 4.40000);
+  EXPECT_EQ(tracked_objects.objects.at(0).shape.dimensions.y, 1.73071);
+  EXPECT_EQ(tracked_objects.objects.at(0).shape.dimensions.z, 1.0);
 }
 
 TEST(ParseFunction, CompleteFromFilename)
@@ -581,38 +791,44 @@ TEST(ParseFunction, CompleteFromFilename)
   const auto parser_test_route =
     autoware_test_utils_dir + "/test_data/lanelet_route_parser_test.yaml";
 
-  const auto lanelet_route = parse<LaneletRoute>(parser_test_route);
-  EXPECT_DOUBLE_EQ(lanelet_route.start_pose.position.x, 1.0);
-  EXPECT_DOUBLE_EQ(lanelet_route.start_pose.position.y, 2.0);
-  EXPECT_DOUBLE_EQ(lanelet_route.start_pose.position.z, 3.0);
+  if (const auto lanelet_route_opt = parse<std::optional<LaneletRoute>>(parser_test_route)) {
+    const auto & lanelet_route = *lanelet_route_opt;
+    EXPECT_DOUBLE_EQ(lanelet_route.start_pose.position.x, 1.0);
+    EXPECT_DOUBLE_EQ(lanelet_route.start_pose.position.y, 2.0);
+    EXPECT_DOUBLE_EQ(lanelet_route.start_pose.position.z, 3.0);
 
-  EXPECT_DOUBLE_EQ(lanelet_route.start_pose.orientation.x, 0.1);
-  EXPECT_DOUBLE_EQ(lanelet_route.start_pose.orientation.y, 0.2);
-  EXPECT_DOUBLE_EQ(lanelet_route.start_pose.orientation.z, 0.3);
-  EXPECT_DOUBLE_EQ(lanelet_route.start_pose.orientation.w, 0.4);
+    EXPECT_DOUBLE_EQ(lanelet_route.start_pose.orientation.x, 0.1);
+    EXPECT_DOUBLE_EQ(lanelet_route.start_pose.orientation.y, 0.2);
+    EXPECT_DOUBLE_EQ(lanelet_route.start_pose.orientation.z, 0.3);
+    EXPECT_DOUBLE_EQ(lanelet_route.start_pose.orientation.w, 0.4);
 
-  EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.position.x, 4.0);
-  EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.position.y, 5.0);
-  EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.position.z, 6.0);
-  EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.orientation.x, 0.5);
-  EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.orientation.y, 0.6);
-  EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.orientation.z, 0.7);
-  EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.orientation.w, 0.8);
+    EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.position.x, 4.0);
+    EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.position.y, 5.0);
+    EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.position.z, 6.0);
+    EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.orientation.x, 0.5);
+    EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.orientation.y, 0.6);
+    EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.orientation.z, 0.7);
+    EXPECT_DOUBLE_EQ(lanelet_route.goal_pose.orientation.w, 0.8);
 
-  ASSERT_EQ(
-    lanelet_route.segments.size(),
-    uint64_t(2));  // Assuming only one segment in the provided YAML for this test
-  const auto & segment1 = lanelet_route.segments[1];
-  EXPECT_EQ(segment1.preferred_primitive.id, 44);
-  EXPECT_EQ(segment1.primitives.size(), uint64_t(4));
-  EXPECT_EQ(segment1.primitives[0].id, 55);
-  EXPECT_EQ(segment1.primitives[0].primitive_type, "lane");
-  EXPECT_EQ(segment1.primitives[1].id, 66);
-  EXPECT_EQ(segment1.primitives[1].primitive_type, "lane");
-  EXPECT_EQ(segment1.primitives[2].id, 77);
-  EXPECT_EQ(segment1.primitives[2].primitive_type, "lane");
-  EXPECT_EQ(segment1.primitives[3].id, 88);
-  EXPECT_EQ(segment1.primitives[3].primitive_type, "lane");
+    ASSERT_EQ(
+      lanelet_route.segments.size(),
+      static_cast<uint64_t>(2));  // Assuming only one segment in the provided YAML for this test
+    const auto & segment1 = lanelet_route.segments[1];
+    EXPECT_EQ(segment1.preferred_primitive.id, 44);
+    EXPECT_EQ(segment1.primitives.size(), static_cast<uint64_t>(4));
+    EXPECT_EQ(segment1.primitives[0].id, 55);
+    EXPECT_EQ(segment1.primitives[0].primitive_type, "lane");
+    EXPECT_EQ(segment1.primitives[1].id, 66);
+    EXPECT_EQ(segment1.primitives[1].primitive_type, "lane");
+    EXPECT_EQ(segment1.primitives[2].id, 77);
+    EXPECT_EQ(segment1.primitives[2].primitive_type, "lane");
+    EXPECT_EQ(segment1.primitives[3].id, 88);
+    EXPECT_EQ(segment1.primitives[3].primitive_type, "lane");
+  } else {
+    const std::string fail_reason =
+      "Failed to parse YAML file: " + parser_test_route + ". The file might be corrupted.";
+    FAIL() << fail_reason;
+  }
 }
 
 TEST(ParseFunction, ParsePathWithLaneID)
@@ -622,45 +838,49 @@ TEST(ParseFunction, ParsePathWithLaneID)
   const auto parser_test_path =
     autoware_test_utils_dir + "/test_data/path_with_lane_id_parser_test.yaml";
 
-  const auto path = parse<PathWithLaneId>(parser_test_path);
-  EXPECT_EQ(path.header.stamp.sec, 20);
-  EXPECT_EQ(path.header.stamp.nanosec, 5);
+  if (const auto path_opt = parse<std::optional<PathWithLaneId>>(parser_test_path)) {
+    const auto & path = *path_opt;
+    EXPECT_EQ(path.header.stamp.sec, 20);
+    EXPECT_EQ(path.header.stamp.nanosec, 5);
 
-  const auto path_points = path.points;
-  const auto & p1 = path_points.front();
-  EXPECT_DOUBLE_EQ(p1.point.pose.position.x, 12.9);
-  EXPECT_DOUBLE_EQ(p1.point.pose.position.y, 3.8);
-  EXPECT_DOUBLE_EQ(p1.point.pose.position.z, 4.7);
-  EXPECT_DOUBLE_EQ(p1.point.pose.orientation.x, 1.0);
-  EXPECT_DOUBLE_EQ(p1.point.pose.orientation.y, 2.0);
-  EXPECT_DOUBLE_EQ(p1.point.pose.orientation.z, 3.0);
-  EXPECT_DOUBLE_EQ(p1.point.pose.orientation.w, 4.0);
-  EXPECT_FLOAT_EQ(p1.point.longitudinal_velocity_mps, 1.2);
-  EXPECT_FLOAT_EQ(p1.point.lateral_velocity_mps, 3.4);
-  EXPECT_FLOAT_EQ(p1.point.heading_rate_rps, 5.6);
-  EXPECT_TRUE(p1.point.is_final);
-  EXPECT_EQ(p1.lane_ids.front(), 912);
+    const auto path_points = path.points;
+    const auto & p1 = path_points.front();
+    EXPECT_DOUBLE_EQ(p1.point.pose.position.x, 12.9);
+    EXPECT_DOUBLE_EQ(p1.point.pose.position.y, 3.8);
+    EXPECT_DOUBLE_EQ(p1.point.pose.position.z, 4.7);
+    EXPECT_DOUBLE_EQ(p1.point.pose.orientation.x, 1.0);
+    EXPECT_DOUBLE_EQ(p1.point.pose.orientation.y, 2.0);
+    EXPECT_DOUBLE_EQ(p1.point.pose.orientation.z, 3.0);
+    EXPECT_DOUBLE_EQ(p1.point.pose.orientation.w, 4.0);
+    EXPECT_FLOAT_EQ(p1.point.longitudinal_velocity_mps, 1.2);
+    EXPECT_FLOAT_EQ(p1.point.lateral_velocity_mps, 3.4);
+    EXPECT_FLOAT_EQ(p1.point.heading_rate_rps, 5.6);
+    EXPECT_TRUE(p1.point.is_final);
+    EXPECT_EQ(p1.lane_ids.front(), 912);
 
-  const auto & p2 = path_points.back();
-  EXPECT_DOUBLE_EQ(p2.point.pose.position.x, 0.0);
-  EXPECT_DOUBLE_EQ(p2.point.pose.position.y, 20.5);
-  EXPECT_DOUBLE_EQ(p2.point.pose.position.z, 90.11);
-  EXPECT_DOUBLE_EQ(p2.point.pose.orientation.x, 4.0);
-  EXPECT_DOUBLE_EQ(p2.point.pose.orientation.y, 3.0);
-  EXPECT_DOUBLE_EQ(p2.point.pose.orientation.z, 2.0);
-  EXPECT_DOUBLE_EQ(p2.point.pose.orientation.w, 1.0);
-  EXPECT_FLOAT_EQ(p2.point.longitudinal_velocity_mps, 2.1);
-  EXPECT_FLOAT_EQ(p2.point.lateral_velocity_mps, 4.3);
-  EXPECT_FLOAT_EQ(p2.point.heading_rate_rps, 6.5);
-  EXPECT_FALSE(p2.point.is_final);
-  EXPECT_EQ(p2.lane_ids.front(), 205);
+    const auto & p2 = path_points.back();
+    EXPECT_DOUBLE_EQ(p2.point.pose.position.x, 0.0);
+    EXPECT_DOUBLE_EQ(p2.point.pose.position.y, 20.5);
+    EXPECT_DOUBLE_EQ(p2.point.pose.position.z, 90.11);
+    EXPECT_DOUBLE_EQ(p2.point.pose.orientation.x, 4.0);
+    EXPECT_DOUBLE_EQ(p2.point.pose.orientation.y, 3.0);
+    EXPECT_DOUBLE_EQ(p2.point.pose.orientation.z, 2.0);
+    EXPECT_DOUBLE_EQ(p2.point.pose.orientation.w, 1.0);
+    EXPECT_FLOAT_EQ(p2.point.longitudinal_velocity_mps, 2.1);
+    EXPECT_FLOAT_EQ(p2.point.lateral_velocity_mps, 4.3);
+    EXPECT_FLOAT_EQ(p2.point.heading_rate_rps, 6.5);
+    EXPECT_FALSE(p2.point.is_final);
+    EXPECT_EQ(p2.lane_ids.front(), 205);
 
-  EXPECT_DOUBLE_EQ(path.left_bound.front().x, 55.0);
-  EXPECT_DOUBLE_EQ(path.left_bound.front().y, 66.0);
-  EXPECT_DOUBLE_EQ(path.left_bound.front().z, 77.0);
+    EXPECT_DOUBLE_EQ(path.left_bound.front().x, 55.0);
+    EXPECT_DOUBLE_EQ(path.left_bound.front().y, 66.0);
+    EXPECT_DOUBLE_EQ(path.left_bound.front().z, 77.0);
 
-  EXPECT_DOUBLE_EQ(path.right_bound.front().x, 0.55);
-  EXPECT_DOUBLE_EQ(path.right_bound.front().y, 0.66);
-  EXPECT_DOUBLE_EQ(path.right_bound.front().z, 0.77);
+    EXPECT_DOUBLE_EQ(path.right_bound.front().x, 0.55);
+    EXPECT_DOUBLE_EQ(path.right_bound.front().y, 0.66);
+    EXPECT_DOUBLE_EQ(path.right_bound.front().z, 0.77);
+  } else {
+    FAIL() << "Yaml file might've corrupted.";
+  }
 }
 }  // namespace autoware::test_utils

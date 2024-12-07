@@ -360,9 +360,9 @@ $$
 To realize collision-free trajectory planning, we have to formulate constraints that the vehicle is inside the road and also does not collide with obstacles in linear equations.
 For linearity, we implemented some methods to approximate the vehicle shape with a set of circles, that is reliable and easy to implement.
 
-- 1. Bicycle Model
-- 2. Uniform Circles
-- 3. Fitting Uniform Circles
+1. Bicycle Model
+2. Uniform Circles
+3. Fitting Uniform Circles
 
 ![vehicle_circles](../media/vehicle_circles.svg)
 

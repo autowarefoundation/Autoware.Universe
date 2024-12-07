@@ -728,10 +728,10 @@ void calc_2d_bounding_box_bottom_orientation_line_list(
 
   // front corner cuts for orientation
   const double point_list[4][3] = {
-    {length_half, width_half - tick_width, height_half},
-    {length_half - tick_length, width_half, height_half},
-    {length_half, -width_half + tick_width, height_half},
-    {length_half - tick_length, -width_half, height_half},
+    {length_half, width_half - tick_width, -height_half},
+    {length_half - tick_length, width_half, -height_half},
+    {length_half, -width_half + tick_width, -height_half},
+    {length_half - tick_length, -width_half, -height_half},
   };
   const int point_pairs[2][2] = {
     {0, 1},

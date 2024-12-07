@@ -65,7 +65,7 @@ std::vector<PointType> Trajectory<PointType>::restore(const size_t & min_points)
   points.reserve(bases.size());
   for (const auto & s : bases) {
     PointType p;
-    p.point = BaseClass::compute(s);
+    p.point = BaseClass::compute(s - start_);
     p.lane_ids = lane_ids.compute(s);
     points.emplace_back(p);
   }

@@ -32,8 +32,10 @@
 #include <stdio.h>
 
 #include <algorithm>
+#include <cstdio>
 #include <filesystem>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace bp = boost::process;

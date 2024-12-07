@@ -14,6 +14,8 @@
 
 #include "autoware/interpolation/spherical_linear_interpolation.hpp"
 
+#include <vector>
+
 namespace autoware::interpolation
 {
 geometry_msgs::msg::Quaternion slerp(

@@ -18,8 +18,8 @@
 
 namespace kinematic_diagnostics
 {
-Stat<double> MetricsCalculator::updateStat(
-  const Metric metric, const Odometry & odom, const Stat<double> stat_prev) const
+Accumulator<double> MetricsCalculator::updateStat(
+  const Metric metric, const Odometry & odom, const Accumulator<double> stat_prev) const
 {
   switch (metric) {
     case Metric::velocity_stats:

@@ -16,6 +16,8 @@
 
 #include <rclcpp/logging.hpp>
 
+#include <vector>
+
 namespace yabloc::ground_server
 {
 // cppcheck-suppress unusedFunction

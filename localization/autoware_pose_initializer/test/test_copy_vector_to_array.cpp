@@ -16,6 +16,8 @@
 
 #include <gmock/gmock.h>
 
+#include <vector>
+
 TEST(CopyVectorToArray, CopyAllElements)
 {
   const std::vector<int> vector{0, 1, 2, 3, 4};

@@ -28,6 +28,8 @@
 #include <lanelet2_routing/Route.h>
 #include <pcl/common/transforms.h>
 #include <pcl_conversions/pcl_conversions.h>
+
+#include <string>
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_eigen/tf2_eigen.h>
 #else
@@ -79,8 +81,6 @@ BehaviorVelocityPlannerNode::BehaviorVelocityPlannerNode(const rclcpp::NodeOptio
 
   // Publishers
   path_pub_ = this->create_publisher<autoware_planning_msgs::msg::Path>("~/output/path", 1);
-  stop_reason_diag_pub_ =
-    this->create_publisher<diagnostic_msgs::msg::DiagnosticStatus>("~/output/stop_reason", 1);
   debug_viz_pub_ = this->create_publisher<visualization_msgs::msg::MarkerArray>("~/debug/path", 1);
 
   // Parameters
@@ -233,7 +233,7 @@ bool BehaviorVelocityPlannerNode::processData(rclcpp::Clock clock)
   bool is_ready = true;
   const auto & logData = [&clock, this](const std::string & data_type) {
     std::string msg = "Waiting for " + data_type + " data";
-    RCLCPP_INFO_THROTTLE(get_logger(), clock, logger_throttle_interval, msg.c_str());
+    RCLCPP_INFO_THROTTLE(get_logger(), clock, logger_throttle_interval, "%s", msg.c_str());
   };
 
   const auto & getData = [&logData](auto & dest, auto & sub, const std::string & data_type = "") {
@@ -327,7 +327,6 @@ void BehaviorVelocityPlannerNode::onTrigger(
 
   path_pub_->publish(output_path_msg);
   published_time_publisher_->publish_if_subscribed(path_pub_, output_path_msg.header.stamp);
-  stop_reason_diag_pub_->publish(planner_manager_.getStopReasonDiag());
 
   if (debug_viz_pub_->get_subscription_count() > 0) {
     publishDebugMarker(output_path_msg);

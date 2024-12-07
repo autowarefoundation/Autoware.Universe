@@ -31,9 +31,11 @@
 #include <fstream>
 #include <iomanip>
 #include <limits>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace autoware::lidar_marker_localizer
 {

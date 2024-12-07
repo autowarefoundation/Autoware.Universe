@@ -155,11 +155,11 @@ where:
 
 ## Inputs / Outputs
 
-| Name              | Type                                              | Description                                       |
-| ----------------- | ------------------------------------------------- | ------------------------------------------------- |
-| `~/input/objects` | `autoware_perception_msgs::msg::PredictedObjects` | The predicted objects to evaluate.                |
-| `~/metrics`       | `diagnostic_msgs::msg::DiagnosticArray`           | Diagnostic information about perception accuracy. |
-| `~/markers`       | `visualization_msgs::msg::MarkerArray`            | Visual markers for debugging and visualization.   |
+| Name              | Type                                              | Description                                     |
+| ----------------- | ------------------------------------------------- | ----------------------------------------------- |
+| `~/input/objects` | `autoware_perception_msgs::msg::PredictedObjects` | The predicted objects to evaluate.              |
+| `~/metrics`       | `tier4_metric_msgs::msg::MetricArray`             | Metric information about perception accuracy.   |
+| `~/markers`       | `visualization_msgs::msg::MarkerArray`            | Visual markers for debugging and visualization. |
 
 ## Parameters
 

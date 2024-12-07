@@ -24,6 +24,7 @@
 #include <autoware/universe_utils/math/normalization.hpp>
 #include <rclcpp/rclcpp.hpp>
 
+#include <algorithm>
 #include <deque>
 #include <functional>
 #include <limits>

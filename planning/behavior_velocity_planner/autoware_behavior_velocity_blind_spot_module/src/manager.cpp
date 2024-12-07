@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "manager.hpp"
+#include "autoware/behavior_velocity_blind_spot_module/manager.hpp"
+
+#include "autoware/behavior_velocity_blind_spot_module/util.hpp"
 
 #include <autoware/behavior_velocity_planner_common/utilization/boost_geometry_helper.hpp>
 #include <autoware/behavior_velocity_planner_common/utilization/util.hpp>
@@ -23,7 +25,6 @@
 #include <memory>
 #include <set>
 #include <string>
-#include <vector>
 
 namespace autoware::behavior_velocity_planner
 {
@@ -69,9 +70,8 @@ void BlindSpotModuleManager::launchNewModules(const tier4_planning_msgs::msg::Pa
     if (turn_direction_str != "left" && turn_direction_str != "right") {
       continue;
     }
-    const auto turn_direction = turn_direction_str == "left"
-                                  ? BlindSpotModule::TurnDirection::LEFT
-                                  : BlindSpotModule::TurnDirection::RIGHT;
+    const auto turn_direction =
+      turn_direction_str == "left" ? TurnDirection::LEFT : TurnDirection::RIGHT;
 
     registerModule(std::make_shared<BlindSpotModule>(
       module_id, lane_id, turn_direction, planner_data_, planner_param_,

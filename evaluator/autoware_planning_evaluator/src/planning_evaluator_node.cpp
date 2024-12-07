@@ -16,13 +16,16 @@
 
 #include <autoware_lanelet2_extension/utility/query.hpp>
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
+#include <nlohmann/json.hpp>
 
 #include <diagnostic_msgs/msg/detail/diagnostic_status__struct.hpp>
 
 #include "boost/lexical_cast.hpp"
 
+#include <chrono>
+#include <filesystem>
 #include <fstream>
-#include <iostream>
+#include <limits>
 #include <memory>
 #include <string>
 #include <vector>
@@ -50,8 +53,11 @@ PlanningEvaluatorNode::PlanningEvaluatorNode(const rclcpp::NodeOptions & node_op
   metrics_calculator_.parameters.obstacle.dist_thr_m =
     declare_parameter<double>("obstacle.dist_thr_m");
 
-  output_file_str_ = declare_parameter<std::string>("output_file");
+  output_metrics_ = declare_parameter<bool>("output_metrics");
   ego_frame_str_ = declare_parameter<std::string>("ego_frame");
+
+  processing_time_pub_ =
+    this->create_publisher<tier4_debug_msgs::msg::Float64Stamped>("~/debug/processing_time_ms", 1);
 
   // List of metrics to calculate and publish
   metrics_pub_ = create_publisher<MetricArrayMsg>("~/metrics", 1);
@@ -64,34 +70,49 @@ PlanningEvaluatorNode::PlanningEvaluatorNode(const rclcpp::NodeOptions & node_op
 
 PlanningEvaluatorNode::~PlanningEvaluatorNode()
 {
-  if (!output_file_str_.empty()) {
-    // column width is the maximum size we might print + 1 for the space between columns
-    // Write data using format
-    std::ofstream f(output_file_str_);
-    f << std::fixed << std::left;
-    // header
-    f << "#Stamp(ns)";
-    for (Metric metric : metrics_) {
-      f << " " << metric_descriptions.at(metric);
-      f << " . .";  // extra "columns" to align columns headers
+  if (!output_metrics_) {
+    return;
+  }
+
+  // generate json data
+  using json = nlohmann::json;
+  json j;
+  for (Metric metric : metrics_) {
+    const std::string base_name = metric_to_str.at(metric) + "/";
+    j[base_name + "min"] = metric_accumulators_[static_cast<size_t>(metric)][0].min();
+    j[base_name + "max"] = metric_accumulators_[static_cast<size_t>(metric)][1].max();
+    j[base_name + "mean"] = metric_accumulators_[static_cast<size_t>(metric)][2].mean();
+    j[base_name + "count"] = metric_accumulators_[static_cast<size_t>(metric)][2].count();
+    j[base_name + "description"] = metric_descriptions.at(metric);
+  }
+
+  // get output folder
+  const std::string output_folder_str =
+    rclcpp::get_logging_directory().string() + "/autoware_metrics";
+  if (!std::filesystem::exists(output_folder_str)) {
+    if (!std::filesystem::create_directories(output_folder_str)) {
+      RCLCPP_ERROR(
+        this->get_logger(), "Failed to create directories: %s", output_folder_str.c_str());
+      return;
     }
-    f << std::endl;
-    f << "#.";
-    for (Metric metric : metrics_) {
-      (void)metric;
-      f << " min max mean";
-    }
-    f << std::endl;
-    // data
-    for (size_t i = 0; i < stamps_.size(); ++i) {
-      f << stamps_[i].nanoseconds();
-      for (Metric metric : metrics_) {
-        const auto & stat = metric_stats_[static_cast<size_t>(metric)][i];
-        f << " " << stat;
-      }
-      f << std::endl;
-    }
+  }
+
+  // get time stamp
+  std::time_t now_time_t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+  std::tm * local_time = std::localtime(&now_time_t);
+  std::ostringstream oss;
+  oss << std::put_time(local_time, "%Y-%m-%d-%H-%M-%S");
+  std::string cur_time_str = oss.str();
+
+  // Write metrics .json to file
+  const std::string output_file_str =
+    output_folder_str + "/autoware_planning_evaluator-" + cur_time_str + ".json";
+  std::ofstream f(output_file_str);
+  if (f.is_open()) {
+    f << j.dump(4);
     f.close();
+  } else {
+    RCLCPP_ERROR(this->get_logger(), "Failed to open file: %s", output_file_str.c_str());
   }
 }
 
@@ -195,7 +216,8 @@ void PlanningEvaluatorNode::AddKinematicStateMetricMsg(
   return;
 }
 
-void PlanningEvaluatorNode::AddMetricMsg(const Metric & metric, const Stat<double> & metric_stat)
+void PlanningEvaluatorNode::AddMetricMsg(
+  const Metric & metric, const Accumulator<double> & metric_stat)
 {
   const std::string base_name = metric_to_str.at(metric) + "/";
   MetricMsg metric_msg;
@@ -222,6 +244,8 @@ void PlanningEvaluatorNode::AddMetricMsg(const Metric & metric, const Stat<doubl
 
 void PlanningEvaluatorNode::onTimer()
 {
+  autoware::universe_utils::StopWatch<std::chrono::milliseconds> stop_watch;
+
   const auto ego_state_ptr = odometry_sub_.takeData();
   onOdometry(ego_state_ptr);
   {
@@ -247,6 +271,12 @@ void PlanningEvaluatorNode::onTimer()
   metrics_msg_.stamp = now();
   metrics_pub_->publish(metrics_msg_);
   metrics_msg_ = MetricArrayMsg{};
+
+  // Publish ProcessingTime
+  tier4_debug_msgs::msg::Float64Stamped processing_time_msg;
+  processing_time_msg.stamp = get_clock()->now();
+  processing_time_msg.data = stop_watch.toc();
+  processing_time_pub_->publish(processing_time_msg);
 }
 
 void PlanningEvaluatorNode::onTrajectory(
@@ -257,9 +287,6 @@ void PlanningEvaluatorNode::onTrajectory(
   }
 
   auto start = now();
-  if (!output_file_str_.empty()) {
-    stamps_.push_back(traj_msg->header.stamp);
-  }
 
   for (Metric metric : metrics_) {
     const auto metric_stat = metrics_calculator_.calculate(Metric(metric), *traj_msg);
@@ -267,8 +294,10 @@ void PlanningEvaluatorNode::onTrajectory(
       continue;
     }
 
-    if (!output_file_str_.empty()) {
-      metric_stats_[static_cast<size_t>(metric)].push_back(*metric_stat);
+    if (output_metrics_) {
+      metric_accumulators_[static_cast<size_t>(metric)][0].add(metric_stat->min());
+      metric_accumulators_[static_cast<size_t>(metric)][1].add(metric_stat->max());
+      metric_accumulators_[static_cast<size_t>(metric)][2].add(metric_stat->mean());
     }
 
     if (metric_stat->count() > 0) {
@@ -296,7 +325,11 @@ void PlanningEvaluatorNode::onModifiedGoal(
     if (!metric_stat) {
       continue;
     }
-    metric_stats_[static_cast<size_t>(metric)].push_back(*metric_stat);
+    if (output_metrics_) {
+      metric_accumulators_[static_cast<size_t>(metric)][0].add(metric_stat->min());
+      metric_accumulators_[static_cast<size_t>(metric)][1].add(metric_stat->max());
+      metric_accumulators_[static_cast<size_t>(metric)][2].add(metric_stat->mean());
+    }
     if (metric_stat->count() > 0) {
       AddMetricMsg(metric, *metric_stat);
     }

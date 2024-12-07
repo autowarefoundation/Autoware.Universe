@@ -22,6 +22,9 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <vector>
+
 using tier4_rtc_msgs::msg::State;
 
 namespace autoware::rtc_interface

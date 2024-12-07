@@ -15,8 +15,6 @@
 #ifndef PERCEPTION_ONLINE_EVALUATOR__METRICS__DEVIATION_METRICS_HPP_
 #define PERCEPTION_ONLINE_EVALUATOR__METRICS__DEVIATION_METRICS_HPP_
 
-#include "perception_online_evaluator/stat.hpp"
-
 #include <autoware_perception_msgs/msg/predicted_path.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 

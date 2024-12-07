@@ -16,8 +16,6 @@
 
 #include <boost/geometry/algorithms/correct.hpp>
 
-#include <algorithm>
-#include <vector>
 namespace autoware::behavior_velocity_planner
 {
 
@@ -27,8 +25,8 @@ Polygon2d lines2polygon(const LineString2d & left_line, const LineString2d & rig
 
   polygon.outer().push_back(left_line.front());
 
-  for (auto itr = right_line.begin(); itr != right_line.end(); ++itr) {
-    polygon.outer().push_back(*itr);
+  for (const auto & itr : right_line) {
+    polygon.outer().push_back(itr);
   }
 
   for (auto itr = left_line.rbegin(); itr != left_line.rend(); ++itr) {
@@ -57,8 +55,8 @@ geometry_msgs::msg::Polygon toGeomPoly(const Polygon2d & polygon)
   geometry_msgs::msg::Polygon polygon_msg;
   geometry_msgs::msg::Point32 point_msg;
   for (const auto & p : polygon.outer()) {
-    point_msg.x = p.x();
-    point_msg.y = p.y();
+    point_msg.x = static_cast<float>(p.x());
+    point_msg.y = static_cast<float>(p.y());
     polygon_msg.points.push_back(point_msg);
   }
   return polygon_msg;

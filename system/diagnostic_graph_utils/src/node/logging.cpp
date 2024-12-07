@@ -19,6 +19,7 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include <string>
 #include <vector>
 
 namespace diagnostic_graph_utils

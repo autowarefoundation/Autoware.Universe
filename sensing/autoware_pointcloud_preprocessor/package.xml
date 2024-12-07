@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_pointcloud_preprocessor</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>The ROS 2 autoware_pointcloud_preprocessor package</description>
   <maintainer email="abrahammonrroy@yahoo.com">amc-nu</maintainer>
   <maintainer email="yukihiro.saito@tier4.jp">Yukihiro Saito</maintainer>
@@ -15,6 +15,8 @@
   <maintainer email="david.wong@tier4.jp">David Wong</maintainer>
   <maintainer email="melike@leodrive.ai">Melike Tanrikulu</maintainer>
   <license>Apache License 2.0</license>
+  <!-- For polygon_remover, vector_map_filter -->
+  <license>LGPLv3</license>
 
   <!-- Original authors -->
   <author>Open Perception</author>

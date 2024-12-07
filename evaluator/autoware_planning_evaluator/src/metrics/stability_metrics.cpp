@@ -29,9 +29,9 @@ namespace metrics
 {
 using autoware_planning_msgs::msg::TrajectoryPoint;
 
-Stat<double> calcFrechetDistance(const Trajectory & traj1, const Trajectory & traj2)
+Accumulator<double> calcFrechetDistance(const Trajectory & traj1, const Trajectory & traj2)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
 
   if (traj1.points.empty() || traj2.points.empty()) {
     return stat;
@@ -58,9 +58,9 @@ Stat<double> calcFrechetDistance(const Trajectory & traj1, const Trajectory & tr
   return stat;
 }
 
-Stat<double> calcLateralDistance(const Trajectory & traj1, const Trajectory & traj2)
+Accumulator<double> calcLateralDistance(const Trajectory & traj1, const Trajectory & traj2)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   if (traj1.points.empty()) {
     return stat;
   }

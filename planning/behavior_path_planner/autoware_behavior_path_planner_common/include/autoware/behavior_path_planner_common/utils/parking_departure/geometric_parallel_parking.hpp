@@ -70,11 +70,11 @@ public:
   bool isParking() const;
   bool planPullOver(
     const Pose & goal_pose, const lanelet::ConstLanelets & road_lanes,
-    const lanelet::ConstLanelets & shoulder_lanes, const bool is_forward,
+    const lanelet::ConstLanelets & pull_over_lanes, const bool is_forward,
     const bool left_side_parking);
   bool planPullOut(
     const Pose & start_pose, const Pose & goal_pose, const lanelet::ConstLanelets & road_lanes,
-    const lanelet::ConstLanelets & shoulder_lanes, const bool left_side_start,
+    const lanelet::ConstLanelets & pull_over_lanes, const bool left_side_start,
     const std::shared_ptr<autoware::lane_departure_checker::LaneDepartureChecker>
       autoware_lane_departure_checker);
   void setParameters(const ParallelParkingParameters & parameters) { parameters_ = parameters; }
@@ -117,7 +117,7 @@ private:
   void clearPaths();
   std::vector<PathWithLaneId> planOneTrial(
     const Pose & start_pose, const Pose & goal_pose, const double R_E_far,
-    const lanelet::ConstLanelets & road_lanes, const lanelet::ConstLanelets & shoulder_lanes,
+    const lanelet::ConstLanelets & road_lanes, const lanelet::ConstLanelets & pull_over_lanes,
     const bool is_forward, const bool left_side_parking, const double end_pose_offset,
     const double lane_departure_margin, const double arc_path_interval,
     const std::shared_ptr<autoware::lane_departure_checker::LaneDepartureChecker>
@@ -134,7 +134,7 @@ private:
     const bool left_side_parking);
   std::vector<PathWithLaneId> generatePullOverPaths(
     const Pose & start_pose, const Pose & goal_pose, const double R_E_far,
-    const lanelet::ConstLanelets & road_lanes, const lanelet::ConstLanelets & shoulder_lanes,
+    const lanelet::ConstLanelets & road_lanes, const lanelet::ConstLanelets & pull_over_lanes,
     const bool is_forward, const bool left_side_parking, const double end_pose_offset,
     const double velocity);
   PathWithLaneId generateStraightPath(

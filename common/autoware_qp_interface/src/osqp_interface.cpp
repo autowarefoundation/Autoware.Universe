@@ -18,6 +18,11 @@
 
 #include <rclcpp/rclcpp.hpp>
 
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
 namespace autoware::qp_interface
 {
 OSQPInterface::OSQPInterface(

@@ -14,6 +14,10 @@
 
 #include "autoware/universe_utils/geometry/ear_clipping.hpp"
 
+#include <algorithm>
+#include <limits>
+#include <vector>
+
 namespace autoware::universe_utils
 {
 

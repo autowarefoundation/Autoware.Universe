@@ -2,6 +2,41 @@
 Changelog for package autoware_behavior_path_planner_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.39.0 (2024-11-25)
+-------------------
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* feat(goal_planner): safety check with only parking path (`#9293 <https://github.com/autowarefoundation/autoware.universe/issues/9293>`_)
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* fix(behavior_path_planner_common): use boost intersects instead of overlaps (`#9289 <https://github.com/autowarefoundation/autoware.universe/issues/9289>`_)
+  * fix(behavior_path_planner_common): use boost intersects instead of overlaps
+  * Update planning/behavior_path_planner/autoware_behavior_path_planner_common/src/utils/path_safety_checker/safety_check.cpp
+  Co-authored-by: Go Sakayori <go-sakayori@users.noreply.github.com>
+  ---------
+  Co-authored-by: Go Sakayori <go-sakayori@users.noreply.github.com>
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* fix(bpp): prevent accessing nullopt (`#9269 <https://github.com/autowarefoundation/autoware.universe/issues/9269>`_)
+* test(behavior_path_planner_common): add unit test for path shifter (`#9239 <https://github.com/autowarefoundation/autoware.universe/issues/9239>`_)
+  * add unit test for path shifter
+  * fix unnecessary modification
+  * fix spelling mistake
+  * add docstring
+  ---------
+* test(bpp_common): add unit test for safety check (`#9223 <https://github.com/autowarefoundation/autoware.universe/issues/9223>`_)
+  * add test for object collision
+  * add test for more functions
+  * add docstring
+  * fix lane change
+  ---------
+* fix(bpp): prevent accessing nullopt (`#9204 <https://github.com/autowarefoundation/autoware.universe/issues/9204>`_)
+  fix(bpp): calcDistanceToRedTrafficLight null
+* Contributors: Esteve Fernandez, Go Sakayori, Kosuke Takeuchi, Shumpei Wakabayashi, Yutaka Kondo
+
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0

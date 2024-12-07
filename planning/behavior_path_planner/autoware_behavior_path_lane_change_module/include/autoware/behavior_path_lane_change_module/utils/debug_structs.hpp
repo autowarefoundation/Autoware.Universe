@@ -35,7 +35,7 @@ struct Debug
   LaneChangePaths valid_paths;
   CollisionCheckDebugMap collision_check_objects;
   CollisionCheckDebugMap collision_check_objects_after_approval;
-  FilteredByLanesExtendedObjects filtered_objects;
+  FilteredLanesObjects filtered_objects;
   geometry_msgs::msg::Polygon execution_area;
   geometry_msgs::msg::Pose ego_pose;
   lanelet::ConstLanelets current_lanes;
@@ -55,9 +55,11 @@ struct Debug
     collision_check_objects.clear();
     collision_check_objects_after_approval.clear();
     filtered_objects.current_lane.clear();
-    filtered_objects.target_lane_leading.clear();
     filtered_objects.target_lane_trailing.clear();
-    filtered_objects.other_lane.clear();
+    filtered_objects.target_lane_leading.moving.clear();
+    filtered_objects.target_lane_leading.stopped.clear();
+    filtered_objects.target_lane_leading.stopped_at_bound.clear();
+    filtered_objects.others.clear();
     execution_area.points.clear();
     current_lanes.clear();
     target_lanes.clear();

@@ -30,8 +30,6 @@
 #include <autoware_planning_msgs/msg/path.hpp>
 #include <tier4_debug_msgs/msg/float64_stamped.hpp>
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
-#include <tier4_planning_msgs/msg/stop_reason.hpp>
-#include <tier4_planning_msgs/msg/stop_reason_array.hpp>
 #include <tier4_rtc_msgs/msg/state.hpp>
 #include <tier4_v2x_msgs/msg/infrastructure_command_array.hpp>
 #include <unique_identifier_msgs/msg/uuid.hpp>
@@ -41,6 +39,7 @@
 #include <set>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 // Debug
@@ -61,8 +60,6 @@ using autoware::universe_utils::getOrDeclareParameter;
 using builtin_interfaces::msg::Time;
 using tier4_debug_msgs::msg::Float64Stamped;
 using tier4_planning_msgs::msg::PathWithLaneId;
-using tier4_planning_msgs::msg::StopFactor;
-using tier4_planning_msgs::msg::StopReason;
 using tier4_rtc_msgs::msg::Module;
 using tier4_rtc_msgs::msg::State;
 using unique_identifier_msgs::msg::UUID;
@@ -73,9 +70,9 @@ struct ObjectOfInterest
   autoware_perception_msgs::msg::Shape shape;
   ColorName color;
   ObjectOfInterest(
-    const geometry_msgs::msg::Pose & pose, const autoware_perception_msgs::msg::Shape & shape,
+    const geometry_msgs::msg::Pose & pose, autoware_perception_msgs::msg::Shape shape,
     const ColorName & color_name)
-  : pose(pose), shape(shape), color(color_name)
+  : pose(pose), shape(std::move(shape)), color(color_name)
   {
   }
 };
@@ -87,12 +84,13 @@ public:
     const int64_t module_id, rclcpp::Logger logger, rclcpp::Clock::SharedPtr clock);
   virtual ~SceneModuleInterface() = default;
 
-  virtual bool modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason) = 0;
+  virtual bool modifyPathVelocity(PathWithLaneId * path) = 0;
 
   virtual visualization_msgs::msg::MarkerArray createDebugMarkerArray() = 0;
   virtual std::vector<autoware::motion_utils::VirtualWall> createVirtualWalls() = 0;
 
   int64_t getModuleId() const { return module_id_; }
+
   void setPlannerData(const std::shared_ptr<const PlannerData> & planner_data)
   {
     planner_data_ = planner_data;
@@ -116,8 +114,6 @@ public:
 
   std::shared_ptr<universe_utils::TimeKeeper> getTimeKeeper() { return time_keeper_; }
 
-  std::optional<double> getFirstStopPathPointDistance() { return first_stop_path_point_distance_; }
-
   void setActivation(const bool activated) { activated_ = activated; }
   void setRTCEnabled(const bool enable_rtc) { rtc_enabled_ = enable_rtc; }
   bool isActivated() const { return activated_; }
@@ -139,7 +135,6 @@ protected:
   rclcpp::Clock::SharedPtr clock_;
   std::shared_ptr<const PlannerData> planner_data_;
   std::optional<tier4_v2x_msgs::msg::InfrastructureCommand> infrastructure_command_;
-  std::optional<double> first_stop_path_point_distance_;
   autoware::motion_utils::VelocityFactorInterface velocity_factor_;
   std::vector<ObjectOfInterest> objects_of_interest_;
   mutable std::shared_ptr<universe_utils::TimeKeeper> time_keeper_;
@@ -174,8 +169,6 @@ public:
 
   virtual const char * getModuleName() = 0;
 
-  std::optional<double> getFirstStopPathPointDistance() { return first_stop_path_point_distance_; }
-
   void updateSceneModuleInstances(
     const std::shared_ptr<const PlannerData> & planner_data,
     const tier4_planning_msgs::msg::PathWithLaneId & path);
@@ -208,7 +201,6 @@ protected:
   std::shared_ptr<const PlannerData> planner_data_;
   autoware::motion_utils::VirtualWallMarkerCreator virtual_wall_marker_creator_;
 
-  std::optional<double> first_stop_path_point_distance_;
   rclcpp::Node & node_;
   rclcpp::Clock::SharedPtr clock_;
   // Debug
@@ -217,7 +209,6 @@ protected:
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr pub_virtual_wall_;
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr pub_debug_;
   rclcpp::Publisher<tier4_planning_msgs::msg::PathWithLaneId>::SharedPtr pub_debug_path_;
-  rclcpp::Publisher<tier4_planning_msgs::msg::StopReasonArray>::SharedPtr pub_stop_reason_;
   rclcpp::Publisher<autoware_adapi_v1_msgs::msg::VelocityFactorArray>::SharedPtr
     pub_velocity_factor_;
   rclcpp::Publisher<tier4_v2x_msgs::msg::InfrastructureCommandArray>::SharedPtr

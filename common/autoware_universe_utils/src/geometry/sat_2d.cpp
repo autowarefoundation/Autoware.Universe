@@ -14,6 +14,8 @@
 
 #include "autoware/universe_utils/geometry/sat_2d.hpp"
 
+#include <utility>
+
 namespace autoware::universe_utils::sat
 {
 

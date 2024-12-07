@@ -20,6 +20,10 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <string>
+#include <vector>
+
 using autoware::costmap_generator::CostmapGenerator;
 using tier4_planning_msgs::msg::Scenario;
 

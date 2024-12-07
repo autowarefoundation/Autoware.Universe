@@ -16,6 +16,9 @@
 
 #include <yabloc_common/color.hpp>
 
+#include <algorithm>
+#include <vector>
+
 namespace yabloc::initializer
 {
 

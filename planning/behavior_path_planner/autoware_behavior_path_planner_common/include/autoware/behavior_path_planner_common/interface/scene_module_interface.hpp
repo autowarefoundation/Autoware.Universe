@@ -39,9 +39,6 @@
 #include <autoware_adapi_v1_msgs/msg/steering_factor.hpp>
 #include <tier4_planning_msgs/msg/avoidance_debug_msg_array.hpp>
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
-#include <tier4_planning_msgs/msg/stop_factor.hpp>
-#include <tier4_planning_msgs/msg/stop_reason.hpp>
-#include <tier4_planning_msgs/msg/stop_reason_array.hpp>
 #include <tier4_rtc_msgs/msg/state.hpp>
 #include <unique_identifier_msgs/msg/uuid.hpp>
 #include <visualization_msgs/msg/detail/marker_array__struct.hpp>
@@ -69,9 +66,6 @@ using autoware_adapi_v1_msgs::msg::SteeringFactor;
 using autoware_adapi_v1_msgs::msg::VelocityFactor;
 using tier4_planning_msgs::msg::AvoidanceDebugMsgArray;
 using tier4_planning_msgs::msg::PathWithLaneId;
-using tier4_planning_msgs::msg::StopFactor;
-using tier4_planning_msgs::msg::StopReason;
-using tier4_planning_msgs::msg::StopReasonArray;
 using tier4_rtc_msgs::msg::State;
 using unique_identifier_msgs::msg::UUID;
 using visualization_msgs::msg::MarkerArray;
@@ -192,8 +186,6 @@ public:
 
     reset_factor();
 
-    stop_reason_ = StopReason();
-
     processOnExit();
   }
 
@@ -265,8 +257,6 @@ public:
   virtual MarkerArray getModuleVirtualWall() { return MarkerArray(); }
 
   ModuleStatus getCurrentStatus() const { return current_state_; }
-
-  StopReason getStopReason() const { return stop_reason_; }
 
   void reset_factor()
   {
@@ -446,8 +436,6 @@ private:
 
   BehaviorModuleOutput previous_module_output_;
 
-  StopReason stop_reason_;
-
   bool is_locked_new_module_launch_{false};
 
   bool is_locked_output_path_{false};
@@ -578,23 +566,6 @@ protected:
 
     velocity_factor_interface_.set(
       path.points, getEgoPose(), slow_pose_.value(), VelocityFactor::APPROACHING, "slow down");
-  }
-
-  void setStopReason(const std::string & stop_reason, const PathWithLaneId & path)
-  {
-    stop_reason_.reason = stop_reason;
-    stop_reason_.stop_factors.clear();
-
-    if (!stop_pose_) {
-      stop_reason_.reason = "";
-      return;
-    }
-
-    StopFactor stop_factor;
-    stop_factor.stop_pose = stop_pose_.value();
-    stop_factor.dist_to_stop_pose = autoware::motion_utils::calcSignedArcLength(
-      path.points, getEgoPosition(), stop_pose_.value().position);
-    stop_reason_.stop_factors.push_back(stop_factor);
   }
 
   void setDrivableLanes(const std::vector<DrivableLanes> & drivable_lanes);

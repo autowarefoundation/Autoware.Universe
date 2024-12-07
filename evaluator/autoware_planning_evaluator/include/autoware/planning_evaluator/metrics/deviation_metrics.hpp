@@ -15,7 +15,7 @@
 #ifndef AUTOWARE__PLANNING_EVALUATOR__METRICS__DEVIATION_METRICS_HPP_
 #define AUTOWARE__PLANNING_EVALUATOR__METRICS__DEVIATION_METRICS_HPP_
 
-#include "autoware/planning_evaluator/stat.hpp"
+#include "autoware/universe_utils/math/accumulator.hpp"
 
 #include "autoware_planning_msgs/msg/trajectory.hpp"
 #include "autoware_planning_msgs/msg/trajectory_point.hpp"
@@ -24,6 +24,7 @@ namespace planning_diagnostics
 {
 namespace metrics
 {
+using autoware::universe_utils::Accumulator;
 using autoware_planning_msgs::msg::Trajectory;
 using autoware_planning_msgs::msg::TrajectoryPoint;
 using geometry_msgs::msg::Point;
@@ -35,7 +36,7 @@ using geometry_msgs::msg::Pose;
  * @param [in] traj input trajectory
  * @return calculated statistics
  */
-Stat<double> calcLateralDeviation(const Trajectory & ref, const Trajectory & traj);
+Accumulator<double> calcLateralDeviation(const Trajectory & ref, const Trajectory & traj);
 
 /**
  * @brief calculate yaw deviation of the given trajectory from the reference trajectory
@@ -43,7 +44,7 @@ Stat<double> calcLateralDeviation(const Trajectory & ref, const Trajectory & tra
  * @param [in] traj input trajectory
  * @return calculated statistics
  */
-Stat<double> calcYawDeviation(const Trajectory & ref, const Trajectory & traj);
+Accumulator<double> calcYawDeviation(const Trajectory & ref, const Trajectory & traj);
 
 /**
  * @brief calculate velocity deviation of the given trajectory from the reference trajectory
@@ -51,7 +52,7 @@ Stat<double> calcYawDeviation(const Trajectory & ref, const Trajectory & traj);
  * @param [in] traj input trajectory
  * @return calculated statistics
  */
-Stat<double> calcVelocityDeviation(const Trajectory & ref, const Trajectory & traj);
+Accumulator<double> calcVelocityDeviation(const Trajectory & ref, const Trajectory & traj);
 
 /**
  * @brief calculate longitudinal deviation of the given ego pose from the modified goal pose
@@ -59,7 +60,7 @@ Stat<double> calcVelocityDeviation(const Trajectory & ref, const Trajectory & tr
  * @param [in] target_point target point
  * @return calculated statistics
  */
-Stat<double> calcLongitudinalDeviation(const Pose & base_pose, const Point & target_point);
+Accumulator<double> calcLongitudinalDeviation(const Pose & base_pose, const Point & target_point);
 
 /**
  * @brief calculate lateral deviation of the given ego pose from the modified goal pose
@@ -67,7 +68,7 @@ Stat<double> calcLongitudinalDeviation(const Pose & base_pose, const Point & tar
  * @param [in] target_point target point
  * @return calculated statistics
  */
-Stat<double> calcLateralDeviation(const Pose & base_pose, const Point & target_point);
+Accumulator<double> calcLateralDeviation(const Pose & base_pose, const Point & target_point);
 
 /**
  * @brief calculate yaw deviation of the given ego pose from the modified goal pose
@@ -75,7 +76,7 @@ Stat<double> calcLateralDeviation(const Pose & base_pose, const Point & target_p
  * @param [in] target_pose target pose
  * @return calculated statistics
  */
-Stat<double> calcYawDeviation(const Pose & base_pose, const Pose & target_pose);
+Accumulator<double> calcYawDeviation(const Pose & base_pose, const Pose & target_pose);
 
 }  // namespace metrics
 }  // namespace planning_diagnostics

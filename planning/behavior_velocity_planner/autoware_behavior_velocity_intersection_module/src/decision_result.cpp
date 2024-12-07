@@ -14,6 +14,8 @@
 
 #include "decision_result.hpp"
 
+#include <string>
+
 namespace autoware::behavior_velocity_planner
 {
 std::string formatDecisionResult(

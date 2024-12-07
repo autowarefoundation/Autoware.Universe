@@ -44,6 +44,10 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include <iostream>
+#include <string>
+#include <vector>
+
 // init static variable
 bool STrack::_parameters_loaded = false;
 STrack::KfParams STrack::_kf_parameters;

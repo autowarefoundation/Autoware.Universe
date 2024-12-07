@@ -156,9 +156,9 @@ int32_t PurePursuit::findNextPointIdx(int32_t search_start_idx)
   }
 
   // look for the next waypoint.
-  for (int32_t i = search_start_idx; i < (int32_t)curr_wps_ptr_->size(); i++) {
+  for (int32_t i = search_start_idx; i < static_cast<int32_t>(curr_wps_ptr_->size()); i++) {
     // if search waypoint is the last
-    if (i == ((int32_t)curr_wps_ptr_->size() - 1)) {
+    if (i == (static_cast<int32_t>(curr_wps_ptr_->size()) - 1)) {
       return i;
     }
 

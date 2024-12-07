@@ -21,8 +21,10 @@
 #include "autoware/universe_utils/math/normalization.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include <limits>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace autoware::motion::control::mpc_lateral_controller

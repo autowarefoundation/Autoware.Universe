@@ -111,16 +111,6 @@ double getDistanceFromTwoPoint(
   }
 }
 
-constexpr double sign(const double value)
-{
-  if (value > 0) {
-    return 1.0;
-  } else if (value < 0) {
-    return -1.0;
-  } else {
-    return 0.0;
-  }
-}
 }  // namespace
 
 namespace autoware::motion_planning
@@ -573,7 +563,7 @@ double AdaptiveCruiseController::calcUpperVelocity(
 }
 
 double AdaptiveCruiseController::calcThreshDistToForwardObstacle(
-  const double current_vel, const double obj_vel)
+  const double current_vel, const double obj_vel) const
 {
   const double current_vel_min = std::max(1.0, std::fabs(current_vel));
   const double obj_vel_min = std::max(0.0, obj_vel);
@@ -590,7 +580,7 @@ double AdaptiveCruiseController::calcThreshDistToForwardObstacle(
 }
 
 double AdaptiveCruiseController::calcBaseDistToForwardObstacle(
-  const double current_vel, const double obj_vel)
+  const double current_vel, const double obj_vel) const
 {
   const double obj_vel_min = std::max(0.0, obj_vel);
   const double minimum_distance = param_.min_dist_standard;

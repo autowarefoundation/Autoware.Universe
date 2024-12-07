@@ -17,6 +17,10 @@
 #include "autoware/component_interface_utils/status.hpp"
 #include "gtest/gtest.h"
 
+#include <algorithm>
+#include <memory>
+#include <string>
+
 TEST(interface, utils)
 {
   {

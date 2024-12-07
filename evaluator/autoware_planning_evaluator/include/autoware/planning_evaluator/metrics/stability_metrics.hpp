@@ -15,7 +15,7 @@
 #ifndef AUTOWARE__PLANNING_EVALUATOR__METRICS__STABILITY_METRICS_HPP_
 #define AUTOWARE__PLANNING_EVALUATOR__METRICS__STABILITY_METRICS_HPP_
 
-#include "autoware/planning_evaluator/stat.hpp"
+#include "autoware/universe_utils/math/accumulator.hpp"
 
 #include "autoware_planning_msgs/msg/trajectory.hpp"
 
@@ -23,6 +23,7 @@ namespace planning_diagnostics
 {
 namespace metrics
 {
+using autoware::universe_utils::Accumulator;
 using autoware_planning_msgs::msg::Trajectory;
 
 /**
@@ -31,7 +32,7 @@ using autoware_planning_msgs::msg::Trajectory;
  * @param [in] traj2 second trajectory
  * @return calculated statistics
  */
-Stat<double> calcFrechetDistance(const Trajectory & traj1, const Trajectory & traj2);
+Accumulator<double> calcFrechetDistance(const Trajectory & traj1, const Trajectory & traj2);
 
 /**
  * @brief calculate the lateral distance between two trajectories
@@ -39,7 +40,7 @@ Stat<double> calcFrechetDistance(const Trajectory & traj1, const Trajectory & tr
  * @param [in] traj2 second trajectory
  * @return calculated statistics
  */
-Stat<double> calcLateralDistance(const Trajectory & traj1, const Trajectory & traj2);
+Accumulator<double> calcLateralDistance(const Trajectory & traj1, const Trajectory & traj2);
 
 }  // namespace metrics
 }  // namespace planning_diagnostics

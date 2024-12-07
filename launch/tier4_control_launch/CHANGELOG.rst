@@ -2,6 +2,33 @@
 Changelog for package tier4_control_launch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.39.0 (2024-11-25)
+-------------------
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* fix(collision_detector): skip process when odometry is not published (`#9308 <https://github.com/autowarefoundation/autoware.universe/issues/9308>`_)
+  * subscribe odometry
+  * fix precommit
+  * remove unnecessary log info
+  ---------
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* feat(aeb): set global param to override autoware state check (`#9263 <https://github.com/autowarefoundation/autoware.universe/issues/9263>`_)
+  * set global param to override autoware state check
+  * change variable to be more general
+  * add comment
+  * move param to control component launch
+  * change param name to be more straightforward
+  ---------
+* feat(control_launch): add collision detector in launch (`#9214 <https://github.com/autowarefoundation/autoware.universe/issues/9214>`_)
+  add collision detector in launch
+* Contributors: Esteve Fernandez, Go Sakayori, Yutaka Kondo, danielsanchezaran
+
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0

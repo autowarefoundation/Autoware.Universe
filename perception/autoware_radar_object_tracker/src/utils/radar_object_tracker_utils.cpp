@@ -14,6 +14,10 @@
 
 #include "autoware_radar_object_tracker/utils/radar_object_tracker_utils.hpp"
 
+#include <string>
+#include <utility>
+#include <vector>
+
 namespace autoware::radar_object_tracker::utils
 {
 

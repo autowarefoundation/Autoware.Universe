@@ -14,6 +14,10 @@
 
 #include "autoware/behavior_path_planner_common/interface/scene_module_manager_interface.hpp"
 
+#include <memory>
+#include <string>
+#include <vector>
+
 namespace autoware::behavior_path_planner
 {
 void SceneModuleManagerInterface::initInterface(

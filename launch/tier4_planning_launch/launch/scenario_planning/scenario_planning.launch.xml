@@ -44,7 +44,7 @@
           <remap from="~/input/operation_mode_state" to="/system/operation_mode/state"/>
           <remap from="~/output/current_velocity_limit_mps" to="/planning/scenario_planning/current_max_velocity"/>
         </composable_node>
-        <composable_node pkg="glog_component" plugin="GlogComponent" name="glog_component" namespace=""/>
+        <composable_node pkg="autoware_glog_component" plugin="autoware::glog_component::GlogComponent" name="glog_component" namespace=""/>
       </node_container>
     </group>
   </group>

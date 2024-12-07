@@ -15,7 +15,11 @@
 #include "topic_publisher.hpp"
 
 #include <algorithm>
+#include <map>
 #include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace reaction_analyzer::topic_publisher
 {

@@ -132,7 +132,7 @@ Please see [the description of `GetSelectedPointCloudMap.srv`](https://github.co
 
 lanelet2_map_loader loads Lanelet2 file and publishes the map data as autoware_map_msgs/LaneletMapBin message.
 The node projects lan/lon coordinates into arbitrary coordinates defined in `/map/map_projector_info` from `map_projection_loader`.
-Please see [tier4_autoware_msgs/msg/MapProjectorInfo.msg](https://github.com/tier4/tier4_autoware_msgs/blob/tier4/universe/tier4_map_msgs/msg/MapProjectorInfo.msg) for supported projector types.
+Please see [autoware_map_msgs/msg/MapProjectorInfo.msg](https://github.com/autowarefoundation/autoware_msgs/blob/main/autoware_map_msgs/msg/MapProjectorInfo.msg) for supported projector types.
 
 ### How to run
 
@@ -140,7 +140,7 @@ Please see [tier4_autoware_msgs/msg/MapProjectorInfo.msg](https://github.com/tie
 
 ### Subscribed Topics
 
-- ~input/map_projector_info (tier4_map_msgs/MapProjectorInfo) : Projection type for Autoware
+- ~input/map_projector_info (autoware_map_msgs/MapProjectorInfo) : Projection type for Autoware
 
 ### Published Topics
 

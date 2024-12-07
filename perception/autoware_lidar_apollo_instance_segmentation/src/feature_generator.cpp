@@ -17,6 +17,7 @@
 #include "autoware/lidar_apollo_instance_segmentation/log_table.hpp"
 
 #include <cmath>
+#include <memory>
 
 namespace
 {

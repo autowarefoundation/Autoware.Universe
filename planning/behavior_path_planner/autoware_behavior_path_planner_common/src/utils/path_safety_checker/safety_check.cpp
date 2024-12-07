@@ -28,8 +28,12 @@
 
 #include <tf2/utils.h>
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace autoware::behavior_path_planner::utils::path_safety_checker
 {

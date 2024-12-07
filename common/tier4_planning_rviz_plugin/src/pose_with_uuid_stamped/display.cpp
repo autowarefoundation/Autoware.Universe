@@ -20,6 +20,9 @@
 #include <rviz_rendering/objects/axes.hpp>
 #include <rviz_rendering/objects/movable_text.hpp>
 
+#include <memory>
+#include <string>
+
 namespace
 {
 std::string uuid_to_string(const unique_identifier_msgs::msg::UUID & u)

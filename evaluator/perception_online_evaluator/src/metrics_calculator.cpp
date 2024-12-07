@@ -235,7 +235,7 @@ MetricStatMap MetricsCalculator::calcLateralDeviationMetrics(
       !parameters_->object_parameters.at(label).check_lateral_deviation) {
       continue;
     }
-    Stat<double> stat{};
+    Accumulator<double> stat{};
     const auto stamp = rclcpp::Time(objects.header.stamp);
     for (const auto & object : objects.objects) {
       const auto uuid = autoware::universe_utils::toHexString(object.object_id);
@@ -264,7 +264,7 @@ MetricStatMap MetricsCalculator::calcYawDeviationMetrics(
       !parameters_->object_parameters.at(label).check_yaw_deviation) {
       continue;
     }
-    Stat<double> stat{};
+    Accumulator<double> stat{};
     const auto stamp = rclcpp::Time(objects.header.stamp);
     for (const auto & object : objects.objects) {
       const auto uuid = autoware::universe_utils::toHexString(object.object_id);
@@ -420,7 +420,7 @@ MetricStatMap MetricsCalculator::calcYawRateMetrics(const ClassObjectsMap & clas
 
   MetricStatMap metric_stat_map{};
   for (const auto & [label, objects] : class_objects_map) {
-    Stat<double> stat{};
+    Accumulator<double> stat{};
     const auto stamp = rclcpp::Time(objects.header.stamp);
 
     for (const auto & object : objects.objects) {

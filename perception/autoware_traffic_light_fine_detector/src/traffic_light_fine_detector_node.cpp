@@ -14,6 +14,8 @@
 
 #include "traffic_light_fine_detector_node.hpp"
 
+#include <map>
+
 #if (defined(_MSC_VER) or (defined(__GNUC__) and (7 <= __GNUC_MAJOR__)))
 #include <filesystem>
 namespace fs = ::std::filesystem;

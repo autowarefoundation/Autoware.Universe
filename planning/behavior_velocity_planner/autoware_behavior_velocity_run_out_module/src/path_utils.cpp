@@ -15,6 +15,9 @@
 #include "path_utils.hpp"
 
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
+
+#include <limits>
+#include <vector>
 namespace autoware::behavior_velocity_planner::run_out_utils
 {
 /**

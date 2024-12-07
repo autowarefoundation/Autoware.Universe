@@ -14,6 +14,9 @@
 
 #include <autoware/lidar_transfusion/detection_class_remapper.hpp>
 
+#include <limits>
+#include <vector>
+
 namespace autoware::lidar_transfusion
 {
 

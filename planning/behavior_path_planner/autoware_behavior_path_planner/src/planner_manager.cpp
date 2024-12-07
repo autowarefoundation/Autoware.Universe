@@ -25,8 +25,13 @@
 
 #include <boost/scope_exit.hpp>
 
+#include <algorithm>
+#include <iostream>
 #include <memory>
 #include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 namespace autoware::behavior_path_planner
 {

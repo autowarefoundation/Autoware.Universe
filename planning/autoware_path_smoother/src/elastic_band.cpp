@@ -27,6 +27,9 @@
 #include <algorithm>
 #include <chrono>
 #include <limits>
+#include <memory>
+#include <tuple>
+#include <vector>
 
 namespace
 {
@@ -34,9 +37,9 @@ Eigen::SparseMatrix<double> makePMatrix(const int num_points)
 {
   std::vector<Eigen::Triplet<double>> triplet_vec;
   const auto assign_value_to_triplet_vec =
-    [&](const double row, const double colum, const double value) {
-      triplet_vec.push_back(Eigen::Triplet<double>(row, colum, value));
-      triplet_vec.push_back(Eigen::Triplet<double>(row + num_points, colum + num_points, value));
+    [&](const double row, const double column, const double value) {
+      triplet_vec.push_back(Eigen::Triplet<double>(row, column, value));
+      triplet_vec.push_back(Eigen::Triplet<double>(row + num_points, column + num_points, value));
     };
 
   for (int r = 0; r < num_points; ++r) {

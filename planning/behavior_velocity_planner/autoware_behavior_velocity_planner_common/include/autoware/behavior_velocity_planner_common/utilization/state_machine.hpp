@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <string>
-#include <utility>
 
 namespace autoware::behavior_velocity_planner
 {
@@ -37,11 +36,11 @@ public:
   {
     if (state == State::STOP) {
       return "STOP";
-    } else if (state == State::GO) {
-      return "GO";
-    } else {
-      return "";
     }
+    if (state == State::GO) {
+      return "GO";
+    }
+    return "";
   }
   StateMachine()
   {

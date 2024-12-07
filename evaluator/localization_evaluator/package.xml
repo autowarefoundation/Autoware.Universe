@@ -1,11 +1,16 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>localization_evaluator</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>localization evaluator ROS 2 node</description>
 
   <maintainer email="dominik.jargot@robotec.ai">Dominik Jargot</maintainer>
   <maintainer email="koji.minoda@tier4.jp">Koji Minoda</maintainer>
+  <maintainer email="anh.nguyen.2@tier4.jp">Anh Nguyen</maintainer>
+  <maintainer email="masahiro.sakamoto@tier4.jp">Masahiro Sakamoto</maintainer>
+  <maintainer email="shintaro.sakoda@tier4.jp">Shintaro Sakoda</maintainer>
+  <maintainer email="taiki.yamada@tier4.jp">Taiki Yamada</maintainer>
+  <maintainer email="yamato.ando@tier4.jp">Yamato Ando</maintainer>
 
   <license>Apache License 2.0</license>
 
@@ -25,6 +30,7 @@
   <depend>tf2_ros</depend>
 
   <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_index_cpp</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>autoware_lint_common</test_depend>
 

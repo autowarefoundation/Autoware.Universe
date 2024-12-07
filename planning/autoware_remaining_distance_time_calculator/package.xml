@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>autoware_remaining_distance_time_calculator</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>Calculates and publishes remaining distance and time of the mission.</description>
 
   <maintainer email="ahmed.ebrahim@leodrive.ai">Ahmed Ebrahim</maintainer>

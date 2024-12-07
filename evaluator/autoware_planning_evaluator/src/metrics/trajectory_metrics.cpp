@@ -23,18 +23,19 @@ namespace metrics
 using autoware::universe_utils::calcCurvature;
 using autoware::universe_utils::calcDistance2d;
 
-Stat<double> calcTrajectoryInterval(const Trajectory & traj)
+Accumulator<double> calcTrajectoryInterval(const Trajectory & traj)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   for (size_t i = 1; i < traj.points.size(); ++i) {
     stat.add(calcDistance2d(traj.points.at(i), traj.points.at(i - 1)));
   }
   return stat;
 }
 
-Stat<double> calcTrajectoryRelativeAngle(const Trajectory & traj, const double min_dist_threshold)
+Accumulator<double> calcTrajectoryRelativeAngle(
+  const Trajectory & traj, const double min_dist_threshold)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   // We need at least three points to compute relative angle
   const size_t relative_angle_points_num = 3;
   if (traj.points.size() < relative_angle_points_num) {
@@ -79,9 +80,9 @@ Stat<double> calcTrajectoryRelativeAngle(const Trajectory & traj, const double m
   return stat;
 }
 
-Stat<double> calcTrajectoryCurvature(const Trajectory & traj)
+Accumulator<double> calcTrajectoryCurvature(const Trajectory & traj)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   // We need at least three points to compute curvature
   if (traj.points.size() < 3) {
     return stat;
@@ -111,18 +112,18 @@ Stat<double> calcTrajectoryCurvature(const Trajectory & traj)
   return stat;
 }
 
-Stat<double> calcTrajectoryLength(const Trajectory & traj)
+Accumulator<double> calcTrajectoryLength(const Trajectory & traj)
 {
   double length = 0.0;
   for (size_t i = 1; i < traj.points.size(); ++i) {
     length += calcDistance2d(traj.points.at(i), traj.points.at(i - 1));
   }
-  Stat<double> stat;
+  Accumulator<double> stat;
   stat.add(length);
   return stat;
 }
 
-Stat<double> calcTrajectoryDuration(const Trajectory & traj)
+Accumulator<double> calcTrajectoryDuration(const Trajectory & traj)
 {
   double duration = 0.0;
   for (size_t i = 0; i + 1 < traj.points.size(); ++i) {
@@ -132,32 +133,32 @@ Stat<double> calcTrajectoryDuration(const Trajectory & traj)
       duration += length / std::abs(velocity);
     }
   }
-  Stat<double> stat;
+  Accumulator<double> stat;
   stat.add(duration);
   return stat;
 }
 
-Stat<double> calcTrajectoryVelocity(const Trajectory & traj)
+Accumulator<double> calcTrajectoryVelocity(const Trajectory & traj)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   for (TrajectoryPoint p : traj.points) {
     stat.add(p.longitudinal_velocity_mps);
   }
   return stat;
 }
 
-Stat<double> calcTrajectoryAcceleration(const Trajectory & traj)
+Accumulator<double> calcTrajectoryAcceleration(const Trajectory & traj)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   for (TrajectoryPoint p : traj.points) {
     stat.add(p.acceleration_mps2);
   }
   return stat;
 }
 
-Stat<double> calcTrajectoryJerk(const Trajectory & traj)
+Accumulator<double> calcTrajectoryJerk(const Trajectory & traj)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   for (size_t i = 0; i + 1 < traj.points.size(); ++i) {
     const double vel = traj.points.at(i).longitudinal_velocity_mps;
     if (vel != 0) {

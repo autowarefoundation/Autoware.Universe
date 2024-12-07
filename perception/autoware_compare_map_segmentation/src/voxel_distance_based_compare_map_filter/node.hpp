@@ -29,14 +29,14 @@
 namespace autoware::compare_map_segmentation
 {
 
-using PointCloud = typename pcl::Filter<pcl::PointXYZ>::PointCloud;
-using PointCloudPtr = typename PointCloud::Ptr;
-using PointCloudConstPtr = typename PointCloud::ConstPtr;
+using FilteredPointCloud = typename pcl::Filter<pcl::PointXYZ>::PointCloud;
+using FilteredPointCloudPtr = typename FilteredPointCloud::Ptr;
+using FilteredPointCloudConstPtr = typename FilteredPointCloud::ConstPtr;
 
 class VoxelDistanceBasedStaticMapLoader : public VoxelGridStaticMapLoader
 {
 private:
-  PointCloudConstPtr map_ptr_;
+  FilteredPointCloudConstPtr map_ptr_;
   pcl::search::Search<pcl::PointXYZ>::Ptr tree_;
 
 public:
@@ -55,7 +55,7 @@ class VoxelDistanceBasedDynamicMapLoader : public VoxelGridDynamicMapLoader
 {
 protected:
 private:
-  PointCloudConstPtr map_ptr_;
+  FilteredPointCloudConstPtr map_ptr_;
   /* data */
 public:
   explicit VoxelDistanceBasedDynamicMapLoader(
@@ -78,7 +78,7 @@ public:
     pcl::fromROSMsg(map_cell_to_add.pointcloud, map_cell_pc_tmp);
 
     VoxelGridPointXYZ map_cell_voxel_grid_tmp;
-    PointCloudPtr map_cell_downsampled_pc_ptr_tmp;
+    FilteredPointCloudPtr map_cell_downsampled_pc_ptr_tmp;
 
     auto map_cell_voxel_input_tmp_ptr =
       std::make_shared<pcl::PointCloud<pcl::PointXYZ>>(map_cell_pc_tmp);

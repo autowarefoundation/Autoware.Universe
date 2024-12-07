@@ -17,6 +17,8 @@
 #include "autoware/behavior_path_lane_change_module/interface.hpp"
 #include "scene.hpp"
 
+#include <memory>
+
 namespace autoware::behavior_path_planner
 {
 using autoware::behavior_path_planner::LaneChangeInterface;

@@ -10,8 +10,8 @@ nav:
     - 'autoware_grid_map_utils': common/autoware_grid_map_utils
     - 'autoware_point_types': common/autoware_point_types
     - 'Geography Utils': common/autoware_geography_utils
-    - 'Global Parameter Loader': common/global_parameter_loader/Readme
-    - 'Glog Component': common/glog_component
+    - 'Global Parameter Loader': common/autoware_global_parameter_loader/Readme
+    - 'Glog Component': common/autoware_glog_component
     - 'interpolation': common/autoware_interpolation
     - 'Kalman Filter': common/autoware_kalman_filter
     - 'Motion Utils': common/autoware_motion_utils
@@ -40,7 +40,7 @@ nav:
     - 'tier4_system_rviz_plugin': common/tier4_system_rviz_plugin
     - 'tier4_traffic_light_rviz_plugin': common/tier4_traffic_light_rviz_plugin
     - 'tier4_vehicle_rviz_plugin': common/tier4_vehicle_rviz_plugin
-    - 'traffic_light_recognition_marker_publisher': common/traffic_light_recognition_marker_publisher/Readme
+    - 'autoware_traffic_light_recognition_marker_publisher': common/autoware_traffic_light_recognition_marker_publisher/Readme
   - 'Node':
     - 'Goal Distance Calculator': common/autoware_goal_distance_calculator/Readme
     - 'Path Distance Calculator': common/autoware_path_distance_calculator/Readme

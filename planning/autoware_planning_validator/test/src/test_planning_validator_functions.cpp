@@ -19,6 +19,7 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
 #include <string>
 
 using autoware::planning_validator::PlanningValidator;

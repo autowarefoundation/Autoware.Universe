@@ -28,7 +28,12 @@
 #include <pcl/sample_consensus/model_types.h>
 #include <pcl/segmentation/sac_segmentation.h>
 
+#include <algorithm>
 #include <cmath>
+#include <limits>
+#include <set>
+#include <string>
+#include <vector>
 
 namespace yabloc::ground_server
 {

@@ -35,6 +35,7 @@
 #include <unistd.h>
 
 #include <algorithm>
+#include <cstdio>
 #include <iostream>
 #include <regex>
 #include <sstream>

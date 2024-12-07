@@ -20,6 +20,7 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
 #include <vector>
 
 TEST(PlanningModuleInterfaceTest, NodeTestWithExceptionTrajectory)

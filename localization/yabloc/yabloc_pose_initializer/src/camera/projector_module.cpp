@@ -18,6 +18,8 @@
 #include <opencv2/imgproc.hpp>
 #include <yabloc_common/cv_decompress.hpp>
 
+#include <vector>
+
 namespace yabloc::initializer
 {
 ProjectorModule::ProjectorModule(rclcpp::Node * node)

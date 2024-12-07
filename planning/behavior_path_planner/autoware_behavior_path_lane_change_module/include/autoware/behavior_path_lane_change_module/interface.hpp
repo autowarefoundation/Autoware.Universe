@@ -93,6 +93,8 @@ public:
   MarkerArray getModuleVirtualWall() override;
 
 protected:
+  using SceneModuleInterface::updateRTCStatus;
+
   std::shared_ptr<LaneChangeParameters> parameters_;
 
   std::unique_ptr<LaneChangeBase> module_type_;

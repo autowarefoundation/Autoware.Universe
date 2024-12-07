@@ -16,6 +16,8 @@
 
 #include <gmock/gmock.h>
 
+#include <vector>
+
 using testing::AllOf;
 using testing::Each;
 using testing::Ge;

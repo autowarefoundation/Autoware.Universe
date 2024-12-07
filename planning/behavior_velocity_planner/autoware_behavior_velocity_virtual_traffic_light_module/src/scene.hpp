@@ -79,7 +79,7 @@ public:
     const PlannerParam & planner_param, const rclcpp::Logger logger,
     const rclcpp::Clock::SharedPtr clock);
 
-  bool modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason) override;
+  bool modifyPathVelocity(PathWithLaneId * path) override;
 
   visualization_msgs::msg::MarkerArray createDebugMarkerArray() override;
   autoware::motion_utils::VirtualWalls createVirtualWalls() override;
@@ -95,8 +95,6 @@ private:
   ModuleData module_data_;
 
   void updateInfrastructureCommand();
-
-  void setStopReason(const Pose & stop_pose, StopReason * stop_reason);
 
   void setVelocityFactor(
     const geometry_msgs::msg::Pose & stop_pose,
@@ -119,12 +117,10 @@ private:
   bool hasRightOfWay(const tier4_v2x_msgs::msg::VirtualTrafficLightState & state);
 
   void insertStopVelocityAtStopLine(
-    tier4_planning_msgs::msg::PathWithLaneId * path,
-    tier4_planning_msgs::msg::StopReason * stop_reason, const size_t end_line_idx);
+    tier4_planning_msgs::msg::PathWithLaneId * path, const size_t end_line_idx);
 
   void insertStopVelocityAtEndLine(
-    tier4_planning_msgs::msg::PathWithLaneId * path,
-    tier4_planning_msgs::msg::StopReason * stop_reason, const size_t end_line_idx);
+    tier4_planning_msgs::msg::PathWithLaneId * path, const size_t end_line_idx);
 };
 }  // namespace autoware::behavior_velocity_planner
 #endif  // SCENE_HPP_

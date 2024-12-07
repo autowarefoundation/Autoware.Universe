@@ -25,8 +25,12 @@
 #include <boost/optional.hpp>
 
 #include <chrono>
+#include <map>
+#include <memory>
+#include <string>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 using Label = autoware_perception_msgs::msg::ObjectClassification;
 

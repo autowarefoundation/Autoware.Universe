@@ -1,42 +1,40 @@
 /**:
   ros__parameters:
     lane_change:
-      backward_lane_length: 200.0 #[m]
-      prepare_duration: 4.0         # [s]
-
+      backward_lane_length: 200.0
       backward_length_buffer_for_end_of_lane: 3.0 # [m]
       backward_length_buffer_for_blocking_object: 3.0 # [m]
       backward_length_from_intersection: 5.0 # [m]
 
-      lane_changing_lateral_jerk: 0.5              # [m/s3]
-
-      minimum_lane_changing_velocity: 2.78        # [m/s]
-      prediction_time_resolution: 0.5           # [s]
-      longitudinal_acceleration_sampling_num: 5
-      lateral_acceleration_sampling_num: 3
-
-      # side walk parked vehicle
-      object_check_min_road_shoulder_width: 0.5  # [m]
-      object_shiftable_ratio_threshold: 0.6
-
       # turn signal
       min_length_for_turn_signal_activation: 10.0 # [m]
-      length_ratio_for_turn_signal_deactivation: 0.8 # ratio (desired end position)
 
-      # longitudinal acceleration
-      min_longitudinal_acc: -1.0
-      max_longitudinal_acc: 1.0
+      # trajectory generation
+      trajectory:
+        max_prepare_duration: 4.0
+        min_prepare_duration: 2.0
+        lateral_jerk: 0.5
+        min_longitudinal_acc: -1.0
+        max_longitudinal_acc: 1.0
+        th_prepare_length_diff: 1.0
+        th_lane_changing_length_diff: 1.0
+        min_lane_changing_velocity: 2.78
+        lon_acc_sampling_num: 5
+        lat_acc_sampling_num: 3
+        lane_changing_decel_factor: 0.5
 
-      skip_process:
-        longitudinal_distance_diff_threshold:
-          prepare: 1.0
-          lane_changing: 1.0
+      # delay lane change
+      delay_lane_change:
+        enable: true
+        check_only_parked_vehicle: false
+        min_road_shoulder_width: 0.5  # [m]
+        th_parked_vehicle_shift_ratio: 0.6
 
       # safety check
       safety_check:
         allow_loose_check_for_cancel: true
         enable_target_lane_bound_check: true
-        collision_check_yaw_diff_threshold: 3.1416
+        stopped_object_velocity_threshold: 1.0 # [m/s]
         execution:
           expected_front_deceleration: -1.0
           expected_rear_deceleration: -1.0
@@ -104,14 +102,16 @@
         stop_time: 3.0 # [s]
 
       # collision check
-      enable_collision_check_for_prepare_phase:
-        general_lanes: false
-        intersection: true
-        turns: true
-      stopped_object_velocity_threshold: 1.0 # [m/s]
-      check_objects_on_current_lanes: false
-      check_objects_on_other_lanes: false
-      use_all_predicted_path: false
+      collision_check:
+        enable_for_prepare_phase:
+          general_lanes: false
+          intersection: true
+          turns: true
+        prediction_time_resolution: 0.5
+        yaw_diff_threshold: 3.1416
+        check_current_lanes: false
+        check_other_lanes: false
+        use_all_predicted_paths: false
 
       # lane change cancel
       cancel:

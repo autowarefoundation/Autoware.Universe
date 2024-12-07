@@ -28,6 +28,8 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
+#include <algorithm>
+
 namespace autoware::multi_object_tracker
 {
 

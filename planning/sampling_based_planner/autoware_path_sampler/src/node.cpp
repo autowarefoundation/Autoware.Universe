@@ -27,8 +27,11 @@
 
 #include <boost/geometry/algorithms/distance.hpp>
 
+#include <algorithm>
 #include <chrono>
 #include <limits>
+#include <string>
+#include <vector>
 
 namespace autoware::path_sampler
 {

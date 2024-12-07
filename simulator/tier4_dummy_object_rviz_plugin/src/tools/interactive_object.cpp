@@ -55,6 +55,7 @@
 #include <memory>
 #include <random>
 #include <string>
+#include <vector>
 
 namespace rviz_plugins
 {

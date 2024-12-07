@@ -27,6 +27,8 @@
 
 #include <tf2/LinearMath/Quaternion.h>
 
+#include <memory>
+
 namespace rviz_plugins
 {
 PoseWithCovarianceHistory::PoseWithCovarianceHistory() : last_stamp_(0, 0, RCL_ROS_TIME)

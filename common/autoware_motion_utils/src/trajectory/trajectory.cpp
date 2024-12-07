@@ -14,6 +14,10 @@
 
 #include "autoware/motion_utils/trajectory/trajectory.hpp"
 
+#include <algorithm>
+#include <utility>
+#include <vector>
+
 namespace autoware::motion_utils
 {
 

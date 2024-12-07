@@ -17,6 +17,8 @@
 
 #include <Eigen/Core>
 
+#include <limits>
+#include <string>
 #include <tuple>
 #include <vector>
 

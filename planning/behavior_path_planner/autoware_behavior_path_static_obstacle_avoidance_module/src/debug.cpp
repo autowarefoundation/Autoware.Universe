@@ -20,6 +20,8 @@
 #include <autoware_lanelet2_extension/visualization/visualization.hpp>
 #include <magic_enum.hpp>
 
+#include <algorithm>
+#include <memory>
 #include <string>
 #include <vector>
 

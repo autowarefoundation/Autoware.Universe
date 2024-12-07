@@ -22,6 +22,8 @@
 
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <memory>
+
 namespace autoware::low_intensity_cluster_filter
 {
 LowIntensityClusterFilter::LowIntensityClusterFilter(const rclcpp::NodeOptions & node_options)

@@ -49,7 +49,7 @@ protected:
     const PointCloud2 & input_pointcloud_msg, const std::size_t image_id,
     const DetectedObjectsWithFeature & input_roi_msg,
     const sensor_msgs::msg::CameraInfo & camera_info, PointCloud2 & output_pointcloud_msg) override;
-  bool out_of_scope(const DetectedObjectWithFeature & obj);
+  bool out_of_scope(const DetectedObjectWithFeature & obj) override;
 };
 
 }  // namespace autoware::image_projection_based_fusion

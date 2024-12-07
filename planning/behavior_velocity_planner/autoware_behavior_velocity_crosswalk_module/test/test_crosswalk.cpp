@@ -16,6 +16,8 @@
 
 #include <gtest/gtest.h>
 
+#include <vector>
+
 TEST(CrosswalkTest, CheckInterpolateEgoPassMargin)
 {
   namespace bvp = autoware::behavior_velocity_planner;

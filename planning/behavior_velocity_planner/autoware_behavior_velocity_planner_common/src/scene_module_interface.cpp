@@ -22,6 +22,8 @@
 #include <algorithm>
 #include <limits>
 #include <memory>
+#include <string>
+#include <vector>
 
 namespace autoware::behavior_velocity_planner
 {
@@ -67,8 +69,6 @@ SceneModuleManagerInterface::SceneModuleManagerInterface(
     std::string("~/virtual_wall/") + module_name, 5);
   pub_velocity_factor_ = node.create_publisher<autoware_adapi_v1_msgs::msg::VelocityFactorArray>(
     std::string("/planning/velocity_factors/") + module_name, 1);
-  pub_stop_reason_ =
-    node.create_publisher<tier4_planning_msgs::msg::StopReasonArray>("~/output/stop_reasons", 1);
   pub_infrastructure_commands_ =
     node.create_publisher<tier4_v2x_msgs::msg::InfrastructureCommandArray>(
       "~/output/infrastructure_commands", 1);
@@ -107,38 +107,26 @@ void SceneModuleManagerInterface::modifyPathVelocity(
   StopWatch<std::chrono::milliseconds> stop_watch;
   stop_watch.tic("Total");
   visualization_msgs::msg::MarkerArray debug_marker_array;
-  tier4_planning_msgs::msg::StopReasonArray stop_reason_array;
   autoware_adapi_v1_msgs::msg::VelocityFactorArray velocity_factor_array;
-  stop_reason_array.header.frame_id = "map";
-  stop_reason_array.header.stamp = clock_->now();
   velocity_factor_array.header.frame_id = "map";
   velocity_factor_array.header.stamp = clock_->now();
 
   tier4_v2x_msgs::msg::InfrastructureCommandArray infrastructure_command_array;
   infrastructure_command_array.stamp = clock_->now();
 
-  first_stop_path_point_distance_ = autoware::motion_utils::calcArcLength(path->points);
   for (const auto & scene_module : scene_modules_) {
-    tier4_planning_msgs::msg::StopReason stop_reason;
     scene_module->resetVelocityFactor();
     scene_module->setPlannerData(planner_data_);
-    scene_module->modifyPathVelocity(path, &stop_reason);
+    scene_module->modifyPathVelocity(path);
 
     // The velocity factor must be called after modifyPathVelocity.
     const auto velocity_factor = scene_module->getVelocityFactor();
     if (velocity_factor.behavior != PlanningBehavior::UNKNOWN) {
       velocity_factor_array.factors.emplace_back(velocity_factor);
     }
-    if (stop_reason.reason != "") {
-      stop_reason_array.stop_reasons.emplace_back(stop_reason);
-    }
 
     if (const auto command = scene_module->getInfrastructureCommand()) {
       infrastructure_command_array.commands.push_back(*command);
-    }
-
-    if (scene_module->getFirstStopPathPointDistance() < first_stop_path_point_distance_) {
-      first_stop_path_point_distance_ = scene_module->getFirstStopPathPointDistance();
     }
 
     for (const auto & marker : scene_module->createDebugMarkerArray().markers) {
@@ -148,9 +136,6 @@ void SceneModuleManagerInterface::modifyPathVelocity(
     virtual_wall_marker_creator_.add_virtual_walls(scene_module->createVirtualWalls());
   }
 
-  if (!stop_reason_array.stop_reasons.empty()) {
-    pub_stop_reason_->publish(stop_reason_array);
-  }
   pub_velocity_factor_->publish(velocity_factor_array);
   pub_infrastructure_commands_->publish(infrastructure_command_array);
   pub_debug_->publish(debug_marker_array);

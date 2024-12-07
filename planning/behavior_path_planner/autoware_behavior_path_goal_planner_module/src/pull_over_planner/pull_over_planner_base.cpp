@@ -14,6 +14,9 @@
 
 #include <autoware/behavior_path_goal_planner_module/pull_over_planner/pull_over_planner_base.hpp>
 
+#include <utility>
+#include <vector>
+
 namespace autoware::behavior_path_planner
 {
 

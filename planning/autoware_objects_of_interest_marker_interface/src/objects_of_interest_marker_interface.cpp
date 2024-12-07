@@ -18,6 +18,8 @@
 #include <autoware/universe_utils/math/constants.hpp>
 #include <autoware/universe_utils/math/trigonometry.hpp>
 
+#include <string>
+
 namespace autoware::objects_of_interest_marker_interface
 {
 using autoware_perception_msgs::msg::Shape;

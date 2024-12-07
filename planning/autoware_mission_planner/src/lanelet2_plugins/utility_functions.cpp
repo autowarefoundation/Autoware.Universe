@@ -23,6 +23,7 @@
 #include <lanelet2_core/geometry/Lanelet.h>
 
 #include <limits>
+#include <vector>
 
 namespace autoware::mission_planner::lanelet2
 {

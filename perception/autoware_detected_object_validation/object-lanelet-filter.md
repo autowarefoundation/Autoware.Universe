@@ -24,6 +24,11 @@ The objects only inside of the vector map will be published.
 
 ## Parameters
 
+| Name                   | Type     | Description                                                                          |
+| ---------------------- | -------- | ------------------------------------------------------------------------------------ |
+| `debug`                | `bool`   | if true, publish debug markers                                                       |
+| `lanelet_extra_margin` | `double` | `if > 0` lanelet polygons are expanded by extra margin, `if <= 0` margin is disabled |
+
 ### Core Parameters
 
 | Name                             | Type | Default Value | Description                               |

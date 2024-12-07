@@ -16,6 +16,10 @@
 
 #include <sensor_msgs/distortion_models.hpp>
 
+#include <algorithm>
+#include <string>
+#include <vector>
+
 namespace autoware::image_projection_based_fusion
 {
 bool checkCameraInfo(const sensor_msgs::msg::CameraInfo & camera_info)

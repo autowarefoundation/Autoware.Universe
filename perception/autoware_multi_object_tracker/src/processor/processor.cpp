@@ -20,6 +20,10 @@
 #include "autoware_perception_msgs/msg/tracked_objects.hpp"
 
 #include <iterator>
+#include <map>
+#include <memory>
+#include <string>
+#include <unordered_map>
 
 namespace autoware::multi_object_tracker
 {

@@ -15,14 +15,13 @@
 #include <autoware/behavior_velocity_planner_common/utilization/debug.hpp>
 #include <autoware/behavior_velocity_planner_common/utilization/util.hpp>
 #include <autoware/universe_utils/ros/marker_helper.hpp>
-namespace autoware::behavior_velocity_planner
+
+#include <string>
+#include <vector>
+namespace autoware::behavior_velocity_planner::debug
 {
-namespace debug
-{
-using autoware::universe_utils::appendMarkerArray;
 using autoware::universe_utils::createDefaultMarker;
 using autoware::universe_utils::createMarkerColor;
-using autoware::universe_utils::createMarkerOrientation;
 using autoware::universe_utils::createMarkerScale;
 
 visualization_msgs::msg::MarkerArray createPolygonMarkerArray(
@@ -33,8 +32,9 @@ visualization_msgs::msg::MarkerArray createPolygonMarkerArray(
   visualization_msgs::msg::MarkerArray msg;
   {
     auto marker = createDefaultMarker(
-      "map", now, ns.c_str(), module_id, visualization_msgs::msg::Marker::LINE_STRIP,
-      createMarkerScale(x, y, z), createMarkerColor(r, g, b, 0.8));
+      "map", now, ns, static_cast<int32_t>(module_id), visualization_msgs::msg::Marker::LINE_STRIP,
+      createMarkerScale(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)),
+      createMarkerColor(static_cast<float>(r), static_cast<float>(g), static_cast<float>(b), 0.8f));
     marker.lifetime = rclcpp::Duration::from_seconds(0.3);
 
     for (const auto & p : polygon.points) {
@@ -64,15 +64,18 @@ visualization_msgs::msg::MarkerArray createPathMarkerArray(
     const auto & p = path.points.at(i);
 
     auto marker = createDefaultMarker(
-      "map", now, ns.c_str(), planning_utils::bitShift(lane_id) + i,
-      visualization_msgs::msg::Marker::ARROW, createMarkerScale(x, y, z),
-      createMarkerColor(r, g, b, 0.999));
+      "map", now, ns, static_cast<int32_t>(planning_utils::bitShift(lane_id) + i),
+      visualization_msgs::msg::Marker::ARROW,
+      createMarkerScale(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)),
+      createMarkerColor(
+        static_cast<float>(r), static_cast<float>(g), static_cast<float>(b), 0.999f));
     marker.lifetime = rclcpp::Duration::from_seconds(0.3);
     marker.pose = p.point.pose;
 
     if (std::find(p.lane_ids.begin(), p.lane_ids.end(), lane_id) != p.lane_ids.end()) {
       // if p.lane_ids has lane_id
-      marker.color = createMarkerColor(r, g, b, 0.999);
+      marker.color = createMarkerColor(
+        static_cast<float>(r), static_cast<float>(g), static_cast<float>(b), 0.999f);
     } else {
       marker.color = createMarkerColor(0.5, 0.5, 0.5, 0.999);
     }
@@ -90,13 +93,13 @@ visualization_msgs::msg::MarkerArray createObjectsMarkerArray(
 
   auto marker = createDefaultMarker(
     "map", now, ns, 0, visualization_msgs::msg::Marker::CUBE, createMarkerScale(3.0, 1.0, 1.0),
-    createMarkerColor(r, g, b, 0.8));
+    createMarkerColor(static_cast<float>(r), static_cast<float>(g), static_cast<float>(b), 0.8f));
   marker.lifetime = rclcpp::Duration::from_seconds(1.0);
 
   for (size_t i = 0; i < objects.objects.size(); ++i) {
     const auto & object = objects.objects.at(i);
 
-    marker.id = planning_utils::bitShift(module_id) + i;
+    marker.id = static_cast<int>(planning_utils::bitShift(module_id) + i);
     marker.pose = object.kinematics.initial_pose_with_covariance.pose;
     msg.markers.push_back(marker);
   }
@@ -113,15 +116,14 @@ visualization_msgs::msg::MarkerArray createPointsMarkerArray(
 
   auto marker = createDefaultMarker(
     "map", now, ns, 0, visualization_msgs::msg::Marker::SPHERE, createMarkerScale(x, y, z),
-    createMarkerColor(r, g, b, 0.999));
+    createMarkerColor(static_cast<float>(r), static_cast<float>(g), static_cast<float>(b), 0.999f));
   marker.lifetime = rclcpp::Duration::from_seconds(0.3);
   for (size_t i = 0; i < points.size(); ++i) {
-    marker.id = i + planning_utils::bitShift(module_id);
+    marker.id = static_cast<int32_t>(i + planning_utils::bitShift(module_id));
     marker.pose.position = points.at(i);
     msg.markers.push_back(marker);
   }
 
   return msg;
 }
-}  // namespace debug
-}  // namespace autoware::behavior_velocity_planner
+}  // namespace autoware::behavior_velocity_planner::debug

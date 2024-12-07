@@ -15,6 +15,7 @@
 #include "grid_utils.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include <limits>
 #include <stdexcept>
 #include <utility>

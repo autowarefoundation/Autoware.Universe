@@ -16,6 +16,8 @@
 
 #include <autoware/component_interface_utils/rclcpp/exceptions.hpp>
 
+#include <memory>
+
 namespace autoware::operation_mode_transition_manager
 {
 

@@ -15,6 +15,8 @@
 #include "scenario_simulator_v2_adapter/converter_node.hpp"
 
 #include <regex>
+#include <string>
+#include <vector>
 
 namespace
 {

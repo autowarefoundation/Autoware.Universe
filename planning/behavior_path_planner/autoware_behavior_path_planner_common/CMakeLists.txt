@@ -35,6 +35,7 @@ if(BUILD_TESTING)
   ament_add_ros_isolated_gmock(test_${PROJECT_NAME}_utilities
     test/test_utils.cpp
     test/test_path_utils.cpp
+    test/test_traffic_light_utils.cpp
   )
 
   target_link_libraries(test_${PROJECT_NAME}_utilities
@@ -93,4 +94,6 @@ if(BUILD_TESTING)
   )
 endif()
 
-ament_auto_package()
+ament_auto_package(INSTALL_TO_SHARE
+  test_data
+)

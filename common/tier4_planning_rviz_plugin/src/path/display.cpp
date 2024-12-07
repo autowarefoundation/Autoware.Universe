@@ -16,6 +16,10 @@
 
 #include <pluginlib/class_list_macros.hpp>
 
+#include <memory>
+#include <string>
+#include <utility>
+
 namespace rviz_plugins
 {
 AutowarePathWithLaneIdDisplay::AutowarePathWithLaneIdDisplay()

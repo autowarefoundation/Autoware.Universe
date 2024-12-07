@@ -1,6 +1,5 @@
 /**:
   ros__parameters:
-    output_file: "" # if empty, metrics are not written to file
     ego_frame: base_link # reference frame of ego
 
     selected_metrics:

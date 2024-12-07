@@ -28,4 +28,7 @@ if(BUILD_TESTING)
   target_include_directories(test_${PROJECT_NAME} PRIVATE src)
 endif()
 
-ament_auto_package(INSTALL_TO_SHARE config)
+ament_auto_package(INSTALL_TO_SHARE
+  config
+  test_data
+)

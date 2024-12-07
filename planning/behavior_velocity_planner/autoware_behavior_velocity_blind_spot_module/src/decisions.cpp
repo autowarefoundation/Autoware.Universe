@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "scene.hpp"
+#include "autoware/behavior_velocity_blind_spot_module/scene.hpp"
 
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
 
@@ -24,7 +24,7 @@ namespace autoware::behavior_velocity_planner
  */
 template <typename T>
 void BlindSpotModule::setRTCStatusByDecision(
-  const T &, const tier4_planning_msgs::msg::PathWithLaneId & path)
+  const T &, [[maybe_unused]] const tier4_planning_msgs::msg::PathWithLaneId & path)
 {
   static_assert("Unsupported type passed to setRTCStatus");
   return;
@@ -33,8 +33,7 @@ void BlindSpotModule::setRTCStatusByDecision(
 template <typename T>
 void BlindSpotModule::reactRTCApprovalByDecision(
   [[maybe_unused]] const T & decision,
-  [[maybe_unused]] tier4_planning_msgs::msg::PathWithLaneId * path,
-  [[maybe_unused]] StopReason * stop_reason)
+  [[maybe_unused]] tier4_planning_msgs::msg::PathWithLaneId * path)
 {
   static_assert("Unsupported type passed to reactRTCApprovalByDecision");
 }
@@ -53,8 +52,7 @@ void BlindSpotModule::setRTCStatusByDecision(
 template <>
 void BlindSpotModule::reactRTCApprovalByDecision(
   [[maybe_unused]] const InternalError & decision,
-  [[maybe_unused]] tier4_planning_msgs::msg::PathWithLaneId * path,
-  [[maybe_unused]] StopReason * stop_reason)
+  [[maybe_unused]] tier4_planning_msgs::msg::PathWithLaneId * path)
 {
   return;
 }
@@ -73,8 +71,7 @@ void BlindSpotModule::setRTCStatusByDecision(
 template <>
 void BlindSpotModule::reactRTCApprovalByDecision(
   [[maybe_unused]] const OverPassJudge & decision,
-  [[maybe_unused]] tier4_planning_msgs::msg::PathWithLaneId * path,
-  [[maybe_unused]] StopReason * stop_reason)
+  [[maybe_unused]] tier4_planning_msgs::msg::PathWithLaneId * path)
 {
   return;
 }
@@ -95,8 +92,7 @@ void BlindSpotModule::setRTCStatusByDecision(
 
 template <>
 void BlindSpotModule::reactRTCApprovalByDecision(
-  const Unsafe & decision, tier4_planning_msgs::msg::PathWithLaneId * path,
-  StopReason * stop_reason)
+  const Unsafe & decision, tier4_planning_msgs::msg::PathWithLaneId * path)
 {
   if (!isActivated()) {
     constexpr double stop_vel = 0.0;
@@ -104,11 +100,7 @@ void BlindSpotModule::reactRTCApprovalByDecision(
     debug_data_.virtual_wall_pose = planning_utils::getAheadPose(
       decision.stop_line_idx, planner_data_->vehicle_info_.max_longitudinal_offset_m, *path);
 
-    tier4_planning_msgs::msg::StopFactor stop_factor;
     const auto stop_pose = path->points.at(decision.stop_line_idx).point.pose;
-    stop_factor.stop_pose = stop_pose;
-    stop_factor.stop_factor_points = planning_utils::toRosPoints(debug_data_.conflicting_targets);
-    planning_utils::appendStopReason(stop_factor, stop_reason);
     velocity_factor_.set(
       path->points, planner_data_->current_odometry->pose, stop_pose, VelocityFactor::UNKNOWN);
   }
@@ -131,7 +123,7 @@ void BlindSpotModule::setRTCStatusByDecision(
 
 template <>
 void BlindSpotModule::reactRTCApprovalByDecision(
-  const Safe & decision, tier4_planning_msgs::msg::PathWithLaneId * path, StopReason * stop_reason)
+  const Safe & decision, tier4_planning_msgs::msg::PathWithLaneId * path)
 {
   if (!isActivated()) {
     constexpr double stop_vel = 0.0;
@@ -139,11 +131,7 @@ void BlindSpotModule::reactRTCApprovalByDecision(
     debug_data_.virtual_wall_pose = planning_utils::getAheadPose(
       decision.stop_line_idx, planner_data_->vehicle_info_.max_longitudinal_offset_m, *path);
 
-    tier4_planning_msgs::msg::StopFactor stop_factor;
     const auto stop_pose = path->points.at(decision.stop_line_idx).point.pose;
-    stop_factor.stop_pose = stop_pose;
-    stop_factor.stop_factor_points = planning_utils::toRosPoints(debug_data_.conflicting_targets);
-    planning_utils::appendStopReason(stop_factor, stop_reason);
     velocity_factor_.set(
       path->points, planner_data_->current_odometry->pose, stop_pose, VelocityFactor::UNKNOWN);
   }

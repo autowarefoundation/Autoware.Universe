@@ -21,6 +21,11 @@
 
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <algorithm>
+#include <limits>
+#include <set>
+#include <utility>
+
 namespace yabloc::segment_filter
 {
 SegmentFilter::SegmentFilter(const rclcpp::NodeOptions & options)

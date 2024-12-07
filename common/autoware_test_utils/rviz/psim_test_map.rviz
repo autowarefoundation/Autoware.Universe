@@ -24,6 +24,8 @@ Panels:
     Name: AutowareStatePanel
   - Class: rviz_plugins::SimulatedClockPanel
     Name: SimulatedClockPanel
+  - Class: rviz_plugins::TrafficLightPublishPanel
+    Name: TrafficLightPublishPanel
 Visualization Manager:
   Class: ""
   Displays:
@@ -4429,7 +4431,7 @@ Visualization Manager:
         Value: /rviz/routing/rough_goal
     - Acceleration: 0
       Class: rviz_plugins/PedestrianInitialPoseTool
-      Interactive: true
+      Interactive: false
       Max velocity: 33.29999923706055
       Min velocity: -33.29999923706055
       Pose Topic: /simulation/dummy_perception_publisher/object_info
@@ -4443,7 +4445,7 @@ Visualization Manager:
     - Acceleration: 0
       Class: rviz_plugins/CarInitialPoseTool
       H vehicle height: 2
-      Interactive: true
+      Interactive: false
       L vehicle length: 4
       Max velocity: 33.29999923706055
       Min velocity: -33.29999923706055
@@ -4459,7 +4461,7 @@ Visualization Manager:
     - Acceleration: 0
       Class: rviz_plugins/BusInitialPoseTool
       H vehicle height: 3.5
-      Interactive: true
+      Interactive: false
       L vehicle length: 10.5
       Max velocity: 33.29999923706055
       Min velocity: -33.29999923706055
@@ -4557,6 +4559,8 @@ Window Geometry:
   SimulatedClockPanel:
     collapsed: false
   Tool Properties:
+    collapsed: false
+  TrafficLightPublishPanel:
     collapsed: false
   Views:
     collapsed: false

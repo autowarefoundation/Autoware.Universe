@@ -16,7 +16,6 @@
 #define PERCEPTION_ONLINE_EVALUATOR__METRICS__DETECTION_COUNT_HPP_
 
 #include "perception_online_evaluator/parameters.hpp"
-#include "perception_online_evaluator/stat.hpp"
 #include "tf2_ros/buffer.h"
 
 #include <rclcpp/rclcpp.hpp>

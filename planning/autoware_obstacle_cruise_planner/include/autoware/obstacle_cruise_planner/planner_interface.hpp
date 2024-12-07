@@ -42,6 +42,7 @@ using MetricArray = tier4_metric_msgs::msg::MetricArray;
 class PlannerInterface
 {
 public:
+  virtual ~PlannerInterface() = default;
   PlannerInterface(
     rclcpp::Node & node, const LongitudinalInfo & longitudinal_info,
     const autoware::vehicle_info_utils::VehicleInfo & vehicle_info,
@@ -53,7 +54,6 @@ public:
     slow_down_param_(SlowDownParam(node)),
     stop_param_(StopParam(node, longitudinal_info))
   {
-    stop_reasons_pub_ = node.create_publisher<StopReasonArray>("~/output/stop_reasons", 1);
     velocity_factors_pub_ =
       node.create_publisher<VelocityFactorArray>("/planning/velocity_factors/obstacle_cruise", 1);
     stop_speed_exceeded_pub_ =
@@ -65,8 +65,6 @@ public:
     moving_object_hysteresis_range =
       node.declare_parameter<double>("slow_down.moving_object_hysteresis_range");
   }
-
-  PlannerInterface() = default;
 
   void setParam(
     const bool enable_debug_info, const bool enable_calculation_time_info,
@@ -147,7 +145,6 @@ protected:
     stop_watch_;
 
   // Publishers
-  rclcpp::Publisher<StopReasonArray>::SharedPtr stop_reasons_pub_;
   rclcpp::Publisher<VelocityFactorArray>::SharedPtr velocity_factors_pub_;
   rclcpp::Publisher<StopSpeedExceeded>::SharedPtr stop_speed_exceeded_pub_;
   rclcpp::Publisher<MetricArray>::SharedPtr metrics_pub_;

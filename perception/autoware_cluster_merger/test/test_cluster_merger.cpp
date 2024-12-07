@@ -19,6 +19,8 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <string>
 #include <vector>
 
 using autoware::cluster_merger::ClusterMergerNode;

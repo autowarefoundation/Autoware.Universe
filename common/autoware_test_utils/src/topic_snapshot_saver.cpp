@@ -19,6 +19,7 @@
 
 #include <autoware_adapi_v1_msgs/msg/operation_mode_state.hpp>
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
+#include <autoware_perception_msgs/msg/tracked_objects.hpp>
 #include <autoware_perception_msgs/msg/traffic_light_group_array.hpp>
 #include <autoware_planning_msgs/msg/lanelet_route.hpp>
 #include <geometry_msgs/msg/accel_with_covariance_stamped.hpp>
@@ -28,18 +29,24 @@
 #include <yaml-cpp/yaml.h>
 
 #include <fstream>
+#include <iostream>
+#include <memory>
 #include <mutex>
 #include <optional>
+#include <string>
 #include <unordered_map>
+#include <utility>
 #include <variant>
+#include <vector>
 
 using MessageType = std::variant<
-  nav_msgs::msg::Odometry,                               // 0
-  geometry_msgs::msg::AccelWithCovarianceStamped,        // 1
-  autoware_perception_msgs::msg::PredictedObjects,       // 2
-  autoware_adapi_v1_msgs::msg::OperationModeState,       // 3
-  autoware_planning_msgs::msg::LaneletRoute,             // 4
-  autoware_perception_msgs::msg::TrafficLightGroupArray  // 5
+  nav_msgs::msg::Odometry,                                // 0
+  geometry_msgs::msg::AccelWithCovarianceStamped,         // 1
+  autoware_perception_msgs::msg::PredictedObjects,        // 2
+  autoware_adapi_v1_msgs::msg::OperationModeState,        // 3
+  autoware_planning_msgs::msg::LaneletRoute,              // 4
+  autoware_perception_msgs::msg::TrafficLightGroupArray,  // 5
+  autoware_perception_msgs::msg::TrackedObjects           // 6
   >;
 
 std::optional<size_t> get_topic_index(const std::string & name)
@@ -61,6 +68,9 @@ std::optional<size_t> get_topic_index(const std::string & name)
   }
   if (name == "TrafficLightGroupArray") {
     return 5;
+  }
+  if (name == "TrackedObjects") {
+    return 6;
   }
   return std::nullopt;
 }
@@ -185,6 +195,7 @@ public:
       REGISTER_CALLBACK(3);
       REGISTER_CALLBACK(4);
       REGISTER_CALLBACK(5);
+      REGISTER_CALLBACK(6);
     }
   }
 
@@ -231,6 +242,7 @@ private:
       REGISTER_WRITE_TYPE(3);
       REGISTER_WRITE_TYPE(4);
       REGISTER_WRITE_TYPE(5);
+      REGISTER_WRITE_TYPE(6);
     }
 
     const std::string desc = std::string(R"(#
@@ -241,7 +253,7 @@ private:
 # map_path_uri: package://<package-name>/<resource-path>
 # fields(this is array)
 #   - name: <field-name-for-your-yaml-of-this-topic, str>
-#     type: either {Odometry | AccelWithCovarianceStamped | PredictedObjects | OperationModeState | LaneletRoute | TrafficLightGroupArray | TBD}
+#     type: either {Odometry | AccelWithCovarianceStamped | PredictedObjects | OperationModeState | LaneletRoute | TrafficLightGroupArray | TrackedObjects | TBD}
 #     topic: <topic-name, str>
 #
 )");

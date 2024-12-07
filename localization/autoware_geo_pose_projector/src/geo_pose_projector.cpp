@@ -17,6 +17,8 @@
 #include <autoware/geography_utils/height.hpp>
 #include <autoware/geography_utils/projection.hpp>
 
+#include <memory>
+
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #else

@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_component_interface_specs</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>The autoware_component_interface_specs package</description>
   <maintainer email="isamu.takagi@tier4.jp">Takagi, Isamu</maintainer>
   <maintainer email="yukihiro.saito@tier4.jp">Yukihiro Saito</maintainer>
@@ -12,6 +12,7 @@
   <buildtool_depend>autoware_cmake</buildtool_depend>
 
   <depend>autoware_adapi_v1_msgs</depend>
+  <depend>autoware_map_msgs</depend>
   <depend>autoware_perception_msgs</depend>
   <depend>autoware_planning_msgs</depend>
   <depend>autoware_vehicle_msgs</depend>
@@ -21,7 +22,6 @@
   <depend>rosidl_runtime_cpp</depend>
   <depend>tier4_control_msgs</depend>
   <depend>tier4_localization_msgs</depend>
-  <depend>tier4_map_msgs</depend>
   <depend>tier4_planning_msgs</depend>
   <depend>tier4_system_msgs</depend>
   <depend>tier4_vehicle_msgs</depend>

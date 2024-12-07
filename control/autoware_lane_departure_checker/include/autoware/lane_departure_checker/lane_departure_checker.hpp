@@ -157,18 +157,9 @@ private:
   Param param_;
   std::shared_ptr<autoware::vehicle_info_utils::VehicleInfo> vehicle_info_ptr_;
 
-  static PoseDeviation calcTrajectoryDeviation(
-    const Trajectory & trajectory, const geometry_msgs::msg::Pose & pose,
-    const double dist_threshold, const double yaw_threshold);
-
-  static std::vector<LinearRing2d> createVehiclePassingAreas(
-    const std::vector<LinearRing2d> & vehicle_footprints);
-
   bool willLeaveLane(
     const lanelet::ConstLanelets & candidate_lanelets,
     const std::vector<LinearRing2d> & vehicle_footprints) const;
-
-  double calcMaxSearchLengthForBoundaries(const Trajectory & trajectory) const;
 
   static SegmentRtree extractUncrossableBoundaries(
     const lanelet::LaneletMap & lanelet_map, const geometry_msgs::msg::Point & ego_point,

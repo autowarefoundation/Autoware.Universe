@@ -54,9 +54,9 @@ protected:
   using pcl::VoxelGrid<PointT>::div_b_;
   using pcl::VoxelGrid<PointT>::inverse_leaf_size_;
 
-  using PointCloud = typename pcl::Filter<PointT>::PointCloud;
-  using PointCloudPtr = typename PointCloud::Ptr;
-  using PointCloudConstPtr = typename PointCloud::ConstPtr;
+  using FilteredPointCloud = typename pcl::Filter<PointT>::PointCloud;
+  using FilteredPointCloudPtr = typename FilteredPointCloud::Ptr;
+  using FilteredPointCloudConstPtr = typename FilteredPointCloud::ConstPtr;
 
 public:
   using pcl::VoxelGrid<PointT>::leaf_layout_;
@@ -93,8 +93,8 @@ protected:
 
 public:
   using VoxelGridPointXYZ = VoxelGridEx<pcl::PointXYZ>;
-  using PointCloud = typename pcl::Filter<pcl::PointXYZ>::PointCloud;
-  using PointCloudPtr = typename PointCloud::Ptr;
+  using FilteredPointCloud = typename pcl::Filter<pcl::PointXYZ>::PointCloud;
+  using FilteredPointCloudPtr = typename FilteredPointCloud::Ptr;
   explicit VoxelGridMapLoader(
     rclcpp::Node * node, double leaf_size, double downsize_ratio_z_axis,
     std::string * tf_map_input_frame);
@@ -106,11 +106,12 @@ public:
     const pcl::PointXYZ & point, const double distance_threshold, VoxelGridPointXYZ & voxel,
     pcl::search::Search<pcl::PointXYZ>::Ptr tree);
   bool is_close_to_neighbor_voxels(
-    const pcl::PointXYZ & point, const double distance_threshold, const PointCloudPtr & map,
+    const pcl::PointXYZ & point, const double distance_threshold, const FilteredPointCloudPtr & map,
     VoxelGridPointXYZ & voxel) const;
   bool is_in_voxel(
     const pcl::PointXYZ & src_point, const pcl::PointXYZ & target_point,
-    const double distance_threshold, const PointCloudPtr & map, VoxelGridPointXYZ & voxel) const;
+    const double distance_threshold, const FilteredPointCloudPtr & map,
+    VoxelGridPointXYZ & voxel) const;
 
   void publish_downsampled_map(const pcl::PointCloud<pcl::PointXYZ> & downsampled_pc);
   std::string * tf_map_input_frame_;
@@ -121,7 +122,7 @@ class VoxelGridStaticMapLoader : public VoxelGridMapLoader
 protected:
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr sub_map_;
   VoxelGridPointXYZ voxel_grid_;
-  PointCloudPtr voxel_map_ptr_;
+  FilteredPointCloudPtr voxel_map_ptr_;
   std::atomic_bool is_initialized_{false};
 
 public:
@@ -138,7 +139,7 @@ protected:
   struct MapGridVoxelInfo
   {
     VoxelGridPointXYZ map_cell_voxel_grid;
-    PointCloudPtr map_cell_pc_ptr;
+    FilteredPointCloudPtr map_cell_pc_ptr;
     float min_b_x, min_b_y, max_b_x, max_b_y;
     pcl::search::Search<pcl::PointXYZ>::Ptr map_cell_kdtree;
   };
@@ -291,7 +292,7 @@ public:
     pcl::fromROSMsg(map_cell_to_add.pointcloud, map_cell_pc_tmp);
 
     VoxelGridPointXYZ map_cell_voxel_grid_tmp;
-    PointCloudPtr map_cell_downsampled_pc_ptr_tmp;
+    FilteredPointCloudPtr map_cell_downsampled_pc_ptr_tmp;
 
     auto map_cell_voxel_input_tmp_ptr =
       std::make_shared<pcl::PointCloud<pcl::PointXYZ>>(map_cell_pc_tmp);

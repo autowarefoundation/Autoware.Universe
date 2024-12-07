@@ -18,6 +18,8 @@
 
 #include <gtest/gtest.h>
 
+#include <vector>
+
 // Test case 1: Test if the decoded image is the same as the original image
 TEST(UtilsTest, runLengthEncoderDecoderTest)
 {

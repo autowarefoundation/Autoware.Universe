@@ -47,6 +47,7 @@
 #include "tier4_vehicle_msgs/srv/update_accel_brake_map.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
 
+#include <cstdio>
 #include <fstream>
 #include <iomanip>
 #include <memory>

@@ -17,6 +17,8 @@
 #include <pcl/kdtree/kdtree.h>
 #include <pcl/segmentation/extract_clusters.h>
 
+#include <vector>
+
 namespace autoware::euclidean_cluster
 {
 EuclideanCluster::EuclideanCluster()

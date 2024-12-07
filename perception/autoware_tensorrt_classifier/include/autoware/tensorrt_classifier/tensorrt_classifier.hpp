@@ -107,7 +107,6 @@ private:
   std::vector<float> input_h_;
   CudaUniquePtr<float[]> input_d_;
 
-  bool needs_output_decode_;
   size_t out_elem_num_;
   size_t out_elem_num_per_batch_;
   CudaUniquePtr<float[]> out_prob_d_;

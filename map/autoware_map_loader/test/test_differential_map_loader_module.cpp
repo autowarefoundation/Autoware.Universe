@@ -21,7 +21,9 @@
 #include <gtest/gtest.h>
 #include <pcl/io/pcd_io.h>
 
+#include <map>
 #include <memory>
+#include <string>
 
 using autoware::map_loader::DifferentialMapLoaderModule;
 using autoware_map_msgs::srv::GetDifferentialPointCloudMap;

@@ -55,7 +55,6 @@ private:
   tf2_ros::TransformListener tf_listener_{tf_buffer_};
 
   DetectionClassRemapper detection_class_remapper_;
-  float score_threshold_{0.0};
   std::vector<std::string> class_names_;
 
   NonMaximumSuppression iou_bev_nms_;

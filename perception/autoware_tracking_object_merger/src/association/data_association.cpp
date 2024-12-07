@@ -94,11 +94,11 @@ void DataAssociation::assign(
   const Eigen::MatrixXd & src, std::unordered_map<int, int> & direct_assignment,
   std::unordered_map<int, int> & reverse_assignment)
 {
-  std::vector<std::vector<double>> score(src.rows());
+  std::vector<std::vector<double>> score(static_cast<size_t>(src.rows()));
   for (int row = 0; row < src.rows(); ++row) {
-    score.at(row).resize(src.cols());
+    score.at(static_cast<size_t>(row)).resize(static_cast<size_t>(src.cols()));
     for (int col = 0; col < src.cols(); ++col) {
-      score.at(row).at(col) = src(row, col);
+      score.at(static_cast<size_t>(row)).at(static_cast<size_t>(col)) = src(row, col);
     }
   }
   // Solve
@@ -134,15 +134,17 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
   const autoware_perception_msgs::msg::TrackedObjects & objects0,
   const autoware_perception_msgs::msg::TrackedObjects & objects1)
 {
-  Eigen::MatrixXd score_matrix =
-    Eigen::MatrixXd::Zero(objects1.objects.size(), objects0.objects.size());
+  Eigen::MatrixXd score_matrix = Eigen::MatrixXd::Zero(
+    static_cast<Eigen::Index>(objects1.objects.size()),
+    static_cast<Eigen::Index>(objects0.objects.size()));
   for (size_t objects1_idx = 0; objects1_idx < objects1.objects.size(); ++objects1_idx) {
     const auto & object1 = objects1.objects.at(objects1_idx);
     for (size_t objects0_idx = 0; objects0_idx < objects0.objects.size(); ++objects0_idx) {
       const auto & object0 = objects0.objects.at(objects0_idx);
       const double score = calcScoreBetweenObjects(object0, object1);
 
-      score_matrix(objects1_idx, objects0_idx) = score;
+      score_matrix(
+        static_cast<Eigen::Index>(objects1_idx), static_cast<Eigen::Index>(objects0_idx)) = score;
     }
   }
   return score_matrix;
@@ -159,7 +161,8 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
   const autoware_perception_msgs::msg::TrackedObjects & objects0,
   const std::vector<TrackerState> & trackers)
 {
-  Eigen::MatrixXd score_matrix = Eigen::MatrixXd::Zero(trackers.size(), objects0.objects.size());
+  Eigen::MatrixXd score_matrix = Eigen::MatrixXd::Zero(
+    static_cast<Eigen::Index>(trackers.size()), static_cast<Eigen::Index>(objects0.objects.size()));
   for (size_t trackers_idx = 0; trackers_idx < trackers.size(); ++trackers_idx) {
     const auto & object1 = trackers.at(trackers_idx).getObject();
 
@@ -167,7 +170,8 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
       const auto & object0 = objects0.objects.at(objects0_idx);
       const double score = calcScoreBetweenObjects(object0, object1);
 
-      score_matrix(trackers_idx, objects0_idx) = score;
+      score_matrix(
+        static_cast<Eigen::Index>(trackers_idx), static_cast<Eigen::Index>(objects0_idx)) = score;
     }
   }
   return score_matrix;

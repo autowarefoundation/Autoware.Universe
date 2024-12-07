@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>tier4_system_launch</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>The tier4_system_launch package</description>
   <maintainer email="fumihito.ito@tier4.jp">Fumihito Ito</maintainer>
   <maintainer email="tetsuhiro.kawaguchi@tier4.jp">TetsuKawa</maintainer>

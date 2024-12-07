@@ -2,7 +2,7 @@
 <launch>
   <!-- Essential parameters -->
   <arg name="vehicle_model" default="sample_vehicle" description="vehicle model name"/>
-  <arg name="sensor_model" default="sample_sensor_kit" description="sensor model name"/>
+  <arg name="sensor_model" default="awsim_sensor_kit" description="sensor model name"/>
   <arg name="rviz_config" default="$(find-pkg-share autoware_test_utils)/rviz/psim_test_map.rviz" description="rviz config"/>
   <arg name="use_sim_time" default="true"/>
 

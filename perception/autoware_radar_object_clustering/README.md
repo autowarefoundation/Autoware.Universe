@@ -17,12 +17,12 @@ Therefore, by this package the multiple detection results are clustered into one
 
 ### Algorithm
 
-- 1. Sort by distance from `base_link`
+#### 1. Sort by distance from `base_link`
 
 At first, to prevent changing the result from depending on the order of objects in DetectedObjects, input objects are sorted by distance from `base_link`.
 In addition, to apply matching in closeness order considering occlusion, objects are sorted in order of short distance in advance.
 
-- 2. Clustering
+#### 2. Clustering
 
 If two radar objects are near, and yaw angle direction and velocity between two radar objects is similar (the degree of these is defined by parameters), then these are clustered.
 Note that radar characteristic affect parameters for this matching.
@@ -32,13 +32,13 @@ For example, if resolution of range distance or angle is low and accuracy of vel
 
 After grouping for all radar objects, if multiple radar objects are grouping, the kinematics of the new clustered object is calculated from average of that and label and shape of the new clustered object is calculated from top confidence in radar objects.
 
-- 3. Fixed label correction
+#### 3. Fixed label correction
 
 When the label information from radar outputs lack accuracy, `is_fixed_label` parameter is recommended to set `true`.
 If the parameter is true, the label of a clustered object is overwritten by the label set by `fixed_label` parameter.
 If this package use for faraway dynamic object detection with radar, the parameter is recommended to set to `VEHICLE`.
 
-- 4. Fixed size correction
+#### 4. Fixed size correction
 
 When the size information from radar outputs lack accuracy, `is_fixed_size` parameter is recommended to set `true`.
 If the parameter is true, the size of a clustered object is overwritten by the label set by `size_x`, `size_y`, and `size_z` parameters.

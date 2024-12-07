@@ -18,7 +18,9 @@
 #include <syslog.h>
 
 #include <cerrno>
+#include <cstdio>
 #include <cstring>
+#include <string>
 
 /**
  * @brief print usage

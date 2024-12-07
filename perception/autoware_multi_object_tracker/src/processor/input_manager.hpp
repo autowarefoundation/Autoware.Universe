@@ -57,7 +57,7 @@ public:
   bool isTimeInitialized() const { return initial_count_ > 0; }
   uint getIndex() const { return index_; }
   void getObjectsOlderThan(
-    const rclcpp::Time & object_latest_time, const rclcpp::Time & object_oldest_time,
+    const rclcpp::Time & object_latest_time, const rclcpp::Time & object_earliest_time,
     ObjectsList & objects_list);
   bool isSpawnEnabled() const { return is_spawn_enabled_; }
 
@@ -88,7 +88,6 @@ private:
 
   // bool is_time_initialized_{false};
   int initial_count_{0};
-  double expected_interval_{};
   double latency_mean_{};
   double latency_var_{};
   double interval_mean_{};
@@ -130,13 +129,11 @@ private:
   double target_stream_latency_std_{0.04};   // [s]
   double target_stream_interval_{0.1};       // [s]
   double target_stream_interval_std_{0.02};  // [s]
-  double target_latency_{0.2};               // [s]
-  double target_latency_band_{1.0};          // [s]
 
 private:
   void getObjectTimeInterval(
     const rclcpp::Time & now, rclcpp::Time & object_latest_time,
-    rclcpp::Time & object_oldest_time) const;
+    rclcpp::Time & object_earliest_time) const;
   void optimizeTimings();
 };
 

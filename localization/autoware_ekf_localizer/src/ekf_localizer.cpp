@@ -33,6 +33,7 @@
 #include <queue>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace autoware::ekf_localizer
 {
@@ -73,6 +74,8 @@ EKFLocalizer::EKFLocalizer(const rclcpp::NodeOptions & node_options)
   pub_biased_pose_cov_ = create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "ekf_biased_pose_with_covariance", 1);
   pub_diag_ = this->create_publisher<diagnostic_msgs::msg::DiagnosticArray>("/diagnostics", 10);
+  pub_processing_time_ =
+    create_publisher<tier4_debug_msgs::msg::Float64Stamped>("debug/processing_time_ms", 1);
   sub_initialpose_ = create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "initialpose", 1, std::bind(&EKFLocalizer::callback_initial_pose, this, _1));
   sub_pose_with_cov_ = create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
@@ -129,6 +132,8 @@ void EKFLocalizer::update_predict_frequency(const rclcpp::Time & current_time)
  */
 void EKFLocalizer::timer_callback()
 {
+  stop_watch_timer_cb_.tic();
+
   const rclcpp::Time current_time = this->now();
 
   if (!is_activated_) {
@@ -219,6 +224,12 @@ void EKFLocalizer::timer_callback()
   /* publish ekf result */
   publish_estimate_result(current_ekf_pose, current_biased_ekf_pose, current_ekf_twist);
   publish_diagnostics(current_ekf_pose, current_time);
+
+  /* publish processing time */
+  const double elapsed_time = stop_watch_timer_cb_.toc();
+  pub_processing_time_->publish(tier4_debug_msgs::build<tier4_debug_msgs::msg::Float64Stamped>()
+                                  .stamp(current_time)
+                                  .data(elapsed_time));
 }
 
 /*

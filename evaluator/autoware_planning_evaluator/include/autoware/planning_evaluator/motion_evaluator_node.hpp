@@ -16,7 +16,7 @@
 #define AUTOWARE__PLANNING_EVALUATOR__MOTION_EVALUATOR_NODE_HPP_
 
 #include "autoware/planning_evaluator/metrics_calculator.hpp"
-#include "autoware/planning_evaluator/stat.hpp"
+#include "autoware/universe_utils/math/accumulator.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "tf2_ros/buffer.h"
 #include "tf2_ros/transform_listener.h"
@@ -33,6 +33,7 @@
 
 namespace planning_diagnostics
 {
+using autoware::universe_utils::Accumulator;
 using autoware_planning_msgs::msg::Trajectory;
 using autoware_planning_msgs::msg::TrajectoryPoint;
 
@@ -60,7 +61,7 @@ private:
   std::unique_ptr<tf2_ros::TransformListener> tf_listener_ptr_;
 
   // Parameters
-  std::string output_file_str_;
+  bool output_metrics_;
 
   // Calculator
   MetricsCalculator metrics_calculator_;

@@ -17,6 +17,8 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+
 class VehicleInfoUtilTest : public ::testing::Test
 {
 protected:

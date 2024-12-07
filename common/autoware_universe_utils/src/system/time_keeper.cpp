@@ -19,7 +19,10 @@
 
 #include <fmt/format.h>
 
+#include <memory>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 namespace autoware::universe_utils
 {
@@ -135,9 +138,10 @@ void TimeKeeper::start_track(const std::string & func_name)
     root_node_thread_id_ = std::this_thread::get_id();
   } else {
     if (root_node_thread_id_ != std::this_thread::get_id()) {
-      RCLCPP_WARN(
-        rclcpp::get_logger("TimeKeeper"),
-        "TimeKeeper::start_track() is called from a different thread. Ignoring the call.");
+      const auto warning_msg = fmt::format(
+        "TimeKeeper::start_track({}) is called from a different thread. Ignoring the call.",
+        func_name);
+      RCLCPP_WARN(rclcpp::get_logger("TimeKeeper"), "%s", warning_msg.c_str());
       return;
     }
     current_time_node_ = current_time_node_->add_child(func_name);

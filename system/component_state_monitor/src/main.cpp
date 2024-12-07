@@ -14,6 +14,8 @@
 
 #include "main.hpp"
 
+#include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace component_state_monitor

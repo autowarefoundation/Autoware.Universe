@@ -21,6 +21,7 @@
 #include "gtest/gtest.h"
 
 #include <cmath>
+#include <vector>
 
 /*
  * Throttle data: (vel, throttle -> acc)

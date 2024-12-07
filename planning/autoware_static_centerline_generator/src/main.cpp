@@ -14,6 +14,9 @@
 
 #include "static_centerline_generator_node.hpp"
 
+#include <memory>
+#include <string>
+
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);

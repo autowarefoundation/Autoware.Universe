@@ -100,6 +100,9 @@ public:
 
   AstarSearch(
     const PlannerCommonParam & planner_common_param, const VehicleShape & collision_vehicle_shape,
+    const AstarParam & astar_param, const rclcpp::Clock::SharedPtr & clock);
+  AstarSearch(
+    const PlannerCommonParam & planner_common_param, const VehicleShape & collision_vehicle_shape,
     rclcpp::Node & node)
   : AstarSearch(
       planner_common_param, collision_vehicle_shape,
@@ -113,7 +116,8 @@ public:
         node.declare_parameter<double>("astar.distance_heuristic_weight"),
         node.declare_parameter<double>("astar.smoothness_weight"),
         node.declare_parameter<double>("astar.obstacle_distance_weight"),
-        node.declare_parameter<double>("astar.goal_lat_distance_weight")})
+        node.declare_parameter<double>("astar.goal_lat_distance_weight")},
+      node.get_clock())
   {
   }
 

@@ -15,6 +15,8 @@
 #include "autoware/pure_pursuit/util/interpolate.hpp"
 
 #include <algorithm>
+#include <cstdio>
+#include <iostream>
 #include <vector>
 
 namespace autoware::pure_pursuit

@@ -14,6 +14,8 @@
 
 #include "utils.hpp"
 
+#include <string>
+
 std::filesystem::path resource(const std::string & path)
 {
   return std::filesystem::path(TEST_RESOURCE_PATH) / path;

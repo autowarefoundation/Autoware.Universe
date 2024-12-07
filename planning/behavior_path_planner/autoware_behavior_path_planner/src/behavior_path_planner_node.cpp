@@ -51,7 +51,6 @@ BehaviorPathPlannerNode::BehaviorPathPlannerNode(const rclcpp::NodeOptions & nod
   const auto durable_qos = rclcpp::QoS(1).transient_local();
   modified_goal_publisher_ =
     create_publisher<PoseWithUuidStamped>("~/output/modified_goal", durable_qos);
-  stop_reason_publisher_ = create_publisher<StopReasonArray>("~/output/stop_reasons", 1);
   pub_steering_factors_ =
     create_publisher<SteeringFactorArray>("/planning/steering_factor/intersection", 1);
   reroute_availability_publisher_ =
@@ -408,7 +407,6 @@ void BehaviorPathPlannerNode::run()
   publishSceneModuleDebugMsg(planner_manager_->getDebugMsg());
   publishPathCandidate(planner_manager_->getSceneModuleManagers(), planner_data_);
   publishPathReference(planner_manager_->getSceneModuleManagers(), planner_data_);
-  stop_reason_publisher_->publish(planner_manager_->getStopReasons());
 
   // publish modified goal only when it is updated
   if (

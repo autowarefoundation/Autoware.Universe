@@ -20,6 +20,8 @@
 
 #include <visualization_msgs/msg/marker_array.hpp>
 
+#include <string>
+
 using autoware::universe_utils::createDefaultMarker;
 using autoware::universe_utils::createDeletedDefaultMarker;
 using autoware::universe_utils::createMarkerColor;

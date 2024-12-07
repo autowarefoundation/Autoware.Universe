@@ -21,6 +21,7 @@
 #include <limits>
 #include <memory>
 #include <optional>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -335,8 +336,7 @@ bool ControlPerformanceAnalysisCore::calculateDrivingVars()
         lpf(curr.desired_steering_angle.data, prev->desired_steering_angle.data);
       }
 
-      prev_driving_vars_ =
-        std::move(std::make_unique<msg::DrivingMonitorStamped>(driving_status_vars));
+      prev_driving_vars_ = std::make_unique<msg::DrivingMonitorStamped>(driving_status_vars);
 
       last_odom_header.stamp = odom_history_ptr_->at(odom_size - 1).header.stamp;
       last_steering_report.stamp = current_vec_steering_msg_ptr_->stamp;

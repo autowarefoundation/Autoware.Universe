@@ -19,6 +19,7 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
   src/util.cpp
   src/goal_planner_module.cpp
   src/manager.cpp
+  src/decision_state.cpp
 )
 
 if(BUILD_EXAMPLES)

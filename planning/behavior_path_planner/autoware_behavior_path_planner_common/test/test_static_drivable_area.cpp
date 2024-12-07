@@ -32,6 +32,7 @@
 #include <lanelet2_core/primitives/Point.h>
 
 #include <memory>
+#include <vector>
 
 const auto intersection_map =
   autoware::test_utils::make_map_bin_msg(autoware::test_utils::get_absolute_path_to_lanelet_map(

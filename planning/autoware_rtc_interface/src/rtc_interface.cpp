@@ -14,6 +14,9 @@
 
 #include "autoware/rtc_interface/rtc_interface.hpp"
 
+#include <string>
+#include <vector>
+
 namespace
 {
 using tier4_rtc_msgs::msg::Module;

@@ -22,8 +22,10 @@
 
 #include <algorithm>
 #include <cmath>
+#include <deque>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace autoware::pose_instability_detector
 {

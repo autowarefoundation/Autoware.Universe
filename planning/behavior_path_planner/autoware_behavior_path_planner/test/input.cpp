@@ -13,6 +13,8 @@
 // limitations under the License.
 #include "input.hpp"
 
+#include <vector>
+
 namespace autoware::behavior_path_planner
 {
 using autoware_planning_msgs::msg::PathPoint;

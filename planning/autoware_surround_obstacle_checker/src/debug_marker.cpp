@@ -17,6 +17,8 @@
 #include <autoware/motion_utils/marker/marker_helper.hpp>
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware/universe_utils/ros/marker_helper.hpp>
+
+#include <string>
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #else
@@ -60,13 +62,12 @@ using autoware::universe_utils::createMarkerScale;
 using autoware::universe_utils::createPoint;
 
 SurroundObstacleCheckerDebugNode::SurroundObstacleCheckerDebugNode(
-  const autoware::vehicle_info_utils::VehicleInfo & vehicle_info, const double base_link2front,
-  const std::string & object_label, const double & surround_check_front_distance,
-  const double & surround_check_side_distance, const double & surround_check_back_distance,
-  const double & surround_check_hysteresis_distance, const geometry_msgs::msg::Pose & self_pose,
-  const rclcpp::Clock::SharedPtr clock, rclcpp::Node & node)
+  const autoware::vehicle_info_utils::VehicleInfo & vehicle_info, const std::string & object_label,
+  const double & surround_check_front_distance, const double & surround_check_side_distance,
+  const double & surround_check_back_distance, const double & surround_check_hysteresis_distance,
+  const geometry_msgs::msg::Pose & self_pose, const rclcpp::Clock::SharedPtr clock,
+  rclcpp::Node & node)
 : vehicle_info_(vehicle_info),
-  base_link2front_(base_link2front),
   object_label_(object_label),
   surround_check_front_distance_(surround_check_front_distance),
   surround_check_side_distance_(surround_check_side_distance),
@@ -76,7 +77,6 @@ SurroundObstacleCheckerDebugNode::SurroundObstacleCheckerDebugNode(
   clock_(clock)
 {
   debug_viz_pub_ = node.create_publisher<visualization_msgs::msg::MarkerArray>("~/debug/marker", 1);
-  stop_reason_pub_ = node.create_publisher<StopReasonArray>("~/output/stop_reasons", 1);
   velocity_factor_pub_ =
     node.create_publisher<VelocityFactorArray>("/planning/velocity_factors/surround_obstacle", 1);
   vehicle_footprint_pub_ = node.create_publisher<PolygonStamped>("~/debug/footprint", 1);
@@ -143,8 +143,6 @@ void SurroundObstacleCheckerDebugNode::publish()
   debug_viz_pub_->publish(visualization_msg);
 
   /* publish stop reason for autoware api */
-  const auto stop_reason_msg = makeStopReasonArray();
-  stop_reason_pub_->publish(stop_reason_msg);
   const auto velocity_factor_msg = makeVelocityFactorArray();
   velocity_factor_pub_->publish(velocity_factor_msg);
 
@@ -170,33 +168,6 @@ MarkerArray SurroundObstacleCheckerDebugNode::makeVisualizationMarker()
   }
 
   return msg;
-}
-
-StopReasonArray SurroundObstacleCheckerDebugNode::makeStopReasonArray()
-{
-  // create header
-  std_msgs::msg::Header header;
-  header.frame_id = "map";
-  header.stamp = this->clock_->now();
-
-  // create stop reason stamped
-  StopReason stop_reason_msg;
-  stop_reason_msg.reason = StopReason::SURROUND_OBSTACLE_CHECK;
-  StopFactor stop_factor;
-
-  if (stop_pose_ptr_ != nullptr) {
-    stop_factor.stop_pose = *stop_pose_ptr_;
-    if (stop_obstacle_point_ptr_ != nullptr) {
-      stop_factor.stop_factor_points.emplace_back(*stop_obstacle_point_ptr_);
-    }
-    stop_reason_msg.stop_factors.emplace_back(stop_factor);
-  }
-
-  // create stop reason array
-  StopReasonArray stop_reason_array;
-  stop_reason_array.header = header;
-  stop_reason_array.stop_reasons.emplace_back(stop_reason_msg);
-  return stop_reason_array;
 }
 
 VelocityFactorArray SurroundObstacleCheckerDebugNode::makeVelocityFactorArray()

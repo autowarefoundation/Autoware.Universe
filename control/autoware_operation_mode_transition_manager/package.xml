@@ -1,6 +1,6 @@
 <package format="3">
   <name>autoware_operation_mode_transition_manager</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>The operation_mode_transition_manager package</description>
   <maintainer email="takamasa.horibe@tier4.jp">Takamasa Horibe</maintainer>
   <maintainer email="tomoya.kimura@tier4.jp">Tomoya Kimura</maintainer>

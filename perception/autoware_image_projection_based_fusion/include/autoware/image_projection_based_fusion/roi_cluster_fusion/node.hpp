@@ -54,7 +54,7 @@ protected:
   double trust_object_distance_;
   std::string non_trust_object_iou_mode_{"iou_x"};
   bool is_far_enough(const DetectedObjectWithFeature & obj, const double distance_threshold);
-  bool out_of_scope(const DetectedObjectWithFeature & obj);
+  bool out_of_scope(const DetectedObjectWithFeature & obj) override;
   double cal_iou_by_mode(
     const sensor_msgs::msg::RegionOfInterest & roi_1,
     const sensor_msgs::msg::RegionOfInterest & roi_2, const std::string iou_mode);

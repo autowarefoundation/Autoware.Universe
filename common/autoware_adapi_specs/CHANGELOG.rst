@@ -1,6 +1,22 @@
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Changelog for package autoware_ad_api_specs
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changelog for package autoware_adapi_specs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+0.39.0 (2024-11-25)
+-------------------
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* refactor(autoware_ad_api_specs): prefix package and namespace with autoware (`#9250 <https://github.com/autowarefoundation/autoware.universe/issues/9250>`_)
+  * refactor(autoware_ad_api_specs): prefix package and namespace with autoware
+  * style(pre-commit): autofix
+  * chore(autoware_adapi_specs): rename ad_api to adapi
+  * style(pre-commit): autofix
+  * chore(autoware_adapi_specs): rename ad_api to adapi
+  * chore(autoware_adapi_specs): rename ad_api to adapi
+  * chore(autoware_adapi_specs): rename ad_api_specs to adapi_specs
+  ---------
+  Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
+* Contributors: Esteve Fernandez, Yutaka Kondo
 
 0.38.0 (2024-11-08)
 -------------------

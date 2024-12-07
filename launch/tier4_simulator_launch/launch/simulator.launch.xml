@@ -188,9 +188,9 @@
       <push-ros-namespace namespace="sensing"/>
       <arg name="input_vehicle_velocity_topic" default="/vehicle/status/velocity_status"/>
       <arg name="output_twist_with_covariance" default="/sensing/vehicle_velocity_converter/twist_with_covariance"/>
-      <arg name="config_file" default="$(find-pkg-share vehicle_velocity_converter)/config/vehicle_velocity_converter.param.yaml"/>
+      <arg name="config_file" default="$(find-pkg-share autoware_vehicle_velocity_converter)/config/vehicle_velocity_converter.param.yaml"/>
 
-      <node pkg="vehicle_velocity_converter" exec="vehicle_velocity_converter_node" output="both">
+      <node pkg="autoware_vehicle_velocity_converter" exec="autoware_vehicle_velocity_converter_node" output="both">
         <param from="$(var config_file)"/>
         <remap from="velocity_status" to="$(var input_vehicle_velocity_topic)"/>
         <remap from="twist_with_covariance" to="$(var output_twist_with_covariance)"/>

@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_mission_details_overlay_rviz_plugin</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>
     RViz2 plugin for 2D overlays for mission details in the 3D view. Mainly a port of the JSK overlay plugin
         (https://github.com/jsk-ros-pkg/jsk_visualization).

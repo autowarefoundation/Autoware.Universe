@@ -14,8 +14,12 @@
 
 #include "autoware/ndt_scan_matcher/ndt_omp/estimate_covariance.hpp"
 
+#include <algorithm>
 #include <fstream>
 #include <iomanip>
+#include <memory>
+#include <utility>
+#include <vector>
 
 namespace pclomp
 {

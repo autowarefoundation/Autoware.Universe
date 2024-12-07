@@ -16,6 +16,12 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
+#include <iostream>
+#include <limits>
+#include <string>
+#include <vector>
+
 using TreeStructuredParzenEstimator = autoware::localization_util::TreeStructuredParzenEstimator;
 
 TEST(TreeStructuredParzenEstimatorTest, TPE_is_better_than_random_search_on_sphere_function)

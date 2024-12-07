@@ -64,40 +64,10 @@
     b = _temp_index;       \
   }
 
-#if 0
-#include <assert.h>
-#define ASSERT(cond) assert(cond)
-#define PRINTF(fmt, ...) printf(fmt, ##__VA_ARGS__)
-#define PRINT_COST_ARRAY(a, n)         \
-  while (1) {                          \
-    printf(#a " = [");                 \
-    if ((n) > 0) {                     \
-      printf("%f", (a)[0]);            \
-      for (uint_t j = 1; j < n; j++) { \
-        printf(", %f", (a)[j]);        \
-      }                                \
-    }                                  \
-    printf("]\n");                     \
-    break;                             \
-  }
-#define PRINT_INDEX_ARRAY(a, n)        \
-  while (1) {                          \
-    printf(#a " = [");                 \
-    if ((n) > 0) {                     \
-      printf("%d", (a)[0]);            \
-      for (uint_t j = 1; j < n; j++) { \
-        printf(", %d", (a)[j]);        \
-      }                                \
-    }                                  \
-    printf("]\n");                     \
-    break;                             \
-  }
-#else
 #define ASSERT(cond)
 #define PRINTF(fmt, ...)
 #define PRINT_COST_ARRAY(a, n)
 #define PRINT_INDEX_ARRAY(a, n)
-#endif
 
 typedef signed int int_t;
 typedef unsigned int uint_t;

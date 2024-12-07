@@ -18,8 +18,13 @@
 
 #include <tf2/utils.h>
 
+#include <functional>
 #include <iostream>
+#include <limits>
+#include <memory>
 #include <random>
+#include <string>
+#include <vector>
 
 namespace autoware::shape_estimation
 {
@@ -140,7 +145,7 @@ void TrtShapeEstimator::preprocess(const DetectedObjectsWithFeature & input)
       }
 
       int iter_count = static_cast<int>(input_pc_size) / point_size_of_cloud;
-      int remainer_count = static_cast<int>(input_pc_size) % point_size_of_cloud;
+      int remaining_points_count = static_cast<int>(input_pc_size) % point_size_of_cloud;
 
       for (int j = 1; j < iter_count; j++) {
         for (int k = 0; k < point_size_of_cloud; k++) {
@@ -155,7 +160,7 @@ void TrtShapeEstimator::preprocess(const DetectedObjectsWithFeature & input)
         }
       }
 
-      for (int j = 0; j < remainer_count; j++) {
+      for (int j = 0; j < remaining_points_count; j++) {
         input_pc_h_[i * input_chan * input_pc_size + 0 + iter_count * point_size_of_cloud + j] =
           input_pc_h_[i * input_chan * input_pc_size + j];
 

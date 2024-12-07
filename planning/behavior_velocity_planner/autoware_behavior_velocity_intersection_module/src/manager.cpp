@@ -360,7 +360,7 @@ IntersectionModuleManager::getModuleExpiredFunction(
   const auto lane_set = planning_utils::getLaneletsOnPath(
     path, planner_data_->route_handler_->getLaneletMapPtr(), planner_data_->current_odometry->pose);
 
-  return [this, lane_set](const std::shared_ptr<SceneModuleInterface> & scene_module) {
+  return [lane_set](const std::shared_ptr<SceneModuleInterface> & scene_module) {
     const auto intersection_module = std::dynamic_pointer_cast<IntersectionModule>(scene_module);
     const auto & associative_ids = intersection_module->getAssociativeIds();
     for (const auto & lane : lane_set) {
@@ -555,7 +555,7 @@ MergeFromPrivateModuleManager::getModuleExpiredFunction(
   const auto lane_set = planning_utils::getLaneletsOnPath(
     path, planner_data_->route_handler_->getLaneletMapPtr(), planner_data_->current_odometry->pose);
 
-  return [this, lane_set](const std::shared_ptr<SceneModuleInterface> & scene_module) {
+  return [lane_set](const std::shared_ptr<SceneModuleInterface> & scene_module) {
     const auto merge_from_private_module =
       std::dynamic_pointer_cast<MergeFromPrivateRoadModule>(scene_module);
     const auto & associative_ids = merge_from_private_module->getAssociativeIds();

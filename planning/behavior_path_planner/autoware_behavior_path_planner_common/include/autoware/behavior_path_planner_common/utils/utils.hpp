@@ -137,9 +137,21 @@ double l2Norm(const Vector3 vector);
 
 double getDistanceToEndOfLane(const Pose & current_pose, const lanelet::ConstLanelets & lanelets);
 
+/**
+ * @brief Calculates the distance to the next intersection.
+ * @param current_pose Ego pose.
+ * @param lanelets Lanelets to check.
+ * @return Distance.
+ */
 double getDistanceToNextIntersection(
   const Pose & current_pose, const lanelet::ConstLanelets & lanelets);
 
+/**
+ * @brief Calculates the distance to the next crosswalk.
+ * @param current_pose Ego pose.
+ * @param lanelets Lanelets to check.
+ * @return Distance.
+ */
 double getDistanceToCrosswalk(
   const Pose & current_pose, const lanelet::ConstLanelets & lanelets,
   const lanelet::routing::RoutingGraphContainer & overall_graphs);
@@ -236,6 +248,15 @@ bool set_goal(
  */
 const Pose refineGoal(const Pose & goal, const lanelet::ConstLanelet & goal_lanelet);
 
+/**
+ * @brief Recreate the path with a given goal pose.
+ * @param search_radius_range Searching radius.
+ * @param search_rad_range Searching angle.
+ * @param input Input path.
+ * @param goal Goal pose.
+ * @param goal_lane_id Lane ID of goal lanelet.
+ * @return Recreated path
+ */
 PathWithLaneId refinePathForGoal(
   const double search_radius_range, const double search_rad_range, const PathWithLaneId & input,
   const Pose & goal, const int64_t goal_lane_id);
@@ -243,8 +264,22 @@ PathWithLaneId refinePathForGoal(
 bool isAllowedGoalModification(const std::shared_ptr<RouteHandler> & route_handler);
 bool checkOriginalGoalIsInShoulder(const std::shared_ptr<RouteHandler> & route_handler);
 
+/**
+ * @brief Checks if the given pose is inside the given lanes.
+ * @param pose Ego pose.
+ * @param lanes Lanelets to check.
+ * @return True if the ego pose is inside the lanes.
+ */
 bool isInLanelets(const Pose & pose, const lanelet::ConstLanelets & lanes);
 
+/**
+ * @brief Checks if the given pose is inside the given lane within certain yaw difference.
+ * @param current_pose Ego pose.
+ * @param lanelet Lanelet to check.
+ * @param yaw_threshold Yaw angle difference threshold.
+ * @param radius Search radius
+ * @return True if the ego pose is inside the lane.
+ */
 bool isInLaneletWithYawThreshold(
   const Pose & current_pose, const lanelet::ConstLanelet & lanelet, const double yaw_threshold,
   const double radius = 0.0);
@@ -254,6 +289,14 @@ bool isEgoOutOfRoute(
   const std::optional<PoseWithUuidStamped> & modified_goal,
   const std::shared_ptr<RouteHandler> & route_handler);
 
+/**
+ * @brief Checks if the given pose is inside the original lane.
+ * @param current_lanes Original lanes.
+ * @param current_pose Ego pose.
+ * @param common_param Parameters used for behavior path planner.
+ * @param outer_margin Allowed margin.
+ * @return True if the ego pose is inside the original lane.
+ */
 bool isEgoWithinOriginalLane(
   const lanelet::ConstLanelets & current_lanes, const Pose & current_pose,
   const BehaviorPathPlannerParameters & common_param, const double outer_margin = 0.0);
@@ -268,18 +311,48 @@ bool isEgoWithinOriginalLane(
 std::shared_ptr<PathWithLaneId> generateCenterLinePath(
   const std::shared_ptr<const PlannerData> & planner_data);
 
+/**
+ * @brief Inserts a stop point with given length
+ * @param length Distance to insert stop point.
+ * @param path Original path.
+ * @return Inserted stop point.
+ */
 PathPointWithLaneId insertStopPoint(const double length, PathWithLaneId & path);
 
+/**
+ * @brief Calculates distance to lane boundary.
+ * @param lanelet Target lanelet.
+ * @param position Ego position.
+ * @param left_side Whether to check left side boundary.
+ * @return Distance to boundary.
+ */
 double getSignedDistanceFromLaneBoundary(
   const lanelet::ConstLanelet & lanelet, const Point & position, const bool left_side);
+
 double getSignedDistanceFromBoundary(
   const lanelet::ConstLanelets & lanelets, const Pose & pose, const bool left_side);
+
+/**
+ * @brief Calculates distance to lane boundary.
+ * @param lanelet Target lanelet.
+ * @param vehicle_width Ego vehicle width.
+ * @param base_link2front Ego vehicle distance from base link to front.
+ * @param base_link2rear Ego vehicle distance from base link to rear.
+ * @param vehicle_pose Ego vehicle pose.
+ * @param left_side Whether to check left side boundary.
+ * @return Distance to boundary.
+ */
 std::optional<double> getSignedDistanceFromBoundary(
   const lanelet::ConstLanelets & lanelets, const double vehicle_width, const double base_link2front,
   const double base_link2rear, const Pose & vehicle_pose, const bool left_side);
 
 // misc
 
+/**
+ * @brief Convert lanelet to 2D polygon.
+ * @param lanelet Target lanelet.
+ * @return Polygon
+ */
 Polygon2d toPolygon2d(const lanelet::ConstLanelet & lanelet);
 
 Polygon2d toPolygon2d(const lanelet::BasicPolygon2d & polygon);
@@ -316,9 +389,26 @@ lanelet::ConstLanelets extendPrevLane(
 lanelet::ConstLanelets extendLanes(
   const std::shared_ptr<RouteHandler> route_handler, const lanelet::ConstLanelets & lanes);
 
+/**
+ * @brief Retrieves sequences of preceding lanelets from the target lanes.
+ * @param route_handler Reference to the route handler.
+ * @param target_lanes The set of target lanelets.
+ * @param current_pose The current pose of ego vehicle.
+ * @param backward_length The backward search length [m].
+ * @return A vector of lanelet sequences that precede the target lanes
+ */
 std::vector<lanelet::ConstLanelets> getPrecedingLanelets(
   const RouteHandler & route_handler, const lanelet::ConstLanelets & target_lanes,
   const Pose & current_pose, const double backward_length);
+
+/**
+ * @brief Retrieves all preceding lanelets as a flat list.
+ * @param route_handler Reference to the route handler.
+ * @param target_lanes The set of target lanelets.
+ * @param current_pose The current pose of ego vehicle.
+ * @param backward_length The backward search length [m].
+ * @return Preceding lanelets within the specified backward length.
+ */
 
 lanelet::ConstLanelets getBackwardLanelets(
   const RouteHandler & route_handler, const lanelet::ConstLanelets & target_lanes,
@@ -335,17 +425,41 @@ lanelet::ConstLanelets getExtendedCurrentLanesFromPath(
   const PathWithLaneId & path, const std::shared_ptr<const PlannerData> & planner_data,
   const double backward_length, const double forward_length, const bool forward_only_in_route);
 
+/**
+ * @brief Calculates the sequence of lanelets around a given pose within a specified range.
+ * @param route_handler A shared pointer to the RouteHandler for accessing route and lanelet
+ * information.
+ * @param pose The reference pose to locate the lanelets around.
+ * @param forward_length The length of the route to extend forward from the reference pose.
+ * @param backward_length The length of the route to extend backward from the reference pose.
+ * @param dist_threshold The maximum allowable distance to consider a lanelet as closest.
+ * @param yaw_threshold The maximum allowable yaw difference (in radians) for lanelet matching.
+ * @return A sequence of lanelets around the given pose.
+ */
 lanelet::ConstLanelets calcLaneAroundPose(
-  const std::shared_ptr<RouteHandler> route_handler, const geometry_msgs::msg::Pose & pose,
+  const std::shared_ptr<RouteHandler> & route_handler, const geometry_msgs::msg::Pose & pose,
   const double forward_length, const double backward_length,
   const double dist_threshold = std::numeric_limits<double>::max(),
   const double yaw_threshold = std::numeric_limits<double>::max());
 
+/**
+ * @brief Checks whether the relative angles between consecutive triplets of points in a path remain
+ * within a specified threshold.
+ * @param path Input path.
+ * @param angle_threshold The maximum allowable angle in radians.
+ * @return True if all relative angles are within the threshold or the path has fewer than three
+ * points.
+ */
 bool checkPathRelativeAngle(const PathWithLaneId & path, const double angle_threshold);
 
 lanelet::ConstLanelets getLaneletsFromPath(
   const PathWithLaneId & path, const std::shared_ptr<RouteHandler> & route_handler);
 
+/**
+ * @brief Converts camel case string to snake case string.
+ * @param input_str Input string.
+ * @return String
+ */
 std::string convertToSnakeCase(const std::string & input_str);
 
 std::optional<lanelet::Polygon3d> getPolygonByPoint(

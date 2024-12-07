@@ -96,7 +96,7 @@ private:
   bool m_keep_steer_control_until_converged;
 
   // MPC solver checker.
-  bool m_is_mpc_solved{true};
+  ResultWithReason m_mpc_solved_status{true};
 
   // trajectory buffer for detecting new trajectory
   std::deque<Trajectory> m_trajectory_buffer;
@@ -292,13 +292,13 @@ private:
   template <typename... Args>
   inline void info_throttle(Args &&... args)
   {
-    RCLCPP_INFO_THROTTLE(logger_, *clock_, 5000, args...);
+    RCLCPP_INFO_THROTTLE(logger_, *clock_, 5000, "%s", args...);
   }
 
   template <typename... Args>
   inline void warn_throttle(Args &&... args)
   {
-    RCLCPP_WARN_THROTTLE(logger_, *clock_, 5000, args...);
+    RCLCPP_WARN_THROTTLE(logger_, *clock_, 5000, "%s", args...);
   }
 };
 }  // namespace autoware::motion::control::mpc_lateral_controller

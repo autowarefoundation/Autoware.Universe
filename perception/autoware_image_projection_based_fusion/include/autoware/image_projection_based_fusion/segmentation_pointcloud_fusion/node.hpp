@@ -62,7 +62,7 @@ protected:
     const PointCloud2 & input_pointcloud_msg, const std::size_t image_id, const Image & input_mask,
     const CameraInfo & camera_info, PointCloud2 & output_pointcloud_msg) override;
 
-  bool out_of_scope(const PointCloud2 & filtered_cloud);
+  bool out_of_scope(const PointCloud2 & filtered_cloud) override;
   inline void copyPointCloud(
     const PointCloud2 & input, const int point_step, const size_t global_offset,
     PointCloud2 & output, size_t & output_pointcloud_size)

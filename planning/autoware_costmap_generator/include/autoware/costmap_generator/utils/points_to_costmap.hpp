@@ -79,8 +79,6 @@ private:
   double grid_resolution_;
   double grid_position_x_;
   double grid_position_y_;
-  double y_cell_size_;
-  double x_cell_size_;
 
   /// \brief initialize gridmap parameters
   /// \param[in] gridmap: gridmap object to be initialized

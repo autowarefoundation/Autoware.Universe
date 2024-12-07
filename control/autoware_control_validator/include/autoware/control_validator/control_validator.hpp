@@ -149,7 +149,6 @@ private:
 
   ControlValidatorStatus validation_status_;
   ValidationParams validation_params_;  // for thresholds
-  bool is_velocity_valid_{true};
   autoware::signal_processing::LowpassFilter1d vehicle_vel_{0.0};
   autoware::signal_processing::LowpassFilter1d target_vel_{0.0};
   bool hold_velocity_error_until_stop_{false};

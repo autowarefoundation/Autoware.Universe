@@ -23,6 +23,9 @@
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost/range/adaptors.hpp>
 
+#include <utility>
+#include <vector>
+
 namespace yabloc
 {
 namespace bg = boost::geometry;

@@ -15,8 +15,6 @@
 #ifndef AUTOWARE__PLANNING_EVALUATOR__METRICS__METRICS_UTILS_HPP_
 #define AUTOWARE__PLANNING_EVALUATOR__METRICS__METRICS_UTILS_HPP_
 
-#include "autoware/planning_evaluator/stat.hpp"
-
 #include "autoware_planning_msgs/msg/trajectory.hpp"
 #include "autoware_planning_msgs/msg/trajectory_point.hpp"
 

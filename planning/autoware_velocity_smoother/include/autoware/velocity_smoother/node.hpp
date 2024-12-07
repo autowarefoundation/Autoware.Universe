@@ -164,10 +164,17 @@ private:
     bool plan_from_ego_speed_on_manual_mode = true;
   } node_param_{};
 
+  struct AccelerationRequest
+  {
+    bool request{false};
+    double max_acceleration{0.0};
+    double max_jerk{0.0};
+  };
   struct ExternalVelocityLimit
   {
     double velocity{0.0};  // current external_velocity_limit
     double dist{0.0};      // distance to set external velocity limit
+    AccelerationRequest acceleration_request;
     std::string sender{""};
   };
   ExternalVelocityLimit

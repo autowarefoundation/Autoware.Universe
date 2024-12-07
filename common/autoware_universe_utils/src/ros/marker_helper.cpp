@@ -14,6 +14,8 @@
 
 #include "autoware/universe_utils/ros/marker_helper.hpp"
 
+#include <string>
+
 namespace autoware::universe_utils
 {
 visualization_msgs::msg::Marker createDefaultMarker(

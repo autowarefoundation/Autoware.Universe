@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_static_centerline_generator</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>The autoware_static_centerline_generator package</description>
   <maintainer email="takayuki.murooka@tier4.jp">Takayuki Murooka</maintainer>
   <maintainer email="kosuke.takeuchi@tier4.jp">Kosuke Takeuchi</maintainer>
@@ -17,6 +17,7 @@
 
   <depend>autoware_behavior_path_planner_common</depend>
   <depend>autoware_geography_utils</depend>
+  <depend>autoware_global_parameter_loader</depend>
   <depend>autoware_interpolation</depend>
   <depend>autoware_lanelet2_extension</depend>
   <depend>autoware_map_loader</depend>
@@ -33,10 +34,8 @@
   <depend>autoware_universe_utils</depend>
   <depend>autoware_vehicle_info_utils</depend>
   <depend>geometry_msgs</depend>
-  <depend>global_parameter_loader</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
-  <depend>tier4_map_msgs</depend>
 
   <exec_depend>python3-flask-cors</exec_depend>
   <exec_depend>rosidl_default_runtime</exec_depend>

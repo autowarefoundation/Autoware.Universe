@@ -50,6 +50,7 @@
 #include <Eigen/src/Core/util/Constants.h>
 #include <tf2/utils.h>
 
+#include <algorithm>
 #include <cmath>
 #include <string>
 

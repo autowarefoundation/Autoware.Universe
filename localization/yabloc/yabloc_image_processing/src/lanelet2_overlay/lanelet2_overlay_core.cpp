@@ -26,6 +26,9 @@
 
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <limits>
+#include <tuple>
+
 namespace yabloc::lanelet2_overlay
 {
 Lanelet2Overlay::Lanelet2Overlay(const rclcpp::NodeOptions & options)

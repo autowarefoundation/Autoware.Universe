@@ -23,6 +23,7 @@
 #include <thrust/reduce.h>
 
 #include <cmath>
+#include <memory>
 #include <vector>
 
 namespace autoware::lidar_transfusion

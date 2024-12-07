@@ -21,8 +21,10 @@
 #include <QHeaderView>
 #include <QString>
 #include <QVBoxLayout>
+#include <autoware/motion_utils/distance/distance.hpp>
 #include <rviz_common/display_context.hpp>
 
+#include <algorithm>
 #include <memory>
 #include <string>
 
@@ -46,7 +48,8 @@ QGroupBox * VelocitySteeringFactorsPanel::makeVelocityFactorsGroup()
   auto vertical_header = new QHeaderView(Qt::Vertical);
   vertical_header->hide();
   auto horizontal_header = new QHeaderView(Qt::Horizontal);
-  horizontal_header->setSectionResizeMode(QHeaderView::Stretch);
+  horizontal_header->setSectionResizeMode(QHeaderView::ResizeToContents);
+  horizontal_header->setStretchLastSection(true);
 
   auto header_labels = QStringList({"Type", "Status", "Distance [m]", "Detail"});
   velocity_factors_table_ = new QTableWidget();
@@ -54,7 +57,27 @@ QGroupBox * VelocitySteeringFactorsPanel::makeVelocityFactorsGroup()
   velocity_factors_table_->setHorizontalHeaderLabels(header_labels);
   velocity_factors_table_->setVerticalHeader(vertical_header);
   velocity_factors_table_->setHorizontalHeader(horizontal_header);
-  grid->addWidget(velocity_factors_table_, 0, 0);
+  grid->addWidget(velocity_factors_table_, 0, 0, 4, 1);
+
+  auto * jerk_label = new QLabel("Jerk");
+  grid->addWidget(jerk_label, 0, 1);
+
+  jerk_input_ = new QDoubleSpinBox;
+  jerk_input_->setMinimum(0.0);
+  jerk_input_->setValue(JERK_DEFAULT);
+  jerk_input_->setSingleStep(0.1);
+  jerk_input_->setSuffix(" [m/s\u00B3]");
+  grid->addWidget(jerk_input_, 1, 1);
+
+  auto * decel_limit_label = new QLabel("Decel limit");
+  grid->addWidget(decel_limit_label, 2, 1);
+
+  decel_limit_input_ = new QDoubleSpinBox;
+  decel_limit_input_->setMinimum(0.0);
+  decel_limit_input_->setValue(DECEL_LIMIT_DEFAULT);
+  decel_limit_input_->setSingleStep(0.1);
+  decel_limit_input_->setSuffix(" [m/s\u00B2]");
+  grid->addWidget(decel_limit_input_, 3, 1);
 
   group->setLayout(grid);
   return group;
@@ -90,6 +113,17 @@ void VelocitySteeringFactorsPanel::onInitialize()
   raw_node_ = this->getDisplayContext()->getRosNodeAbstraction().lock()->get_raw_node();
 
   // Planning
+  sub_kinematic_state_ = raw_node_->create_subscription<nav_msgs::msg::Odometry>(
+    "/localization/kinematic_state", 10,
+    [this](const nav_msgs::msg::Odometry::ConstSharedPtr msg) { kinematic_state_ = msg; });
+
+  sub_acceleration_ =
+    raw_node_->create_subscription<geometry_msgs::msg::AccelWithCovarianceStamped>(
+      "/localization/acceleration", 10,
+      [this](const geometry_msgs::msg::AccelWithCovarianceStamped::ConstSharedPtr msg) {
+        acceleration_ = msg;
+      });
+
   sub_velocity_factors_ = raw_node_->create_subscription<VelocityFactorArray>(
     "/api/planning/velocity_factors", 10,
     std::bind(&VelocitySteeringFactorsPanel::onVelocityFactors, this, _1));
@@ -154,6 +188,26 @@ void VelocitySteeringFactorsPanel::onVelocityFactors(const VelocityFactorArray::
       auto label = new QLabel(QString::fromStdString(e.detail));
       label->setAlignment(Qt::AlignCenter);
       velocity_factors_table_->setCellWidget(i, 3, label);
+    }
+
+    const auto row_background = [&]() -> QBrush {
+      if (!kinematic_state_ || !acceleration_) {
+        return {};
+      }
+      const auto & current_vel = kinematic_state_->twist.twist.linear.x;
+      const auto & current_acc = acceleration_->accel.accel.linear.x;
+      const auto acc_min = -decel_limit_input_->value();
+      const auto jerk_acc = jerk_input_->value();
+      const auto decel_dist = autoware::motion_utils::calcDecelDistWithJerkAndAccConstraints(
+        current_vel, 0., current_acc, acc_min, jerk_acc, -jerk_acc);
+      if (decel_dist > e.distance && e.distance >= 0 && e.status == VelocityFactor::APPROACHING) {
+        return COLOR_FREAK_PINK;
+      }
+      return {};
+    }();
+    for (int j = 0; j < velocity_factors_table_->columnCount(); j++) {
+      velocity_factors_table_->setItem(i, j, new QTableWidgetItem);
+      velocity_factors_table_->item(i, j)->setBackground(row_background);
     }
   }
   velocity_factors_table_->update();

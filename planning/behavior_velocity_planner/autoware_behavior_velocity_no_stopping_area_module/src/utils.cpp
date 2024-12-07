@@ -26,6 +26,7 @@
 #include <lanelet2_core/geometry/Polygon.h>
 
 #include <limits>
+#include <vector>
 
 namespace autoware::behavior_velocity_planner::no_stopping_area
 {

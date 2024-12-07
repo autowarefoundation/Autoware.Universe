@@ -17,11 +17,10 @@
 #ifndef VELOCITY_STEERING_FACTORS_PANEL_HPP_
 #define VELOCITY_STEERING_FACTORS_PANEL_HPP_
 
+#include <QDoubleSpinBox>
 #include <QGroupBox>
 #include <QLabel>
 #include <QLayout>
-#include <QPushButton>
-#include <QSpinBox>
 #include <QTableWidget>
 #include <rclcpp/rclcpp.hpp>
 #include <rviz_common/panel.hpp>
@@ -29,6 +28,8 @@
 #include <autoware_adapi_v1_msgs/msg/planning_behavior.hpp>
 #include <autoware_adapi_v1_msgs/msg/steering_factor_array.hpp>
 #include <autoware_adapi_v1_msgs/msg/velocity_factor_array.hpp>
+#include <geometry_msgs/msg/accel_with_covariance_stamped.hpp>
+#include <nav_msgs/msg/odometry.hpp>
 
 #include <memory>
 
@@ -49,6 +50,11 @@ public:
   void onInitialize() override;
 
 protected:
+  static constexpr double JERK_DEFAULT = 1.0;
+  static constexpr double DECEL_LIMIT_DEFAULT = 1.0;
+
+  static constexpr QColor COLOR_FREAK_PINK = {255, 0, 108};
+
   // Layout
   QGroupBox * makeVelocityFactorsGroup();
   QGroupBox * makeSteeringFactorsGroup();
@@ -58,7 +64,14 @@ protected:
   // Planning
   QTableWidget * velocity_factors_table_{nullptr};
   QTableWidget * steering_factors_table_{nullptr};
+  QDoubleSpinBox * jerk_input_{nullptr};
+  QDoubleSpinBox * decel_limit_input_{nullptr};
 
+  nav_msgs::msg::Odometry::ConstSharedPtr kinematic_state_;
+  geometry_msgs::msg::AccelWithCovarianceStamped::ConstSharedPtr acceleration_;
+
+  rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr sub_kinematic_state_;
+  rclcpp::Subscription<geometry_msgs::msg::AccelWithCovarianceStamped>::SharedPtr sub_acceleration_;
   rclcpp::Subscription<VelocityFactorArray>::SharedPtr sub_velocity_factors_;
   rclcpp::Subscription<SteeringFactorArray>::SharedPtr sub_steering_factors_;
 

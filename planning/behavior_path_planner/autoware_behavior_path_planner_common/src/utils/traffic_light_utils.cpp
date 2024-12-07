@@ -16,6 +16,9 @@
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
 #include <autoware/traffic_light_utils/traffic_light_utils.hpp>
 
+#include <limits>
+#include <memory>
+
 namespace autoware::behavior_path_planner::utils::traffic_light
 {
 using autoware::motion_utils::calcSignedArcLength;
@@ -130,7 +133,7 @@ bool isStoppedAtRedTrafficLightWithinDistance(
     return false;
   }
 
-  return (distance_to_red_traffic_light < distance_threshold);
+  return (distance_to_red_traffic_light.value() < distance_threshold);
 }
 
 bool isTrafficSignalStop(

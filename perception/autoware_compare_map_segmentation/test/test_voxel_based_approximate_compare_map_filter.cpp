@@ -23,6 +23,9 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <string>
+
 using autoware::compare_map_segmentation::VoxelBasedApproximateCompareMapFilterComponent;
 using autoware::point_types::PointXYZIRC;
 using autoware::point_types::PointXYZIRCGenerator;

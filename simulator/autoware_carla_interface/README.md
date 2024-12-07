@@ -24,7 +24,7 @@ This ros package enables communication between Autoware and CARLA for autonomous
 
 1. Download maps (y-axis inverted version) to arbitrary location
 2. Change names and create the map folder (example: Town01) inside `autoware_map`. (`point_cloud/Town01.pcd` -> `autoware_map/Town01/pointcloud_map.pcd`, `vector_maps/lanelet2/Town01.osm`-> `autoware_map/Town01/lanelet2_map.osm`)
-3. Create `map_projector_info.yaml` on the folder and add `projector_type: local` on the first line.
+3. Create `map_projector_info.yaml` on the folder and add `projector_type: Local` on the first line.
 
 ### Build
 
@@ -136,14 +136,14 @@ The maps provided by the Carla Simulator ([Carla Lanelet2 Maps](https://bitbucke
 - Options to Modify the Map
 
   - A. Create a New Map from Scratch
-  - Use the [Tier4 Vector Map Builder](https://tools.tier4.jp/feature/vector_map_builder_ll2/) to create a new map.
+  - Use the [TIER IV Vector Map Builder](https://tools.tier4.jp/feature/vector_map_builder_ll2/) to create a new map.
 
   - B. Modify the Existing Carla Lanelet2 Maps
   - Adjust the longitude and latitude of the [Carla Lanelet2 Maps](https://bitbucket.org/carla-simulator/autoware-contents/src/master/maps/) to align with the PCD (origin).
     - Use this [tool](https://github.com/mraditya01/offset_lanelet2/tree/main) to modify the coordinates.
-    - Snap Lanelet with PCD and add the traffic lights using the [Tier4 Vector Map Builder](https://tools.tier4.jp/feature/vector_map_builder_ll2/).
+    - Snap Lanelet with PCD and add the traffic lights using the [TIER IV Vector Map Builder](https://tools.tier4.jp/feature/vector_map_builder_ll2/).
 
-- When using the Tier4 Vector Map Builder, you must convert the PCD format from `binary_compressed` to `ascii`. You can use `pcl_tools` for this conversion.
+- When using the TIER IV Vector Map Builder, you must convert the PCD format from `binary_compressed` to `ascii`. You can use `pcl_tools` for this conversion.
 - For reference, an example of Town01 with added traffic lights at one intersection can be downloaded [here](https://drive.google.com/drive/folders/1QFU0p3C8NW71sT5wwdnCKXoZFQJzXfTG?usp=sharing).
 
 ## Tips

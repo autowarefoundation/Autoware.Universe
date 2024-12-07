@@ -30,7 +30,7 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
   ${QP_INTERFACE_LIB_SRC}
   ${QP_INTERFACE_LIB_HEADERS}
 )
-target_compile_options(${PROJECT_NAME} PRIVATE -Wno-error=old-style-cast -Wno-error=useless-cast)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wno-error=old-style-cast)
 
 target_include_directories(${PROJECT_NAME}
   SYSTEM PUBLIC

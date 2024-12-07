@@ -276,7 +276,7 @@ bool CTRVMotionModel::predictStateStep(const double dt, KalmanFilter & ekf) cons
   Eigen::MatrixXd X_next_t(DIM, 1);                               // predicted state
   X_next_t(IDX::X) = X_t(IDX::X) + X_t(IDX::VEL) * cos_yaw * dt;  // dx = v * cos(yaw)
   X_next_t(IDX::Y) = X_t(IDX::Y) + X_t(IDX::VEL) * sin_yaw * dt;  // dy = v * sin(yaw)
-  X_next_t(IDX::YAW) = X_t(IDX::YAW) + (X_t(IDX::WZ)) * dt;       // dyaw = omega
+  X_next_t(IDX::YAW) = X_t(IDX::YAW) + (X_t(IDX::WZ))*dt;         // dyaw = omega
   X_next_t(IDX::VEL) = X_t(IDX::VEL);
   X_next_t(IDX::WZ) = X_t(IDX::WZ);
 

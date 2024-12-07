@@ -20,6 +20,10 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <string>
+#include <vector>
+
 class TestUtilWithMap : public ::testing::Test
 {
 protected:

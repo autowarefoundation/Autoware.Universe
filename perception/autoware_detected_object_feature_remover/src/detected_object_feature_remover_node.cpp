@@ -14,6 +14,8 @@
 
 #include "detected_object_feature_remover_node.hpp"
 
+#include <memory>
+
 namespace autoware::detected_object_feature_remover
 {
 DetectedObjectFeatureRemover::DetectedObjectFeatureRemover(const rclcpp::NodeOptions & node_options)

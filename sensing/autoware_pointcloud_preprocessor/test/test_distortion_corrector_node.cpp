@@ -41,6 +41,10 @@
 #include <tf2_ros/static_transform_broadcaster.h>
 
 #include <cassert>
+#include <memory>
+#include <string>
+#include <tuple>
+#include <vector>
 
 enum AngleCoordinateSystem { HESAI, VELODYNE, CARTESIAN };
 class DistortionCorrectorTest : public ::testing::Test

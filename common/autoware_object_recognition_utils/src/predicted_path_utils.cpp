@@ -19,6 +19,7 @@
 #include "autoware/interpolation/spline_interpolation.hpp"
 
 #include <algorithm>
+#include <vector>
 
 namespace autoware::object_recognition_utils
 {

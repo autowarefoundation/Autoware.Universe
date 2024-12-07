@@ -16,6 +16,11 @@
 
 #include "autoware/lidar_transfusion/utils.hpp"
 
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 namespace autoware::lidar_transfusion
 {
 

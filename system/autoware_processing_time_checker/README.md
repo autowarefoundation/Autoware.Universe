@@ -31,6 +31,8 @@ ros2 launch autoware_processing_time_checker processing_time_checker.launch.xml
 
 {{ json_to_markdown("system/autoware_processing_time_checker/schema/processing_time_checker.schema.json") }}
 
+If `output_metrics = true`, the node writes the statics of the processing_time measured during its lifetime to `<ros2_logging_directory>/autoware_metrics/<node_name>-<time_stamp>.json` when shut down.
+
 ## Assumptions / Known limits
 
 TBD.

@@ -18,6 +18,8 @@
 #include <boost/geometry/algorithms/convex_hull.hpp>
 #include <boost/geometry/strategies/agnostic/hull_graham_andrew.hpp>
 
+#include <utility>
+
 namespace utils
 {
 

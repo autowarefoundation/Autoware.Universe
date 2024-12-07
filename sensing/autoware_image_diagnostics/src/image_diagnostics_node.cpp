@@ -16,6 +16,7 @@
 
 #include <std_msgs/msg/header.hpp>
 
+#include <string>
 #include <vector>
 
 namespace autoware::image_diagnostics

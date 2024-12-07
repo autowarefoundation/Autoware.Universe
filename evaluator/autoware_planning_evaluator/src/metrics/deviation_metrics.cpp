@@ -25,9 +25,9 @@ namespace metrics
 using autoware_planning_msgs::msg::Trajectory;
 using autoware_planning_msgs::msg::TrajectoryPoint;
 
-Stat<double> calcLateralDeviation(const Trajectory & ref, const Trajectory & traj)
+Accumulator<double> calcLateralDeviation(const Trajectory & ref, const Trajectory & traj)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
 
   if (ref.points.empty() || traj.points.empty()) {
     return stat;
@@ -45,9 +45,9 @@ Stat<double> calcLateralDeviation(const Trajectory & ref, const Trajectory & tra
   return stat;
 }
 
-Stat<double> calcYawDeviation(const Trajectory & ref, const Trajectory & traj)
+Accumulator<double> calcYawDeviation(const Trajectory & ref, const Trajectory & traj)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
 
   if (ref.points.empty() || traj.points.empty()) {
     return stat;
@@ -64,9 +64,9 @@ Stat<double> calcYawDeviation(const Trajectory & ref, const Trajectory & traj)
   return stat;
 }
 
-Stat<double> calcVelocityDeviation(const Trajectory & ref, const Trajectory & traj)
+Accumulator<double> calcVelocityDeviation(const Trajectory & ref, const Trajectory & traj)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
 
   if (ref.points.empty() || traj.points.empty()) {
     return stat;
@@ -81,23 +81,23 @@ Stat<double> calcVelocityDeviation(const Trajectory & ref, const Trajectory & tr
   return stat;
 }
 
-Stat<double> calcLongitudinalDeviation(const Pose & base_pose, const Point & target_point)
+Accumulator<double> calcLongitudinalDeviation(const Pose & base_pose, const Point & target_point)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   stat.add(std::abs(autoware::universe_utils::calcLongitudinalDeviation(base_pose, target_point)));
   return stat;
 }
 
-Stat<double> calcLateralDeviation(const Pose & base_pose, const Point & target_point)
+Accumulator<double> calcLateralDeviation(const Pose & base_pose, const Point & target_point)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   stat.add(std::abs(autoware::universe_utils::calcLateralDeviation(base_pose, target_point)));
   return stat;
 }
 
-Stat<double> calcYawDeviation(const Pose & base_pose, const Pose & target_pose)
+Accumulator<double> calcYawDeviation(const Pose & base_pose, const Pose & target_pose)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   stat.add(std::abs(autoware::universe_utils::calcYawDeviation(base_pose, target_pose)));
   return stat;
 }

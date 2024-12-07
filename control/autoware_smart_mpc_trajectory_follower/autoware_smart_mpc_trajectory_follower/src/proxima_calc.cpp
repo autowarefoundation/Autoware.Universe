@@ -19,7 +19,9 @@
 #include <pybind11/eigen.h>
 #include <pybind11/pybind11.h>
 
+#include <algorithm>
 #include <iostream>
+#include <vector>
 namespace py = pybind11;
 
 Eigen::VectorXd tanh(const Eigen::VectorXd & v)

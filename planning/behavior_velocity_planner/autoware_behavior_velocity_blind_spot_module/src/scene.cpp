@@ -12,31 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "scene.hpp"
+#include "autoware/behavior_velocity_blind_spot_module/scene.hpp"
+
+#include "autoware/behavior_velocity_blind_spot_module/util.hpp"
 
 #include <autoware/behavior_velocity_planner_common/utilization/boost_geometry_helper.hpp>
-#include <autoware/behavior_velocity_planner_common/utilization/path_utilization.hpp>
 #include <autoware/behavior_velocity_planner_common/utilization/util.hpp>
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
-#include <autoware_lanelet2_extension/regulatory_elements/road_marking.hpp>
-#include <autoware_lanelet2_extension/utility/query.hpp>
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
 
-#include <boost/geometry/algorithms/area.hpp>
-#include <boost/geometry/algorithms/distance.hpp>
-#include <boost/geometry/algorithms/length.hpp>
-#include <boost/geometry/algorithms/union.hpp>
+#include <boost/geometry/algorithms/intersects.hpp>
 
-#include <lanelet2_core/Forward.h>
 #include <lanelet2_core/geometry/Polygon.h>
-#include <lanelet2_core/primitives/BasicRegulatoryElements.h>
 
 #include <algorithm>
 #include <limits>
 #include <memory>
 #include <optional>
 #include <string>
-#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -55,7 +48,9 @@ BlindSpotModule::BlindSpotModule(
   is_over_pass_judge_line_(false)
 {
   velocity_factor_.init(PlanningBehavior::REAR_CHECK);
-  sibling_straight_lanelet_ = getSiblingStraightLanelet(planner_data);
+  sibling_straight_lanelet_ = getSiblingStraightLanelet(
+    planner_data->route_handler_->getLaneletMapPtr()->laneletLayer.get(lane_id_),
+    planner_data->route_handler_->getRoutingGraphPtr());
 }
 
 void BlindSpotModule::initializeRTCStatus()
@@ -64,8 +59,7 @@ void BlindSpotModule::initializeRTCStatus()
   setDistance(std::numeric_limits<double>::lowest());
 }
 
-BlindSpotDecision BlindSpotModule::modifyPathVelocityDetail(
-  PathWithLaneId * path, [[maybe_unused]] StopReason * stop_reason)
+BlindSpotDecision BlindSpotModule::modifyPathVelocityDetail(PathWithLaneId * path)
 {
   if (planner_param_.use_pass_judge_line && is_over_pass_judge_line_) {
     return OverPassJudge{"already over the pass judge line. no plan needed."};
@@ -73,7 +67,8 @@ BlindSpotDecision BlindSpotModule::modifyPathVelocityDetail(
   const auto & input_path = *path;
 
   /* set stop-line and stop-judgement-line for base_link */
-  const auto interpolated_path_info_opt = generateInterpolatedPathInfo(input_path);
+  const auto interpolated_path_info_opt =
+    generateInterpolatedPathInfo(lane_id_, input_path, logger_);
   if (!interpolated_path_info_opt) {
     return InternalError{"Failed to interpolate path"};
   }
@@ -106,7 +101,10 @@ BlindSpotDecision BlindSpotModule::modifyPathVelocityDetail(
   }
 
   if (!blind_spot_lanelets_) {
-    const auto blind_spot_lanelets = generateBlindSpotLanelets(input_path);
+    const auto blind_spot_lanelets = generateBlindSpotLanelets(
+      planner_data_->route_handler_, turn_direction_, lane_id_, input_path,
+      planner_param_.ignore_width_from_center_line, planner_param_.adjacent_extend_width,
+      planner_param_.opposite_adjacent_extend_width);
     if (!blind_spot_lanelets.empty()) {
       blind_spot_lanelets_ = blind_spot_lanelets;
     }
@@ -117,8 +115,8 @@ BlindSpotDecision BlindSpotModule::modifyPathVelocityDetail(
   const auto & blind_spot_lanelets = blind_spot_lanelets_.value();
 
   const auto detection_area_opt = generateBlindSpotPolygons(
-    input_path, closest_idx, blind_spot_lanelets,
-    path->points.at(critical_stopline_idx).point.pose);
+    input_path, closest_idx, blind_spot_lanelets, path->points.at(critical_stopline_idx).point.pose,
+    planner_param_.backward_detection_length);
   if (!detection_area_opt) {
     return InternalError{"Failed to generate BlindSpotPolygons"};
   }
@@ -160,98 +158,25 @@ void BlindSpotModule::setRTCStatus(
     decision);
 }
 
-void BlindSpotModule::reactRTCApproval(
-  const BlindSpotDecision & decision, PathWithLaneId * path, StopReason * stop_reason)
+void BlindSpotModule::reactRTCApproval(const BlindSpotDecision & decision, PathWithLaneId * path)
 {
   std::visit(
-    VisitorSwitch{[&](const auto & sub_decision) {
-      reactRTCApprovalByDecision(sub_decision, path, stop_reason);
-    }},
+    VisitorSwitch{
+      [&](const auto & sub_decision) { reactRTCApprovalByDecision(sub_decision, path); }},
     decision);
 }
 
-bool BlindSpotModule::modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason)
+bool BlindSpotModule::modifyPathVelocity(PathWithLaneId * path)
 {
   debug_data_ = DebugData();
-  *stop_reason = planning_utils::initializeStopReason(StopReason::BLIND_SPOT);
 
   initializeRTCStatus();
-  const auto decision = modifyPathVelocityDetail(path, stop_reason);
+  const auto decision = modifyPathVelocityDetail(path);
   const auto & input_path = *path;
   setRTCStatus(decision, input_path);
-  reactRTCApproval(decision, path, stop_reason);
+  reactRTCApproval(decision, path);
 
   return true;
-}
-
-static bool hasLaneIds(
-  const tier4_planning_msgs::msg::PathPointWithLaneId & p, const lanelet::Id id)
-{
-  for (const auto & pid : p.lane_ids) {
-    if (pid == id) {
-      return true;
-    }
-  }
-  return false;
-}
-
-static std::optional<std::pair<size_t, size_t>> findLaneIdInterval(
-  const tier4_planning_msgs::msg::PathWithLaneId & p, const lanelet::Id id)
-{
-  bool found = false;
-  size_t start = 0;
-  size_t end = p.points.size() > 0 ? p.points.size() - 1 : 0;
-  if (start == end) {
-    // there is only one point in the path
-    return std::nullopt;
-  }
-  for (size_t i = 0; i < p.points.size(); ++i) {
-    if (hasLaneIds(p.points.at(i), id)) {
-      if (!found) {
-        // found interval for the first time
-        found = true;
-        start = i;
-      }
-    } else if (found) {
-      // prior point was in the interval. interval ended
-      end = i;
-      break;
-    }
-  }
-  start = start > 0 ? start - 1 : 0;  // the idx of last point before the interval
-  return found ? std::make_optional(std::make_pair(start, end)) : std::nullopt;
-}
-
-std::optional<InterpolatedPathInfo> BlindSpotModule::generateInterpolatedPathInfo(
-  const tier4_planning_msgs::msg::PathWithLaneId & input_path) const
-{
-  constexpr double ds = 0.2;
-  InterpolatedPathInfo interpolated_path_info;
-  if (!splineInterpolate(input_path, ds, interpolated_path_info.path, logger_)) {
-    return std::nullopt;
-  }
-  interpolated_path_info.ds = ds;
-  interpolated_path_info.lane_id = lane_id_;
-  interpolated_path_info.lane_id_interval =
-    findLaneIdInterval(interpolated_path_info.path, lane_id_);
-  return interpolated_path_info;
-}
-
-std::optional<lanelet::ConstLanelet> BlindSpotModule::getSiblingStraightLanelet(
-  const std::shared_ptr<const PlannerData> planner_data) const
-{
-  const auto lanelet_map_ptr = planner_data->route_handler_->getLaneletMapPtr();
-  const auto routing_graph_ptr = planner_data->route_handler_->getRoutingGraphPtr();
-
-  const auto assigned_lane = lanelet_map_ptr->laneletLayer.get(lane_id_);
-  for (const auto & prev : routing_graph_ptr->previous(assigned_lane)) {
-    for (const auto & following : routing_graph_ptr->following(prev)) {
-      if (std::string(following.attributeOr("turn_direction", "else")) == "straight") {
-        return following;
-      }
-    }
-  }
-  return std::nullopt;
 }
 
 static std::optional<size_t> getFirstPointIntersectsLineByFootprint(
@@ -445,7 +370,7 @@ double BlindSpotModule::computeTimeToPassStopLine(
   const lanelet::ConstLanelets & blind_spot_lanelets,
   const geometry_msgs::msg::Pose & stop_line_pose) const
 {
-  // egoが停止している時にそのまま速度を使うと衝突しなくなってしまうのでegoについては最低速度を使う
+  // if ego is completely stopped, using ego velocity yields "no-collision"
   const auto & current_pose = planner_data_->current_odometry->pose;
   const auto current_arc_ego =
     lanelet::utils::getArcCoordinates(blind_spot_lanelets, current_pose).length;
@@ -493,220 +418,6 @@ std::optional<autoware_perception_msgs::msg::PredictedObject> BlindSpotModule::i
     }
   }
   return std::nullopt;
-}
-
-lanelet::ConstLanelet BlindSpotModule::generateHalfLanelet(
-  const lanelet::ConstLanelet lanelet) const
-{
-  lanelet::Points3d lefts, rights;
-
-  const double offset = (turn_direction_ == TurnDirection::LEFT)
-                          ? planner_param_.ignore_width_from_center_line
-                          : -planner_param_.ignore_width_from_center_line;
-  const auto offset_centerline = lanelet::utils::getCenterlineWithOffset(lanelet, offset);
-
-  const auto original_left_bound =
-    (turn_direction_ == TurnDirection::LEFT) ? lanelet.leftBound() : offset_centerline;
-  const auto original_right_bound =
-    (turn_direction_ == TurnDirection::LEFT) ? offset_centerline : lanelet.rightBound();
-
-  for (const auto & pt : original_left_bound) {
-    lefts.push_back(lanelet::Point3d(pt));
-  }
-  for (const auto & pt : original_right_bound) {
-    rights.push_back(lanelet::Point3d(pt));
-  }
-  const auto left_bound = lanelet::LineString3d(lanelet::InvalId, std::move(lefts));
-  const auto right_bound = lanelet::LineString3d(lanelet::InvalId, std::move(rights));
-  auto half_lanelet = lanelet::Lanelet(lanelet::InvalId, left_bound, right_bound);
-  return half_lanelet;
-}
-
-lanelet::ConstLanelet BlindSpotModule::generateExtendedAdjacentLanelet(
-  const lanelet::ConstLanelet lanelet, const TurnDirection direction) const
-{
-  const auto centerline = lanelet.centerline2d();
-  const auto width =
-    boost::geometry::area(lanelet.polygon2d().basicPolygon()) / boost::geometry::length(centerline);
-  const double extend_width = std::min<double>(planner_param_.adjacent_extend_width, width);
-  const auto left_bound_ =
-    direction == TurnDirection::LEFT
-      ? lanelet::utils::getCenterlineWithOffset(lanelet, -width / 2 + extend_width)
-      : lanelet.leftBound();
-  const auto right_bound_ =
-    direction == TurnDirection::RIGHT
-      ? lanelet::utils::getCenterlineWithOffset(lanelet, width / 2 - extend_width)
-      : lanelet.rightBound();
-  lanelet::Points3d lefts, rights;
-  for (const auto & pt : left_bound_) {
-    lefts.push_back(lanelet::Point3d(pt));
-  }
-  for (const auto & pt : right_bound_) {
-    rights.push_back(lanelet::Point3d(pt));
-  }
-  const auto left_bound = lanelet::LineString3d(lanelet::InvalId, std::move(lefts));
-  const auto right_bound = lanelet::LineString3d(lanelet::InvalId, std::move(rights));
-  auto new_lanelet = lanelet::Lanelet(lanelet::InvalId, left_bound, right_bound);
-  const auto new_centerline = lanelet::utils::generateFineCenterline(new_lanelet, 5.0);
-  new_lanelet.setCenterline(new_centerline);
-  return new_lanelet;
-}
-
-lanelet::ConstLanelet BlindSpotModule::generateExtendedOppositeAdjacentLanelet(
-  const lanelet::ConstLanelet lanelet, const TurnDirection direction) const
-{
-  const auto centerline = lanelet.centerline2d();
-  const auto width =
-    boost::geometry::area(lanelet.polygon2d().basicPolygon()) / boost::geometry::length(centerline);
-  const double extend_width =
-    std::min<double>(planner_param_.opposite_adjacent_extend_width, width);
-  const auto left_bound_ =
-    direction == TurnDirection::RIGHT
-      ? lanelet.rightBound().invert()
-      : lanelet::utils::getCenterlineWithOffset(lanelet.invert(), -width / 2 + extend_width);
-  const auto right_bound_ =
-    direction == TurnDirection::RIGHT
-      ? lanelet::utils::getCenterlineWithOffset(lanelet.invert(), width / 2 - extend_width)
-      : lanelet.leftBound().invert();
-  lanelet::Points3d lefts, rights;
-  for (const auto & pt : left_bound_) {
-    lefts.push_back(lanelet::Point3d(pt));
-  }
-  for (const auto & pt : right_bound_) {
-    rights.push_back(lanelet::Point3d(pt));
-  }
-  const auto left_bound = lanelet::LineString3d(lanelet::InvalId, std::move(lefts));
-  const auto right_bound = lanelet::LineString3d(lanelet::InvalId, std::move(rights));
-  auto new_lanelet = lanelet::Lanelet(lanelet::InvalId, left_bound, right_bound);
-  const auto new_centerline = lanelet::utils::generateFineCenterline(new_lanelet, 5.0);
-  new_lanelet.setCenterline(new_centerline);
-  return new_lanelet;
-}
-
-static lanelet::LineString3d removeConst(lanelet::ConstLineString3d line)
-{
-  lanelet::Points3d pts;
-  for (const auto & pt : line) {
-    pts.push_back(lanelet::Point3d(pt));
-  }
-  return lanelet::LineString3d(lanelet::InvalId, pts);
-}
-
-lanelet::ConstLanelets BlindSpotModule::generateBlindSpotLanelets(
-  const tier4_planning_msgs::msg::PathWithLaneId & path) const
-{
-  /* get lanelet map */
-  const auto lanelet_map_ptr = planner_data_->route_handler_->getLaneletMapPtr();
-  const auto routing_graph_ptr = planner_data_->route_handler_->getRoutingGraphPtr();
-
-  std::vector<int64_t> lane_ids;
-  /* get lane ids until intersection */
-  for (const auto & point : path.points) {
-    bool found_intersection_lane = false;
-    for (const auto lane_id : point.lane_ids) {
-      if (lane_id == lane_id_) {
-        found_intersection_lane = true;
-        lane_ids.push_back(lane_id);
-        break;
-      }
-      // make lane_ids unique
-      if (std::find(lane_ids.begin(), lane_ids.end(), lane_id) == lane_ids.end()) {
-        lane_ids.push_back(lane_id);
-      }
-    }
-    if (found_intersection_lane) break;
-  }
-
-  lanelet::ConstLanelets blind_spot_lanelets;
-  for (const auto i : lane_ids) {
-    const auto lane = lanelet_map_ptr->laneletLayer.get(i);
-    const auto ego_half_lanelet = generateHalfLanelet(lane);
-    const auto assoc_adj =
-      turn_direction_ == TurnDirection::LEFT
-        ? (routing_graph_ptr->adjacentLeft(lane))
-        : (turn_direction_ == TurnDirection::RIGHT ? (routing_graph_ptr->adjacentRight(lane))
-                                                   : boost::none);
-    const std::optional<lanelet::ConstLanelet> opposite_adj =
-      [&]() -> std::optional<lanelet::ConstLanelet> {
-      if (!!assoc_adj) {
-        return std::nullopt;
-      }
-      if (turn_direction_ == TurnDirection::LEFT) {
-        // this should exist in right-hand traffic
-        const auto adjacent_lanes =
-          lanelet_map_ptr->laneletLayer.findUsages(lane.leftBound().invert());
-        if (adjacent_lanes.empty()) {
-          return std::nullopt;
-        }
-        return adjacent_lanes.front();
-      }
-      if (turn_direction_ == TurnDirection::RIGHT) {
-        // this should exist in left-hand traffic
-        const auto adjacent_lanes =
-          lanelet_map_ptr->laneletLayer.findUsages(lane.rightBound().invert());
-        if (adjacent_lanes.empty()) {
-          return std::nullopt;
-        }
-        return adjacent_lanes.front();
-      } else {
-        return std::nullopt;
-      }
-    }();
-
-    const auto assoc_shoulder = [&]() -> std::optional<lanelet::ConstLanelet> {
-      if (turn_direction_ == TurnDirection::LEFT) {
-        return planner_data_->route_handler_->getLeftShoulderLanelet(lane);
-      } else if (turn_direction_ == TurnDirection::RIGHT) {
-        return planner_data_->route_handler_->getRightShoulderLanelet(lane);
-      }
-      return std::nullopt;
-    }();
-    if (assoc_shoulder) {
-      const auto lefts = (turn_direction_ == TurnDirection::LEFT)
-                           ? assoc_shoulder.value().leftBound()
-                           : ego_half_lanelet.leftBound();
-      const auto rights = (turn_direction_ == TurnDirection::LEFT)
-                            ? ego_half_lanelet.rightBound()
-                            : assoc_shoulder.value().rightBound();
-      blind_spot_lanelets.push_back(
-        lanelet::ConstLanelet(lanelet::InvalId, removeConst(lefts), removeConst(rights)));
-
-    } else if (!!assoc_adj) {
-      const auto adj_half_lanelet =
-        generateExtendedAdjacentLanelet(assoc_adj.value(), turn_direction_);
-      const auto lefts = (turn_direction_ == TurnDirection::LEFT) ? adj_half_lanelet.leftBound()
-                                                                  : ego_half_lanelet.leftBound();
-      const auto rights = (turn_direction_ == TurnDirection::RIGHT) ? adj_half_lanelet.rightBound()
-                                                                    : ego_half_lanelet.rightBound();
-      blind_spot_lanelets.push_back(
-        lanelet::ConstLanelet(lanelet::InvalId, removeConst(lefts), removeConst(rights)));
-    } else if (opposite_adj) {
-      const auto adj_half_lanelet =
-        generateExtendedOppositeAdjacentLanelet(opposite_adj.value(), turn_direction_);
-      const auto lefts = (turn_direction_ == TurnDirection::LEFT) ? adj_half_lanelet.leftBound()
-                                                                  : ego_half_lanelet.leftBound();
-      const auto rights = (turn_direction_ == TurnDirection::LEFT) ? ego_half_lanelet.rightBound()
-                                                                   : adj_half_lanelet.rightBound();
-      blind_spot_lanelets.push_back(
-        lanelet::ConstLanelet(lanelet::InvalId, removeConst(lefts), removeConst(rights)));
-    } else {
-      blind_spot_lanelets.push_back(ego_half_lanelet);
-    }
-  }
-  return blind_spot_lanelets;
-}
-
-std::optional<lanelet::CompoundPolygon3d> BlindSpotModule::generateBlindSpotPolygons(
-  [[maybe_unused]] const tier4_planning_msgs::msg::PathWithLaneId & path,
-  [[maybe_unused]] const size_t closest_idx, const lanelet::ConstLanelets & blind_spot_lanelets,
-  const geometry_msgs::msg::Pose & stop_line_pose) const
-{
-  const auto stop_line_arc_ego =
-    lanelet::utils::getArcCoordinates(blind_spot_lanelets, stop_line_pose).length;
-  const auto detection_area_start_length_ego =
-    std::max<double>(stop_line_arc_ego - planner_param_.backward_detection_length, 0.0);
-  return lanelet::utils::getPolygonFromArcLength(
-    blind_spot_lanelets, detection_area_start_length_ego, stop_line_arc_ego);
 }
 
 bool BlindSpotModule::isTargetObjectType(

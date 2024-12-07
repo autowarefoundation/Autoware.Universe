@@ -22,8 +22,11 @@
 #include <NvInfer.h>
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <functional>
+#include <memory>
 #include <numeric>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace autoware

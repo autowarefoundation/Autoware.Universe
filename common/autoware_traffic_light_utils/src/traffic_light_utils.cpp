@@ -14,6 +14,8 @@
 
 #include "autoware/traffic_light_utils/traffic_light_utils.hpp"
 
+#include <string>
+
 namespace autoware::traffic_light_utils
 {
 

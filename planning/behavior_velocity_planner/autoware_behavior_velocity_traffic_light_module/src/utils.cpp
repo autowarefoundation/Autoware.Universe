@@ -19,6 +19,8 @@
 #include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 
+#include <vector>
+
 namespace autoware::behavior_velocity_planner
 {
 namespace bg = boost::geometry;
@@ -32,8 +34,8 @@ auto getOffsetPoint(const Eigen::Vector2d & src, const Eigen::Vector2d & dst, co
 }
 
 auto findNearestCollisionPoint(
-  const LineString2d & line1, const LineString2d & line2,
-  const Point2d & origin) -> std::optional<Point2d>
+  const LineString2d & line1, const LineString2d & line2, const Point2d & origin)
+  -> std::optional<Point2d>
 {
   std::vector<Point2d> collision_points;
   bg::intersection(line1, line2, collision_points);

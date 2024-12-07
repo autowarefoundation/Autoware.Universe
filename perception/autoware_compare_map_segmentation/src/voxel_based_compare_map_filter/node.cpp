@@ -21,6 +21,7 @@
 #include <pcl/search/kdtree.h>
 #include <pcl/segmentation/segment_differences.h>
 
+#include <memory>
 #include <string>
 
 namespace autoware::compare_map_segmentation

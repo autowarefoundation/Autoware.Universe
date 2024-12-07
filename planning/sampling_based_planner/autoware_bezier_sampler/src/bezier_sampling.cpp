@@ -14,6 +14,8 @@
 
 #include <autoware_bezier_sampler/bezier_sampling.hpp>
 
+#include <vector>
+
 namespace autoware::bezier_sampler
 {
 std::vector<Bezier> sample(

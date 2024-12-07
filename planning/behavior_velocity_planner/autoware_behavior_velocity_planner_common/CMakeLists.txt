@@ -6,6 +6,7 @@ autoware_package()
 
 ament_auto_add_library(${PROJECT_NAME} SHARED
   src/scene_module_interface.cpp
+  src/planner_data.cpp
   src/utilization/path_utilization.cpp
   src/utilization/trajectory_utils.cpp
   src/utilization/arc_lane_util.cpp
@@ -15,15 +16,14 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
 )
 
 if(BUILD_TESTING)
-  ament_add_ros_isolated_gtest(test_${PROJECT_NAME}
-    test/src/test_state_machine.cpp
-    test/src/test_arc_lane_util.cpp
-    test/src/test_utilization.cpp
-  )
+  file(GLOB TEST_SOURCES test/src/*.cpp)
+  ament_add_ros_isolated_gtest(test_${PROJECT_NAME} ${TEST_SOURCES})
   target_link_libraries(test_${PROJECT_NAME}
     gtest_main
     ${PROJECT_NAME}
   )
 endif()
 
-ament_auto_package()
+ament_auto_package(INSTALL_TO_SHARE
+  config
+)

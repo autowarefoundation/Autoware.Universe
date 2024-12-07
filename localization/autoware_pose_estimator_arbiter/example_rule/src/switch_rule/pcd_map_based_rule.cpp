@@ -16,6 +16,9 @@
 
 #include <autoware/universe_utils/ros/parameter.hpp>
 
+#include <memory>
+#include <unordered_map>
+#include <unordered_set>
 #include <utility>
 
 namespace autoware::pose_estimator_arbiter::switch_rule

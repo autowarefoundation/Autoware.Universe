@@ -14,7 +14,10 @@
 
 #include "debugger.hpp"
 
+#include <list>
 #include <memory>
+#include <string>
+#include <unordered_map>
 
 namespace autoware::multi_object_tracker
 {

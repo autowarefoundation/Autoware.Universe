@@ -18,6 +18,9 @@
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware/universe_utils/math/constants.hpp>
 
+#include <string>
+#include <vector>
+
 namespace autoware::lidar_transfusion
 {
 

@@ -29,7 +29,9 @@
 
 #include <lanelet2_core/geometry/Polygon.h>
 
+#include <algorithm>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace autoware::behavior_path_planner

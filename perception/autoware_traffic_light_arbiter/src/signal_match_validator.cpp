@@ -14,6 +14,12 @@
 
 #include "autoware/traffic_light_arbiter/signal_match_validator.hpp"
 
+#include <algorithm>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
 namespace util
 {
 using TrafficSignalArray = autoware_perception_msgs::msg::TrafficLightGroupArray;

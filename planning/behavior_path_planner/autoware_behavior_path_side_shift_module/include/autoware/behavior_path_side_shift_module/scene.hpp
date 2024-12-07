@@ -87,8 +87,6 @@ private:
   // const methods
   void publishPath(const PathWithLaneId & path) const;
 
-  double getClosestShiftLength() const;
-
   // member
   PathWithLaneId refined_path_{};
   PathWithLaneId reference_path_{};

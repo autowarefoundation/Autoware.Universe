@@ -14,6 +14,7 @@
 #ifndef AUTOWARE__BEHAVIOR_PATH_LANE_CHANGE_MODULE__UTILS__DATA_STRUCTS_HPP_
 #define AUTOWARE__BEHAVIOR_PATH_LANE_CHANGE_MODULE__UTILS__DATA_STRUCTS_HPP_
 
+#include "autoware/behavior_path_lane_change_module/utils/parameters.hpp"
 #include "autoware/behavior_path_planner_common/utils/path_safety_checker/path_safety_checker_parameters.hpp"
 #include "autoware/behavior_path_planner_common/utils/path_shifter/path_shifter.hpp"
 
@@ -41,140 +42,6 @@ using route_handler::Direction;
 using route_handler::RouteHandler;
 using universe_utils::Polygon2d;
 using utils::path_safety_checker::ExtendedPredictedObjects;
-
-struct LateralAccelerationMap
-{
-  std::vector<double> base_vel;
-  std::vector<double> base_min_acc;
-  std::vector<double> base_max_acc;
-
-  void add(const double velocity, const double min_acc, const double max_acc)
-  {
-    if (base_vel.size() != base_min_acc.size() || base_vel.size() != base_max_acc.size()) {
-      return;
-    }
-
-    size_t idx = 0;
-    for (size_t i = 0; i < base_vel.size(); ++i) {
-      if (velocity < base_vel.at(i)) {
-        break;
-      }
-      idx = i + 1;
-    }
-
-    base_vel.insert(base_vel.begin() + idx, velocity);
-    base_min_acc.insert(base_min_acc.begin() + idx, min_acc);
-    base_max_acc.insert(base_max_acc.begin() + idx, max_acc);
-  }
-
-  std::pair<double, double> find(const double velocity) const
-  {
-    if (!base_vel.empty() && velocity < base_vel.front()) {
-      return std::make_pair(base_min_acc.front(), base_max_acc.front());
-    }
-    if (!base_vel.empty() && velocity > base_vel.back()) {
-      return std::make_pair(base_min_acc.back(), base_max_acc.back());
-    }
-
-    const double min_acc = autoware::interpolation::lerp(base_vel, base_min_acc, velocity);
-    const double max_acc = autoware::interpolation::lerp(base_vel, base_max_acc, velocity);
-
-    return std::make_pair(min_acc, max_acc);
-  }
-};
-
-struct CancelParameters
-{
-  bool enable_on_prepare_phase{true};
-  bool enable_on_lane_changing_phase{false};
-  double delta_time{1.0};
-  double duration{5.0};
-  double max_lateral_jerk{10.0};
-  double overhang_tolerance{0.0};
-
-  // unsafe_hysteresis_threshold will be compare with the number of detected unsafe instance. If the
-  // number of unsafe exceeds unsafe_hysteresis_threshold, the lane change will be cancelled or
-  // aborted.
-  int unsafe_hysteresis_threshold{2};
-
-  int deceleration_sampling_num{5};
-};
-
-struct Parameters
-{
-  // trajectory generation
-  double backward_lane_length{200.0};
-  double prediction_time_resolution{0.5};
-  int longitudinal_acc_sampling_num{10};
-  int lateral_acc_sampling_num{10};
-
-  // lane change parameters
-  double backward_length_buffer_for_end_of_lane{0.0};
-  double backward_length_buffer_for_blocking_object{0.0};
-  double backward_length_from_intersection{5.0};
-  double lane_changing_lateral_jerk{0.5};
-  double minimum_lane_changing_velocity{5.6};
-  double lane_change_prepare_duration{4.0};
-  LateralAccelerationMap lane_change_lat_acc_map;
-
-  // parked vehicle
-  double object_check_min_road_shoulder_width{0.5};
-  double object_shiftable_ratio_threshold{0.6};
-
-  // turn signal
-  double min_length_for_turn_signal_activation{10.0};
-  double length_ratio_for_turn_signal_deactivation{0.8};
-
-  // acceleration data
-  double min_longitudinal_acc{-1.0};
-  double max_longitudinal_acc{1.0};
-
-  double skip_process_lon_diff_th_prepare{0.5};
-  double skip_process_lon_diff_th_lane_changing{1.0};
-
-  // collision check
-  bool enable_collision_check_for_prepare_phase_in_general_lanes{false};
-  bool enable_collision_check_for_prepare_phase_in_intersection{true};
-  bool enable_collision_check_for_prepare_phase_in_turns{true};
-  double stopped_object_velocity_threshold{0.1};
-  bool check_objects_on_current_lanes{true};
-  bool check_objects_on_other_lanes{true};
-  bool use_all_predicted_path{false};
-  double lane_expansion_left_offset{0.0};
-  double lane_expansion_right_offset{0.0};
-
-  // regulatory elements
-  bool regulate_on_crosswalk{false};
-  bool regulate_on_intersection{false};
-  bool regulate_on_traffic_light{false};
-
-  // ego vehicle stuck detection
-  double stop_velocity_threshold{0.1};
-  double stop_time_threshold{3.0};
-
-  // true by default for all objects
-  utils::path_safety_checker::ObjectTypesToCheck object_types_to_check;
-
-  // safety check
-  bool allow_loose_check_for_cancel{true};
-  bool enable_target_lane_bound_check{true};
-  double collision_check_yaw_diff_threshold{3.1416};
-  utils::path_safety_checker::RSSparams rss_params{};
-  utils::path_safety_checker::RSSparams rss_params_for_parked{};
-  utils::path_safety_checker::RSSparams rss_params_for_abort{};
-  utils::path_safety_checker::RSSparams rss_params_for_stuck{};
-
-  // abort
-  CancelParameters cancel{};
-
-  // finish judge parameter
-  double lane_change_finish_judge_buffer{3.0};
-  double finish_judge_lateral_threshold{0.2};
-  double finish_judge_lateral_angle_deviation{autoware::universe_utils::deg2rad(3.0)};
-
-  // debug marker
-  bool publish_debug_marker{false};
-};
 
 enum class States {
   Normal = 0,
@@ -262,23 +129,26 @@ struct Info
   }
 };
 
-template <typename Object>
-struct LanesObjects
+struct TargetLaneLeadingObjects
 {
-  Object current_lane{};
-  Object target_lane_leading{};
-  Object target_lane_trailing{};
-  Object other_lane{};
+  ExtendedPredictedObjects moving;
+  ExtendedPredictedObjects stopped;
 
-  LanesObjects() = default;
-  LanesObjects(
-    Object current_lane, Object target_lane_leading, Object target_lane_trailing, Object other_lane)
-  : current_lane(std::move(current_lane)),
-    target_lane_leading(std::move(target_lane_leading)),
-    target_lane_trailing(std::move(target_lane_trailing)),
-    other_lane(std::move(other_lane))
+  // for objects outside of target lanes, but close to its boundaries
+  ExtendedPredictedObjects stopped_at_bound;
+
+  [[nodiscard]] size_t size() const
   {
+    return moving.size() + stopped.size() + stopped_at_bound.size();
   }
+};
+
+struct FilteredLanesObjects
+{
+  ExtendedPredictedObjects others;
+  ExtendedPredictedObjects current_lane;
+  ExtendedPredictedObjects target_lane_trailing;
+  TargetLaneLeadingObjects target_lane_leading;
 };
 
 struct TargetObjects
@@ -352,6 +222,8 @@ struct TransientData
   size_t current_path_seg_idx;   // index of nearest segment to ego along current path
   double current_path_velocity;  // velocity of the current path at the ego position along the path
 
+  double lane_change_prepare_duration{0.0};
+
   bool is_ego_near_current_terminal_start{false};
   bool is_ego_stuck{false};
 
@@ -418,8 +290,7 @@ using LaneChangeStates = lane_change::States;
 using LaneChangePhaseInfo = lane_change::PhaseInfo;
 using LaneChangePhaseMetrics = lane_change::PhaseMetrics;
 using LaneChangeInfo = lane_change::Info;
-using FilteredByLanesObjects = lane_change::LanesObjects<std::vector<PredictedObject>>;
-using FilteredByLanesExtendedObjects = lane_change::LanesObjects<ExtendedPredictedObjects>;
+using FilteredLanesObjects = lane_change::FilteredLanesObjects;
 using LateralAccelerationMap = lane_change::LateralAccelerationMap;
 }  // namespace autoware::behavior_path_planner
 

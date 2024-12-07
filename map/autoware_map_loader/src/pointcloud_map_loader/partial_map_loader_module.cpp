@@ -14,6 +14,8 @@
 
 #include "partial_map_loader_module.hpp"
 
+#include <map>
+#include <string>
 #include <utility>
 
 namespace autoware::map_loader

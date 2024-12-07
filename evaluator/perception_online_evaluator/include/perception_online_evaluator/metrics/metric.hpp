@@ -15,7 +15,7 @@
 #ifndef PERCEPTION_ONLINE_EVALUATOR__METRICS__METRIC_HPP_
 #define PERCEPTION_ONLINE_EVALUATOR__METRICS__METRIC_HPP_
 
-#include "perception_online_evaluator/stat.hpp"
+#include "autoware/universe_utils/math/accumulator.hpp"
 
 #include <iostream>
 #include <string>
@@ -39,14 +39,15 @@ enum class Metric {
 
 // Each metric has a different return type. (statistic or just a one value etc).
 // To handle them all in the MetricsCalculator::calculate function, define MetricsMap as a variant
-using MetricStatMap = std::unordered_map<std::string, Stat<double>>;
+using autoware::universe_utils::Accumulator;
+using MetricStatMap = std::unordered_map<std::string, Accumulator<double>>;
 using MetricValueMap = std::unordered_map<std::string, double>;
 using MetricsMap = std::variant<MetricStatMap, MetricValueMap>;
 
 struct PredictedPathDeviationMetrics
 {
-  Stat<double> mean;
-  Stat<double> variance;
+  Accumulator<double> mean;
+  Accumulator<double> variance;
 };
 
 static const std::unordered_map<std::string, Metric> str_to_metric = {

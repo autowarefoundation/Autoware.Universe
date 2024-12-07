@@ -22,6 +22,8 @@
 #include <rviz_common/validate_floats.hpp>
 #include <rviz_rendering/objects/billboard_line.hpp>
 
+#include <memory>
+
 namespace rviz_plugins
 {
 PoseHistory::PoseHistory() : last_stamp_(0, 0, RCL_ROS_TIME)

@@ -21,6 +21,11 @@
 #include <yabloc_common/cv_decompress.hpp>
 #include <yabloc_common/pub_sub.hpp>
 
+#include <memory>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+
 namespace yabloc::graph_segment
 {
 GraphSegment::GraphSegment(const rclcpp::NodeOptions & options)

@@ -31,6 +31,5 @@
     <remap from="~/output/trajectory" to="$(var output_trajectory)"/>
     <remap from="~/output/velocity_limit" to="$(var output_velocity_limit)"/>
     <remap from="~/output/clear_velocity_limit" to="$(var output_clear_velocity_limit)"/>
-    <remap from="~/output/stop_reasons" to="/planning/scenario_planning/status/stop_reasons"/>
   </node>
 </launch>

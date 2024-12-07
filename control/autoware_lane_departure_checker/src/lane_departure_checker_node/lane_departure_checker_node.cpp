@@ -252,8 +252,7 @@ bool LaneDepartureCheckerNode::isDataValid()
   }
 
   if (predicted_trajectory_->points.empty()) {
-    RCLCPP_ERROR_THROTTLE(
-      get_logger(), *get_clock(), 5000, "predicted_trajectory is empty. Not expected!");
+    RCLCPP_DEBUG(get_logger(), "predicted_trajectory is empty. Not expected!");
     return false;
   }
 

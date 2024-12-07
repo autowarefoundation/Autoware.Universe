@@ -21,47 +21,17 @@
           "default": "1.0",
           "description": "the output path will be interpolated by this interval"
         },
-        "max_accel": {
-          "type": "number",
-          "default": "-2.8",
-          "description": "(to be a global parameter) max acceleration of the vehicle"
-        },
-        "system_delay": {
-          "type": "number",
-          "default": "0.5",
-          "description": "(to be a global parameter) delay time until output control command"
-        },
-        "delay_response_time": {
-          "type": "number",
-          "default": "0.5",
-          "description": "(to be a global parameter) delay time of the vehicle's response to control commands"
-        },
         "stop_line_extend_length": {
           "type": "number",
           "default": "5.0",
           "description": "extend length of stop line"
-        },
-        "max_jerk": {
-          "type": "number",
-          "default": "-5.0",
-          "description": "max jerk of the vehicle"
-        },
-        "is_publish_debug_path": {
-          "type": "boolean",
-          "default": "false",
-          "description": "is publish debug path?"
         }
       },
       "required": [
         "forward_path_length",
         "behavior_output_path_interval",
         "backward_path_length",
-        "max_accel",
-        "system_delay",
-        "delay_response_time",
-        "stop_line_extend_length",
-        "max_jerk",
-        "is_publish_debug_path"
+        "stop_line_extend_length"
       ],
       "additionalProperties": false
     }

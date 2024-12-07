@@ -23,12 +23,11 @@ The `autoware_obstacle_cruise_planner` package has following modules.
 
 ### Output topics
 
-| Name                            | Type                                           | Description                           |
-| ------------------------------- | ---------------------------------------------- | ------------------------------------- |
-| `~/output/trajectory`           | autoware_planning_msgs::Trajectory             | output trajectory                     |
-| `~/output/velocity_limit`       | tier4_planning_msgs::VelocityLimit             | velocity limit for cruising           |
-| `~/output/clear_velocity_limit` | tier4_planning_msgs::VelocityLimitClearCommand | clear command for velocity limit      |
-| `~/output/stop_reasons`         | tier4_planning_msgs::StopReasonArray           | reasons that make the vehicle to stop |
+| Name                            | Type                                           | Description                      |
+| ------------------------------- | ---------------------------------------------- | -------------------------------- |
+| `~/output/trajectory`           | autoware_planning_msgs::Trajectory             | output trajectory                |
+| `~/output/velocity_limit`       | tier4_planning_msgs::VelocityLimit             | velocity limit for cruising      |
+| `~/output/clear_velocity_limit` | tier4_planning_msgs::VelocityLimitClearCommand | clear command for velocity limit |
 
 ## Design
 

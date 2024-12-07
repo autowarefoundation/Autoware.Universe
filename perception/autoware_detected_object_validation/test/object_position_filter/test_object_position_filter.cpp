@@ -19,6 +19,8 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <string>
 #include <vector>
 
 using autoware::detected_object_validation::position_filter::ObjectPositionFilterNode;

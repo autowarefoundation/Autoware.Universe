@@ -19,6 +19,8 @@
 #include <gtest/gtest.h>
 #include <tf2/utils.h>
 
+#include <memory>
+
 namespace
 {
 geometry_msgs::msg::Point32 toPoint32(const geometry_msgs::msg::Pose & pose)

@@ -26,7 +26,6 @@ bool PullOutPlannerBase::isPullOutPathCollided(
   const auto & dynamic_objects = planner_data_->dynamic_object;
   const auto pull_out_lanes = start_planner_utils::getPullOutLanes(
     planner_data_, planner_data_->parameters.backward_path_length + parameters_.max_back_distance);
-  const auto & vehicle_footprint = vehicle_info_.createFootprint();
   // extract stop objects in pull out lane for collision check
   const auto stop_objects = utils::path_safety_checker::filterObjectsByVelocity(
     *dynamic_objects, parameters_.th_moving_object_velocity);

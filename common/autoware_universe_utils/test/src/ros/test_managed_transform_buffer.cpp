@@ -21,6 +21,7 @@
 #include <tf2_ros/static_transform_broadcaster.h>
 
 #include <memory>
+#include <string>
 
 class TestManagedTransformBuffer : public ::testing::Test
 {

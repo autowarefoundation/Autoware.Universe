@@ -24,6 +24,10 @@
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/Polygon.h>
 
+#include <limits>
+#include <string>
+#include <vector>
+
 namespace landmark_manager
 {
 

@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <stack>
+#include <vector>
 
 namespace autoware::freespace_planning_algorithms::rrtstar_core
 {

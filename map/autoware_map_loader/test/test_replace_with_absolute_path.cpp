@@ -17,6 +17,11 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <map>
+#include <set>
+#include <string>
+#include <vector>
+
 using autoware::map_loader::PCDFileMetadata;
 using autoware::map_loader::replace_with_absolute_path;
 using ::testing::ContainerEq;

@@ -254,6 +254,12 @@ private:
   void setupDiagnosticUpdater();
   void checkControlState(diagnostic_updater::DiagnosticStatusWrapper & stat);
 
+  struct ResultWithReason
+  {
+    bool result{false};
+    std::string reason{""};
+  };
+
   /**
    * @brief set current and previous velocity with received message
    * @param [in] msg current state message
@@ -297,6 +303,13 @@ private:
    * @param [in] dt time between previous and current one
    */
   Motion calcEmergencyCtrlCmd(const double dt);
+
+  /**
+   * @brief change control state
+   * @param [in] new state
+   * @param [in] reason to change control state
+   */
+  void changeControlState(const ControlState & control_state, const std::string & reason = "");
 
   /**
    * @brief update control state according to the current situation

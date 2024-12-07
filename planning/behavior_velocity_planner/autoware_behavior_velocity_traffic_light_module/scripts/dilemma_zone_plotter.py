@@ -38,7 +38,7 @@ def get_params_from_yaml():
     # get parameters from behavior velocity planner
     behavior_vel_yaml_file_path = os.path.join(
         autoware_launch_package_path,
-        "config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/behavior_velocity_planner.param.yaml",
+        "config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/behavior_velocity_planner_common.param.yaml",
     )
     with open(behavior_vel_yaml_file_path, "r") as yaml_file:
         params = yaml.safe_load(yaml_file)

@@ -54,6 +54,7 @@ using behavior_path_planner::lane_change::CommonDataPtr;
 using behavior_path_planner::lane_change::LanesPolygon;
 using behavior_path_planner::lane_change::ModuleType;
 using behavior_path_planner::lane_change::PathSafetyStatus;
+using behavior_path_planner::lane_change::TargetLaneLeadingObjects;
 using geometry_msgs::msg::Point;
 using geometry_msgs::msg::Pose;
 using geometry_msgs::msg::Twist;
@@ -115,10 +116,9 @@ CandidateOutput assignToCandidate(
 std::optional<lanelet::ConstLanelet> get_lane_change_target_lane(
   const CommonDataPtr & common_data_ptr, const lanelet::ConstLanelets & current_lanes);
 
-std::vector<PoseWithVelocityStamped> convertToPredictedPath(
-  const LaneChangePath & lane_change_path, const Twist & vehicle_twist, const Pose & pose,
-  const double lane_changing_acceleration, const BehaviorPathPlannerParameters & common_parameters,
-  const LaneChangeParameters & lane_change_parameters, const double resolution);
+std::vector<PoseWithVelocityStamped> convert_to_predicted_path(
+  const CommonDataPtr & common_data_ptr, const LaneChangePath & lane_change_path,
+  const double lane_changing_acceleration);
 
 bool isParkedObject(
   const PathWithLaneId & path, const RouteHandler & route_handler,
@@ -131,21 +131,35 @@ bool isParkedObject(
   const ExtendedPredictedObject & object, const double buffer_to_bound,
   const double ratio_threshold);
 
-bool passed_parked_objects(
+/**
+ * @brief Checks if delaying of lane change maneuver is necessary
+ *
+ * @details Scans through the provided target objects (assumed to be ordered from closest to
+ * furthest), and returns true if any of the objects satisfy the following conditions:
+ *  - Not near the end of current lanes
+ *  - There is sufficient distance from object to next one to do lane change
+ * If the parameter delay_lc_param.check_only_parked_vehicle is set to True, only objects
+ * which pass isParkedObject() check will be considered.
+ *
+ * @param common_data_ptr Shared pointer to CommonData that holds necessary lanes info, parameters,
+ *                        and transient data.
+ * @param lane_change_path Candidate lane change path to apply checks on.
+ * @param target_objects Relevant objects to consider for delay LC checks (assumed to only include
+ *                       target lane leading static objects).
+ * @param object_debug Collision check debug struct to be updated if any of the target objects
+ *                     satisfy the conditions.
+ * @return bool True if conditions to delay lane change are met
+ */
+bool is_delay_lane_change(
   const CommonDataPtr & common_data_ptr, const LaneChangePath & lane_change_path,
-  const std::vector<ExtendedPredictedObject> & objects, CollisionCheckDebugMap & object_debug);
-
-std::optional<size_t> getLeadingStaticObjectIdx(
-  const RouteHandler & route_handler, const LaneChangePath & lane_change_path,
-  const std::vector<ExtendedPredictedObject> & objects,
-  const double object_check_min_road_shoulder_width, const double object_shiftable_ratio_threshold);
+  const std::vector<ExtendedPredictedObject> & target_objects,
+  CollisionCheckDebugMap & object_debug);
 
 lanelet::BasicPolygon2d create_polygon(
   const lanelet::ConstLanelets & lanes, const double start_dist, const double end_dist);
 
 ExtendedPredictedObject transform(
-  const PredictedObject & object, const BehaviorPathPlannerParameters & common_parameters,
-  const LaneChangeParameters & lane_change_parameters);
+  const PredictedObject & object, const LaneChangeParameters & lane_change_parameters);
 
 bool is_collided_polygons_in_lanelet(
   const std::vector<Polygon2d> & collided_polygons, const lanelet::BasicPolygon2d & lanes_polygon);
@@ -240,16 +254,13 @@ bool is_same_lane_with_prev_iteration(
 
 bool is_ahead_of_ego(
   const CommonDataPtr & common_data_ptr, const PathWithLaneId & path,
-  const PredictedObject & object);
+  const ExtendedPredictedObject & object);
 
 bool is_before_terminal(
   const CommonDataPtr & common_data_ptr, const PathWithLaneId & path,
-  const PredictedObject & object);
+  const ExtendedPredictedObject & object);
 
 double calc_angle_to_lanelet_segment(const lanelet::ConstLanelets & lanelets, const Pose & pose);
-
-ExtendedPredictedObjects transform_to_extended_objects(
-  const CommonDataPtr & common_data_ptr, const std::vector<PredictedObject> & objects);
 
 double get_distance_to_next_regulatory_element(
   const CommonDataPtr & common_data_ptr, const bool ignore_crosswalk = false,
@@ -274,7 +285,7 @@ double get_distance_to_next_regulatory_element(
  * found, returns the maximum possible double value.
  */
 double get_min_dist_to_current_lanes_obj(
-  const CommonDataPtr & common_data_ptr, const FilteredByLanesExtendedObjects & filtered_objects,
+  const CommonDataPtr & common_data_ptr, const FilteredLanesObjects & filtered_objects,
   const double dist_to_target_lane_start, const PathWithLaneId & path);
 
 /**
@@ -294,8 +305,8 @@ double get_min_dist_to_current_lanes_obj(
  * otherwise, false.
  */
 bool has_blocking_target_object(
-  const CommonDataPtr & common_data_ptr, const FilteredByLanesExtendedObjects & filtered_objects,
-  const double stop_arc_length, const PathWithLaneId & path);
+  const TargetLaneLeadingObjects & target_leading_objects, const double stop_arc_length,
+  const PathWithLaneId & path);
 
 /**
  * @brief Checks if the ego vehicle has passed any turn direction within an intersection.
@@ -342,5 +353,34 @@ std::vector<LineString2d> get_line_string_paths(const ExtendedPredictedObject & 
  */
 bool has_overtaking_turn_lane_object(
   const CommonDataPtr & common_data_ptr, const ExtendedPredictedObjects & trailing_objects);
+
+/**
+ * @brief Filters objects based on their positions and velocities relative to the ego vehicle and
+ * the target lane.
+ *
+ * This function evaluates whether an object should be classified as a leading or trailing object
+ * in the context of a lane change. Objects are filtered based on their lateral distance from
+ * the ego vehicle, velocity, and whether they are within the target lane or its expanded
+ * boundaries.
+ *
+ * @param common_data_ptr Shared pointer to CommonData containing information about current lanes,
+ *                        vehicle dimensions, lane polygons, and behavior parameters.
+ * @param object An extended predicted object representing a potential obstacle in the environment.
+ * @param dist_ego_to_current_lanes_center Distance from the ego vehicle to the center of the
+ * current lanes.
+ * @param ahead_of_ego Boolean flag indicating if the object is ahead of the ego vehicle.
+ * @param before_terminal Boolean flag indicating if the ego vehicle is before the terminal point of
+ * the lane.
+ * @param leading_objects Reference to a structure for storing leading objects (stopped, moving, or
+ * outside boundaries).
+ * @param trailing_objects Reference to a collection for storing trailing objects.
+ *
+ * @return true if the object is classified as either leading or trailing, false otherwise.
+ */
+bool filter_target_lane_objects(
+  const CommonDataPtr & common_data_ptr, const ExtendedPredictedObject & object,
+  const double dist_ego_to_current_lanes_center, const bool ahead_of_ego,
+  const bool before_terminal, TargetLaneLeadingObjects & leading_objects,
+  ExtendedPredictedObjects & trailing_objects);
 }  // namespace autoware::behavior_path_planner::utils::lane_change
 #endif  // AUTOWARE__BEHAVIOR_PATH_LANE_CHANGE_MODULE__UTILS__UTILS_HPP_

@@ -34,8 +34,6 @@ else
 
 endif
 
-:Publish stop reason;
-
 stop
 @enduml
 ```
@@ -93,7 +91,6 @@ Stop condition の項で述べたように、状態によって障害物判定�
 | `~/output/velocity_limit_clear_command` | `tier4_planning_msgs::msg::VelocityLimitClearCommand` | Velocity limit clear command |
 | `~/output/max_velocity`                 | `tier4_planning_msgs::msg::VelocityLimit`             | Velocity limit command       |
 | `~/output/no_start_reason`              | `diagnostic_msgs::msg::DiagnosticStatus`              | No start reason              |
-| `~/output/stop_reasons`                 | `tier4_planning_msgs::msg::StopReasonArray`           | Stop reasons                 |
 | `~/debug/marker`                        | `visualization_msgs::msg::MarkerArray`                | Marker for visualization     |
 
 ## Parameters

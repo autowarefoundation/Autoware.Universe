@@ -14,6 +14,8 @@
 
 #include "butterworth_filter_test.hpp"
 
+#include <vector>
+
 using autoware::signal_processing::ButterworthFilter;
 
 TEST_F(ButterWorthTestFixture, butterworthOrderTest)

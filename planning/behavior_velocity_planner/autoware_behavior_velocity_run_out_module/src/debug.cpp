@@ -20,6 +20,9 @@
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware/universe_utils/ros/marker_helper.hpp>
 
+#include <string>
+#include <vector>
+
 using autoware::universe_utils::appendMarkerArray;
 using autoware::universe_utils::calcOffsetPose;
 using autoware::universe_utils::createDefaultMarker;

@@ -2,6 +2,36 @@
 Changelog for package autoware_map_based_prediction
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.39.0 (2024-11-25)
+-------------------
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* refactor(map_based_prediction): move member functions to utils (`#9225 <https://github.com/autowarefoundation/autoware.universe/issues/9225>`_)
+* refactor(map_based_prediction): divide objectsCallback (`#9219 <https://github.com/autowarefoundation/autoware.universe/issues/9219>`_)
+* refactor(autoware_map_based_prediction): split pedestrian and bicycle predictor (`#9201 <https://github.com/autowarefoundation/autoware.universe/issues/9201>`_)
+  * refactor: grouping functions
+  * refactor: grouping parameters
+  * refactor: rename member road_users_history to road_users_history\_
+  * refactor: separate util functions
+  * refactor: Add predictor_vru.cpp and utils.cpp to map_based_prediction_node
+  * refactor: Add explicit template instantiation for removeOldObjectsHistory function
+  * refactor: Add tf2_geometry_msgs to data_structure
+  * refactor: Remove unused variables and functions in map_based_prediction_node.cpp
+  * Update perception/autoware_map_based_prediction/include/map_based_prediction/predictor_vru.hpp
+  * Apply suggestions from code review
+  * style(pre-commit): autofix
+  ---------
+  Co-authored-by: Mamoru Sobue <hilo.soblin@gmail.com>
+  Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
+* Contributors: Esteve Fernandez, Mamoru Sobue, Taekjin LEE, Yutaka Kondo
+
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0

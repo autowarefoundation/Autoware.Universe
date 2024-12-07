@@ -19,6 +19,7 @@
 #include "autoware/velocity_smoother/trajectory_utils.hpp"
 
 #include <algorithm>
+#include <memory>
 #include <string>
 #include <tuple>
 #include <utility>

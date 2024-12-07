@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_behavior_path_planner_common</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>The autoware_behavior_path_planner_common package</description>
 
   <!-- turn signal decider -->
@@ -26,6 +26,7 @@
   <maintainer email="takamasa.horibe@tier4.jp">Takamasa Horibe</maintainer>
   <maintainer email="zulfaqar.azmi@tier4.jp">Zulfaqar Azmi</maintainer>
   <maintainer email="go.sakayori@tier4.jp">Go Sakayori</maintainer>
+  <maintainer email="alqudah.mohammad@tier4.jp">Alqudah Mohammad</maintainer>
 
   <license>Apache License 2.0</license>
 

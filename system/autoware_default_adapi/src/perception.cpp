@@ -14,6 +14,7 @@
 
 #include "perception.hpp"
 
+#include <unordered_map>
 #include <vector>
 
 namespace autoware::default_adapi

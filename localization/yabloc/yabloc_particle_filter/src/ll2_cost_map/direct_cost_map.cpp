@@ -14,6 +14,9 @@
 
 #include "yabloc_particle_filter/ll2_cost_map/direct_cost_map.hpp"
 
+#include <limits>
+#include <vector>
+
 namespace yabloc
 {
 cv::Mat direct_cost_map(const cv::Mat & cost_map, const cv::Mat & intensity)

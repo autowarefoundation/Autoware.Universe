@@ -2,6 +2,38 @@
 Changelog for package autoware_test_utils
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.39.0 (2024-11-25)
+-------------------
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* test(costmap_generator): unit test implementation for costmap generator (`#9149 <https://github.com/autowarefoundation/autoware.universe/issues/9149>`_)
+  * modify costmap generator directory structure
+  * rename class CostmapGenerator to CostmapGeneratorNode
+  * unit test for object_map_utils
+  * catch error from lookupTransform
+  * use polling subscriber in costmap generator node
+  * add test for costmap generator node
+  * add test for isActive()
+  * revert unnecessary changes
+  * remove commented out line
+  * minor fix
+  * Update planning/autoware_costmap_generator/src/costmap_generator.cpp
+  Co-authored-by: Kosuke Takeuchi <kosuke.tnp@gmail.com>
+  ---------
+  Co-authored-by: Kosuke Takeuchi <kosuke.tnp@gmail.com>
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* feat(autoware_test_utils): use sample_vehicle/sample_sensor_kit (`#9290 <https://github.com/autowarefoundation/autoware.universe/issues/9290>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* feat(autoware_test_utils): add general topic dumper (`#9207 <https://github.com/autowarefoundation/autoware.universe/issues/9207>`_)
+* refactor(component_interface_utils): prefix package and namespace with autoware (`#9092 <https://github.com/autowarefoundation/autoware.universe/issues/9092>`_)
+* feat(autoware_test_utils): add traffic light msgs parser (`#9177 <https://github.com/autowarefoundation/autoware.universe/issues/9177>`_)
+* Contributors: Esteve Fernandez, Mamoru Sobue, Yutaka Kondo, mkquda
+
 0.38.0 (2024-11-08)
 -------------------
 * unify package.xml version to 0.37.0

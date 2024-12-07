@@ -17,14 +17,14 @@
 
 #include <rclcpp/qos.hpp>
 
-#include <tier4_map_msgs/msg/map_projector_info.hpp>
+#include <autoware_map_msgs/msg/map_projector_info.hpp>
 
 namespace autoware::component_interface_specs::map
 {
 
 struct MapProjectorInfo
 {
-  using Message = tier4_map_msgs::msg::MapProjectorInfo;
+  using Message = autoware_map_msgs::msg::MapProjectorInfo;
   static constexpr char name[] = "/map/map_projector_info";
   static constexpr size_t depth = 1;
   static constexpr auto reliability = RMW_QOS_POLICY_RELIABILITY_RELIABLE;

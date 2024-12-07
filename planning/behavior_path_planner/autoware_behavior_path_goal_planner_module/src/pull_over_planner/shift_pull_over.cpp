@@ -22,7 +22,10 @@
 #include <autoware_lanelet2_extension/utility/query.hpp>
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
 
+#include <algorithm>
+#include <limits>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace autoware::behavior_path_planner
@@ -132,7 +135,7 @@ std::optional<PullOverPath> ShiftPullOver::generatePullOverPath(
   const GoalCandidate & goal_candidate, const size_t id,
   const std::shared_ptr<const PlannerData> planner_data,
   const BehaviorModuleOutput & previous_module_output, const lanelet::ConstLanelets & road_lanes,
-  const lanelet::ConstLanelets & shoulder_lanes, const double lateral_jerk) const
+  const lanelet::ConstLanelets & pull_over_lanes, const double lateral_jerk) const
 {
   const double pull_over_velocity = parameters_.pull_over_velocity;
   const double after_shift_straight_distance = parameters_.after_shift_straight_distance;
@@ -206,9 +209,6 @@ std::optional<PullOverPath> ShiftPullOver::generatePullOverPath(
   shifted_path.path.points = autoware::motion_utils::removeOverlapPoints(shifted_path.path.points);
   autoware::motion_utils::insertOrientation(shifted_path.path.points, true);
 
-  // set same orientation, because the reference center line orientation is not same to the
-  shifted_path.path.points.back().point.pose.orientation = shift_end_pose.orientation;
-
   // for debug. result of shift is not equal to the target
   const Pose actual_shift_end_pose = shifted_path.path.points.back().point.pose;
 
@@ -221,14 +221,23 @@ std::optional<PullOverPath> ShiftPullOver::generatePullOverPath(
     shifted_path.path.points.push_back(p);
   }
 
+  // combine road lanes and shoulder lanes to find closest lanelet id
+  const auto lanes = std::invoke([&]() -> lanelet::ConstLanelets {
+    auto lanes = road_lanes;
+    lanes.insert(lanes.end(), pull_over_lanes.begin(), pull_over_lanes.end());
+    return lanes;  // not copy the value (Return Value Optimization)
+  });
+
   // set goal pose with velocity 0
   {
     PathPointWithLaneId p{};
     p.point.longitudinal_velocity_mps = 0.0;
     p.point.pose = goal_pose;
-    p.lane_ids = shifted_path.path.points.back().lane_ids;
-    for (const auto & lane : shoulder_lanes) {
-      p.lane_ids.push_back(lane.id());
+    lanelet::Lanelet goal_lanelet{};
+    if (lanelet::utils::query::getClosestLanelet(lanes, goal_pose, &goal_lanelet)) {
+      p.lane_ids = {goal_lanelet.id()};
+    } else {
+      p.lane_ids = shifted_path.path.points.back().lane_ids;
     }
     shifted_path.path.points.push_back(p);
   }
@@ -237,24 +246,13 @@ std::optional<PullOverPath> ShiftPullOver::generatePullOverPath(
   for (size_t i = path_shifter.getShiftLines().front().start_idx;
        i < shifted_path.path.points.size() - 1; ++i) {
     auto & point = shifted_path.path.points.at(i);
-    // set velocity
     point.point.longitudinal_velocity_mps =
       std::min(point.point.longitudinal_velocity_mps, static_cast<float>(pull_over_velocity));
-
-    // add target lanes to points after shift start
-    // add road lane_ids if not found
-    for (const auto id : shifted_path.path.points.back().lane_ids) {
-      if (std::find(point.lane_ids.begin(), point.lane_ids.end(), id) == point.lane_ids.end()) {
-        point.lane_ids.push_back(id);
-      }
-    }
-    // add shoulder lane_id if not found
-    for (const auto & lane : shoulder_lanes) {
-      if (
-        std::find(point.lane_ids.begin(), point.lane_ids.end(), lane.id()) ==
-        point.lane_ids.end()) {
-        point.lane_ids.push_back(lane.id());
-      }
+    lanelet::Lanelet lanelet{};
+    if (lanelet::utils::query::getClosestLanelet(lanes, point.point.pose, &lanelet)) {
+      point.lane_ids = {lanelet.id()};  // overwrite lane_ids
+    } else {
+      point.lane_ids = shifted_path.path.points.at(i - 1).lane_ids;
     }
   }
 
@@ -295,18 +293,12 @@ std::optional<PullOverPath> ShiftPullOver::generatePullOverPath(
         return is_footprint_in_any_polygon(footprint);
       });
   });
-  const bool is_in_lanes = std::invoke([&]() -> bool {
-    const auto drivable_lanes =
-      utils::generateDrivableLanesWithShoulderLanes(road_lanes, shoulder_lanes);
-    const auto & dp = planner_data->drivable_area_expansion_parameters;
-    const auto expanded_lanes = utils::expandLanelets(
-      drivable_lanes, dp.drivable_area_left_bound_offset, dp.drivable_area_right_bound_offset,
-      dp.drivable_area_types_to_skip);
-    const auto combined_drivable = utils::combineDrivableLanes(
-      expanded_lanes, previous_module_output.drivable_area_info.drivable_lanes);
-    return !lane_departure_checker_.checkPathWillLeaveLane(
-      utils::transformToLanelets(combined_drivable), pull_over_path.parking_path());
-  });
+
+  const auto departure_check_lane = goal_planner_utils::createDepartureCheckLanelet(
+    pull_over_lanes, *planner_data->route_handler, left_side_parking_);
+  const bool is_in_lanes = !lane_departure_checker_.checkPathWillLeaveLane(
+    {departure_check_lane}, pull_over_path.parking_path());
+
   if (!is_in_parking_lots && !is_in_lanes) {
     return {};
   }

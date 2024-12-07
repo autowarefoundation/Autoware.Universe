@@ -25,6 +25,7 @@
 #include <boost/geometry/geometry.hpp>
 
 #include <algorithm>
+#include <limits>
 #include <list>
 #include <memory>
 #include <vector>

@@ -25,7 +25,10 @@
 #include <gtest/gtest.h>
 
 #include <chrono>
+#include <cstdio>
+#include <iostream>
 #include <string>
+#include <vector>
 
 constexpr double epsilon = 1e-6;
 

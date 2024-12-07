@@ -46,7 +46,7 @@ KinematicEvaluatorNode::KinematicEvaluatorNode(const rclcpp::NodeOptions & node_
   for (const std::string & selected_metric :
        declare_parameter<std::vector<std::string>>("selected_metrics")) {
     Metric metric = str_to_metric.at(selected_metric);
-    metrics_dict_[metric] = Stat<double>();
+    metrics_dict_[metric] = Accumulator<double>();
     metrics_.push_back(metric);
   }
 }
@@ -83,7 +83,7 @@ KinematicEvaluatorNode::~KinematicEvaluatorNode()
 }
 
 DiagnosticStatus KinematicEvaluatorNode::generateDiagnosticStatus(
-  const Metric & metric, const Stat<double> & metric_stat) const
+  const Metric & metric, const Accumulator<double> & metric_stat) const
 {
   DiagnosticStatus status;
   status.level = status.OK;

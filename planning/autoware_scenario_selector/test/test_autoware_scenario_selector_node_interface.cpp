@@ -21,6 +21,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <memory>
 #include <vector>
 namespace autoware::scenario_selector
 {

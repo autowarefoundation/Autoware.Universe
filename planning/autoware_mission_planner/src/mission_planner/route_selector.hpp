@@ -15,9 +15,11 @@
 #ifndef MISSION_PLANNER__ROUTE_SELECTOR_HPP_
 #define MISSION_PLANNER__ROUTE_SELECTOR_HPP_
 
+#include <autoware/universe_utils/system/stop_watch.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <autoware_planning_msgs/msg/lanelet_route.hpp>
+#include <tier4_debug_msgs/msg/float64_stamped.hpp>
 #include <tier4_planning_msgs/msg/route_state.hpp>
 #include <tier4_planning_msgs/srv/clear_route.hpp>
 #include <tier4_planning_msgs/srv/set_lanelet_route.hpp>
@@ -64,6 +66,8 @@ class RouteSelector : public rclcpp::Node
 {
 public:
   explicit RouteSelector(const rclcpp::NodeOptions & options);
+  void publish_processing_time(
+    autoware::universe_utils::StopWatch<std::chrono::milliseconds> stop_watch);
 
 private:
   using WaypointRequest = SetWaypointRoute::Request::SharedPtr;
@@ -78,6 +82,7 @@ private:
   rclcpp::Client<SetLaneletRoute>::SharedPtr cli_set_lanelet_route_;
   rclcpp::Subscription<RouteState>::SharedPtr sub_state_;
   rclcpp::Subscription<LaneletRoute>::SharedPtr sub_route_;
+  rclcpp::Publisher<tier4_debug_msgs::msg::Float64Stamped>::SharedPtr pub_processing_time_;
 
   bool initialized_;
   bool mrm_operating_;

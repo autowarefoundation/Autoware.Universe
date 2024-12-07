@@ -17,6 +17,7 @@
 
 #include <chrono>
 #include <random>
+#include <vector>
 
 using autoware::motion_velocity_planner::obstacle_velocity_limiter::CollisionChecker;
 using autoware::motion_velocity_planner::obstacle_velocity_limiter::linestring_t;

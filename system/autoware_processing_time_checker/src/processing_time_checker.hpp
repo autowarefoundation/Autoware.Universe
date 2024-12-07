@@ -15,6 +15,8 @@
 #ifndef PROCESSING_TIME_CHECKER_HPP_
 #define PROCESSING_TIME_CHECKER_HPP_
 
+#include "autoware/universe_utils/math/accumulator.hpp"
+
 #include <rclcpp/rclcpp.hpp>
 
 #include <tier4_debug_msgs/msg/float64_stamped.hpp>
@@ -27,6 +29,7 @@
 
 namespace autoware::processing_time_checker
 {
+using autoware::universe_utils::Accumulator;
 using MetricMsg = tier4_metric_msgs::msg::Metric;
 using MetricArrayMsg = tier4_metric_msgs::msg::MetricArray;
 using tier4_debug_msgs::msg::Float64Stamped;
@@ -35,6 +38,7 @@ class ProcessingTimeChecker : public rclcpp::Node
 {
 public:
   explicit ProcessingTimeChecker(const rclcpp::NodeOptions & node_options);
+  ~ProcessingTimeChecker() override;
 
 private:
   void on_timer();
@@ -44,10 +48,15 @@ private:
   rclcpp::Publisher<MetricArrayMsg>::SharedPtr metrics_pub_;
   std::vector<rclcpp::Subscription<Float64Stamped>::SharedPtr> processing_time_subscribers_;
 
+  // parameters
+  bool output_metrics_;
+
   // topic name - module name
   std::unordered_map<std::string, std::string> module_name_map_{};
   // module name - processing time
   std::unordered_map<std::string, double> processing_time_map_{};
+  // module name - accumulator
+  std::unordered_map<std::string, Accumulator<double>> processing_time_accumulator_map_{};
 };
 }  // namespace autoware::processing_time_checker
 

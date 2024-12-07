@@ -18,6 +18,7 @@
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
 
 #include <cmath>
+#include <utility>
 
 namespace autoware::behavior_velocity_planner
 {
@@ -81,12 +82,11 @@ std::pair<double, geometry_msgs::msg::Point> WalkwayModule::getStopLine(
   return std::make_pair(dist_ego_to_stop, p_stop_line);
 }
 
-bool WalkwayModule::modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason)
+bool WalkwayModule::modifyPathVelocity(PathWithLaneId * path)
 {
   const auto & base_link2front = planner_data_->vehicle_info_.max_longitudinal_offset_m;
 
   debug_data_ = DebugData(planner_data_);
-  *stop_reason = planning_utils::initializeStopReason(StopReason::WALKWAY);
 
   const auto input = *path;
 
@@ -119,10 +119,6 @@ bool WalkwayModule::modifyPathVelocity(PathWithLaneId * path, StopReason * stop_
     }
 
     /* get stop point and stop factor */
-    StopFactor stop_factor;
-    stop_factor.stop_pose = stop_pose.value();
-    stop_factor.stop_factor_points.push_back(path_end_points_on_walkway->first);
-    planning_utils::appendStopReason(stop_factor, stop_reason);
     velocity_factor_.set(
       path->points, planner_data_->current_odometry->pose, stop_pose.value(),
       VelocityFactor::UNKNOWN);

@@ -32,7 +32,9 @@
 
 #include <algorithm>
 #include <limits>
+#include <memory>
 #include <utility>
+#include <vector>
 
 namespace autoware::behavior_velocity_planner
 {
@@ -50,7 +52,7 @@ RunOutModule::RunOutModule(
   debug_ptr_(debug_ptr),
   state_machine_(std::make_unique<run_out_utils::StateMachine>(planner_param.approaching.state))
 {
-  velocity_factor_.init(PlanningBehavior::ROUTE_OBSTACLE);
+  velocity_factor_.init(PlanningBehavior::RUN_OUT);
 
   if (planner_param.run_out.use_partition_lanelet) {
     const lanelet::LaneletMapConstPtr & ll = planner_data->route_handler_->getLaneletMapPtr();
@@ -63,8 +65,7 @@ void RunOutModule::setPlannerParam(const PlannerParam & planner_param)
   planner_param_ = planner_param;
 }
 
-bool RunOutModule::modifyPathVelocity(
-  PathWithLaneId * path, [[maybe_unused]] StopReason * stop_reason)
+bool RunOutModule::modifyPathVelocity(PathWithLaneId * path)
 {
   // timer starts
   const auto t_start = std::chrono::system_clock::now();

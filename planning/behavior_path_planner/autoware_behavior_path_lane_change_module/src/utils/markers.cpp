@@ -26,6 +26,7 @@
 #include <visualization_msgs/msg/detail/marker__struct.hpp>
 #include <visualization_msgs/msg/detail/marker_array__struct.hpp>
 
+#include <algorithm>
 #include <cstdint>
 #include <cstdlib>
 #include <sstream>
@@ -101,36 +102,34 @@ MarkerArray createLaneChangingVirtualWallMarker(
 }
 
 MarkerArray showFilteredObjects(
-  const FilteredByLanesExtendedObjects & filtered_objects, const std::string & ns)
+  const FilteredLanesObjects & filtered_objects, const std::string & ns)
 {
   int32_t update_id = 0;
-  auto current_marker = marker_utils::showFilteredObjects(
-    filtered_objects.current_lane, ns, colors::yellow(), update_id);
-  update_id += static_cast<int32_t>(current_marker.markers.size());
-  auto target_leading_marker = marker_utils::showFilteredObjects(
-    filtered_objects.target_lane_leading, ns, colors::aqua(), update_id);
-  update_id += static_cast<int32_t>(target_leading_marker.markers.size());
-  auto target_trailing_marker = marker_utils::showFilteredObjects(
-    filtered_objects.target_lane_trailing, ns, colors::blue(), update_id);
-  update_id += static_cast<int32_t>(target_trailing_marker.markers.size());
-  auto other_marker = marker_utils::showFilteredObjects(
-    filtered_objects.other_lane, ns, colors::medium_orchid(), update_id);
-
   MarkerArray marker_array;
-  std::move(
-    current_marker.markers.begin(), current_marker.markers.end(),
-    std::back_inserter(marker_array.markers));
-  std::move(
-    target_leading_marker.markers.begin(), target_leading_marker.markers.end(),
-    std::back_inserter(marker_array.markers));
+  auto reserve_size = filtered_objects.current_lane.size() + filtered_objects.others.size() +
+                      filtered_objects.target_lane_leading.size() +
+                      filtered_objects.target_lane_trailing.size();
+  marker_array.markers.reserve(2 * reserve_size);
+  auto add_objects_to_marker =
+    [&](const ExtendedPredictedObjects & objects, const ColorRGBA & color) {
+      if (objects.empty()) {
+        return;
+      }
 
-  std::move(
-    target_trailing_marker.markers.begin(), target_trailing_marker.markers.end(),
-    std::back_inserter(marker_array.markers));
+      auto marker = marker_utils::showFilteredObjects(objects, ns, color, update_id);
+      update_id += static_cast<int32_t>(marker.markers.size());
+      std::move(
+        marker.markers.begin(), marker.markers.end(), std::back_inserter(marker_array.markers));
+    };
 
-  std::move(
-    other_marker.markers.begin(), other_marker.markers.end(),
-    std::back_inserter(marker_array.markers));
+  add_objects_to_marker(filtered_objects.current_lane, colors::yellow());
+  add_objects_to_marker(filtered_objects.target_lane_leading.moving, colors::aqua());
+  add_objects_to_marker(filtered_objects.target_lane_leading.stopped, colors::light_steel_blue());
+  add_objects_to_marker(filtered_objects.target_lane_trailing, colors::blue());
+  add_objects_to_marker(
+    filtered_objects.target_lane_leading.stopped_at_bound, colors::light_pink());
+  add_objects_to_marker(filtered_objects.others, colors::medium_orchid());
+
   return marker_array;
 }
 

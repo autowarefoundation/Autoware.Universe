@@ -235,20 +235,17 @@ std::shared_ptr<SteeringOffsetEstimator> MpcLateralController::createSteerOffset
 
 void MpcLateralController::setStatus(diagnostic_updater::DiagnosticStatusWrapper & stat)
 {
-  if (m_is_mpc_solved) {
+  if (m_mpc_solved_status.result) {
     stat.summary(diagnostic_msgs::msg::DiagnosticStatus::OK, "MPC succeeded.");
   } else {
-    const std::string error_msg = "The MPC solver failed. Call MRM to stop the car.";
+    const std::string error_msg = "MPC failed due to " + m_mpc_solved_status.reason;
     stat.summary(diagnostic_msgs::msg::DiagnosticStatus::ERROR, error_msg);
   }
 }
 
 void MpcLateralController::setupDiag()
 {
-  auto & d = diag_updater_;
-  d->setHardwareID("mpc_lateral_controller");
-
-  d->add("MPC_solve_checker", [&](auto & stat) { setStatus(stat); });
+  diag_updater_->add("MPC_solve_checker", [&](auto & stat) { setStatus(stat); });
 }
 
 trajectory_follower::LateralOutput MpcLateralController::run(
@@ -277,11 +274,16 @@ trajectory_follower::LateralOutput MpcLateralController::run(
   }
 
   trajectory_follower::LateralHorizon ctrl_cmd_horizon{};
-  const bool is_mpc_solved = m_mpc->calculateMPC(
+  const auto mpc_solved_status = m_mpc->calculateMPC(
     m_current_steering, m_current_kinematic_state, ctrl_cmd, predicted_traj, debug_values,
     ctrl_cmd_horizon);
 
-  m_is_mpc_solved = is_mpc_solved;  // for diagnostic updater
+  if (
+    (m_mpc_solved_status.result == true && mpc_solved_status.result == false) ||
+    (!mpc_solved_status.result && mpc_solved_status.reason != m_mpc_solved_status.reason)) {
+    RCLCPP_ERROR(logger_, "MPC failed due to %s", mpc_solved_status.reason.c_str());
+  }
+  m_mpc_solved_status = mpc_solved_status;  // for diagnostic updater
 
   diag_updater_->force_update();
 
@@ -290,7 +292,7 @@ trajectory_follower::LateralOutput MpcLateralController::run(
   // the vehicle will return to the path by re-planning the trajectory or external operation.
   // After the recovery, the previous value of the optimization may deviate greatly from
   // the actual steer angle, and it may make the optimization result unstable.
-  if (!is_mpc_solved || !is_under_control) {
+  if (!mpc_solved_status.result || !is_under_control) {
     m_mpc->resetPrevResult(m_current_steering);
   } else {
     setSteeringToHistory(ctrl_cmd);
@@ -334,13 +336,12 @@ trajectory_follower::LateralOutput MpcLateralController::run(
     return createLateralOutput(m_ctrl_cmd_prev, false, ctrl_cmd_horizon);
   }
 
-  if (!is_mpc_solved) {
-    warn_throttle("MPC is not solved. publish 0 velocity.");
+  if (!mpc_solved_status.result) {
     ctrl_cmd = getStopControlCommand();
   }
 
   m_ctrl_cmd_prev = ctrl_cmd;
-  return createLateralOutput(ctrl_cmd, is_mpc_solved, ctrl_cmd_horizon);
+  return createLateralOutput(ctrl_cmd, mpc_solved_status.result, ctrl_cmd_horizon);
 }
 
 bool MpcLateralController::isSteerConverged(const Lateral & cmd) const

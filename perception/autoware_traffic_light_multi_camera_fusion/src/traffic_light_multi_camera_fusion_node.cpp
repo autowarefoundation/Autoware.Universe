@@ -18,6 +18,7 @@
 #include <autoware_lanelet2_extension/utility/query.hpp>
 
 #include <algorithm>
+#include <map>
 #include <memory>
 #include <string>
 #include <unordered_map>

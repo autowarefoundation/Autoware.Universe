@@ -68,7 +68,7 @@ public:
 
   virtual void update_lanes(const bool is_approved) = 0;
 
-  virtual void update_transient_data() = 0;
+  virtual void update_transient_data(const bool is_approved) = 0;
 
   virtual void update_filtered_objects() = 0;
 
@@ -267,6 +267,15 @@ protected:
     return turn_signal;
   }
 
+  void set_signal_activation_time(const bool reset = false) const
+  {
+    if (reset) {
+      signal_activation_time_ = std::nullopt;
+    } else if (!signal_activation_time_) {
+      signal_activation_time_ = clock_.now();
+    }
+  }
+
   LaneChangeStatus status_{};
   PathShifter path_shifter_{};
 
@@ -276,7 +285,7 @@ protected:
   std::shared_ptr<LaneChangePath> abort_path_{};
   std::shared_ptr<const PlannerData> planner_data_{};
   lane_change::CommonDataPtr common_data_ptr_{};
-  FilteredByLanesExtendedObjects filtered_objects_{};
+  FilteredLanesObjects filtered_objects_{};
   BehaviorModuleOutput prev_module_output_{};
   std::optional<Pose> lane_change_stop_pose_{std::nullopt};
 
@@ -292,6 +301,7 @@ protected:
 
   mutable StopWatch<std::chrono::milliseconds> stop_watch_;
   mutable lane_change::Debug lane_change_debug_;
+  mutable std::optional<rclcpp::Time> signal_activation_time_{std::nullopt};
 
   rclcpp::Logger logger_ = utils::lane_change::getLogger(getModuleTypeStr());
   mutable rclcpp::Clock clock_{RCL_ROS_TIME};

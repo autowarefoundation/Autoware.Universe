@@ -19,7 +19,9 @@
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 
+#include <memory>
 #include <utility>
+#include <vector>
 
 namespace autoware::imu_corrector
 {

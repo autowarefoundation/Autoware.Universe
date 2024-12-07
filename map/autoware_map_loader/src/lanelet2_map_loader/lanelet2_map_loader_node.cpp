@@ -49,13 +49,14 @@
 #include <lanelet2_io/Io.h>
 #include <lanelet2_projection/UTM.h>
 
+#include <memory>
 #include <stdexcept>
 #include <string>
 
 namespace autoware::map_loader
 {
 using autoware_map_msgs::msg::LaneletMapBin;
-using tier4_map_msgs::msg::MapProjectorInfo;
+using autoware_map_msgs::msg::MapProjectorInfo;
 
 Lanelet2MapLoaderNode::Lanelet2MapLoaderNode(const rclcpp::NodeOptions & options)
 : Node("lanelet2_map_loader", options)
@@ -136,10 +137,10 @@ void Lanelet2MapLoaderNode::on_map_projector_info(
 
 lanelet::LaneletMapPtr Lanelet2MapLoaderNode::load_map(
   const std::string & lanelet2_filename,
-  const tier4_map_msgs::msg::MapProjectorInfo & projector_info)
+  const autoware_map_msgs::msg::MapProjectorInfo & projector_info)
 {
   lanelet::ErrorMessages errors{};
-  if (projector_info.projector_type != tier4_map_msgs::msg::MapProjectorInfo::LOCAL) {
+  if (projector_info.projector_type != autoware_map_msgs::msg::MapProjectorInfo::LOCAL) {
     std::unique_ptr<lanelet::Projector> projector =
       autoware::geography_utils::get_lanelet2_projector(projector_info);
     lanelet::LaneletMapPtr map = lanelet::load(lanelet2_filename, *projector, &errors);

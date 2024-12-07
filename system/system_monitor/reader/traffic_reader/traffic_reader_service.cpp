@@ -26,6 +26,11 @@
 #include <signal.h>
 #include <syslog.h>
 
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
 namespace process = boost::process;
 
 namespace traffic_reader_service

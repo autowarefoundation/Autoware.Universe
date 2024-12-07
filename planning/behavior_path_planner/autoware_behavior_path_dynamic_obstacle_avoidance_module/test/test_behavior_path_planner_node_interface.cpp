@@ -18,6 +18,8 @@
 #include <autoware_planning_test_manager/autoware_planning_test_manager.hpp>
 #include <autoware_test_utils/autoware_test_utils.hpp>
 
+#include <memory>
+#include <string>
 #include <vector>
 
 using autoware::behavior_path_planner::BehaviorPathPlannerNode;

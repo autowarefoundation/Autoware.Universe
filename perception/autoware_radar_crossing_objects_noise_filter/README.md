@@ -10,7 +10,7 @@ This package can filter the noise objects which cross to the ego vehicle.
 This package aim to filter the noise objects which cross from the ego vehicle.
 The reason why these objects are noise is as below.
 
-- 1. The objects with doppler velocity can be trusted more than those with vertical velocity to it.
+#### 1. The objects with doppler velocity can be trusted more than those with vertical velocity to it
 
 Radars can get velocity information of objects as doppler velocity, but cannot get vertical velocity to doppler velocity directory.
 Some radars can output the objects with not only doppler velocity but also vertical velocity by estimation.
@@ -22,7 +22,7 @@ Velocity estimation fails on static objects, resulting in ghost objects crossing
 
 ![vertical_velocity_objects](docs/vertical_velocity_objects.png)
 
-- 2. Turning around by ego vehicle affect the output from radar.
+#### 2. Turning around by ego vehicle affect the output from radar
 
 When the ego vehicle turns around, the radars outputting at the object level sometimes fail to estimate the twist of objects correctly even if [radar_tracks_msgs_converter](https://github.com/autowarefoundation/autoware.universe/tree/main/perception/autoware_radar_tracks_msgs_converter) compensates by the ego vehicle twist.
 So if an object detected by radars has circular motion viewing from base_link, it is likely that the speed is estimated incorrectly and that the object is a static object.

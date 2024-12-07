@@ -168,8 +168,8 @@ bool FreespacePlannerNode::checkCurrentTrajectoryCollision()
   const size_t nearest_index_partial = autoware::motion_utils::findNearestIndex(
     partial_trajectory_.points, current_pose_.pose.position);
   const size_t end_index_partial = partial_trajectory_.points.size() - 1;
-  const auto forward_trajectory =
-    utils::get_partial_trajectory(partial_trajectory_, nearest_index_partial, end_index_partial);
+  const auto forward_trajectory = utils::get_partial_trajectory(
+    partial_trajectory_, nearest_index_partial, end_index_partial, get_clock());
 
   const bool is_obs_found =
     algo_->hasObstacleOnTrajectory(utils::trajectory_to_pose_array(forward_trajectory));
@@ -316,7 +316,7 @@ void FreespacePlannerNode::onTimer()
     // stops.
     if (!is_new_parking_cycle_) {
       const auto stop_trajectory = partial_trajectory_.points.empty()
-                                     ? utils::create_stop_trajectory(current_pose_)
+                                     ? utils::create_stop_trajectory(current_pose_, get_clock())
                                      : utils::create_stop_trajectory(partial_trajectory_);
       trajectory_pub_->publish(stop_trajectory);
       debug_pose_array_pub_->publish(utils::trajectory_to_pose_array(stop_trajectory));
@@ -352,7 +352,7 @@ void FreespacePlannerNode::onTimer()
   // Update partial trajectory
   updateTargetIndex();
   partial_trajectory_ =
-    utils::get_partial_trajectory(trajectory_, prev_target_index_, target_index_);
+    utils::get_partial_trajectory(trajectory_, prev_target_index_, target_index_, get_clock());
 
   // Publish messages
   trajectory_pub_->publish(partial_trajectory_);

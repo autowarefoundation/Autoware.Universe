@@ -21,7 +21,9 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <iostream>
 #include <unordered_set>
+#include <vector>
 
 struct indexHash
 {

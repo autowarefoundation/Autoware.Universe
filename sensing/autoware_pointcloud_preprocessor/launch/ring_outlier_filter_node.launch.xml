@@ -3,11 +3,9 @@
   <arg name="output_topic_name" default="/sensing/lidar/top/pointcloud_ring_filtered"/>
   <arg name="input_frame" default=""/>
   <arg name="output_frame" default=""/>
-  <arg name="filter_param_file" default="$(find-pkg-share autoware_pointcloud_preprocessor)/config/filter.param.yaml"/>
   <arg name="ring_outlier_filter_param_file" default="$(find-pkg-share autoware_pointcloud_preprocessor)/config/ring_outlier_filter_node.param.yaml"/>
   <node pkg="autoware_pointcloud_preprocessor" exec="ring_outlier_filter_node" name="ring_outlier_filter_node">
     <param from="$(var ring_outlier_filter_param_file)"/>
-    <param from="$(var filter_param_file)"/>
     <remap from="input" to="$(var input_topic_name)"/>
     <remap from="output" to="$(var output_topic_name)"/>
     <param name="input_frame" value="$(var input_frame)"/>

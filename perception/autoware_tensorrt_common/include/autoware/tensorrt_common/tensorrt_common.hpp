@@ -17,6 +17,8 @@
 
 #ifndef YOLOX_STANDALONE
 #include <rclcpp/rclcpp.hpp>
+
+#include <iostream>
 #endif
 
 #include <NvInfer.h>
@@ -222,8 +224,6 @@ private:
   TrtUniquePtr<nvinfer1::IExecutionContext> context_;
   std::unique_ptr<nvinfer1::IInt8Calibrator> calibrator_;
 
-  nvinfer1::Dims input_dims_;
-  nvinfer1::Dims output_dims_;
   std::string precision_;
   BatchConfig batch_config_;
   size_t max_workspace_size_;

@@ -90,6 +90,9 @@ public:
     managed_tf_buffer_ =
       std::make_unique<autoware::universe_utils::ManagedTransformBuffer>(&node, has_static_tf_only);
   }
+
+  virtual ~DistortionCorrectorBase() = default;
+
   [[nodiscard]] bool pointcloud_transform_exists() const;
   [[nodiscard]] bool pointcloud_transform_needed() const;
   std::deque<geometry_msgs::msg::TwistStamped> get_twist_queue();

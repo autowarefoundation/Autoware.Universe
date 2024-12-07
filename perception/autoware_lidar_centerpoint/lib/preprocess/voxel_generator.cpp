@@ -19,6 +19,7 @@
 
 #include "sensor_msgs/point_cloud2_iterator.hpp"
 
+#include <memory>
 #include <type_traits>
 
 namespace autoware::lidar_centerpoint

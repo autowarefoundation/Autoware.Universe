@@ -20,6 +20,7 @@
 #include <autoware/motion_utils/trajectory/path_with_lane_id.hpp>
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
 
+#include <algorithm>
 #include <string>
 #include <utility>
 #include <vector>

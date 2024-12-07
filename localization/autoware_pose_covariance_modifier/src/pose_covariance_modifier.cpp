@@ -21,6 +21,8 @@
 #include <std_msgs/msg/float64.hpp>
 #include <std_msgs/msg/string.hpp>
 
+#include <algorithm>
+
 namespace autoware::pose_covariance_modifier
 {
 using PoseSource = PoseCovarianceModifierNode::PoseSource;

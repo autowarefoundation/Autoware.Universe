@@ -19,6 +19,7 @@
 #include "rclcpp/logging.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include <limits>
 #include <memory>
 #include <queue>

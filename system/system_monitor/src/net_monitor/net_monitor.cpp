@@ -26,6 +26,11 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 
+#include <algorithm>
+#include <memory>
+#include <string>
+#include <vector>
+
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>
 #include <ifaddrs.h>

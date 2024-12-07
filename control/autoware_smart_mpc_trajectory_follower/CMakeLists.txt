@@ -9,6 +9,8 @@ find_package(pybind11 REQUIRED)
 find_package(Eigen3 REQUIRED)
 autoware_package()
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-ignored-optimization-argument")
+
 execute_process(COMMAND bash -c "pip3 install numba==0.58.1 --force-reinstall")
 execute_process(COMMAND bash -c "pip3 install GPy")
 

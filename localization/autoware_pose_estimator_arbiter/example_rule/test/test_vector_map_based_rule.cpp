@@ -22,6 +22,7 @@
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/Polygon.h>
 
+#include <memory>
 #include <unordered_set>
 
 class VectorMapBasedRuleMockNode : public ::testing::Test

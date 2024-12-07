@@ -20,6 +20,8 @@
 #include <lanelet2_core/primitives/LineString.h>
 
 #include <algorithm>
+#include <string>
+#include <vector>
 
 namespace autoware::behavior_path_planner::drivable_area_expansion
 {

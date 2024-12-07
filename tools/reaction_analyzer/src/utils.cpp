@@ -14,6 +14,12 @@
 
 #include "utils.hpp"
 
+#include <algorithm>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
 namespace reaction_analyzer
 {
 SubscriberMessageType get_subscriber_message_type(const std::string & message_type)

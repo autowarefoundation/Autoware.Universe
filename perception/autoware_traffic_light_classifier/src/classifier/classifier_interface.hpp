@@ -27,6 +27,7 @@ namespace autoware::traffic_light
 class ClassifierInterface
 {
 public:
+  virtual ~ClassifierInterface() = default;
   virtual bool getTrafficSignals(
     const std::vector<cv::Mat> & input_image,
     tier4_perception_msgs::msg::TrafficLightArray & traffic_signals) = 0;

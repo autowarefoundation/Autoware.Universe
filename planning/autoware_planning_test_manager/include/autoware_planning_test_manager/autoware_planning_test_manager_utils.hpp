@@ -22,6 +22,7 @@
 #include <geometry_msgs/msg/pose.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 
+#include <iostream>
 #include <memory>
 #include <vector>
 

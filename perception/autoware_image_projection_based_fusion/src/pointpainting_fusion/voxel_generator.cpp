@@ -16,6 +16,8 @@
 
 #include <sensor_msgs/point_cloud2_iterator.hpp>
 
+#include <memory>
+
 namespace autoware::image_projection_based_fusion
 {
 

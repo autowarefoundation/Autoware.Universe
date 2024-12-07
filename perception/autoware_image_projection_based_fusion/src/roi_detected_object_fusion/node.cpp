@@ -19,6 +19,11 @@
 #include <autoware/image_projection_based_fusion/utils/geometry.hpp>
 #include <autoware/image_projection_based_fusion/utils/utils.hpp>
 
+#include <algorithm>
+#include <map>
+#include <utility>
+#include <vector>
+
 namespace autoware::image_projection_based_fusion
 {
 
@@ -64,7 +69,7 @@ void RoiDetectedObjectFusionNode::preprocess(DetectedObjects & output_msg)
   }
 
   int64_t timestamp_nsec =
-    output_msg.header.stamp.sec * (int64_t)1e9 + output_msg.header.stamp.nanosec;
+    output_msg.header.stamp.sec * static_cast<int64_t>(1e9) + output_msg.header.stamp.nanosec;
   passthrough_object_flags_map_.insert(std::make_pair(timestamp_nsec, passthrough_object_flags));
   fused_object_flags_map_.insert(std::make_pair(timestamp_nsec, fused_object_flags));
   ignored_object_flags_map_.insert(std::make_pair(timestamp_nsec, ignored_object_flags));
@@ -113,8 +118,8 @@ RoiDetectedObjectFusionNode::generateDetectedObjectRoIs(
   const image_geometry::PinholeCameraModel & pinhole_camera_model)
 {
   std::map<std::size_t, DetectedObjectWithFeature> object_roi_map;
-  int64_t timestamp_nsec =
-    input_object_msg.header.stamp.sec * (int64_t)1e9 + input_object_msg.header.stamp.nanosec;
+  int64_t timestamp_nsec = input_object_msg.header.stamp.sec * static_cast<int64_t>(1e9) +
+                           input_object_msg.header.stamp.nanosec;
   if (passthrough_object_flags_map_.size() == 0) {
     return object_roi_map;
   }
@@ -200,8 +205,8 @@ void RoiDetectedObjectFusionNode::fuseObjectsOnImage(
   const std::vector<DetectedObjectWithFeature> & image_rois,
   const std::map<std::size_t, DetectedObjectWithFeature> & object_roi_map)
 {
-  int64_t timestamp_nsec =
-    input_object_msg.header.stamp.sec * (int64_t)1e9 + input_object_msg.header.stamp.nanosec;
+  int64_t timestamp_nsec = input_object_msg.header.stamp.sec * static_cast<int64_t>(1e9) +
+                           input_object_msg.header.stamp.nanosec;
   if (fused_object_flags_map_.size() == 0 || ignored_object_flags_map_.size() == 0) {
     return;
   }
@@ -284,7 +289,7 @@ void RoiDetectedObjectFusionNode::publish(const DetectedObjects & output_msg)
   }
 
   int64_t timestamp_nsec =
-    output_msg.header.stamp.sec * (int64_t)1e9 + output_msg.header.stamp.nanosec;
+    output_msg.header.stamp.sec * static_cast<int64_t>(1e9) + output_msg.header.stamp.nanosec;
   if (
     passthrough_object_flags_map_.size() == 0 || fused_object_flags_map_.size() == 0 ||
     ignored_object_flags_map_.size() == 0) {

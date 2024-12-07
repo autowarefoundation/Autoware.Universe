@@ -122,7 +122,7 @@ public:
     using trajectory::detail::to_point;
     Eigen::Vector2d point(to_point(p).x, to_point(p).y);
     std::vector<double> distances_from_segments;
-    std::vector<double> lengthes_from_start_points;
+    std::vector<double> lengths_from_start_points;
 
     auto axis = detail::crop_bases(bases_, start_, end_);
 
@@ -149,7 +149,7 @@ public:
       }
       if (constraints(length_from_start_point)) {
         distances_from_segments.push_back(distance_from_segment);
-        lengthes_from_start_points.push_back(length_from_start_point);
+        lengths_from_start_points.push_back(length_from_start_point);
       }
     }
     if (distances_from_segments.empty()) {
@@ -158,7 +158,7 @@ public:
 
     auto min_it = std::min_element(distances_from_segments.begin(), distances_from_segments.end());
 
-    return lengthes_from_start_points[std::distance(distances_from_segments.begin(), min_it)] -
+    return lengths_from_start_points[std::distance(distances_from_segments.begin(), min_it)] -
            start_;
   }
 

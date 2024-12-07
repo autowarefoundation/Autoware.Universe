@@ -26,7 +26,9 @@
 
 #include <tf2/utils.h>
 
+#include <memory>
 #include <numeric>
+#include <utility>
 
 namespace yabloc::modularized_particle_filter
 {

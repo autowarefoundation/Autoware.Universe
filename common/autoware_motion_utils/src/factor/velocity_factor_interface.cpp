@@ -19,6 +19,9 @@
 #include <autoware_planning_msgs/msg/trajectory_point.hpp>
 #include <tier4_planning_msgs/msg/path_point_with_lane_id.hpp>
 
+#include <string>
+#include <vector>
+
 namespace autoware::motion_utils
 {
 template <class PointType>

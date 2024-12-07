@@ -18,6 +18,8 @@
 
 #include <autoware_planning_msgs/msg/path_point.hpp>
 
+#include <vector>
+
 namespace autoware::trajectory
 {
 
@@ -76,7 +78,7 @@ std::vector<PointType> Trajectory<PointType>::restore(const size_t & min_points)
   points.reserve(bases.size());
   for (const auto & s : bases) {
     PointType p;
-    p.pose = Trajectory<geometry_msgs::msg::Pose>::compute(s);
+    p.pose = Trajectory<geometry_msgs::msg::Pose>::compute(s - start_);
     p.longitudinal_velocity_mps = static_cast<float>(this->longitudinal_velocity_mps.compute(s));
     p.lateral_velocity_mps = static_cast<float>(this->lateral_velocity_mps.compute(s));
     p.heading_rate_rps = static_cast<float>(this->heading_rate_rps.compute(s));

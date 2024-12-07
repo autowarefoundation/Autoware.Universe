@@ -26,6 +26,8 @@
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/Polygon.h>
 
+#include <memory>
+#include <string>
 #include <unordered_set>
 
 class RuleHelperMockNode : public ::testing::Test

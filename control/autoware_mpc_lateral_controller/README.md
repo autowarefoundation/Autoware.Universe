@@ -75,6 +75,12 @@ Return LateralOutput which contains the following to the controller node
 - LateralSyncData
   - steer angle convergence
 
+Publish the following messages.
+
+| Name                            | Type                               | Description                                                                                                                                                                |
+| ------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `~/output/predicted_trajectory` | autoware_planning_msgs::Trajectory | Predicted trajectory calculated by MPC. The trajectory size will be empty when the controller is in an emergency such as too large deviation from the planning trajectory. |
+
 ### MPC class
 
 The `MPC` class (defined in `mpc.hpp`) provides the interface with the MPC algorithm.

@@ -18,6 +18,8 @@
 #include <autoware/motion_utils/marker/virtual_wall_marker_creator.hpp>
 #include <autoware/universe_utils/math/constants.hpp>
 #include <autoware/universe_utils/ros/marker_helper.hpp>
+
+#include <vector>
 using autoware::motion_utils::createStopVirtualWallMarker;
 using autoware::universe_utils::appendMarkerArray;
 using autoware::universe_utils::createDefaultMarker;

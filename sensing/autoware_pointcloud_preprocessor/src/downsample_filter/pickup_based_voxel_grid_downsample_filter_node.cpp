@@ -16,6 +16,9 @@
 
 #include "robin_hood.h"
 
+#include <memory>
+#include <vector>
+
 namespace
 {
 /**

@@ -20,6 +20,10 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <string>
+#include <utility>
+
 class PublishedTimePublisherWithSubscriptionTest : public ::testing::Test
 {
 protected:

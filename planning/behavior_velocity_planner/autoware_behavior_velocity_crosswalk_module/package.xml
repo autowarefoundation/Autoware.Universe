@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_behavior_velocity_crosswalk_module</name>
-  <version>0.38.0</version>
+  <version>0.39.0</version>
   <description>The autoware_behavior_velocity_crosswalk_module package</description>
 
   <maintainer email="satoshi.ota@tier4.jp">Satoshi Ota</maintainer>

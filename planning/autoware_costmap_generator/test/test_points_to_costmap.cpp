@@ -16,6 +16,8 @@
 
 #include <gtest/gtest.h>
 
+#include <string>
+
 namespace autoware::costmap_generator
 {
 using pointcloud = pcl::PointCloud<pcl::PointXYZ>;

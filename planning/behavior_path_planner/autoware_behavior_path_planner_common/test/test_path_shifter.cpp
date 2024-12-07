@@ -21,6 +21,9 @@
 
 #include <gtest/gtest.h>
 
+#include <utility>
+#include <vector>
+
 namespace autoware::behavior_path_planner
 {
 

@@ -48,11 +48,12 @@ FreespacePullOver::FreespacePullOver(
     vehicle_info, parameters.vehicle_shape_margin);
   if (parameters.freespace_parking_algorithm == "astar") {
     planner_ = std::make_unique<AstarSearch>(
-      parameters.freespace_parking_common_parameters, vehicle_shape, parameters.astar_parameters);
+      parameters.freespace_parking_common_parameters, vehicle_shape, parameters.astar_parameters,
+      node.get_clock());
   } else if (parameters.freespace_parking_algorithm == "rrtstar") {
     planner_ = std::make_unique<RRTStar>(
-      parameters.freespace_parking_common_parameters, vehicle_shape,
-      parameters.rrt_star_parameters);
+      parameters.freespace_parking_common_parameters, vehicle_shape, parameters.rrt_star_parameters,
+      node.get_clock());
   }
 }
 

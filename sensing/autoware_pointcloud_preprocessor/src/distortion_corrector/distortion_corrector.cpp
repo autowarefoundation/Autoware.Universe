@@ -20,6 +20,10 @@
 #include <autoware/universe_utils/math/trigonometry.hpp>
 #include <tf2_eigen/tf2_eigen.hpp>
 
+#include <deque>
+#include <memory>
+#include <string>
+
 namespace autoware::pointcloud_preprocessor
 {
 

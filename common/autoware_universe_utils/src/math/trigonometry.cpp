@@ -18,6 +18,7 @@
 #include "autoware/universe_utils/math/sin_table.hpp"
 
 #include <cmath>
+#include <utility>
 
 namespace autoware::universe_utils
 {

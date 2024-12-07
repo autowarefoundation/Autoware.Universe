@@ -41,9 +41,17 @@
 #include <lanelet2_io/Io.h>
 #include <matplotlibcpp17/pyplot.h>
 
+#include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <functional>
 #include <iostream>
+#include <map>
+#include <memory>
+#include <string>
+#include <tuple>
+#include <unordered_map>
+#include <vector>
 
 using namespace std::chrono_literals;  // NOLINT
 

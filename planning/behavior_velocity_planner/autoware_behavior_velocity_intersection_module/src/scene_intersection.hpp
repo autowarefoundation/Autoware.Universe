@@ -321,7 +321,7 @@ public:
    * INTERSECTION_OCCLUSION.
    * @{
    */
-  bool modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason) override;
+  bool modifyPathVelocity(PathWithLaneId * path) override;
   /** @}*/
 
   visualization_msgs::msg::MarkerArray createDebugMarkerArray() override;
@@ -504,7 +504,7 @@ private:
   /**
    * @brief analyze traffic_light/occupancy/objects context and return DecisionResult
    */
-  DecisionResult modifyPathVelocityDetail(PathWithLaneId * path, StopReason * stop_reason);
+  DecisionResult modifyPathVelocityDetail(PathWithLaneId * path);
 
   /**
    * @brief set RTC value according to calculated DecisionResult
@@ -516,8 +516,7 @@ private:
    * @brief act based on current RTC approval
    */
   void reactRTCApproval(
-    const DecisionResult & decision_result, tier4_planning_msgs::msg::PathWithLaneId * path,
-    StopReason * stop_reason);
+    const DecisionResult & decision_result, tier4_planning_msgs::msg::PathWithLaneId * path);
   /** @}*/
 
 private:

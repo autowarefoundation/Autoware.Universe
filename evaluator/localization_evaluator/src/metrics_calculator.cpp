@@ -18,8 +18,8 @@
 
 namespace localization_diagnostics
 {
-Stat<double> MetricsCalculator::updateStat(
-  const Stat<double> stat_prev, const Metric metric, const geometry_msgs::msg::Point & pos,
+Accumulator<double> MetricsCalculator::updateStat(
+  const Accumulator<double> stat_prev, const Metric metric, const geometry_msgs::msg::Point & pos,
   const geometry_msgs::msg::Point & pos_ref) const
 {
   if (

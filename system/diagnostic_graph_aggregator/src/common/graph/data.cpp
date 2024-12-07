@@ -14,6 +14,8 @@
 
 #include "data.hpp"
 
+#include <string>
+
 namespace diagnostic_graph_aggregator
 {
 

@@ -280,7 +280,7 @@ void StatePanel::onInitialize()
 
 void StatePanel::onOperationMode(const OperationModeState::ConstSharedPtr msg)
 {
-  auto changeButtonState = [this](
+  auto changeButtonState = [](
                              QPushButton * button, const bool is_desired_mode_available,
                              const uint8_t current_mode = OperationModeState::UNKNOWN,
                              const uint8_t desired_mode = OperationModeState::STOP) {

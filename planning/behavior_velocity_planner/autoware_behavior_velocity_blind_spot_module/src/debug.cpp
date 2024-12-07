@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "scene.hpp"
+#include "autoware/behavior_velocity_blind_spot_module/scene.hpp"
 
 #include <autoware/behavior_velocity_planner_common/utilization/debug.hpp>
 #include <autoware/behavior_velocity_planner_common/utilization/util.hpp>
@@ -24,6 +24,7 @@
 #include <tf2/utils.h>
 
 #include <string>
+#include <vector>
 
 namespace autoware::behavior_velocity_planner
 {

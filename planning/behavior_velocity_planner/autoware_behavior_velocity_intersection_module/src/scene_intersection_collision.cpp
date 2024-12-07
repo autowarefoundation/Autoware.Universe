@@ -30,6 +30,14 @@
 #include <fmt/format.h>
 #include <lanelet2_core/geometry/Polygon.h>
 
+#include <algorithm>
+#include <limits>
+#include <list>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
 namespace autoware::behavior_velocity_planner
 {
 namespace bg = boost::geometry;

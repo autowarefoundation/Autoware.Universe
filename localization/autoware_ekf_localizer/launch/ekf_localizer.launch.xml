@@ -16,6 +16,7 @@
   <arg name="output_biased_pose_with_covariance_name" default="ekf_biased_pose_with_covariance"/>
   <arg name="output_twist_name" default="ekf_twist"/>
   <arg name="output_twist_with_covariance_name" default="ekf_twist_with_covariance"/>
+  <arg name="output_processing_time_ms" default="debug/processing_time_ms"/>
 
   <node pkg="autoware_ekf_localizer" exec="autoware_ekf_localizer_node" output="both">
     <remap from="in_pose_with_covariance" to="$(var input_pose_with_cov_name)"/>
@@ -32,6 +33,7 @@
     <remap from="ekf_biased_pose_with_covariance" to="$(var output_biased_pose_with_covariance_name)"/>
     <remap from="ekf_twist" to="$(var output_twist_name)"/>
     <remap from="ekf_twist_with_covariance" to="$(var output_twist_with_covariance_name)"/>
+    <remap from="debug/processing_time_ms" to="$(var output_processing_time_ms)"/>
 
     <param from="$(var param_file)"/>
   </node>

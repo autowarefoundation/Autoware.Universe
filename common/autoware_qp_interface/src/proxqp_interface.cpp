@@ -14,6 +14,10 @@
 
 #include "autoware/qp_interface/proxqp_interface.hpp"
 
+#include <memory>
+#include <string>
+#include <vector>
+
 namespace autoware::qp_interface
 {
 using proxsuite::proxqp::QPSolverOutput;

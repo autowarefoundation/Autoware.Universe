@@ -16,7 +16,7 @@
 #define AUTOWARE__PLANNING_EVALUATOR__METRICS_CALCULATOR_HPP_
 #include "autoware/planning_evaluator/metrics/metric.hpp"
 #include "autoware/planning_evaluator/parameters.hpp"
-#include "autoware/planning_evaluator/stat.hpp"
+#include "autoware/universe_utils/math/accumulator.hpp"
 
 #include "autoware_perception_msgs/msg/predicted_objects.hpp"
 #include "autoware_planning_msgs/msg/pose_with_uuid_stamped.hpp"
@@ -28,6 +28,7 @@
 
 namespace planning_diagnostics
 {
+using autoware::universe_utils::Accumulator;
 using autoware_perception_msgs::msg::PredictedObjects;
 using autoware_planning_msgs::msg::PoseWithUuidStamped;
 using autoware_planning_msgs::msg::Trajectory;
@@ -47,8 +48,8 @@ public:
    * @param [in] metric Metric enum value
    * @return string describing the requested metric
    */
-  std::optional<Stat<double>> calculate(const Metric metric, const Trajectory & traj) const;
-  std::optional<Stat<double>> calculate(
+  std::optional<Accumulator<double>> calculate(const Metric metric, const Trajectory & traj) const;
+  std::optional<Accumulator<double>> calculate(
     const Metric metric, const Pose & base_pose, const Pose & target_pose) const;
 
   /**

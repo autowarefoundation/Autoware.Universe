@@ -29,7 +29,7 @@ There are three types of transformations from latitude and longitude to XYZ coor
 
 ```yaml
 # map_projector_info.yaml
-projector_type: local
+projector_type: Local
 ```
 
 #### Limitation
@@ -86,7 +86,7 @@ map_origin:
 
 ## Published Topics
 
-- `~/map_projector_info` (tier4_map_msgs/MapProjectorInfo) : This topic shows the definition of map projector information
+- `~/map_projector_info` (autoware_map_msgs/MapProjectorInfo) : This topic shows the definition of map projector information
 
 ## Parameters
 

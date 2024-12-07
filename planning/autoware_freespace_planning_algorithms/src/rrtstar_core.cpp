@@ -16,13 +16,16 @@
 
 #include <nlohmann/json.hpp>
 
+#include <algorithm>
 #include <fstream>
 #include <functional>
 #include <memory>
 #include <queue>
 #include <stack>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 // cspell: ignore rsspace
 // In this case, RSSpace means "Reeds Shepp state Space"

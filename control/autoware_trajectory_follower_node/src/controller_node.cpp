@@ -62,6 +62,8 @@ Controller::Controller(const rclcpp::NodeOptions & node_options) : Node("control
   enable_control_cmd_horizon_pub_ =
     declare_parameter<bool>("enable_control_cmd_horizon_pub", false);
 
+  diag_updater_->setHardwareID("trajectory_follower_node");
+
   const auto lateral_controller_mode =
     getLateralControllerMode(declare_parameter<std::string>("lateral_controller_mode"));
   switch (lateral_controller_mode) {

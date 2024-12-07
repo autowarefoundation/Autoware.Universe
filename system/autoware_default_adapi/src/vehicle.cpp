@@ -20,6 +20,7 @@
 #include <geographic_msgs/msg/geo_point.hpp>
 
 #include <limits>
+#include <unordered_map>
 
 namespace autoware::default_adapi
 {

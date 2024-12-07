@@ -17,6 +17,8 @@
 #include <chrono>
 #include <cstdint>
 #include <iostream>
+#include <string>
+#include <utility>
 
 using autoware::universe_utils::LRUCache;
 

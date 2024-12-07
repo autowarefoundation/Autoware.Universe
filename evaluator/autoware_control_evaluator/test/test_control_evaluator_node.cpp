@@ -28,6 +28,7 @@
 
 #include <tf2/LinearMath/Quaternion.h>
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -52,6 +53,7 @@ protected:
     rclcpp::NodeOptions options;
     const auto share_dir =
       ament_index_cpp::get_package_share_directory("autoware_control_evaluator");
+    options.arguments({"--ros-args", "-p", "output_metrics:=false"});
 
     dummy_node = std::make_shared<rclcpp::Node>("control_evaluator_test_node");
     eval_node = std::make_shared<EvalNode>(options);

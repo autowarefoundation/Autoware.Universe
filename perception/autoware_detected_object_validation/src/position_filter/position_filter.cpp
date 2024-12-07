@@ -14,6 +14,8 @@
 
 #include "position_filter.hpp"
 
+#include <memory>
+
 namespace autoware::detected_object_validation
 {
 namespace position_filter

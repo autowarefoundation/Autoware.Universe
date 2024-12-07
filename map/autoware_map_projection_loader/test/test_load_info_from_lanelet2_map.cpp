@@ -20,6 +20,8 @@
 #include <gmock/gmock.h>
 
 #include <fstream>
+#include <iostream>
+#include <string>
 
 void save_dummy_mgrs_lanelet2_map(const std::string & mgrs_coord, const std::string & output_path)
 {
@@ -111,7 +113,7 @@ TEST(TestLoadFromLanelet2Map, LoadLocalGrid)
     autoware::map_projection_loader::load_info_from_lanelet2_map(output_path);
 
   // Check the result
-  EXPECT_EQ(projector_info.projector_type, "local");
+  EXPECT_EQ(projector_info.projector_type, "Local");
 }
 
 TEST(TestLoadFromLanelet2Map, LoadNoLocalGrid)

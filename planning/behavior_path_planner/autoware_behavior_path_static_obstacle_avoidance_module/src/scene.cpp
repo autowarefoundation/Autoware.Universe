@@ -35,6 +35,7 @@
 #include <optional>
 #include <set>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace autoware::behavior_path_planner
@@ -779,8 +780,6 @@ void StaticObstacleAvoidanceModule::updateEgoBehavior(
   insert_velocity();
 
   insertReturnDeadLine(isBestEffort(parameters_->policy_deceleration), path);
-
-  setStopReason(StopReason::AVOIDANCE, path.path);
 
   setVelocityFactor(path.path);
 }

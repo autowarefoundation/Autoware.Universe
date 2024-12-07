@@ -22,6 +22,9 @@
 
 #include <gtest/gtest.h>
 
+#include <string>
+#include <vector>
+
 using namespace diagnostic_graph_aggregator;  // NOLINT(build/namespaces)
 
 using diagnostic_msgs::msg::DiagnosticArray;

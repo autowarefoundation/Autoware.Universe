@@ -19,6 +19,7 @@
 #include <pcl/common/centroid.h>
 
 #include <limits>
+#include <memory>
 #include <random>
 #include <string>
 #include <vector>

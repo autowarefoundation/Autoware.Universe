@@ -19,6 +19,11 @@
 #include <autoware/motion_utils/distance/distance.hpp>
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
 
+#include <algorithm>
+#include <memory>
+#include <utility>
+#include <vector>
+
 namespace autoware::behavior_path_planner::utils::parking_departure
 {
 

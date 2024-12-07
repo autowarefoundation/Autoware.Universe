@@ -18,6 +18,8 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+
 std::shared_ptr<autoware::radar_tracks_noise_filter::RadarTrackCrossingNoiseFilterNode> get_node(
   float velocity_y_threshold)
 {

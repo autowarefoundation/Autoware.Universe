@@ -191,6 +191,12 @@ struct MPCMatrix
   MPCMatrix() = default;
 };
 
+struct ResultWithReason
+{
+  bool result{false};
+  std::string reason{""};
+};
+
 /**
  * MPC-based waypoints follower class
  * @brief calculate control command to follow reference waypoints
@@ -221,8 +227,6 @@ private:
 
   bool m_is_forward_shift = true;  // Flag indicating if the shift is in the forward direction.
 
-  double m_min_prediction_length = 5.0;  // Minimum prediction distance.
-
   rclcpp::Publisher<Trajectory>::SharedPtr m_debug_frenet_predicted_trajectory_pub;
   rclcpp::Publisher<Trajectory>::SharedPtr m_debug_resampled_reference_trajectory_pub;
   /**
@@ -232,7 +236,7 @@ private:
    * @param current_kinematics The current vehicle kinematics.
    * @return A pair of a boolean flag indicating success and the MPC data.
    */
-  std::pair<bool, MPCData> getData(
+  std::pair<ResultWithReason, MPCData> getData(
     const MPCTrajectory & trajectory, const SteeringReport & current_steer,
     const Odometry & current_kinematics);
 
@@ -272,7 +276,7 @@ private:
    * @param [in] current_velocity current ego velocity
    * @return A pair of a boolean flag indicating success and the optimized input vector.
    */
-  std::pair<bool, VectorXd> executeOptimization(
+  std::pair<ResultWithReason, VectorXd> executeOptimization(
     const MPCMatrix & mpc_matrix, const VectorXd & x0, const double prediction_dt,
     const MPCTrajectory & trajectory, const double current_velocity);
 
@@ -283,7 +287,7 @@ private:
    * @param input The input trajectory.
    * @return A pair of a boolean flag indicating success and the resampled trajectory.
    */
-  std::pair<bool, MPCTrajectory> resampleMPCTrajectoryByTime(
+  std::pair<ResultWithReason, MPCTrajectory> resampleMPCTrajectoryByTime(
     const double start_time, const double prediction_dt, const MPCTrajectory & input) const;
 
   /**
@@ -399,7 +403,7 @@ private:
   template <typename... Args>
   inline bool fail_warn_throttle(Args &&... args) const
   {
-    RCLCPP_WARN_THROTTLE(m_logger, *m_clock, 3000, args...);
+    RCLCPP_WARN_THROTTLE(m_logger, *m_clock, 3000, "%s", args...);
     return false;
   }
 
@@ -407,7 +411,7 @@ private:
   template <typename... Args>
   inline void warn_throttle(Args &&... args) const
   {
-    RCLCPP_WARN_THROTTLE(m_logger, *m_clock, 3000, args...);
+    RCLCPP_WARN_THROTTLE(m_logger, *m_clock, 3000, "%s", args...);
   }
 
 public:
@@ -450,7 +454,7 @@ public:
    * @param diagnostic Diagnostic data for debugging purposes.
    * @return True if the MPC calculation is successful, false otherwise.
    */
-  bool calculateMPC(
+  ResultWithReason calculateMPC(
     const SteeringReport & current_steer, const Odometry & current_kinematics, Lateral & ctrl_cmd,
     Trajectory & predicted_trajectory, Float32MultiArrayStamped & diagnostic,
     LateralHorizon & ctrl_cmd_horizon);

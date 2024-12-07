@@ -14,6 +14,9 @@
 
 #include "autoware/motion_utils/marker/virtual_wall_marker_creator.hpp"
 #include "gtest/gtest.h"
+
+#include <string>
+
 namespace
 {
 constexpr auto wall_ns_suffix = "_virtual_wall";

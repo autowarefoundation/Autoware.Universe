@@ -15,6 +15,7 @@
 #include "autoware_raw_vehicle_cmd_converter/node.hpp"
 
 #include <algorithm>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <vector>

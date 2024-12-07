@@ -35,12 +35,12 @@
 
   <!-- Global parameters (for PathFootprint in tier4_planning_rviz_plugin) -->
   <!-- Do not add "group" in order to propagate global parameters -->
-  <include file="$(find-pkg-share global_parameter_loader)/launch/global_params.launch.py">
+  <include file="$(find-pkg-share autoware_global_parameter_loader)/launch/global_params.launch.py">
     <arg name="vehicle_model" value="$(var vehicle_model)"/>
   </include>
 
   <!-- generate tf from "viewer" to "map" -->
-  <node pkg="map_tf_generator" exec="vector_map_tf_generator" name="vector_map_tf_generator">
+  <node pkg="autoware_map_tf_generator" exec="autoware_vector_map_tf_generator" name="vector_map_tf_generator">
     <remap from="vector_map" to="$(var lanelet2_map_topic)"/>
 
     <param name="map_frame" value="map"/>

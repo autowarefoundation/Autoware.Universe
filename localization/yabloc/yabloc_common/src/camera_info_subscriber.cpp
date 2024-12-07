@@ -14,6 +14,8 @@
 
 #include "yabloc_common/camera_info_subscriber.hpp"
 
+#include <string>
+
 namespace yabloc::common
 {
 CameraInfoSubscriber::CameraInfoSubscriber(rclcpp::Node * node)

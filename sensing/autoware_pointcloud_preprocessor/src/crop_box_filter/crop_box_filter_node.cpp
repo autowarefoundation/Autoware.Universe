@@ -53,6 +53,7 @@
 
 #include <sensor_msgs/point_cloud2_iterator.hpp>
 
+#include <memory>
 #include <vector>
 
 namespace autoware::pointcloud_preprocessor

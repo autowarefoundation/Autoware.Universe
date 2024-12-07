@@ -21,7 +21,7 @@
 #include <rclcpp/rclcpp.hpp>
 
 #include <autoware_map_msgs/msg/lanelet_map_bin.hpp>
-#include <tier4_map_msgs/msg/map_projector_info.hpp>
+#include <autoware_map_msgs/msg/map_projector_info.hpp>
 
 #include <lanelet2_projection/UTM.h>
 
@@ -40,7 +40,7 @@ public:
 
   static lanelet::LaneletMapPtr load_map(
     const std::string & lanelet2_filename,
-    const tier4_map_msgs::msg::MapProjectorInfo & projector_info);
+    const autoware_map_msgs::msg::MapProjectorInfo & projector_info);
   static autoware_map_msgs::msg::LaneletMapBin create_map_bin_msg(
     const lanelet::LaneletMapPtr map, const std::string & lanelet2_filename,
     const rclcpp::Time & now);

@@ -25,7 +25,10 @@
 
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <algorithm>
 #include <cmath>
+#include <string>
+#include <utility>
 
 namespace yabloc::modularized_particle_filter
 {

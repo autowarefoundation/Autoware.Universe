@@ -16,6 +16,8 @@
 
 #include <gtest/gtest.h>
 
+#include <vector>
+
 TEST(NonMaximumSuppressionTest, Apply)
 {
   autoware::lidar_transfusion::NonMaximumSuppression nms;

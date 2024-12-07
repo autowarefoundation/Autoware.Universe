@@ -32,6 +32,7 @@
 #endif
 
 #include <algorithm>
+#include <cmath>
 #include <memory>
 #include <string>
 #include <utility>
@@ -140,7 +141,8 @@ void RadiusSearch2dFilter::filter(
     const float distance =
       std::hypot(xy_cloud->points[i].x - pose.position.x, xy_cloud->points[i].y - pose.position.y);
     const int min_points_threshold = std::min(
-      std::max(static_cast<int>(min_points_and_distance_ratio_ / distance + 0.5f), min_points_),
+      std::max(
+        static_cast<int>(std::lround(min_points_and_distance_ratio_ / distance)), min_points_),
       max_points_);
     const int points_num =
       kd_tree_->radiusSearch(i, search_radius_, k_indices, k_distances, min_points_threshold);
@@ -200,7 +202,8 @@ void RadiusSearch2dFilter::filter(
     const float distance =
       std::hypot(xy_cloud->points[i].x - pose.position.x, xy_cloud->points[i].y - pose.position.y);
     const int min_points_threshold = std::min(
-      std::max(static_cast<int>(min_points_and_distance_ratio_ / distance + 0.5f), min_points_),
+      std::max(
+        static_cast<int>(std::lround(min_points_and_distance_ratio_ / distance)), min_points_),
       max_points_);
     const int points_num =
       kd_tree_->radiusSearch(i, search_radius_, k_indices, k_distances, min_points_threshold);

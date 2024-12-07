@@ -20,6 +20,8 @@
 
 #include <gtest/gtest.h>
 
+#include <vector>
+
 using autoware::universe_utils::Point2d;
 using autoware::universe_utils::Point3d;
 

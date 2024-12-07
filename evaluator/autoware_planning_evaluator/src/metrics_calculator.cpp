@@ -22,7 +22,7 @@
 #include "autoware/universe_utils/geometry/geometry.hpp"
 namespace planning_diagnostics
 {
-std::optional<Stat<double>> MetricsCalculator::calculate(
+std::optional<Accumulator<double>> MetricsCalculator::calculate(
   const Metric metric, const Trajectory & traj) const
 {
   // Functions to calculate trajectory metrics
@@ -74,7 +74,7 @@ std::optional<Stat<double>> MetricsCalculator::calculate(
   }
 }
 
-std::optional<Stat<double>> MetricsCalculator::calculate(
+std::optional<Accumulator<double>> MetricsCalculator::calculate(
   const Metric metric, const Pose & base_pose, const Pose & target_pose) const
 {
   // Functions to calculate pose metrics

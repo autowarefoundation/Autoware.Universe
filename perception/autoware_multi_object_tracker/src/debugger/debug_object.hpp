@@ -77,7 +77,6 @@ private:
 
   std::vector<ObjectData> object_data_list_;
   std::list<int32_t> unused_marker_ids_;
-  int32_t marker_id_ = 0;
   std::vector<std::vector<ObjectData>> object_data_groups_;
 
   std::vector<std::string> channel_names_;
