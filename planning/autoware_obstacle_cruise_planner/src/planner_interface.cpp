@@ -90,7 +90,7 @@ double findReachTime(
   double upper = max;
   double t;
   int iter = 0;
-  for (int i = 0;; i++) {
+  while (true) {
     t = 0.5 * (lower + upper);
     const double fx = f(t, j, a, v, d);
     // std::cout<<"fx: "<<fx<<" up: "<<upper<<" lo: "<<lower<<" t: "<<t<<std::endl;
