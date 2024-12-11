@@ -14520,12 +14520,6 @@
 <td>An array of distance threshold values of norm of yaw [rad].</td>
 </tr>
 <tr>
-<td><code>post_process_params.iou_nms_target_class_names</code></td>
-<td>list[string]</td>
-<td>-</td>
-<td>target classes for IoU-based Non Maximum Suppression</td>
-</tr>
-<tr>
 <td><code>post_process_params.iou_nms_search_distance_2d</code></td>
 <td>double</td>
 <td>-</td>
@@ -14685,7 +14679,6 @@ point_cloud_range, point_feature_size, voxel_size, etc. according to the trainin
 <span class="w">    </span><span class="nt">encoder_in_feature_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9</span>
 <span class="w">    </span><span class="c1"># post-process params</span>
 <span class="w">    </span><span class="nt">circle_nms_dist_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
-<span class="w">    </span><span class="nt">iou_nms_target_class_names</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"CAR"</span><span class="p p-Indicator">]</span>
 <span class="w">    </span><span class="nt">iou_nms_search_distance_2d</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0</span>
 <span class="w">    </span><span class="nt">iou_nms_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
 <span class="w">    </span><span class="nt">yaw_norm_thresholds</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">]</span>
