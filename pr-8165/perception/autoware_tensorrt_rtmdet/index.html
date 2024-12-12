@@ -13583,7 +13583,7 @@ bicycles, etc. in a scene. This package provides a ROS 2 interface for RTMDet us
 </tr>
 <tr>
 <td><code>out/mask</code></td>
-<td><code>autoware_perception_msgs/SegmentationMask</code></td>
+<td><code>autoware_internal_perception_msgs/SegmentationMask</code></td>
 <td>The instance segmentation mask</td>
 </tr>
 <tr>
@@ -13743,7 +13743,8 @@ bicycles, etc. in a scene. This package provides a ROS 2 interface for RTMDet us
 <p>A sample model is provided in <code>autoware_data</code> folder by ansible script on env preparation stage. If you cannot find the
 model, you follow instructions from the
 <a href="https://github.com/autowarefoundation/autoware/tree/main/ansible/roles/artifacts">link</a> to download the model.</p>
-<p>The shared model was trained by open-mmlab using the COCO dataset. For more details, see <a href="https://github.com/open-mmlab/mmdetection/tree/3.x/configs/rtmdet#instance-segmentation">link</a>.</p>
+<p>The shared model was trained by open-mmlab using the COCO dataset. For more details,
+see <a href="https://github.com/open-mmlab/mmdetection/tree/3.x/configs/rtmdet#instance-segmentation">link</a>.</p>
 <h3 id="package-acceptable-model-generation">Package acceptable model generation<a class="headerlink" href="#package-acceptable-model-generation" title="Permanent link">#</a></h3>
 <p>Users can generate their own model using official RTMDet repository. Please refer to the
 <a href="https://github.com/open-mmlab/mmdetection/tree/3.x/configs/rtmdet#rtmdet-an-empirical-study-of-designing-real-time-object-detectors">official repository</a></p>
