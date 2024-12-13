@@ -48,8 +48,7 @@ TEST(service, checker)
       }
     };
     std::shared_ptr<ServiceLogChecker> checker;
-    rclcpp::NodeOptions option;
-    checker = std::make_shared<ServiceLogChecker>(option);
+    checker = std::make_shared<ServiceLogChecker>();
    
     auto test_log = std::make_shared<PubManager>();
     ServiceLog log;
