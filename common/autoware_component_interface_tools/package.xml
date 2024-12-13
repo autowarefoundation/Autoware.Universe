@@ -9,7 +9,8 @@
 
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
   <buildtool_depend>autoware_cmake</buildtool_depend>
-
+  <buildtool_depend>ament_cmake_test</buildtool_depend>
+  
   <depend>diagnostic_updater</depend>
   <depend>fmt</depend>
   <depend>rclcpp</depend>
