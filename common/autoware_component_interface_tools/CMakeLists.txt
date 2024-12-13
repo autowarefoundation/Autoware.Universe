@@ -13,8 +13,10 @@ if(BUILD_TESTING)
     test/test_service_log_checker.cpp
   )
 
-  target_link_libraries(test_service_log_checker
-  component_interface_tools
+  ament_target_dependencies(test_service_log_checker
+  tier4_system_msgs
+  yaml_cpp_vendor
+  diagnostic_updater
   )
   target_include_directories(test_service_log_checker PRIVATE src)
 endif()
