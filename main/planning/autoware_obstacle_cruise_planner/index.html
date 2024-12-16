@@ -14420,6 +14420,8 @@ This planner data is created first, and then sent to the planning algorithm.</p>
 <p>Obstacles for cruising, stopping and slowing down are selected in this order based on their pose and velocity.
 The obstacles not in front of the ego will be ignored.</p>
 <p><img alt="determine_cruise_stop_slow_down" src="media/determine_cruise_stop_slow_down.drawio.svg"></p>
+<p>The behavior determination flowchart is shown below.</p>
+<p><img alt="behavior_determination_flowchart" src="media/behavior_determination_flowchart.drawio.svg"></p>
 <h4 id="determine-cruise-vehicles">Determine cruise vehicles<a class="headerlink" href="#determine-cruise-vehicles" title="Permanent link">#</a></h4>
 <p>The obstacles meeting the following condition are determined as obstacles for cruising.</p>
 <ul>
@@ -14792,6 +14794,8 @@ v_{target} &amp; = max(v_{ego} + v_{add}, v_{min, cruise})
 </tr>
 </tbody>
 </table>
+<h4 id="block-diagram">Block diagram<a class="headerlink" href="#block-diagram" title="Permanent link">#</a></h4>
+<p><img alt="cruise_planning_block_diagram" src="media/cruise_planning_block_diagram.drawio.svg"></p>
 <h3 id="slow-down-planning">Slow down planning<a class="headerlink" href="#slow-down-planning" title="Permanent link">#</a></h3>
 <table>
 <thead>
