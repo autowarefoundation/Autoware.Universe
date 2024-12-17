@@ -13,7 +13,6 @@ rclcpp_components_register_node(${PROJECT_NAME}
   EXECUTABLE service_log_checker_node
 )
 
-
 if(BUILD_TESTING)
   ament_add_ros_isolated_gtest(test_${PROJECT_NAME}
     test/test_autoware_component_interface_tools.cpp

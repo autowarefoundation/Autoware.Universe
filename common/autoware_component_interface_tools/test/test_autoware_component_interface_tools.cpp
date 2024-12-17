@@ -20,14 +20,13 @@
 #include <rclcpp_components/register_node_macro.hpp>
 #include <memory>
 #include <string>
+
 using ServiceLog = tier4_system_msgs::msg::ServiceLog;
 using DiagnosticArray = diagnostic_msgs::msg::DiagnosticArray;
 using ServiceLogChecker = autoware::component_interface_tools::ServiceLogChecker;
-using namespace rclcpp;
 
 TEST(ServiceCheckerTest, ServiceChecker)
 {
-  
     class PubManager : public rclcpp::Node
     {
     public:
@@ -53,7 +52,7 @@ TEST(ServiceCheckerTest, ServiceChecker)
     rclcpp::init(0, nullptr);
     auto node_options = rclcpp::NodeOptions{};
     auto test_target_node = std::make_shared<ServiceLogChecker>(node_options);
-    auto  test_log = std::make_shared<PubManager>();
+    auto test_log = std::make_shared<PubManager>();
     ServiceLog log;
     log.type = 6;
     log.name = "test";
@@ -62,5 +61,4 @@ TEST(ServiceCheckerTest, ServiceChecker)
 
     while (!test_log->flag) {
     }
-
 }
