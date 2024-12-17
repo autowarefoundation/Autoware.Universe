@@ -11,21 +11,23 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
+ 
 #include "service_log_checker.hpp"
-
+#include <rclcpp/node_options.hpp>
 #include <yaml-cpp/yaml.h>
-
+#include <ament_index_cpp/get_package_share_directory.hpp>
+#include <rclcpp_components/register_node_macro.hpp>
 #include <memory>
 #include <string>
+using ServiceLog = tier4_system_msgs::msg::ServiceLog;
+using DiagnosticArray = diagnostic_msgs::msg::DiagnosticArray;
+using ServiceLogChecker = autoware::component_interface_tools::ServiceLogChecker;
+using namespace rclcpp;
 
-TEST(service, checker)
+TEST(ServiceCheckerTest, ServiceChecker)
 {
-  {
-    using ServiceLog = tier4_system_msgs::msg::ServiceLog;
-    using DiagnosticArray = diagnostic_msgs::msg::DiagnosticArray;
-
+  
     class PubManager : public rclcpp::Node
     {
     public:
@@ -47,11 +49,11 @@ TEST(service, checker)
         }
       }
     };
+    
+    rclcpp::init(0, nullptr);
     auto node_options = rclcpp::NodeOptions{};
-    std::shared_ptr<ServiceLogChecker> checker;
-    checker = std::make_shared<ServiceLogChecker>(node_options);
-   
-    auto test_log = std::make_shared<PubManager>();
+    auto test_target_node = std::make_shared<ServiceLogChecker>(node_options);
+    auto  test_log = std::make_shared<PubManager>();
     ServiceLog log;
     log.type = 6;
     log.name = "test";
@@ -60,5 +62,5 @@ TEST(service, checker)
 
     while (!test_log->flag) {
     }
-  }
+
 }

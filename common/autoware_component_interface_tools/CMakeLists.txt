@@ -8,22 +8,20 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
   src/service_log_checker.cpp
 )
 
-if(BUILD_TESTING)
-  ament_add_ros_isolated_gtest(test_service_log_checker
-    test/test_service_log_checker.cpp
-  )
-
-  ament_target_dependencies(test_service_log_checker
-  tier4_system_msgs
-  yaml_cpp_vendor
-  diagnostic_updater
-  )
-  target_include_directories(test_service_log_checker PRIVATE src)
-endif()
-
 rclcpp_components_register_node(${PROJECT_NAME}
   PLUGIN "autoware::component_interface_tools::ServiceLogChecker"
   EXECUTABLE service_log_checker_node
 )
+
+
+if(BUILD_TESTING)
+  ament_add_ros_isolated_gtest(test_${PROJECT_NAME}
+    test/test_autoware_component_interface_tools.cpp
+  )
+  target_link_libraries(test_${PROJECT_NAME}
+    ${PROJECT_NAME}
+  )
+  target_include_directories(test_${PROJECT_NAME} PRIVATE src)
+endif()
 
 ament_auto_package(INSTALL_TO_SHARE launch)
