@@ -11,9 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#include <gtest/gtest.h>
 #include "service_log_checker.hpp"
+
 #include <rclcpp/node_options.hpp>
+
+#include <gtest/gtest.h>
+
 #include <memory>
 #include <string>
 
@@ -23,38 +26,38 @@ using ServiceLogChecker = autoware::component_interface_tools::ServiceLogChecker
 
 TEST(ServiceCheckerTest, ServiceChecker)
 {
-    class PubManager : public rclcpp::Node
+  class PubManager : public rclcpp::Node
+  {
+  public:
+    PubManager() : Node("test_pub_node")
     {
-    public:
-      PubManager() : Node("test_pub_node")
-      {
-        pub_odom_ = create_publisher<ServiceLog>("service_log", 1);
-        sub_odom_ = create_subscription<DiagnosticArray>(
-          "/diagnostics", 1, std::bind(&PubManager::on_service_log, this, std::placeholders::_1));
-      }
-      rclcpp::Publisher<ServiceLog>::SharedPtr pub_odom_;
-      rclcpp::Subscription<DiagnosticArray>::SharedPtr sub_odom_;
-      bool flag = false;
-      void on_service_log(const DiagnosticArray::ConstSharedPtr msg)
-      {
-        if (msg->status.size() > 0) {
-          auto diag_array = msg->status[0].message.c_str();
-          EXPECT_EQ(diag_array, "ERROR");
-          flag = true;
-        }
-      }
-    };
-    
-    rclcpp::init(0, nullptr);
-    auto node_options = rclcpp::NodeOptions{};
-    auto test_target_node = std::make_shared<ServiceLogChecker>(node_options);
-    auto test_log = std::make_shared<PubManager>();
-    ServiceLog log;
-    log.type = 6;
-    log.name = "test";
-    log.node = "test_node";
-    test_log->pub_odom_->publish(log);
-
-    while (!test_log->flag) {
+      pub_odom_ = create_publisher<ServiceLog>("service_log", 1);
+      sub_odom_ = create_subscription<DiagnosticArray>(
+        "/diagnostics", 1, std::bind(&PubManager::on_service_log, this, std::placeholders::_1));
     }
+    rclcpp::Publisher<ServiceLog>::SharedPtr pub_odom_;
+    rclcpp::Subscription<DiagnosticArray>::SharedPtr sub_odom_;
+    bool flag = false;
+    void on_service_log(const DiagnosticArray::ConstSharedPtr msg)
+    {
+      if (msg->status.size() > 0) {
+        auto diag_array = msg->status[0].message.c_str();
+        EXPECT_EQ(diag_array, "ERROR");
+        flag = true;
+      }
+    }
+  };
+
+  rclcpp::init(0, nullptr);
+  auto node_options = rclcpp::NodeOptions{};
+  auto test_target_node = std::make_shared<ServiceLogChecker>(node_options);
+  auto test_log = std::make_shared<PubManager>();
+  ServiceLog log;
+  log.type = 6;
+  log.name = "test";
+  log.node = "test_node";
+  test_log->pub_odom_->publish(log);
+
+  while (!test_log->flag) {
+  }
 }
