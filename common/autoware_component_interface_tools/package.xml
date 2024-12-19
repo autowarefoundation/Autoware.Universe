@@ -19,15 +19,12 @@
   <depend>yaml_cpp_vendor</depend>
   
   <test_depend>ament_cmake_ros</test_depend>
-  <test_depend>rclcpp_components</test_depend>
   <test_depend>rclcpp</test_depend>
   <test_depend>ament_lint_auto</test_depend>
-  <test_depend>autoware_test_utils</test_depend>
   <test_depend>autoware_lint_common</test_depend>
   <test_depend>tier4_system_msgs</test_depend>
   <test_depend>yaml_cpp_vendor</test_depend>
   <test_depend>diagnostic_updater</test_depend>
-  <test_depend>autoware_testing</test_depend>
   <test_depend>ament_index_python</test_depend>
  
   <export>
