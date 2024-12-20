@@ -14366,6 +14366,7 @@ It is assumed that the target acceleration calculated here will be properly real
 </ul>
 </li>
 </ul>
+<p>We also offer the options to switch between these, depending on driving conditions.</p>
 <p><strong>Notation:</strong> This function works correctly only in a vehicle system that does not have acceleration feedback in the low-level control system.</p>
 <p>This compensation adds gravity correction to the target acceleration, resulting in an output value that is no longer equal to the target acceleration that the autonomous driving system desires. Therefore, it conflicts with the role of the acceleration feedback in the low-level controller.
 For instance, if the vehicle is attempting to start with an acceleration of <code>1.0 m/s^2</code> and a gravity correction of <code>-1.0 m/s^2</code> is applied, the output value will be <code>0</code>. If this output value is mistakenly treated as the target acceleration, the vehicle will not start.</p>
