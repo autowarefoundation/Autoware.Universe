@@ -175,7 +175,7 @@
                   : For 500 [ms], self velocity is smaller than C1, and self acceleration is smaller than C2.
                   <br/>
                   <b>emergency condition</b>
-                  <span>: Speed command is zero velocity, and distance to stop is smaller than D1, or self pose is not within D2, D3 from trajectory.</span>
+                  <span>: Speed command is zero velocity, and distance to stop is smaller than D1.</span>
                 </p>
               </div>
             </div>
@@ -315,10 +315,6 @@
                   C2 : stopped_state_entry_acc
                   <br/>
                   D1 : emergency_state_overshoot_stop_dist
-                  <br/>
-                  D2 : emergency_state_traj_trans_dev
-                  <br/>
-                  D3 : emergency_state_traj_rot_dev
                 </p>
               </div>
             </div>
