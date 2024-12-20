@@ -14440,26 +14440,26 @@
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
 <p>The <code>concatenate_and_time_synchronize_node</code> is a node designed to combine and synchronize multiple point clouds into a single, unified point cloud. By integrating data from multiple LiDARs, this node significantly enhances the sensing range and coverage of autonomous vehicles, enabling more accurate perception of the surrounding environment. Synchronization ensures that point clouds are aligned temporally, reducing errors caused by mismatched timestamps.</p>
 <p>For example, consider a vehicle equipped with three LiDAR sensors mounted on the left, right, and top positions. Each LiDAR captures data from its respective field of view, as shown below:</p>
-<div align="center">
-  <table>
-    <tr>
-      <td><img src="./image/concatenate_left.png" alt="Concatenate Left" width="300"></td>
-      <td><img src="./image/concatenate_top.png" alt="Concatenate Top" width="300"></td>
-      <td><img src="./image/concatenate_right.png" alt="Concatenate Right" width="300"></td>
-    </tr>
-    <tr>
-      <td align="center">Left</td>
-      <td align="center">Right</td>
-      <td align="center">Top</td>
-    </tr>
-  </table>
-</div>
-
+<table>
+<thead>
+<tr>
+<th align="center">Left</th>
+<th align="center">Top</th>
+<th align="center">Right</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="Concatenate Left" src="../image/concatenate_left.png"></td>
+<td align="center"><img alt="Concatenate Top" src="../image/concatenate_top.png"></td>
+<td align="center"><img alt="Concatenate Right" src="../image/concatenate_right.png"></td>
+</tr>
+</tbody>
+</table>
 <p>After processing the data through the <code>concatenate_and_time_synchronize_node</code>, the outputs from all LiDARs are combined into a single comprehensive point cloud that provides a complete view of the environment:</p>
-<div align="center">
-  <img src="./image/concatenate_all.png" alt="Full Scene View" width="500">
+<div style="margin: 0 auto; max-width: 500px">
+<p><img alt="Full Scene View" src="../image/concatenate_all.png"></p>
 </div>
-
 <p>This resulting point cloud allows autonomous systems to detect obstacles, map the environment, and navigate more effectively, leveraging the complementary fields of view from multiple LiDAR sensors.</p>
 <h2 id="inner-workings-algorithms">Inner Workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
 <p><img alt="concatenate_algorithm" src="../image/concatenate_algorithm.drawio.svg"></p>
