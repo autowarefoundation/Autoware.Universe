@@ -16,7 +16,6 @@
 #define AUTOWARE__TRAJECTORY__PATH_POINT_WITH_LANE_ID_HPP_
 
 #include "autoware/trajectory/path_point.hpp"
-#include "autoware/trajectory/point.hpp"
 
 #include <tier4_planning_msgs/msg/path_point_with_lane_id.hpp>
 
@@ -34,8 +33,18 @@ class Trajectory<tier4_planning_msgs::msg::PathPointWithLaneId>
   using PointType = tier4_planning_msgs::msg::PathPointWithLaneId;
   using LaneIdType = std::vector<int64_t>;
 
+protected:
+  [[nodiscard]] std::vector<double> get_internal_bases() const override;
+
 public:
   detail::InterpolatedArray<LaneIdType> lane_ids{nullptr};  //!< Lane ID
+
+  Trajectory();
+  ~Trajectory() override = default;
+  Trajectory(const Trajectory & rhs);
+  Trajectory(Trajectory && rhs) = default;
+  Trajectory & operator=(const Trajectory & rhs);
+  Trajectory & operator=(Trajectory && rhs) = default;
 
   /**
    * @brief Build the trajectory from the points
@@ -64,17 +73,7 @@ public:
     std::unique_ptr<Trajectory> trajectory_;
 
   public:
-    Builder()
-    {
-      trajectory_ = std::make_unique<Trajectory>();
-      set_xy_interpolator<interpolator::CubicSpline>();
-      set_z_interpolator<interpolator::Linear>();
-      set_orientation_interpolator<interpolator::SphericalLinear>();
-      set_longitudinal_velocity_interpolator<interpolator::Stairstep<double>>();
-      set_lateral_velocity_interpolator<interpolator::Stairstep<double>>();
-      set_heading_rate_interpolator<interpolator::Stairstep<double>>();
-      set_lane_ids_interpolator<interpolator::Stairstep<LaneIdType>>();
-    }
+    Builder() : trajectory_(std::make_unique<Trajectory>()) {}
 
     template <class InterpolatorType, class... Args>
     Builder & set_xy_interpolator(Args &&... args)

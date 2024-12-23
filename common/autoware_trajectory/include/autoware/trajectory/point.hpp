@@ -16,9 +16,8 @@
 #define AUTOWARE__TRAJECTORY__POINT_HPP_
 
 #include "autoware/trajectory/detail/utils.hpp"
-#include "autoware/trajectory/interpolator/cubic_spline.hpp"
+#include "autoware/trajectory/forward.hpp"
 #include "autoware/trajectory/interpolator/interpolator.hpp"
-#include "autoware/trajectory/interpolator/linear.hpp"
 
 #include <Eigen/Dense>
 
@@ -34,10 +33,6 @@
 
 namespace autoware::trajectory
 {
-
-template <typename PointType>
-class Trajectory;
-
 /**
  * @brief Trajectory class for geometry_msgs::msg::Point
  */
@@ -45,6 +40,8 @@ template <>
 class Trajectory<geometry_msgs::msg::Point>
 {
   using PointType = geometry_msgs::msg::Point;
+
+  friend class Trajectory<geometry_msgs::msg::Pose>;
 
 protected:
   std::shared_ptr<interpolator::InterpolatorInterface<double>>
@@ -66,7 +63,16 @@ protected:
    */
   [[nodiscard]] double clamp(const double & s, bool show_warning = false) const;
 
+  [[nodiscard]] virtual std::vector<double> get_internal_bases() const;
+
 public:
+  Trajectory();
+  virtual ~Trajectory() = default;
+  Trajectory(const Trajectory & rhs);
+  Trajectory(Trajectory && rhs) = default;
+  Trajectory & operator=(const Trajectory & rhs);
+  Trajectory & operator=(Trajectory && rhs) = default;
+
   /**
    * @brief Get the length of the trajectory
    * @return Length of the trajectory
@@ -124,13 +130,18 @@ public:
     std::vector<double> distances_from_segments;
     std::vector<double> lengths_from_start_points;
 
-    auto axis = detail::crop_bases(bases_, start_, end_);
+    auto bases = get_internal_bases();
 
-    for (size_t i = 1; i < axis.size(); ++i) {
+    for (size_t i = 1; i < bases.size(); ++i) {
       Eigen::Vector2d p0;
       Eigen::Vector2d p1;
-      p0 << x_interpolator_->compute(axis.at(i - 1)), y_interpolator_->compute(axis.at(i - 1));
-      p1 << x_interpolator_->compute(axis.at(i)), y_interpolator_->compute(axis.at(i));
+
+      auto p0_tmp = compute(bases.at(i - 1));
+      auto p1_tmp = compute(bases.at(i));
+
+      p0 << p0_tmp.x, p0_tmp.y;
+      p1 << p1_tmp.x, p1_tmp.y;
+
       Eigen::Vector2d v = p1 - p0;
       Eigen::Vector2d w = point - p0;
       double c1 = w.dot(v);
@@ -138,13 +149,13 @@ public:
       double length_from_start_point = NAN;
       double distance_from_segment = NAN;
       if (c1 <= 0) {
-        length_from_start_point = axis.at(i - 1);
+        length_from_start_point = bases.at(i - 1);
         distance_from_segment = (point - p0).norm();
       } else if (c2 <= c1) {
-        length_from_start_point = axis.at(i);
+        length_from_start_point = bases.at(i);
         distance_from_segment = (point - p1).norm();
       } else {
-        length_from_start_point = axis.at(i - 1) + c1 / c2 * (p1 - p0).norm();
+        length_from_start_point = bases.at(i - 1) + c1 / c2 * (p1 - p0).norm();
         distance_from_segment = (point - (p0 + (c1 / c2) * v)).norm();
       }
       if (constraints(length_from_start_point)) {
@@ -158,8 +169,7 @@ public:
 
     auto min_it = std::min_element(distances_from_segments.begin(), distances_from_segments.end());
 
-    return lengths_from_start_points[std::distance(distances_from_segments.begin(), min_it)] -
-           start_;
+    return lengths_from_start_points[std::distance(distances_from_segments.begin(), min_it)];
   }
 
   /**
@@ -175,7 +185,7 @@ public:
     return *s;
   }
   /**
-   * @brief Find the crossing point with constraint
+   * @brief Find the point where Trajectory and line cross and satisfy the constraint.
    * @tparam InputPointType Type of input point
    * @param start Start point
    * @param end End point
@@ -192,13 +202,17 @@ public:
     Eigen::Vector2d line_end(to_point(end).x, to_point(end).y);
     Eigen::Vector2d line_dir = line_end - line_start;
 
-    auto axis = detail::crop_bases(bases_, start_, end_);
+    auto bases = get_internal_bases();
 
-    for (size_t i = 1; i < axis.size(); ++i) {
+    for (size_t i = 1; i < bases.size(); ++i) {
       Eigen::Vector2d p0;
       Eigen::Vector2d p1;
-      p0 << x_interpolator_->compute(axis.at(i - 1)), y_interpolator_->compute(axis.at(i - 1));
-      p1 << x_interpolator_->compute(axis.at(i)), y_interpolator_->compute(axis.at(i));
+
+      auto p0_tmp = compute(bases.at(i - 1));
+      auto p1_tmp = compute(bases.at(i));
+
+      p0 << p0_tmp.x, p0_tmp.y;
+      p1 << p1_tmp.x, p1_tmp.y;
 
       Eigen::Vector2d segment_dir = p1 - p0;
 
@@ -215,9 +229,9 @@ public:
         (p0_to_line_start.x() * segment_dir.y() - p0_to_line_start.y() * segment_dir.x()) / det;
 
       if (t >= 0.0 && t <= 1.0 && u >= 0.0 && u <= 1.0) {
-        double intersection_s = axis.at(i - 1) + t * (axis.at(i) - axis.at(i - 1));
+        double intersection_s = bases.at(i - 1) + t * (bases.at(i) - bases.at(i - 1));
         if (constraints(intersection_s)) {
-          return intersection_s - start_;
+          return intersection_s;
         }
       }
     }
@@ -226,10 +240,10 @@ public:
   }
 
   /**
-   * @brief Find the crossing point
+   * @brief Find the point where Trajectory and line cross.
    * @tparam InputPointType Type of input point
-   * @param start Start point
-   * @param end End point
+   * @param start Start point of the line
+   * @param end End point of the line
    * @return Optional arc length of the crossing point
    */
   template <typename InputPointType>
@@ -248,19 +262,28 @@ public:
 
   void crop(const double & start, const double & length);
 
+  /**
+   * @brief Extracts segments from the trajectory based on the given constraints.
+   *
+   * This function iterates through the internal bases of the trajectory and applies the provided
+   * constraint function to determine valid segments. A segment is defined as a continuous range
+   * of points that satisfy the constraint function.
+   *
+   * @param constraints A function that takes a double value and returns a boolean indicating
+   *                    whether the value satisfies the constraints.
+   * @return A vector of pairs, where each pair represents the start and end points of a segment
+   *         that satisfies the constraints.
+   */
+  [[nodiscard]] std::vector<std::pair<double, double>> get_segments(
+    const ConstraintFunction & constraints) const;
+
   class Builder
   {
   private:
     std::unique_ptr<Trajectory> trajectory_;
 
   public:
-    Builder()
-    {
-      trajectory_ = std::make_unique<Trajectory>();
-      // Default interpolators
-      set_xy_interpolator<interpolator::CubicSpline>();
-      set_z_interpolator<interpolator::Linear>();
-    }
+    Builder() : trajectory_(std::make_unique<Trajectory>()) {}
 
     template <class InterpolatorType, class... Args>
     Builder & set_xy_interpolator(Args &&... args)

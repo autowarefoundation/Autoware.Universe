@@ -16,7 +16,6 @@
 #define AUTOWARE__TRAJECTORY__PATH_POINT_HPP_
 
 #include "autoware/trajectory/detail/interpolated_array.hpp"
-#include "autoware/trajectory/interpolator/stairstep.hpp"
 #include "autoware/trajectory/pose.hpp"
 
 #include <memory>
@@ -32,11 +31,21 @@ class Trajectory<autoware_planning_msgs::msg::PathPoint>
   using BaseClass = Trajectory<geometry_msgs::msg::Pose>;
   using PointType = autoware_planning_msgs::msg::PathPoint;
 
+protected:
+  [[nodiscard]] std::vector<double> get_internal_bases() const override;
+
 public:
   detail::InterpolatedArray<double> longitudinal_velocity_mps{
     nullptr};  //!< Longitudinal velocity in m/s
   detail::InterpolatedArray<double> lateral_velocity_mps{nullptr};  //!< Lateral velocity in m/s
   detail::InterpolatedArray<double> heading_rate_rps{nullptr};      //!< Heading rate in rad/s};
+
+  Trajectory();
+  ~Trajectory() override = default;
+  Trajectory(const Trajectory & rhs);
+  Trajectory(Trajectory && rhs) = default;
+  Trajectory & operator=(const Trajectory & rhs);
+  Trajectory & operator=(Trajectory && rhs) = default;
 
   /**
    * @brief Build the trajectory from the points
@@ -65,16 +74,7 @@ public:
     std::unique_ptr<Trajectory> trajectory_;
 
   public:
-    Builder()
-    {
-      trajectory_ = std::make_unique<Trajectory>();
-      set_xy_interpolator<interpolator::CubicSpline>();
-      set_z_interpolator<interpolator::Linear>();
-      set_orientation_interpolator<interpolator::SphericalLinear>();
-      set_longitudinal_velocity_interpolator<interpolator::Stairstep<double>>();
-      set_lateral_velocity_interpolator<interpolator::Stairstep<double>>();
-      set_heading_rate_interpolator<interpolator::Stairstep<double>>();
-    }
+    Builder() : trajectory_(std::make_unique<Trajectory>()) {}
 
     template <class InterpolatorType, class... Args>
     Builder & set_xy_interpolator(Args &&... args)

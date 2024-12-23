@@ -14,6 +14,8 @@
 
 #include "autoware/trajectory/pose.hpp"
 
+#include "autoware/trajectory/interpolator/spherical_linear.hpp"
+
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Vector3.h>
 
@@ -21,8 +23,27 @@
 
 namespace autoware::trajectory
 {
-
 using PointType = geometry_msgs::msg::Pose;
+
+Trajectory<PointType>::Trajectory()
+: orientation_interpolator_(std::make_shared<interpolator::SphericalLinear>())
+{
+}
+
+Trajectory<PointType>::Trajectory(const Trajectory & rhs)
+: Trajectory<geometry_msgs::msg::Point>(rhs)
+{
+  orientation_interpolator_ = rhs.orientation_interpolator_->clone();
+}
+
+Trajectory<PointType> & Trajectory<PointType>::operator=(const Trajectory & rhs)
+{
+  if (this != &rhs) {
+    BaseClass::operator=(rhs);
+    orientation_interpolator_ = rhs.orientation_interpolator_->clone();
+  }
+  return *this;
+}
 
 bool Trajectory<PointType>::build(const std::vector<PointType> & points)
 {
@@ -39,6 +60,14 @@ bool Trajectory<PointType>::build(const std::vector<PointType> & points)
   is_valid &= BaseClass::build(path_points);
   is_valid &= orientation_interpolator_->build(bases_, orientations);
   return is_valid;
+}
+
+std::vector<double> Trajectory<PointType>::get_internal_bases() const
+{
+  auto bases = detail::crop_bases(bases_, start_, end_);
+  std::transform(
+    bases.begin(), bases.end(), bases.begin(), [this](const double & s) { return s - start_; });
+  return bases;
 }
 
 PointType Trajectory<PointType>::compute(double s) const
@@ -86,15 +115,12 @@ void Trajectory<PointType>::align_orientation_with_trajectory_direction()
 
 std::vector<PointType> Trajectory<PointType>::restore(const size_t & min_points) const
 {
-  auto bases = detail::crop_bases(bases_, start_, end_);
+  auto bases = get_internal_bases();
   bases = detail::fill_bases(bases, min_points);
   std::vector<PointType> points;
   points.reserve(bases.size());
   for (const auto & s : bases) {
-    PointType p;
-    p.position = BaseClass::compute(s - start_);
-    p.orientation = orientation_interpolator_->compute(s);
-    points.emplace_back(p);
+    points.emplace_back(compute(s));
   }
   return points;
 }

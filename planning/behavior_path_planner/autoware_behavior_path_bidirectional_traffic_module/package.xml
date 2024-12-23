@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>autoware_behavior_path_bidirectional_traffic_module</name>
+  <version>0.1.0</version>
+  <description>The autoware_behavior_path_bidirectional_traffic_module package</description>
+  <maintainer email="yukinari.hisaki.2@tier4.jp">Yukinari Hisaki</maintainer>
+
+  <license>Apache License 2.0</license>
+  <author email="yukinari.hisaki.2@tier4.jp">Yukinari Hisaki</author>
+
+  <buildtool_depend>ament_cmake_auto</buildtool_depend>
+  <buildtool_depend>autoware_cmake</buildtool_depend>
+  <buildtool_depend>eigen3_cmake_module</buildtool_depend>
+
+  <depend>autoware_behavior_path_planner</depend>
+  <depend>autoware_behavior_path_planner_common</depend>
+  <depend>autoware_trajectory</depend>
+  <depend>lanelet2_core</depend>
+  <depend>rclcpp</depend>
+
+  <test_depend>ament_cmake_ros</test_depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>autoware_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

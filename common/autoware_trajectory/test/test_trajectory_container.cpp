@@ -116,26 +116,8 @@ TEST_F(TrajectoryTest, restore)
 {
   using autoware::trajectory::Trajectory;
   trajectory->longitudinal_velocity_mps.range(4.0, trajectory->length()).set(5.0);
-  {
-    auto points = static_cast<Trajectory<geometry_msgs::msg::Point> &>(*trajectory).restore(0);
-    EXPECT_EQ(10, points.size());
-  }
-
-  {
-    auto points = static_cast<Trajectory<geometry_msgs::msg::Pose> &>(*trajectory).restore(0);
-    EXPECT_EQ(10, points.size());
-  }
-
-  {
-    auto points =
-      static_cast<Trajectory<autoware_planning_msgs::msg::PathPoint> &>(*trajectory).restore(0);
-    EXPECT_EQ(11, points.size());
-  }
-
-  {
-    auto points = trajectory->restore(0);
-    EXPECT_EQ(11, points.size());
-  }
+  auto points = trajectory->restore(0);
+  EXPECT_EQ(11, points.size());
 }
 
 TEST_F(TrajectoryTest, crossed)

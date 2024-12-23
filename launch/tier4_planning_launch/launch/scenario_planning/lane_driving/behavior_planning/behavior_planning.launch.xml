@@ -18,6 +18,7 @@
   <arg name="launch_start_planner_module" default="true"/>
   <arg name="launch_sampling_planner_module" default="true"/>
   <arg name="launch_side_shift_module" default="true"/>
+  <arg name="launch_bidirectional_traffic_module" default="true"/>
 
   <arg name="launch_crosswalk_module" default="true"/>
   <arg name="launch_walkway_module" default="true"/>
@@ -52,6 +53,11 @@
     name="behavior_path_planner_launch_modules"
     value="$(eval &quot;'$(var behavior_path_planner_launch_modules)' + 'autoware::behavior_path_planner::SideShiftModuleManager, '&quot;)"
     if="$(var launch_side_shift_module)"
+  />
+  <let
+    name="behavior_path_planner_launch_modules"
+    value="$(eval &quot;'$(var behavior_path_planner_launch_modules)' + 'autoware::behavior_path_planner::BidirectionalLaneModuleManager, '&quot;)"
+    if="$(var launch_bidirectional_traffic_module)"
   />
   <let
     name="behavior_path_planner_launch_modules"

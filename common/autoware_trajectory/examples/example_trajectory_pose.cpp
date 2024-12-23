@@ -45,7 +45,6 @@ int main()
     pose(8.31, 7.28), pose(8.45, 7.93), pose(8.68, 8.45), pose(8.96, 8.96), pose(9.32, 9.36)};
 
   using autoware::trajectory::Trajectory;
-  using autoware::trajectory::interpolator::CubicSpline;
 
   auto trajectory = Trajectory<geometry_msgs::msg::Pose>::Builder{}.build(poses);
 

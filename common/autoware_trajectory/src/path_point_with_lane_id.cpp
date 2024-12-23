@@ -15,13 +15,36 @@
 #include "autoware/trajectory/path_point_with_lane_id.hpp"
 
 #include "autoware/trajectory/detail/utils.hpp"
+#include "autoware/trajectory/interpolator/stairstep.hpp"
 
+#include <memory>
 #include <vector>
 
 namespace autoware::trajectory
 {
 
 using PointType = tier4_planning_msgs::msg::PathPointWithLaneId;
+
+Trajectory<PointType>::Trajectory()
+: lane_ids(
+    detail::InterpolatedArray<LaneIdType>(std::make_shared<interpolator::Stairstep<LaneIdType>>()))
+{
+}
+
+Trajectory<PointType>::Trajectory(const Trajectory & rhs)
+: Trajectory<autoware_planning_msgs::msg::PathPoint>(rhs)
+{
+  lane_ids = rhs.lane_ids;
+}
+
+Trajectory<PointType> & Trajectory<PointType>::operator=(const Trajectory & rhs)
+{
+  if (this != &rhs) {
+    BaseClass::operator=(rhs);
+    lane_ids = rhs.lane_ids;
+  }
+  return *this;
+}
 
 bool Trajectory<PointType>::build(const std::vector<PointType> & points)
 {
@@ -38,16 +61,7 @@ bool Trajectory<PointType>::build(const std::vector<PointType> & points)
   return is_valid;
 }
 
-PointType Trajectory<PointType>::compute(double s) const
-{
-  PointType result;
-  result.point = BaseClass::compute(s);
-  s = clamp(s);
-  result.lane_ids = lane_ids.compute(s);
-  return result;
-}
-
-std::vector<PointType> Trajectory<PointType>::restore(const size_t & min_points) const
+std::vector<double> Trajectory<PointType>::get_internal_bases() const
 {
   auto get_bases = [](const auto & interpolated_array) {
     auto [bases, values] = interpolated_array.get_data();
@@ -59,15 +73,30 @@ std::vector<PointType> Trajectory<PointType>::restore(const size_t & min_points)
     get_bases(this->heading_rate_rps), get_bases(this->lane_ids));
 
   bases = detail::crop_bases(bases, start_, end_);
+
+  std::transform(
+    bases.begin(), bases.end(), bases.begin(), [this](const double & s) { return s - start_; });
+  return bases;
+}
+
+PointType Trajectory<PointType>::compute(double s) const
+{
+  PointType result;
+  result.point = BaseClass::compute(s);
+  s = clamp(s);
+  result.lane_ids = lane_ids.compute(s);
+  return result;
+}
+
+std::vector<PointType> Trajectory<PointType>::restore(const size_t & min_points) const
+{
+  auto bases = get_internal_bases();
   bases = detail::fill_bases(bases, min_points);
 
   std::vector<PointType> points;
   points.reserve(bases.size());
   for (const auto & s : bases) {
-    PointType p;
-    p.point = BaseClass::compute(s - start_);
-    p.lane_ids = lane_ids.compute(s);
-    points.emplace_back(p);
+    points.emplace_back(compute(s));
   }
   return points;
 }
