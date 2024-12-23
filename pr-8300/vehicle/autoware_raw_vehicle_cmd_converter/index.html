@@ -14172,6 +14172,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#vehicle-adaptor" class="md-nav__link">
+    Vehicle Adaptor
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -14252,6 +14259,10 @@ a + b \times v^2 - c \times \lvert \delta \rvert
 <p><img alt="vgr" src="figure/vgr.svg"></p>
 <p>When <code>convert_steer_cmd_method: "vgr"</code> is selected, the node receives the control command from the controller as the desired tire angle and calculates the desired steering angle to output.
 Also, when <code>convert_actuation_to_steering_status: true</code>, this node receives the <code>actuation_status</code> topic and calculates the steer tire angle from the <code>steer_wheel_angle</code> and publishes it.</p>
+<h3 id="vehicle-adaptor">Vehicle Adaptor<a class="headerlink" href="#vehicle-adaptor" title="Permanent link">#</a></h3>
+<p><strong>Under development</strong>
+A feature that compensates for control commands according to the dynamic characteristics of the vehicle.
+This feature works when <code>use_vehicle_adaptor: true</code> is set and requires <code>control_horizon</code> to be enabled, so you need to set <code>enable_control_cmd_horizon_pub: true</code> in the trajectory_follower node.</p>
 <h2 id="input-topics">Input topics<a class="headerlink" href="#input-topics" title="Permanent link">#</a></h2>
 <table>
 <thead>
@@ -14281,6 +14292,33 @@ Also, when <code>convert_actuation_to_steering_status: true</code>, this node re
 <td><code>~/input/actuation_status</code></td>
 <td>tier4_vehicle_msgs::msg::ActuationStatus</td>
 <td>actuation status is assumed to receive the same type of status as sent to the vehicle side. For example, if throttle/brake pedal/steer_wheel_angle is sent, the same type of status is received. In the case of steer_wheel_angle, it is used to calculate steer_tire_angle and VGR in this node.</td>
+</tr>
+</tbody>
+</table>
+<p>Input topics when vehicle_adaptor is enabled</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/input/accel</code></td>
+<td>geometry_msgs::msg::AccelWithCovarianceStamped;</td>
+<td>acceleration status</td>
+</tr>
+<tr>
+<td><code>~/input/operation_mode_state</code></td>
+<td>autoware_adapi_v1_msgs::msg::OperationModeState</td>
+<td>operation mode status</td>
+</tr>
+<tr>
+<td><code>~/input/control_horizon</code></td>
+<td>autoware_control_msgs::msg::ControlHorizon</td>
+<td>control horizon command</td>
 </tr>
 </tbody>
 </table>
@@ -14526,6 +14564,13 @@ Also, when <code>convert_actuation_to_steering_status: true</code>, this node re
 <td>boolean</td>
 <td>convert actuation to steering status or not. Whether to subscribe to actuation_status and calculate and publish steering_status For example, receive the steering wheel angle and calculate the steering wheel angle based on the gear ratio. If false, the vehicle interface must publish steering_status.</td>
 <td>true</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>use_vehicle_adaptor</td>
+<td>boolean</td>
+<td>flag to enable feature that compensates control commands according to vehicle dynamics.</td>
+<td>false</td>
 <td>N/A</td>
 </tr>
 </tbody>
