@@ -14328,16 +14328,22 @@ The table below outlines how the matching process determines the output based on
 </thead>
 <tbody>
 <tr>
+<td><code>external_delay_tolerance</code></td>
+<td>double</td>
+<td>5.0</td>
+<td>The duration in seconds an external message is considered valid for merging in comparison with current time</td>
+</tr>
+<tr>
 <td><code>external_time_tolerance</code></td>
 <td>double</td>
 <td>5.0</td>
-<td>The duration in seconds an external message is considered valid for merging</td>
+<td>The duration in seconds an external message is considered valid for merging in comparison with a timestamp of perception message</td>
 </tr>
 <tr>
 <td><code>perception_time_tolerance</code></td>
 <td>double</td>
 <td>1.0</td>
-<td>The duration in seconds a perception message is considered valid for merging</td>
+<td>The duration in seconds a perception message is considered valid for merging in comparison with a timestamp of external message</td>
 </tr>
 <tr>
 <td><code>external_priority</code></td>
