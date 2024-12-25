@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#macro-rendering-error" class="md-skip">
+        <a href="#downsample_filter" class="md-skip">
           Skip to content
         </a>
       
@@ -10097,7 +10097,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../blockage_diag/" class="md-nav__link">
+      <a href="../blockage-diag/" class="md-nav__link">
         blockage_diag
       </a>
     </li>
@@ -10162,9 +10162,171 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          downsample_filter
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         downsample_filter
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    Purpose
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithms" class="md-nav__link">
+    Inner-workings / Algorithms
+  </a>
+  
+    <nav class="md-nav" aria-label="Inner-workings / Algorithms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#approximate-downsample-filter" class="md-nav__link">
+    Approximate Downsample Filter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-downsample-filter" class="md-nav__link">
+    Random Downsample Filter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voxel-grid-downsample-filter" class="md-nav__link">
+    Voxel Grid Downsample Filter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pickup-based-voxel-grid-downsample-filter" class="md-nav__link">
+    Pickup Based Voxel Grid Downsample Filter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs-outputs" class="md-nav__link">
+    Inputs / Outputs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#note-parameters" class="md-nav__link">
+    Note Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-parameters" class="md-nav__link">
+    Core Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-downsample-filter_1" class="md-nav__link">
+    Random Downsample Filter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voxel-grid-downsample-filter_1" class="md-nav__link">
+    Voxel Grid Downsample Filter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pickup-based-voxel-grid-downsample-filter_1" class="md-nav__link">
+    Pickup Based Voxel Grid Downsample Filter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-known-limits" class="md-nav__link">
+    Assumptions / Known limits
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-error-detection-and-handling" class="md-nav__link">
+    (Optional) Error detection and handling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-performance-characterization" class="md-nav__link">
+    (Optional) Performance characterization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-referencesexternal-links" class="md-nav__link">
+    (Optional) References/External links
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-future-extensions-unimplemented-parts" class="md-nav__link">
+    (Optional) Future extensions / Unimplemented parts
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -14140,6 +14302,152 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    Purpose
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithms" class="md-nav__link">
+    Inner-workings / Algorithms
+  </a>
+  
+    <nav class="md-nav" aria-label="Inner-workings / Algorithms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#approximate-downsample-filter" class="md-nav__link">
+    Approximate Downsample Filter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-downsample-filter" class="md-nav__link">
+    Random Downsample Filter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voxel-grid-downsample-filter" class="md-nav__link">
+    Voxel Grid Downsample Filter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pickup-based-voxel-grid-downsample-filter" class="md-nav__link">
+    Pickup Based Voxel Grid Downsample Filter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs-outputs" class="md-nav__link">
+    Inputs / Outputs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#note-parameters" class="md-nav__link">
+    Note Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-parameters" class="md-nav__link">
+    Core Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-downsample-filter_1" class="md-nav__link">
+    Random Downsample Filter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voxel-grid-downsample-filter_1" class="md-nav__link">
+    Voxel Grid Downsample Filter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pickup-based-voxel-grid-downsample-filter_1" class="md-nav__link">
+    Pickup Based Voxel Grid Downsample Filter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-known-limits" class="md-nav__link">
+    Assumptions / Known limits
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-error-detection-and-handling" class="md-nav__link">
+    (Optional) Error detection and handling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-performance-characterization" class="md-nav__link">
+    (Optional) Performance characterization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-referencesexternal-links" class="md-nav__link">
+    (Optional) References/External links
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-future-extensions-unimplemented-parts" class="md-nav__link">
+    (Optional) Future extensions / Unimplemented parts
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -14156,21 +14464,158 @@
   
 
 
-<div><h1 id="macro-rendering-error"><em>Macro Rendering Error</em><a class="headerlink" href="#macro-rendering-error" title="Permanent link">#</a></h1>
-<p><em>File</em>: <code>sensing/autoware_pointcloud_preprocessor/docs/downsample-filter.md</code></p>
-<p><em>FileNotFoundError</em>: [Errno 2] No such file or directory: 'sensing/autoware_pointcloud_preprocessor/schema/pickup_based_voxel_grid_downsample_filter.schema.json'</p>
-<div class="highlight"><pre><span></span><code>Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/mkdocs_macros/plugin.py", line 688, in render
-    return md_template.render(**page_variables)
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 1295, in render
-    self.environment.handle_exception()
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "&lt;template&gt;", line 51, in top-level template code
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 70, in json_to_markdown
-    with open(json_schema_file_path) as f:
-FileNotFoundError: [Errno 2] No such file or directory: 'sensing/autoware_pointcloud_preprocessor/schema/pickup_based_voxel_grid_downsample_filter.schema.json'
-</code></pre></div></div>
+<div><h1 id="downsample_filter">downsample_filter<a class="headerlink" href="#downsample_filter" title="Permanent link">#</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
+<p>The <code>downsample_filter</code> is a node that reduces the number of points.</p>
+<h2 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
+<h3 id="approximate-downsample-filter">Approximate Downsample Filter<a class="headerlink" href="#approximate-downsample-filter" title="Permanent link">#</a></h3>
+<p><code>pcl::VoxelGridNearestCentroid</code> is used. The algorithm is described in <a href="../../../autoware_pcl_extensions/">autoware_pcl_extensions</a></p>
+<h3 id="random-downsample-filter">Random Downsample Filter<a class="headerlink" href="#random-downsample-filter" title="Permanent link">#</a></h3>
+<p><code>pcl::RandomSample</code> is used, which points are sampled with uniform probability.</p>
+<h3 id="voxel-grid-downsample-filter">Voxel Grid Downsample Filter<a class="headerlink" href="#voxel-grid-downsample-filter" title="Permanent link">#</a></h3>
+<p><code>pcl::VoxelGrid</code> is used, which points in each voxel are approximated with their centroid.</p>
+<h3 id="pickup-based-voxel-grid-downsample-filter">Pickup Based Voxel Grid Downsample Filter<a class="headerlink" href="#pickup-based-voxel-grid-downsample-filter" title="Permanent link">#</a></h3>
+<p>This algorithm samples a single actual point existing within the voxel, not the centroid. The computation cost is low compared to Centroid Based Voxel Grid Filter.</p>
+<h2 id="inputs-outputs">Inputs / Outputs<a class="headerlink" href="#inputs-outputs" title="Permanent link">#</a></h2>
+<p>These implementations inherit <code>autoware::pointcloud_preprocessor::Filter</code> class, please refer <a href="../../">README</a>.</p>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
+<h3 id="note-parameters">Note Parameters<a class="headerlink" href="#note-parameters" title="Permanent link">#</a></h3>
+<p>These implementations inherit <code>autoware::pointcloud_preprocessor::Filter</code> class, please refer <a href="../../">README</a>.</p>
+<h3 id="core-parameters">Core Parameters<a class="headerlink" href="#core-parameters" title="Permanent link">#</a></h3>
+<h4 id="approximate-downsample-filter_1">Approximate Downsample Filter<a class="headerlink" href="#approximate-downsample-filter_1" title="Permanent link">#</a></h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>voxel_size_x</td>
+<td>float</td>
+<td>voxel size along the x-axis [m]</td>
+<td>0.3</td>
+<td>≥0.0</td>
+</tr>
+<tr>
+<td>voxel_size_y</td>
+<td>float</td>
+<td>voxel size along the y-axis [m]</td>
+<td>0.3</td>
+<td>≥0.0</td>
+</tr>
+<tr>
+<td>voxel_size_z</td>
+<td>float</td>
+<td>voxel size along the z-axis [m]</td>
+<td>0.1</td>
+<td>≥0.0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="random-downsample-filter_1">Random Downsample Filter<a class="headerlink" href="#random-downsample-filter_1" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sample_num</td>
+<td>integer</td>
+<td>number of indices to be sampled</td>
+<td>1500</td>
+<td>≥0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="voxel-grid-downsample-filter_1">Voxel Grid Downsample Filter<a class="headerlink" href="#voxel-grid-downsample-filter_1" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>voxel_size_x</td>
+<td>float</td>
+<td>the voxel size along x-axis [m]</td>
+<td>0.3</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>voxel_size_y</td>
+<td>float</td>
+<td>the voxel size along y-axis [m]</td>
+<td>0.3</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>voxel_size_z</td>
+<td>float</td>
+<td>the voxel size along z-axis [m]</td>
+<td>0.1</td>
+<td>≥0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pickup-based-voxel-grid-downsample-filter_1">Pickup Based Voxel Grid Downsample Filter<a class="headerlink" href="#pickup-based-voxel-grid-downsample-filter_1" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>voxel_size_x</td>
+<td>float</td>
+<td>voxel size along the x-axis [m]</td>
+<td>1</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>voxel_size_y</td>
+<td>float</td>
+<td>voxel size along the y-axis [m]</td>
+<td>1</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>voxel_size_z</td>
+<td>float</td>
+<td>voxel size along the z-axis [m]</td>
+<td>1</td>
+<td>≥0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="assumptions-known-limits">Assumptions / Known limits<a class="headerlink" href="#assumptions-known-limits" title="Permanent link">#</a></h2>
+<!-- cspell: ignore martinus -->
+
+<p>This implementation uses the <code>robin_hood.h</code> hashing library by martinus, available under the MIT License at <a href="https://github.com/martinus/robin-hood-hashing">martinus/robin-hood-hashing</a> on GitHub. Special thanks to martinus for this contribution.</p>
+<h2 id="optional-error-detection-and-handling">(Optional) Error detection and handling<a class="headerlink" href="#optional-error-detection-and-handling" title="Permanent link">#</a></h2>
+<h2 id="optional-performance-characterization">(Optional) Performance characterization<a class="headerlink" href="#optional-performance-characterization" title="Permanent link">#</a></h2>
+<h2 id="optional-referencesexternal-links">(Optional) References/External links<a class="headerlink" href="#optional-referencesexternal-links" title="Permanent link">#</a></h2>
+<h2 id="optional-future-extensions-unimplemented-parts">(Optional) Future extensions / Unimplemented parts<a class="headerlink" href="#optional-future-extensions-unimplemented-parts" title="Permanent link">#</a></h2></div>
 
 
 

@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#macro-rendering-error" class="md-skip">
+        <a href="#passthrough_filter" class="md-skip">
           Skip to content
         </a>
       
@@ -10097,7 +10097,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../blockage_diag/" class="md-nav__link">
+      <a href="../blockage-diag/" class="md-nav__link">
         blockage_diag
       </a>
     </li>
@@ -10204,9 +10204,129 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          passthrough_filter
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         passthrough_filter
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    Purpose
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithms" class="md-nav__link">
+    Inner-workings / Algorithms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs-outputs" class="md-nav__link">
+    Inputs / Outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Inputs / Outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    Input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    Output
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-parameters" class="md-nav__link">
+    Core Parameters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-known-limits" class="md-nav__link">
+    Assumptions / Known limits
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-error-detection-and-handling" class="md-nav__link">
+    (Optional) Error detection and handling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-performance-characterization" class="md-nav__link">
+    (Optional) Performance characterization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-referencesexternal-links" class="md-nav__link">
+    (Optional) References/External links
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-future-extensions-unimplemented-parts" class="md-nav__link">
+    (Optional) Future extensions / Unimplemented parts
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -14140,6 +14260,110 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    Purpose
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithms" class="md-nav__link">
+    Inner-workings / Algorithms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs-outputs" class="md-nav__link">
+    Inputs / Outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Inputs / Outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    Input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    Output
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-parameters" class="md-nav__link">
+    Core Parameters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-known-limits" class="md-nav__link">
+    Assumptions / Known limits
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-error-detection-and-handling" class="md-nav__link">
+    (Optional) Error detection and handling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-performance-characterization" class="md-nav__link">
+    (Optional) Performance characterization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-referencesexternal-links" class="md-nav__link">
+    (Optional) References/External links
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-future-extensions-unimplemented-parts" class="md-nav__link">
+    (Optional) Future extensions / Unimplemented parts
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -14156,21 +14380,105 @@
   
 
 
-<div><h1 id="macro-rendering-error"><em>Macro Rendering Error</em><a class="headerlink" href="#macro-rendering-error" title="Permanent link">#</a></h1>
-<p><em>File</em>: <code>sensing/autoware_pointcloud_preprocessor/docs/passthrough-filter.md</code></p>
-<p><em>FileNotFoundError</em>: [Errno 2] No such file or directory: 'sensing/autoware_pointcloud_preprocessor/schema/passthrough_filter_uint16_node.schema.json\n'</p>
-<div class="highlight"><pre><span></span><code>Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/mkdocs_macros/plugin.py", line 688, in render
-    return md_template.render(**page_variables)
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 1295, in render
-    self.environment.handle_exception()
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "&lt;template&gt;", line 28, in top-level template code
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 70, in json_to_markdown
-    with open(json_schema_file_path) as f:
-FileNotFoundError: [Errno 2] No such file or directory: 'sensing/autoware_pointcloud_preprocessor/schema/passthrough_filter_uint16_node.schema.json\n'
-</code></pre></div></div>
+<div><h1 id="passthrough_filter">passthrough_filter<a class="headerlink" href="#passthrough_filter" title="Permanent link">#</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
+<p>The <code>passthrough_filter</code> is a node that removes points on the outside of a range in a given field (e.g. x, y, z, intensity, ring, etc).</p>
+<h2 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
+<h2 id="inputs-outputs">Inputs / Outputs<a class="headerlink" href="#inputs-outputs" title="Permanent link">#</a></h2>
+<h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/input/points</code></td>
+<td><code>sensor_msgs::msg::PointCloud2</code></td>
+<td>reference points</td>
+</tr>
+<tr>
+<td><code>~/input/indices</code></td>
+<td><code>pcl_msgs::msg::Indices</code></td>
+<td>reference indices</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output">Output<a class="headerlink" href="#output" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/output/points</code></td>
+<td><code>sensor_msgs::msg::PointCloud2</code></td>
+<td>filtered points</td>
+</tr>
+</tbody>
+</table>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
+<h3 id="core-parameters">Core Parameters<a class="headerlink" href="#core-parameters" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>filter_limit_min</td>
+<td>integer</td>
+<td>minimum allowed field value</td>
+<td>0</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>filter_limit_max</td>
+<td>integer</td>
+<td>maximum allowed field value</td>
+<td>127</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>filter_field_name</td>
+<td>string</td>
+<td>filtering field name</td>
+<td>channel</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>keep_organized</td>
+<td>boolean</td>
+<td>flag to keep indices structure</td>
+<td>false</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>filter_limit_negative</td>
+<td>boolean</td>
+<td>flag to return whether the data is inside limit or not</td>
+<td>false</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<h2 id="assumptions-known-limits">Assumptions / Known limits<a class="headerlink" href="#assumptions-known-limits" title="Permanent link">#</a></h2>
+<h2 id="optional-error-detection-and-handling">(Optional) Error detection and handling<a class="headerlink" href="#optional-error-detection-and-handling" title="Permanent link">#</a></h2>
+<h2 id="optional-performance-characterization">(Optional) Performance characterization<a class="headerlink" href="#optional-performance-characterization" title="Permanent link">#</a></h2>
+<h2 id="optional-referencesexternal-links">(Optional) References/External links<a class="headerlink" href="#optional-referencesexternal-links" title="Permanent link">#</a></h2>
+<h2 id="optional-future-extensions-unimplemented-parts">(Optional) Future extensions / Unimplemented parts<a class="headerlink" href="#optional-future-extensions-unimplemented-parts" title="Permanent link">#</a></h2></div>
 
 
 

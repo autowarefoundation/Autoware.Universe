@@ -1186,7 +1186,7 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/main/sensing/autoware_pointcloud_preprocessor/docs/blockage_diag/</loc>
+         <loc>https://autowarefoundation.github.io/autoware.universe/main/sensing/autoware_pointcloud_preprocessor/docs/blockage-diag/</loc>
          <lastmod>2024-12-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
