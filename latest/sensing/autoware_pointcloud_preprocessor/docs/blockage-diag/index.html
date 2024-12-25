@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/latest/sensing/autoware_pointcloud_preprocessor/docs/blockage_diag/">
+        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/latest/sensing/autoware_pointcloud_preprocessor/docs/blockage-diag/">
       
       
         <link rel="prev" href="../../">
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#macro-rendering-error" class="md-skip">
+        <a href="#blockage_diag" class="md-skip">
           Skip to content
         </a>
       
@@ -10106,9 +10106,123 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          blockage_diag
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         blockage_diag
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    Purpose
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithmsblockage-detection" class="md-nav__link">
+    Inner-workings / Algorithms(Blockage detection)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithmsdust-detection" class="md-nav__link">
+    Inner-workings /Algorithms(Dust detection)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs-outputs" class="md-nav__link">
+    Inputs / Outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Inputs / Outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    Input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    Output
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-known-limits" class="md-nav__link">
+    Assumptions / Known limits
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-error-detection-and-handling" class="md-nav__link">
+    (Optional) Error detection and handling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-performance-characterization" class="md-nav__link">
+    (Optional) Performance characterization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencesexternal-links" class="md-nav__link">
+    References/External links
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-future-extensions-unimplemented-parts" class="md-nav__link">
+    (Optional) Future extensions / Unimplemented parts
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -14140,6 +14254,104 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    Purpose
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithmsblockage-detection" class="md-nav__link">
+    Inner-workings / Algorithms(Blockage detection)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithmsdust-detection" class="md-nav__link">
+    Inner-workings /Algorithms(Dust detection)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs-outputs" class="md-nav__link">
+    Inputs / Outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Inputs / Outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    Input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    Output
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-known-limits" class="md-nav__link">
+    Assumptions / Known limits
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-error-detection-and-handling" class="md-nav__link">
+    (Optional) Error detection and handling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-performance-characterization" class="md-nav__link">
+    (Optional) Performance characterization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencesexternal-links" class="md-nav__link">
+    References/External links
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-future-extensions-unimplemented-parts" class="md-nav__link">
+    (Optional) Future extensions / Unimplemented parts
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -14156,25 +14368,246 @@
   
 
 
-<div><h1 id="macro-rendering-error"><em>Macro Rendering Error</em><a class="headerlink" href="#macro-rendering-error" title="Permanent link">#</a></h1>
-<p><em>File</em>: <code>sensing/autoware_pointcloud_preprocessor/docs/blockage_diag.md</code></p>
-<p><em>KeyError</em>: 'default'</p>
-<div class="highlight"><pre><span></span><code>Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/mkdocs_macros/plugin.py", line 688, in render
-    return md_template.render(**page_variables)
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 1295, in render
-    self.environment.handle_exception()
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "&lt;template&gt;", line 54, in top-level template code
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 72, in json_to_markdown
-    return format_json(data)
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 63, in format_json
-    markdown_table = tabulate(extract_parameter_info(parameters), headers="keys", tablefmt="github")
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 52, in extract_parameter_info
-    param["Default"] = v["default"]
-KeyError: 'default'
-</code></pre></div></div>
+<div><h1 id="blockage_diag">blockage_diag<a class="headerlink" href="#blockage_diag" title="Permanent link">#</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
+<p>To ensure the performance of LiDAR and safety for autonomous driving, the abnormal condition diagnostics feature is
+needed.
+LiDAR blockage is abnormal condition of LiDAR when some unwanted objects stitch to and block the light pulses and return
+signal.
+This node's purpose is to detect the existing of blockage on LiDAR and its related size and location.</p>
+<h2 id="inner-workings-algorithmsblockage-detection">Inner-workings / Algorithms(Blockage detection)<a class="headerlink" href="#inner-workings-algorithmsblockage-detection" title="Permanent link">#</a></h2>
+<p>This node bases on the no-return region and its location to decide if it is a blockage.</p>
+<p><img alt="blockage situation" src="../image/blockage_diag.png"></p>
+<p>The logic is showed as below</p>
+<p><img alt="blockage_diag_flowchart" src="../image/blockage_diag_flowchart.drawio.svg"></p>
+<h2 id="inner-workings-algorithmsdust-detection">Inner-workings /Algorithms(Dust detection)<a class="headerlink" href="#inner-workings-algorithmsdust-detection" title="Permanent link">#</a></h2>
+<p>About dust detection, morphological processing is implemented.
+If the lidar's ray cannot be acquired due to dust in the lidar area where the point cloud is considered to return from
+the ground,
+black pixels appear as noise in the depth image.
+The area of noise is found by erosion and dilation these black pixels.</p>
+<h2 id="inputs-outputs">Inputs / Outputs<a class="headerlink" href="#inputs-outputs" title="Permanent link">#</a></h2>
+<p>This implementation inherits <code>autoware::pointcloud_preprocessor::Filter</code> class, please refer <a href="../../">README</a>.</p>
+<h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/input/pointcloud_raw_ex</code></td>
+<td><code>sensor_msgs::msg::PointCloud2</code></td>
+<td>The raw point cloud data is used to detect the no-return region</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output">Output<a class="headerlink" href="#output" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Name</th>
+<th align="left">Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>~/output/blockage_diag/debug/blockage_mask_image</code></td>
+<td align="left"><code>sensor_msgs::msg::Image</code></td>
+<td>The mask image of detected blockage</td>
+</tr>
+<tr>
+<td align="left"><code>~/output/blockage_diag/debug/ground_blockage_ratio</code></td>
+<td align="left"><code>tier4_debug_msgs::msg::Float32Stamped</code></td>
+<td>The area ratio of blockage region in ground region</td>
+</tr>
+<tr>
+<td align="left"><code>~/output/blockage_diag/debug/sky_blockage_ratio</code></td>
+<td align="left"><code>tier4_debug_msgs::msg::Float32Stamped</code></td>
+<td>The area ratio of blockage region in sky region</td>
+</tr>
+<tr>
+<td align="left"><code>~/output/blockage_diag/debug/lidar_depth_map</code></td>
+<td align="left"><code>sensor_msgs::msg::Image</code></td>
+<td>The depth map image of input point cloud</td>
+</tr>
+<tr>
+<td align="left"><code>~/output/blockage_diag/debug/single_frame_dust_mask</code></td>
+<td align="left"><code>sensor_msgs::msg::Image</code></td>
+<td>The mask image of detected dusty area in latest single frame</td>
+</tr>
+<tr>
+<td align="left"><code>~/output/blockage_diag/debug/multi_frame_dust_mask</code></td>
+<td align="left"><code>sensor_msgs::msg::Image</code></td>
+<td>The mask image of continuous detected dusty area</td>
+</tr>
+<tr>
+<td align="left"><code>~/output/blockage_diag/debug/blockage_dust_merged_image</code></td>
+<td align="left"><code>sensor_msgs::msg::Image</code></td>
+<td>The merged image of blockage detection(red) and multi frame dusty area detection(yellow) results</td>
+</tr>
+<tr>
+<td align="left"><code>~/output/blockage_diag/debug/ground_dust_ratio</code></td>
+<td align="left"><code>tier4_debug_msgs::msg::Float32Stamped</code></td>
+<td>The ratio of dusty area divided by area where ray usually returns from the ground.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>blockage_ratio_threshold</td>
+<td>float</td>
+<td>The threshold of blockage area ratio. If the blockage value exceeds this threshold, the diagnostic state will be set to ERROR.</td>
+<td>0.1</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>blockage_count_threshold</td>
+<td>float</td>
+<td>The threshold of number continuous blockage frames</td>
+<td>50</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>blockage_buffering_frames</td>
+<td>integer</td>
+<td>The number of buffering about blockage detection [range:1-200]</td>
+<td>2</td>
+<td>≥1<br>≤200</td>
+</tr>
+<tr>
+<td>blockage_buffering_interval</td>
+<td>integer</td>
+<td>The interval of buffering about blockage detection</td>
+<td>1</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>enable_dust_diag</td>
+<td>boolean</td>
+<td>enable dust diagnostic</td>
+<td>false</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>publish_debug_image</td>
+<td>boolean</td>
+<td>publish debug image</td>
+<td>false</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>dust_ratio_threshold</td>
+<td>float</td>
+<td>The threshold of dusty area ratio</td>
+<td>0.2</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>dust_count_threshold</td>
+<td>integer</td>
+<td>The threshold of number continuous frames include dusty area</td>
+<td>10</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>dust_kernel_size</td>
+<td>integer</td>
+<td>The kernel size of morphology processing in dusty area detection</td>
+<td>2</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>dust_buffering_frames</td>
+<td>integer</td>
+<td>The number of buffering about dusty area detection [range:1-200]</td>
+<td>10</td>
+<td>≥1<br>≤200</td>
+</tr>
+<tr>
+<td>dust_buffering_interval</td>
+<td>integer</td>
+<td>The interval of buffering about dusty area detection</td>
+<td>1</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>max_distance_range</td>
+<td>float</td>
+<td>Maximum view range for the LiDAR</td>
+<td>200.0</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>horizontal_resolution</td>
+<td>float</td>
+<td>The horizontal resolution of depth map image [deg/pixel]</td>
+<td>0.4</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>blockage_kernel</td>
+<td>integer</td>
+<td>The kernel size of morphology processing the detected blockage area</td>
+<td>10</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>angle_range</td>
+<td>array</td>
+<td>The effective range of LiDAR</td>
+<td>[0.0, 360.0]</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>vertical_bins</td>
+<td>integer</td>
+<td>The LiDAR channel</td>
+<td>40</td>
+<td>≥0</td>
+</tr>
+<tr>
+<td>is_channel_order_top2down</td>
+<td>boolean</td>
+<td>If the lidar channels are indexed from top to down</td>
+<td>true</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>horizontal_ring_id</td>
+<td>integer</td>
+<td>The id of horizontal ring of the LiDAR</td>
+<td>18</td>
+<td>≥0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="assumptions-known-limits">Assumptions / Known limits<a class="headerlink" href="#assumptions-known-limits" title="Permanent link">#</a></h2>
+<ol>
+<li>Only Hesai Pandar40P and Hesai PandarQT were tested. For a new LiDAR, it is necessary to check order of channel id in
+   vertical distribution manually and modify the code.</li>
+<li>About dusty area detection, False positives occur when there are water puddles on the road surface due to rain, etc.
+   Also, the area of the ray to the sky is currently undetectable.</li>
+</ol>
+<h2 id="optional-error-detection-and-handling">(Optional) Error detection and handling<a class="headerlink" href="#optional-error-detection-and-handling" title="Permanent link">#</a></h2>
+<h2 id="optional-performance-characterization">(Optional) Performance characterization<a class="headerlink" href="#optional-performance-characterization" title="Permanent link">#</a></h2>
+<h2 id="referencesexternal-links">References/External links<a class="headerlink" href="#referencesexternal-links" title="Permanent link">#</a></h2>
+<h2 id="optional-future-extensions-unimplemented-parts">(Optional) Future extensions / Unimplemented parts<a class="headerlink" href="#optional-future-extensions-unimplemented-parts" title="Permanent link">#</a></h2></div>
 
 
 
