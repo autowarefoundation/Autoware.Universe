@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#macro-rendering-error" class="md-skip">
+        <a href="#multi_object_tracker" class="md-skip">
           Skip to content
         </a>
       
@@ -14130,6 +14130,150 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    Purpose
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithms" class="md-nav__link">
+    Inner-workings / Algorithms
+  </a>
+  
+    <nav class="md-nav" aria-label="Inner-workings / Algorithms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-association" class="md-nav__link">
+    Data association
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ekf-tracker" class="md-nav__link">
+    EKF Tracker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs-outputs" class="md-nav__link">
+    Inputs / Outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Inputs / Outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    Input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    Output
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#input-channel-parameters" class="md-nav__link">
+    Input Channel parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-parameters" class="md-nav__link">
+    Core Parameters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-known-limits" class="md-nav__link">
+    Assumptions / Known limits
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-error-detection-and-handling" class="md-nav__link">
+    (Optional) Error detection and handling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-performance-characterization" class="md-nav__link">
+    (Optional) Performance characterization
+  </a>
+  
+    <nav class="md-nav" aria-label="(Optional) Performance characterization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#evaluation-of-mussp" class="md-nav__link">
+    Evaluation of muSSP
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-referencesexternal-links" class="md-nav__link">
+    (Optional) References/External links
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-future-extensions-unimplemented-parts" class="md-nav__link">
+    (Optional) Future extensions / Unimplemented parts
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -14146,27 +14290,493 @@
   
 
 
-<div><h1 id="macro-rendering-error"><em>Macro Rendering Error</em><a class="headerlink" href="#macro-rendering-error" title="Permanent link">#</a></h1>
-<p><em>File</em>: <code>perception/autoware_multi_object_tracker/README.md</code></p>
-<p><em>KeyError</em>: 'description'</p>
-<div class="highlight"><pre><span></span><code>Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/mkdocs_macros/plugin.py", line 688, in render
-    return md_template.render(**page_variables)
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 1295, in render
-    self.environment.handle_exception()
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "&lt;template&gt;", line 72, in top-level template code
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 72, in json_to_markdown
-    return format_json(data)
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 63, in format_json
-    markdown_table = tabulate(extract_parameter_info(parameters), headers="keys", tablefmt="github")
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 56, in extract_parameter_info
-    params.extend(extract_parameter_info(v["properties"], k + "."))
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 51, in extract_parameter_info
-    param["Description"] = v["description"]
-KeyError: 'description'
-</code></pre></div></div>
+<div><h1 id="multi_object_tracker">multi_object_tracker<a class="headerlink" href="#multi_object_tracker" title="Permanent link">#</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
+<p>The results of the detection are processed by a time series. The main purpose is to give ID and estimate velocity.</p>
+<h2 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
+<p>This multi object tracker consists of data association and EKF.</p>
+<p><img alt="multi_object_tracker_overview" src="image/multi_object_tracker_overview.svg"></p>
+<h3 id="data-association">Data association<a class="headerlink" href="#data-association" title="Permanent link">#</a></h3>
+<p>The data association performs maximum score matching, called min cost max flow problem.
+In this package, mussp[1] is used as solver.
+In addition, when associating observations to tracers, data association have gates such as the area of the object from the BEV, Mahalanobis distance, and maximum distance, depending on the class label.</p>
+<h3 id="ekf-tracker">EKF Tracker<a class="headerlink" href="#ekf-tracker" title="Permanent link">#</a></h3>
+<p>Models for pedestrians, bicycles (motorcycles), cars and unknown are available.
+The pedestrian or bicycle tracker is running at the same time as the respective EKF model in order to enable the transition between pedestrian and bicycle tracking.
+For big vehicles such as trucks and buses, we have separate models for passenger cars and large vehicles because they are difficult to distinguish from passenger cars and are not stable. Therefore, separate models are prepared for passenger cars and big vehicles, and these models are run at the same time as the respective EKF models to ensure stability.</p>
+<!-- Write how this package works. Flowcharts and figures are great. Add sub-sections as you like.
+
+Example:
+  ### Flowcharts
+
+  ...(PlantUML or something)
+
+  ### State Transitions
+
+  ...(PlantUML or something)
+
+  ### How to filter target obstacles
+
+  ...
+
+  ### How to optimize trajectory
+
+  ...
+-->
+
+<h2 id="inputs-outputs">Inputs / Outputs<a class="headerlink" href="#inputs-outputs" title="Permanent link">#</a></h2>
+<h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">#</a></h3>
+<p>Multiple inputs are pre-defined in the input channel parameters (described below) and the inputs can be configured</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>selected_input_channels</code></td>
+<td><code>std::vector&lt;std::string&gt;</code></td>
+<td>array of channel names</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>default value: <code>selected_input_channels:="['detected_objects']"</code>, merged DetectedObject message</li>
+<li>multi-input example: <code>selected_input_channels:="['lidar_centerpoint','camera_lidar_fusion','detection_by_tracker','radar_far']"</code></li>
+</ul>
+<h3 id="output">Output<a class="headerlink" href="#output" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/output</code></td>
+<td><code>autoware_perception_msgs::msg::TrackedObjects</code></td>
+<td>tracked objects</td>
+</tr>
+</tbody>
+</table>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
+<h3 id="input-channel-parameters">Input Channel parameters<a class="headerlink" href="#input-channel-parameters" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>topic</td>
+<td>string</td>
+<td>The ROS topic name for the input channel.</td>
+<td>/perception/object_recognition/detection/objects</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>can_spawn_new_tracker</td>
+<td>boolean</td>
+<td>Indicates if the input channel can spawn new trackers.</td>
+<td>True</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>optional.name</td>
+<td>string</td>
+<td>The name of the input channel.</td>
+<td>detected_objects</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>optional.short_name</td>
+<td>string</td>
+<td>The short name of the input channel.</td>
+<td>all</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<h3 id="core-parameters">Core Parameters<a class="headerlink" href="#core-parameters" title="Permanent link">#</a></h3>
+<ul>
+<li>Node</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>car_tracker</td>
+<td>string</td>
+<td>Tracker model for car class.</td>
+<td>multi_vehicle_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>truck_tracker</td>
+<td>string</td>
+<td>Tracker model for truck class.</td>
+<td>multi_vehicle_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>bus_tracker</td>
+<td>string</td>
+<td>Tracker model for bus class.</td>
+<td>multi_vehicle_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>trailer_tracker</td>
+<td>string</td>
+<td>Tracker model for trailer class.</td>
+<td>multi_vehicle_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>pedestrian_tracker</td>
+<td>string</td>
+<td>Tracker model for pedestrian class.</td>
+<td>pedestrian_and_bicycle_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>bicycle_tracker</td>
+<td>string</td>
+<td>Tracker model for bicycle class.</td>
+<td>pedestrian_and_bicycle_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>motorcycle_tracker</td>
+<td>string</td>
+<td>Tracker model for motorcycle class.</td>
+<td>pedestrian_and_bicycle_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>publish_rate</td>
+<td>float</td>
+<td>Timer frequency to output with delay compensation.</td>
+<td>10.0</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>world_frame_id</td>
+<td>string</td>
+<td>Object kinematics definition frame.</td>
+<td>map</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>enable_delay_compensation</td>
+<td>boolean</td>
+<td>If True, tracker use timers to schedule publishers and use prediction step to extrapolate object state at desired timestamp.</td>
+<td>False</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>consider_odometry_uncertainty</td>
+<td>boolean</td>
+<td>If True, consider odometry uncertainty in tracking.</td>
+<td>False</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>tracker_lifetime</td>
+<td>float</td>
+<td>Lifetime of the tracker in seconds.</td>
+<td>1.0</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>min_known_object_removal_iou</td>
+<td>float</td>
+<td>Minimum IOU between associated objects with known label to remove younger tracker</td>
+<td>0.1</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>min_unknown_object_removal_iou</td>
+<td>float</td>
+<td>Minimum IOU between associated objects with unknown label to remove unknown tracker</td>
+<td>0.001</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>distance_threshold</td>
+<td>float</td>
+<td>Distance threshold in meters.</td>
+<td>5.0</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>confident_count_threshold.UNKNOWN</td>
+<td>float</td>
+<td>Number of measurements to consider tracker as confident for unknown object classes.</td>
+<td>3</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>confident_count_threshold.CAR</td>
+<td>float</td>
+<td>Number of measurements to consider tracker as confident for car object classes.</td>
+<td>3</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>confident_count_threshold.TRUCK</td>
+<td>float</td>
+<td>Number of measurements to consider tracker as confident for truck object classes.</td>
+<td>3</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>confident_count_threshold.BUS</td>
+<td>float</td>
+<td>Number of measurements to consider tracker as confident for bus object classes.</td>
+<td>3</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>confident_count_threshold.TRAILER</td>
+<td>float</td>
+<td>Number of measurements to consider tracker as confident for trailer object classes.</td>
+<td>3</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>confident_count_threshold.MOTORBIKE</td>
+<td>float</td>
+<td>Number of measurements to consider tracker as confident for motorbike object classes.</td>
+<td>3</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>confident_count_threshold.BICYCLE</td>
+<td>float</td>
+<td>Number of measurements to consider tracker as confident for bicycle object classes.</td>
+<td>3</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>confident_count_threshold.PEDESTRIAN</td>
+<td>float</td>
+<td>Number of measurements to consider tracker as confident for pedestrian object classes.</td>
+<td>3</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>publish_processing_time</td>
+<td>boolean</td>
+<td>Enable to publish debug message of process time information.</td>
+<td>False</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>publish_tentative_objects</td>
+<td>boolean</td>
+<td>Enable to publish tentative tracked objects, which have lower confidence.</td>
+<td>False</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>publish_debug_markers</td>
+<td>boolean</td>
+<td>Enable to publish debug markers, which indicates association of multi-inputs, existence probability of each detection.</td>
+<td>False</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>diagnostics_warn_delay</td>
+<td>float</td>
+<td>Delay threshold for warning diagnostics in seconds.</td>
+<td>0.5</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>diagnostics_error_delay</td>
+<td>float</td>
+<td>Delay threshold for error diagnostics in seconds.</td>
+<td>1.0</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Association</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>can_assign_matrix</td>
+<td>array</td>
+<td>Assignment table for data association.</td>
+<td>[1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1]</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>max_dist_matrix</td>
+<td>array</td>
+<td>Maximum distance table for data association.</td>
+<td>[4.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 4.0, 2.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 4.0, 2.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 4.0, 2.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 4.0, 2.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 3.0, 1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 2.0, 3.0, 1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 2.0]</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>max_area_matrix</td>
+<td>array</td>
+<td>Maximum area table for data association.</td>
+<td>[100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 12.1, 12.1, 36.0, 60.0, 60.0, 10000.0, 10000.0, 10000.0, 36.0, 12.1, 36.0, 60.0, 60.0, 10000.0, 10000.0, 10000.0, 60.0, 12.1, 36.0, 60.0, 60.0, 10000.0, 10000.0, 10000.0, 60.0, 12.1, 36.0, 60.0, 60.0, 10000.0, 10000.0, 10000.0, 2.5, 10000.0, 10000.0, 10000.0, 10000.0, 2.5, 2.5, 1.0, 2.5, 10000.0, 10000.0, 10000.0, 10000.0, 2.5, 2.5, 1.0, 2.0, 10000.0, 10000.0, 10000.0, 10000.0, 1.5, 1.5, 1.0]</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>min_area_matrix</td>
+<td>array</td>
+<td>Minimum area table for data association.</td>
+<td>[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.6, 3.6, 6.0, 10.0, 10.0, 0.0, 0.0, 0.0, 6.0, 3.6, 6.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 3.6, 6.0, 10.0, 10.0, 0.0, 0.0, 0.0, 10.0, 3.6, 6.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.001, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1, 0.001, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1, 0.001, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1]</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>max_rad_matrix</td>
+<td>array</td>
+<td>Maximum angle table for data association.</td>
+<td>[3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15]</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>min_iou_matrix</td>
+<td>array</td>
+<td>A matrix that represents the minimum Intersection over Union (IoU) limit allowed for assignment.</td>
+<td>[0.0001, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0001]</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<h4 id="simulation-parameters">Simulation parameters<a class="headerlink" href="#simulation-parameters" title="Permanent link">#</a></h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>car_tracker</td>
+<td>string</td>
+<td>Tracker model for car class.</td>
+<td>pass_through_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>truck_tracker</td>
+<td>string</td>
+<td>Tracker model for truck class.</td>
+<td>pass_through_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>bus_tracker</td>
+<td>string</td>
+<td>Tracker model for bus class.</td>
+<td>pass_through_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>pedestrian_tracker</td>
+<td>string</td>
+<td>Tracker model for pedestrian class.</td>
+<td>pass_through_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>bicycle_tracker</td>
+<td>string</td>
+<td>Tracker model for bicycle class.</td>
+<td>pass_through_tracker</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>motorcycle_tracker</td>
+<td>string</td>
+<td>Tracker model for motorcycle class.</td>
+<td>pass_through_tracker</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<h2 id="assumptions-known-limits">Assumptions / Known limits<a class="headerlink" href="#assumptions-known-limits" title="Permanent link">#</a></h2>
+<p>See the <a href="models/">model explanations</a>.</p>
+<h2 id="optional-error-detection-and-handling">(Optional) Error detection and handling<a class="headerlink" href="#optional-error-detection-and-handling" title="Permanent link">#</a></h2>
+<!-- Write how to detect errors and how to recover from them.
+
+Example:
+  This package can handle up to 20 obstacles. If more obstacles found, this node will give up and raise diagnostic errors.
+-->
+
+<h2 id="optional-performance-characterization">(Optional) Performance characterization<a class="headerlink" href="#optional-performance-characterization" title="Permanent link">#</a></h2>
+<h3 id="evaluation-of-mussp">Evaluation of muSSP<a class="headerlink" href="#evaluation-of-mussp" title="Permanent link">#</a></h3>
+<p>According to our evaluation, muSSP is faster than normal <a href="src/data_association/successive_shortest_path">SSP</a> when the matrix size is more than 100.</p>
+<p>Execution time for varying matrix size at 95% sparsity. In real data, the sparsity was often around 95%.
+<img alt="mussp_evaluation1" src="image/mussp_evaluation1.png"></p>
+<p>Execution time for varying the sparsity with matrix size 100.
+<img alt="mussp_evaluation2" src="image/mussp_evaluation2.png"></p>
+<h2 id="optional-referencesexternal-links">(Optional) References/External links<a class="headerlink" href="#optional-referencesexternal-links" title="Permanent link">#</a></h2>
+<p>This package makes use of external code.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>License</th>
+<th>Original Repository</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="src/data_association/mu_successive_shortest_path">muSSP</a></td>
+<td><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache-2.0</a></td>
+<td><a href="https://github.com/yu-lab-vt/muSSP">https://github.com/yu-lab-vt/muSSP</a></td>
+</tr>
+</tbody>
+</table>
+<p>[1] C. Wang, Y. Wang, Y. Wang, C.-t. Wu, and G. Yu, “muSSP: Efficient
+Min-cost Flow Algorithm for Multi-object Tracking,” NeurIPS, 2019</p>
+<h2 id="optional-future-extensions-unimplemented-parts">(Optional) Future extensions / Unimplemented parts<a class="headerlink" href="#optional-future-extensions-unimplemented-parts" title="Permanent link">#</a></h2>
+<!-- Write future extensions of this package.
+
+Example:
+  Currently, this package can't handle the chattering obstacles well. We plan to add some probabilistic filters in the perception layer to improve it.
+  Also, there are some parameters that should be global(e.g. vehicle size, max steering, etc.). These will be refactored and defined as global parameters so that we can share the same parameters between different nodes.
+--></div>
 
 
 
