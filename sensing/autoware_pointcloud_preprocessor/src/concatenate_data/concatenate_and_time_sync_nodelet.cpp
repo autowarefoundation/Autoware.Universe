@@ -138,7 +138,7 @@ PointCloudConcatenateDataSynchronizerComponent::PointCloudConcatenateDataSynchro
 
   // tf2 listener
   {
-    managed_tf_buffer_ = std::make_unique<autoware::universe_utils::ManagedTransformBuffer>(this);
+    managed_tf_buffer_ = std::make_unique<managed_transform_buffer::ManagedTransformBuffer>(this);
   }
 
   // Output Publishers

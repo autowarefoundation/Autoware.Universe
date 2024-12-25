@@ -24,6 +24,7 @@
   <depend>autoware_universe_utils</depend>
   <depend>autoware_vehicle_info_utils</depend>
   <depend>libopencv-dev</depend>
+  <depend>managed_transform_buffer</depend>
   <depend>pcl_conversions</depend>
   <depend>pcl_ros</depend>
   <depend>rclcpp</depend>

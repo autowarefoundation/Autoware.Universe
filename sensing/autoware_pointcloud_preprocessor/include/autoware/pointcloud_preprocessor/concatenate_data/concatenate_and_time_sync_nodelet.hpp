@@ -64,9 +64,9 @@
 #include "autoware/point_types/types.hpp"
 
 #include <autoware/universe_utils/ros/debug_publisher.hpp>
-#include <autoware/universe_utils/ros/managed_transform_buffer.hpp>
 #include <autoware/universe_utils/system/stop_watch.hpp>
 #include <diagnostic_updater/diagnostic_updater.hpp>
+#include <managed_transform_buffer/managed_transform_buffer.hpp>
 #include <point_cloud_msg_wrapper/point_cloud_msg_wrapper.hpp>
 
 #include <diagnostic_msgs/msg/diagnostic_status.hpp>
@@ -150,7 +150,7 @@ private:
   // XmlRpc::XmlRpcValue input_topics_;
   std::vector<std::string> input_topics_;
 
-  std::unique_ptr<autoware::universe_utils::ManagedTransformBuffer> managed_tf_buffer_{nullptr};
+  std::unique_ptr<managed_transform_buffer::ManagedTransformBuffer> managed_tf_buffer_{nullptr};
 
   std::deque<geometry_msgs::msg::TwistStamped::ConstSharedPtr> twist_ptr_queue_;
 

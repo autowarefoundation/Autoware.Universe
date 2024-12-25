@@ -18,7 +18,7 @@
 #include "autoware/pointcloud_preprocessor/filter.hpp"
 #include "autoware/universe_utils/system/time_keeper.hpp"
 
-#include <autoware/universe_utils/ros/managed_transform_buffer.hpp>
+#include <managed_transform_buffer/managed_transform_buffer.hpp>
 
 #include <geometry_msgs/msg/pose_array.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
@@ -84,7 +84,7 @@ private:
   bool debug_ = false;
   bool is_initialized_debug_message_ = false;
   Eigen::Vector3d unit_vec_ = Eigen::Vector3d::UnitZ();
-  std::unique_ptr<autoware::universe_utils::ManagedTransformBuffer> managed_tf_buffer_{nullptr};
+  std::unique_ptr<managed_transform_buffer::ManagedTransformBuffer> managed_tf_buffer_{nullptr};
 
   // time keeper related
   rclcpp::Publisher<autoware::universe_utils::ProcessingTimeDetail>::SharedPtr

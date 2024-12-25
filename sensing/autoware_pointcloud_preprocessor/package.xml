@@ -36,6 +36,7 @@
   <depend>image_transport</depend>
   <depend>libopencv-dev</depend>
   <depend>libpcl-all-dev</depend>
+  <depend>managed_transform_buffer</depend>
   <depend>message_filters</depend>
   <depend>nav_msgs</depend>
   <depend>pcl_conversions</depend>
