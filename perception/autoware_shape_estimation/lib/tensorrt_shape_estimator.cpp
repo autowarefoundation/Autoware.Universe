@@ -18,8 +18,13 @@
 
 #include <tf2/utils.h>
 
+#include <functional>
 #include <iostream>
+#include <limits>
+#include <memory>
 #include <random>
+#include <string>
+#include <vector>
 
 namespace autoware::shape_estimation
 {
@@ -41,13 +46,14 @@ TrtShapeEstimator::TrtShapeEstimator(
   const auto pc_input_dims = trt_common_->getBindingDimensions(0);
   const auto pc_input_size = std::accumulate(
     pc_input_dims.d + 1, pc_input_dims.d + pc_input_dims.nbDims, 1, std::multiplies<int>());
-  input_pc_d_ = cuda_utils::make_unique<float[]>(pc_input_size * batch_config[2]);
+  input_pc_d_ = autoware::cuda_utils::make_unique<float[]>(pc_input_size * batch_config[2]);
   batch_size_ = batch_config[2];
   const auto one_hot_input_dims = trt_common_->getBindingDimensions(1);
   const auto one_hot_input_size = std::accumulate(
     one_hot_input_dims.d + 1, one_hot_input_dims.d + one_hot_input_dims.nbDims, 1,
     std::multiplies<int>());
-  input_one_hot_d_ = cuda_utils::make_unique<float[]>(one_hot_input_size * batch_config[2]);
+  input_one_hot_d_ =
+    autoware::cuda_utils::make_unique<float[]>(one_hot_input_size * batch_config[2]);
 
   const auto stage1_center_out_dims = trt_common_->getBindingDimensions(2);
   out_s1center_elem_num_ = std::accumulate(
@@ -55,18 +61,18 @@ TrtShapeEstimator::TrtShapeEstimator(
     std::multiplies<int>());
   out_s1center_elem_num_ = out_s1center_elem_num_ * batch_config[2];
   out_s1center_elem_num_per_batch_ = static_cast<size_t>(out_s1center_elem_num_ / batch_config[2]);
-  out_s1center_prob_d_ = cuda_utils::make_unique<float[]>(out_s1center_elem_num_);
+  out_s1center_prob_d_ = autoware::cuda_utils::make_unique<float[]>(out_s1center_elem_num_);
   out_s1center_prob_h_ =
-    cuda_utils::make_unique_host<float[]>(out_s1center_elem_num_, cudaHostAllocPortable);
+    autoware::cuda_utils::make_unique_host<float[]>(out_s1center_elem_num_, cudaHostAllocPortable);
 
   const auto pred_out_dims = trt_common_->getBindingDimensions(3);
   out_pred_elem_num_ = std::accumulate(
     pred_out_dims.d + 1, pred_out_dims.d + pred_out_dims.nbDims, 1, std::multiplies<int>());
   out_pred_elem_num_ = out_pred_elem_num_ * batch_config[2];
   out_pred_elem_num_per_batch_ = static_cast<size_t>(out_pred_elem_num_ / batch_config[2]);
-  out_pred_prob_d_ = cuda_utils::make_unique<float[]>(out_pred_elem_num_);
+  out_pred_prob_d_ = autoware::cuda_utils::make_unique<float[]>(out_pred_elem_num_);
   out_pred_prob_h_ =
-    cuda_utils::make_unique_host<float[]>(out_pred_elem_num_, cudaHostAllocPortable);
+    autoware::cuda_utils::make_unique_host<float[]>(out_pred_elem_num_, cudaHostAllocPortable);
 
   g_type_mean_size_ = {{4.6344314, 1.9600292, 1.7375569},     {6.936331, 2.5178623, 2.8506238},
                        {11.194943, 2.9501154, 3.4918275},     {12.275775, 2.9231303, 3.87086},
@@ -139,7 +145,7 @@ void TrtShapeEstimator::preprocess(const DetectedObjectsWithFeature & input)
       }
 
       int iter_count = static_cast<int>(input_pc_size) / point_size_of_cloud;
-      int remainer_count = static_cast<int>(input_pc_size) % point_size_of_cloud;
+      int remaining_points_count = static_cast<int>(input_pc_size) % point_size_of_cloud;
 
       for (int j = 1; j < iter_count; j++) {
         for (int k = 0; k < point_size_of_cloud; k++) {
@@ -154,7 +160,7 @@ void TrtShapeEstimator::preprocess(const DetectedObjectsWithFeature & input)
         }
       }
 
-      for (int j = 0; j < remainer_count; j++) {
+      for (int j = 0; j < remaining_points_count; j++) {
         input_pc_h_[i * input_chan * input_pc_size + 0 + iter_count * point_size_of_cloud + j] =
           input_pc_h_[i * input_chan * input_pc_size + j];
 

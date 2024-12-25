@@ -14,6 +14,8 @@
 
 #include "diagnostic_graph_utils/subscription.hpp"
 
+#include <memory>
+
 namespace diagnostic_graph_utils
 {
 

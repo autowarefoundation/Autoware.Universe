@@ -16,48 +16,59 @@
 
 #include "autoware/map_projection_loader/load_info_from_lanelet2_map.hpp"
 
-#include <tier4_map_msgs/msg/map_projector_info.hpp>
+#include <autoware_map_msgs/msg/map_projector_info.hpp>
 
 #include <yaml-cpp/yaml.h>
 
 #include <filesystem>
 #include <fstream>
+#include <iostream>
+#include <string>
 
 namespace autoware::map_projection_loader
 {
-tier4_map_msgs::msg::MapProjectorInfo load_info_from_yaml(const std::string & filename)
+autoware_map_msgs::msg::MapProjectorInfo load_info_from_yaml(const std::string & filename)
 {
   YAML::Node data = YAML::LoadFile(filename);
 
-  tier4_map_msgs::msg::MapProjectorInfo msg;
+  autoware_map_msgs::msg::MapProjectorInfo msg;
   msg.projector_type = data["projector_type"].as<std::string>();
-  if (msg.projector_type == tier4_map_msgs::msg::MapProjectorInfo::MGRS) {
+  if (msg.projector_type == autoware_map_msgs::msg::MapProjectorInfo::MGRS) {
     msg.vertical_datum = data["vertical_datum"].as<std::string>();
     msg.mgrs_grid = data["mgrs_grid"].as<std::string>();
 
   } else if (
-    msg.projector_type == tier4_map_msgs::msg::MapProjectorInfo::LOCAL_CARTESIAN_UTM ||
-    msg.projector_type == tier4_map_msgs::msg::MapProjectorInfo::TRANSVERSE_MERCATOR) {
+    msg.projector_type == autoware_map_msgs::msg::MapProjectorInfo::LOCAL_CARTESIAN_UTM ||
+    msg.projector_type == autoware_map_msgs::msg::MapProjectorInfo::TRANSVERSE_MERCATOR) {
     msg.vertical_datum = data["vertical_datum"].as<std::string>();
     msg.map_origin.latitude = data["map_origin"]["latitude"].as<double>();
     msg.map_origin.longitude = data["map_origin"]["longitude"].as<double>();
     msg.map_origin.altitude = data["map_origin"]["altitude"].as<double>();
 
-  } else if (msg.projector_type == tier4_map_msgs::msg::MapProjectorInfo::LOCAL) {
+  } else if (msg.projector_type == autoware_map_msgs::msg::MapProjectorInfo::LOCAL) {
     ;  // do nothing
 
+  } else if (msg.projector_type == "local") {
+    RCLCPP_WARN_STREAM(
+      rclcpp::get_logger("MapProjectionLoader"),
+      "Load " << filename << "\n"
+              << "DEPRECATED WARNING: projector type \"local\" is deprecated."
+                 "Please use \"Local\" instead. For more info, visit "
+                 "https://github.com/autowarefoundation/autoware.universe/blob/main/map/"
+                 "map_projection_loader README.md");
+    msg.projector_type = autoware_map_msgs::msg::MapProjectorInfo::LOCAL;
   } else {
     throw std::runtime_error(
       "Invalid map projector type. Currently supported types: MGRS, LocalCartesianUTM, "
-      "TransverseMercator, and local");
+      "TransverseMercator, and Local");
   }
   return msg;
 }
 
-tier4_map_msgs::msg::MapProjectorInfo load_map_projector_info(
+autoware_map_msgs::msg::MapProjectorInfo load_map_projector_info(
   const std::string & yaml_filename, const std::string & lanelet2_map_filename)
 {
-  tier4_map_msgs::msg::MapProjectorInfo msg;
+  autoware_map_msgs::msg::MapProjectorInfo msg;
 
   if (std::filesystem::exists(yaml_filename)) {
     std::cout << "Load " << yaml_filename << std::endl;
@@ -87,11 +98,11 @@ MapProjectionLoader::MapProjectionLoader(const rclcpp::NodeOptions & options)
   const std::string lanelet2_map_filename =
     this->declare_parameter<std::string>("lanelet2_map_path");
 
-  const tier4_map_msgs::msg::MapProjectorInfo msg =
+  const autoware_map_msgs::msg::MapProjectorInfo msg =
     load_map_projector_info(yaml_filename, lanelet2_map_filename);
 
   // Publish the message
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   adaptor.init_pub(publisher_);
   publisher_->publish(msg);
 }

@@ -20,11 +20,6 @@
           "description": "Frequency for tf broadcasting [Hz]",
           "default": 50.0
         },
-        "publish_tf": {
-          "type": "boolean",
-          "description": "Whether to publish tf",
-          "default": true
-        },
         "extend_state_step": {
           "type": "integer",
           "description": "Max delay step which can be dealt with in EKF. Large number increases computational cost.",
@@ -40,7 +35,6 @@
         "show_debug_info",
         "predict_frequency",
         "tf_rate",
-        "publish_tf",
         "extend_state_step",
         "enable_yaw_bias_estimation"
       ],

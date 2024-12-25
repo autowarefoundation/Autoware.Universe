@@ -26,6 +26,9 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <limits>
+#include <memory>
+
 namespace autoware::behavior_path_planner::utils::static_obstacle_avoidance
 {
 
@@ -820,7 +823,7 @@ TEST(TestUtils, insertDecelPoint)
     constexpr double offset = 100.0;
     constexpr double velocity = 1.0;
 
-    std::optional<geometry_msgs::msg::Pose> p_out{std::nullopt};
+    PoseWithDetailOpt p_out{std::nullopt};
     insertDecelPoint(ego_position, offset, velocity, path, p_out);
 
     EXPECT_FALSE(p_out.has_value());
@@ -838,13 +841,13 @@ TEST(TestUtils, insertDecelPoint)
     constexpr double offset = 3.0;
     constexpr double velocity = 1.0;
 
-    std::optional<geometry_msgs::msg::Pose> p_out{std::nullopt};
+    PoseWithDetailOpt p_out{std::nullopt};
     insertDecelPoint(ego_position, offset, velocity, path, p_out);
 
     ASSERT_TRUE(p_out.has_value());
-    EXPECT_DOUBLE_EQ(p_out.value().position.x, 6.5);
-    EXPECT_DOUBLE_EQ(p_out.value().position.y, 0.0);
-    EXPECT_DOUBLE_EQ(p_out.value().position.z, 0.0);
+    EXPECT_DOUBLE_EQ(p_out.value().pose.position.x, 6.5);
+    EXPECT_DOUBLE_EQ(p_out.value().pose.position.y, 0.0);
+    EXPECT_DOUBLE_EQ(p_out.value().pose.position.z, 0.0);
     for (size_t i = 7; i < path.points.size(); i++) {
       EXPECT_DOUBLE_EQ(path.points.at(i).point.longitudinal_velocity_mps, 1.0);
     }

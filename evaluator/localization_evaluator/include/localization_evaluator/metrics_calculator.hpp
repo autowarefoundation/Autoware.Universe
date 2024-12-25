@@ -15,15 +15,16 @@
 #ifndef LOCALIZATION_EVALUATOR__METRICS_CALCULATOR_HPP_
 #define LOCALIZATION_EVALUATOR__METRICS_CALCULATOR_HPP_
 
+#include "autoware/universe_utils/math/accumulator.hpp"
 #include "localization_evaluator/metrics/metric.hpp"
 #include "localization_evaluator/parameters.hpp"
-#include "localization_evaluator/stat.hpp"
 
 #include "geometry_msgs/msg/pose.hpp"
 #include <nav_msgs/msg/odometry.hpp>
 
 namespace localization_diagnostics
 {
+using autoware::universe_utils::Accumulator;
 class MetricsCalculator
 {
 public:
@@ -38,8 +39,8 @@ public:
    * @param [in] pos_ref reference position
    * @return string describing the requested metric
    */
-  Stat<double> updateStat(
-    const Stat<double> stat_prev, const Metric metric, const geometry_msgs::msg::Point & pos,
+  Accumulator<double> updateStat(
+    const Accumulator<double> stat_prev, const Metric metric, const geometry_msgs::msg::Point & pos,
     const geometry_msgs::msg::Point & pos_ref) const;
 };  // class MetricsCalculator
 

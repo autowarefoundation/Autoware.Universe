@@ -17,6 +17,8 @@
 #include <autoware/motion_utils/trajectory/conversion.hpp>
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
+#include <vector>
+
 namespace autoware::planning_topic_converter
 {
 namespace

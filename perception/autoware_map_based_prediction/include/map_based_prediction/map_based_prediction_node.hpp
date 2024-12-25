@@ -25,16 +25,10 @@
 #include <autoware/universe_utils/ros/published_time_publisher.hpp>
 #include <autoware/universe_utils/ros/transform_listener.hpp>
 #include <autoware/universe_utils/ros/update_param.hpp>
-#include <autoware/universe_utils/ros/uuid_helper.hpp>
 #include <autoware/universe_utils/system/lru_cache.hpp>
-#include <autoware/universe_utils/system/stop_watch.hpp>
 #include <autoware/universe_utils/system/time_keeper.hpp>
 #include <rclcpp/rclcpp.hpp>
 
-#include <autoware_map_msgs/msg/lanelet_map_bin.hpp>
-#include <autoware_perception_msgs/msg/predicted_objects.hpp>
-#include <autoware_perception_msgs/msg/tracked_objects.hpp>
-#include <autoware_perception_msgs/msg/traffic_light_group_array.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/twist.hpp>
@@ -77,25 +71,10 @@ struct hash<lanelet::routing::LaneletPath>
 }  // namespace std
 namespace autoware::map_based_prediction
 {
-using LaneletsData = std::vector<LaneletData>;
-using ManeuverProbability = std::unordered_map<Maneuver, float>;
-using autoware::universe_utils::StopWatch;
-using autoware_map_msgs::msg::LaneletMapBin;
-using autoware_perception_msgs::msg::ObjectClassification;
-using autoware_perception_msgs::msg::PredictedObject;
-using autoware_perception_msgs::msg::PredictedObjectKinematics;
-using autoware_perception_msgs::msg::PredictedObjects;
-using autoware_perception_msgs::msg::PredictedPath;
-using autoware_perception_msgs::msg::TrackedObject;
-using autoware_perception_msgs::msg::TrackedObjectKinematics;
-using autoware_perception_msgs::msg::TrackedObjects;
-using autoware_perception_msgs::msg::TrafficLightElement;
-using autoware_perception_msgs::msg::TrafficLightGroup;
-using autoware_perception_msgs::msg::TrafficLightGroupArray;
 using autoware_planning_msgs::msg::TrajectoryPoint;
 using tier4_debug_msgs::msg::StringStamped;
 using TrajectoryPoints = std::vector<TrajectoryPoint>;
-using LaneletPathWithPathInfo = std::pair<lanelet::routing::LaneletPath, PredictedRefPath>;
+
 class MapBasedPredictionNode : public rclcpp::Node
 {
 public:
@@ -202,10 +181,6 @@ private:
   //// Vehicle process
   // Lanelet process
   LaneletsData getCurrentLanelets(const TrackedObject & object);
-  bool checkCloseLaneletCondition(
-    const std::pair<double, lanelet::Lanelet> & lanelet, const TrackedObject & object);
-  float calculateLocalLikelihood(
-    const lanelet::Lanelet & current_lanelet, const TrackedObject & object) const;
   bool isDuplicated(
     const std::pair<double, lanelet::ConstLanelet> & target_lanelet,
     const LaneletsData & lanelets_data);
@@ -238,6 +213,11 @@ private:
     const bool & right_paths_exists, const bool & center_paths_exists) const;
 
   // Vehicle path process
+  PredictedObject getPredictionForNonVehicleObject(
+    const std_msgs::msg::Header & header, const TrackedObject & object);
+  std::optional<PredictedObject> getPredictionForVehicleObject(
+    const std_msgs::msg::Header & header, const TrackedObject & object,
+    const double objects_detected_time, visualization_msgs::msg::MarkerArray & debug_markers);
   std::optional<size_t> searchProperStartingRefPathIndex(
     const TrackedObject & object, const PosePath & pose_path) const;
   std::vector<LaneletPathWithPathInfo> getPredictedReferencePath(

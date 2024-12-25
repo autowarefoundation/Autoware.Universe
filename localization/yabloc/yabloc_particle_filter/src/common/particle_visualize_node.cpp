@@ -20,6 +20,8 @@
 #include <sensor_msgs/msg/nav_sat_fix.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
+#include <algorithm>
+
 namespace yabloc::modularized_particle_filter
 {
 class ParticleVisualize : public rclcpp::Node

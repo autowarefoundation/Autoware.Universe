@@ -50,11 +50,8 @@
 
 namespace autoware::motion::control::pid_longitudinal_controller
 {
-using autoware::universe_utils::createDefaultMarker;
-using autoware::universe_utils::createMarkerColor;
-using autoware::universe_utils::createMarkerScale;
 using autoware_adapi_v1_msgs::msg::OperationModeState;
-using visualization_msgs::msg::Marker;
+using visualization_msgs::msg::MarkerArray;
 
 namespace trajectory_follower = ::autoware::motion::control::trajectory_follower;
 
@@ -87,7 +84,6 @@ private:
 
   struct ControlData
   {
-    bool is_far_from_trajectory{false};
     autoware_planning_msgs::msg::Trajectory interpolated_traj{};
     size_t nearest_idx{0};  // nearest_idx = 0 when nearest_idx is not found with findNearestIdx
     size_t target_idx{0};
@@ -104,7 +100,7 @@ private:
   // ros variables
   rclcpp::Publisher<tier4_debug_msgs::msg::Float32MultiArrayStamped>::SharedPtr m_pub_slope;
   rclcpp::Publisher<tier4_debug_msgs::msg::Float32MultiArrayStamped>::SharedPtr m_pub_debug;
-  rclcpp::Publisher<Marker>::SharedPtr m_pub_stop_reason_marker;
+  rclcpp::Publisher<MarkerArray>::SharedPtr m_pub_virtual_wall_marker;
 
   rclcpp::Node::OnSetParametersCallbackHandle::SharedPtr m_set_param_res;
   rcl_interfaces::msg::SetParametersResult paramCallback(
@@ -162,8 +158,6 @@ private:
     double stopped_state_entry_acc;
     // emergency
     double emergency_state_overshoot_stop_dist;
-    double emergency_state_traj_trans_dev;
-    double emergency_state_traj_rot_dev;
   };
   StateTransitionParams m_state_transition_params;
 
@@ -210,12 +204,18 @@ private:
   double m_max_acc_cmd_diff;
 
   // slope compensation
-  enum class SlopeSource { RAW_PITCH = 0, TRAJECTORY_PITCH, TRAJECTORY_ADAPTIVE };
+  enum class SlopeSource {
+    RAW_PITCH = 0,
+    TRAJECTORY_PITCH,
+    TRAJECTORY_ADAPTIVE,
+    TRAJECTORY_GOAL_ADAPTIVE
+  };
   SlopeSource m_slope_source{SlopeSource::RAW_PITCH};
   double m_adaptive_trajectory_velocity_th;
   std::shared_ptr<LowpassFilter1d> m_lpf_pitch{nullptr};
   double m_max_pitch_rad;
   double m_min_pitch_rad;
+  std::optional<double> m_previous_slope_angle{std::nullopt};
 
   // ego nearest index search
   double m_ego_nearest_dist_threshold;
@@ -245,14 +245,14 @@ private:
   // Diagnostic
   std::shared_ptr<diagnostic_updater::Updater>
     diag_updater_{};  // Diagnostic updater for publishing diagnostic data.
-  struct DiagnosticData
-  {
-    double trans_deviation{0.0};  // translation deviation between nearest point and current_pose
-    double rot_deviation{0.0};    // rotation deviation between nearest point and current_pose
-  };
-  DiagnosticData m_diagnostic_data;
   void setupDiagnosticUpdater();
   void checkControlState(diagnostic_updater::DiagnosticStatusWrapper & stat);
+
+  struct ResultWithReason
+  {
+    bool result{false};
+    std::string reason{""};
+  };
 
   /**
    * @brief set current and previous velocity with received message
@@ -297,6 +297,13 @@ private:
    * @param [in] dt time between previous and current one
    */
   Motion calcEmergencyCtrlCmd(const double dt);
+
+  /**
+   * @brief change control state
+   * @param [in] new state
+   * @param [in] reason to change control state
+   */
+  void changeControlState(const ControlState & control_state, const std::string & reason = "");
 
   /**
    * @brief update control state according to the current situation
@@ -398,11 +405,14 @@ private:
 
   /**
    * @brief update variables for debugging about pitch
-   * @param [in] pitch current pitch of the vehicle (filtered)
-   * @param [in] traj_pitch current trajectory pitch
-   * @param [in] raw_pitch current raw pitch of the vehicle (unfiltered)
+   * @param [in] pitch_using
+   * @param [in] traj_pitch
+   * @param [in] localization_pitch
+   * @param [in] localization_pitch_lpf
    */
-  void updatePitchDebugValues(const double pitch, const double traj_pitch, const double raw_pitch);
+  void updatePitchDebugValues(
+    const double pitch_using, const double traj_pitch, const double localization_pitch,
+    const double localization_pitch_lpf);
 
   /**
    * @brief update variables for velocity and acceleration

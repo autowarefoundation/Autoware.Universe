@@ -56,7 +56,6 @@ private:
   void imageCallback(
     const sensor_msgs::msg::Image::ConstSharedPtr input_image_msg, const std::size_t image_id);
 
-  rclcpp::Node * node_ptr_;
   std::shared_ptr<image_transport::ImageTransport> image_transport_;
   std::vector<std::string> input_camera_topics_;
   std::vector<image_transport::Subscriber> image_subs_;

@@ -12,6 +12,7 @@
   <arg name="output_gear" default="/system/emergency/gear_cmd"/>
   <arg name="output_hazard" default="/system/emergency/hazard_lights_cmd"/>
   <arg name="output_mrm_state" default="/system/fail_safe/mrm_state"/>
+  <arg name="output_emergency_holding" default="/system/emergency_holding"/>
   <arg name="output_mrm_pull_over_operate" default="/system/mrm/pull_over_manager/operate"/>
   <arg name="output_mrm_comfortable_stop_operate" default="/system/mrm/comfortable_stop/operate"/>
   <arg name="output_mrm_emergency_stop_operate" default="/system/mrm/emergency_stop/operate"/>
@@ -32,6 +33,7 @@
     <remap from="~/output/gear" to="$(var output_gear)"/>
     <remap from="~/output/hazard" to="$(var output_hazard)"/>
     <remap from="~/output/mrm/state" to="$(var output_mrm_state)"/>
+    <remap from="~/output/emergency_holding" to="$(var output_emergency_holding)"/>
     <remap from="~/output/mrm/pull_over/operate" to="$(var output_mrm_pull_over_operate)"/>
     <remap from="~/output/mrm/comfortable_stop/operate" to="$(var output_mrm_comfortable_stop_operate)"/>
     <remap from="~/output/mrm/emergency_stop/operate" to="$(var output_mrm_emergency_stop_operate)"/>

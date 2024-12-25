@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>autoware_tensorrt_common</name>
-  <version>0.0.1</version>
+  <version>0.40.0</version>
   <description>tensorrt utility wrapper</description>
 
   <author email="taichi.higashide@tier4.jp">Taichi Higashide</author>

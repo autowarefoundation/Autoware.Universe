@@ -28,6 +28,7 @@ namespace autoware::lidar_centerpoint
 class VoxelGeneratorTemplate
 {
 public:
+  virtual ~VoxelGeneratorTemplate() = default;
   explicit VoxelGeneratorTemplate(
     const DensificationParam & param, const CenterPointConfig & config);
 

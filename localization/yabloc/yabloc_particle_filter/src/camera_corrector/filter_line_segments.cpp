@@ -20,6 +20,8 @@
 #include <yabloc_common/pose_conversions.hpp>
 #include <yabloc_common/pub_sub.hpp>
 
+#include <utility>
+
 namespace yabloc::modularized_particle_filter
 {
 cv::Point2f cv2pt(const Eigen::Vector3f & v)

@@ -16,10 +16,9 @@
 
 #include "autoware/multi_object_tracker/tracker/model/tracker_base.hpp"
 
-#include "autoware/multi_object_tracker/utils/utils.hpp"
-
 #include <algorithm>
 #include <random>
+#include <vector>
 
 namespace
 {
@@ -80,9 +79,8 @@ void Tracker::initializeExistenceProbabilities(
 }
 
 bool Tracker::updateWithMeasurement(
-  const autoware_perception_msgs::msg::DetectedObject & object,
-  const rclcpp::Time & measurement_time, const geometry_msgs::msg::Transform & self_transform,
-  const uint & channel_index)
+  const types::DynamicObject & object, const rclcpp::Time & measurement_time,
+  const geometry_msgs::msg::Transform & self_transform)
 {
   // Update existence probability
   {
@@ -96,6 +94,7 @@ bool Tracker::updateWithMeasurement(
     constexpr float probability_false_detection = 0.2;
 
     // update measured channel probability without decay
+    const uint channel_index = object.channel_index;
     existence_probabilities_[channel_index] = updateProbability(
       existence_probabilities_[channel_index], probability_true_detection,
       probability_false_detection);
@@ -201,7 +200,7 @@ void Tracker::updateClassification(
 geometry_msgs::msg::PoseWithCovariance Tracker::getPoseWithCovariance(
   const rclcpp::Time & time) const
 {
-  autoware_perception_msgs::msg::TrackedObject object;
+  types::DynamicObject object;
   getTrackedObject(time, object);
   return object.kinematics.pose_with_covariance;
 }

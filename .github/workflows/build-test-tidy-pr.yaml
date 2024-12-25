@@ -1,0 +1,137 @@
+name: build-test-tidy-pr
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  require-label:
+    uses: autowarefoundation/autoware-github-actions/.github/workflows/require-label.yaml@v1
+    with:
+      label: run:build-and-test-differential
+
+  check-if-cuda-job-is-needed:
+    needs: require-label
+    runs-on: ubuntu-latest
+    outputs:
+      cuda_job_is_needed: ${{ steps.check.outputs.any_changed }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check if relevant files changed
+        id: check
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            perception/**
+            sensing/**
+
+      - name: Output result
+        run: |
+          echo "CUDA job needed: ${{ steps.check.outputs.any_changed }}"
+        shell: bash
+
+  build-and-test-differential:
+    needs:
+      - require-label
+    uses: ./.github/workflows/build-and-test-differential.yaml
+    with:
+      container: ghcr.io/autowarefoundation/autoware:universe-devel
+    secrets:
+      codecov-token: ${{ secrets.CODECOV_TOKEN }}
+
+  build-and-test-differential-cuda:
+    needs: check-if-cuda-job-is-needed
+    if: ${{ needs.check-if-cuda-job-is-needed.outputs.cuda_job_is_needed == 'true' }}
+    uses: ./.github/workflows/build-and-test-differential.yaml
+    with:
+      container: ghcr.io/autowarefoundation/autoware:universe-devel
+      container-suffix: -cuda
+    secrets:
+      codecov-token: ${{ secrets.CODECOV_TOKEN }}
+
+  build-test-pr:
+    needs:
+      - build-and-test-differential
+      - build-and-test-differential-cuda
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize Summary
+        run: echo "### Build Test PR Results" > $GITHUB_STEP_SUMMARY
+        shell: bash
+
+      - name: Evaluate build-and-test-differential
+        uses: ./.github/actions/evaluate-job-result
+        with:
+          job_result: ${{ needs.build-and-test-differential.result }}
+          job_name: build-and-test-differential
+          expected_results: success
+
+      - name: Evaluate build-and-test-differential-cuda
+        if: ${{ always() }}
+        uses: ./.github/actions/evaluate-job-result
+        with:
+          job_result: ${{ needs.build-and-test-differential-cuda.result }}
+          job_name: build-and-test-differential-cuda
+          expected_results: success,skipped
+
+  clang-tidy-differential:
+    needs:
+      - check-if-cuda-job-is-needed
+      - build-and-test-differential
+    if: ${{ needs.check-if-cuda-job-is-needed.outputs.cuda_job_is_needed == 'false' }}
+    uses: ./.github/workflows/clang-tidy-differential.yaml
+    with:
+      container: ghcr.io/autowarefoundation/autoware:universe-devel
+
+  clang-tidy-differential-cuda:
+    needs:
+      - build-and-test-differential-cuda
+    uses: ./.github/workflows/clang-tidy-differential.yaml
+    with:
+      container: ghcr.io/autowarefoundation/autoware:universe-devel
+      container-suffix: -cuda
+
+  clang-tidy-pr:
+    needs:
+      - clang-tidy-differential
+      - clang-tidy-differential-cuda
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Initialize Summary
+        run: echo "### Clang Tidy PR Results" > $GITHUB_STEP_SUMMARY
+        shell: bash
+
+      - name: Check clang-tidy success
+        if: ${{ needs.clang-tidy-differential.result == 'success' || needs.clang-tidy-differential-cuda.result == 'success' }}
+        run: |
+          echo "✅ Either one of the following has succeeded:" >> $GITHUB_STEP_SUMMARY
+
+      - name: Fail if conditions not met
+        if: ${{ !(needs.clang-tidy-differential.result == 'success' || needs.clang-tidy-differential-cuda.result == 'success') }}
+        run: |
+          echo "::error::❌ Either one of the following should have succeeded:"
+          echo "::error::clang-tidy-differential: ${{ needs.clang-tidy-differential.result }}"
+          echo "::error::clang-tidy-differential-cuda: ${{ needs.clang-tidy-differential-cuda.result }}"
+
+          echo "❌ Either one of the following should have succeeded:" >> $GITHUB_STEP_SUMMARY
+
+          exit 1
+
+      - name: Print the results
+        if: ${{ always() }}
+        run: |
+          echo "- **clang-tidy-differential:** ${{ needs.clang-tidy-differential.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **clang-tidy-differential-cuda:** ${{ needs.clang-tidy-differential-cuda.result }}" >> $GITHUB_STEP_SUMMARY

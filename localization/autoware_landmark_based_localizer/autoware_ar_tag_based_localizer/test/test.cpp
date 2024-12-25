@@ -20,6 +20,7 @@
 #include <gtest/gtest.h>
 #include <rcl_yaml_param_parser/parser.h>
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>

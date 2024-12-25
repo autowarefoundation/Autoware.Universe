@@ -22,6 +22,9 @@
 
 #include <chrono>
 #include <limits>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace autoware::path_smoother
 {

@@ -37,8 +37,8 @@
 #ifndef AUTOWARE__TENSORRT_YOLOX__CALIBRATOR_HPP_
 #define AUTOWARE__TENSORRT_YOLOX__CALIBRATOR_HPP_
 
-#include "cuda_utils/cuda_check_error.hpp"
-#include "cuda_utils/cuda_unique_ptr.hpp"
+#include "autoware/cuda_utils/cuda_check_error.hpp"
+#include "autoware/cuda_utils/cuda_unique_ptr.hpp"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -48,7 +48,9 @@
 #include <assert.h>
 
 #include <algorithm>
+#include <cstdio>
 #include <fstream>
+#include <iostream>
 #include <iterator>
 #include <string>
 #include <vector>
@@ -248,19 +250,19 @@ public:
     output.write(reinterpret_cast<const char *>(cache), length);
   }
 
-  double getQuantile() const noexcept
+  double getQuantile() const noexcept override
   {
     printf("Quantile %f\n", quantile_);
     return quantile_;
   }
 
-  double getRegressionCutoff(void) const noexcept
+  double getRegressionCutoff(void) const noexcept override
   {
     printf("Cutoff %f\n", cutoff_);
     return cutoff_;
   }
 
-  const void * readHistogramCache(std::size_t & length) noexcept
+  const void * readHistogramCache(std::size_t & length) noexcept override
   {
     hist_cache_.clear();
     std::ifstream input(histogram_cache_file_, std::ios::binary);
@@ -279,7 +281,7 @@ public:
     }
     return length ? &hist_cache_[0] : nullptr;
   }
-  void writeHistogramCache(void const * ptr, std::size_t length) noexcept
+  void writeHistogramCache(void const * ptr, std::size_t length) noexcept override
   {
     std::ofstream output(histogram_cache_file_, std::ios::binary);
     output.write(reinterpret_cast<const char *>(ptr), length);

@@ -25,6 +25,11 @@
 
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <memory>
+#include <string>
+#include <tuple>
+#include <vector>
+
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_eigen/tf2_eigen.h>
 #else
@@ -44,9 +49,9 @@ using autoware::localization_util::matrix4f_to_pose;
 using autoware::localization_util::point_to_vector3d;
 using autoware::localization_util::pose_to_matrix4f;
 
-using autoware::localization_util::DiagnosticsModule;
 using autoware::localization_util::SmartPoseBuffer;
 using autoware::localization_util::TreeStructuredParzenEstimator;
+using autoware::universe_utils::DiagnosticInterface;
 
 tier4_debug_msgs::msg::Float32Stamped make_float32_stamped(
   const builtin_interfaces::msg::Time & stamp, const float data)
@@ -136,7 +141,7 @@ NDTScanMatcher::NDTScanMatcher(const rclcpp::NodeOptions & options)
       std::make_unique<SmartPoseBuffer>(this->get_logger(), value_as_unlimited, value_as_unlimited);
 
     diagnostics_regularization_pose_ =
-      std::make_unique<DiagnosticsModule>(this, "regularization_pose_subscriber_status");
+      std::make_unique<DiagnosticInterface>(this, "regularization_pose_subscriber_status");
   }
 
   sensor_aligned_pose_pub_ =
@@ -204,13 +209,13 @@ NDTScanMatcher::NDTScanMatcher(const rclcpp::NodeOptions & options)
   map_update_module_ =
     std::make_unique<MapUpdateModule>(this, &ndt_ptr_mtx_, ndt_ptr_, param_.dynamic_map_loading);
 
-  diagnostics_scan_points_ = std::make_unique<DiagnosticsModule>(this, "scan_matching_status");
+  diagnostics_scan_points_ = std::make_unique<DiagnosticInterface>(this, "scan_matching_status");
   diagnostics_initial_pose_ =
-    std::make_unique<DiagnosticsModule>(this, "initial_pose_subscriber_status");
-  diagnostics_map_update_ = std::make_unique<DiagnosticsModule>(this, "map_update_status");
-  diagnostics_ndt_align_ = std::make_unique<DiagnosticsModule>(this, "ndt_align_service_status");
+    std::make_unique<DiagnosticInterface>(this, "initial_pose_subscriber_status");
+  diagnostics_map_update_ = std::make_unique<DiagnosticInterface>(this, "map_update_status");
+  diagnostics_ndt_align_ = std::make_unique<DiagnosticInterface>(this, "ndt_align_service_status");
   diagnostics_trigger_node_ =
-    std::make_unique<DiagnosticsModule>(this, "trigger_node_service_status");
+    std::make_unique<DiagnosticInterface>(this, "trigger_node_service_status");
 
   logger_configure_ = std::make_unique<autoware::universe_utils::LoggerLevelConfigure>(this);
 }

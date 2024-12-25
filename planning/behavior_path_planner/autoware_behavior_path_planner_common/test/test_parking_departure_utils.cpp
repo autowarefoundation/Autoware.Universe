@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "autoware/behavior_path_planner_common/data_manager.hpp"
 #include "autoware/behavior_path_planner_common/utils/parking_departure/utils.hpp"
 #include "autoware/behavior_path_planner_common/utils/path_safety_checker/path_safety_checker_parameters.hpp"
 
@@ -23,6 +24,9 @@
 #include <lanelet2_core/Forward.h>
 
 #include <cstddef>
+#include <memory>
+#include <utility>
+#include <vector>
 
 constexpr double epsilon = 1e-6;
 
@@ -219,7 +223,7 @@ TEST(BehaviorPathPlanningParkingDepartureUtil, generateFeasibleStopPath)
   data->self_acceleration = accel_with_covariance;
   auto planner_data = std::static_pointer_cast<const PlannerData>(data);
 
-  std::optional<geometry_msgs::msg::Pose> stop_pose;
+  autoware::behavior_path_planner::PoseWithDetailOpt stop_pose{std::nullopt};
 
   // condition: empty path
   PathWithLaneId path;

@@ -14,15 +14,17 @@
 
 #include "autoware/velocity_smoother/smoother/jerk_filtered_smoother.hpp"
 
+#include "autoware/qp_interface/proxqp_interface.hpp"
 #include "autoware/velocity_smoother/trajectory_utils.hpp"
-#include "qp_interface/proxqp_interface.hpp"
 
 #include <Eigen/Core>
 
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <iostream>
 #include <limits>
+#include <memory>
 #include <numeric>
 #include <vector>
 
@@ -42,7 +44,7 @@ JerkFilteredSmoother::JerkFilteredSmoother(
   p.jerk_filter_ds = node.declare_parameter<double>("jerk_filter_ds");
 
   qp_interface_ =
-    std::make_shared<autoware::common::ProxQPInterface>(false, 20000, 1.0e-8, 1.0e-6, false);
+    std::make_shared<autoware::qp_interface::ProxQPInterface>(false, 20000, 1.0e-8, 1.0e-6, false);
 }
 
 void JerkFilteredSmoother::setParam(const Param & smoother_param)

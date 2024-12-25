@@ -15,7 +15,7 @@
 #ifndef HEARTBEAT_HPP_
 #define HEARTBEAT_HPP_
 
-#include <autoware_ad_api_specs/system.hpp>
+#include <autoware/adapi_specs/system.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 // This file should be included after messages.
@@ -31,7 +31,7 @@ public:
 
 private:
   rclcpp::TimerBase::SharedPtr timer_;
-  Pub<autoware_ad_api::system::Heartbeat> pub_;
+  Pub<autoware::adapi_specs::system::Heartbeat> pub_;
   uint16_t sequence_ = 0;
 };
 

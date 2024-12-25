@@ -71,16 +71,6 @@
           "description": "If `enable_overshoot_emergency` is true and the ego is `emergency_state_overshoot_stop_dist`-meter ahead of the stop point, the state will transit to EMERGENCY. [m]",
           "default": "1.5"
         },
-        "emergency_state_traj_trans_dev": {
-          "type": "number",
-          "description": "If the ego's position is `emergency_state_traj_trans_dev` meter away from the nearest trajectory point, the state will transit to EMERGENCY. [m]",
-          "default": "3.0"
-        },
-        "emergency_state_traj_rot_dev": {
-          "type": "number",
-          "description": "If the ego's orientation is `emergency_state_traj_rot_dev` rad away from the nearest trajectory point orientation, the state will transit to EMERGENCY. [rad]",
-          "default": "0.7854"
-        },
         "kp": {
           "type": "number",
           "description": "p gain for longitudinal control",
@@ -326,8 +316,6 @@
         "stopped_state_entry_vel",
         "stopped_state_entry_acc",
         "emergency_state_overshoot_stop_dist",
-        "emergency_state_traj_trans_dev",
-        "emergency_state_traj_rot_dev",
         "kp",
         "ki",
         "kd",

@@ -26,7 +26,7 @@ struct LogTable
   {
     data.resize(256 * 10);
     for (size_t i = 0; i < data.size(); ++i) {
-      data[i] = std::log1p(static_cast<float>(i / 10.0));
+      data[i] = std::log1p(static_cast<float>(i) * 0.1f);
     }
   }
 };
@@ -44,7 +44,7 @@ float calcApproximateLog(float num)
   if (integer_num < static_cast<int>(log_table.data.size())) {
     return log_table.data[integer_num];
   }
-  return std::log(static_cast<float>(1.0 + num));
+  return std::log1p(num);
 }
 }  // namespace lidar_apollo_instance_segmentation
 }  // namespace autoware

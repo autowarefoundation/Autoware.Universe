@@ -22,6 +22,9 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <string>
+
 namespace
 {
 using autoware::shape_estimation::ShapeEstimationNode;

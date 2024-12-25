@@ -14,6 +14,8 @@
 
 #include "autoware_radar_object_tracker/utils/utils.hpp"
 
+#include <vector>
+
 namespace autoware::radar_object_tracker::utils
 {
 // concatenate matrices vertically

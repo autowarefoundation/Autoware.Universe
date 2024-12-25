@@ -15,13 +15,12 @@
 #ifndef AUTOWARE__BEHAVIOR_VELOCITY_PLANNER_COMMON__UTILIZATION__UTIL_HPP_
 #define AUTOWARE__BEHAVIOR_VELOCITY_PLANNER_COMMON__UTILIZATION__UTIL_HPP_
 
-#include <autoware/universe_utils/geometry/boost_geometry.hpp>
+#include "autoware/universe_utils/geometry/boost_geometry.hpp"
 
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <autoware_perception_msgs/msg/traffic_light_group.hpp>
 #include <geometry_msgs/msg/point.hpp>
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
-#include <tier4_planning_msgs/msg/stop_reason.hpp>
 
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/LaneletMap.h>
@@ -37,23 +36,29 @@
 
 namespace autoware::behavior_velocity_planner
 {
+/**
+ * @brief Represents detection range parameters.
+ */
 struct DetectionRange
 {
-  bool use_right = true;
-  bool use_left = true;
-  double interval;
-  double min_longitudinal_distance;
-  double max_longitudinal_distance;
-  double max_lateral_distance;
-  double wheel_tread;
-  double right_overhang;
-  double left_overhang;
+  bool use_right = true;                  ///< Whether to use the right side.
+  bool use_left = true;                   ///< Whether to use the left side.
+  double interval{0.0};                   ///< Interval of detection points.
+  double min_longitudinal_distance{0.0};  ///< Minimum longitudinal detection distance.
+  double max_longitudinal_distance{0.0};  ///< Maximum longitudinal detection distance.
+  double max_lateral_distance{0.0};       ///< Maximum lateral detection distance.
+  double wheel_tread{0.0};                ///< Wheel tread of the vehicle.
+  double right_overhang{0.0};             ///< Right overhang of the vehicle.
+  double left_overhang{0.0};              ///< Left overhang of the vehicle.
 };
 
+/**
+ * @brief Represents a traffic signal with a timestamp.
+ */
 struct TrafficSignalStamped
 {
-  builtin_interfaces::msg::Time stamp;
-  autoware_perception_msgs::msg::TrafficLightGroup signal;
+  builtin_interfaces::msg::Time stamp;                      ///< Timestamp of the signal.
+  autoware_perception_msgs::msg::TrafficLightGroup signal;  ///< Traffic light group.
 };
 
 using Pose = geometry_msgs::msg::Pose;
@@ -65,29 +70,33 @@ using Polygons2d = std::vector<Polygon2d>;
 using autoware_perception_msgs::msg::PredictedObjects;
 using tier4_planning_msgs::msg::PathPointWithLaneId;
 using tier4_planning_msgs::msg::PathWithLaneId;
-using tier4_planning_msgs::msg::StopFactor;
-using tier4_planning_msgs::msg::StopReason;
 
 namespace planning_utils
 {
 size_t calcSegmentIndexFromPointIndex(
   const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points,
   const geometry_msgs::msg::Point & point, const size_t idx);
-// create detection area from given range return false if creation failure
+
 bool createDetectionAreaPolygons(
   Polygons2d & da_polys, const PathWithLaneId & path, const geometry_msgs::msg::Pose & target_pose,
   const size_t target_seg_idx, const DetectionRange & da_range, const double obstacle_vel_mps,
   const double min_velocity = 1.0);
+
 Point2d calculateOffsetPoint2d(
   const geometry_msgs::msg::Pose & pose, const double offset_x, const double offset_y);
+
 void extractClosePartition(
   const geometry_msgs::msg::Point position, const BasicPolygons2d & all_partitions,
   BasicPolygons2d & close_partition, const double distance_thresh = 30.0);
-void getAllPartitionLanelets(const lanelet::LaneletMapConstPtr ll, BasicPolygons2d & polys);
+
+void getAllPartitionLanelets(const lanelet::LaneletMapConstPtr & ll, BasicPolygons2d & polys);
+
 void setVelocityFromIndex(const size_t begin_idx, const double vel, PathWithLaneId * input);
+
 void insertVelocity(
   PathWithLaneId & path, const PathPointWithLaneId & path_point, const double v,
   size_t & insert_index, const double min_distance = 0.001);
+
 inline int64_t bitShift(int64_t original_id)
 {
   return original_id << (sizeof(int32_t) * 8 / 2);
@@ -99,6 +108,7 @@ geometry_msgs::msg::Pose getAheadPose(
   const tier4_planning_msgs::msg::PathWithLaneId & path);
 Polygon2d generatePathPolygon(
   const PathWithLaneId & path, const size_t start_idx, const size_t end_idx, const double width);
+
 double calcJudgeLineDistWithAccLimit(
   const double velocity, const double max_stop_acceleration, const double delay_response_time);
 
@@ -113,10 +123,6 @@ double calcDecelerationVelocityFromDistanceToTarget(
 double findReachTime(
   const double jerk, const double accel, const double velocity, const double distance,
   const double t_min, const double t_max);
-
-StopReason initializeStopReason(const std::string & stop_reason);
-
-void appendStopReason(const StopFactor stop_factor, StopReason * stop_reason);
 
 std::vector<geometry_msgs::msg::Point> toRosPoints(const PredictedObjects & object);
 
@@ -217,6 +223,7 @@ bool isOverLine(
 
 std::optional<geometry_msgs::msg::Pose> insertStopPoint(
   const geometry_msgs::msg::Point & stop_point, PathWithLaneId & output);
+
 std::optional<geometry_msgs::msg::Pose> insertStopPoint(
   const geometry_msgs::msg::Point & stop_point, const size_t stop_seg_idx, PathWithLaneId & output);
 
@@ -225,11 +232,11 @@ std::optional<geometry_msgs::msg::Pose> insertStopPoint(
   or lane-changeable parent lanes with `lane` and has same turn_direction value.
  */
 std::set<lanelet::Id> getAssociativeIntersectionLanelets(
-  lanelet::ConstLanelet lane, const lanelet::LaneletMapPtr lanelet_map,
+  const lanelet::ConstLanelet & lane, const lanelet::LaneletMapPtr lanelet_map,
   const lanelet::routing::RoutingGraphPtr routing_graph);
 
 lanelet::ConstLanelets getConstLaneletsFromIds(
-  lanelet::LaneletMapConstPtr map, const std::set<lanelet::Id> & ids);
+  const lanelet::LaneletMapConstPtr & map, const std::set<lanelet::Id> & ids);
 
 }  // namespace planning_utils
 }  // namespace autoware::behavior_velocity_planner

@@ -26,10 +26,14 @@
 #include <autoware_lanelet2_extension/utility/message_conversion.hpp>
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
 
+#include <algorithm>
 #include <limits>
+#include <memory>
 #include <queue>
+#include <set>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace autoware::behavior_path_planner
 {

@@ -158,9 +158,7 @@ bool RadarFusionToDetectedObject::isYawCorrect(
   const double object_yaw = autoware::universe_utils::normalizeRadian(
     tf2::getYaw(object.kinematics.pose_with_covariance.pose.orientation));
   const double diff_yaw = autoware::universe_utils::normalizeRadian(twist_yaw - object_yaw);
-  if (std::abs(diff_yaw) < yaw_threshold) {
-    return true;
-  } else if (M_PI - yaw_threshold < std::abs(diff_yaw)) {
+  if (std::abs(diff_yaw) < yaw_threshold || M_PI - yaw_threshold < std::abs(diff_yaw)) {
     return true;
   } else {
     return false;

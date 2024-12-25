@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <random>
+#include <vector>
 
 namespace autoware::radar_object_tracker
 {

@@ -14,6 +14,7 @@
 
 #include "autoware/mpc_lateral_controller/lowpass_filter.hpp"
 
+#include <algorithm>
 #include <vector>
 
 namespace autoware::motion::control::mpc_lateral_controller
@@ -125,8 +126,11 @@ bool filt_vector(const int num, std::vector<double> & u)
     }
 
     for (int j = -num_tmp; j <= num_tmp; ++j) {
-      tmp += u[static_cast<size_t>(i + j)];
-      ++count;
+      int index = i + j;
+      if (index >= 0 && index < static_cast<int>(u.size())) {
+        tmp += u[static_cast<size_t>(index)];
+        ++count;
+      }
     }
     filtered_u[static_cast<size_t>(i)] = tmp / count;
   }

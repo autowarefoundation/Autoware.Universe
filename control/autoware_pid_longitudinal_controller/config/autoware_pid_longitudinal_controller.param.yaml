@@ -16,8 +16,6 @@
     stopped_state_entry_vel: 0.01
     stopped_state_entry_acc: 0.1
     emergency_state_overshoot_stop_dist: 1.5
-    emergency_state_traj_trans_dev: 3.0
-    emergency_state_traj_rot_dev: 0.7854
 
     # drive state
     kp: 1.0
@@ -76,7 +74,7 @@
 
     # slope compensation
     lpf_pitch_gain: 0.95
-    slope_source: "raw_pitch" # raw_pitch, trajectory_pitch or trajectory_adaptive
+    slope_source: "trajectory_goal_adaptive" # raw_pitch, trajectory_pitch, trajectory_adaptive or trajectory_goal_adaptive
     adaptive_trajectory_velocity_th: 1.0
     max_pitch_rad: 0.1
     min_pitch_rad: -0.1

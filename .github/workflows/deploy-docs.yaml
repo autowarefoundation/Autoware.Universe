@@ -1,3 +1,7 @@
+# This file is automatically synced from:
+# https://github.com/autowarefoundation/sync-file-templates
+# To make changes, update the source repository and follow the guidelines in its README.
+
 name: deploy-docs
 
 on:
@@ -22,7 +26,7 @@ jobs:
   prevent-no-label-execution:
     uses: autowarefoundation/autoware-github-actions/.github/workflows/prevent-no-label-execution.yaml@v1
     with:
-      label: tag:deploy-docs
+      label: run:deploy-docs
 
   deploy-docs:
     needs: prevent-no-label-execution

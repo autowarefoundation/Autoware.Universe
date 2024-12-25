@@ -17,6 +17,7 @@
 #include <autoware/universe_utils/ros/marker_helper.hpp>
 #include <rclcpp/logging.hpp>
 
+#include <limits>
 #include <memory>
 #include <utility>
 #include <vector>

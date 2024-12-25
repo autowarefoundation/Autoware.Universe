@@ -48,8 +48,8 @@ auto getOffsetPoint(const Eigen::Vector2d & src, const Eigen::Vector2d & dst, co
  * @return intersection point. if there is no intersection point, return std::nullopt.
  */
 auto findNearestCollisionPoint(
-  const LineString2d & line1, const LineString2d & line2,
-  const Point2d & origin) -> std::optional<Point2d>;
+  const LineString2d & line1, const LineString2d & line2, const Point2d & origin)
+  -> std::optional<Point2d>;
 
 /**
  * @brief find intersection point between path and stop line and return the point.

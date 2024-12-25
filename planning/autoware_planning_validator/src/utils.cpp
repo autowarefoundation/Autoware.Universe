@@ -17,6 +17,7 @@
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
+#include <algorithm>
 #include <memory>
 #include <string>
 #include <utility>

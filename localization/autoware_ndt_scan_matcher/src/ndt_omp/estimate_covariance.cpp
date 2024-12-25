@@ -14,8 +14,12 @@
 
 #include "autoware/ndt_scan_matcher/ndt_omp/estimate_covariance.hpp"
 
+#include <algorithm>
 #include <fstream>
 #include <iomanip>
+#include <memory>
+#include <utility>
+#include <vector>
 
 namespace pclomp
 {
@@ -103,34 +107,13 @@ ResultOfMultiNdtCovarianceEstimation estimate_xy_covariance_by_multi_ndt_score(
   return {mean, covariance, poses_to_search, ndt_results};
 }
 
-Eigen::Matrix2d find_rotation_matrix_aligning_covariance_to_principal_axes(
-  const Eigen::Matrix2d & matrix)
-{
-  const Eigen::SelfAdjointEigenSolver<Eigen::Matrix2d> eigensolver(matrix);
-  if (eigensolver.info() == Eigen::Success) {
-    const Eigen::Vector2d eigen_vec = eigensolver.eigenvectors().col(0);
-    const double th = std::atan2(eigen_vec.y(), eigen_vec.x());
-    return Eigen::Rotation2Dd(th).toRotationMatrix();
-  }
-  throw std::runtime_error("Eigen solver failed. Return output_pose_covariance value.");
-}
-
 std::vector<Eigen::Matrix4f> propose_poses_to_search(
   const NdtResult & ndt_result, const std::vector<double> & offset_x,
   const std::vector<double> & offset_y)
 {
   assert(offset_x.size() == offset_y.size());
   const Eigen::Matrix4f & center_pose = ndt_result.pose;
-
-  // (1) calculate rot by pose (default)
   const Eigen::Matrix2d rot = ndt_result.pose.topLeftCorner<2, 2>().cast<double>();
-
-  // (2) calculate rot by covariance (alternative)
-  // const Eigen::Matrix<double, 6, 6> & hessian = ndt_result.hessian;
-  // const Eigen::Matrix2d covariance = estimate_xy_covariance_by_Laplace_approximation(hessian);
-  // const Eigen::Matrix2d rot =
-  // find_rotation_matrix_aligning_covariance_to_principal_axes(-covariance);
-
   std::vector<Eigen::Matrix4f> poses_to_search;
   for (int i = 0; i < static_cast<int>(offset_x.size()); i++) {
     const Eigen::Vector2d pose_offset(offset_x[i], offset_y[i]);

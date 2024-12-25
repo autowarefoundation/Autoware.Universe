@@ -1,4 +1,6 @@
 <launch>
+  <!-- if output_metrics=true, metrics are written to `<ros2_logging_directory>/autoware_metrics/<node_name>-<time_stamp>.json`. -->
+  <arg name="output_metrics" default="false"/>
   <arg name="input/odometry" default="/localization/kinematic_state"/>
   <arg name="input/acceleration" default="/localization/acceleration"/>
   <arg name="input/trajectory" default="/planning/scenario_planning/trajectory"/>
@@ -7,22 +9,20 @@
   <arg name="input/modified_goal" default="/planning/scenario_planning/modified_goal"/>
   <arg name="input/map_topic" default="/map/vector_map"/>
   <arg name="input/route_topic" default="/planning/mission_planning/route"/>
-  <arg name="input/diagnostics" default="/diagnostics"/>
 
   <!-- planning evaluator -->
   <group>
     <node name="planning_evaluator" exec="planning_evaluator" pkg="autoware_planning_evaluator">
       <param from="$(find-pkg-share autoware_planning_evaluator)/config/planning_evaluator.param.yaml"/>
+      <param name="output_metrics" value="$(var output_metrics)"/>
       <remap from="~/input/odometry" to="$(var input/odometry)"/>
       <remap from="~/input/acceleration" to="$(var input/acceleration)"/>
       <remap from="~/input/trajectory" to="$(var input/trajectory)"/>
-      <remap from="~/input/diagnostics" to="$(var input/diagnostics)"/>
       <remap from="~/input/reference_trajectory" to="$(var input/reference_trajectory)"/>
       <remap from="~/input/objects" to="$(var input/objects)"/>
       <remap from="~/input/modified_goal" to="$(var input/modified_goal)"/>
       <remap from="~/input/route" to="$(var input/route_topic)"/>
       <remap from="~/input/vector_map" to="$(var input/map_topic)"/>
-      <remap from="~/metrics" to="/planning/planning_evaluator/metrics"/>
     </node>
   </group>
 </launch>

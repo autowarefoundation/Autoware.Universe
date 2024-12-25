@@ -27,6 +27,7 @@
 
 #include <limits>
 #include <memory>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -593,6 +594,12 @@ struct AvoidancePlanningData
   double to_start_point{std::numeric_limits<double>::lowest()};
 
   double to_return_point{std::numeric_limits<double>::max()};
+
+  std::optional<double> distance_to_red_traffic_light{std::nullopt};
+
+  std::optional<lanelet::ConstLanelet> closest_lanelet{std::nullopt};
+
+  bool is_allowed_goal_modification{false};
 
   bool request_operator{false};
 };

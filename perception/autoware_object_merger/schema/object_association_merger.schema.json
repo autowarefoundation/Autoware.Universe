@@ -45,7 +45,8 @@
         "remove_overlapped_unknown_objects",
         "base_link_frame_id",
         "priority_mode"
-      ]
+      ],
+      "additionalProperties": false
     }
   },
   "properties": {
@@ -56,8 +57,10 @@
           "$ref": "#/definitions/object_association_merger"
         }
       },
-      "required": ["ros__parameters"]
+      "required": ["ros__parameters"],
+      "additionalProperties": false
     }
   },
-  "required": ["/**"]
+  "required": ["/**"],
+  "additionalProperties": false
 }

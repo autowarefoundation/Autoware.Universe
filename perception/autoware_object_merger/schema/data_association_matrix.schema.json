@@ -2,8 +2,8 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Data Association Matrix Parameters",
   "type": "object",
-  "properties": {
-    "ros__parameters": {
+  "definitions": {
+    "data_association_matrix": {
       "type": "object",
       "properties": {
         "can_assign_matrix": {
@@ -11,31 +11,72 @@
           "items": {
             "type": "number"
           },
-          "description": "Assignment table for data association"
+          "description": "Assignment table for data association.",
+          "default": [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1,
+            0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0,
+            0, 0, 0, 1, 1, 1
+          ]
         },
         "max_dist_matrix": {
           "type": "array",
           "items": {
             "type": "number"
           },
-          "description": "Maximum distance table for data association"
+          "description": "Maximum distance table for data association.",
+          "default": [
+            4.0, 4.0, 5.0, 5.0, 5.0, 2.0, 2.0, 2.0, 4.0, 2.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 5.0,
+            5.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 5.0, 5.0,
+            5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 3.0, 2.0, 1.0, 1.0,
+            1.0, 1.0, 3.0, 3.0, 3.0, 2.0, 1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 2.0
+          ]
         },
         "max_rad_matrix": {
           "type": "array",
           "items": {
-            "type": "number"
+            "type": "number",
+            "minimum": 0.0
           },
-          "description": "Maximum angle table for data association. If value is greater than pi, it will be ignored."
+          "description": "Maximum angle table for data association. If value is greater than pi, it will be ignored.",
+          "default": [
+            3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15,
+            3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047,
+            1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15,
+            3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15,
+            3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15
+          ]
         },
         "min_iou_matrix": {
           "type": "array",
           "items": {
-            "type": "number"
+            "type": "number",
+            "minimum": 0.0
           },
-          "description": "Minimum IoU threshold matrix for data association. If value is negative, it will be ignored."
+          "description": "Minimum IoU threshold matrix for data association. If value is negative, it will be ignored.",
+          "default": [
+            0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.3, 0.2, 0.2, 0.2, 0.1, 0.1, 0.1, 0.1,
+            0.2, 0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.2,
+            0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
+            0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1
+          ]
         }
       },
-      "required": ["can_assign_matrix", "max_dist_matrix", "max_rad_matrix", "min_iou_matrix"]
+      "required": ["can_assign_matrix", "max_dist_matrix", "max_rad_matrix", "min_iou_matrix"],
+      "additionalProperties": false
     }
-  }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/data_association_matrix"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
 }

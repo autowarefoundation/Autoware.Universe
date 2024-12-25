@@ -61,6 +61,7 @@ public:
     double state_clear_time;
     double hold_stop_margin_distance;
     double distance_to_judge_over_stop_line;
+    bool suppress_pass_judge_when_stopping;
   };
 
   DetectionAreaModule(
@@ -69,7 +70,7 @@ public:
     const PlannerParam & planner_param, const rclcpp::Logger & logger,
     const rclcpp::Clock::SharedPtr clock);
 
-  bool modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason) override;
+  bool modifyPathVelocity(PathWithLaneId * path) override;
 
   visualization_msgs::msg::MarkerArray createDebugMarkerArray() override;
   autoware::motion_utils::VirtualWalls createVirtualWalls() override;

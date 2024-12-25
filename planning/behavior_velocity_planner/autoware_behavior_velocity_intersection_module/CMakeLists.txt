@@ -22,6 +22,10 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
   src/debug.cpp
 )
 
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
+  ${OpenCV_INCLUDE_DIRS}
+)
+
 target_link_libraries(${PROJECT_NAME}
   ${OpenCV_LIBRARIES}
 )

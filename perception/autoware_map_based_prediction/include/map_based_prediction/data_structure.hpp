@@ -15,17 +15,24 @@
 #ifndef MAP_BASED_PREDICTION__DATA_STRUCTURE_HPP_
 #define MAP_BASED_PREDICTION__DATA_STRUCTURE_HPP_
 
+#include <autoware/universe_utils/system/stop_watch.hpp>
+
+#include <autoware_map_msgs/msg/lanelet_map_bin.hpp>
+#include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <autoware_perception_msgs/msg/tracked_object.hpp>
+#include <autoware_perception_msgs/msg/tracked_objects.hpp>
+#include <autoware_perception_msgs/msg/traffic_light_group_array.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 #include <geometry_msgs/msg/twist.hpp>
 #include <std_msgs/msg/header.hpp>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 
 #include <lanelet2_core/LaneletMap.h>
+#include <lanelet2_routing/LaneletPath.h>
 
 #include <unordered_map>
+#include <utility>
 #include <vector>
-
 namespace autoware::map_based_prediction
 {
 using PosePath = std::vector<geometry_msgs::msg::Pose>;
@@ -58,7 +65,7 @@ enum class Maneuver {
 struct LaneletData
 {
   lanelet::Lanelet lanelet;
-  float probability;
+  double probability;
 };
 
 struct PredictedRefPath
@@ -89,6 +96,23 @@ struct CrosswalkUserData
   std_msgs::msg::Header header;
   autoware_perception_msgs::msg::TrackedObject tracked_object;
 };
+
+using LaneletsData = std::vector<LaneletData>;
+using ManeuverProbability = std::unordered_map<Maneuver, float>;
+using autoware::universe_utils::StopWatch;
+using autoware_map_msgs::msg::LaneletMapBin;
+using autoware_perception_msgs::msg::ObjectClassification;
+using autoware_perception_msgs::msg::PredictedObject;
+using autoware_perception_msgs::msg::PredictedObjectKinematics;
+using autoware_perception_msgs::msg::PredictedObjects;
+using autoware_perception_msgs::msg::PredictedPath;
+using autoware_perception_msgs::msg::TrackedObject;
+using autoware_perception_msgs::msg::TrackedObjectKinematics;
+using autoware_perception_msgs::msg::TrackedObjects;
+using autoware_perception_msgs::msg::TrafficLightElement;
+using autoware_perception_msgs::msg::TrafficLightGroup;
+using autoware_perception_msgs::msg::TrafficLightGroupArray;
+using LaneletPathWithPathInfo = std::pair<lanelet::routing::LaneletPath, PredictedRefPath>;
 
 }  // namespace autoware::map_based_prediction
 

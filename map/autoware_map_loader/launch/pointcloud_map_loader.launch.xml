@@ -1,0 +1,12 @@
+<launch>
+  <arg name="pointcloud_map_path"/>
+  <arg name="pointcloud_map_metadata_path"/>
+  <arg name="pointcloud_map_loader_param_path" default="$(find-pkg-share autoware_map_loader)/config/pointcloud_map_loader.param.yaml"/>
+
+  <node pkg="autoware_map_loader" exec="pointcloud_map_loader" name="pointcloud_map_loader" output="both">
+    <remap from="output/pointcloud_map" to="/map/pointcloud_map"/>
+    <remap from="service/get_partial_pcd_map" to="/map/get_partial_pointcloud_map"/>
+    <remap from="service/get_selected_pcd_map" to="/map/get_selected_pointcloud_map"/>
+    <param from="$(var pointcloud_map_loader_param_path)" allow_substs="true"/>
+  </node>
+</launch>

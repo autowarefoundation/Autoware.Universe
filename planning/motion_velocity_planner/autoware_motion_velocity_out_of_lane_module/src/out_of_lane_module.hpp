@@ -24,8 +24,6 @@
 
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <geometry_msgs/msg/pose.hpp>
-#include <tier4_planning_msgs/msg/path_point_with_lane_id.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/LaneletMap.h>
 
@@ -54,10 +52,6 @@ private:
     out_of_lane::EgoData & ego_data,
     const std::vector<autoware_planning_msgs::msg::TrajectoryPoint> & ego_trajectory_points,
     const double max_arc_length);
-  /// @brief calculate the minimum stop and slowdown distances of ego
-  static void calculate_min_stop_and_slowdown_distances(
-    out_of_lane::EgoData & ego_data, const PlannerData & planner_data,
-    std::optional<geometry_msgs::msg::Pose> & previous_slowdown_pose_, const double slow_velocity);
 
   out_of_lane::PlannerParam params_{};
 

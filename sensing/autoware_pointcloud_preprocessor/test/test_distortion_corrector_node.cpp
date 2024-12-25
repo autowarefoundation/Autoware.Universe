@@ -41,6 +41,10 @@
 #include <tf2_ros/static_transform_broadcaster.h>
 
 #include <cassert>
+#include <memory>
+#include <string>
+#include <tuple>
+#include <vector>
 
 std::chrono::milliseconds autoware::universe_utils::ManagedTransformBuffer::default_timeout =
   std::chrono::milliseconds(100);  // Relax timeout for CI

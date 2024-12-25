@@ -26,10 +26,7 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 #endif
 
-#include <algorithm>
-#include <memory>
 #include <utility>
-#include <vector>
 
 namespace
 {
@@ -54,12 +51,6 @@ geometry_msgs::msg::Point operator*(const geometry_msgs::msg::Point & p, const d
   return multiplied_p;
 }
 
-/*
-geometry_msgs::msg::Point operator*(const double v, const geometry_msgs::msg::Point & p)
-{
-return p * v;
-}
-*/
 }  // namespace
 
 namespace autoware::behavior_velocity_planner::arc_lane_utils

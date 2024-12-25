@@ -16,6 +16,8 @@
 
 #include <gtest/gtest.h>
 
+#include <vector>
+
 TEST(objectToVertices, test_objectToVertices)
 {
   // Test `boundingBoxToVertices()` and `cylinderToVertices()` simultaneously

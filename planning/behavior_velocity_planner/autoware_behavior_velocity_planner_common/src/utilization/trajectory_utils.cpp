@@ -25,6 +25,10 @@
 
 #include <tf2/utils.h>
 
+#include <iostream>
+#include <utility>
+#include <vector>
+
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #else
@@ -75,13 +79,15 @@ bool smoothPath(
   TrajectoryPoints clipped;
   TrajectoryPoints traj_smoothed;
   clipped.insert(
-    clipped.end(), traj_resampled.begin() + traj_resampled_closest, traj_resampled.end());
+    clipped.end(), traj_resampled.begin() + static_cast<std::ptrdiff_t>(traj_resampled_closest),
+    traj_resampled.end());
   if (!smoother->apply(v0, a0, clipped, traj_smoothed, debug_trajectories, false)) {
     std::cerr << "[behavior_velocity][trajectory_utils]: failed to smooth" << std::endl;
     return false;
   }
   traj_smoothed.insert(
-    traj_smoothed.begin(), traj_resampled.begin(), traj_resampled.begin() + traj_resampled_closest);
+    traj_smoothed.begin(), traj_resampled.begin(),
+    traj_resampled.begin() + static_cast<std::ptrdiff_t>(traj_resampled_closest));
 
   if (external_v_limit) {
     autoware::velocity_smoother::trajectory_utils::applyMaximumVelocityLimit(

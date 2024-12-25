@@ -16,6 +16,9 @@
 
 #include "robin_hood.h"
 
+#include <memory>
+#include <vector>
+
 namespace
 {
 /**
@@ -121,15 +124,7 @@ void PickupBasedVoxelGridDownsampleFilterComponent::filter(
   size_t output_global_offset = 0;
   output.data.resize(voxel_map.size() * input->point_step);
   for (const auto & kv : voxel_map) {
-    std::memcpy(
-      &output.data[output_global_offset + x_offset], &input->data[kv.second + x_offset],
-      sizeof(float));
-    std::memcpy(
-      &output.data[output_global_offset + y_offset], &input->data[kv.second + y_offset],
-      sizeof(float));
-    std::memcpy(
-      &output.data[output_global_offset + z_offset], &input->data[kv.second + z_offset],
-      sizeof(float));
+    std::memcpy(&output.data[output_global_offset], &input->data[kv.second], input->point_step);
     output_global_offset += input->point_step;
   }
 

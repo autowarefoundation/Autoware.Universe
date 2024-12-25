@@ -21,10 +21,12 @@
 #include "autoware_raw_vehicle_cmd_converter/brake_map.hpp"
 #include "autoware_raw_vehicle_cmd_converter/pid.hpp"
 #include "autoware_raw_vehicle_cmd_converter/steer_map.hpp"
+#include "autoware_raw_vehicle_cmd_converter/vehicle_adaptor/vehicle_adaptor.hpp"
 #include "autoware_raw_vehicle_cmd_converter/vgr.hpp"
 
 #include <rclcpp/rclcpp.hpp>
 
+#include <autoware_adapi_v1_msgs/msg/operation_mode_state.hpp>
 #include <autoware_control_msgs/msg/control.hpp>
 #include <autoware_vehicle_msgs/msg/steering_report.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>
@@ -46,7 +48,8 @@ using tier4_vehicle_msgs::msg::ActuationStatusStamped;
 using TwistStamped = geometry_msgs::msg::TwistStamped;
 using Odometry = nav_msgs::msg::Odometry;
 using Steering = autoware_vehicle_msgs::msg::SteeringReport;
-
+using autoware_adapi_v1_msgs::msg::OperationModeState;
+using geometry_msgs::msg::AccelWithCovarianceStamped;
 class DebugValues
 {
 public:
@@ -79,6 +82,7 @@ public:
   //!< @brief topic publisher for low level vehicle command
   rclcpp::Publisher<ActuationCommandStamped>::SharedPtr pub_actuation_cmd_;
   rclcpp::Publisher<Steering>::SharedPtr pub_steering_status_;
+  rclcpp::Publisher<Control>::SharedPtr pub_compensated_control_cmd_;
   //!< @brief subscriber for vehicle command
   rclcpp::Subscription<Control>::SharedPtr sub_control_cmd_;
   rclcpp::Subscription<ActuationStatusStamped>::SharedPtr sub_actuation_status_;
@@ -86,17 +90,27 @@ public:
   // polling subscribers
   autoware::universe_utils::InterProcessPollingSubscriber<Odometry> sub_odometry_{
     this, "~/input/odometry"};
+  // polling subscribers for vehicle_adaptor
+  autoware::universe_utils::InterProcessPollingSubscriber<AccelWithCovarianceStamped> sub_accel_{
+    this, "~/input/accel"};
+  autoware::universe_utils::InterProcessPollingSubscriber<OperationModeState> sub_operation_mode_{
+    this, "~/input/operation_mode_state"};
+  // control_horizon is an experimental topic, but vehicle_adaptor uses it to improve performance,
+  autoware::universe_utils::InterProcessPollingSubscriber<ControlHorizon> sub_control_horizon_{
+    this, "~/input/control_horizon"};
 
   rclcpp::TimerBase::SharedPtr timer_;
 
   std::unique_ptr<TwistStamped> current_twist_ptr_;  // [m/s]
   std::unique_ptr<double> current_steer_ptr_;
   ActuationStatusStamped::ConstSharedPtr actuation_status_ptr_;
+  Odometry::ConstSharedPtr current_odometry_;
   Control::ConstSharedPtr control_cmd_ptr_;
   AccelMap accel_map_;
   BrakeMap brake_map_;
   SteerMap steer_map_;
   VGR vgr_;
+  VehicleAdaptor vehicle_adaptor_;
   // TODO(tanaka): consider accel/brake pid too
   PIDController steer_pid_;
   bool ff_map_initialized_;
@@ -112,6 +126,7 @@ public:
   bool convert_brake_cmd_;                                             //!< @brief use brake or not
   std::optional<std::string> convert_steer_cmd_method_{std::nullopt};  //!< @brief method to convert
   bool need_to_subscribe_actuation_status_{false};
+  bool use_vehicle_adaptor_{false};
   rclcpp::Time prev_time_steer_calculation_{0, 0, RCL_ROS_TIME};
 
   // Whether to subscribe to actuation_status and calculate and publish steering_status

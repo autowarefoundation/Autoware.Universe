@@ -19,10 +19,12 @@
 #ifndef AUTOWARE__MULTI_OBJECT_TRACKER__TRACKER__MODEL__PEDESTRIAN_TRACKER_HPP_
 #define AUTOWARE__MULTI_OBJECT_TRACKER__TRACKER__MODEL__PEDESTRIAN_TRACKER_HPP_
 
-#include "autoware/kalman_filter/kalman_filter.hpp"
 #include "autoware/multi_object_tracker/object_model/object_model.hpp"
+#include "autoware/multi_object_tracker/object_model/types.hpp"
 #include "autoware/multi_object_tracker/tracker/model/tracker_base.hpp"
 #include "autoware/multi_object_tracker/tracker/motion_model/ctrv_motion_model.hpp"
+
+#include <autoware/kalman_filter/kalman_filter.hpp>
 
 namespace autoware::multi_object_tracker
 {
@@ -30,7 +32,7 @@ namespace autoware::multi_object_tracker
 class PedestrianTracker : public Tracker
 {
 private:
-  autoware_perception_msgs::msg::DetectedObject object_;
+  types::DynamicObject object_;
   rclcpp::Logger logger_;
 
   object_model::ObjectModel object_model_ = object_model::pedestrian;
@@ -56,23 +58,19 @@ private:
 
 public:
   PedestrianTracker(
-    const rclcpp::Time & time, const autoware_perception_msgs::msg::DetectedObject & object,
-    const geometry_msgs::msg::Transform & self_transform, const size_t channel_size,
-    const uint & channel_index);
+    const rclcpp::Time & time, const types::DynamicObject & object, const size_t channel_size);
 
   bool predict(const rclcpp::Time & time) override;
   bool measure(
-    const autoware_perception_msgs::msg::DetectedObject & object, const rclcpp::Time & time,
+    const types::DynamicObject & object, const rclcpp::Time & time,
     const geometry_msgs::msg::Transform & self_transform) override;
-  bool measureWithPose(const autoware_perception_msgs::msg::DetectedObject & object);
-  bool measureWithShape(const autoware_perception_msgs::msg::DetectedObject & object);
-  bool getTrackedObject(
-    const rclcpp::Time & time,
-    autoware_perception_msgs::msg::TrackedObject & object) const override;
+  bool measureWithPose(const types::DynamicObject & object);
+  bool measureWithShape(const types::DynamicObject & object);
+  bool getTrackedObject(const rclcpp::Time & time, types::DynamicObject & object) const override;
 
 private:
-  autoware_perception_msgs::msg::DetectedObject getUpdatingObject(
-    const autoware_perception_msgs::msg::DetectedObject & object,
+  types::DynamicObject getUpdatingObject(
+    const types::DynamicObject & object,
     const geometry_msgs::msg::Transform & self_transform) const;
 };
 

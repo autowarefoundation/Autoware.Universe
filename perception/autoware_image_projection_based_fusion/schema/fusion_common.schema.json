@@ -31,6 +31,11 @@
           "default": 15,
           "minimum": 1
         },
+        "point_project_to_unrectified_image": {
+          "type": "array",
+          "description": "An array of options indicating whether to project point to unrectified image or not.",
+          "default": [false, false, false, false, false, false]
+        },
         "debug_mode": {
           "type": "boolean",
           "description": "Whether to debug or not.",
@@ -65,6 +70,21 @@
           "type": "number",
           "description": "Maximum z position [m].",
           "default": 100.0
+        },
+        "approximate_camera_projection": {
+          "type": "array",
+          "description": "An array of options indicating whether to use approximated projection for each camera.",
+          "default": [true, true, true, true, true, true]
+        },
+        "approximation_grid_cell_width": {
+          "type": "number",
+          "description": "The width of grid cell used in approximated projection [pixel].",
+          "default": 1.0
+        },
+        "approximation_grid_cell_height": {
+          "type": "number",
+          "description": "The height of grid cell used in approximated projection [pixel].",
+          "default": 1.0
         }
       }
     }

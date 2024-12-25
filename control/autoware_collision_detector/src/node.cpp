@@ -29,6 +29,12 @@
 #include <pcl/point_cloud.h>
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <limits>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
 #define EIGEN_MPL2_ONLY
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -312,6 +318,14 @@ bool CollisionDetectorNode::shouldBeExcluded(
 
 void CollisionDetectorNode::checkCollision(diagnostic_updater::DiagnosticStatusWrapper & stat)
 {
+  odometry_ptr_ = sub_odometry_.takeData();
+
+  if (!odometry_ptr_) {
+    RCLCPP_INFO_THROTTLE(
+      this->get_logger(), *this->get_clock(), 5000 /* ms */, "waiting for current odometry...");
+    return;
+  }
+
   pointcloud_ptr_ = sub_pointcloud_.takeData();
   object_ptr_ = sub_dynamic_objects_.takeData();
   operation_mode_ptr_ = sub_operation_mode_.takeData();

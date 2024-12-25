@@ -18,6 +18,7 @@
 #include <pcl/segmentation/extract_clusters.h>
 
 #include <unordered_map>
+#include <vector>
 
 namespace autoware::euclidean_cluster
 {
@@ -117,7 +118,9 @@ bool VoxelGridBasedEuclideanCluster::cluster(
       voxel_grid_.getCentroidIndexAt(voxel_grid_.getGridCoordinates(point.x, point.y, point.z));
     if (map.find(index) != map.end()) {
       auto & cluster_data_size = clusters_data_size.at(map[index]);
-      if (cluster_data_size > std::size_t(max_cluster_size_ * point_step)) {
+      if (
+        cluster_data_size >
+        static_cast<std::size_t>(max_cluster_size_) * static_cast<std::size_t>(point_step)) {
         continue;
       }
       std::memcpy(

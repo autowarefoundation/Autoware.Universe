@@ -1,55 +1,48 @@
-- repository: autowarefoundation/autoware
+- repository: autowarefoundation/sync-file-templates
+  source-dir: sources
   files:
-    - source: CODE_OF_CONDUCT.md
-    - source: CONTRIBUTING.md
-    - source: DISCLAIMER.md
-    - source: LICENSE
     - source: .github/ISSUE_TEMPLATE/bug.yaml
     - source: .github/ISSUE_TEMPLATE/config.yml
     - source: .github/ISSUE_TEMPLATE/task.yaml
     - source: .github/dependabot.yaml
+    - source: .github/pull_request_template_complex.md
+      dest: .github/pull_request_template.md
     - source: .github/stale.yml
     - source: .github/workflows/cancel-previous-workflows.yaml
+    - source: .github/workflows/check-build-depends.yaml
+    - source: .github/workflows/clang-tidy-pr-comments.yaml
+    - source: .github/workflows/clang-tidy-pr-comments-manually.yaml
+    - source: .github/workflows/comment-on-pr.yaml
+    - source: .github/workflows/delete-closed-pr-docs.yaml
+    - source: .github/workflows/deploy-docs.yaml
     - source: .github/workflows/github-release.yaml
     - source: .github/workflows/pre-commit.yaml
     - source: .github/workflows/pre-commit-optional.yaml
+    - source: .github/workflows/pre-commit-optional-autoupdate.yaml
+    - source: .github/workflows/pre-commit-autoupdate.yaml
     - source: .github/workflows/semantic-pull-request.yaml
     - source: .github/workflows/spell-check-differential.yaml
       pre-commands: |
         sd "        with:\n" "        with:\n          local-cspell-json: .cspell.json\n" {source}
-    - source: .github/workflows/spell-check-differential.yaml
-      dest: .github/workflows/spell-check-daily.yaml
+    - source: .github/workflows/spell-check-daily.yaml
       pre-commands: |
-        sd "spell-check-differential" "spell-check-daily" {source}
-        sd "        with:\n" "        with:\n          local-cspell-json: .cspell.json\n          incremental-files-only: false\n" {source}
-        sd "on:\n  pull_request:\n" "on:\n  schedule:\n    - cron: 0 0 * * *\n  workflow_dispatch:\n" {source}
+        sd "        with:\n" "        with:\n          local-cspell-json: .cspell.json\n" {source}
     - source: .github/workflows/sync-files.yaml
+    - source: .github/workflows/update-codeowners-from-packages.yaml
+    - source: docs/assets/js/mathjax.js
     - source: .clang-format
     - source: .markdown-link-check.json
     - source: .markdownlint.yaml
     - source: .pre-commit-config-optional.yaml
+    - source: .pre-commit-config.yaml
     - source: .prettierignore
     - source: .prettierrc.yaml
     - source: .yamllint.yaml
+    - source: CODE_OF_CONDUCT.md
+    - source: CONTRIBUTING.md
     - source: CPPLINT.cfg
-    - source: setup.cfg
-
-- repository: autowarefoundation/autoware_common
-  files:
-    - source: .github/workflows/clang-tidy-differential.yaml
-      pre-commands: |
-        sd 'container: ros:(\w+)' 'container: ghcr.io/autowarefoundation/autoware:latest-autoware-universe-cuda' {source}
-    - source: .github/workflows/check-build-depends.yaml
-    - source: .github/workflows/clang-tidy-pr-comments.yaml
-    - source: .github/workflows/clang-tidy-pr-comments-manually.yaml
-    - source: .github/workflows/update-codeowners-from-packages.yaml
-    - source: .pre-commit-config.yaml
-    - source: codecov.yaml
-
-- repository: autowarefoundation/autoware-documentation
-  files:
-    - source: .github/workflows/deploy-docs.yaml
-    - source: .github/workflows/delete-closed-pr-docs.yaml
+    - source: DISCLAIMER.md
+    - source: LICENSE
     - source: mkdocs-base.yaml
       dest: mkdocs.yaml
       pre-commands: |
@@ -63,4 +56,4 @@
         "  - macros" \
         "  - macros:
               module_name: mkdocs_macros" {source}
-    - source: docs/assets/js/mathjax.js
+    - source: setup.cfg

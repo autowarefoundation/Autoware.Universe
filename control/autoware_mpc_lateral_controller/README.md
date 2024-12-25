@@ -75,6 +75,12 @@ Return LateralOutput which contains the following to the controller node
 - LateralSyncData
   - steer angle convergence
 
+Publish the following messages.
+
+| Name                            | Type                               | Description                                                                                                                                                                |
+| ------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `~/output/predicted_trajectory` | autoware_planning_msgs::Trajectory | Predicted trajectory calculated by MPC. The trajectory size will be empty when the controller is in an emergency such as too large deviation from the planning trajectory. |
+
 ### MPC class
 
 The `MPC` class (defined in `mpc.hpp`) provides the interface with the MPC algorithm.
@@ -89,13 +95,11 @@ AutonomouStuff Lexus RX 450h for under 40 km/h driving.
 
 #### System
 
-| Name                      | Type    | Description                                                                 | Default value |
-| :------------------------ | :------ | :-------------------------------------------------------------------------- | :------------ |
-| traj_resample_dist        | double  | distance of waypoints in resampling [m]                                     | 0.1           |
-| use_steer_prediction      | boolean | flag for using steer prediction (do not use steer measurement)              | false         |
-| admissible_position_error | double  | stop vehicle when following position error is larger than this value [m]    | 5.0           |
-| admissible_yaw_error_rad  | double  | stop vehicle when following yaw angle error is larger than this value [rad] | 1.57          |
-| use_delayed_initial_state | boolean | flag to use x0_delayed as initial state for predicted trajectory            | true          |
+| Name                      | Type    | Description                                                      | Default value |
+| :------------------------ | :------ | :--------------------------------------------------------------- | :------------ |
+| traj_resample_dist        | double  | distance of waypoints in resampling [m]                          | 0.1           |
+| use_steer_prediction      | boolean | flag for using steer prediction (do not use steer measurement)   | false         |
+| use_delayed_initial_state | boolean | flag to use x0_delayed as initial state for predicted trajectory | true          |
 
 #### Path Smoothing
 

@@ -17,6 +17,8 @@
 #include "autoware/behavior_path_lane_change_module/interface.hpp"
 #include "scene.hpp"
 
+#include <memory>
+
 namespace autoware::behavior_path_planner
 {
 using autoware::behavior_path_planner::LaneChangeInterface;
@@ -26,7 +28,7 @@ ExternalRequestLaneChangeRightModuleManager::createNewSceneModuleInstance()
 {
   return std::make_unique<LaneChangeInterface>(
     name_, *node_, parameters_, rtc_interface_ptr_map_,
-    objects_of_interest_marker_interface_ptr_map_, steering_factor_interface_ptr_,
+    objects_of_interest_marker_interface_ptr_map_,
     std::make_unique<ExternalRequestLaneChange>(parameters_, direction_));
 }
 
@@ -35,7 +37,7 @@ ExternalRequestLaneChangeLeftModuleManager::createNewSceneModuleInstance()
 {
   return std::make_unique<LaneChangeInterface>(
     name_, *node_, parameters_, rtc_interface_ptr_map_,
-    objects_of_interest_marker_interface_ptr_map_, steering_factor_interface_ptr_,
+    objects_of_interest_marker_interface_ptr_map_,
     std::make_unique<ExternalRequestLaneChange>(parameters_, direction_));
 }
 

@@ -20,13 +20,12 @@
 #include "autoware/multi_object_tracker/tracker/motion_model/ctrv_motion_model.hpp"
 
 #include "autoware/multi_object_tracker/tracker/motion_model/motion_model_base.hpp"
-#include "autoware/multi_object_tracker/utils/utils.hpp"
-#include "autoware/universe_utils/math/normalization.hpp"
-#include "autoware/universe_utils/math/unit_conversion.hpp"
-#include "autoware/universe_utils/ros/msg_covariance.hpp"
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
+#include <autoware/universe_utils/math/normalization.hpp>
+#include <autoware/universe_utils/math/unit_conversion.hpp>
+#include <autoware/universe_utils/ros/msg_covariance.hpp>
 
 namespace autoware::multi_object_tracker
 {
@@ -276,7 +275,7 @@ bool CTRVMotionModel::predictStateStep(const double dt, KalmanFilter & ekf) cons
   Eigen::MatrixXd X_next_t(DIM, 1);                               // predicted state
   X_next_t(IDX::X) = X_t(IDX::X) + X_t(IDX::VEL) * cos_yaw * dt;  // dx = v * cos(yaw)
   X_next_t(IDX::Y) = X_t(IDX::Y) + X_t(IDX::VEL) * sin_yaw * dt;  // dy = v * sin(yaw)
-  X_next_t(IDX::YAW) = X_t(IDX::YAW) + (X_t(IDX::WZ)) * dt;       // dyaw = omega
+  X_next_t(IDX::YAW) = X_t(IDX::YAW) + (X_t(IDX::WZ))*dt;         // dyaw = omega
   X_next_t(IDX::VEL) = X_t(IDX::VEL);
   X_next_t(IDX::WZ) = X_t(IDX::WZ);
 

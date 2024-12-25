@@ -22,7 +22,6 @@
     <param from="$(var vehicle_info_param_file)"/>
     <!-- remap topic name -->
     <remap from="~/output/stop_reason" to="/planning/scenario_planning/status/stop_reason"/>
-    <remap from="~/output/stop_reasons" to="/planning/scenario_planning/status/stop_reasons"/>
     <remap from="~/output/trajectory" to="$(var output_trajectory)"/>
     <remap from="~/output/max_velocity" to="$(var output_velocity_limit)"/>
     <remap from="~/output/velocity_limit_clear_command" to="$(var output_velocity_limit_clear_command)"/>

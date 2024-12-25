@@ -11,6 +11,10 @@ ament_auto_add_library(traffic_light_roi_visualizer SHARED
   src/traffic_light_roi_visualizer/shape_draw.cpp
 )
 
+target_include_directories(traffic_light_roi_visualizer SYSTEM PUBLIC
+  ${OpenCV_INCLUDE_DIRS}
+)
+
 target_link_libraries(traffic_light_roi_visualizer
   ${OpenCV_LIBRARIES}
 )

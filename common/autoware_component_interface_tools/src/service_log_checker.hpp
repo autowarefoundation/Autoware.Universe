@@ -23,6 +23,8 @@
 #include <string>
 #include <unordered_map>
 
+namespace autoware::component_interface_tools
+{
 class ServiceLogChecker : public rclcpp::Node
 {
 public:
@@ -38,5 +40,5 @@ private:
   void update_diagnostics(diagnostic_updater::DiagnosticStatusWrapper & stat);
   std::unordered_map<std::string, std::string> errors_;
 };
-
+}  // namespace autoware::component_interface_tools
 #endif  // SERVICE_LOG_CHECKER_HPP_

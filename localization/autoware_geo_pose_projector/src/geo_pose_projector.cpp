@@ -17,6 +17,8 @@
 #include <autoware/geography_utils/height.hpp>
 #include <autoware/geography_utils/projection.hpp>
 
+#include <memory>
+
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #else
@@ -31,7 +33,7 @@ GeoPoseProjector::GeoPoseProjector(const rclcpp::NodeOptions & options)
 : rclcpp::Node("geo_pose_projector", options), publish_tf_(declare_parameter<bool>("publish_tf"))
 {
   // Subscribe to map_projector_info topic
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   adaptor.init_sub(
     sub_map_projector_info_,
     [this](const MapProjectorInfo::Message::ConstSharedPtr msg) { projector_info_ = *msg; });

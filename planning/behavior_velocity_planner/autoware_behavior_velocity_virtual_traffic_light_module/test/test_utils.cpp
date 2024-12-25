@@ -19,7 +19,9 @@
 
 #include <gtest/gtest.h>
 
+#include <iostream>
 #include <memory>
+#include <vector>
 
 using autoware::behavior_velocity_planner::virtual_traffic_light::calcCenter;
 using autoware::behavior_velocity_planner::virtual_traffic_light::calcHeadPose;

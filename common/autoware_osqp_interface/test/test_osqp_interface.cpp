@@ -17,6 +17,7 @@
 
 #include <Eigen/Core>
 
+#include <iostream>
 #include <tuple>
 #include <vector>
 

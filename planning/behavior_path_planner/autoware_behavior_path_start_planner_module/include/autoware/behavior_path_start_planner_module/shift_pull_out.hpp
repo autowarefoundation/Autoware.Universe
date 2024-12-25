@@ -56,6 +56,8 @@ public:
 
   std::shared_ptr<LaneDepartureChecker> lane_departure_checker_;
 
+  friend class TestShiftPullOut;
+
 private:
   // Calculate longitudinal distance based on the acceleration limit, curvature limit, and the
   // minimum distance requirement.

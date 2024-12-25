@@ -15,9 +15,10 @@
 #ifndef PROCESSOR__INPUT_MANAGER_HPP_
 #define PROCESSOR__INPUT_MANAGER_HPP_
 
+#include "autoware/multi_object_tracker/object_model/types.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-#include "autoware_perception_msgs/msg/detected_objects.hpp"
+#include <autoware_perception_msgs/msg/detected_objects.hpp>
 
 #include <deque>
 #include <functional>
@@ -28,8 +29,7 @@
 
 namespace autoware::multi_object_tracker
 {
-using DetectedObjects = autoware_perception_msgs::msg::DetectedObjects;
-using ObjectsList = std::vector<std::pair<uint, DetectedObjects>>;
+using ObjectsList = std::vector<types::DynamicObjectList>;
 
 struct InputChannel
 {
@@ -57,7 +57,7 @@ public:
   bool isTimeInitialized() const { return initial_count_ > 0; }
   uint getIndex() const { return index_; }
   void getObjectsOlderThan(
-    const rclcpp::Time & object_latest_time, const rclcpp::Time & object_oldest_time,
+    const rclcpp::Time & object_latest_time, const rclcpp::Time & object_earliest_time,
     ObjectsList & objects_list);
   bool isSpawnEnabled() const { return is_spawn_enabled_; }
 
@@ -82,13 +82,11 @@ private:
   bool is_spawn_enabled_{};
 
   size_t que_size_{30};
-  std::deque<DetectedObjects> objects_que_;
+  std::deque<types::DynamicObjectList> objects_que_;
 
   std::function<void(const uint &)> func_trigger_;
 
-  // bool is_time_initialized_{false};
   int initial_count_{0};
-  double expected_interval_{};
   double latency_mean_{};
   double latency_var_{};
   double interval_mean_{};
@@ -116,7 +114,8 @@ public:
 
 private:
   rclcpp::Node & node_;
-  std::vector<rclcpp::Subscription<DetectedObjects>::SharedPtr> sub_objects_array_{};
+  std::vector<rclcpp::Subscription<autoware_perception_msgs::msg::DetectedObjects>::SharedPtr>
+    sub_objects_array_{};
 
   bool is_initialized_{false};
   rclcpp::Time latest_exported_object_time_;
@@ -130,13 +129,11 @@ private:
   double target_stream_latency_std_{0.04};   // [s]
   double target_stream_interval_{0.1};       // [s]
   double target_stream_interval_std_{0.02};  // [s]
-  double target_latency_{0.2};               // [s]
-  double target_latency_band_{1.0};          // [s]
 
 private:
   void getObjectTimeInterval(
     const rclcpp::Time & now, rclcpp::Time & object_latest_time,
-    rclcpp::Time & object_oldest_time) const;
+    rclcpp::Time & object_earliest_time) const;
   void optimizeTimings();
 };
 

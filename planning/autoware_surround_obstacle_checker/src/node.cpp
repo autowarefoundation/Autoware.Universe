@@ -32,6 +32,7 @@
 #include <pcl_conversions/pcl_conversions.h>
 
 #include <optional>
+#include <utility>
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_eigen/tf2_eigen.h>
 #else
@@ -57,34 +58,6 @@ using autoware::universe_utils::createPoint;
 using autoware::universe_utils::pose2transform;
 using autoware_perception_msgs::msg::ObjectClassification;
 
-namespace
-{
-std::string jsonDumpsPose(const geometry_msgs::msg::Pose & pose)
-{
-  const std::string json_dumps_pose =
-    (boost::format(
-       R"({"position":{"x":%lf,"y":%lf,"z":%lf},"orientation":{"w":%lf,"x":%lf,"y":%lf,"z":%lf}})") %
-     pose.position.x % pose.position.y % pose.position.z % pose.orientation.w % pose.orientation.x %
-     pose.orientation.y % pose.orientation.z)
-      .str();
-  return json_dumps_pose;
-}
-
-diagnostic_msgs::msg::DiagnosticStatus makeStopReasonDiag(
-  const std::string & no_start_reason, const geometry_msgs::msg::Pose & stop_pose)
-{
-  diagnostic_msgs::msg::DiagnosticStatus no_start_reason_diag;
-  diagnostic_msgs::msg::KeyValue no_start_reason_diag_kv;
-  no_start_reason_diag.level = diagnostic_msgs::msg::DiagnosticStatus::OK;
-  no_start_reason_diag.name = "no_start_reason";
-  no_start_reason_diag.message = no_start_reason;
-  no_start_reason_diag_kv.key = "no_start_pose";
-  no_start_reason_diag_kv.value = jsonDumpsPose(stop_pose);
-  no_start_reason_diag.values.push_back(no_start_reason_diag_kv);
-  return no_start_reason_diag;
-}
-}  // namespace
-
 SurroundObstacleCheckerNode::SurroundObstacleCheckerNode(const rclcpp::NodeOptions & node_options)
 : Node("surround_obstacle_checker_node", node_options)
 {
@@ -104,8 +77,6 @@ SurroundObstacleCheckerNode::SurroundObstacleCheckerNode(const rclcpp::NodeOptio
   vehicle_info_ = autoware::vehicle_info_utils::VehicleInfoUtils(*this).getVehicleInfo();
 
   // Publishers
-  pub_stop_reason_ =
-    this->create_publisher<diagnostic_msgs::msg::DiagnosticStatus>("~/output/no_start_reason", 1);
   pub_clear_velocity_limit_ = this->create_publisher<VelocityLimitClearCommand>(
     "~/output/velocity_limit_clear_command", rclcpp::QoS{1}.transient_local());
   pub_velocity_limit_ = this->create_publisher<VelocityLimit>(
@@ -126,9 +97,9 @@ SurroundObstacleCheckerNode::SurroundObstacleCheckerNode(const rclcpp::NodeOptio
     const auto param = param_listener_->get_params();
     const auto check_distances = getCheckDistances(param.debug_footprint_label);
     debug_ptr_ = std::make_shared<SurroundObstacleCheckerDebugNode>(
-      vehicle_info_, vehicle_info_.max_longitudinal_offset_m, param.debug_footprint_label,
-      check_distances.at(0), check_distances.at(1), check_distances.at(2),
-      param.surround_check_hysteresis_distance, odometry_ptr_->pose.pose, this->get_clock(), *this);
+      vehicle_info_, param.debug_footprint_label, check_distances.at(0), check_distances.at(1),
+      check_distances.at(2), param.surround_check_hysteresis_distance, odometry_ptr_->pose.pose,
+      this->get_clock(), *this);
   }
 }
 
@@ -256,10 +227,8 @@ void SurroundObstacleCheckerNode::onTimer()
     debug_ptr_->pushObstaclePoint(nearest_obstacle.value().second, PointType::NoStart);
   }
 
-  diagnostic_msgs::msg::DiagnosticStatus no_start_reason_diag;
   if (state_ == State::STOP) {
     debug_ptr_->pushPose(odometry_ptr_->pose.pose, PoseType::NoStart);
-    no_start_reason_diag = makeStopReasonDiag("obstacle", odometry_ptr_->pose.pose);
   }
 
   tier4_debug_msgs::msg::Float64Stamped processing_time_msg;
@@ -267,7 +236,6 @@ void SurroundObstacleCheckerNode::onTimer()
   processing_time_msg.data = stop_watch.toc();
   pub_processing_time_->publish(processing_time_msg);
 
-  pub_stop_reason_->publish(no_start_reason_diag);
   debug_ptr_->publish();
 }
 
@@ -411,8 +379,8 @@ std::optional<geometry_msgs::msg::TransformStamped> SurroundObstacleCheckerNode:
 
 auto SurroundObstacleCheckerNode::isStopRequired(
   const bool is_obstacle_found, const bool is_vehicle_stopped, const State & state,
-  const std::optional<rclcpp::Time> & last_obstacle_found_time,
-  const double time_threshold) const -> std::pair<bool, std::optional<rclcpp::Time>>
+  const std::optional<rclcpp::Time> & last_obstacle_found_time, const double time_threshold) const
+  -> std::pair<bool, std::optional<rclcpp::Time>>
 {
   if (!is_vehicle_stopped) {
     return std::make_pair(false, std::nullopt);

@@ -15,8 +15,8 @@
 #ifndef PERCEPTION_HPP_
 #define PERCEPTION_HPP_
 
+#include <autoware/adapi_specs/perception.hpp>
 #include <autoware/component_interface_specs/perception.hpp>
-#include <autoware_ad_api_specs/perception.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <autoware_adapi_v1_msgs/msg/dynamic_object.hpp>
@@ -40,7 +40,7 @@ public:
   explicit PerceptionNode(const rclcpp::NodeOptions & options);
 
 private:
-  Pub<autoware_ad_api::perception::DynamicObjectArray> pub_object_recognized_;
+  Pub<autoware::adapi_specs::perception::DynamicObjectArray> pub_object_recognized_;
   Sub<autoware::component_interface_specs::perception::ObjectRecognition> sub_object_recognized_;
   void object_recognize(const autoware::component_interface_specs::perception::ObjectRecognition::
                           Message::ConstSharedPtr msg);

@@ -14,6 +14,8 @@
 
 #include "state_machine.hpp"
 
+#include <string>
+
 namespace autoware::behavior_velocity_planner
 {
 namespace run_out_utils

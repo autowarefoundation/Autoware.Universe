@@ -21,6 +21,8 @@
 
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <vector>
+
 namespace yabloc::line_segment_detector
 {
 LineSegmentDetector::LineSegmentDetector(const rclcpp::NodeOptions & options)

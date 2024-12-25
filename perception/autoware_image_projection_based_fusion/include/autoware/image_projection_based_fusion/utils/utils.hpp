@@ -65,9 +65,6 @@ struct PointData
 
 bool checkCameraInfo(const sensor_msgs::msg::CameraInfo & camera_info);
 
-Eigen::Vector2d calcRawImageProjectedPoint(
-  const image_geometry::PinholeCameraModel & pinhole_camera_model, const cv::Point3d & point3d);
-
 std::optional<geometry_msgs::msg::TransformStamped> getTransformStamped(
   const tf2_ros::Buffer & tf_buffer, const std::string & target_frame_id,
   const std::string & source_frame_id, const rclcpp::Time & time);

@@ -25,11 +25,15 @@
 
 #include <rclcpp/rclcpp.hpp>
 
-#include <diagnostic_msgs/msg/diagnostic_array.hpp>
+#include <tier4_metric_msgs/msg/metric.hpp>
+#include <tier4_metric_msgs/msg/metric_array.hpp>
 
 #include <optional>
 #include <string>
 #include <vector>
+
+using Metric = tier4_metric_msgs::msg::Metric;
+using MetricArray = tier4_metric_msgs::msg::MetricArray;
 
 struct PlannerData
 {
@@ -165,12 +169,15 @@ struct CruiseObstacle : public TargetObstacleInterface
   CruiseObstacle(
     const std::string & arg_uuid, const rclcpp::Time & arg_stamp,
     const geometry_msgs::msg::Pose & arg_pose, const double arg_lon_velocity,
-    const double arg_lat_velocity, const std::vector<PointWithStamp> & arg_collision_points)
+    const double arg_lat_velocity, const std::vector<PointWithStamp> & arg_collision_points,
+    bool arg_is_yield_obstacle = false)
   : TargetObstacleInterface(arg_uuid, arg_stamp, arg_pose, arg_lon_velocity, arg_lat_velocity),
-    collision_points(arg_collision_points)
+    collision_points(arg_collision_points),
+    is_yield_obstacle(arg_is_yield_obstacle)
   {
   }
   std::vector<PointWithStamp> collision_points;  // time-series collision points
+  bool is_yield_obstacle;
 };
 
 struct SlowDownObstacle : public TargetObstacleInterface
@@ -293,9 +300,9 @@ struct DebugData
   MarkerArray cruise_wall_marker;
   MarkerArray slow_down_wall_marker;
   std::vector<autoware::universe_utils::Polygon2d> detection_polygons;
-  std::optional<diagnostic_msgs::msg::DiagnosticStatus> stop_reason_diag{std::nullopt};
-  std::optional<diagnostic_msgs::msg::DiagnosticStatus> slow_down_reason_diag{std::nullopt};
-  std::optional<diagnostic_msgs::msg::DiagnosticStatus> cruise_reason_diag{std::nullopt};
+  std::optional<std::vector<Metric>> stop_metrics{std::nullopt};
+  std::optional<std::vector<Metric>> slow_down_metrics{std::nullopt};
+  std::optional<std::vector<Metric>> cruise_metrics{std::nullopt};
 };
 
 struct EgoNearestParam

@@ -15,7 +15,7 @@
 #ifndef INTERFACE_HPP_
 #define INTERFACE_HPP_
 
-#include <autoware_ad_api_specs/interface.hpp>
+#include <autoware/adapi_specs/interface.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 // This file should be included after messages.
@@ -30,7 +30,7 @@ public:
   explicit InterfaceNode(const rclcpp::NodeOptions & options);
 
 private:
-  Srv<autoware_ad_api::interface::Version> srv_;
+  Srv<autoware::adapi_specs::interface::Version> srv_;
 };
 
 }  // namespace autoware::default_adapi

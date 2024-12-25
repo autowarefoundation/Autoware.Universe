@@ -21,6 +21,9 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <string>
+
 namespace
 {
 using autoware::detected_object_feature_remover::DetectedObjectFeatureRemover;

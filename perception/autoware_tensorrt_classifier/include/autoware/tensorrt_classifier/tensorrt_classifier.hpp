@@ -15,10 +15,10 @@
 #ifndef AUTOWARE__TENSORRT_CLASSIFIER__TENSORRT_CLASSIFIER_HPP_
 #define AUTOWARE__TENSORRT_CLASSIFIER__TENSORRT_CLASSIFIER_HPP_
 
+#include <autoware/cuda_utils/cuda_check_error.hpp>
+#include <autoware/cuda_utils/cuda_unique_ptr.hpp>
+#include <autoware/cuda_utils/stream_unique_ptr.hpp>
 #include <autoware/tensorrt_common/tensorrt_common.hpp>
-#include <cuda_utils/cuda_check_error.hpp>
-#include <cuda_utils/cuda_unique_ptr.hpp>
-#include <cuda_utils/stream_unique_ptr.hpp>
 #include <opencv2/opencv.hpp>
 
 #include <memory>
@@ -27,10 +27,10 @@
 
 namespace autoware::tensorrt_classifier
 {
-using cuda_utils::CudaUniquePtr;
-using cuda_utils::CudaUniquePtrHost;
-using cuda_utils::makeCudaStream;
-using cuda_utils::StreamUniquePtr;
+using autoware::cuda_utils::CudaUniquePtr;
+using autoware::cuda_utils::CudaUniquePtrHost;
+using autoware::cuda_utils::makeCudaStream;
+using autoware::cuda_utils::StreamUniquePtr;
 
 /**
  * @class TrtClassifier
@@ -107,7 +107,6 @@ private:
   std::vector<float> input_h_;
   CudaUniquePtr<float[]> input_d_;
 
-  bool needs_output_decode_;
   size_t out_elem_num_;
   size_t out_elem_num_per_batch_;
   CudaUniquePtr<float[]> out_prob_d_;

@@ -22,7 +22,6 @@
 #include <tier4_planning_msgs/msg/velocity_limit.hpp>
 #include <tier4_planning_msgs/msg/velocity_limit_clear_command.hpp>
 
-#include <deque>
 #include <memory>
 #include <string>
 #include <unordered_map>

@@ -20,6 +20,8 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+
 std::shared_ptr<autoware::radar_crossing_objects_noise_filter::RadarCrossingObjectsNoiseFilterNode>
 get_node(double angle_threshold, double velocity_threshold)
 {

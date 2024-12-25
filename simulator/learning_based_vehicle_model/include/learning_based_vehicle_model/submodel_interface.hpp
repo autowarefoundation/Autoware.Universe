@@ -20,6 +20,8 @@
 class SubModelInterface
 {
 public:
+  virtual ~SubModelInterface() = default;
+
   /**
    * @brief set time step of the model
    * @param [in] dt time step

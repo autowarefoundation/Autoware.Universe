@@ -36,6 +36,8 @@ public:
 
   PullOverPlannerType getPlannerType() const override { return PullOverPlannerType::FREESPACE; }
 
+  void setMap(const nav_msgs::msg::OccupancyGrid & costmap) { planner_->setMap(costmap); }
+
   std::optional<PullOverPath> plan(
     const GoalCandidate & modified_goal_pose, const size_t id,
     const std::shared_ptr<const PlannerData> planner_data,

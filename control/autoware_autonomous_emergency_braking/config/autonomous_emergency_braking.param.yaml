@@ -3,10 +3,13 @@
     # Ego path calculation
     use_predicted_trajectory: true
     use_imu_path: true
+    limit_imu_path_lat_dev: false
+    limit_imu_path_length: true
     use_pointcloud_data: true
     use_predicted_object_data: false
     use_object_velocity_calculation: true
     check_autoware_state: true
+    imu_path_lat_dev_threshold: 1.75
     min_generated_imu_path_length: 0.5
     max_generated_imu_path_length: 10.0
     imu_prediction_time_horizon: 1.5
@@ -21,14 +24,14 @@
     # Point cloud partitioning
     detection_range_min_height: 0.0
     detection_range_max_height_margin: 0.0
-    voxel_grid_x: 0.05
-    voxel_grid_y: 0.05
-    voxel_grid_z: 100000.0
+    voxel_grid_x: 0.1
+    voxel_grid_y: 0.1
+    voxel_grid_z: 0.5
 
     # Point cloud cropping
-    expand_width: 0.1
-    path_footprint_extra_margin: 4.0
-    speed_calculation_expansion_margin: 0.5
+    expand_width: -0.2
+    path_footprint_extra_margin: 1.0
+    speed_calculation_expansion_margin: 0.7
 
     # Point cloud clustering
     cluster_tolerance: 0.15 #[m]
@@ -37,10 +40,10 @@
     maximum_cluster_size: 10000
 
     # RSS distance collision check
-    longitudinal_offset: 2.0
+    longitudinal_offset_margin: 1.0
     t_response: 1.0
     a_ego_min: -3.0
     a_obj_min: -1.0
-    collision_keeping_sec: 2.0
+    collision_keeping_sec: 3.0
     previous_obstacle_keep_time: 1.0
     aeb_hz: 10.0

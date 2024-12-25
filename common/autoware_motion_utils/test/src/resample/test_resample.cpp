@@ -24,6 +24,7 @@
 #include <tf2/LinearMath/Quaternion.h>
 
 #include <limits>
+#include <vector>
 
 namespace
 {

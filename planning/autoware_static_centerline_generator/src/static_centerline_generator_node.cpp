@@ -14,19 +14,20 @@
 
 #include "static_centerline_generator_node.hpp"
 
-#include "autoware/interpolation/spline_interpolation_points_2d.hpp"
+#include "autoware/map_loader/lanelet2_map_loader_node.hpp"
 #include "autoware/map_projection_loader/load_info_from_lanelet2_map.hpp"
 #include "autoware/map_projection_loader/map_projection_loader.hpp"
 #include "autoware/motion_utils/resample/resample.hpp"
 #include "autoware/motion_utils/trajectory/conversion.hpp"
+#include "autoware/motion_utils/trajectory/trajectory.hpp"
 #include "autoware/universe_utils/geometry/geometry.hpp"
+#include "autoware/universe_utils/math/unit_conversion.hpp"
 #include "autoware/universe_utils/ros/parameter.hpp"
 #include "autoware_lanelet2_extension/utility/message_conversion.hpp"
 #include "autoware_lanelet2_extension/utility/query.hpp"
 #include "autoware_lanelet2_extension/utility/utilities.hpp"
 #include "autoware_static_centerline_generator/msg/points_with_lane_id.hpp"
 #include "centerline_source/bag_ego_trajectory_based_centerline.hpp"
-#include "map_loader/lanelet2_map_loader_node.hpp"
 #include "type_alias.hpp"
 #include "utils.hpp"
 
@@ -51,6 +52,7 @@
 #include <chrono>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <memory>
 #include <string>
@@ -58,6 +60,7 @@
 
 #define RESET_TEXT "\x1B[0m"
 #define RED_TEXT "\x1B[31m"
+#define YELLOW_TEXT "\x1b[33m"
 #define BOLD_TEXT "\x1B[1m"
 
 namespace autoware::static_centerline_generator
@@ -358,24 +361,24 @@ void StaticCenterlineGeneratorNode::load_map(const std::string & lanelet2_input_
     // load map
     map_projector_info_ = std::make_unique<MapProjectorInfo>(
       autoware::map_projection_loader::load_info_from_lanelet2_map(lanelet2_input_file_path));
-    const auto map_ptr =
-      Lanelet2MapLoaderNode::load_map(lanelet2_input_file_path, *map_projector_info_);
+    const auto map_ptr = autoware::map_loader::Lanelet2MapLoaderNode::load_map(
+      lanelet2_input_file_path, *map_projector_info_);
     if (!map_ptr) {
       return nullptr;
     }
 
     // NOTE: The original map is stored here since the centerline will be added to all the
     //       lanelet when lanelet::utils::overwriteLaneletCenterline is called.
-    original_map_ptr_ =
-      Lanelet2MapLoaderNode::load_map(lanelet2_input_file_path, *map_projector_info_);
+    original_map_ptr_ = autoware::map_loader::Lanelet2MapLoaderNode::load_map(
+      lanelet2_input_file_path, *map_projector_info_);
 
     // overwrite more dense centerline
     // NOTE: overwriteLaneletsCenterlineWithWaypoints is used only in real time calculation.
     lanelet::utils::overwriteLaneletsCenterline(map_ptr, 5.0, false);
 
     // create map bin msg
-    const auto map_bin_msg =
-      Lanelet2MapLoaderNode::create_map_bin_msg(map_ptr, lanelet2_input_file_path, now());
+    const auto map_bin_msg = autoware::map_loader::Lanelet2MapLoaderNode::create_map_bin_msg(
+      map_ptr, lanelet2_input_file_path, now());
 
     return std::make_shared<LaneletMapBin>(map_bin_msg);
   }();
@@ -625,10 +628,8 @@ void StaticCenterlineGeneratorNode::validate()
   }
 
   // calculate curvature
-  autoware::interpolation::SplineInterpolationPoints2d centerline_spline(centerline);
-  const auto curvature_vec = centerline_spline.getSplineInterpolatedCurvatures();
-  const double curvature_threshold = vehicle_info_.calcCurvatureFromSteerAngle(
-    vehicle_info_.max_steer_angle_rad - max_steer_angle_margin);
+  const auto curvature_vec = autoware::motion_utils::calcCurvature(centerline);
+  const double steer_angle_threshold = vehicle_info_.max_steer_angle_rad - max_steer_angle_margin;
 
   // calculate the distance between footprint and right/left bounds
   MarkerArray marker_array;
@@ -675,6 +676,7 @@ void StaticCenterlineGeneratorNode::validate()
       max_curvature = std::abs(curvature);
     }
   }
+  const double max_steer_angle = vehicle_info_.calcSteerAngleFromCurvature(max_curvature);
 
   // publish road boundaries
   const auto left_bound = convertToGeometryPoints(lanelet_left_bound);
@@ -692,30 +694,36 @@ void StaticCenterlineGeneratorNode::validate()
     std::cerr << "1. Footprints inside Lanelets:" << std::endl;
     if (dist_thresh_to_road_border < min_dist) {
       std::cerr << "  The generated centerline is inside the lanelet. (threshold:"
-                << dist_thresh_to_road_border << " < actual:" << min_dist << ")" << std::endl
+                << dist_thresh_to_road_border << "[m] < actual:" << min_dist << "[m])" << std::endl
                 << "  Passed." << std::endl;
       return true;
     }
     std::cerr << RED_TEXT
               << " The generated centerline is outside the lanelet. (actual:" << min_dist
-              << " <= threshold:" << dist_thresh_to_road_border << ")" << std::endl
+              << "[m] <= threshold:" << dist_thresh_to_road_border << "[m])" << std::endl
               << "  Failed." << RESET_TEXT << std::endl;
     return false;
   }();
   // 2. centerline's curvature
-  const bool is_curvature_low = [&]() {
-    std::cerr << "2. Curvature:" << std::endl;
-    if (max_curvature < curvature_threshold) {
-      std::cerr << "  The generated centerline has no high curvature. (actual:" << max_curvature
-                << " < threshold:" << curvature_threshold << ")"
-                << "  Passed." << std::endl;
-      return true;
-    }
-    std::cerr << RED_TEXT << "  The generated centerline has a too high curvature. (threshold:"
-              << curvature_threshold << " <= actual:" << max_curvature << ")"
-              << "  Failed." << RESET_TEXT << std::endl;
-    return false;
-  }();
+  std::cerr << "2. Curvature:" << std::endl;
+  const bool is_curvature_low =
+    true;  // always tre for now since the curvature is just estimated and not enough precise.
+  if (max_steer_angle < steer_angle_threshold) {
+    std::cerr << "  The generated centerline has no high steer angle. (estimated:"
+              << autoware::universe_utils::rad2deg(max_steer_angle)
+              << "[deg] < threshold:" << autoware::universe_utils::rad2deg(steer_angle_threshold)
+              << "[deg])" << std::endl
+              << "  Passed." << std::endl;
+  } else {
+    std::cerr << YELLOW_TEXT << "  The generated centerline has a too high steer angle. (threshold:"
+              << autoware::universe_utils::rad2deg(steer_angle_threshold)
+              << "[deg] <= estimated:" << autoware::universe_utils::rad2deg(max_steer_angle)
+              << "[deg])" << std::endl
+              << "  However, the estimated steer angle is not enough precise, so the result is "
+                 "conditional pass."
+              << std::endl
+              << "  Conditionally Passed." << RESET_TEXT << std::endl;
+  }
   // 3. result
   std::cerr << std::endl << BOLD_TEXT << "Result:" << RESET_TEXT << std::endl;
   if (are_footprints_inside_lanelets && is_curvature_low) {

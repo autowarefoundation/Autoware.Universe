@@ -20,6 +20,8 @@
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
 #include <limits>
+#include <string>
+#include <vector>
 
 namespace autoware::behavior_velocity_planner::virtual_traffic_light
 {

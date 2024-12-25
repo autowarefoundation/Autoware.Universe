@@ -27,6 +27,7 @@
 #include <cmath>
 #include <complex>
 #include <numeric>
+#include <vector>
 
 namespace yabloc::modularized_particle_filter
 {

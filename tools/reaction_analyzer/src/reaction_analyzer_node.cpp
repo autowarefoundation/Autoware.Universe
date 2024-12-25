@@ -15,7 +15,9 @@
 #include "reaction_analyzer_node.hpp"
 
 #include <functional>
+#include <map>
 #include <memory>
+#include <string>
 
 namespace reaction_analyzer
 {

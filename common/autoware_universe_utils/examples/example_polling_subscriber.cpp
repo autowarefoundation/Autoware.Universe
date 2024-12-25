@@ -18,6 +18,8 @@
 
 #include <std_msgs/msg/string.hpp>
 
+#include <memory>
+
 // PublisherNode class definition
 class PublisherNode : public rclcpp::Node
 {

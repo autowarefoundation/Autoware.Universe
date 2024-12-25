@@ -25,8 +25,16 @@ The successive shortest path algorithm is used to solve the data association pro
 
 ## Parameters
 
+- object association merger
+
 {{ json_to_markdown("perception/autoware_object_merger/schema/object_association_merger.schema.json") }}
+
+- data association matrix
+
 {{ json_to_markdown("perception/autoware_object_merger/schema/data_association_matrix.schema.json") }}
+
+- overlapped judge
+
 {{ json_to_markdown("perception/autoware_object_merger/schema/overlapped_judge.schema.json") }}
 
 ## Tips

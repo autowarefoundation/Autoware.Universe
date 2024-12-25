@@ -58,13 +58,15 @@ size_t get_next_target_index(
   const size_t current_target_index);
 
 Trajectory get_partial_trajectory(
-  const Trajectory & trajectory, const size_t start_index, const size_t end_index);
+  const Trajectory & trajectory, const size_t start_index, const size_t end_index,
+  const rclcpp::Clock::SharedPtr clock);
 
 Trajectory create_trajectory(
   const PoseStamped & current_pose, const PlannerWaypoints & planner_waypoints,
   const double & velocity);
 
-Trajectory create_stop_trajectory(const PoseStamped & current_pose);
+Trajectory create_stop_trajectory(
+  const PoseStamped & current_pose, const rclcpp::Clock::SharedPtr clock);
 
 Trajectory create_stop_trajectory(const Trajectory & trajectory);
 

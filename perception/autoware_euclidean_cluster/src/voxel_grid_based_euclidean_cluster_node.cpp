@@ -16,6 +16,7 @@
 
 #include "autoware/euclidean_cluster/utils.hpp"
 
+#include <memory>
 #include <vector>
 
 namespace autoware::euclidean_cluster

@@ -14,9 +14,13 @@
 
 #include "processing_time_checker.hpp"
 
+#include <nlohmann/json.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <chrono>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -39,6 +43,7 @@ std::string get_last_name(const std::string & str)
 ProcessingTimeChecker::ProcessingTimeChecker(const rclcpp::NodeOptions & node_options)
 : Node("processing_time_checker", node_options)
 {
+  output_metrics_ = declare_parameter<bool>("output_metrics");
   const double update_rate = declare_parameter<double>("update_rate");
   const auto processing_time_topic_name_list =
     declare_parameter<std::vector<std::string>>("processing_time_topic_name_list");
@@ -48,7 +53,7 @@ ProcessingTimeChecker::ProcessingTimeChecker(const rclcpp::NodeOptions & node_op
 
     // extract module name from topic name
     auto tmp_topic_name = processing_time_topic_name;
-    for (size_t i = 0; i < 4; ++i) {  // 4 is enouh for the search depth
+    for (size_t i = 0; i < 4; ++i) {  // 4 is enough for the search depth
       tmp_topic_name = remove_last_name(tmp_topic_name);
       const auto module_name_candidate = get_last_name(tmp_topic_name);
       // clang-format off
@@ -65,6 +70,7 @@ ProcessingTimeChecker::ProcessingTimeChecker(const rclcpp::NodeOptions & node_op
     // register module name
     if (module_name) {
       module_name_map_.insert_or_assign(processing_time_topic_name, *module_name);
+      processing_time_accumulator_map_.insert_or_assign(*module_name, Accumulator<double>());
     } else {
       throw std::invalid_argument("The format of the processing time topic name is not correct.");
     }
@@ -80,41 +86,91 @@ ProcessingTimeChecker::ProcessingTimeChecker(const rclcpp::NodeOptions & node_op
         processing_time_topic_name, 1,
         [this, &module_name]([[maybe_unused]] const Float64Stamped & msg) {
           processing_time_map_.insert_or_assign(module_name, msg.data);
+          processing_time_accumulator_map_.at(module_name).add(msg.data);
         }));
     // clang-format on
   }
 
-  diag_pub_ = create_publisher<DiagnosticArray>("~/metrics", 1);
+  metrics_pub_ = create_publisher<MetricArrayMsg>("~/metrics", 1);
 
   const auto period_ns = rclcpp::Rate(update_rate).period();
   timer_ = rclcpp::create_timer(
     this, get_clock(), period_ns, std::bind(&ProcessingTimeChecker::on_timer, this));
 }
 
+ProcessingTimeChecker::~ProcessingTimeChecker()
+{
+  if (!output_metrics_) {
+    return;
+  }
+
+  try {
+    // generate json data
+    nlohmann::json j;
+    for (const auto & accumulator_iterator : processing_time_accumulator_map_) {
+      const auto module_name = accumulator_iterator.first;
+      const auto processing_time_accumulator = accumulator_iterator.second;
+      j[module_name + "/min"] = processing_time_accumulator.min();
+      j[module_name + "/max"] = processing_time_accumulator.max();
+      j[module_name + "/mean"] = processing_time_accumulator.mean();
+      j[module_name + "/count"] = processing_time_accumulator.count();
+      j[module_name + "/description"] = "processing time of " + module_name + "[ms]";
+    }
+
+    // get output folder
+    const std::string output_folder_str =
+      rclcpp::get_logging_directory().string() + "/autoware_metrics";
+    if (!std::filesystem::exists(output_folder_str)) {
+      if (!std::filesystem::create_directories(output_folder_str)) {
+        RCLCPP_ERROR(
+          this->get_logger(), "Failed to create directories: %s", output_folder_str.c_str());
+        return;
+      }
+    }
+
+    // get time stamp
+    std::time_t now_time_t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::tm * local_time = std::localtime(&now_time_t);
+    std::ostringstream oss;
+    oss << std::put_time(local_time, "%Y-%m-%d-%H-%M-%S");
+    std::string cur_time_str = oss.str();
+
+    // Write metrics .json to file
+    const std::string output_file_str =
+      output_folder_str + "/autoware_processing_time_checker-" + cur_time_str + ".json";
+    std::ofstream f(output_file_str);
+    if (f.is_open()) {
+      f << j.dump(4);
+      f.close();
+    } else {
+      RCLCPP_ERROR(this->get_logger(), "Failed to open file: %s", output_file_str.c_str());
+    }
+  } catch (const std::exception & e) {
+    std::cerr << "Exception in ProcessingTimeChecker: " << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unknown exception in ProcessingTimeChecker" << std::endl;
+  }
+}
+
 void ProcessingTimeChecker::on_timer()
 {
-  // create diagnostic status
-  DiagnosticStatus status;
-  status.level = status.OK;
-  status.name = "processing_time";
+  // create MetricArrayMsg
+  MetricArrayMsg metrics_msg;
   for (const auto & processing_time_iterator : processing_time_map_) {
     const auto processing_time_topic_name = processing_time_iterator.first;
     const double processing_time = processing_time_iterator.second;
 
-    // generate diagnostic status
-    diagnostic_msgs::msg::KeyValue key_value;
-    key_value.key = processing_time_topic_name;
-    key_value.value = std::to_string(processing_time);
-    status.values.push_back(key_value);
+    // generate MetricMsg
+    MetricMsg metric;
+    metric.name = "processing_time/" + processing_time_topic_name;
+    metric.value = std::to_string(processing_time);
+    metric.unit = "millisecond";
+    metrics_msg.metric_array.push_back(metric);
   }
 
-  // create diagnostic array
-  DiagnosticArray diag_msg;
-  diag_msg.header.stamp = now();
-  diag_msg.status.push_back(status);
-
   // publish
-  diag_pub_->publish(diag_msg);
+  metrics_msg.stamp = now();
+  metrics_pub_->publish(metrics_msg);
 }
 }  // namespace autoware::processing_time_checker
 

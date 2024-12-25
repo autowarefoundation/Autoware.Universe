@@ -212,10 +212,11 @@ Update by Recursive Least Squares(RLS) method using data close enough to each gr
 #### Parameters
 
 Data selection is determined by the following thresholds.
-| Name | Default Value |
+
+| Name                    | Default Value |
 | ----------------------- | ------------- |
-| velocity_diff_threshold | 0.556 |
-| pedal_diff_threshold | 0.03 |
+| velocity_diff_threshold | 0.556         |
+| pedal_diff_threshold    | 0.03          |
 
 #### Update formula
 

@@ -50,7 +50,7 @@ PerceptionOnlineEvaluatorNode::PerceptionOnlineEvaluatorNode(
 
   objects_sub_ = create_subscription<PredictedObjects>(
     "~/input/objects", 1, std::bind(&PerceptionOnlineEvaluatorNode::onObjects, this, _1));
-  metrics_pub_ = create_publisher<DiagnosticArray>("~/metrics", 1);
+  metrics_pub_ = create_publisher<tier4_metric_msgs::msg::MetricArray>("~/metrics", 1);
   pub_marker_ = create_publisher<MarkerArray>("~/markers", 10);
 
   tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
@@ -65,7 +65,8 @@ PerceptionOnlineEvaluatorNode::PerceptionOnlineEvaluatorNode(
 
 void PerceptionOnlineEvaluatorNode::publishMetrics()
 {
-  DiagnosticArray metrics_msg;
+  // DiagnosticArray metrics_msg;
+  tier4_metric_msgs::msg::MetricArray metrics_msg;
 
   // calculate metrics
   for (const Metric & metric : parameters_->metrics) {
@@ -80,10 +81,10 @@ void PerceptionOnlineEvaluatorNode::publishMetrics()
         for (const auto & [metric, value] : arg) {
           if constexpr (std::is_same_v<T, MetricStatMap>) {
             if (value.count() > 0) {
-              metrics_msg.status.emplace_back(generateDiagnosticStatus(metric, value));
+              toMetricMsg(metric, value, metrics_msg);
             }
           } else if constexpr (std::is_same_v<T, MetricValueMap>) {
-            metrics_msg.status.emplace_back(generateDiagnosticStatus(metric, value));
+            toMetricMsg(metric, value, metrics_msg);
           }
         }
       },
@@ -91,49 +92,44 @@ void PerceptionOnlineEvaluatorNode::publishMetrics()
   }
 
   // publish metrics
-  if (!metrics_msg.status.empty()) {
-    metrics_msg.header.stamp = now();
+  if (!metrics_msg.metric_array.empty()) {
+    metrics_msg.stamp = now();
     metrics_pub_->publish(metrics_msg);
   }
   publishDebugMarker();
 }
 
-DiagnosticStatus PerceptionOnlineEvaluatorNode::generateDiagnosticStatus(
-  const std::string metric, const Stat<double> & metric_stat) const
+void PerceptionOnlineEvaluatorNode::toMetricMsg(
+  const std::string & metric, const Accumulator<double> & metric_stat,
+  tier4_metric_msgs::msg::MetricArray & metrics_msg) const
 {
-  DiagnosticStatus status;
+  // min value
+  metrics_msg.metric_array.emplace_back(tier4_metric_msgs::build<tier4_metric_msgs::msg::Metric>()
+                                          .name(metric + "/min")
+                                          .unit("")
+                                          .value(std::to_string(metric_stat.min())));
 
-  status.level = status.OK;
-  status.name = metric;
+  // max value
+  metrics_msg.metric_array.emplace_back(tier4_metric_msgs::build<tier4_metric_msgs::msg::Metric>()
+                                          .name(metric + "/max")
+                                          .unit("")
+                                          .value(std::to_string(metric_stat.max())));
 
-  diagnostic_msgs::msg::KeyValue key_value;
-  key_value.key = "min";
-  key_value.value = std::to_string(metric_stat.min());
-  status.values.push_back(key_value);
-  key_value.key = "max";
-  key_value.value = std::to_string(metric_stat.max());
-  status.values.push_back(key_value);
-  key_value.key = "mean";
-  key_value.value = std::to_string(metric_stat.mean());
-  status.values.push_back(key_value);
-
-  return status;
+  // mean value
+  metrics_msg.metric_array.emplace_back(tier4_metric_msgs::build<tier4_metric_msgs::msg::Metric>()
+                                          .name(metric + "/mean")
+                                          .unit("")
+                                          .value(std::to_string(metric_stat.mean())));
 }
 
-DiagnosticStatus PerceptionOnlineEvaluatorNode::generateDiagnosticStatus(
-  const std::string & metric, const double value) const
+void PerceptionOnlineEvaluatorNode::toMetricMsg(
+  const std::string & metric, const double metric_value,
+  tier4_metric_msgs::msg::MetricArray & metrics_msg) const
 {
-  DiagnosticStatus status;
-
-  status.level = status.OK;
-  status.name = metric;
-
-  diagnostic_msgs::msg::KeyValue key_value;
-  key_value.key = "metric_value";
-  key_value.value = std::to_string(value);
-  status.values.push_back(key_value);
-
-  return status;
+  metrics_msg.metric_array.emplace_back(tier4_metric_msgs::build<tier4_metric_msgs::msg::Metric>()
+                                          .name(metric + "/metric_value")
+                                          .unit("")
+                                          .value(std::to_string(metric_value)));
 }
 
 void PerceptionOnlineEvaluatorNode::onObjects(const PredictedObjects::ConstSharedPtr objects_msg)

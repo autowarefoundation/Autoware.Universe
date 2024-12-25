@@ -15,11 +15,11 @@
 #ifndef MOTION_HPP_
 #define MOTION_HPP_
 
+#include <autoware/adapi_specs/motion.hpp>
 #include <autoware/component_interface_specs/control.hpp>
+#include <autoware/component_interface_utils/rclcpp.hpp>
+#include <autoware/component_interface_utils/status.hpp>
 #include <autoware/motion_utils/vehicle/vehicle_state_checker.hpp>
-#include <autoware_ad_api_specs/motion.hpp>
-#include <component_interface_utils/rclcpp.hpp>
-#include <component_interface_utils/status.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 // This file should be included after messages.
@@ -37,8 +37,8 @@ private:
   autoware::motion_utils::VehicleStopChecker vehicle_stop_checker_;
   rclcpp::TimerBase::SharedPtr timer_;
   rclcpp::CallbackGroup::SharedPtr group_cli_;
-  Srv<autoware_ad_api::motion::AcceptStart> srv_accept_;
-  Pub<autoware_ad_api::motion::State> pub_state_;
+  Srv<autoware::adapi_specs::motion::AcceptStart> srv_accept_;
+  Pub<autoware::adapi_specs::motion::State> pub_state_;
   Cli<autoware::component_interface_specs::control::SetPause> cli_set_pause_;
   Sub<autoware::component_interface_specs::control::IsPaused> sub_is_paused_;
   Sub<autoware::component_interface_specs::control::IsStartRequested> sub_is_start_requested_;
@@ -63,8 +63,8 @@ private:
     const autoware::component_interface_specs::control::IsStartRequested::Message::ConstSharedPtr
       msg);
   void on_accept(
-    const autoware_ad_api::motion::AcceptStart::Service::Request::SharedPtr req,
-    const autoware_ad_api::motion::AcceptStart::Service::Response::SharedPtr res);
+    const autoware::adapi_specs::motion::AcceptStart::Service::Request::SharedPtr req,
+    const autoware::adapi_specs::motion::AcceptStart::Service::Response::SharedPtr res);
 };
 
 }  // namespace autoware::default_adapi

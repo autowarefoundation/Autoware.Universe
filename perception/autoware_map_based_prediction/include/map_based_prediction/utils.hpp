@@ -30,6 +30,7 @@
 #include <tf2/utils.h>
 
 #include <deque>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -93,6 +94,39 @@ PredictedObjectKinematics convertToPredictedKinematics(
   const TrackedObjectKinematics & tracked_object);
 
 PredictedObject convertToPredictedObject(const TrackedObject & tracked_object);
+
+double calculateLocalLikelihood(
+  const lanelet::Lanelet & current_lanelet, const TrackedObject & object,
+  const double sigma_lateral_offset, const double sigma_yaw_angle_deg);
+
+bool isDuplicated(
+  const std::pair<double, lanelet::ConstLanelet> & target_lanelet,
+  const LaneletsData & lanelets_data);
+
+bool isDuplicated(
+  const PredictedPath & predicted_path, const std::vector<PredictedPath> & predicted_paths);
+
+bool checkCloseLaneletCondition(
+  const std::pair<double, lanelet::Lanelet> & lanelet, const TrackedObject & object,
+  const std::unordered_map<std::string, std::deque<ObjectData>> & road_users_history,
+  const double dist_threshold_for_searching_lanelet,
+  const double delta_yaw_threshold_for_searching_lanelet);
+
+// NOTE: These two functions are copied from the route_handler package.
+lanelet::Lanelets getRightOppositeLanelets(
+  const std::shared_ptr<lanelet::LaneletMap> & lanelet_map_ptr,
+  const lanelet::ConstLanelet & lanelet);
+
+lanelet::Lanelets getLeftOppositeLanelets(
+  const std::shared_ptr<lanelet::LaneletMap> & lanelet_map_ptr,
+  const lanelet::ConstLanelet & lanelet);
+
+LaneletsData getCurrentLanelets(
+  const TrackedObject & object, lanelet::LaneletMapPtr lanelet_map_ptr,
+  const std::unordered_map<std::string, std::deque<ObjectData>> & road_users_history,
+  const double dist_threshold_for_searching_lanelet,
+  const double delta_yaw_threshold_for_searching_lanelet, const double sigma_lateral_offset,
+  const double sigma_yaw_angle_deg);
 
 }  // namespace utils
 

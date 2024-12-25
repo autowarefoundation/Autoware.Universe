@@ -16,10 +16,10 @@
 #define AUTOWARE__VELOCITY_SMOOTHER__SMOOTHER__JERK_FILTERED_SMOOTHER_HPP_
 
 #include "autoware/motion_utils/trajectory/trajectory.hpp"
+#include "autoware/qp_interface/qp_interface.hpp"
 #include "autoware/universe_utils/geometry/geometry.hpp"
 #include "autoware/universe_utils/system/time_keeper.hpp"
 #include "autoware/velocity_smoother/smoother/smoother_base.hpp"
-#include "qp_interface/qp_interface.hpp"
 
 #include "autoware_planning_msgs/msg/trajectory_point.hpp"
 
@@ -60,7 +60,7 @@ public:
 
 private:
   Param smoother_param_;
-  std::shared_ptr<autoware::common::QPInterface> qp_interface_;
+  std::shared_ptr<autoware::qp_interface::QPInterface> qp_interface_;
   rclcpp::Logger logger_{rclcpp::get_logger("smoother").get_child("jerk_filtered_smoother")};
 
   TrajectoryPoints forwardJerkFilter(

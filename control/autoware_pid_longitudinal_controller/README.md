@@ -68,6 +68,8 @@ There are two sources of the slope information, which can be switched by a param
   - Cons: z-coordinates of high-precision map is needed.
   - Cons: Does not support free space planning (for now)
 
+We also offer the options to switch between these, depending on driving conditions.
+
 **Notation:** This function works correctly only in a vehicle system that does not have acceleration feedback in the low-level control system.
 
 This compensation adds gravity correction to the target acceleration, resulting in an output value that is no longer equal to the target acceleration that the autonomous driving system desires. Therefore, it conflicts with the role of the acceleration feedback in the low-level controller.

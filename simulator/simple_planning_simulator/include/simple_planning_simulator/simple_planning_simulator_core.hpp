@@ -224,7 +224,10 @@ private:
     DELAY_STEER_MAP_ACC_GEARED = 6,
     LEARNED_STEER_VEL = 7,
     DELAY_STEER_ACC_GEARED_WO_FALL_GUARD = 8,
-    ACTUATION_CMD = 9
+    ACTUATION_CMD = 9,
+    ACTUATION_CMD_VGR = 10,
+    ACTUATION_CMD_MECHANICAL = 11,
+    ACTUATION_CMD_STEER_MAP = 12,
   } vehicle_model_type_;  //!< @brief vehicle model type to decide the model dynamics
   std::shared_ptr<SimModelInterface> vehicle_model_ptr_;  //!< @brief vehicle model pointer
 

@@ -164,25 +164,6 @@ int8_t getLaneDirection(const std::vector<geometry_msgs::msg::Pose> & poses, dou
   return 2;
 }
 
-template <>
-bool isInPolygon(
-  const std::vector<geometry_msgs::msg::Point> & polygon, const geometry_msgs::msg::Point & point)
-{
-  std::vector<tf2::Vector3> polygon_conv;
-  for (const auto & el : polygon) {
-    polygon_conv.emplace_back(el.x, el.y, el.z);
-  }
-
-  tf2::Vector3 point_conv = tf2::Vector3(point.x, point.y, point.z);
-
-  return isInPolygon<tf2::Vector3>(polygon_conv, point_conv);
-}
-
-double kmph2mps(const double velocity_kmph)
-{
-  return (velocity_kmph * 1000) / (60 * 60);
-}
-
 double normalizeEulerAngle(const double euler)
 {
   double res = euler;

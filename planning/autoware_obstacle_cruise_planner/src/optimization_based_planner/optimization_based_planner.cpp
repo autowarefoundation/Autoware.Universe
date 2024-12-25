@@ -25,6 +25,12 @@
 #include "autoware/universe_utils/geometry/geometry.hpp"
 #include "autoware/universe_utils/ros/marker_helper.hpp"
 
+#include <algorithm>
+#include <limits>
+#include <memory>
+#include <tuple>
+#include <vector>
+
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #else
@@ -199,7 +205,8 @@ std::vector<TrajectoryPoint> OptimizationBasedPlanner::generateCruiseTrajectory(
       output.at(i).longitudinal_velocity_mps = 0.0;
     }
     prev_output_ = output;
-    debug_data_ptr_->cruise_reason_diag = makeDiagnostic("cruise", planner_data);
+    debug_data_ptr_->cruise_metrics =
+      makeMetrics("OptimizationBasedPlanner", "cruise", planner_data);
     return output;
   } else if (opt_position.size() == 1) {
     RCLCPP_DEBUG(
@@ -256,7 +263,7 @@ std::vector<TrajectoryPoint> OptimizationBasedPlanner::generateCruiseTrajectory(
   // Insert Closest Stop Point
   autoware::motion_utils::insertStopPoint(0, closest_stop_dist, output);
 
-  debug_data_ptr_->cruise_reason_diag = makeDiagnostic("cruise", planner_data);
+  debug_data_ptr_->cruise_metrics = makeMetrics("OptimizationBasedPlanner", "cruise", planner_data);
   prev_output_ = output;
   return output;
 }

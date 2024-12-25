@@ -14,6 +14,8 @@
 
 #include "autoware/pointcloud_preprocessor/polygon_remover/polygon_remover.hpp"
 
+#include <memory>
+
 namespace autoware::pointcloud_preprocessor
 {
 PolygonRemoverComponent::PolygonRemoverComponent(const rclcpp::NodeOptions & options)

@@ -14,6 +14,9 @@
 
 #include "yabloc_common/static_tf_subscriber.hpp"
 
+#include <memory>
+#include <string>
+
 namespace yabloc::common
 {
 StaticTfSubscriber::StaticTfSubscriber(rclcpp::Clock::SharedPtr clock)

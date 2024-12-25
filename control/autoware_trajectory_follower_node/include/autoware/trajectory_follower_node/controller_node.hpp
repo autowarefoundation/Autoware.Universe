@@ -15,6 +15,7 @@
 #ifndef AUTOWARE__TRAJECTORY_FOLLOWER_NODE__CONTROLLER_NODE_HPP_
 #define AUTOWARE__TRAJECTORY_FOLLOWER_NODE__CONTROLLER_NODE_HPP_
 
+#include "autoware/trajectory_follower_base/control_horizon.hpp"
 #include "autoware/trajectory_follower_base/lateral_controller_base.hpp"
 #include "autoware/trajectory_follower_base/longitudinal_controller_base.hpp"
 #include "autoware/trajectory_follower_node/visibility_control.hpp"
@@ -33,6 +34,7 @@
 #include <diagnostic_updater/diagnostic_updater.hpp>
 
 #include "autoware_control_msgs/msg/control.hpp"
+#include "autoware_control_msgs/msg/control_horizon.hpp"
 #include "autoware_control_msgs/msg/longitudinal.hpp"
 #include "autoware_planning_msgs/msg/trajectory.hpp"
 #include "geometry_msgs/msg/accel_stamped.hpp"
@@ -41,6 +43,7 @@
 #include "nav_msgs/msg/odometry.hpp"
 #include "tf2_msgs/msg/tf_message.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
+#include <autoware_control_msgs/msg/detail/control_horizon__struct.hpp>
 #include <tier4_debug_msgs/msg/float64_stamped.hpp>
 
 #include <memory>
@@ -50,13 +53,16 @@
 
 namespace autoware::motion::control
 {
+using trajectory_follower::LateralHorizon;
 using trajectory_follower::LateralOutput;
+using trajectory_follower::LongitudinalHorizon;
 using trajectory_follower::LongitudinalOutput;
 namespace trajectory_follower_node
 {
 
 using autoware::universe_utils::StopWatch;
 using autoware_adapi_v1_msgs::msg::OperationModeState;
+using autoware_control_msgs::msg::ControlHorizon;
 using tier4_debug_msgs::msg::Float64Stamped;
 
 namespace trajectory_follower = ::autoware::motion::control::trajectory_follower;
@@ -72,6 +78,7 @@ public:
 private:
   rclcpp::TimerBase::SharedPtr timer_control_;
   double timeout_thr_sec_;
+  bool enable_control_cmd_horizon_pub_{false};
   boost::optional<LongitudinalOutput> longitudinal_output_{boost::none};
 
   std::shared_ptr<diagnostic_updater::Updater> diag_updater_ =
@@ -104,6 +111,7 @@ private:
   rclcpp::Publisher<Float64Stamped>::SharedPtr pub_processing_time_lat_ms_;
   rclcpp::Publisher<Float64Stamped>::SharedPtr pub_processing_time_lon_ms_;
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr debug_marker_pub_;
+  rclcpp::Publisher<autoware_control_msgs::msg::ControlHorizon>::SharedPtr control_cmd_horizon_pub_;
 
   autoware_planning_msgs::msg::Trajectory::ConstSharedPtr current_trajectory_ptr_;
   nav_msgs::msg::Odometry::ConstSharedPtr current_odometry_ptr_;
@@ -134,6 +142,19 @@ private:
   void publishDebugMarker(
     const trajectory_follower::InputData & input_data,
     const trajectory_follower::LateralOutput & lat_out) const;
+  /**
+   * @brief merge lateral and longitudinal horizons
+   * @details If one of the commands has only one control, repeat the control to match the other
+   *          horizon. If each horizon has different time intervals, resample them to match the size
+   *          with the greatest common divisor.
+   * @param lateral_horizon lateral horizon
+   * @param longitudinal_horizon longitudinal horizon
+   * @param stamp stamp
+   * @return merged control horizon
+   */
+  static std::optional<ControlHorizon> mergeLatLonHorizon(
+    const LateralHorizon & lateral_horizon, const LongitudinalHorizon & longitudinal_horizon,
+    const rclcpp::Time & stamp);
 
   std::unique_ptr<autoware::universe_utils::LoggerLevelConfigure> logger_configure_;
 

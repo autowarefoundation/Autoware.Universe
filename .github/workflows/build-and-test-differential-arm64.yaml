@@ -33,7 +33,7 @@ jobs:
           - -cuda
         include:
           - rosdistro: humble
-            container: ghcr.io/autowarefoundation/autoware:latest-autoware-universe
+            container: ghcr.io/autowarefoundation/autoware:universe-devel
             build-depends-repos: build_depends.repos
     steps:
       - name: Set PR fetch depth

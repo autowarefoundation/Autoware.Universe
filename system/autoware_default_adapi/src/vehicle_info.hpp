@@ -15,7 +15,7 @@
 #ifndef VEHICLE_INFO_HPP_
 #define VEHICLE_INFO_HPP_
 
-#include <autoware_ad_api_specs/vehicle.hpp>
+#include <autoware/adapi_specs/vehicle.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 // This file should be included after messages.
@@ -30,7 +30,7 @@ public:
   explicit VehicleInfoNode(const rclcpp::NodeOptions & options);
 
 private:
-  Srv<autoware_ad_api::vehicle::Dimensions> srv_dimensions_;
+  Srv<autoware::adapi_specs::vehicle::Dimensions> srv_dimensions_;
   autoware_adapi_v1_msgs::msg::VehicleDimensions dimensions_;
 };
 

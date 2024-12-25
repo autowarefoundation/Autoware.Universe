@@ -32,7 +32,9 @@
 
 #include <algorithm>
 #include <limits>
+#include <memory>
 #include <utility>
+#include <vector>
 
 namespace autoware::behavior_velocity_planner
 {
@@ -50,7 +52,7 @@ RunOutModule::RunOutModule(
   debug_ptr_(debug_ptr),
   state_machine_(std::make_unique<run_out_utils::StateMachine>(planner_param.approaching.state))
 {
-  velocity_factor_.init(PlanningBehavior::UNKNOWN);
+  velocity_factor_.init(PlanningBehavior::RUN_OUT);
 
   if (planner_param.run_out.use_partition_lanelet) {
     const lanelet::LaneletMapConstPtr & ll = planner_data->route_handler_->getLaneletMapPtr();
@@ -63,8 +65,7 @@ void RunOutModule::setPlannerParam(const PlannerParam & planner_param)
   planner_param_ = planner_param;
 }
 
-bool RunOutModule::modifyPathVelocity(
-  PathWithLaneId * path, [[maybe_unused]] StopReason * stop_reason)
+bool RunOutModule::modifyPathVelocity(PathWithLaneId * path)
 {
   // timer starts
   const auto t_start = std::chrono::system_clock::now();
@@ -768,6 +769,11 @@ bool RunOutModule::insertStopPoint(
   stop_point_with_lane_id = path.points.at(nearest_seg_idx);
   stop_point_with_lane_id.point.pose = *stop_point;
   planning_utils::insertVelocity(path, stop_point_with_lane_id, 0.0, insert_idx);
+
+  velocity_factor_.set(
+    path.points, planner_data_->current_odometry->pose, stop_point.value(), VelocityFactor::UNKNOWN,
+    "run_out");
+
   return true;
 }
 
@@ -805,7 +811,7 @@ void RunOutModule::insertVelocityForState(
 
   // insert velocity for each state
   switch (state) {
-    case State::GO: {
+    case State::GO: {  // NOLINT
       insertStoppingVelocity(target_obstacle, current_pose, current_vel, current_acc, output_path);
       break;
     }
@@ -869,6 +875,9 @@ void RunOutModule::insertApproachingVelocity(
     RCLCPP_WARN_STREAM(logger_, "failed to calculate stop point.");
     return;
   }
+
+  velocity_factor_.set(
+    output_path.points, current_pose, stop_point.value(), VelocityFactor::UNKNOWN, "run_out");
 
   // debug
   debug_ptr_->pushStopPose(autoware::universe_utils::calcOffsetPose(

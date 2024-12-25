@@ -14,6 +14,9 @@
 
 #include "imu_corrector_core.hpp"
 
+#include <memory>
+#include <string>
+
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #else

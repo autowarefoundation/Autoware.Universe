@@ -16,6 +16,8 @@
 
 #include <gtest/gtest.h>
 
+#include <vector>
+
 constexpr double epsilon = 1e-06;
 
 namespace

@@ -42,7 +42,7 @@ InitialPoseAdaptor::InitialPoseAdaptor(const rclcpp::NodeOptions & options)
     "~/initialpose", rclcpp::QoS(1),
     std::bind(&InitialPoseAdaptor::on_initial_pose, this, std::placeholders::_1));
 
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   adaptor.init_cli(cli_initialize_);
 }
 

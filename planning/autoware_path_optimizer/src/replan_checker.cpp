@@ -19,6 +19,7 @@
 #include "autoware/universe_utils/geometry/geometry.hpp"
 #include "autoware/universe_utils/ros/update_param.hpp"
 
+#include <memory>
 #include <vector>
 
 namespace autoware::path_optimizer

@@ -27,6 +27,7 @@
 
 #include "boost/lexical_cast.hpp"
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>

@@ -16,6 +16,8 @@
 
 #include <rclcpp/rclcpp.hpp>
 
+#include <vector>
+
 namespace autoware::image_projection_based_fusion
 {
 

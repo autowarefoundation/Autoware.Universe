@@ -14,6 +14,8 @@
 
 #include "autoware/pointcloud_preprocessor/utility/geometry.hpp"
 
+#include <vector>
+
 namespace autoware::pointcloud_preprocessor::utils
 {
 void to_cgal_polygon(const geometry_msgs::msg::Polygon & polygon_in, PolygonCgal & polygon_out)

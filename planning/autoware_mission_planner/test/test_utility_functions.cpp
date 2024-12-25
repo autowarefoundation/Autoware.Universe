@@ -23,6 +23,8 @@
 #include <lanelet2_core/primitives/LineString.h>
 #include <lanelet2_core/primitives/Point.h>
 
+#include <vector>
+
 using autoware::mission_planner::lanelet2::convert_linear_ring_to_polygon;
 using autoware::mission_planner::lanelet2::convertBasicPoint3dToPose;
 using autoware::mission_planner::lanelet2::convertCenterlineToPoints;

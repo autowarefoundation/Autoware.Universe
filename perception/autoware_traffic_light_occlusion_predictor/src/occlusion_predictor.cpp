@@ -16,6 +16,8 @@
 #include "occlusion_predictor.hpp"
 
 #include <algorithm>
+#include <map>
+#include <vector>
 namespace
 {
 

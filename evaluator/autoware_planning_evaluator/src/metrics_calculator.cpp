@@ -16,13 +16,14 @@
 
 #include "autoware/motion_utils/trajectory/trajectory.hpp"
 #include "autoware/planning_evaluator/metrics/deviation_metrics.hpp"
+#include "autoware/planning_evaluator/metrics/metrics_utils.hpp"
 #include "autoware/planning_evaluator/metrics/obstacle_metrics.hpp"
 #include "autoware/planning_evaluator/metrics/stability_metrics.hpp"
 #include "autoware/planning_evaluator/metrics/trajectory_metrics.hpp"
 #include "autoware/universe_utils/geometry/geometry.hpp"
 namespace planning_diagnostics
 {
-std::optional<Stat<double>> MetricsCalculator::calculate(
+std::optional<Accumulator<double>> MetricsCalculator::calculate(
   const Metric metric, const Trajectory & traj) const
 {
   // Functions to calculate trajectory metrics
@@ -49,22 +50,27 @@ std::optional<Stat<double>> MetricsCalculator::calculate(
       return metrics::calcYawDeviation(reference_trajectory_, traj);
     case Metric::velocity_deviation:
       return metrics::calcVelocityDeviation(reference_trajectory_, traj);
+    case Metric::lateral_trajectory_displacement:
+      return metrics::calcLateralTrajectoryDisplacement(previous_trajectory_, traj, ego_pose_);
     case Metric::stability_frechet:
       return metrics::calcFrechetDistance(
-        getLookaheadTrajectory(
-          previous_trajectory_, parameters.trajectory.lookahead.max_dist_m,
+        metrics::utils::get_lookahead_trajectory(
+          previous_trajectory_, ego_pose_, parameters.trajectory.lookahead.max_dist_m,
           parameters.trajectory.lookahead.max_time_s),
-        getLookaheadTrajectory(
-          traj, parameters.trajectory.lookahead.max_dist_m,
+        metrics::utils::get_lookahead_trajectory(
+          traj, ego_pose_, parameters.trajectory.lookahead.max_dist_m,
           parameters.trajectory.lookahead.max_time_s));
     case Metric::stability:
       return metrics::calcLateralDistance(
-        getLookaheadTrajectory(
-          previous_trajectory_, parameters.trajectory.lookahead.max_dist_m,
+        metrics::utils::get_lookahead_trajectory(
+          previous_trajectory_, ego_pose_, parameters.trajectory.lookahead.max_dist_m,
           parameters.trajectory.lookahead.max_time_s),
-        getLookaheadTrajectory(
-          traj, parameters.trajectory.lookahead.max_dist_m,
+        metrics::utils::get_lookahead_trajectory(
+          traj, ego_pose_, parameters.trajectory.lookahead.max_dist_m,
           parameters.trajectory.lookahead.max_time_s));
+    case Metric::trajectory_lateral_displacement:
+      return metrics::calcTrajectoryLateralDisplacement(
+        previous_trajectory_, traj, ego_odometry_, parameters.trajectory.evaluation_time_s);
     case Metric::obstacle_distance:
       return metrics::calcDistanceToObstacle(dynamic_objects_, traj);
     case Metric::obstacle_ttc:
@@ -74,7 +80,7 @@ std::optional<Stat<double>> MetricsCalculator::calculate(
   }
 }
 
-std::optional<Stat<double>> MetricsCalculator::calculate(
+std::optional<Accumulator<double>> MetricsCalculator::calculate(
   const Metric metric, const Pose & base_pose, const Pose & target_pose) const
 {
   // Functions to calculate pose metrics
@@ -105,43 +111,15 @@ void MetricsCalculator::setPredictedObjects(const PredictedObjects & objects)
   dynamic_objects_ = objects;
 }
 
-void MetricsCalculator::setEgoPose(const geometry_msgs::msg::Pose & pose)
+void MetricsCalculator::setEgoPose(const nav_msgs::msg::Odometry & ego_odometry)
 {
-  ego_pose_ = pose;
+  ego_pose_ = ego_odometry.pose.pose;
+  ego_odometry_ = ego_odometry;
 }
 
 Pose MetricsCalculator::getEgoPose()
 {
   return ego_pose_;
-}
-
-Trajectory MetricsCalculator::getLookaheadTrajectory(
-  const Trajectory & traj, const double max_dist_m, const double max_time_s) const
-{
-  if (traj.points.empty()) {
-    return traj;
-  }
-
-  const auto ego_index =
-    autoware::motion_utils::findNearestSegmentIndex(traj.points, ego_pose_.position);
-  Trajectory lookahead_traj;
-  lookahead_traj.header = traj.header;
-  double dist = 0.0;
-  double time = 0.0;
-  auto curr_point_it = std::next(traj.points.begin(), ego_index);
-  auto prev_point_it = curr_point_it;
-  while (curr_point_it != traj.points.end() && dist <= max_dist_m && time <= max_time_s) {
-    lookahead_traj.points.push_back(*curr_point_it);
-    const auto d = autoware::universe_utils::calcDistance2d(
-      prev_point_it->pose.position, curr_point_it->pose.position);
-    dist += d;
-    if (prev_point_it->longitudinal_velocity_mps != 0.0) {
-      time += d / std::abs(prev_point_it->longitudinal_velocity_mps);
-    }
-    prev_point_it = curr_point_it;
-    ++curr_point_it;
-  }
-  return lookahead_traj;
 }
 
 }  // namespace planning_diagnostics

@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -29,6 +30,10 @@ void drawShape(
   cv::Mat & image, const std::vector<ShapeImgParam> & params, int size, const cv::Point & position,
   const cv::Scalar & color, float probability)
 {
+  // skip if the roi position is set as (0,0), which means it is undetected
+  if (position.x == 0 && position.y == 0) {
+    return;
+  }
   // load concatenated shape image
   const auto shape_img = loadShapeImage(params, size);
 
@@ -42,14 +47,13 @@ void drawShape(
   const int fill_rect_h = std::max(shape_img.rows, text_size.height) + 10;
 
   const cv::Point rect_position(position.x, position.y - fill_rect_h);
-
   if (
     rect_position.x < 0 || rect_position.y < 0 || rect_position.x + fill_rect_w > image.cols ||
     position.y > image.rows) {
     // TODO(KhalilSelyan): This error message may flood the terminal logs, so commented out
     // temporarily. Need to consider a better way.
 
-    // std::cerr << "Adjusted position is out of image bounds." << std::endl;
+    std::cerr << "Adjusted position is out of image bounds." << std::endl;
     return;
   }
   cv::Rect rectangle(rect_position.x, rect_position.y, fill_rect_w, fill_rect_h);

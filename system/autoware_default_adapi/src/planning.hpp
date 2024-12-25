@@ -15,10 +15,10 @@
 #ifndef PLANNING_HPP_
 #define PLANNING_HPP_
 
+#include <autoware/adapi_specs/planning.hpp>
 #include <autoware/component_interface_specs/localization.hpp>
 #include <autoware/component_interface_specs/planning.hpp>
 #include <autoware/motion_utils/vehicle/vehicle_state_checker.hpp>
-#include <autoware_ad_api_specs/planning.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <memory>
@@ -38,8 +38,8 @@ public:
 private:
   using VelocityFactorArray = autoware_adapi_v1_msgs::msg::VelocityFactorArray;
   using SteeringFactorArray = autoware_adapi_v1_msgs::msg::SteeringFactorArray;
-  Pub<autoware_ad_api::planning::VelocityFactors> pub_velocity_factors_;
-  Pub<autoware_ad_api::planning::SteeringFactors> pub_steering_factors_;
+  Pub<autoware::adapi_specs::planning::VelocityFactors> pub_velocity_factors_;
+  Pub<autoware::adapi_specs::planning::SteeringFactors> pub_steering_factors_;
   Sub<autoware::component_interface_specs::planning::Trajectory> sub_trajectory_;
   Sub<autoware::component_interface_specs::localization::KinematicState> sub_kinematic_state_;
   std::vector<rclcpp::Subscription<VelocityFactorArray>::SharedPtr> sub_velocity_factors_;

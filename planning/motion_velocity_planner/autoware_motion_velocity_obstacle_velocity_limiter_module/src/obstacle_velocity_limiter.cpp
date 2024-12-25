@@ -23,6 +23,7 @@
 #include <boost/geometry/algorithms/correct.hpp>
 
 #include <algorithm>
+#include <vector>
 
 namespace autoware::motion_velocity_planner::obstacle_velocity_limiter
 {

@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>tier4_map_launch</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>The tier4_map_launch package</description>
   <maintainer email="ryu.yamamoto@tier4.jp">Ryu Yamamoto</maintainer>
   <maintainer email="kento.yabuuchi.2@tier4.jp">Kento Yabuuchi</maintainer>
@@ -18,9 +18,9 @@
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
   <buildtool_depend>autoware_cmake</buildtool_depend>
 
+  <exec_depend>autoware_map_loader</exec_depend>
   <exec_depend>autoware_map_projection_loader</exec_depend>
   <exec_depend>autoware_map_tf_generator</exec_depend>
-  <exec_depend>map_loader</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>autoware_lint_common</test_depend>

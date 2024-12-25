@@ -26,6 +26,7 @@
 #include <lanelet2_core/geometry/Polygon.h>
 
 #include <limits>
+#include <vector>
 
 namespace autoware::behavior_velocity_planner::no_stopping_area
 {
@@ -107,14 +108,13 @@ bool is_stoppable(
   const bool distance_stoppable = stoppable_distance < signed_arc_length;
   const bool slow_velocity = ego_data.current_velocity < 2.0;
   // ego vehicle is high speed and can't stop before stop line -> GO
-  const bool not_stoppable = !distance_stoppable && !slow_velocity;
   // stoppable or not is judged only once
   RCLCPP_DEBUG(
     logger, "stoppable_dist: %lf signed_arc_length: %lf", stoppable_distance, signed_arc_length);
   if (!distance_stoppable && !pass_judge.pass_judged) {
     pass_judge.pass_judged = true;
     // can't stop using maximum brake consider jerk limit
-    if (not_stoppable) {  // TODO(someone): this can be replaced by !slow_velocity, is this correct?
+    if (!slow_velocity) {
       // pass through
       pass_judge.is_stoppable = false;
       RCLCPP_WARN_THROTTLE(

@@ -108,6 +108,8 @@ private:
   rclcpp::TimerBase::SharedPtr timer_;
 
   // publisher and subscriber
+  autoware::universe_utils::InterProcessPollingSubscriber<nav_msgs::msg::Odometry> sub_odometry_{
+    this, "~/input/odometry"};
   autoware::universe_utils::InterProcessPollingSubscriber<sensor_msgs::msg::PointCloud2>
     sub_pointcloud_{this, "~/input/pointcloud", autoware::universe_utils::SingleDepthSensorQoS()};
   autoware::universe_utils::InterProcessPollingSubscriber<PredictedObjects> sub_dynamic_objects_{
@@ -121,6 +123,7 @@ private:
   autoware::vehicle_info_utils::VehicleInfo vehicle_info_;
 
   // data
+  nav_msgs::msg::Odometry::ConstSharedPtr odometry_ptr_;
   sensor_msgs::msg::PointCloud2::ConstSharedPtr pointcloud_ptr_;
   PredictedObjects::ConstSharedPtr object_ptr_;
   OperationModeState::ConstSharedPtr operation_mode_ptr_;

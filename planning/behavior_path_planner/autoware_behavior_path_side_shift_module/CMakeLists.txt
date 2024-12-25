@@ -21,6 +21,21 @@ if(BUILD_TESTING)
   )
 
   target_include_directories(test_${PROJECT_NAME} PRIVATE src)
+
+  ament_add_ros_isolated_gtest(test_${PROJECT_NAME}_utils
+    test/test_side_shift_utils.cpp
+  )
+
+  target_include_directories(test_${PROJECT_NAME}_utils PRIVATE src)
+
+  ament_target_dependencies(test_${PROJECT_NAME}_utils
+    tf2
+    tf2_geometry_msgs
+  )
+
+  target_link_libraries(test_${PROJECT_NAME}_utils
+    ${PROJECT_NAME}
+  )
 endif()
 
 ament_auto_package(INSTALL_TO_SHARE config)

@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_behavior_velocity_run_out_module</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>The autoware_behavior_velocity_run_out_module package</description>
 
   <maintainer email="tomohito.ando@tier4.jp">Tomohito Ando</maintainer>
@@ -21,6 +21,7 @@
 
   <depend>autoware_behavior_velocity_crosswalk_module</depend>
   <depend>autoware_behavior_velocity_planner_common</depend>
+  <depend>autoware_internal_debug_msgs</depend>
   <depend>autoware_motion_utils</depend>
   <depend>autoware_object_recognition_utils</depend>
   <depend>autoware_perception_msgs</depend>
@@ -41,6 +42,7 @@
   <depend>tf2_ros</depend>
   <depend>visualization_msgs</depend>
 
+  <test_depend>ament_cmake_ros</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>autoware_lint_common</test_depend>
 

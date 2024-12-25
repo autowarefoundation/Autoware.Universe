@@ -14,6 +14,10 @@
 
 #include "autoware/behavior_path_planner_common/interface/scene_module_manager_interface.hpp"
 
+#include <memory>
+#include <string>
+#include <vector>
+
 namespace autoware::behavior_path_planner
 {
 void SceneModuleManagerInterface::initInterface(
@@ -57,12 +61,10 @@ void SceneModuleManagerInterface::initInterface(
     pub_drivable_lanes_ = node->create_publisher<MarkerArray>("~/drivable_lanes/" + name_, 20);
     pub_processing_time_ = node->create_publisher<universe_utils::ProcessingTimeDetail>(
       "~/processing_time/" + name_, 20);
-  }
-
-  // init steering factor
-  {
-    steering_factor_interface_ptr_ =
-      std::make_shared<SteeringFactorInterface>(node, utils::convertToSnakeCase(name_));
+    pub_steering_factors_ =
+      node->create_publisher<SteeringFactorArray>("/planning/steering_factor/" + name_, 1);
+    pub_velocity_factors_ =
+      node->create_publisher<VelocityFactorArray>("/planning/velocity_factors/" + name_, 1);
   }
 
   // misc

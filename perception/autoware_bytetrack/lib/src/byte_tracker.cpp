@@ -40,6 +40,8 @@
 
 #include <cstddef>
 #include <fstream>
+#include <iostream>
+#include <vector>
 
 ByteTracker::ByteTracker(
   int track_buffer, float track_thresh, float high_thresh, float match_thresh)

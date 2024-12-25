@@ -89,8 +89,8 @@ private:
 
   auto isStopRequired(
     const bool is_obstacle_found, const bool is_vehicle_stopped, const State & state,
-    const std::optional<rclcpp::Time> & last_obstacle_found_time,
-    const double time_threshold) const -> std::pair<bool, std::optional<rclcpp::Time>>;
+    const std::optional<rclcpp::Time> & last_obstacle_found_time, const double time_threshold) const
+    -> std::pair<bool, std::optional<rclcpp::Time>>;
 
   // ros
   mutable tf2_ros::Buffer tf_buffer_{get_clock()};
@@ -104,7 +104,6 @@ private:
     sub_pointcloud_{this, "~/input/pointcloud", autoware::universe_utils::SingleDepthSensorQoS()};
   autoware::universe_utils::InterProcessPollingSubscriber<PredictedObjects> sub_dynamic_objects_{
     this, "~/input/objects"};
-  rclcpp::Publisher<diagnostic_msgs::msg::DiagnosticStatus>::SharedPtr pub_stop_reason_;
   rclcpp::Publisher<VelocityLimitClearCommand>::SharedPtr pub_clear_velocity_limit_;
   rclcpp::Publisher<VelocityLimit>::SharedPtr pub_velocity_limit_;
   rclcpp::Publisher<tier4_debug_msgs::msg::Float64Stamped>::SharedPtr pub_processing_time_;

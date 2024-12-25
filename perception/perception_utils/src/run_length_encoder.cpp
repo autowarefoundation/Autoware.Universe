@@ -14,6 +14,8 @@
 
 #include "perception_utils/run_length_encoder.hpp"
 
+#include <vector>
+
 namespace perception_utils
 {
 

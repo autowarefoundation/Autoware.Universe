@@ -14,176 +14,167 @@
 
 #include "scene.hpp"
 
-#include <autoware/behavior_velocity_planner_common/utilization/arc_lane_util.hpp>
-#include <autoware/behavior_velocity_planner_common/utilization/util.hpp>
-#include <autoware/motion_utils/trajectory/trajectory.hpp>
-#include <autoware/universe_utils/system/time_keeper.hpp>
+#include "autoware/behavior_velocity_planner_common/utilization/util.hpp"
 
-#include <algorithm>
-#include <vector>
+#include <rclcpp/logging.hpp>
+
+#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+
+#include <optional>
+#include <utility>
 
 namespace autoware::behavior_velocity_planner
 {
-namespace bg = boost::geometry;
 
 StopLineModule::StopLineModule(
-  const int64_t module_id, const size_t lane_id, const lanelet::ConstLineString3d & stop_line,
-  const PlannerParam & planner_param, const rclcpp::Logger logger,
-  const rclcpp::Clock::SharedPtr clock)
+  const int64_t module_id, lanelet::ConstLineString3d stop_line, const PlannerParam & planner_param,
+  const rclcpp::Logger & logger, const rclcpp::Clock::SharedPtr clock)
 : SceneModuleInterface(module_id, logger, clock),
-  lane_id_(lane_id),
-  stop_line_(stop_line),
+  stop_line_(std::move(stop_line)),
+  planner_param_(planner_param),
   state_(State::APPROACH),
   debug_data_()
 {
   velocity_factor_.init(PlanningBehavior::STOP_SIGN);
-  planner_param_ = planner_param;
 }
 
-bool StopLineModule::modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason)
+bool StopLineModule::modifyPathVelocity(PathWithLaneId * path)
 {
-  universe_utils::ScopedTimeTrack st(
-    std::string(__func__) + " (lane_id:=" + std::to_string(module_id_) + ")", *getTimeKeeper());
-  debug_data_ = DebugData();
-  if (path->points.empty()) return true;
-  const auto base_link2front = planner_data_->vehicle_info_.max_longitudinal_offset_m;
-  debug_data_.base_link2front = base_link2front;
-  first_stop_path_point_index_ = static_cast<int>(path->points.size()) - 1;
-  *stop_reason = planning_utils::initializeStopReason(StopReason::STOP_LINE);
+  auto trajectory =
+    trajectory::Trajectory<tier4_planning_msgs::msg::PathPointWithLaneId>::Builder{}.build(
+      path->points);
 
-  const LineString2d stop_line = planning_utils::extendLine(
-    stop_line_[0], stop_line_[1], planner_data_->stop_line_extend_length);
-
-  time_keeper_->start_track("createTargetPoint");
-  // Calculate stop pose and insert index
-  const auto stop_point = arc_lane_utils::createTargetPoint(
-    *path, stop_line, planner_param_.stop_margin,
-    planner_data_->vehicle_info_.max_longitudinal_offset_m);
-  time_keeper_->end_track("createTargetPoint");
-  // If no collision found, do nothing
-  if (!stop_point) {
-    RCLCPP_DEBUG_THROTTLE(logger_, *clock_, 5000 /* ms */, "is no collision");
+  if (!trajectory) {
     return true;
   }
 
-  const auto stop_point_idx = stop_point->first;
-  auto stop_pose = stop_point->second;
+  auto [ego_s, stop_point] =
+    getEgoAndStopPoint(*trajectory, planner_data_->current_odometry->pose, state_);
 
-  /**
-   * @brief : calculate signed arc length consider stop margin from stop line
-   *
-   * |----------------------------|
-   * s---ego----------x--|--------g
-   */
-  time_keeper_->start_track(
-    "calcSegmentIndexFromPointIndex & findEgoSegmentIndex & calcSignedArcLength");
-  const size_t stop_line_seg_idx = planning_utils::calcSegmentIndexFromPointIndex(
-    path->points, stop_pose.position, stop_point_idx);
-  const size_t current_seg_idx = findEgoSegmentIndex(path->points);
-  const double signed_arc_dist_to_stop_point = autoware::motion_utils::calcSignedArcLength(
-    path->points, planner_data_->current_odometry->pose.position, current_seg_idx,
-    stop_pose.position, stop_line_seg_idx);
-  time_keeper_->end_track(
-    "calcSegmentIndexFromPointIndex & findEgoSegmentIndex & calcSignedArcLength");
-  switch (state_) {
-    case State::APPROACH: {
-      // Insert stop pose
-      planning_utils::insertStopPoint(stop_pose.position, stop_line_seg_idx, *path);
-
-      // Update first stop index
-      first_stop_path_point_index_ = static_cast<int>(stop_point_idx);
-      debug_data_.stop_pose = stop_pose;
-
-      // Get stop point and stop factor
-      {
-        tier4_planning_msgs::msg::StopFactor stop_factor;
-        stop_factor.stop_pose = stop_pose;
-        stop_factor.stop_factor_points.push_back(getCenterOfStopLine(stop_line_));
-        planning_utils::appendStopReason(stop_factor, stop_reason);
-        velocity_factor_.set(
-          path->points, planner_data_->current_odometry->pose, stop_pose,
-          VelocityFactor::APPROACHING);
-      }
-
-      // Move to stopped state if stopped
-      if (
-        signed_arc_dist_to_stop_point < planner_param_.hold_stop_margin_distance &&
-        planner_data_->isVehicleStopped()) {
-        RCLCPP_INFO(logger_, "APPROACH -> STOPPED");
-
-        state_ = State::STOPPED;
-        stopped_time_ = std::make_shared<const rclcpp::Time>(clock_->now());
-
-        if (signed_arc_dist_to_stop_point < -planner_param_.hold_stop_margin_distance) {
-          RCLCPP_ERROR(
-            logger_, "Failed to stop near stop line but ego stopped. Change state to STOPPED");
-        }
-      }
-
-      break;
-    }
-
-    case State::STOPPED: {
-      // Change state after vehicle departure
-      const auto stopped_pose = autoware::motion_utils::calcLongitudinalOffsetPose(
-        path->points, planner_data_->current_odometry->pose.position, 0.0);
-
-      if (!stopped_pose) {
-        break;
-      }
-
-      SegmentIndexWithPose ego_pos_on_path;
-      ego_pos_on_path.pose = stopped_pose.value();
-      ego_pos_on_path.index = findEgoSegmentIndex(path->points);
-
-      // Insert stop pose
-      planning_utils::insertStopPoint(ego_pos_on_path.pose.position, ego_pos_on_path.index, *path);
-
-      debug_data_.stop_pose = stop_pose;
-
-      // Get stop point and stop factor
-      {
-        tier4_planning_msgs::msg::StopFactor stop_factor;
-        stop_factor.stop_pose = ego_pos_on_path.pose;
-        stop_factor.stop_factor_points.push_back(getCenterOfStopLine(stop_line_));
-        planning_utils::appendStopReason(stop_factor, stop_reason);
-        velocity_factor_.set(
-          path->points, planner_data_->current_odometry->pose, stop_pose, VelocityFactor::STOPPED);
-      }
-
-      const auto elapsed_time = (clock_->now() - *stopped_time_).seconds();
-
-      if (planner_param_.stop_duration_sec < elapsed_time) {
-        RCLCPP_INFO(logger_, "STOPPED -> START");
-        state_ = State::START;
-      }
-
-      break;
-    }
-
-    case State::START: {
-      // Initialize if vehicle is far from stop_line
-      if (planner_param_.use_initialization_stop_line_state) {
-        if (signed_arc_dist_to_stop_point > planner_param_.hold_stop_margin_distance) {
-          RCLCPP_INFO(logger_, "START -> APPROACH");
-          state_ = State::APPROACH;
-        }
-      }
-
-      break;
-    }
+  if (!stop_point) {
+    return true;
   }
+
+  trajectory->longitudinal_velocity_mps.range(*stop_point, trajectory->length()).set(0.0);
+
+  path->points = trajectory->restore();
+
+  updateVelocityFactor(&velocity_factor_, state_, *stop_point - ego_s);
+
+  updateStateAndStoppedTime(
+    &state_, &stopped_time_, clock_->now(), *stop_point - ego_s, planner_data_->isVehicleStopped());
+
+  geometry_msgs::msg::Pose stop_pose = trajectory->compute(*stop_point).point.pose;
+
+  updateDebugData(&debug_data_, stop_pose, state_);
 
   return true;
 }
 
-geometry_msgs::msg::Point StopLineModule::getCenterOfStopLine(
-  const lanelet::ConstLineString3d & stop_line)
+std::pair<double, std::optional<double>> StopLineModule::getEgoAndStopPoint(
+  const Trajectory & trajectory, const geometry_msgs::msg::Pose & ego_pose,
+  const State & state) const
 {
-  geometry_msgs::msg::Point center_point;
-  center_point.x = (stop_line[0].x() + stop_line[1].x()) / 2.0;
-  center_point.y = (stop_line[0].y() + stop_line[1].y()) / 2.0;
-  center_point.z = (stop_line[0].z() + stop_line[1].z()) / 2.0;
-  return center_point;
+  const double ego_s = trajectory.closest(ego_pose.position);
+  std::optional<double> stop_point_s;
+
+  switch (state) {
+    case State::APPROACH: {
+      const double base_link2front = planner_data_->vehicle_info_.max_longitudinal_offset_m;
+      const LineString2d stop_line = planning_utils::extendLine(
+        stop_line_[0], stop_line_[1], planner_data_->stop_line_extend_length);
+
+      // Calculate intersection with stop line
+      const auto trajectory_stop_line_intersection =
+        trajectory.crossed(stop_line.front(), stop_line.back());
+
+      // If no collision found, do nothing
+      if (!trajectory_stop_line_intersection) {
+        stop_point_s = std::nullopt;
+        break;
+      }
+
+      stop_point_s =
+        *trajectory_stop_line_intersection -
+        (base_link2front + planner_param_.stop_margin);  // consider vehicle length and stop margin
+
+      if (*stop_point_s < 0.0) {
+        stop_point_s = std::nullopt;
+      }
+      break;
+    }
+
+    case State::STOPPED: {
+      stop_point_s = ego_s;
+      break;
+    }
+
+    case State::START: {
+      stop_point_s = std::nullopt;
+      break;
+    }
+  }
+  return {ego_s, stop_point_s};
 }
+
+void StopLineModule::updateStateAndStoppedTime(
+  State * state, std::optional<rclcpp::Time> * stopped_time, const rclcpp::Time & now,
+  const double & distance_to_stop_point, const bool & is_vehicle_stopped) const
+{
+  switch (*state) {
+    case State::APPROACH: {
+      if (distance_to_stop_point < planner_param_.hold_stop_margin_distance && is_vehicle_stopped) {
+        *state = State::STOPPED;
+        *stopped_time = now;
+        RCLCPP_INFO(logger_, "APPROACH -> STOPPED");
+
+        if (distance_to_stop_point < 0.0) {
+          RCLCPP_WARN(logger_, "Vehicle cannot stop before stop line");
+        }
+      }
+      break;
+    }
+    case State::STOPPED: {
+      double stop_duration = (now - **stopped_time).seconds();
+      if (stop_duration > planner_param_.stop_duration_sec) {
+        *state = State::START;
+        stopped_time->reset();
+        RCLCPP_INFO(logger_, "STOPPED -> START");
+      }
+      break;
+    }
+    case State::START: {
+      break;
+    }
+  }
+}
+
+void StopLineModule::updateVelocityFactor(
+  autoware::motion_utils::VelocityFactorInterface * velocity_factor, const State & state,
+  const double & distance_to_stop_point)
+{
+  switch (state) {
+    case State::APPROACH: {
+      velocity_factor->set(distance_to_stop_point, VelocityFactor::APPROACHING);
+      break;
+    }
+    case State::STOPPED: {
+      velocity_factor->set(distance_to_stop_point, VelocityFactor::STOPPED);
+      break;
+    }
+    case State::START:
+      break;
+  }
+}
+
+void StopLineModule::updateDebugData(
+  DebugData * debug_data, const geometry_msgs::msg::Pose & stop_pose, const State & state) const
+{
+  debug_data->base_link2front = planner_data_->vehicle_info_.max_longitudinal_offset_m;
+  debug_data->stop_pose = stop_pose;
+  if (state == State::START) {
+    debug_data->stop_pose = std::nullopt;
+  }
+}
+
 }  // namespace autoware::behavior_velocity_planner

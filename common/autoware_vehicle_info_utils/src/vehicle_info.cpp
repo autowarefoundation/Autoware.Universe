@@ -16,6 +16,8 @@
 
 #include <rclcpp/rclcpp.hpp>
 
+#include <limits>
+
 namespace autoware::vehicle_info_utils
 {
 autoware::universe_utils::LinearRing2d VehicleInfo::createFootprint(const double margin) const
@@ -126,5 +128,16 @@ double VehicleInfo::calcCurvatureFromSteerAngle(const double steer_angle) const
   const double radius = wheel_base_m / std::tan(steer_angle);
   const double curvature = 1.0 / radius;
   return curvature;
+}
+
+double VehicleInfo::calcSteerAngleFromCurvature(const double curvature) const
+{
+  if (std::abs(curvature) < 1e-6) {
+    return 0.0;
+  }
+
+  const double radius = 1.0 / curvature;
+  const double steer_angle = std::atan2(wheel_base_m, radius);
+  return steer_angle;
 }
 }  // namespace autoware::vehicle_info_utils

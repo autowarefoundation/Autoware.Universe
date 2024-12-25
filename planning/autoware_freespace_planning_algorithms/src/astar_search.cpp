@@ -24,6 +24,9 @@
 #include <tf2/utils.h>
 
 #include <limits>
+#include <memory>
+#include <queue>
+#include <utility>
 
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
@@ -48,11 +51,6 @@ double calcReedsSheppDistance(const Pose & p1, const Pose & p2, double radius)
   return rs_space.distance(pose0, pose1);
 }
 
-void setYaw(geometry_msgs::msg::Quaternion * orientation, const double yaw)
-{
-  *orientation = autoware::universe_utils::createQuaternionFromYaw(yaw);
-}
-
 Pose calcRelativePose(const Pose & base_pose, const Pose & pose)
 {
   tf2::Transform tf_transform;
@@ -72,7 +70,34 @@ Pose calcRelativePose(const Pose & base_pose, const Pose & pose)
 AstarSearch::AstarSearch(
   const PlannerCommonParam & planner_common_param, const VehicleShape & collision_vehicle_shape,
   const AstarParam & astar_param)
-: AbstractPlanningAlgorithm(planner_common_param, collision_vehicle_shape),
+: AbstractPlanningAlgorithm(
+    planner_common_param, std::make_shared<rclcpp::Clock>(RCL_ROS_TIME), collision_vehicle_shape),
+  astar_param_(astar_param),
+  goal_node_(nullptr),
+  use_reeds_shepp_(true)
+{
+  steering_resolution_ =
+    collision_vehicle_shape_.max_steering / planner_common_param_.turning_steps;
+  heading_resolution_ = 2.0 * M_PI / planner_common_param_.theta_size;
+
+  const double avg_steering =
+    steering_resolution_ + (collision_vehicle_shape_.max_steering - steering_resolution_) / 2.0;
+  avg_turning_radius_ =
+    kinematic_bicycle_model::getTurningRadius(collision_vehicle_shape_.base_length, avg_steering);
+
+  is_backward_search_ = astar_param_.search_method == "backward";
+
+  min_expansion_dist_ = astar_param_.expansion_distance;
+  max_expansion_dist_ = collision_vehicle_shape_.base_length * base_length_max_expansion_factor_;
+
+  near_goal_dist_ =
+    std::max(astar_param.near_goal_distance, planner_common_param.longitudinal_goal_range);
+}
+
+AstarSearch::AstarSearch(
+  const PlannerCommonParam & planner_common_param, const VehicleShape & collision_vehicle_shape,
+  const AstarParam & astar_param, const rclcpp::Clock::SharedPtr & clock)
+: AbstractPlanningAlgorithm(planner_common_param, clock, collision_vehicle_shape),
   astar_param_(astar_param),
   goal_node_(nullptr),
   use_reeds_shepp_(true)
@@ -363,7 +388,7 @@ double AstarSearch::getExpansionDistance(const AstarNode & current_node) const
 double AstarSearch::getSteeringCost(const int steering_index) const
 {
   return planner_common_param_.curve_weight *
-         (abs(steering_index) / planner_common_param_.turning_steps);
+         (static_cast<double>(abs(steering_index)) / planner_common_param_.turning_steps);
 }
 
 double AstarSearch::getSteeringChangeCost(
@@ -404,7 +429,7 @@ double AstarSearch::getLatDistanceCost(const Pose & pose) const
 void AstarSearch::setPath(const AstarNode & goal_node)
 {
   std_msgs::msg::Header header;
-  header.stamp = rclcpp::Clock(RCL_ROS_TIME).now();
+  header.stamp = clock_->now();
   header.frame_id = costmap_.header.frame_id;
 
   // From the goal node to the start node

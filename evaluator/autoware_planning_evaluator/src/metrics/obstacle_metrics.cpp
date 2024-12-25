@@ -30,9 +30,10 @@ namespace metrics
 using autoware::universe_utils::calcDistance2d;
 using autoware_planning_msgs::msg::TrajectoryPoint;
 
-Stat<double> calcDistanceToObstacle(const PredictedObjects & obstacles, const Trajectory & traj)
+Accumulator<double> calcDistanceToObstacle(
+  const PredictedObjects & obstacles, const Trajectory & traj)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   for (const TrajectoryPoint & p : traj.points) {
     double min_dist = std::numeric_limits<double>::max();
     for (const auto & object : obstacles.objects) {
@@ -45,10 +46,10 @@ Stat<double> calcDistanceToObstacle(const PredictedObjects & obstacles, const Tr
   return stat;
 }
 
-Stat<double> calcTimeToCollision(
+Accumulator<double> calcTimeToCollision(
   const PredictedObjects & obstacles, const Trajectory & traj, const double distance_threshold)
 {
-  Stat<double> stat;
+  Accumulator<double> stat;
   /** TODO(Maxime CLEMENT):
    * this implementation assumes static obstacles and does not work for dynamic obstacles
    */

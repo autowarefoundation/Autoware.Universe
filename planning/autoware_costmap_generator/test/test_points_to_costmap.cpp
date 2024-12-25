@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <autoware_costmap_generator/points_to_costmap.hpp>
+#include <autoware/costmap_generator/utils/points_to_costmap.hpp>
 
 #include <gtest/gtest.h>
+
+#include <string>
 
 namespace autoware::costmap_generator
 {

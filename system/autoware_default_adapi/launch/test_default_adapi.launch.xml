@@ -1,0 +1,5 @@
+<launch>
+  <arg name="vehicle_model" default="sample_vehicle"/>
+  <include file="$(find-pkg-share autoware_global_parameter_loader)/launch/global_params.launch.py"/>
+  <include file="$(find-pkg-share autoware_default_adapi)/launch/default_adapi.launch.py"/>
+</launch>

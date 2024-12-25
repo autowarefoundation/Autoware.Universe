@@ -34,6 +34,7 @@ if(BUILD_TESTING)
   ament_add_ros_isolated_gtest(${PROJECT_NAME}-test
     test/src/test_freespace_planning_algorithms.cpp
   )
+  set_tests_properties(${PROJECT_NAME}-test PROPERTIES TIMEOUT 120)
   target_link_libraries(${PROJECT_NAME}-test
     ${PROJECT_NAME}
   )
@@ -59,6 +60,8 @@ install(PROGRAMS
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 find_package(pybind11_vendor REQUIRED)
 find_package(pybind11 REQUIRED)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-ignored-optimization-argument")
 
 pybind11_add_module(${PROJECT_NAME}_pybind SHARED
   scripts/bind/astar_search_pybind.cpp

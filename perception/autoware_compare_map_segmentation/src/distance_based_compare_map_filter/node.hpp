@@ -28,14 +28,14 @@
 namespace autoware::compare_map_segmentation
 {
 
-using PointCloud = typename pcl::Filter<pcl::PointXYZ>::PointCloud;
-using PointCloudPtr = typename PointCloud::Ptr;
-using PointCloudConstPtr = typename PointCloud::ConstPtr;
+using FilteredPointCloud = typename pcl::Filter<pcl::PointXYZ>::PointCloud;
+using FilteredPointCloudPtr = typename FilteredPointCloud::Ptr;
+using FilteredPointCloudConstPtr = typename FilteredPointCloud::ConstPtr;
 
 class DistanceBasedStaticMapLoader : public VoxelGridStaticMapLoader
 {
 private:
-  PointCloudConstPtr map_ptr_;
+  FilteredPointCloudConstPtr map_ptr_;
   pcl::search::Search<pcl::PointXYZ>::Ptr tree_;
 
 public:

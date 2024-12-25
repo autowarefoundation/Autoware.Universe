@@ -1,0 +1,62 @@
+/**:
+  ros__parameters:
+    simulated_frame_id: "base_link"
+    origin_frame_id: "map"
+    vehicle_model_type: "ACTUATION_CMD_MECHANICAL"
+    initialize_source: "INITIAL_POSE_TOPIC"
+    timer_sampling_time_ms: 25
+    add_measurement_noise: False
+    enable_road_slope_simulation: True
+    vel_lim: 50.0
+    vel_rate_lim: 7.0
+    steer_lim: 1.0
+    steer_rate_lim: 5.0
+    acc_time_delay: 0.1
+    acc_time_constant: 0.1
+    steer_time_delay: 0.0
+    steer_time_constant: 0.001
+    steer_dead_band: 0.0
+    x_stddev: 0.0001 # x standard deviation for dummy covariance in map coordinate
+    y_stddev: 0.0001 # y standard deviation for dummy covariance in map coordinate
+
+    accel_time_delay: 0.1
+    accel_time_constant: 0.1
+    brake_time_delay: 0.1
+    brake_time_constant: 0.1
+    accel_map_path: $(find-pkg-share simple_planning_simulator)/data/actuation_cmd_map/accel_map.csv
+    brake_map_path: $(find-pkg-share simple_planning_simulator)/data/actuation_cmd_map/brake_map.csv
+
+    convert_accel_cmd: true
+    convert_brake_cmd: true
+
+    convert_steer_cmd_method: "vgr"
+    vgr_coef_a: 15.713
+    vgr_coef_b: 0.053
+    vgr_coef_c: 0.042
+    enable_pub_steer: true
+
+    mechanical_params:
+      kp: 386.9151820510161
+      ki: 5.460970982628869
+      kd: 0.03550834077602694
+      ff_gain: 0.03051963576179274
+      angle_limit: 10.0
+      rate_limit: 3.0
+      dead_zone_threshold: 0.00708241866710033
+      poly_a: 0.15251276182076065
+      poly_b: -0.17301900674117585
+      poly_c: 1.5896528355739639
+      poly_d: 0.002300899817071436
+      poly_e: -0.0418928856764797
+      poly_f: 0.18449047960081838
+      poly_g: -0.06320887302605509
+      poly_h: 0.18696796150634806
+      inertia: 25.17844747941984
+      damping: 117.00653795106054
+      stiffness: 0.17526182368541224
+      friction: 0.6596571248682918
+      vgr_coef_a: 2.4181735349544224
+      vgr_coef_b: -0.013434076966833082
+      vgr_coef_c: -0.033963661615283594
+      steering_torque_limit: 30.0
+      torque_delay_time: 0.0007641271506616108

@@ -24,7 +24,6 @@
 #include <rclcpp/rclcpp.hpp>
 
 #include <std_msgs/msg/string.hpp>
-#include <tier4_api_msgs/msg/intersection_status.hpp>
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <functional>

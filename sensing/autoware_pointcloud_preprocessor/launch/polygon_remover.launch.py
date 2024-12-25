@@ -18,7 +18,7 @@ from ament_index_python.packages import get_package_share_directory
 import launch
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
-import yaml
+from launch_ros.parameter_descriptions import ParameterFile
 
 
 def generate_launch_description():
@@ -29,19 +29,11 @@ def generate_launch_description():
         get_package_share_directory("autoware_vehicle_info_utils"), "config/polygon_remover.yaml"
     )
 
-    with open(param_file, "r") as f:
-        polygon_remover_param = yaml.safe_load(f)["/**"]["ros__parameters"]
-
     my_component = ComposableNode(
         package=pkg,
         plugin="autoware::pointcloud_preprocessor::PolygonRemoverComponent",
         name="polygon_remover",
-        parameters=[
-            {
-                "polygon_vertices": polygon_remover_param["polygon_vertices"],
-                "will_visualize": polygon_remover_param["will_visualize"],
-            }
-        ],
+        parameters=[ParameterFile(param_file, allow_substs=True)],
     )
 
     # set container to run all required components in the same process

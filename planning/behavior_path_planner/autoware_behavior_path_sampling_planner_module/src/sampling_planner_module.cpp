@@ -14,6 +14,15 @@
 
 #include "autoware/behavior_path_sampling_planner_module/sampling_planner_module.hpp"
 
+#include <algorithm>
+#include <iostream>
+#include <limits>
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+
 namespace autoware::behavior_path_planner
 {
 using autoware::motion_utils::calcSignedArcLength;
@@ -33,9 +42,8 @@ SamplingPlannerModule::SamplingPlannerModule(
   const std::shared_ptr<SamplingPlannerParameters> & parameters,
   const std::unordered_map<std::string, std::shared_ptr<RTCInterface>> & rtc_interface_ptr_map,
   std::unordered_map<std::string, std::shared_ptr<ObjectsOfInterestMarkerInterface>> &
-    objects_of_interest_marker_interface_ptr_map,
-  std::shared_ptr<SteeringFactorInterface> & steering_factor_interface_ptr)
-: SceneModuleInterface{name, node, rtc_interface_ptr_map, objects_of_interest_marker_interface_ptr_map, steering_factor_interface_ptr},  // NOLINT
+    objects_of_interest_marker_interface_ptr_map)
+: SceneModuleInterface{name, node, rtc_interface_ptr_map, objects_of_interest_marker_interface_ptr_map},  // NOLINT
   vehicle_info_{autoware::vehicle_info_utils::VehicleInfoUtils(node).getVehicleInfo()}
 {
   internal_params_ = std::make_shared<SamplingPlannerInternalParameters>();
@@ -247,7 +255,6 @@ bool SamplingPlannerModule::isReferencePathSafe() const
       sampling_planner_data.left_bound, sampling_planner_data.right_bound);
   }
 
-  std::vector<bool> hard_constraints_results;
   auto transform_to_sampling_path = [](const PlanResult plan) {
     autoware::sampler_common::Path path;
     for (size_t i = 0; i < plan->points.size(); ++i) {
@@ -592,13 +599,11 @@ BehaviorModuleOutput SamplingPlannerModule::plan()
   soft_constraints_input.closest_lanelets_to_goal = {closest_lanelet_to_goal};
 
   debug_data_.footprints.clear();
-  std::vector<std::vector<bool>> hard_constraints_results_full;
   std::vector<std::vector<double>> soft_constraints_results_full;
   for (auto & path : frenet_paths) {
     const auto footprint = autoware::sampler_common::constraints::buildFootprintPoints(
       path, internal_params_->constraints);
-    std::vector<bool> hard_constraints_results =
-      evaluateHardConstraints(path, internal_params_->constraints, footprint, hard_constraints_);
+    evaluateHardConstraints(path, internal_params_->constraints, footprint, hard_constraints_);
     path.constraint_results.valid_curvature = true;
     debug_data_.footprints.push_back(footprint);
     std::vector<double> soft_constraints_results = evaluateSoftConstraints(

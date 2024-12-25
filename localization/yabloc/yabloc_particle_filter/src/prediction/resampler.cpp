@@ -21,6 +21,7 @@
 #include <cmath>
 #include <numeric>
 #include <random>
+#include <vector>
 
 namespace yabloc::modularized_particle_filter
 {

@@ -2,8 +2,8 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Overlapped Judge Parameters",
   "type": "object",
-  "properties": {
-    "ros__parameters": {
+  "definitions": {
+    "overlapped_judge": {
       "type": "object",
       "properties": {
         "distance_threshold_list": {
@@ -11,17 +11,36 @@
           "items": {
             "type": "number"
           },
-          "description": "Distance threshold for each class used in judging overlap."
+          "description": "Distance threshold for each class used in judging overlap.",
+          "default": [9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0]
         },
         "generalized_iou_threshold": {
           "type": "array",
           "items": {
-            "type": "number"
+            "type": "number",
+            "minimum": -1.0,
+            "maximum": 1.0
           },
-          "description": "Generalized IoU threshold for each class."
+          "description": "Generalized IoU threshold for each class.",
+          "default": [-0.1, -0.1, -0.1, -0.6, -0.6, -0.1, -0.1, -0.1]
         }
       },
-      "required": ["distance_threshold_list", "generalized_iou_threshold"]
+      "required": ["distance_threshold_list", "generalized_iou_threshold"],
+      "additionalProperties": false
     }
-  }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/overlapped_judge"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
 }

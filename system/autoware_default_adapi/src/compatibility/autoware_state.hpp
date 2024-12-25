@@ -15,9 +15,9 @@
 #ifndef COMPATIBILITY__AUTOWARE_STATE_HPP_
 #define COMPATIBILITY__AUTOWARE_STATE_HPP_
 
-#include <autoware_ad_api_specs/localization.hpp>
-#include <autoware_ad_api_specs/operation_mode.hpp>
-#include <autoware_ad_api_specs/routing.hpp>
+#include <autoware/adapi_specs/localization.hpp>
+#include <autoware/adapi_specs/operation_mode.hpp>
+#include <autoware/adapi_specs/routing.hpp>
 
 #include <autoware_system_msgs/msg/autoware_state.hpp>
 #include <std_srvs/srv/trigger.hpp>
@@ -40,14 +40,14 @@ private:
   using ModeChangeAvailable = tier4_system_msgs::msg::ModeChangeAvailable;
   rclcpp::TimerBase::SharedPtr timer_;
   // emergency
-  Sub<autoware_ad_api::localization::InitializationState> sub_localization_;
-  Sub<autoware_ad_api::routing::RouteState> sub_routing_;
-  Sub<autoware_ad_api::operation_mode::OperationModeState> sub_operation_mode_;
+  Sub<autoware::adapi_specs::localization::InitializationState> sub_localization_;
+  Sub<autoware::adapi_specs::routing::RouteState> sub_routing_;
+  Sub<autoware::adapi_specs::operation_mode::OperationModeState> sub_operation_mode_;
 
   using AutowareState = autoware_system_msgs::msg::AutowareState;
-  using LocalizationState = autoware_ad_api::localization::InitializationState::Message;
-  using RoutingState = autoware_ad_api::routing::RouteState::Message;
-  using OperationModeState = autoware_ad_api::operation_mode::OperationModeState::Message;
+  using LocalizationState = autoware::adapi_specs::localization::InitializationState::Message;
+  using RoutingState = autoware::adapi_specs::routing::RouteState::Message;
+  using OperationModeState = autoware::adapi_specs::operation_mode::OperationModeState::Message;
   using Trigger = std_srvs::srv::Trigger;
   std::vector<bool> component_states_;
   std::vector<rclcpp::Subscription<ModeChangeAvailable>::SharedPtr> sub_component_states_;

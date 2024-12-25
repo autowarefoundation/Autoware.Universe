@@ -15,7 +15,7 @@
 #ifndef KINEMATIC_EVALUATOR__METRICS__KINEMATIC_METRICS_HPP_
 #define KINEMATIC_EVALUATOR__METRICS__KINEMATIC_METRICS_HPP_
 
-#include "kinematic_evaluator/stat.hpp"
+#include "autoware/universe_utils/math/accumulator.hpp"
 
 #include <nav_msgs/msg/odometry.hpp>
 
@@ -23,6 +23,7 @@ namespace kinematic_diagnostics
 {
 namespace metrics
 {
+using autoware::universe_utils::Accumulator;
 using nav_msgs::msg::Odometry;
 
 /**
@@ -31,7 +32,7 @@ using nav_msgs::msg::Odometry;
  * @param [in] stat_prev input trajectory
  * @return calculated statistics
  */
-Stat<double> updateVelocityStats(const double & value, const Stat<double> stat_prev);
+Accumulator<double> updateVelocityStats(const double & value, const Accumulator<double> stat_prev);
 
 }  // namespace metrics
 }  // namespace kinematic_diagnostics

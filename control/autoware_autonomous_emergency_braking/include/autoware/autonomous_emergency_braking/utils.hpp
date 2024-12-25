@@ -15,9 +15,12 @@
 #ifndef AUTOWARE__AUTONOMOUS_EMERGENCY_BRAKING__UTILS_HPP_
 #define AUTOWARE__AUTONOMOUS_EMERGENCY_BRAKING__UTILS_HPP_
 
+#include "autoware/autonomous_emergency_braking/node.hpp"
+
 #include <autoware/universe_utils/geometry/boost_polygon_utils.hpp>
 
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
+#include <geometry_msgs/msg/detail/point__struct.hpp>
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 
@@ -48,6 +51,26 @@ using autoware_perception_msgs::msg::PredictedObjects;
 using geometry_msgs::msg::Point;
 using geometry_msgs::msg::Pose;
 using geometry_msgs::msg::TransformStamped;
+
+/**
+ * @brief Get the Object data of an obstacle inside the ego path
+ * @param path the ego path
+ * @param front_offset offset from ego baselink to front
+ * @param rear_offset offset from ego baselink to back
+ */
+std::optional<ObjectData> getObjectOnPathData(
+  const std::vector<Pose> & ego_path, const geometry_msgs::msg::Point & obj_position,
+  const rclcpp::Time & stamp, const double path_length, const double path_width,
+  const double path_expansion, const double longitudinal_offset, const double object_speed = 0.0);
+
+/**
+ * @brief Get the longitudinal offset based on vehicle traveling direction
+ * @param path the ego path
+ * @param front_offset offset from ego baselink to front
+ * @param rear_offset offset from ego baselink to back
+ */
+std::optional<double> getLongitudinalOffset(
+  const std::vector<Pose> & path, const double front_offset, const double rear_offset);
 
 /**
  * @brief Apply a transform to a predicted object

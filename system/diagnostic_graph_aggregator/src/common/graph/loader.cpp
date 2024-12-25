@@ -20,7 +20,11 @@
 #include "types.hpp"
 #include "units.hpp"
 
+#include <memory>
+#include <string>
+#include <unordered_map>
 #include <utility>
+#include <vector>
 
 namespace diagnostic_graph_aggregator
 {

@@ -48,6 +48,8 @@ DetectionAreaModuleManager::DetectionAreaModuleManager(rclcpp::Node & node)
     getOrDeclareParameter<double>(node, ns + ".hold_stop_margin_distance");
   planner_param_.distance_to_judge_over_stop_line =
     getOrDeclareParameter<double>(node, ns + ".distance_to_judge_over_stop_line");
+  planner_param_.suppress_pass_judge_when_stopping =
+    getOrDeclareParameter<bool>(node, ns + ".suppress_pass_judge_when_stopping");
 }
 
 void DetectionAreaModuleManager::launchNewModules(

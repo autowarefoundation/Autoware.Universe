@@ -18,14 +18,14 @@
 #include "rclcpp/rclcpp.hpp"
 
 #include <autoware/component_interface_specs/map.hpp>
-#include <component_interface_utils/rclcpp.hpp>
+#include <autoware/component_interface_utils/rclcpp.hpp>
 
 #include <string>
 
 namespace autoware::map_projection_loader
 {
-tier4_map_msgs::msg::MapProjectorInfo load_info_from_yaml(const std::string & filename);
-tier4_map_msgs::msg::MapProjectorInfo load_map_projector_info(
+autoware_map_msgs::msg::MapProjectorInfo load_info_from_yaml(const std::string & filename);
+autoware_map_msgs::msg::MapProjectorInfo load_map_projector_info(
   const std::string & yaml_filename, const std::string & lanelet2_map_filename);
 
 class MapProjectionLoader : public rclcpp::Node
@@ -35,7 +35,7 @@ public:
 
 private:
   using MapProjectorInfo = autoware::component_interface_specs::map::MapProjectorInfo;
-  component_interface_utils::Publisher<MapProjectorInfo>::SharedPtr publisher_;
+  autoware::component_interface_utils::Publisher<MapProjectorInfo>::SharedPtr publisher_;
 };
 }  // namespace autoware::map_projection_loader
 

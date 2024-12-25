@@ -14,6 +14,10 @@
 
 #include "voxel_grid_map_loader.hpp"
 
+#include <memory>
+#include <string>
+#include <vector>
+
 namespace autoware::compare_map_segmentation
 {
 VoxelGridMapLoader::VoxelGridMapLoader(
@@ -59,7 +63,7 @@ bool VoxelGridMapLoader::is_close_to_neighbor_voxels(
 }
 
 bool VoxelGridMapLoader::is_close_to_neighbor_voxels(
-  const pcl::PointXYZ & point, const double distance_threshold, const PointCloudPtr & map,
+  const pcl::PointXYZ & point, const double distance_threshold, const FilteredPointCloudPtr & map,
   VoxelGridPointXYZ & voxel) const
 {
   // check map downsampled pc
@@ -224,7 +228,8 @@ bool VoxelGridMapLoader::is_close_to_neighbor_voxels(
 
 bool VoxelGridMapLoader::is_in_voxel(
   const pcl::PointXYZ & src_point, const pcl::PointXYZ & target_point,
-  const double distance_threshold, const PointCloudPtr & map, VoxelGridPointXYZ & voxel) const
+  const double distance_threshold, const FilteredPointCloudPtr & map,
+  VoxelGridPointXYZ & voxel) const
 {
   int voxel_index =
     voxel.getCentroidIndexAt(voxel.getGridCoordinates(src_point.x, src_point.y, src_point.z));
@@ -311,7 +316,8 @@ VoxelGridDynamicMapLoader::VoxelGridDynamicMapLoader(
     RCLCPP_INFO(logger_, "service not available, waiting again ...");
   }
 
-  const auto period_ns = rclcpp::Rate(timer_interval_ms).period();
+  const auto period_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
+    std::chrono::milliseconds(timer_interval_ms));
   timer_callback_group_ = node->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
   map_update_timer_ = rclcpp::create_timer(
     node, node->get_clock(), period_ns, std::bind(&VoxelGridDynamicMapLoader::timer_callback, this),

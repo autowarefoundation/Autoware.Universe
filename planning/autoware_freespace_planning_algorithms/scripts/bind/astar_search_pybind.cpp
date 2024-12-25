@@ -24,6 +24,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <string>
+#include <vector>
+
 namespace autoware::freespace_planning_algorithms
 {
 struct PlannerWaypointsVector
@@ -171,9 +174,10 @@ PYBIND11_MODULE(autoware_freespace_planning_algorithms_pybind, p)
       .def_readwrite("max_steering", &freespace_planning_algorithms::VehicleShape::max_steering)
       .def_readwrite("base2back", &freespace_planning_algorithms::VehicleShape::base2back);
 
-  py::class_<freespace_planning_algorithms::AbstractPlanningAlgorithm>(
-    p, "AbstractPlanningAlgorithm");
-  py::class_<
+  auto pyAbstractPlanningAlgorithm =
+    py::class_<freespace_planning_algorithms::AbstractPlanningAlgorithm>(
+      p, "AbstractPlanningAlgorithm");
+  auto pyAstarSearchCpp = py::class_<
     freespace_planning_algorithms::AstarSearch,
     freespace_planning_algorithms::AbstractPlanningAlgorithm>(p, "AstarSearchCpp");
   py::class_<AstarSearchPython, freespace_planning_algorithms::AstarSearch>(p, "AstarSearch")

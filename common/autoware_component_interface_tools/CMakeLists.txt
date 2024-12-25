@@ -9,7 +9,7 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
 )
 
 rclcpp_components_register_node(${PROJECT_NAME}
-  PLUGIN "ServiceLogChecker"
+  PLUGIN "autoware::component_interface_tools::ServiceLogChecker"
   EXECUTABLE service_log_checker_node
 )
 

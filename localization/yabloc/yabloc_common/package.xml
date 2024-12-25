@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>yabloc_common</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>YabLoc common library</description>
   <maintainer email="kento.yabuuchi.2@tier4.jp">Kento Yabuuchi</maintainer>
   <maintainer email="masahiro.sakamoto@tier4.jp">Masahiro Sakamoto</maintainer>

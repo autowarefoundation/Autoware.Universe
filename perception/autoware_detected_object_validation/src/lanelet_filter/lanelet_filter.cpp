@@ -30,6 +30,10 @@
 #include <lanelet2_core/geometry/LaneletMap.h>
 #include <lanelet2_core/geometry/Polygon.h>
 
+#include <memory>
+#include <utility>
+#include <vector>
+
 namespace autoware::detected_object_validation
 {
 namespace lanelet_filter
@@ -59,6 +63,9 @@ ObjectLaneletFilterNode::ObjectLaneletFilterNode(const rclcpp::NodeOptions & nod
     declare_parameter<double>("filter_settings.lanelet_direction_filter.velocity_yaw_threshold");
   filter_settings_.lanelet_direction_filter_object_speed_threshold =
     declare_parameter<double>("filter_settings.lanelet_direction_filter.object_speed_threshold");
+  filter_settings_.debug = declare_parameter<bool>("filter_settings.debug");
+  filter_settings_.lanelet_extra_margin =
+    declare_parameter<double>("filter_settings.lanelet_extra_margin");
 
   // Set publisher/subscriber
   map_sub_ = this->create_subscription<autoware_map_msgs::msg::LaneletMapBin>(
@@ -73,6 +80,41 @@ ObjectLaneletFilterNode::ObjectLaneletFilterNode(const rclcpp::NodeOptions & nod
     std::make_unique<autoware::universe_utils::DebugPublisher>(this, "object_lanelet_filter");
   published_time_publisher_ =
     std::make_unique<autoware::universe_utils::PublishedTimePublisher>(this);
+  stop_watch_ptr_ =
+    std::make_unique<autoware::universe_utils::StopWatch<std::chrono::milliseconds>>();
+  if (filter_settings_.debug) {
+    viz_pub_ = this->create_publisher<visualization_msgs::msg::MarkerArray>(
+      "~/debug/marker", rclcpp::QoS{1});
+  }
+}
+
+bool isInPolygon(
+  const geometry_msgs::msg::Pose & current_pose, const lanelet::BasicPolygon2d & polygon,
+  const double radius)
+{
+  constexpr double eps = 1.0e-9;
+  const lanelet::BasicPoint2d p(current_pose.position.x, current_pose.position.y);
+  return boost::geometry::distance(p, polygon) < radius + eps;
+}
+
+LinearRing2d expandPolygon(const LinearRing2d & polygon, double distance)
+{
+  universe_utils::MultiPolygon2d multi_polygon;
+  bg::strategy::buffer::distance_symmetric<double> distance_strategy(distance);
+  bg::strategy::buffer::join_miter join_strategy;
+  bg::strategy::buffer::end_flat end_strategy;
+  bg::strategy::buffer::point_circle circle_strategy;
+  bg::strategy::buffer::side_straight side_strategy;
+
+  bg::buffer(
+    polygon, multi_polygon, distance_strategy, side_strategy, join_strategy, end_strategy,
+    circle_strategy);
+
+  if (multi_polygon.empty()) {
+    return polygon;
+  }
+
+  return multi_polygon.front().outer();
 }
 
 void ObjectLaneletFilterNode::mapCallback(
@@ -86,6 +128,8 @@ void ObjectLaneletFilterNode::mapCallback(
 void ObjectLaneletFilterNode::objectCallback(
   const autoware_perception_msgs::msg::DetectedObjects::ConstSharedPtr input_msg)
 {
+  stop_watch_ptr_->tic("processing_time");
+
   // Guard
   if (object_pub_->get_subscription_count() < 1) return;
 
@@ -116,6 +160,9 @@ void ObjectLaneletFilterNode::objectCallback(
       local_rtree.insert(bbox_and_lanelet);
     }
 
+    if (filter_settings_.debug) {
+      publishDebugMarkers(input_msg->header.stamp, convex_hull, intersected_lanelets_with_bbox);
+    }
     // filtering process
     for (size_t index = 0; index < transformed_objects.objects.size(); ++index) {
       const auto & transformed_object = transformed_objects.objects.at(index);
@@ -135,6 +182,8 @@ void ObjectLaneletFilterNode::objectCallback(
       .count();
   debug_publisher_->publish<tier4_debug_msgs::msg::Float64Stamped>(
     "debug/pipeline_latency_ms", pipeline_latency);
+  debug_publisher_->publish<tier4_debug_msgs::msg::Float64Stamped>(
+    "debug/processing_time_ms", stop_watch_ptr_->toc("processing_time", true));
 }
 
 bool ObjectLaneletFilterNode::filterObject(
@@ -217,6 +266,9 @@ LinearRing2d ObjectLaneletFilterNode::getConvexHull(
   LinearRing2d convex_hull;
   bg::convex_hull(candidate_points, convex_hull);
 
+  if (filter_settings_.lanelet_extra_margin > 0) {
+    return expandPolygon(convex_hull, filter_settings_.lanelet_extra_margin);
+  }
   return convex_hull;
 }
 
@@ -265,17 +317,36 @@ std::vector<BoxAndLanelet> ObjectLaneletFilterNode::getIntersectedLanelets(
        lanelet.attribute(lanelet::AttributeName::Subtype).value() == "road_shoulder")) {
       if (bg::intersects(convex_hull, lanelet.polygon2d().basicPolygon())) {
         // create bbox using boost for making the R-tree in later phase
-        lanelet::BoundingBox2d lanelet_bbox = lanelet::geometry::boundingBox2d(lanelet);
-        Point2d min_corner(lanelet_bbox.min().x(), lanelet_bbox.min().y());
-        Point2d max_corner(lanelet_bbox.max().x(), lanelet_bbox.max().y());
-        Box boost_bbox(min_corner, max_corner);
+        auto polygon = getPolygon(lanelet);
+        Box boost_bbox;
+        bg::envelope(polygon, boost_bbox);
 
-        intersected_lanelets_with_bbox.emplace_back(std::make_pair(boost_bbox, lanelet));
+        intersected_lanelets_with_bbox.emplace_back(
+          std::make_pair(boost_bbox, PolygonAndLanelet{polygon, lanelet}));
       }
     }
   }
 
   return intersected_lanelets_with_bbox;
+}
+
+lanelet::BasicPolygon2d ObjectLaneletFilterNode::getPolygon(const lanelet::ConstLanelet & lanelet)
+{
+  if (filter_settings_.lanelet_extra_margin <= 0) {
+    return lanelet.polygon2d().basicPolygon();
+  }
+
+  auto lanelet_polygon = lanelet.polygon2d().basicPolygon();
+  Polygon2d polygon;
+  bg::assign_points(polygon, lanelet_polygon);
+
+  bg::correct(polygon);
+  auto polygon_result = expandPolygon(polygon.outer(), filter_settings_.lanelet_extra_margin);
+  lanelet::BasicPolygon2d result;
+
+  bg::assign_points(result, polygon_result);
+
+  return result;
 }
 
 bool ObjectLaneletFilterNode::isObjectOverlapLanelets(
@@ -314,7 +385,7 @@ bool ObjectLaneletFilterNode::isObjectOverlapLanelets(
       point2d.position.y = point_transformed.y;
 
       for (const auto & candidate : candidates) {
-        if (lanelet::utils::isInLanelet(point2d, candidate.second, 0.0)) {
+        if (isInPolygon(point2d, candidate.second.polygon, 0.0)) {
           return true;
         }
       }
@@ -334,7 +405,7 @@ bool ObjectLaneletFilterNode::isPolygonOverlapLanelets(
   local_rtree.query(bgi::intersects(bbox_of_convex_hull), std::back_inserter(candidates));
 
   for (const auto & box_and_lanelet : candidates) {
-    if (!bg::disjoint(polygon, box_and_lanelet.second.polygon2d().basicPolygon())) {
+    if (!bg::disjoint(polygon, box_and_lanelet.second.polygon)) {
       return true;
     }
   }
@@ -374,14 +445,14 @@ bool ObjectLaneletFilterNode::isSameDirectionWithLanelets(
   local_rtree.query(bgi::intersects(bbox), std::back_inserter(candidates));
 
   for (const auto & box_and_lanelet : candidates) {
-    const bool is_in_lanelet = lanelet::utils::isInLanelet(
-      object.kinematics.pose_with_covariance.pose, box_and_lanelet.second, 0.0);
+    const bool is_in_lanelet =
+      isInPolygon(object.kinematics.pose_with_covariance.pose, box_and_lanelet.second.polygon, 0.0);
     if (!is_in_lanelet) {
       continue;
     }
 
     const double lane_yaw = lanelet::utils::getLaneletAngle(
-      box_and_lanelet.second, object.kinematics.pose_with_covariance.pose.position);
+      box_and_lanelet.second.lanelet, object.kinematics.pose_with_covariance.pose.position);
     const double delta_yaw = object_velocity_yaw - lane_yaw;
     const double normalized_delta_yaw = autoware::universe_utils::normalizeRadian(delta_yaw);
     const double abs_norm_delta_yaw = std::fabs(normalized_delta_yaw);

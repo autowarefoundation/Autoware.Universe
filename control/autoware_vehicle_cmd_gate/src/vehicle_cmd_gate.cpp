@@ -377,7 +377,7 @@ T VehicleCmdGate::getContinuousTopic(
 
 void VehicleCmdGate::onTimer()
 {
-  stop_watch.tic();
+  autoware::universe_utils::StopWatch<std::chrono::milliseconds> stop_watch;
 
   // Subscriber for auto
   const auto msg_auto_command_turn_indicator = auto_turn_indicator_cmd_sub_.takeData();
@@ -518,6 +518,12 @@ void VehicleCmdGate::onTimer()
     }
     gear_cmd_pub_->publish(gear);
   }
+
+  // ProcessingTime
+  tier4_debug_msgs::msg::Float64Stamped processing_time_msg;
+  processing_time_msg.stamp = get_clock()->now();
+  processing_time_msg.data = stop_watch.toc();
+  processing_time_pub_->publish(processing_time_msg);
 }
 
 void VehicleCmdGate::publishControlCommands(const Commands & commands)
@@ -577,18 +583,12 @@ void VehicleCmdGate::publishControlCommands(const Commands & commands)
   vehicle_cmd_emergency.emergency = (use_emergency_handling_ && is_system_emergency_);
   vehicle_cmd_emergency.stamp = filtered_control.stamp;
 
-  // ProcessingTime
-  tier4_debug_msgs::msg::Float64Stamped processing_time_msg;
-  processing_time_msg.stamp = get_clock()->now();
-  processing_time_msg.data = stop_watch.toc();
-
   // Publish commands
   vehicle_cmd_emergency_pub_->publish(vehicle_cmd_emergency);
   control_cmd_pub_->publish(filtered_control);
   published_time_publisher_->publish_if_subscribed(control_cmd_pub_, filtered_control.stamp);
   adapi_pause_->publish();
   moderate_stop_interface_->publish();
-  processing_time_pub_->publish(processing_time_msg);
 
   // Save ControlCmd to steering angle when disengaged
   prev_control_cmd_ = filtered_control;
@@ -626,18 +626,12 @@ void VehicleCmdGate::publishEmergencyStopControlCommands()
   vehicle_cmd_emergency.stamp = stamp;
   vehicle_cmd_emergency.emergency = true;
 
-  // ProcessingTime
-  tier4_debug_msgs::msg::Float64Stamped processing_time_msg;
-  processing_time_msg.stamp = get_clock()->now();
-  processing_time_msg.data = stop_watch.toc();
-
   // Publish topics
   vehicle_cmd_emergency_pub_->publish(vehicle_cmd_emergency);
   control_cmd_pub_->publish(control_cmd);
   turn_indicator_cmd_pub_->publish(turn_indicator);
   hazard_light_cmd_pub_->publish(hazard_light);
   gear_cmd_pub_->publish(gear);
-  processing_time_pub_->publish(processing_time_msg);
 }
 
 void VehicleCmdGate::publishStatus()
@@ -654,18 +648,12 @@ void VehicleCmdGate::publishStatus()
   external_emergency.stamp = stamp;
   external_emergency.emergency = is_external_emergency_stop_;
 
-  // ProcessingTime
-  tier4_debug_msgs::msg::Float64Stamped processing_time_msg;
-  processing_time_msg.stamp = get_clock()->now();
-  processing_time_msg.data = stop_watch.toc();
-
   gate_mode_pub_->publish(current_gate_mode_);
   engage_pub_->publish(autoware_engage);
   pub_external_emergency_->publish(external_emergency);
   operation_mode_pub_->publish(current_operation_mode_);
   adapi_pause_->publish();
   moderate_stop_interface_->publish();
-  processing_time_pub_->publish(processing_time_msg);
 }
 
 Control VehicleCmdGate::filterControlCommand(const Control & in)

@@ -16,6 +16,10 @@
 
 #include <sensor_msgs/distortion_models.hpp>
 
+#include <algorithm>
+#include <string>
+#include <vector>
+
 namespace autoware::image_projection_based_fusion
 {
 bool checkCameraInfo(const sensor_msgs::msg::CameraInfo & camera_info)
@@ -38,16 +42,6 @@ bool checkCameraInfo(const sensor_msgs::msg::CameraInfo & camera_info)
     return false;
   }
   return true;
-}
-
-Eigen::Vector2d calcRawImageProjectedPoint(
-  const image_geometry::PinholeCameraModel & pinhole_camera_model, const cv::Point3d & point3d)
-{
-  const cv::Point2d rectified_image_point = pinhole_camera_model.project3dToPixel(point3d);
-
-  const cv::Point2d raw_image_point = pinhole_camera_model.unrectifyPoint(rectified_image_point);
-
-  return Eigen::Vector2d(raw_image_point.x, raw_image_point.y);
 }
 
 std::optional<geometry_msgs::msg::TransformStamped> getTransformStamped(
@@ -159,8 +153,10 @@ void updateOutputFusedObjects(
     cluster.data.resize(clusters_data_size.at(i));
     auto & feature_obj = output_objs.at(i);
     if (
-      cluster.data.size() < std::size_t(min_cluster_size * cluster.point_step) ||
-      cluster.data.size() >= std::size_t(max_cluster_size * cluster.point_step)) {
+      cluster.data.size() <
+        static_cast<std::size_t>(min_cluster_size) * static_cast<std::size_t>(cluster.point_step) ||
+      cluster.data.size() >=
+        static_cast<std::size_t>(max_cluster_size) * static_cast<std::size_t>(cluster.point_step)) {
       continue;
     }
 
@@ -169,7 +165,9 @@ void updateOutputFusedObjects(
     sensor_msgs::msg::PointCloud2 refine_cluster;
     closest_cluster(
       cluster, cluster_2d_tolerance, min_cluster_size, camera_orig_point_frame, refine_cluster);
-    if (refine_cluster.data.size() < std::size_t(min_cluster_size * cluster.point_step)) {
+    if (
+      refine_cluster.data.size() <
+      static_cast<std::size_t>(min_cluster_size) * static_cast<std::size_t>(cluster.point_step)) {
       continue;
     }
 

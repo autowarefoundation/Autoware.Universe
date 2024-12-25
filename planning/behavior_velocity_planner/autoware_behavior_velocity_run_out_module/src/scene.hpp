@@ -32,10 +32,10 @@
 
 namespace autoware::behavior_velocity_planner
 {
+using autoware_internal_debug_msgs::msg::Float32Stamped;
 using autoware_perception_msgs::msg::PredictedObjects;
 using run_out_utils::PlannerParam;
 using run_out_utils::PoseWithRange;
-using tier4_debug_msgs::msg::Float32Stamped;
 using tier4_planning_msgs::msg::PathPointWithLaneId;
 using tier4_planning_msgs::msg::PathWithLaneId;
 using BasicPolygons2d = std::vector<lanelet::BasicPolygon2d>;
@@ -49,7 +49,7 @@ public:
     std::unique_ptr<DynamicObstacleCreator> dynamic_obstacle_creator,
     const std::shared_ptr<RunOutDebug> & debug_ptr, const rclcpp::Clock::SharedPtr clock);
 
-  bool modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason) override;
+  bool modifyPathVelocity(PathWithLaneId * path) override;
 
   visualization_msgs::msg::MarkerArray createDebugMarkerArray() override;
   autoware::motion_utils::VirtualWalls createVirtualWalls() override;

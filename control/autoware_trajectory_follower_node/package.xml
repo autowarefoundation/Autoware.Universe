@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_trajectory_follower_node</name>
-  <version>1.0.0</version>
+  <version>0.40.0</version>
   <description>Nodes to follow a trajectory by generating control commands separated into lateral and longitudinal commands</description>
 
   <!-- mpc longitudinal controller -->
@@ -37,11 +37,12 @@
   <exec_depend>ros2launch</exec_depend>
 
   <test_depend>ament_cmake_ros</test_depend>
+  <test_depend>ament_index_cpp</test_depend>
   <test_depend>ament_index_python</test_depend>
   <test_depend>ament_lint_auto</test_depend>
+  <test_depend>autoware_fake_test_node</test_depend>
   <test_depend>autoware_lint_common</test_depend>
   <test_depend>autoware_testing</test_depend>
-  <test_depend>fake_test_node</test_depend>
   <test_depend>ros_testing</test_depend>
 
   <export>

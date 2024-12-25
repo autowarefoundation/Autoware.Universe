@@ -16,6 +16,8 @@
 
 #include <gtest/gtest.h>
 
+#include <vector>
+
 TEST(DetectionClassRemapperTest, MapClasses)
 {
   autoware::lidar_centerpoint::DetectionClassRemapper remapper;

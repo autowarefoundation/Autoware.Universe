@@ -20,8 +20,9 @@
 #include "autoware/behavior_path_planner_common/marker_utils/utils.hpp"
 #include "autoware/behavior_path_planner_common/utils/utils.hpp"
 
-#include <autoware/behavior_path_planner_common/interface/steering_factor_interface.hpp>
 #include <autoware/behavior_path_planner_common/turn_signal_decider.hpp>
+#include <autoware/motion_utils/factor/steering_factor_interface.hpp>
+#include <autoware/motion_utils/factor/velocity_factor_interface.hpp>
 #include <autoware/motion_utils/marker/marker_helper.hpp>
 #include <autoware/motion_utils/trajectory/path_with_lane_id.hpp>
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
@@ -35,13 +36,9 @@
 #include <magic_enum.hpp>
 #include <rclcpp/rclcpp.hpp>
 
-#include <autoware_adapi_v1_msgs/msg/planning_behavior.hpp>
-#include <autoware_adapi_v1_msgs/msg/steering_factor_array.hpp>
+#include <autoware_adapi_v1_msgs/msg/steering_factor.hpp>
 #include <tier4_planning_msgs/msg/avoidance_debug_msg_array.hpp>
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
-#include <tier4_planning_msgs/msg/stop_factor.hpp>
-#include <tier4_planning_msgs/msg/stop_reason.hpp>
-#include <tier4_planning_msgs/msg/stop_reason_array.hpp>
 #include <tier4_rtc_msgs/msg/state.hpp>
 #include <unique_identifier_msgs/msg/uuid.hpp>
 #include <visualization_msgs/msg/detail/marker_array__struct.hpp>
@@ -57,6 +54,8 @@
 
 namespace autoware::behavior_path_planner
 {
+using autoware::motion_utils::SteeringFactorInterface;
+using autoware::motion_utils::VelocityFactorInterface;
 using autoware::objects_of_interest_marker_interface::ColorName;
 using autoware::objects_of_interest_marker_interface::ObjectsOfInterestMarkerInterface;
 using autoware::rtc_interface::RTCInterface;
@@ -64,12 +63,9 @@ using autoware::universe_utils::calcOffsetPose;
 using autoware::universe_utils::generateUUID;
 using autoware_adapi_v1_msgs::msg::PlanningBehavior;
 using autoware_adapi_v1_msgs::msg::SteeringFactor;
-using steering_factor_interface::SteeringFactorInterface;
+using autoware_adapi_v1_msgs::msg::VelocityFactor;
 using tier4_planning_msgs::msg::AvoidanceDebugMsgArray;
 using tier4_planning_msgs::msg::PathWithLaneId;
-using tier4_planning_msgs::msg::StopFactor;
-using tier4_planning_msgs::msg::StopReason;
-using tier4_planning_msgs::msg::StopReasonArray;
 using tier4_rtc_msgs::msg::State;
 using unique_identifier_msgs::msg::UUID;
 using visualization_msgs::msg::MarkerArray;
@@ -90,15 +86,13 @@ public:
     const std::string & name, rclcpp::Node & node,
     std::unordered_map<std::string, std::shared_ptr<RTCInterface>> rtc_interface_ptr_map,
     std::unordered_map<std::string, std::shared_ptr<ObjectsOfInterestMarkerInterface>>
-      objects_of_interest_marker_interface_ptr_map,
-    std::shared_ptr<SteeringFactorInterface> & steering_factor_interface_ptr)
+      objects_of_interest_marker_interface_ptr_map)
   : name_{name},
     logger_{node.get_logger().get_child(name)},
     clock_{node.get_clock()},
     rtc_interface_ptr_map_(std::move(rtc_interface_ptr_map)),
     objects_of_interest_marker_interface_ptr_map_(
       std::move(objects_of_interest_marker_interface_ptr_map)),
-    steering_factor_interface_ptr_{steering_factor_interface_ptr},
     time_keeper_(std::make_shared<universe_utils::TimeKeeper>())
   {
     for (const auto & [module_name, ptr] : rtc_interface_ptr_map_) {
@@ -189,9 +183,8 @@ public:
     clearWaitingApproval();
     unlockNewModuleLaunch();
     unlockOutputPath();
-    steering_factor_interface_ptr_->clearSteeringFactors();
 
-    stop_reason_ = StopReason();
+    reset_factor();
 
     processOnExit();
   }
@@ -203,14 +196,6 @@ public:
         ptr->publishMarkerArray();
       }
     }
-  }
-
-  void publishSteeringFactor()
-  {
-    if (!steering_factor_interface_ptr_) {
-      return;
-    }
-    steering_factor_interface_ptr_->publishSteeringFactor(clock_->now());
   }
 
   void lockRTCCommand()
@@ -273,38 +258,52 @@ public:
 
   ModuleStatus getCurrentStatus() const { return current_state_; }
 
-  StopReason getStopReason() const { return stop_reason_; }
+  void reset_factor()
+  {
+    steering_factor_interface_.reset();
+    velocity_factor_interface_.reset();
+  }
+
+  auto get_steering_factor() const -> SteeringFactor { return steering_factor_interface_.get(); }
+
+  auto get_velocity_factor() const -> VelocityFactor { return velocity_factor_interface_.get(); }
 
   std::string name() const { return name_; }
 
-  std::optional<Pose> getStopPose() const
+  PoseWithDetailOpt getStopPose() const
   {
     if (!stop_pose_) {
       return {};
     }
 
     const auto & base_link2front = planner_data_->parameters.base_link2front;
-    return calcOffsetPose(stop_pose_.value(), base_link2front, 0.0, 0.0);
+    return PoseWithDetail(
+      calcOffsetPose(stop_pose_.value().pose, base_link2front, 0.0, 0.0),
+      stop_pose_.value().detail);
   }
 
-  std::optional<Pose> getSlowPose() const
+  PoseWithDetailOpt getSlowPose() const
   {
     if (!slow_pose_) {
       return {};
     }
 
     const auto & base_link2front = planner_data_->parameters.base_link2front;
-    return calcOffsetPose(slow_pose_.value(), base_link2front, 0.0, 0.0);
+    return PoseWithDetail(
+      calcOffsetPose(slow_pose_.value().pose, base_link2front, 0.0, 0.0),
+      slow_pose_.value().detail);
   }
 
-  std::optional<Pose> getDeadPose() const
+  PoseWithDetailOpt getDeadPose() const
   {
     if (!dead_pose_) {
       return {};
     }
 
     const auto & base_link2front = planner_data_->parameters.base_link2front;
-    return calcOffsetPose(dead_pose_.value(), base_link2front, 0.0, 0.0);
+    return PoseWithDetail(
+      calcOffsetPose(dead_pose_.value().pose, base_link2front, 0.0, 0.0),
+      dead_pose_.value().detail);
   }
 
   void resetWallPoses() const
@@ -443,8 +442,6 @@ private:
 
   BehaviorModuleOutput previous_module_output_;
 
-  StopReason stop_reason_;
-
   bool is_locked_new_module_launch_{false};
 
   bool is_locked_output_path_{false};
@@ -561,21 +558,20 @@ protected:
     }
   }
 
-  void setStopReason(const std::string & stop_reason, const PathWithLaneId & path)
+  void setVelocityFactor(const PathWithLaneId & path)
   {
-    stop_reason_.reason = stop_reason;
-    stop_reason_.stop_factors.clear();
-
-    if (!stop_pose_) {
-      stop_reason_.reason = "";
+    if (stop_pose_.has_value()) {
+      velocity_factor_interface_.set(
+        path.points, getEgoPose(), stop_pose_.value().pose, VelocityFactor::APPROACHING, "stop");
       return;
     }
 
-    StopFactor stop_factor;
-    stop_factor.stop_pose = stop_pose_.value();
-    stop_factor.dist_to_stop_pose = autoware::motion_utils::calcSignedArcLength(
-      path.points, getEgoPosition(), stop_pose_.value().position);
-    stop_reason_.stop_factors.push_back(stop_factor);
+    if (!slow_pose_.has_value()) {
+      return;
+    }
+
+    velocity_factor_interface_.set(
+      path.points, getEgoPose(), slow_pose_.value().pose, VelocityFactor::APPROACHING, "slow down");
   }
 
   void setDrivableLanes(const std::vector<DrivableLanes> & drivable_lanes);
@@ -631,13 +627,15 @@ protected:
   std::unordered_map<std::string, std::shared_ptr<ObjectsOfInterestMarkerInterface>>
     objects_of_interest_marker_interface_ptr_map_;
 
-  std::shared_ptr<SteeringFactorInterface> steering_factor_interface_ptr_;
+  mutable SteeringFactorInterface steering_factor_interface_;
 
-  mutable std::optional<Pose> stop_pose_{std::nullopt};
+  mutable VelocityFactorInterface velocity_factor_interface_;
 
-  mutable std::optional<Pose> slow_pose_{std::nullopt};
+  mutable PoseWithDetailOpt stop_pose_{std::nullopt};
 
-  mutable std::optional<Pose> dead_pose_{std::nullopt};
+  mutable PoseWithDetailOpt slow_pose_{std::nullopt};
+
+  mutable PoseWithDetailOpt dead_pose_{std::nullopt};
 
   mutable MarkerArray info_marker_;
 

@@ -15,7 +15,7 @@
 #ifndef TRAJECTORY_FOLLOWER_TEST_UTILS_HPP_
 #define TRAJECTORY_FOLLOWER_TEST_UTILS_HPP_
 
-#include "fake_test_node/fake_test_node.hpp"
+#include "autoware/fake_test_node/fake_test_node.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp/time.hpp"
 #include "tf2_ros/static_transform_broadcaster.h"
@@ -27,7 +27,7 @@
 
 namespace test_utils
 {
-using FakeNodeFixture = autoware::tools::testing::FakeTestNode;
+using FakeNodeFixture = autoware::fake_test_node::FakeTestNode;
 
 inline void waitForMessage(
   const std::shared_ptr<rclcpp::Node> & node, FakeNodeFixture * fixture, const bool & received_flag,

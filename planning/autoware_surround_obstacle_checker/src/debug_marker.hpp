@@ -22,7 +22,6 @@
 #include <autoware_adapi_v1_msgs/msg/velocity_factor_array.hpp>
 #include <geometry_msgs/msg/polygon_stamped.hpp>
 #include <geometry_msgs/msg/pose.hpp>
-#include <tier4_planning_msgs/msg/stop_reason_array.hpp>
 #include <visualization_msgs/msg/marker.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
@@ -39,9 +38,6 @@ using autoware_adapi_v1_msgs::msg::PlanningBehavior;
 using autoware_adapi_v1_msgs::msg::VelocityFactor;
 using autoware_adapi_v1_msgs::msg::VelocityFactorArray;
 using geometry_msgs::msg::PolygonStamped;
-using tier4_planning_msgs::msg::StopFactor;
-using tier4_planning_msgs::msg::StopReason;
-using tier4_planning_msgs::msg::StopReasonArray;
 using visualization_msgs::msg::Marker;
 using visualization_msgs::msg::MarkerArray;
 
@@ -56,7 +52,7 @@ class SurroundObstacleCheckerDebugNode
 {
 public:
   explicit SurroundObstacleCheckerDebugNode(
-    const autoware::vehicle_info_utils::VehicleInfo & vehicle_info, const double base_link2front,
+    const autoware::vehicle_info_utils::VehicleInfo & vehicle_info,
     const std::string & object_label, const double & surround_check_front_distance,
     const double & surround_check_side_distance, const double & surround_check_back_distance,
     const double & surround_check_hysteresis_distance, const geometry_msgs::msg::Pose & self_pose,
@@ -69,7 +65,6 @@ public:
 
 private:
   rclcpp::Publisher<MarkerArray>::SharedPtr debug_viz_pub_;
-  rclcpp::Publisher<StopReasonArray>::SharedPtr stop_reason_pub_;
   rclcpp::Publisher<VelocityFactorArray>::SharedPtr velocity_factor_pub_;
 
   rclcpp::Publisher<PolygonStamped>::SharedPtr vehicle_footprint_pub_;
@@ -77,7 +72,6 @@ private:
   rclcpp::Publisher<PolygonStamped>::SharedPtr vehicle_footprint_recover_offset_pub_;
 
   autoware::vehicle_info_utils::VehicleInfo vehicle_info_;
-  double base_link2front_;
   std::string object_label_;
   double surround_check_front_distance_;
   double surround_check_side_distance_;
@@ -86,7 +80,6 @@ private:
   geometry_msgs::msg::Pose self_pose_;
 
   MarkerArray makeVisualizationMarker();
-  StopReasonArray makeStopReasonArray();
   VelocityFactorArray makeVelocityFactorArray();
 
   PolygonStamped boostPolygonToPolygonStamped(const Polygon2d & boost_polygon, const double & z);

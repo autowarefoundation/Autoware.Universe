@@ -14,6 +14,7 @@
 
 /*
  *    Representation
+ * k      : reference curvature (input)
  * e      : lateral error
  * th     : heading angle error
  * steer  : steering angle
@@ -32,10 +33,12 @@
  * dx3/dt = -(x3 - u) / tau
  *
  *    Linearized model around reference point (v = v_r, th = th_r, steer = steer_r)
- *         [0,  vr,                   0]       [    0]       [                           0]
- * dx/dt = [0,   0, vr/W/cos(steer_r)^2] * x + [    0] * u + [-vr*steer_r/W/cos(steer_r)^2]
- *         [0,   0,               1/tau]       [1/tau]       [                           0]
+ *         [0,  vr,       0]       [    0]       [                    0]
+ * dx/dt = [0,   0,       B] * x + [    0] * u + [-vr*k + A - B*steer_r]
+ *         [0,   0,  -1/tau]       [1/tau]       [                    0]
  *
+ * where A = vr*tan(steer_r)/W
+ *       B = vr/(W*cos(steer_r)^2) (partial derivative of A with respect to steer_r)
  */
 
 #ifndef AUTOWARE__MPC_LATERAL_CONTROLLER__VEHICLE_MODEL__VEHICLE_MODEL_BICYCLE_KINEMATICS_HPP_

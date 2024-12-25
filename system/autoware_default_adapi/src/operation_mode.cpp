@@ -26,7 +26,7 @@ using ServiceResponse = autoware_adapi_v1_msgs::srv::ChangeOperationMode::Respon
 OperationModeNode::OperationModeNode(const rclcpp::NodeOptions & options)
 : Node("operation_mode", options)
 {
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   group_cli_ = create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
   adaptor.init_sub(sub_state_, this, &OperationModeNode::on_state);
   adaptor.init_pub(pub_state_);
@@ -70,13 +70,13 @@ void OperationModeNode::change_mode(
       get_logger(),
       "The target mode is not available. Please check the cause with "
       "rqt_diagnostics_graph_monitor");
-    throw component_interface_utils::ServiceException(
+    throw autoware::component_interface_utils::ServiceException(
       ServiceResponse::ERROR_NOT_AVAILABLE,
       "The target mode is not available. Please check the diagnostics.");
   }
   const auto req = std::make_shared<OperationModeRequest>();
   req->mode = mode;
-  component_interface_utils::status::copy(cli_mode_->call(req), res);  // NOLINT
+  autoware::component_interface_utils::status::copy(cli_mode_->call(req), res);  // NOLINT
 }
 
 void OperationModeNode::on_change_to_stop(
@@ -112,12 +112,12 @@ void OperationModeNode::on_enable_autoware_control(
   const EnableAutowareControl::Service::Response::SharedPtr res)
 {
   if (!mode_available_[curr_state_.mode]) {
-    throw component_interface_utils::ServiceException(
+    throw autoware::component_interface_utils::ServiceException(
       ServiceResponse::ERROR_NOT_AVAILABLE, "The mode change is blocked by the system.");
   }
   const auto req = std::make_shared<AutowareControlRequest>();
   req->autoware_control = true;
-  component_interface_utils::status::copy(cli_control_->call(req), res);  // NOLINT
+  autoware::component_interface_utils::status::copy(cli_control_->call(req), res);  // NOLINT
 }
 
 void OperationModeNode::on_disable_autoware_control(
@@ -126,7 +126,7 @@ void OperationModeNode::on_disable_autoware_control(
 {
   const auto req = std::make_shared<AutowareControlRequest>();
   req->autoware_control = false;
-  component_interface_utils::status::copy(cli_control_->call(req), res);  // NOLINT
+  autoware::component_interface_utils::status::copy(cli_control_->call(req), res);  // NOLINT
 }
 
 void OperationModeNode::on_state(const OperationModeState::Message::ConstSharedPtr msg)

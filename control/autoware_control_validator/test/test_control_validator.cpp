@@ -24,6 +24,7 @@
 #include <gtest/gtest.h>
 #include <tf2/LinearMath/Quaternion.h>
 
+#include <memory>
 #include <tuple>
 
 using autoware_planning_msgs::msg::Trajectory;

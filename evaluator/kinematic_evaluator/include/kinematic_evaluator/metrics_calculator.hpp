@@ -15,15 +15,16 @@
 #ifndef KINEMATIC_EVALUATOR__METRICS_CALCULATOR_HPP_
 #define KINEMATIC_EVALUATOR__METRICS_CALCULATOR_HPP_
 
+#include "autoware/universe_utils/math/accumulator.hpp"
 #include "kinematic_evaluator/metrics/metric.hpp"
 #include "kinematic_evaluator/parameters.hpp"
-#include "kinematic_evaluator/stat.hpp"
 
 #include "geometry_msgs/msg/pose.hpp"
 #include <nav_msgs/msg/odometry.hpp>
 
 namespace kinematic_diagnostics
 {
+using autoware::universe_utils::Accumulator;
 using nav_msgs::msg::Odometry;
 
 class MetricsCalculator
@@ -39,7 +40,7 @@ public:
    * @param [in] odom Odometry
    * @return string describing the requested metric
    */
-  Stat<double> calculate(const Metric metric, const Odometry & odom) const;
+  Accumulator<double> calculate(const Metric metric, const Odometry & odom) const;
 
   /**
    * @brief update Metrics
@@ -47,8 +48,8 @@ public:
    * @param [in] odom Odometry
    * @return string describing the requested metric
    */
-  Stat<double> updateStat(
-    const Metric metric, const Odometry & odom, const Stat<double> stat_prev) const;
+  Accumulator<double> updateStat(
+    const Metric metric, const Odometry & odom, const Accumulator<double> stat_prev) const;
 };  // class MetricsCalculator
 
 }  // namespace kinematic_diagnostics

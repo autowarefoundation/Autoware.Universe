@@ -14,7 +14,10 @@
 
 #include <autoware/behavior_path_planner_common/utils/traffic_light_utils.hpp>
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
-#include <traffic_light_utils/traffic_light_utils.hpp>
+#include <autoware/traffic_light_utils/traffic_light_utils.hpp>
+
+#include <limits>
+#include <memory>
 
 namespace autoware::behavior_path_planner::utils::traffic_light
 {
@@ -91,18 +94,18 @@ std::optional<double> calcDistanceToRedTrafficLight(
         continue;
       }
 
-      if (!traffic_light_utils::isTrafficSignalStop(
+      if (!autoware::traffic_light_utils::isTrafficSignalStop(
             lanelet, traffic_signal_stamped.value().signal)) {
         continue;
       }
 
       const auto & ego_pos = planner_data->self_odometry->pose.pose.position;
-      lanelet::ConstLineString3d stop_line = *(element->stopLine());
-      if (!stop_line.empty()) return std::nullopt;
-      const auto x = 0.5 * (stop_line.front().x() + stop_line.back().x());
-      const auto y = 0.5 * (stop_line.front().y() + stop_line.back().y());
-      const auto z = 0.5 * (stop_line.front().z() + stop_line.back().z());
+      const auto & stop_line = element->stopLine();
+      if (!stop_line || stop_line->empty()) return std::nullopt;
 
+      const auto x = 0.5 * (stop_line->front().x() + stop_line->back().x());
+      const auto y = 0.5 * (stop_line->front().y() + stop_line->back().y());
+      const auto z = 0.5 * (stop_line->front().z() + stop_line->back().z());
       return calcSignedArcLength(
         path.points, ego_pos, autoware::universe_utils::createPoint(x, y, z));
     }
@@ -130,7 +133,7 @@ bool isStoppedAtRedTrafficLightWithinDistance(
     return false;
   }
 
-  return (distance_to_red_traffic_light < distance_threshold);
+  return (distance_to_red_traffic_light.value() < distance_threshold);
 }
 
 bool isTrafficSignalStop(
@@ -143,7 +146,7 @@ bool isTrafficSignalStop(
         continue;
       }
 
-      if (traffic_light_utils::isTrafficSignalStop(
+      if (autoware::traffic_light_utils::isTrafficSignalStop(
             lanelet, traffic_signal_stamped.value().signal)) {
         return true;
       }

@@ -159,7 +159,7 @@ std::vector<OutOfLanePoint> calculate_out_of_lane_points(const EgoData & ego_dat
     const auto & footprint = ego_data.trajectory_footprints[i];
     OutOfLanePoint p =
       calculate_out_of_lane_point(footprint, ego_data.out_lanelets, ego_data.out_lanelets_rtree);
-    p.trajectory_index = ego_data.first_trajectory_idx + i;
+    p.trajectory_index = i;
     if (!p.overlapped_lanelets.empty()) {
       out_of_lane_points.push_back(p);
     }

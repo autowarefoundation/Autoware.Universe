@@ -16,7 +16,7 @@
 #define MODERATE_STOP_INTERFACE_HPP_
 
 #include <autoware/component_interface_specs/control.hpp>
-#include <component_interface_utils/rclcpp.hpp>
+#include <autoware/component_interface_utils/rclcpp.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <string>
@@ -43,8 +43,8 @@ private:
   std::optional<std::unordered_map<std::string, bool>> prev_stop_map_;
 
   rclcpp::Node * node_;
-  component_interface_utils::Service<SetStop>::SharedPtr srv_set_stop_;
-  component_interface_utils::Publisher<IsStopped>::SharedPtr pub_is_stopped_;
+  autoware::component_interface_utils::Service<SetStop>::SharedPtr srv_set_stop_;
+  autoware::component_interface_utils::Publisher<IsStopped>::SharedPtr pub_is_stopped_;
 
   void on_stop_request(
     const SetStop::Service::Request::SharedPtr req,

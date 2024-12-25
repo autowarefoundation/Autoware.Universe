@@ -97,6 +97,7 @@ struct StartPlannerDebugData
 
 struct StartPlannerParameters
 {
+  static StartPlannerParameters init(rclcpp::Node & node);
   double th_arrived_distance{0.0};
   double th_stopped_velocity{0.0};
   double th_stopped_time{0.0};

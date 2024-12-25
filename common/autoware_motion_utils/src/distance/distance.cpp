@@ -14,6 +14,8 @@
 
 #include "autoware/motion_utils/distance/distance.hpp"
 
+#include <tuple>
+
 namespace autoware::motion_utils
 {
 namespace

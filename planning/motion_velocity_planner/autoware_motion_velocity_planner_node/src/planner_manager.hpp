@@ -23,9 +23,9 @@
 #include <autoware_map_msgs/msg/lanelet_map_bin.hpp>
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <autoware_planning_msgs/msg/trajectory.hpp>
-#include <diagnostic_msgs/msg/diagnostic_array.hpp>
-#include <diagnostic_msgs/msg/diagnostic_status.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
+#include <tier4_metric_msgs/msg/metric.hpp>
+#include <tier4_metric_msgs/msg/metric_array.hpp>
 
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_routing/RoutingGraph.h>
@@ -36,8 +36,8 @@
 #include <string>
 #include <vector>
 
-using DiagnosticStatus = diagnostic_msgs::msg::DiagnosticStatus;
-using DiagnosticArray = diagnostic_msgs::msg::DiagnosticArray;
+using Metric = tier4_metric_msgs::msg::Metric;
+using MetricArray = tier4_metric_msgs::msg::MetricArray;
 
 namespace autoware::motion_velocity_planner
 {
@@ -52,14 +52,14 @@ public:
     const std::vector<autoware_planning_msgs::msg::TrajectoryPoint> & ego_trajectory_points,
     const std::shared_ptr<const PlannerData> planner_data);
 
-  // Diagnostic
-  std::shared_ptr<DiagnosticStatus> make_diagnostic(
-    const std::string & module_name, const std::string & reason, const bool is_decided = true);
-  std::shared_ptr<DiagnosticArray> get_diagnostics(const rclcpp::Time & current_time) const;
-  void clear_diagnostics() { diagnostics_.clear(); }
+  // Metrics
+  std::shared_ptr<Metric> make_decision_metric(
+    const std::string & module_name, const std::string & reason);
+  std::shared_ptr<MetricArray> get_metrics(const rclcpp::Time & current_time) const;
+  void clear_metrics() { metrics_.clear(); }
 
 private:
-  std::vector<std::shared_ptr<DiagnosticStatus>> diagnostics_;
+  std::vector<std::shared_ptr<Metric>> metrics_;
   pluginlib::ClassLoader<PluginModuleInterface> plugin_loader_;
   std::vector<std::shared_ptr<PluginModuleInterface>> loaded_plugins_;
 };

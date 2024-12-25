@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_path_smoother</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>The autoware_path_smoother package</description>
   <maintainer email="takayuki.murooka@tier4.jp">Takayuki Murooka</maintainer>
   <maintainer email="maxime.clement@tier4.jp">Maxime CLEMENT</maintainer>
@@ -14,6 +14,7 @@
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
   <buildtool_depend>autoware_cmake</buildtool_depend>
 
+  <depend>autoware_internal_debug_msgs</depend>
   <depend>autoware_interpolation</depend>
   <depend>autoware_motion_utils</depend>
   <depend>autoware_osqp_interface</depend>
@@ -31,9 +32,9 @@
   <test_depend>ament_cmake_ros</test_depend>
   <test_depend>ament_index_python</test_depend>
   <test_depend>ament_lint_auto</test_depend>
+  <test_depend>autoware_fake_test_node</test_depend>
   <test_depend>autoware_lint_common</test_depend>
   <test_depend>autoware_testing</test_depend>
-  <test_depend>fake_test_node</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

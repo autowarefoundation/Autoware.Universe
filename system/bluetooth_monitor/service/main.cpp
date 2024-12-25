@@ -20,6 +20,8 @@
 #include <getopt.h>
 #include <syslog.h>
 
+#include <cstdio>
+
 /**
  * @brief print usage
  */

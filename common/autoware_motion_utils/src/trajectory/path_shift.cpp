@@ -16,6 +16,9 @@
 
 #include "autoware/motion_utils/trajectory/trajectory.hpp"
 
+#include <algorithm>
+#include <string>
+
 namespace autoware::motion_utils
 {
 double calc_feasible_velocity_from_jerk(

@@ -27,7 +27,9 @@
 #include <tf2/utils.h>
 
 #include <algorithm>
+#include <memory>
 #include <optional>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -329,6 +331,8 @@ std::vector<double> spline_two_points(
 std::vector<Pose> interpolatePose(
   const Pose & start_pose, const Pose & end_pose, const double resample_interval)
 {
+  using autoware::universe_utils::calcAzimuthAngle;
+
   std::vector<Pose> interpolated_poses{};  // output
 
   const double distance =
@@ -351,12 +355,19 @@ std::vector<Pose> interpolatePose(
     std::sin(tf2::getYaw(end_pose.orientation)), new_s);
   for (size_t i = 0; i < interpolated_x.size(); ++i) {
     Pose pose{};
-    pose = autoware::universe_utils::calcInterpolatedPose(
-      end_pose, start_pose, (distance - new_s.at(i)) / distance);
     pose.position.x = interpolated_x.at(i);
     pose.position.y = interpolated_y.at(i);
     pose.position.z = end_pose.position.z;
     interpolated_poses.push_back(pose);
+  }
+
+  // insert orientation
+  for (size_t i = 0; i < interpolated_poses.size(); ++i) {
+    const double yaw = calcAzimuthAngle(
+      interpolated_poses.at(i).position, i < interpolated_poses.size() - 1
+                                           ? interpolated_poses.at(i + 1).position
+                                           : end_pose.position);
+    interpolated_poses.at(i).orientation = autoware::universe_utils::createQuaternionFromYaw(yaw);
   }
 
   return interpolated_poses;

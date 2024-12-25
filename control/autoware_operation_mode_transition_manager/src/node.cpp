@@ -14,7 +14,9 @@
 
 #include "node.hpp"
 
-#include <component_interface_utils/rclcpp/exceptions.hpp>
+#include <autoware/component_interface_utils/rclcpp/exceptions.hpp>
+
+#include <memory>
 
 namespace autoware::operation_mode_transition_manager
 {
@@ -27,7 +29,7 @@ OperationModeTransitionManager::OperationModeTransitionManager(const rclcpp::Nod
 
   // component interface
   {
-    const auto node = component_interface_utils::NodeAdaptor(this);
+    const auto node = autoware::component_interface_utils::NodeAdaptor(this);
     node.init_srv(
       srv_autoware_control_, this, &OperationModeTransitionManager::onChangeAutowareControl);
     node.init_srv(
@@ -90,7 +92,7 @@ void OperationModeTransitionManager::onChangeOperationMode(
 {
   const auto mode = toEnum(*request);
   if (!mode) {
-    throw component_interface_utils::ParameterError("The operation mode is invalid.");
+    throw autoware::component_interface_utils::ParameterError("The operation mode is invalid.");
   }
   changeOperationMode(mode.value());
   response->status.success = true;
@@ -121,23 +123,25 @@ void OperationModeTransitionManager::changeOperationMode(std::optional<Operation
   const bool request_control = request_mode ? false : true;
 
   if (current_mode_ == request_mode) {
-    throw component_interface_utils::NoEffectWarning("The mode is the same as the current.");
+    throw autoware::component_interface_utils::NoEffectWarning(
+      "The mode is the same as the current.");
   }
 
   if (current_control && request_control) {
-    throw component_interface_utils::NoEffectWarning("Autoware already controls the vehicle.");
+    throw autoware::component_interface_utils::NoEffectWarning(
+      "Autoware already controls the vehicle.");
   }
 
   // TODO(Takagi, Isamu): Consider mode change request during transition.
   if (transition_ && request_mode != OperationMode::STOP) {
-    throw component_interface_utils::ServiceException(
+    throw autoware::component_interface_utils::ServiceException(
       ServiceResponse::ERROR_IN_TRANSITION, "The mode transition is in progress.");
   }
 
   // Enter transition mode if the vehicle is being or will be controlled by Autoware.
   if (current_control || request_control) {
     if (!available_mode_change_[request_mode.value_or(current_mode_)]) {
-      throw component_interface_utils::ServiceException(
+      throw autoware::component_interface_utils::ServiceException(
         ServiceResponse::ERROR_NOT_AVAILABLE, "The mode change condition is not satisfied.");
     }
     if (request_control) {

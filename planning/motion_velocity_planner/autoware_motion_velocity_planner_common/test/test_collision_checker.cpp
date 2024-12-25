@@ -19,6 +19,8 @@
 #include <gtest/gtest.h>
 
 #include <chrono>
+#include <cstdio>
+#include <iostream>
 #include <random>
 
 using autoware::motion_velocity_planner::CollisionChecker;

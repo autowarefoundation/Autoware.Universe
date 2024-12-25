@@ -9,7 +9,7 @@ This node is a simple node that subscribes to the geo-referenced pose topic and 
 | Name                      | Type                                                 | Description         |
 | ------------------------- | ---------------------------------------------------- | ------------------- |
 | `input_geo_pose`          | `geographic_msgs::msg::GeoPoseWithCovarianceStamped` | geo-referenced pose |
-| `/map/map_projector_info` | `tier4_map_msgs::msg::MapProjectedObjectInfo`        | map projector info  |
+| `/map/map_projector_info` | `autoware_map_msgs::msg::MapProjectedObjectInfo`     | map projector info  |
 
 ## Published Topics
 

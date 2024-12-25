@@ -22,6 +22,7 @@
 #include "autoware/trajectory_follower_base/lateral_controller_base.hpp"
 #include "rclcpp/rclcpp.hpp"
 
+#include <autoware/trajectory_follower_base/control_horizon.hpp>
 #include <diagnostic_updater/diagnostic_updater.hpp>
 
 #include "autoware_control_msgs/msg/lateral.hpp"
@@ -49,6 +50,7 @@ using autoware_vehicle_msgs::msg::SteeringReport;
 using nav_msgs::msg::Odometry;
 using tier4_debug_msgs::msg::Float32MultiArrayStamped;
 using tier4_debug_msgs::msg::Float32Stamped;
+using trajectory_follower::LateralHorizon;
 
 class MpcLateralController : public trajectory_follower::LateralControllerBase
 {
@@ -94,7 +96,7 @@ private:
   bool m_keep_steer_control_until_converged;
 
   // MPC solver checker.
-  bool m_is_mpc_solved{true};
+  ResultWithReason m_mpc_solved_status{true};
 
   // trajectory buffer for detecting new trajectory
   std::deque<Trajectory> m_trajectory_buffer;
@@ -215,6 +217,13 @@ private:
   Lateral createCtrlCmdMsg(const Lateral & ctrl_cmd);
 
   /**
+   * @brief Create the control command horizon message.
+   * @param ctrl_cmd_horizon Control command horizon to be created.
+   * @return Created control command horizon.
+   */
+  LateralHorizon createCtrlCmdHorizonMsg(const LateralHorizon & ctrl_cmd_horizon) const;
+
+  /**
    * @brief Publish the predicted future trajectory.
    * @param predicted_traj Predicted future trajectory to be published.
    */
@@ -283,13 +292,13 @@ private:
   template <typename... Args>
   inline void info_throttle(Args &&... args)
   {
-    RCLCPP_INFO_THROTTLE(logger_, *clock_, 5000, args...);
+    RCLCPP_INFO_THROTTLE(logger_, *clock_, 5000, "%s", args...);
   }
 
   template <typename... Args>
   inline void warn_throttle(Args &&... args)
   {
-    RCLCPP_WARN_THROTTLE(logger_, *clock_, 5000, args...);
+    RCLCPP_WARN_THROTTLE(logger_, *clock_, 5000, "%s", args...);
   }
 };
 }  // namespace autoware::motion::control::mpc_lateral_controller

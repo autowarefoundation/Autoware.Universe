@@ -38,10 +38,9 @@ public:
    * specific criteria.
    *
    * @param path A pointer to the path containing points to be modified.
-   * @param stop_reason A pointer to the stop reason data.
    * @return [bool] wether the path velocity was modified or not.
    */
-  bool modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason) override;
+  bool modifyPathVelocity(PathWithLaneId * path) override;
 
   /**
    * @brief Create a visualization of debug markers.

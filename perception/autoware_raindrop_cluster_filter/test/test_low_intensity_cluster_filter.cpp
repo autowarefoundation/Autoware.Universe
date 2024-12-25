@@ -24,6 +24,9 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <string>
+#include <utility>
 #include <vector>
 
 using autoware::low_intensity_cluster_filter::LowIntensityClusterFilter;

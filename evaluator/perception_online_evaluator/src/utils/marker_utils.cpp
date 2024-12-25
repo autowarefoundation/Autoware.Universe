@@ -24,7 +24,10 @@
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/primitives/LineString.h>
 
+#include <algorithm>
 #include <cstdint>
+#include <string>
+#include <vector>
 
 namespace marker_utils
 {

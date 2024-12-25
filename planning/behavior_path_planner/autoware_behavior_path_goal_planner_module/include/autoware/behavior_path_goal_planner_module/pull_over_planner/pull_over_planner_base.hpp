@@ -33,6 +33,7 @@ namespace autoware::behavior_path_planner
 {
 enum class PullOverPlannerType {
   SHIFT,
+  BEZIER,
   ARC_FORWARD,
   ARC_BACKWARD,
   FREESPACE,

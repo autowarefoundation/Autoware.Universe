@@ -17,10 +17,10 @@
 
 #include "autoware/behavior_path_planner_common/data_manager.hpp"
 #include "autoware/behavior_path_planner_common/interface/scene_module_interface.hpp"
-#include "autoware/behavior_path_planner_common/interface/steering_factor_interface.hpp"
 #include "autoware/universe_utils/ros/logger_level_configure.hpp"
 #include "planner_manager.hpp"
 
+#include <autoware/motion_utils/factor/steering_factor_interface.hpp>
 #include <autoware/universe_utils/ros/polling_subscriber.hpp>
 #include <autoware/universe_utils/ros/published_time_publisher.hpp>
 
@@ -40,7 +40,6 @@
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 #include <tier4_planning_msgs/msg/reroute_availability.hpp>
 #include <tier4_planning_msgs/msg/scenario.hpp>
-#include <tier4_planning_msgs/msg/stop_reason_array.hpp>
 #include <tier4_planning_msgs/msg/velocity_limit.hpp>
 #include <visualization_msgs/msg/marker.hpp>
 
@@ -52,6 +51,7 @@
 
 namespace autoware::behavior_path_planner
 {
+using autoware::motion_utils::SteeringFactorInterface;
 using autoware_adapi_v1_msgs::msg::OperationModeState;
 using autoware_map_msgs::msg::LaneletMapBin;
 using autoware_perception_msgs::msg::PredictedObject;
@@ -65,13 +65,11 @@ using autoware_vehicle_msgs::msg::TurnIndicatorsCommand;
 using nav_msgs::msg::OccupancyGrid;
 using nav_msgs::msg::Odometry;
 using rcl_interfaces::msg::SetParametersResult;
-using steering_factor_interface::SteeringFactorInterface;
 using tier4_planning_msgs::msg::AvoidanceDebugMsgArray;
 using tier4_planning_msgs::msg::LateralOffset;
 using tier4_planning_msgs::msg::PathWithLaneId;
 using tier4_planning_msgs::msg::RerouteAvailability;
 using tier4_planning_msgs::msg::Scenario;
-using tier4_planning_msgs::msg::StopReasonArray;
 using visualization_msgs::msg::Marker;
 using visualization_msgs::msg::MarkerArray;
 
@@ -122,8 +120,8 @@ private:
   rclcpp::Publisher<HazardLightsCommand>::SharedPtr hazard_signal_publisher_;
   rclcpp::Publisher<MarkerArray>::SharedPtr bound_publisher_;
   rclcpp::Publisher<PoseWithUuidStamped>::SharedPtr modified_goal_publisher_;
-  rclcpp::Publisher<StopReasonArray>::SharedPtr stop_reason_publisher_;
   rclcpp::Publisher<RerouteAvailability>::SharedPtr reroute_availability_publisher_;
+  rclcpp::Publisher<SteeringFactorArray>::SharedPtr pub_steering_factors_;
   rclcpp::TimerBase::SharedPtr timer_;
 
   std::map<std::string, rclcpp::Publisher<Path>::SharedPtr> path_candidate_publishers_;
@@ -138,7 +136,7 @@ private:
 
   std::shared_ptr<PlannerManager> planner_manager_;
 
-  std::unique_ptr<SteeringFactorInterface> steering_factor_interface_ptr_;
+  SteeringFactorInterface steering_factor_interface_;
 
   std::mutex mutex_pd_;       // mutex for planner_data_
   std::mutex mutex_manager_;  // mutex for bt_manager_ or planner_manager_

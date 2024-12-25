@@ -19,6 +19,11 @@
 #include <autoware_planning_test_manager/autoware_planning_test_manager_utils.hpp>
 #include <autoware_test_utils/autoware_test_utils.hpp>
 
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
 namespace autoware::planning_test_manager
 {
 
@@ -279,9 +284,13 @@ void PlanningInterfaceTestManager::publishAbnormalRoute(
 void PlanningInterfaceTestManager::publishNominalPathWithLaneId(
   rclcpp::Node::SharedPtr target_node, std::string topic_name)
 {
-  autoware::test_utils::publishToTargetNode(
-    test_node_, target_node, topic_name, normal_path_with_lane_id_pub_,
-    autoware::test_utils::loadPathWithLaneIdInYaml(), 5);
+  try {
+    const auto path = autoware::test_utils::loadPathWithLaneIdInYaml();
+    autoware::test_utils::publishToTargetNode(
+      test_node_, target_node, topic_name, normal_path_with_lane_id_pub_, path, 5);
+  } catch (const std::exception & e) {
+    std::cerr << e.what() << '\n';
+  }
 }
 
 void PlanningInterfaceTestManager::publishAbNominalPathWithLaneId(
@@ -294,11 +303,14 @@ void PlanningInterfaceTestManager::publishAbNominalPathWithLaneId(
 void PlanningInterfaceTestManager::publishNominalPath(
   rclcpp::Node::SharedPtr target_node, std::string topic_name)
 {
-  autoware::test_utils::publishToTargetNode(
-    test_node_, target_node, topic_name, normal_path_pub_,
-    autoware::motion_utils::convertToPath<tier4_planning_msgs::msg::PathWithLaneId>(
-      autoware::test_utils::loadPathWithLaneIdInYaml()),
-    5);
+  try {
+    const auto path = autoware::test_utils::loadPathWithLaneIdInYaml();
+    autoware::test_utils::publishToTargetNode(
+      test_node_, target_node, topic_name, normal_path_pub_,
+      autoware::motion_utils::convertToPath<tier4_planning_msgs::msg::PathWithLaneId>(path), 5);
+  } catch (const std::exception & e) {
+    std::cerr << e.what() << '\n';
+  }
 }
 
 void PlanningInterfaceTestManager::publishAbnormalPath(

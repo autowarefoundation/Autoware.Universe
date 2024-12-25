@@ -14,6 +14,7 @@
 
 #include "converter.hpp"
 
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -117,7 +118,10 @@ void Converter::on_update(DiagGraph::ConstSharedPtr graph)
   hazard.stamp = graph->updated_stamp();
   hazard.status.level = get_system_level(hazard.status);
   hazard.status.emergency = hazard.status.level == HazardStatus::SINGLE_POINT_FAULT;
-  hazard.status.emergency_holding = false;
+
+  const auto is_emergency_holding = sub_emergency_holding_.takeData();
+  hazard.status.emergency_holding =
+    is_emergency_holding == nullptr ? false : is_emergency_holding->is_holding;
   pub_hazard_->publish(hazard);
 }
 

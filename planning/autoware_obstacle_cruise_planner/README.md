@@ -23,12 +23,11 @@ The `autoware_obstacle_cruise_planner` package has following modules.
 
 ### Output topics
 
-| Name                            | Type                                           | Description                           |
-| ------------------------------- | ---------------------------------------------- | ------------------------------------- |
-| `~/output/trajectory`           | autoware_planning_msgs::Trajectory             | output trajectory                     |
-| `~/output/velocity_limit`       | tier4_planning_msgs::VelocityLimit             | velocity limit for cruising           |
-| `~/output/clear_velocity_limit` | tier4_planning_msgs::VelocityLimitClearCommand | clear command for velocity limit      |
-| `~/output/stop_reasons`         | tier4_planning_msgs::StopReasonArray           | reasons that make the vehicle to stop |
+| Name                            | Type                                           | Description                      |
+| ------------------------------- | ---------------------------------------------- | -------------------------------- |
+| `~/output/trajectory`           | autoware_planning_msgs::Trajectory             | output trajectory                |
+| `~/output/velocity_limit`       | tier4_planning_msgs::VelocityLimit             | velocity limit for cruising      |
+| `~/output/clear_velocity_limit` | tier4_planning_msgs::VelocityLimitClearCommand | clear command for velocity limit |
 
 ## Design
 
@@ -75,6 +74,10 @@ Obstacles for cruising, stopping and slowing down are selected in this order bas
 The obstacles not in front of the ego will be ignored.
 
 ![determine_cruise_stop_slow_down](./media/determine_cruise_stop_slow_down.drawio.svg)
+
+The behavior determination flowchart is shown below.
+
+![behavior_determination_flowchart](./media/behavior_determination_flowchart.drawio.svg)
 
 #### Determine cruise vehicles
 
@@ -241,6 +244,10 @@ $$
 | `w_{acc}`         | `output_ratio_during_accel`             |
 | `lpf(val)`        | apply low-pass filter to `val`          |
 | `pid(val)`        | apply pid to `val`                      |
+
+#### Block diagram
+
+![cruise_planning_block_diagram](./media/cruise_planning_block_diagram.drawio.svg)
 
 ### Slow down planning
 

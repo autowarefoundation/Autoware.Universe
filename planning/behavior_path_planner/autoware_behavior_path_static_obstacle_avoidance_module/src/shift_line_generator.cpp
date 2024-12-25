@@ -17,6 +17,11 @@
 #include "autoware/behavior_path_planner_common/utils/utils.hpp"
 #include "autoware/behavior_path_static_obstacle_avoidance_module/utils.hpp"
 
+#include <algorithm>
+#include <string>
+#include <utility>
+#include <vector>
+
 namespace autoware::behavior_path_planner::utils::static_obstacle_avoidance
 {
 
@@ -259,9 +264,9 @@ AvoidOutlines ShiftLineGenerator::generateAvoidOutline(
   AvoidOutlines outlines;
   for (auto & o : data.target_objects) {
     if (!o.avoid_margin.has_value()) {
-      if (!data.red_signal_lane.has_value()) {
-        o.info = ObjectInfo::INSUFFICIENT_DRIVABLE_SPACE;
-      } else if (data.red_signal_lane.value().id() == o.overhang_lanelet.id()) {
+      if (
+        data.red_signal_lane.has_value() &&
+        data.red_signal_lane.value().id() == o.overhang_lanelet.id()) {
         o.info = ObjectInfo::LIMIT_DRIVABLE_SPACE_TEMPORARY;
       } else {
         o.info = ObjectInfo::INSUFFICIENT_DRIVABLE_SPACE;

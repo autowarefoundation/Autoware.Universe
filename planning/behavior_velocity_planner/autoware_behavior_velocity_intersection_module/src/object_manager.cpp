@@ -25,6 +25,8 @@
 #include <lanelet2_core/geometry/Lanelet.h>
 #include <lanelet2_core/geometry/LineString.h>
 
+#include <memory>
+#include <string>
 #include <vector>
 
 namespace

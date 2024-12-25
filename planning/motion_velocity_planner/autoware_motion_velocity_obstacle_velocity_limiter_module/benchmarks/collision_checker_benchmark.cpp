@@ -16,7 +16,9 @@
 #include "../src/types.hpp"
 
 #include <chrono>
+#include <iostream>
 #include <random>
+#include <vector>
 
 using autoware::motion_velocity_planner::obstacle_velocity_limiter::CollisionChecker;
 using autoware::motion_velocity_planner::obstacle_velocity_limiter::linestring_t;
@@ -54,45 +56,53 @@ polygon_t random_polygon()
 
 int main()
 {
-  Obstacles obstacles;
-  std::vector<polygon_t> polygons;
-  polygons.reserve(100);
-  for (auto i = 0; i < 100; ++i) {
-    polygons.push_back(random_polygon());
-  }
-  for (auto nb_lines = 1lu; nb_lines < 1000lu; nb_lines += 10) {
-    obstacles.lines.push_back(random_line());
-    obstacles.points.clear();
-    for (auto nb_points = 1lu; nb_points < 1000lu; nb_points += 10) {
-      obstacles.points.push_back(random_point());
-      const auto rtt_constr_start = std::chrono::system_clock::now();
-      CollisionChecker rtree_collision_checker(obstacles, 0, 0);
-      const auto rtt_constr_end = std::chrono::system_clock::now();
-      const auto naive_constr_start = std::chrono::system_clock::now();
-      CollisionChecker naive_collision_checker(obstacles, nb_points + 1, nb_lines * 100);
-      const auto naive_constr_end = std::chrono::system_clock::now();
-      const auto rtt_check_start = std::chrono::system_clock::now();
-      for (const auto & polygon : polygons)
-        // cppcheck-suppress unreadVariable
-        const auto rtree_result = rtree_collision_checker.intersections(polygon);
-      const auto rtt_check_end = std::chrono::system_clock::now();
-      const auto naive_check_start = std::chrono::system_clock::now();
-      for (const auto & polygon : polygons)
-        // cppcheck-suppress unreadVariable
-        const auto naive_result = naive_collision_checker.intersections(polygon);
-      const auto naive_check_end = std::chrono::system_clock::now();
-      const auto rtt_constr_time =
-        std::chrono::duration_cast<std::chrono::nanoseconds>(rtt_constr_end - rtt_constr_start);
-      const auto naive_constr_time =
-        std::chrono::duration_cast<std::chrono::nanoseconds>(naive_constr_end - naive_constr_start);
-      const auto rtt_check_time =
-        std::chrono::duration_cast<std::chrono::nanoseconds>(rtt_check_end - rtt_check_start);
-      const auto naive_check_time =
-        std::chrono::duration_cast<std::chrono::nanoseconds>(naive_check_end - naive_check_start);
-      std::printf(
-        "%lu, %lu, %ld, %ld, %ld, %ld\n", nb_lines, nb_points, rtt_constr_time.count(),
-        rtt_check_time.count(), naive_constr_time.count(), naive_check_time.count());
+  try {
+    Obstacles obstacles;
+    std::vector<polygon_t> polygons;
+    polygons.reserve(100);
+    for (auto i = 0; i < 100; ++i) {
+      polygons.push_back(random_polygon());
     }
+    for (auto nb_lines = 1lu; nb_lines < 1000lu; nb_lines += 10) {
+      obstacles.lines.push_back(random_line());
+      obstacles.points.clear();
+      for (auto nb_points = 1lu; nb_points < 1000lu; nb_points += 10) {
+        obstacles.points.push_back(random_point());
+        const auto rtt_constr_start = std::chrono::system_clock::now();
+        CollisionChecker rtree_collision_checker(obstacles, 0, 0);
+        const auto rtt_constr_end = std::chrono::system_clock::now();
+        const auto naive_constr_start = std::chrono::system_clock::now();
+        CollisionChecker naive_collision_checker(obstacles, nb_points + 1, nb_lines * 100);
+        const auto naive_constr_end = std::chrono::system_clock::now();
+        const auto rtt_check_start = std::chrono::system_clock::now();
+        for (const auto & polygon : polygons)
+          // cppcheck-suppress unreadVariable
+          const auto rtree_result = rtree_collision_checker.intersections(polygon);
+        const auto rtt_check_end = std::chrono::system_clock::now();
+        const auto naive_check_start = std::chrono::system_clock::now();
+        for (const auto & polygon : polygons)
+          // cppcheck-suppress unreadVariable
+          const auto naive_result = naive_collision_checker.intersections(polygon);
+        const auto naive_check_end = std::chrono::system_clock::now();
+        const auto rtt_constr_time =
+          std::chrono::duration_cast<std::chrono::nanoseconds>(rtt_constr_end - rtt_constr_start);
+        const auto naive_constr_time = std::chrono::duration_cast<std::chrono::nanoseconds>(
+          naive_constr_end - naive_constr_start);
+        const auto rtt_check_time =
+          std::chrono::duration_cast<std::chrono::nanoseconds>(rtt_check_end - rtt_check_start);
+        const auto naive_check_time =
+          std::chrono::duration_cast<std::chrono::nanoseconds>(naive_check_end - naive_check_start);
+        std::printf(
+          "%lu, %lu, %ld, %ld, %ld, %ld\n", nb_lines, nb_points, rtt_constr_time.count(),
+          rtt_check_time.count(), naive_constr_time.count(), naive_check_time.count());
+      }
+    }
+  } catch (const std::exception & e) {
+    std::cerr << "Exception in main(): " << e.what() << std::endl;
+    return {};
+  } catch (...) {
+    std::cerr << "Unknown exception in main()" << std::endl;
+    return {};
   }
   return 0;
 }

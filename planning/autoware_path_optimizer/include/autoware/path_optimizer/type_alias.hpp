@@ -15,6 +15,7 @@
 #ifndef AUTOWARE__PATH_OPTIMIZER__TYPE_ALIAS_HPP_
 #define AUTOWARE__PATH_OPTIMIZER__TYPE_ALIAS_HPP_
 
+#include "autoware_internal_debug_msgs/msg/string_stamped.hpp"
 #include "autoware_planning_msgs/msg/path.hpp"
 #include "autoware_planning_msgs/msg/path_point.hpp"
 #include "autoware_planning_msgs/msg/trajectory.hpp"
@@ -25,7 +26,6 @@
 #include "nav_msgs/msg/odometry.hpp"
 #include "std_msgs/msg/header.hpp"
 #include "tier4_debug_msgs/msg/float64_stamped.hpp"
-#include "tier4_debug_msgs/msg/string_stamped.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
 
 namespace autoware::path_optimizer
@@ -43,8 +43,8 @@ using nav_msgs::msg::Odometry;
 using visualization_msgs::msg::Marker;
 using visualization_msgs::msg::MarkerArray;
 // debug
+using autoware_internal_debug_msgs::msg::StringStamped;
 using tier4_debug_msgs::msg::Float64Stamped;
-using tier4_debug_msgs::msg::StringStamped;
 }  // namespace autoware::path_optimizer
 
 #endif  // AUTOWARE__PATH_OPTIMIZER__TYPE_ALIAS_HPP_

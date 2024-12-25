@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>autoware_tensorrt_classifier</name>
-  <version>0.0.1</version>
+  <version>0.40.0</version>
   <description>tensorrt classifier wrapper</description>
 
   <author email="dan.umeda@tier4.jp">Dan Umeda</author>
@@ -19,8 +19,8 @@
 
   <build_depend>autoware_cmake</build_depend>
 
+  <depend>autoware_cuda_utils</depend>
   <depend>autoware_tensorrt_common</depend>
-  <depend>cuda_utils</depend>
   <depend>libopencv-dev</depend>
   <depend>rclcpp</depend>
 

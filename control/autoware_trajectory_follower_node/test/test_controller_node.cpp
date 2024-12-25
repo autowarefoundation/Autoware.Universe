@@ -13,8 +13,8 @@
 // limitations under the License.
 
 #include "ament_index_cpp/get_package_share_directory.hpp"
+#include "autoware/fake_test_node/fake_test_node.hpp"
 #include "autoware/trajectory_follower_node/controller_node.hpp"
-#include "fake_test_node/fake_test_node.hpp"
 #include "gtest/gtest.h"
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp/time.hpp"
@@ -30,6 +30,7 @@
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -42,7 +43,7 @@ using SteeringReport = autoware_vehicle_msgs::msg::SteeringReport;
 using autoware_adapi_v1_msgs::msg::OperationModeState;
 using geometry_msgs::msg::AccelWithCovarianceStamped;
 
-using FakeNodeFixture = autoware::tools::testing::FakeTestNode;
+using FakeNodeFixture = autoware::fake_test_node::FakeTestNode;
 
 const rclcpp::Duration one_second(1, 0);
 
@@ -507,34 +508,6 @@ TEST_F(FakeNodeFixture, longitudinal_reverse)
   ASSERT_TRUE(tester.received_control_command);
   EXPECT_LT(tester.cmd_msg->longitudinal.velocity, 0.0f);
   EXPECT_GT(tester.cmd_msg->longitudinal.acceleration, 0.0f);
-}
-
-TEST_F(FakeNodeFixture, longitudinal_emergency)
-{
-  const auto node_options = makeNodeOptions();
-  ControllerTester tester(this, node_options);
-
-  tester.send_default_transform();
-  tester.publish_default_odom();
-  tester.publish_autonomous_operation_mode();
-  tester.publish_default_steer();
-  tester.publish_default_acc();
-
-  // Publish trajectory starting away from the current ego pose
-  Trajectory traj;
-  traj.header.stamp = tester.node->now();
-  traj.header.frame_id = "map";
-  traj.points.push_back(make_traj_point(10.0, 0.0, 1.0f));
-  traj.points.push_back(make_traj_point(50.0, 0.0, 1.0f));
-  traj.points.push_back(make_traj_point(100.0, 0.0, 1.0f));
-  tester.traj_pub->publish(traj);
-
-  test_utils::waitForMessage(tester.node, this, tester.received_control_command);
-
-  ASSERT_TRUE(tester.received_control_command);
-  // Emergencies (e.g., far from trajectory) produces braking command (0 vel, negative accel)
-  EXPECT_DOUBLE_EQ(tester.cmd_msg->longitudinal.velocity, 0.0f);
-  EXPECT_LT(tester.cmd_msg->longitudinal.acceleration, 0.0f);
 }
 
 TEST_F(FakeNodeFixture, longitudinal_not_check_steer_converged)

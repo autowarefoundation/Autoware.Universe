@@ -15,8 +15,10 @@
 #include "simple_planning_simulator/utils/csv_loader.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 CSVLoader::CSVLoader(const std::string & csv_path)

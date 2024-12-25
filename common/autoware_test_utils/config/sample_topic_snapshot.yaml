@@ -1,0 +1,29 @@
+format_version: 1
+
+fields:
+  - name: self_odometry
+    type: Odometry # nav_msgs::msg::Odometry
+    topic: /localization/kinematic_state
+
+  - name: self_acceleration
+    type: AccelWithCovarianceStamped # geometry_msgs::msg::AccelWithCovarianceStamped
+    topic: /localization/acceleration
+
+  - name: operation_mode
+    type: OperationModeState # autoware_adapi_v1_msgs::msg::OperationModeState
+    topic: /system/operation_mode/state
+
+  - name: route
+    type: LaneletRoute # autoware_planning_msgs::msg::LaneletRoute
+    topic: /planning/mission_planning/route
+
+  - name: traffic_signal
+    type: TrafficLightGroupArray # autoware_perception_msgs::msg::TrafficLightGroupArray
+    topic: /perception/traffic_light_recognition/traffic_signals
+
+  - name: dynamic_object
+    type: PredictedObjects # autoware_perception_msgs::msg::PredictedObjects
+    topic: /perception/object_recognition/objects
+#  - name: tracked_object
+#    type: TrackedObjects # autoware_perception_msgs::msg::TrackedObjects
+#    topic: /perception/object_recognition/tracking/objects

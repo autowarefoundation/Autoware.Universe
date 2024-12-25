@@ -29,6 +29,10 @@
 #include <lanelet2_core/primitives/Point.h>
 #include <tf2/utils.h>
 
+#include <memory>
+#include <string>
+#include <vector>
+
 using autoware::universe_utils::calcOffsetPose;
 using autoware::universe_utils::createQuaternionFromRPY;
 using autoware_planning_msgs::msg::LaneletRoute;

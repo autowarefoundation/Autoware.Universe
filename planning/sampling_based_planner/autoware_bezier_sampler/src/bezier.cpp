@@ -15,6 +15,9 @@
 #include <autoware_bezier_sampler/bezier.hpp>
 
 #include <iostream>
+#include <limits>
+#include <utility>
+#include <vector>
 
 namespace autoware::bezier_sampler
 {

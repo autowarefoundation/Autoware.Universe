@@ -21,6 +21,8 @@
 #include <gtest/gtest.h>
 #include <lanelet2_core/LaneletMap.h>
 
+#include <memory>
+
 using autoware::behavior_path_planner::drivable_area_expansion::LineString2d;
 using autoware::behavior_path_planner::drivable_area_expansion::Point2d;
 using autoware::behavior_path_planner::drivable_area_expansion::Segment2d;

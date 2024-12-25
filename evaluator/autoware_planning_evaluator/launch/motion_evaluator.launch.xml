@@ -1,7 +1,10 @@
 <launch>
+  <!-- if output_metrics=true, metrics are written to `<ros2_logging_directory>/autoware_metrics/<node_name>-<time_stamp>.json`. -->
+  <arg name="output_metrics" default="false"/>
   <arg name="input/twist" default="/localization/twist"/>
 
   <node name="motion_evaluator" exec="motion_evaluator" pkg="autoware_planning_evaluator" output="screen">
+    <param name="output_metrics" value="$(var output_metrics)"/>
     <remap from="~/input/twist" to="$(var input/twist)"/>
   </node>
 </launch>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>autoware_carla_interface</name>
-  <version>0.0.0</version>
+  <version>0.40.0</version>
   <description>The carla autoware bridge package</description>
   <maintainer email="mradityagio@gmail.com">Muhammad Raditya GIOVANNI</maintainer>
   <maintainer email="maxime.clement@tier4.jp">Maxime CLEMENT</maintainer>

@@ -365,10 +365,10 @@ and aligning the inequality signs
 
 $$
 \begin{align}
-u_{1} - u_{0} &< \dot u_{max}\text{d}t \\\ +
-u_{1} + u_{0} &< -\dot u_{min}\text{d}t \\\
-u_{2} - u_{1} &< \dot u_{max}\text{d}t \\\ +
-u_{2} + u_{1} &< - \dot u_{min}\text{d}t
+u_{1} - u_{0} &< \dot u_{max}\text{d}t \\\
+- u_{1} + u_{0} &< -\dot u_{min}\text{d}t \\\
+u_{2} - u_{1} &< \dot u_{max}\text{d}t \\\
+- u_{2} + u_{1} &< - \dot u_{min}\text{d}t
 \end{align}
 $$
 

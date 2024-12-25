@@ -21,7 +21,7 @@
 
 #include <autoware_perception_msgs/msg/object_classification.hpp>
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
-#include <diagnostic_msgs/msg/diagnostic_array.hpp>
+#include <tier4_metric_msgs/msg/metric_array.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
 #include "boost/lexical_cast.hpp"
@@ -29,6 +29,8 @@
 #include <glog/logging.h>
 #include <gtest/gtest.h>
 
+#include <algorithm>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -37,7 +39,6 @@
 using EvalNode = perception_diagnostics::PerceptionOnlineEvaluatorNode;
 using PredictedObjects = autoware_perception_msgs::msg::PredictedObjects;
 using PredictedObject = autoware_perception_msgs::msg::PredictedObject;
-using DiagnosticArray = diagnostic_msgs::msg::DiagnosticArray;
 using MarkerArray = visualization_msgs::msg::MarkerArray;
 using ObjectClassification = autoware_perception_msgs::msg::ObjectClassification;
 using nav_msgs::msg::Odometry;
@@ -125,36 +126,29 @@ protected:
     tf_pub_->publish(tf_msg);
   }
 
-  void setTargetMetric(perception_diagnostics::Metric metric)
+  void setTargetMetric(const perception_diagnostics::Metric & metric)
   {
     const auto metric_str = perception_diagnostics::metric_to_str.at(metric);
     setTargetMetric(metric_str);
   }
 
-  void setTargetMetric(std::string metric_str)
+  void setTargetMetric(const std::string & metric_str)
   {
-    const auto is_target_metric = [metric_str](const auto & status) {
-      return status.name == metric_str;
-    };
-    metric_sub_ = rclcpp::create_subscription<DiagnosticArray>(
+    metric_sub_ = rclcpp::create_subscription<tier4_metric_msgs::msg::MetricArray>(
       eval_node, "/perception_online_evaluator/metrics", 1,
-      [=](const DiagnosticArray::ConstSharedPtr msg) {
-        const auto it = std::find_if(msg->status.begin(), msg->status.end(), is_target_metric);
-        if (it != msg->status.end()) {
-          const auto mean_it = std::find_if(
-            it->values.begin(), it->values.end(),
-            [](const auto & key_value) { return key_value.key == "mean"; });
-          if (mean_it != it->values.end()) {
-            metric_value_ = boost::lexical_cast<double>(mean_it->value);
-          } else {
-            const auto metric_value_it = std::find_if(
-              it->values.begin(), it->values.end(),
-              [](const auto & key_value) { return key_value.key == "metric_value"; });
-            if (metric_value_it != it->values.end()) {
-              metric_value_ = boost::lexical_cast<double>(metric_value_it->value);
-            }
-          }
+      [this, metric_str](const tier4_metric_msgs::msg::MetricArray::ConstSharedPtr msg) {
+        // extract a metric whose name includes metrics_str
+        const auto it = std::find_if(
+          msg->metric_array.begin(), msg->metric_array.end(), [&metric_str](const auto & metric) {
+            return metric.name == metric_str + "/metric_value" ||
+                   metric.name == metric_str + "/mean";
+          });
+
+        if (it != msg->metric_array.end()) {
+          metric_value_ = boost::lexical_cast<double>(it->value);
           metric_updated_ = true;
+        } else {
+          metric_updated_ = false;
         }
       });
   }
@@ -316,7 +310,7 @@ protected:
 
   // Pub/Sub
   rclcpp::Publisher<PredictedObjects>::SharedPtr objects_pub_;
-  rclcpp::Subscription<DiagnosticArray>::SharedPtr metric_sub_;
+  rclcpp::Subscription<tier4_metric_msgs::msg::MetricArray>::SharedPtr metric_sub_;
   rclcpp::Subscription<MarkerArray>::SharedPtr marker_sub_;
   rclcpp::Publisher<TFMessage>::SharedPtr tf_pub_;
   bool has_received_marker_{false};

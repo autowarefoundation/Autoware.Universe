@@ -16,13 +16,13 @@
 #define PREDICTED_PATH_CHECKER__PREDICTED_PATH_CHECKER_NODE_HPP_
 
 #include <autoware/component_interface_specs/control.hpp>
+#include <autoware/component_interface_utils/rclcpp.hpp>
 #include <autoware/motion_utils/trajectory/conversion.hpp>
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware/universe_utils/ros/self_pose_listener.hpp>
 #include <autoware_vehicle_info_utils/vehicle_info.hpp>
 #include <autoware_vehicle_info_utils/vehicle_info_utils.hpp>
-#include <component_interface_utils/rclcpp.hpp>
 #include <diagnostic_updater/diagnostic_updater.hpp>
 #include <predicted_path_checker/collision_checker.hpp>
 #include <predicted_path_checker/utils.hpp>
@@ -96,11 +96,11 @@ private:
     sub_predicted_trajectory_;
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr sub_odom_;
   rclcpp::Subscription<geometry_msgs::msg::AccelWithCovarianceStamped>::SharedPtr sub_accel_;
-  component_interface_utils::Subscription<
+  autoware::component_interface_utils::Subscription<
     autoware::component_interface_specs::control::IsStopped>::SharedPtr sub_stop_state_;
 
   // Client
-  component_interface_utils::Client<
+  autoware::component_interface_utils::Client<
     autoware::component_interface_specs::control::SetStop>::SharedPtr cli_set_stop_;
 
   // Data Buffer

@@ -19,7 +19,7 @@ namespace autoware::default_adapi
 
 FailSafeNode::FailSafeNode(const rclcpp::NodeOptions & options) : Node("fail_safe", options)
 {
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   adaptor.init_pub(pub_mrm_state_);
   adaptor.init_sub(sub_mrm_state_, this, &FailSafeNode::on_state);
 

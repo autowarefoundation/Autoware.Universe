@@ -17,6 +17,7 @@
 #include <gtest/gtest.h>
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <memory>
 #include <unordered_set>
 
 class PcdMapBasedRuleMockNode : public ::testing::Test

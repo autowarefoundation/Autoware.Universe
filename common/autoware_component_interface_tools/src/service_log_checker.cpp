@@ -22,6 +22,8 @@
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>
 
+namespace autoware::component_interface_tools
+{
 ServiceLogChecker::ServiceLogChecker(const rclcpp::NodeOptions & options)
 : Node("service_log_checker", options), diagnostics_(this)
 {
@@ -98,6 +100,6 @@ void ServiceLogChecker::update_diagnostics(diagnostic_updater::DiagnosticStatusW
     stat.summary(DiagnosticStatus::ERROR, "ERROR");
   }
 }
-
+}  // namespace autoware::component_interface_tools
 #include <rclcpp_components/register_node_macro.hpp>
-RCLCPP_COMPONENTS_REGISTER_NODE(ServiceLogChecker)
+RCLCPP_COMPONENTS_REGISTER_NODE(autoware::component_interface_tools::ServiceLogChecker)

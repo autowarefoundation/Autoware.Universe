@@ -203,8 +203,8 @@ private:
   double estimateRoughPointVelocity(double current_vel);
   bool isObstacleVelocityHigh(const double obj_vel);
   double calcUpperVelocity(const double dist_to_col, const double obj_vel, const double self_vel);
-  double calcThreshDistToForwardObstacle(const double current_vel, const double obj_vel);
-  double calcBaseDistToForwardObstacle(const double current_vel, const double obj_vel);
+  double calcThreshDistToForwardObstacle(const double current_vel, const double obj_vel) const;
+  double calcBaseDistToForwardObstacle(const double current_vel, const double obj_vel) const;
   double calcTargetVelocity_P(const double target_dist, const double current_dist) const;
   static double calcTargetVelocity_I(const double target_dist, const double current_dist);
   double calcTargetVelocity_D(const double target_dist, const double current_dist);

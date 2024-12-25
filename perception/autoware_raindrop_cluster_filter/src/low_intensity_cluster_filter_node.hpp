@@ -56,13 +56,8 @@ private:
   double max_y_;
   double min_y_;
 
-  double max_x_transformed_;
-  double min_x_transformed_;
-  double max_y_transformed_;
-  double min_y_transformed_;
   // Eigen::Vector4f min_boundary_transformed_;
   // Eigen::Vector4f max_boundary_transformed_;
-  bool is_validation_range_transformed_ = false;
   const std::string base_link_frame_id_ = "base_link";
   autoware::detected_object_validation::utils::FilterTargetLabel filter_target_;
 

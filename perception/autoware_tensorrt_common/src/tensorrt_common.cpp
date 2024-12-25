@@ -23,6 +23,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace
 {
@@ -310,12 +311,13 @@ void TrtCommon::printNetworkInfo(const std::string & onnx_file_path)
       int groups = conv->getNbGroups();
       int stride = s_dims.d[0];
       int num_weights = (dim_in.d[1] / groups) * dim_out.d[1] * k_dims.d[0] * k_dims.d[1];
-      float gflops = (2 * num_weights) * (dim_in.d[3] / stride * dim_in.d[2] / stride / 1e9);
-      ;
+      float gflops = (2.0 * num_weights) * (static_cast<float>(dim_in.d[3]) / stride *
+                                            static_cast<float>(dim_in.d[2]) / stride / 1e9);
       total_gflops += gflops;
       total_params += num_weights;
       std::cout << "L" << i << " [conv " << k_dims.d[0] << "x" << k_dims.d[1] << " (" << groups
-                << ") " << "/" << s_dims.d[0] << "] " << dim_in.d[3] << "x" << dim_in.d[2] << "x"
+                << ") "
+                << "/" << s_dims.d[0] << "] " << dim_in.d[3] << "x" << dim_in.d[2] << "x"
                 << dim_in.d[1] << " -> " << dim_out.d[3] << "x" << dim_out.d[2] << "x"
                 << dim_out.d[1];
       std::cout << " weights:" << num_weights;
@@ -335,8 +337,10 @@ void TrtCommon::printNetworkInfo(const std::string & onnx_file_path)
       } else if (p_type == nvinfer1::PoolingType::kMAX_AVERAGE_BLEND) {
         std::cout << "max avg blend ";
       }
-      float gflops = dim_in.d[1] * dim_window.d[0] / dim_stride.d[0] * dim_window.d[1] /
-                     dim_stride.d[1] * dim_in.d[2] * dim_in.d[3] / 1e9;
+      float gflops = static_cast<float>(dim_in.d[1]) *
+                     (static_cast<float>(dim_window.d[0]) / static_cast<float>(dim_stride.d[0])) *
+                     (static_cast<float>(dim_window.d[1]) / static_cast<float>(dim_stride.d[1])) *
+                     static_cast<float>(dim_in.d[2]) * static_cast<float>(dim_in.d[3]) / 1e9;
       total_gflops += gflops;
       std::cout << "pool " << dim_window.d[0] << "x" << dim_window.d[1] << "]";
       std::cout << " GFLOPs:" << gflops;
@@ -380,7 +384,8 @@ bool TrtCommon::buildEngineFromOnnx(
     if (num_available_dla > 0) {
       std::cout << "###" << num_available_dla << " DLAs are supported! ###" << std::endl;
     } else {
-      std::cout << "###Warning : " << "No DLA is supported! ###" << std::endl;
+      std::cout << "###Warning : "
+                << "No DLA is supported! ###" << std::endl;
     }
     config->setDefaultDeviceType(nvinfer1::DeviceType::kDLA);
     config->setDLACore(build_config_->dla_core_id);

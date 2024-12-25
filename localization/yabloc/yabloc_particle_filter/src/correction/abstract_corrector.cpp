@@ -14,6 +14,10 @@
 
 #include "yabloc_particle_filter/correction/abstract_corrector.hpp"
 
+#include <algorithm>
+#include <memory>
+#include <string>
+
 namespace yabloc::modularized_particle_filter
 {
 AbstractCorrector::AbstractCorrector(

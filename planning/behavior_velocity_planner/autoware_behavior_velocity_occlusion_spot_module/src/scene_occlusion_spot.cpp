@@ -30,6 +30,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <string>
 #include <vector>
 
 // turn on only when debugging.
@@ -82,8 +83,7 @@ OcclusionSpotModule::OcclusionSpotModule(
   }
 }
 
-bool OcclusionSpotModule::modifyPathVelocity(
-  PathWithLaneId * path, [[maybe_unused]] StopReason * stop_reason)
+bool OcclusionSpotModule::modifyPathVelocity(PathWithLaneId * path)
 {
   if (param_.is_show_processing_time) stop_watch_.tic("total_processing_time");
   debug_data_.resetData();

@@ -14,6 +14,9 @@
 
 #include "autoware/lidar_centerpoint/network/network_trt.hpp"
 
+#include <string>
+#include <vector>
+
 namespace autoware::lidar_centerpoint
 {
 bool VoxelEncoderTRT::setProfile(

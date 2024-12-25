@@ -14,7 +14,7 @@
 
 #include "autoware/map_projection_loader/load_info_from_lanelet2_map.hpp"
 
-#include "tier4_map_msgs/msg/map_projector_info.hpp"
+#include "autoware_map_msgs/msg/map_projector_info.hpp"
 
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/geometry/LineString.h>
@@ -25,7 +25,7 @@
 
 namespace autoware::map_projection_loader
 {
-tier4_map_msgs::msg::MapProjectorInfo load_info_from_lanelet2_map(const std::string & filename)
+autoware_map_msgs::msg::MapProjectorInfo load_info_from_lanelet2_map(const std::string & filename)
 {
   lanelet::ErrorMessages errors{};
   lanelet::projection::MGRSProjector projector{};
@@ -46,18 +46,18 @@ tier4_map_msgs::msg::MapProjectorInfo load_info_from_lanelet2_map(const std::str
     }
   }
 
-  tier4_map_msgs::msg::MapProjectorInfo msg;
+  autoware_map_msgs::msg::MapProjectorInfo msg;
   if (is_local) {
-    msg.projector_type = tier4_map_msgs::msg::MapProjectorInfo::LOCAL;
+    msg.projector_type = autoware_map_msgs::msg::MapProjectorInfo::LOCAL;
   } else {
-    msg.projector_type = tier4_map_msgs::msg::MapProjectorInfo::MGRS;
+    msg.projector_type = autoware_map_msgs::msg::MapProjectorInfo::MGRS;
     msg.mgrs_grid = projector.getProjectedMGRSGrid();
   }
 
   // We assume that the vertical datum of the map is WGS84 when using lanelet2 map.
   // However, do note that this is not always true, and may cause problems in the future.
   // Thus, please consider using the map_projector_info.yaml instead of this deprecated function.
-  msg.vertical_datum = tier4_map_msgs::msg::MapProjectorInfo::WGS84;
+  msg.vertical_datum = autoware_map_msgs::msg::MapProjectorInfo::WGS84;
   return msg;
 }
 }  // namespace autoware::map_projection_loader

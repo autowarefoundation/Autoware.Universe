@@ -20,7 +20,7 @@
   <arg name="lanelet2_map_topic" default="/map/vector_map"/>
   <arg name="lanelet2_map_marker_topic" default="/map/vector_map_marker"/>
   <!-- param -->
-  <arg name="map_loader_param" default="$(find-pkg-share map_loader)/config/lanelet2_map_loader.param.yaml"/>
+  <arg name="map_loader_param" default="$(find-pkg-share autoware_map_loader)/config/lanelet2_map_loader.param.yaml"/>
   <arg
     name="behavior_path_planner_param"
     default="$(find-pkg-share autoware_launch)/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/behavior_path_planner.param.yaml"
@@ -35,12 +35,12 @@
 
   <!-- Global parameters (for PathFootprint in tier4_planning_rviz_plugin) -->
   <!-- Do not add "group" in order to propagate global parameters -->
-  <include file="$(find-pkg-share global_parameter_loader)/launch/global_params.launch.py">
+  <include file="$(find-pkg-share autoware_global_parameter_loader)/launch/global_params.launch.py">
     <arg name="vehicle_model" value="$(var vehicle_model)"/>
   </include>
 
   <!-- generate tf from "viewer" to "map" -->
-  <node pkg="map_tf_generator" exec="vector_map_tf_generator" name="vector_map_tf_generator">
+  <node pkg="autoware_map_tf_generator" exec="autoware_vector_map_tf_generator" name="vector_map_tf_generator">
     <remap from="vector_map" to="$(var lanelet2_map_topic)"/>
 
     <param name="map_frame" value="map"/>
@@ -48,7 +48,7 @@
   </node>
 
   <!-- visualize map -->
-  <node pkg="map_loader" exec="lanelet2_map_visualization" name="lanelet2_map_visualization">
+  <node pkg="autoware_lanelet2_map_visualizer" exec="lanelet2_map_visualization" name="lanelet2_map_visualization">
     <remap from="input/lanelet2_map" to="$(var lanelet2_map_topic)"/>
     <remap from="output/lanelet2_map_marker" to="$(var lanelet2_map_marker_topic)"/>
   </node>

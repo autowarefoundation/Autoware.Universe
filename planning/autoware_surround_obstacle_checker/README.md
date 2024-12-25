@@ -34,8 +34,6 @@ else
 
 endif
 
-:Publish stop reason;
-
 stop
 @enduml
 ```
@@ -93,7 +91,6 @@ As mentioned in stop condition section, it prevents chattering by changing thres
 | `~/output/velocity_limit_clear_command` | `tier4_planning_msgs::msg::VelocityLimitClearCommand` | Velocity limit clear command                                                          |
 | `~/output/max_velocity`                 | `tier4_planning_msgs::msg::VelocityLimit`             | Velocity limit command                                                                |
 | `~/output/no_start_reason`              | `diagnostic_msgs::msg::DiagnosticStatus`              | No start reason                                                                       |
-| `~/output/stop_reasons`                 | `tier4_planning_msgs::msg::StopReasonArray`           | Stop reasons                                                                          |
 | `~/debug/marker`                        | `visualization_msgs::msg::MarkerArray`                | Marker for visualization                                                              |
 | `~/debug/footprint`                     | `geometry_msgs::msg::PolygonStamped`                  | Ego vehicle base footprint for visualization                                          |
 | `~/debug/footprint_offset`              | `geometry_msgs::msg::PolygonStamped`                  | Ego vehicle footprint with `surround_check_distance` offset for visualization         |

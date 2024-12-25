@@ -20,6 +20,9 @@
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
 #include <algorithm>
+#include <memory>
+#include <utility>
+#include <vector>
 
 namespace autoware::map_based_prediction
 {

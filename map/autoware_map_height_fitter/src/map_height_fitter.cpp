@@ -29,7 +29,9 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <tf2_ros/transform_listener.h>
 
+#include <algorithm>
 #include <memory>
+#include <string>
 
 namespace autoware::map_height_fitter
 {

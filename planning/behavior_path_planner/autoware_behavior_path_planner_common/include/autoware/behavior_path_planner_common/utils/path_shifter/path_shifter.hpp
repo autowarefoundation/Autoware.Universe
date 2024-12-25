@@ -162,30 +162,53 @@ private:
   // Clock
   mutable rclcpp::Clock clock_{RCL_ROS_TIME};
 
-  std::pair<std::vector<double>, std::vector<double>> calcBaseLengths(
+  /**
+   * @brief Calculate basic points to generate shifted path.
+   * @param arclength Longitudinal length in the Frenet coordinate.
+   * @param shift_length Lateral length in the Frenet coordinate.
+   * @param offset_back Whether to apply shifting after shift.
+   * @return First is longitudinal points, and second is lateral points.
+   */
+  std::pair<std::vector<double>, std::vector<double>> calc_base_lengths(
     const double arclength, const double shift_length, const bool offset_back) const;
 
-  static std::pair<std::vector<double>, std::vector<double>> getBaseLengthsWithoutAccelLimit(
+  /**
+   * @brief Calculate basic points to generate shifted path without considering acceleration
+   * limitation.
+   * @param arclength Longitudinal length in the Frenet coordinate.
+   * @param shift_length Lateral length in the Frenet coordinate.
+   * @param offset_back Whether to apply shifting after shift.
+   * @return First is longitudinal points, and second is lateral points.
+   */
+  static std::pair<std::vector<double>, std::vector<double>> get_base_lengths_without_accel_limit(
     const double arclength, const double shift_length, const bool offset_back);
 
-  static std::pair<std::vector<double>, std::vector<double>> getBaseLengthsWithoutAccelLimit(
+  /**
+   * @brief Calculate basic points to generate shifted path without considering acceleration
+   * limitation.
+   * @param arclength Longitudinal length in the Frenet coordinate.
+   * @param shift_length Lateral length in the Frenet coordinate.
+   * @param offset_back Whether to apply shifting after shift.
+   * @return First is longitudinal points, and second is lateral points.
+   */
+  static std::pair<std::vector<double>, std::vector<double>> get_base_lengths_without_accel_limit(
     const double arclength, const double shift_length, const double velocity,
     const double longitudinal_acc, const double total_time, const bool offset_back);
 
   /**
    * @brief Calculate path index for shift_lines and set is_index_aligned_ to true.
    */
-  void updateShiftLinesIndices(ShiftLineArray & shift_lines) const;
+  void update_shift_lines_indices(ShiftLineArray & shift_lines) const;
 
   /**
    * @brief Sort the points in order from the front of the path.
    */
-  void sortShiftLinesAlongPath(ShiftLineArray & shift_lines) const;
+  void sort_shift_lines_along_path(ShiftLineArray & shift_lines) const;
 
   /**
    * @brief Generate shifted path from reference_path_ and shift_lines_ with linear shifting.
    */
-  void applyLinearShifter(ShiftedPath * shifted_path) const;
+  void apply_linear_shifter(ShiftedPath * shifted_path) const;
 
   /**
    * @brief Generate shifted path from reference_path_ and shift_lines_ with spline_based shifting.
@@ -193,7 +216,7 @@ private:
    *          dividing the shift interval into four parts and apply a cubic spline to them.
    *          The resultant shifting shape is closed to the Clothoid curve.
    */
-  void applySplineShifter(ShiftedPath * shifted_path, const bool offset_back) const;
+  void apply_spline_shifter(ShiftedPath * shifted_path, const bool offset_back) const;
 
   ////////////////////////////////////////
   // Helper Functions
@@ -202,17 +225,31 @@ private:
   /**
    * @brief Check if the shift points are aligned in order and have no conflict range.
    */
-  bool checkShiftLinesAlignment(const ShiftLineArray & shift_lines) const;
+  bool check_shift_lines_alignment(const ShiftLineArray & shift_lines) const;
 
-  static void addLateralOffsetOnIndexPoint(ShiftedPath * path, double offset, size_t index);
+  /**
+   * @brief Add offset to specific point in shifted path.
+   * @param path Shifted path.
+   * @param offset Lateral offset.
+   * @param index Target point index.
+   */
+  static void add_lateral_offset_on_index_point(ShiftedPath * path, double offset, size_t index);
 
-  static void shiftBaseLength(ShiftedPath * path, double offset);
+  /**
+   * @brief Add offset distance ti shifted path.
+   * @param path Shifted path.
+   * @param offset Lateral offset.
+   */
+  static void shift_base_length(ShiftedPath * path, double offset);
 
-  void setBaseOffset(const double val)
+  void set_base_offset(const double val)
   {
     RCLCPP_DEBUG(logger_, "base_offset is changed: %f -> %f", base_offset_, val);
     base_offset_ = val;
   }
+
+public:
+  friend class PathShifterTest;
 };
 
 }  // namespace autoware::behavior_path_planner

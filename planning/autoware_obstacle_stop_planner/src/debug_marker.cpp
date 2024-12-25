@@ -18,6 +18,8 @@
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware/universe_utils/ros/marker_helper.hpp>
 
+#include <string>
+
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #else
@@ -47,7 +49,6 @@ ObstacleStopPlannerDebugNode::ObstacleStopPlannerDebugNode(
 {
   virtual_wall_pub_ = node_->create_publisher<MarkerArray>("~/virtual_wall", 1);
   debug_viz_pub_ = node_->create_publisher<MarkerArray>("~/debug/marker", 1);
-  stop_reason_pub_ = node_->create_publisher<StopReasonArray>("~/output/stop_reasons", 1);
   velocity_factor_pub_ =
     node_->create_publisher<VelocityFactorArray>("/planning/velocity_factors/obstacle_stop", 1);
   pub_debug_values_ =
@@ -188,8 +189,6 @@ void ObstacleStopPlannerDebugNode::publish()
   debug_viz_pub_->publish(visualization_msg);
 
   /* publish stop reason for autoware api */
-  const auto stop_reason_msg = makeStopReasonArray();
-  stop_reason_pub_->publish(stop_reason_msg);
   const auto velocity_factor_msg = makeVelocityFactorArray();
   velocity_factor_pub_->publish(velocity_factor_msg);
 
@@ -491,33 +490,6 @@ MarkerArray ObstacleStopPlannerDebugNode::makeVisualizationMarker()
   }
 
   return msg;
-}
-
-StopReasonArray ObstacleStopPlannerDebugNode::makeStopReasonArray()
-{
-  // create header
-  Header header;
-  header.frame_id = "map";
-  header.stamp = node_->now();
-
-  // create stop reason stamped
-  StopReason stop_reason_msg;
-  stop_reason_msg.reason = StopReason::OBSTACLE_STOP;
-  StopFactor stop_factor;
-
-  if (stop_pose_ptr_ != nullptr) {
-    stop_factor.stop_pose = *stop_pose_ptr_;
-    if (stop_obstacle_point_ptr_ != nullptr) {
-      stop_factor.stop_factor_points.emplace_back(*stop_obstacle_point_ptr_);
-    }
-    stop_reason_msg.stop_factors.emplace_back(stop_factor);
-  }
-
-  // create stop reason array
-  StopReasonArray stop_reason_array;
-  stop_reason_array.header = header;
-  stop_reason_array.stop_reasons.emplace_back(stop_reason_msg);
-  return stop_reason_array;
 }
 
 VelocityFactorArray ObstacleStopPlannerDebugNode::makeVelocityFactorArray()

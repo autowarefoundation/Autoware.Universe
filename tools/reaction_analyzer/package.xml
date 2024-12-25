@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>reaction_analyzer</name>
-  <version>1.0.0</version>
+  <version>0.40.0</version>
   <description>Analyzer that measures reaction times of the nodes</description>
 
   <maintainer email="berkay@leodrive.ai">Berkay Karaman</maintainer>

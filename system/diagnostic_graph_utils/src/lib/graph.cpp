@@ -14,6 +14,8 @@
 
 #include "diagnostic_graph_utils/graph.hpp"
 
+#include <vector>
+
 namespace diagnostic_graph_utils
 {
 

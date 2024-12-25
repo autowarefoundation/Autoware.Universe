@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>autoware_obstacle_cruise_planner</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>The autoware_obstacle_cruise_planner package</description>
 
   <maintainer email="takayuki.murooka@tier4.jp">Takayuki Murooka</maintainer>
@@ -23,6 +23,7 @@
   <depend>autoware_lanelet2_extension</depend>
   <depend>autoware_motion_utils</depend>
   <depend>autoware_object_recognition_utils</depend>
+  <depend>autoware_objects_of_interest_marker_interface</depend>
   <depend>autoware_osqp_interface</depend>
   <depend>autoware_perception_msgs</depend>
   <depend>autoware_planning_msgs</depend>
@@ -38,6 +39,7 @@
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
   <depend>tier4_debug_msgs</depend>
+  <depend>tier4_metric_msgs</depend>
   <depend>tier4_planning_msgs</depend>
   <depend>visualization_msgs</depend>
 

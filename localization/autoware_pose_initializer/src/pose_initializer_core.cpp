@@ -31,7 +31,7 @@ namespace autoware::pose_initializer
 PoseInitializer::PoseInitializer(const rclcpp::NodeOptions & options)
 : rclcpp::Node("pose_initializer", options)
 {
-  const auto node = component_interface_utils::NodeAdaptor(this);
+  const auto node = autoware::component_interface_utils::NodeAdaptor(this);
   group_srv_ = create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
   node.init_pub(pub_state_);
   node.init_srv(srv_initialize_, this, &PoseInitializer::on_initialize, group_srv_);
@@ -40,7 +40,7 @@ PoseInitializer::PoseInitializer(const rclcpp::NodeOptions & options)
   output_pose_covariance_ = get_covariance_parameter(this, "output_pose_covariance");
   gnss_particle_covariance_ = get_covariance_parameter(this, "gnss_particle_covariance");
 
-  diagnostics_pose_reliable_ = std::make_unique<autoware::localization_util::DiagnosticsModule>(
+  diagnostics_pose_reliable_ = std::make_unique<autoware::universe_utils::DiagnosticInterface>(
     this, "pose_initializer_status");
 
   if (declare_parameter<bool>("ekf_enabled")) {

@@ -34,7 +34,7 @@ PredictedPathCheckerNode::PredictedPathCheckerNode(const rclcpp::NodeOptions & n
 {
   using std::placeholders::_1;
 
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   group_cli_ = create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
   adaptor.init_cli(cli_set_stop_, group_cli_);
   adaptor.init_sub(sub_stop_state_, this, &PredictedPathCheckerNode::onIsStopped);

@@ -16,7 +16,7 @@
 #define ADAPI_PAUSE_INTERFACE_HPP_
 
 #include <autoware/component_interface_specs/control.hpp>
-#include <component_interface_utils/rclcpp.hpp>
+#include <autoware/component_interface_utils/rclcpp.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <autoware_control_msgs/msg/control.hpp>
@@ -46,9 +46,10 @@ private:
   std::optional<bool> prev_is_start_requested_;
 
   rclcpp::Node * node_;
-  component_interface_utils::Service<SetPause>::SharedPtr srv_set_pause_;
-  component_interface_utils::Publisher<IsPaused>::SharedPtr pub_is_paused_;
-  component_interface_utils::Publisher<IsStartRequested>::SharedPtr pub_is_start_requested_;
+  autoware::component_interface_utils::Service<SetPause>::SharedPtr srv_set_pause_;
+  autoware::component_interface_utils::Publisher<IsPaused>::SharedPtr pub_is_paused_;
+  autoware::component_interface_utils::Publisher<IsStartRequested>::SharedPtr
+    pub_is_start_requested_;
 
   void on_pause(
     const SetPause::Service::Request::SharedPtr req,

@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_bytetrack</name>
-  <version>0.0.1</version>
+  <version>0.40.0</version>
   <description>ByteTrack implementation ported toward Autoware</description>
   <maintainer email="manato.hirabayashi@tier4.jp">Manato HIRABAYASHI</maintainer>
   <maintainer email="yoshi.ri@tier4.jp">Yoshi RI</maintainer>
@@ -15,10 +15,10 @@
   <buildtool_export_depend>cudnn_cmake_module</buildtool_export_depend>
   <buildtool_export_depend>tensorrt_cmake_module</buildtool_export_depend>
 
+  <depend>autoware_cuda_utils</depend>
   <depend>autoware_kalman_filter</depend>
   <depend>autoware_perception_msgs</depend>
   <depend>autoware_tensorrt_common</depend>
-  <depend>cuda_utils</depend>
   <depend>cv_bridge</depend>
   <depend>eigen</depend>
   <depend>image_transport</depend>

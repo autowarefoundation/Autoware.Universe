@@ -16,6 +16,8 @@
 
 #include <autoware/universe_utils/ros/update_param.hpp>
 
+#include <vector>
+
 namespace mrm_emergency_stop_operator
 {
 

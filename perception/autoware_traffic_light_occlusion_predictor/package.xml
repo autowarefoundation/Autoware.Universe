@@ -2,10 +2,11 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_traffic_light_occlusion_predictor</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>The autoware_traffic_light_occlusion_predictor package</description>
   <maintainer email="tao.zhong@tier4.jp">Tao Zhong</maintainer>
   <maintainer email="shunsuke.miura@tier4.jp">Shunsuke Miura</maintainer>
+  <maintainer email="masato.saeki@tier4.jp">Masato Saeki</maintainer>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
@@ -14,6 +15,7 @@
 
   <depend>autoware_lanelet2_extension</depend>
   <depend>autoware_map_msgs</depend>
+  <depend>autoware_traffic_light_utils</depend>
   <depend>autoware_universe_utils</depend>
   <depend>geometry_msgs</depend>
   <depend>image_geometry</depend>
@@ -26,7 +28,6 @@
   <depend>tf2_eigen</depend>
   <depend>tf2_ros</depend>
   <depend>tier4_perception_msgs</depend>
-  <depend>traffic_light_utils</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>autoware_lint_common</test_depend>

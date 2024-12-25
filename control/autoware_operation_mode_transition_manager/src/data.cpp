@@ -14,6 +14,8 @@
 
 #include "data.hpp"
 
+#include <string>
+
 namespace autoware::operation_mode_transition_manager
 {
 

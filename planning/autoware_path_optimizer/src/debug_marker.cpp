@@ -18,6 +18,9 @@
 
 #include "visualization_msgs/msg/marker_array.hpp"
 
+#include <string>
+#include <vector>
+
 namespace autoware::path_optimizer
 {
 using autoware::universe_utils::appendMarkerArray;

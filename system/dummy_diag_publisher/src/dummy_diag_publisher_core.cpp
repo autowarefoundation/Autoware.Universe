@@ -14,21 +14,13 @@
 
 #include "dummy_diag_publisher/dummy_diag_publisher_core.hpp"
 
-#include <rcl_interfaces/msg/detail/set_parameters_result__struct.hpp>
+#include <set>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 #define FMT_HEADER_ONLY
-#include <autoware/universe_utils/ros/update_param.hpp>
-#include <diagnostic_updater/diagnostic_updater.hpp>
-#include <rcl_interfaces/msg/set_parameters_result.hpp>
-#include <rclcpp/create_timer.hpp>
-
 #include <fmt/format.h>
-
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <utility>
-#include <vector>
 
 namespace
 {
@@ -43,82 +35,6 @@ std::vector<std::string> split(const std::string & str, const char delim)
   return elems;
 }
 }  // namespace
-
-rcl_interfaces::msg::SetParametersResult DummyDiagPublisher::paramCallback(
-  const std::vector<rclcpp::Parameter> & parameters)
-{
-  rcl_interfaces::msg::SetParametersResult result;
-
-  for (const auto & param : parameters) {
-    const auto param_name = param.get_name();
-    const auto split_names = split(param_name, '.');
-    const auto & diag_name = split_names.at(0);
-    auto it = std::find_if(
-      std::begin(required_diags_), std::end(required_diags_),
-      [&diag_name](DummyDiagConfig config) { return config.name == diag_name; });
-    if (it == std::end(required_diags_)) {  // diag name not found
-      result.successful = false;
-      result.reason = "no matching diag name";
-    } else {  // diag name found
-      const auto status_prefix_str = diag_name + std::string(".status");
-      const auto is_active_prefix_str = diag_name + std::string(".is_active");
-      auto status_str = convertStatusToStr(it->status);
-      auto prev_status_str = status_str;
-      auto is_active = true;
-      try {
-        autoware::universe_utils::updateParam(parameters, status_prefix_str, status_str);
-        autoware::universe_utils::updateParam(parameters, is_active_prefix_str, is_active);
-      } catch (const rclcpp::exceptions::InvalidParameterTypeException & e) {
-        result.successful = false;
-        result.reason = e.what();
-        return result;
-      }
-      const auto status = convertStrToStatus(status_str);
-      if (!status) {
-        result.successful = false;
-        result.reason = "invalid status";
-        return result;
-      }
-      result = updateDiag(diag_name, *it, is_active, *status);
-    }  // end diag name found
-  }
-  return result;
-}
-
-// update diag with new param
-rcl_interfaces::msg::SetParametersResult DummyDiagPublisher::updateDiag(
-  const std::string diag_name, DummyDiagConfig & config, bool is_active, const Status status)
-{
-  rcl_interfaces::msg::SetParametersResult result;
-  result.successful = true;
-  result.reason = "success";
-
-  if (is_active == config.is_active && config.status == status) {  // diag config not changed
-    result.successful = true;
-    result.reason = "config not changed";
-  } else if (is_active == true && config.is_active == false) {  // newly activated
-    config.is_active = true;
-    if (config.status == status) {  // status not changed
-      addDiagByStatus(diag_name, config.status);
-    } else {  // status changed
-      config.status = status;
-      addDiagByStatus(diag_name, status);
-    }
-  } else {  // deactivated or status changed
-    if (!updater_.removeByName(diag_name)) {
-      result.successful = false;
-      result.reason = "updater removal failed";
-      return result;
-    }
-    if (is_active == false) {  // deactivated
-      config.is_active = false;
-    } else {  // status changed
-      config.status = status;
-      addDiagByStatus(diag_name, status);
-    }
-  }
-  return result;
-}
 
 std::optional<DummyDiagPublisher::Status> DummyDiagPublisher::convertStrToStatus(
   std::string & status_str)
@@ -144,6 +60,21 @@ std::string DummyDiagPublisher::convertStatusToStr(const Status & status)
     return std::string("Error");
   } else {
     return std::string("Stale");
+  }
+}
+
+diagnostic_msgs::msg::DiagnosticStatus::_level_type DummyDiagPublisher::convertStatusToLevel(
+  const Status & status)
+{
+  switch (status) {
+    case Status::OK:
+      return diagnostic_msgs::msg::DiagnosticStatus::OK;
+    case Status::WARN:
+      return diagnostic_msgs::msg::DiagnosticStatus::WARN;
+    case Status::ERROR:
+      return diagnostic_msgs::msg::DiagnosticStatus::ERROR;
+    default:
+      return diagnostic_msgs::msg::DiagnosticStatus::STALE;
   }
 }
 
@@ -189,60 +120,22 @@ void DummyDiagPublisher::loadRequiredDiags()
   }
 }
 
-void DummyDiagPublisher::produceOKDiagnostics(diagnostic_updater::DiagnosticStatusWrapper & stat)
-{
-  diagnostic_msgs::msg::DiagnosticStatus status;
-
-  status.level = diagnostic_msgs::msg::DiagnosticStatus::OK;
-  status.message = diag_config_.msg_ok;
-
-  stat.summary(status.level, status.message);
-}
-void DummyDiagPublisher::produceWarnDiagnostics(diagnostic_updater::DiagnosticStatusWrapper & stat)
-{
-  diagnostic_msgs::msg::DiagnosticStatus status;
-
-  status.level = diagnostic_msgs::msg::DiagnosticStatus::WARN;
-  status.message = diag_config_.msg_warn;
-
-  stat.summary(status.level, status.message);
-}
-void DummyDiagPublisher::produceErrorDiagnostics(diagnostic_updater::DiagnosticStatusWrapper & stat)
-{
-  diagnostic_msgs::msg::DiagnosticStatus status;
-
-  status.level = diagnostic_msgs::msg::DiagnosticStatus::ERROR;
-  status.message = diag_config_.msg_error;
-
-  stat.summary(status.level, status.message);
-}
-void DummyDiagPublisher::produceStaleDiagnostics(diagnostic_updater::DiagnosticStatusWrapper & stat)
-{
-  diagnostic_msgs::msg::DiagnosticStatus status;
-
-  status.level = diagnostic_msgs::msg::DiagnosticStatus::STALE;
-  status.message = diag_config_.msg_stale;
-
-  stat.summary(status.level, status.message);
-}
-void DummyDiagPublisher::addDiagByStatus(const std::string & diag_name, const Status status)
-{
-  if (status == Status::OK) {
-    updater_.add(diag_name, this, &DummyDiagPublisher::produceOKDiagnostics);
-  } else if (status == Status::WARN) {
-    updater_.add(diag_name, this, &DummyDiagPublisher::produceWarnDiagnostics);
-  } else if (status == Status::ERROR) {
-    updater_.add(diag_name, this, &DummyDiagPublisher::produceErrorDiagnostics);
-  } else if (status == Status::STALE) {
-    updater_.add(diag_name, this, &DummyDiagPublisher::produceStaleDiagnostics);
-  } else {
-    throw std::runtime_error("invalid status");
-  }
-}
-
 void DummyDiagPublisher::onTimer()
 {
-  updater_.force_update();
+  diagnostic_msgs::msg::DiagnosticArray array;
+
+  for (const auto & e : required_diags_) {
+    if (e.is_active) {
+      diagnostic_msgs::msg::DiagnosticStatus status;
+      status.hardware_id = diag_config_.hardware_id;
+      status.name = e.name;
+      status.message = convertStatusToStr(e.status);
+      status.level = convertStatusToLevel(e.status);
+      array.status.push_back(status);
+    }
+  }
+  array.header.stamp = this->now();
+  pub_->publish(array);
 }
 
 rclcpp::NodeOptions override_options(rclcpp::NodeOptions options)
@@ -252,32 +145,25 @@ rclcpp::NodeOptions override_options(rclcpp::NodeOptions options)
 }
 
 DummyDiagPublisher::DummyDiagPublisher(const rclcpp::NodeOptions & options)
-: Node("dummy_diag_publisher", override_options(options)), updater_(this)
+: Node("dummy_diag_publisher", override_options(options))
 
 {
   // Parameter
   update_rate_ = this->get_parameter_or("update_rate", 10.0);
 
-  // Set parameter callback
-  set_param_res_ = this->add_on_set_parameters_callback(
-    std::bind(&DummyDiagPublisher::paramCallback, this, std::placeholders::_1));
-
   // Diagnostic Updater
   loadRequiredDiags();
 
   const std::string hardware_id = "dummy_diag";
-  updater_.setHardwareID(hardware_id);
   diag_config_ = DiagConfig{hardware_id, "OK", "Warn", "Error", "Stale"};
-  for (const auto & config : required_diags_) {
-    if (config.is_active) {
-      addDiagByStatus(config.name, config.status);
-    }
-  }
 
   // Timer
   const auto period_ns = rclcpp::Rate(update_rate_).period();
   timer_ = rclcpp::create_timer(
     this, get_clock(), period_ns, std::bind(&DummyDiagPublisher::onTimer, this));
+
+  // Publisher
+  pub_ = create_publisher<diagnostic_msgs::msg::DiagnosticArray>("/diagnostics", rclcpp::QoS(1));
 }
 
 #include <rclcpp_components/register_node_macro.hpp>

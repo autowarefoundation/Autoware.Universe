@@ -15,6 +15,7 @@
 #include "autoware/motion_utils/trajectory/conversion.hpp"
 
 #include <algorithm>
+#include <vector>
 
 namespace autoware::motion_utils
 {

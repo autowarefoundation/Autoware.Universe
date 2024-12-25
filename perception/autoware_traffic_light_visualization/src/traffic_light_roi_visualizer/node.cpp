@@ -201,15 +201,17 @@ void TrafficLightRoiVisualizerNode::imageRoughRoiCallback(
     // bbox drawing
     cv_ptr = cv_bridge::toCvCopy(input_image_msg, sensor_msgs::image_encodings::RGB8);
     for (auto tl_rough_roi : input_tl_rough_roi_msg->rois) {
-      // visualize rough roi
-      createRect(cv_ptr->image, tl_rough_roi, cv::Scalar(0, 255, 0));
-
+      // note: a signal will still be output even if it is undetected
+      // Its position and size will be set as 0 and the color will be set as unknown
+      // So a rough roi will always have correspond roi a correspond traffic signal
       ClassificationResult result;
       bool has_correspond_traffic_signal =
         getClassificationResult(tl_rough_roi.traffic_light_id, *input_traffic_signals_msg, result);
       tier4_perception_msgs::msg::TrafficLightRoi tl_roi;
       bool has_correspond_roi =
         getRoiFromId(tl_rough_roi.traffic_light_id, input_tl_roi_msg, tl_roi);
+
+      createRect(cv_ptr->image, tl_rough_roi, extractShapeInfo(result.label).color);
 
       if (has_correspond_roi && has_correspond_traffic_signal) {
         // has fine detection and classification results

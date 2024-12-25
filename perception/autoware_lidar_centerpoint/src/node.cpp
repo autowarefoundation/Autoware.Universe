@@ -80,9 +80,6 @@ LidarCenterPointNode::LidarCenterPointNode(const rclcpp::NodeOptions & node_opti
 
   {
     NMSParams p;
-    p.nms_type_ = NMS_TYPE::IoU_BEV;
-    p.target_class_names_ = this->declare_parameter<std::vector<std::string>>(
-      "post_process_params.iou_nms_target_class_names");
     p.search_distance_2d_ =
       this->declare_parameter<double>("post_process_params.iou_nms_search_distance_2d");
     p.iou_threshold_ = this->declare_parameter<double>("post_process_params.iou_nms_threshold");

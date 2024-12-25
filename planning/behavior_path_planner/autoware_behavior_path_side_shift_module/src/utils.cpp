@@ -26,12 +26,6 @@ namespace autoware::behavior_path_planner
 {
 void setOrientation(PathWithLaneId * path)
 {
-  if (!path) {
-    RCLCPP_ERROR(
-      rclcpp::get_logger("behavior_path_planner").get_child("side_shift").get_child("util"),
-      "Pointer to path is NULL!");
-  }
-
   // Reset orientation
   for (size_t idx = 0; idx < path->points.size(); ++idx) {
     double angle = 0.0;
@@ -53,9 +47,16 @@ void setOrientation(PathWithLaneId * path)
   }
 }
 
-bool isAlmostZero(double v)
+double getClosestShiftLength(
+  const ShiftedPath & shifted_path, const geometry_msgs::msg::Point ego_point)
 {
-  return std::fabs(v) < 1.0e-4;
+  if (shifted_path.shift_length.empty()) {
+    return 0.0;
+  }
+
+  const auto closest =
+    autoware::motion_utils::findNearestIndex(shifted_path.path.points, ego_point);
+  return shifted_path.shift_length.at(closest);
 }
 
 }  // namespace autoware::behavior_path_planner

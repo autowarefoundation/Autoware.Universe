@@ -66,6 +66,12 @@ ros2 launch autoware_image_projection_based_fusion pointpainting_fusion.launch.x
 
 The rclcpp::TimerBase timer could not break a for loop, therefore even if time is out when fusing a roi msg at the middle, the program will run until all msgs are fused.
 
+### Approximate camera projection
+
+For algorithms like `pointpainting_fusion`, the computation required to project points onto an unrectified (raw) image can be substantial. To address this, an option is provided to reduce the computational load. Set the [`approximate_camera_projection parameter`](config/fusion_common.param.yaml) to `true` for each camera (ROIs). If the corresponding `point_project_to_unrectified_image` parameter is also set to true, the projections will be pre-cached.
+
+The cached projections are calculated using a grid, with the grid size specified by the `approximation_grid_width_size` and `approximation_grid_height_size` parameters in the [configuration file](config/fusion_common.param.yaml). The centers of the grid are used as the projected points.
+
 ### Detail description of each fusion's algorithm is in the following links
 
 | Fusion Name                | Description                                                                                     | Detail                                       |

@@ -49,6 +49,8 @@ MrmHandler::MrmHandler(const rclcpp::NodeOptions & options) : Node("mrm_handler"
     create_publisher<autoware_vehicle_msgs::msg::GearCommand>("~/output/gear", rclcpp::QoS{1});
   pub_mrm_state_ =
     create_publisher<autoware_adapi_v1_msgs::msg::MrmState>("~/output/mrm/state", rclcpp::QoS{1});
+  pub_emergency_holding_ = create_publisher<tier4_system_msgs::msg::EmergencyHoldingState>(
+    "~/output/emergency_holding", rclcpp::QoS{1});
 
   // Clients
   client_mrm_pull_over_group_ = create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
@@ -151,6 +153,14 @@ void MrmHandler::publishMrmState()
 {
   mrm_state_.stamp = this->now();
   pub_mrm_state_->publish(mrm_state_);
+}
+
+void MrmHandler::publishEmergencyHolding()
+{
+  tier4_system_msgs::msg::EmergencyHoldingState msg;
+  msg.stamp = this->now();
+  msg.is_holding = is_emergency_holding_;
+  pub_emergency_holding_->publish(msg);
 }
 
 void MrmHandler::operateMrm()
@@ -352,6 +362,7 @@ void MrmHandler::onTimer()
   publishMrmState();
   publishHazardCmd();
   publishGearCmd();
+  publishEmergencyHolding();
 }
 
 void MrmHandler::transitionTo(const int new_state)

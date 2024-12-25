@@ -16,6 +16,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 namespace autoware::vehicle_cmd_gate
 {

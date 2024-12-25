@@ -4,11 +4,9 @@
   <arg name="input_frame" default=""/>
   <arg name="output_frame" default="base_link"/>
   <arg name="passthrough_filter_uint16_param_file" default="$(find-pkg-share autoware_pointcloud_preprocessor)/config/passthrough_filter_uint16_node.param.yaml"/>
-  <arg name="filter_param_file" default="$(find-pkg-share autoware_pointcloud_preprocessor)/config/filter.param.yaml"/>
 
   <node pkg="autoware_pointcloud_preprocessor" exec="passthrough_filter_uint16_node" name="ring_passthrough_filter">
     <param from="$(var passthrough_filter_uint16_param_file)"/>
-    <param from="$(var filter_param_file)"/>
     <remap from="input" to="$(var input_topic_name)"/>
     <remap from="output" to="$(var output_topic_name)"/>
     <param name="input_frame" value="$(var input_frame)"/>

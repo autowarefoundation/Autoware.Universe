@@ -19,6 +19,8 @@
 
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
 
+#include <vector>
+
 namespace perception_diagnostics
 {
 namespace metrics

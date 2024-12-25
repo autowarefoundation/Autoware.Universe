@@ -31,7 +31,6 @@ public:
     ekf_rate(node->declare_parameter<double>("node.predict_frequency")),
     ekf_dt(1.0 / std::max(ekf_rate, 0.1)),
     tf_rate_(node->declare_parameter<double>("node.tf_rate")),
-    publish_tf_(node->declare_parameter<bool>("node.publish_tf")),
     enable_yaw_bias_estimation(node->declare_parameter<bool>("node.enable_yaw_bias_estimation")),
     extend_state_step(node->declare_parameter<int>("node.extend_state_step")),
     pose_frame_id(node->declare_parameter<std::string>("misc.pose_frame_id")),
@@ -76,7 +75,6 @@ public:
   const double ekf_rate;
   const double ekf_dt;
   const double tf_rate_;
-  const bool publish_tf_;
   const bool enable_yaw_bias_estimation;
   const size_t extend_state_step;
   const std::string pose_frame_id;

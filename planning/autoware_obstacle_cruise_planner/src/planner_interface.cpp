@@ -25,8 +25,12 @@
 #include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
 
+#include <algorithm>
+#include <iostream>
 #include <optional>
 #include <string>
+#include <utility>
+#include <vector>
 
 namespace
 {
@@ -37,74 +41,6 @@ StopSpeedExceeded createStopSpeedExceededMsg(
   msg.stamp = current_time;
   msg.stop_speed_exceeded = stop_flag;
   return msg;
-}
-
-tier4_planning_msgs::msg::StopReasonArray makeStopReasonArray(
-  const PlannerData & planner_data, const geometry_msgs::msg::Pose & stop_pose,
-  const StopObstacle & stop_obstacle)
-{
-  // create header
-  std_msgs::msg::Header header;
-  header.frame_id = "map";
-  header.stamp = planner_data.current_time;
-
-  // create stop factor
-  StopFactor stop_factor;
-  stop_factor.stop_pose = stop_pose;
-  geometry_msgs::msg::Point stop_factor_point = stop_obstacle.collision_point;
-  stop_factor_point.z = stop_pose.position.z;
-  stop_factor.dist_to_stop_pose = autoware::motion_utils::calcSignedArcLength(
-    planner_data.traj_points, planner_data.ego_pose.position, stop_pose.position);
-  stop_factor.stop_factor_points.emplace_back(stop_factor_point);
-
-  // create stop reason stamped
-  StopReason stop_reason_msg;
-  stop_reason_msg.reason = StopReason::OBSTACLE_STOP;
-  stop_reason_msg.stop_factors.emplace_back(stop_factor);
-
-  // create stop reason array
-  StopReasonArray stop_reason_array;
-  stop_reason_array.header = header;
-  stop_reason_array.stop_reasons.emplace_back(stop_reason_msg);
-  return stop_reason_array;
-}
-
-StopReasonArray makeEmptyStopReasonArray(const rclcpp::Time & current_time)
-{
-  // create header
-  std_msgs::msg::Header header;
-  header.frame_id = "map";
-  header.stamp = current_time;
-
-  // create stop reason stamped
-  StopReason stop_reason_msg;
-  stop_reason_msg.reason = StopReason::OBSTACLE_STOP;
-
-  // create stop reason array
-  StopReasonArray stop_reason_array;
-  stop_reason_array.header = header;
-  stop_reason_array.stop_reasons.emplace_back(stop_reason_msg);
-  return stop_reason_array;
-}
-
-VelocityFactorArray makeVelocityFactorArray(
-  const rclcpp::Time & time, const std::optional<geometry_msgs::msg::Pose> pose = std::nullopt)
-{
-  VelocityFactorArray velocity_factor_array;
-  velocity_factor_array.header.frame_id = "map";
-  velocity_factor_array.header.stamp = time;
-
-  if (pose) {
-    using distance_type = VelocityFactor::_distance_type;
-    VelocityFactor velocity_factor;
-    velocity_factor.behavior = PlanningBehavior::ROUTE_OBSTACLE;
-    velocity_factor.pose = pose.value();
-    velocity_factor.distance = std::numeric_limits<distance_type>::quiet_NaN();
-    velocity_factor.status = VelocityFactor::UNKNOWN;
-    velocity_factor.detail = std::string();
-    velocity_factor_array.factors.push_back(velocity_factor);
-  }
-  return velocity_factor_array;
 }
 
 double calcMinimumDistanceToStop(
@@ -246,8 +182,8 @@ std::vector<TrajectoryPoint> PlannerInterface::generateStopTrajectory(
                                   : std::abs(vehicle_info_.min_longitudinal_offset_m);
 
   if (stop_obstacles.empty()) {
-    stop_reasons_pub_->publish(makeEmptyStopReasonArray(planner_data.current_time));
-    velocity_factors_pub_->publish(makeVelocityFactorArray(planner_data.current_time));
+    velocity_factors_pub_->publish(
+      obstacle_cruise_utils::makeVelocityFactorArray(planner_data.current_time));
     // delete marker
     const auto markers =
       autoware::motion_utils::createDeletedStopVirtualWallMarker(planner_data.current_time, 0);
@@ -400,13 +336,11 @@ std::vector<TrajectoryPoint> PlannerInterface::generateStopTrajectory(
 
     // Publish Stop Reason
     const auto stop_pose = output_traj_points.at(*zero_vel_idx).pose;
-    const auto stop_reasons_msg =
-      makeStopReasonArray(planner_data, stop_pose, *determined_stop_obstacle);
-    stop_reasons_pub_->publish(stop_reasons_msg);
-    velocity_factors_pub_->publish(makeVelocityFactorArray(planner_data.current_time, stop_pose));
+    velocity_factors_pub_->publish(obstacle_cruise_utils::makeVelocityFactorArray(
+      planner_data.current_time, PlanningBehavior::ROUTE_OBSTACLE, stop_pose));
     // Store stop reason debug data
-    debug_data_ptr_->stop_reason_diag =
-      makeDiagnostic("stop", planner_data, stop_pose, *determined_stop_obstacle);
+    debug_data_ptr_->stop_metrics =
+      makeMetrics("PlannerInterface", "stop", planner_data, stop_pose, *determined_stop_obstacle);
     // Publish if ego vehicle will over run against the stop point with a limit acceleration
 
     const bool will_over_run = determined_zero_vel_dist.value() >
@@ -656,6 +590,9 @@ std::vector<TrajectoryPoint> PlannerInterface::generateSlowDownTrajectory(
       const auto markers = autoware::motion_utils::createSlowDownVirtualWallMarker(
         slow_down_traj_points.at(slow_down_wall_idx).pose, "obstacle slow down",
         planner_data.current_time, i, abs_ego_offset, "", planner_data.is_driving_forward);
+      velocity_factors_pub_->publish(obstacle_cruise_utils::makeVelocityFactorArray(
+        planner_data.current_time, PlanningBehavior::ROUTE_OBSTACLE,
+        slow_down_traj_points.at(slow_down_wall_idx).pose));
       autoware::universe_utils::appendMarkerArray(markers, &debug_data_ptr_->slow_down_wall_marker);
     }
 
@@ -677,8 +614,9 @@ std::vector<TrajectoryPoint> PlannerInterface::generateSlowDownTrajectory(
 
     // Add debug data
     debug_data_ptr_->obstacles_to_slow_down.push_back(obstacle);
-    if (!debug_data_ptr_->slow_down_reason_diag.has_value()) {
-      debug_data_ptr_->slow_down_reason_diag = makeDiagnostic("slow_down", planner_data);
+    if (!debug_data_ptr_->stop_metrics.has_value()) {
+      debug_data_ptr_->slow_down_metrics =
+        makeMetrics("PlannerInterface", "slow_down", planner_data);
     }
 
     // update prev_slow_down_output_
@@ -837,89 +775,87 @@ PlannerInterface::calculateDistanceToSlowDownWithConstraints(
     filtered_dist_to_slow_down_start, filtered_dist_to_slow_down_end, feasible_slow_down_vel);
 }
 
-DiagnosticStatus PlannerInterface::makeEmptyDiagnostic(const std::string & reason)
-{
-  // Create status
-  DiagnosticStatus status;
-  status.level = status.OK;
-  status.name = "obstacle_cruise_planner_" + reason;
-  diagnostic_msgs::msg::KeyValue key_value;
-  {
-    // Decision
-    key_value.key = "decision";
-    key_value.value = "none";
-    status.values.push_back(key_value);
-  }
-
-  return status;
-}
-
-DiagnosticStatus PlannerInterface::makeDiagnostic(
-  const std::string & reason, const std::optional<PlannerData> & planner_data,
+std::vector<Metric> PlannerInterface::makeMetrics(
+  const std::string & module_name, const std::string & reason,
+  const std::optional<PlannerData> & planner_data,
   const std::optional<geometry_msgs::msg::Pose> & stop_pose,
   const std::optional<StopObstacle> & stop_obstacle)
 {
+  auto metrics = std::vector<Metric>();
+
   // Create status
-  DiagnosticStatus status;
-  status.level = status.OK;
-  status.name = "obstacle_cruise_planner_" + reason;
-  diagnostic_msgs::msg::KeyValue key_value;
   {
     // Decision
-    key_value.key = "decision";
-    key_value.value = reason;
-    status.values.push_back(key_value);
+    Metric decision_metric;
+    decision_metric.name = module_name + "/decision";
+    decision_metric.unit = "string";
+    decision_metric.value = reason;
+    metrics.push_back(decision_metric);
   }
 
   if (stop_pose.has_value() && planner_data.has_value()) {  // Stop info
-    key_value.key = "stop_position";
+    Metric stop_position_metric;
+    stop_position_metric.name = module_name + "/stop_position";
+    stop_position_metric.unit = "string";
     const auto & p = stop_pose.value().position;
-    key_value.value =
+    stop_position_metric.value =
       "{" + std::to_string(p.x) + ", " + std::to_string(p.y) + ", " + std::to_string(p.z) + "}";
-    status.values.push_back(key_value);
-    key_value.key = "stop_orientation";
+    metrics.push_back(stop_position_metric);
+
+    Metric stop_orientation_metric;
+    stop_orientation_metric.name = module_name + "/stop_orientation";
+    stop_orientation_metric.unit = "string";
     const auto & o = stop_pose.value().orientation;
-    key_value.value = "{" + std::to_string(o.w) + ", " + std::to_string(o.x) + ", " +
-                      std::to_string(o.y) + ", " + std::to_string(o.z) + "}";
-    status.values.push_back(key_value);
+    stop_orientation_metric.value = "{" + std::to_string(o.w) + ", " + std::to_string(o.x) + ", " +
+                                    std::to_string(o.y) + ", " + std::to_string(o.z) + "}";
+    metrics.push_back(stop_orientation_metric);
+
     const auto dist_to_stop_pose = autoware::motion_utils::calcSignedArcLength(
       planner_data.value().traj_points, planner_data.value().ego_pose.position,
       stop_pose.value().position);
-    key_value.key = "distance_to_stop_pose";
-    key_value.value = std::to_string(dist_to_stop_pose);
-    status.values.push_back(key_value);
+
+    Metric dist_to_stop_pose_metric;
+    dist_to_stop_pose_metric.name = module_name + "/distance_to_stop_pose";
+    dist_to_stop_pose_metric.unit = "double";
+    dist_to_stop_pose_metric.value = std::to_string(dist_to_stop_pose);
+    metrics.push_back(dist_to_stop_pose_metric);
   }
 
   if (stop_obstacle.has_value()) {
     // Obstacle info
+    Metric collision_point_metric;
     const auto & p = stop_obstacle.value().collision_point;
-    key_value.key = "collision_point";
-    key_value.value =
+    collision_point_metric.name = module_name + "/collision_point";
+    collision_point_metric.unit = "string";
+    collision_point_metric.value =
       "{" + std::to_string(p.x) + ", " + std::to_string(p.y) + ", " + std::to_string(p.z) + "}";
-    status.values.push_back(key_value);
+    metrics.push_back(collision_point_metric);
   }
-
-  return status;
+  return metrics;
 }
 
-void PlannerInterface::publishDiagnostics(const rclcpp::Time & current_time)
+void PlannerInterface::publishMetrics(const rclcpp::Time & current_time)
 {
   // create array
-  DiagnosticArray diagnostics;
-  diagnostics.header.stamp = current_time;
-  diagnostics.header.frame_id = "map";
-  const auto & d = debug_data_ptr_;
-  diagnostics.status = {
-    (d->stop_reason_diag) ? d->stop_reason_diag.value() : makeEmptyDiagnostic("stop"),
-    (d->slow_down_reason_diag) ? *(d->slow_down_reason_diag) : makeEmptyDiagnostic("slow_down"),
-    (d->cruise_reason_diag) ? d->cruise_reason_diag.value() : makeEmptyDiagnostic("cruise")};
-  diagnostics_pub_->publish(diagnostics);
-  clearDiagnostics();
+  MetricArray metrics_msg;
+  metrics_msg.stamp = current_time;
+
+  auto addMetrics = [&metrics_msg](std::optional<std::vector<Metric>> & opt_metrics) {
+    if (opt_metrics) {
+      metrics_msg.metric_array.insert(
+        metrics_msg.metric_array.end(), opt_metrics->begin(), opt_metrics->end());
+    }
+  };
+  addMetrics(debug_data_ptr_->stop_metrics);
+  addMetrics(debug_data_ptr_->slow_down_metrics);
+  addMetrics(debug_data_ptr_->cruise_metrics);
+  metrics_pub_->publish(metrics_msg);
+  clearMetrics();
 }
 
-void PlannerInterface::clearDiagnostics()
+void PlannerInterface::clearMetrics()
 {
-  debug_data_ptr_->stop_reason_diag = std::nullopt;
-  debug_data_ptr_->slow_down_reason_diag = std::nullopt;
-  debug_data_ptr_->cruise_reason_diag = std::nullopt;
+  debug_data_ptr_->stop_metrics = std::nullopt;
+  debug_data_ptr_->slow_down_metrics = std::nullopt;
+  debug_data_ptr_->cruise_metrics = std::nullopt;
 }

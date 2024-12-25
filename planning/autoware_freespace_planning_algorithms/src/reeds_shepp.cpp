@@ -91,7 +91,7 @@ using autoware::freespace_planning_algorithms::ReedsSheppStateSpace;
 
 const double pi = M_PI;
 const double twopi = 2. * pi;
-const double RS_EPS = 1e-6;
+[[maybe_unused]] const double RS_EPS = 1e-6;  // used only in assertions
 const double ZERO = 10 * std::numeric_limits<double>::epsilon();
 
 inline double mod2pi(double x)

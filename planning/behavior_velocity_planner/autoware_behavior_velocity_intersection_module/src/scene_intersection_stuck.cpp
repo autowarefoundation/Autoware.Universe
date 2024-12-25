@@ -26,6 +26,10 @@
 #include <lanelet2_core/geometry/LineString.h>
 #include <lanelet2_core/geometry/Point.h>
 
+#include <algorithm>
+#include <string>
+#include <vector>
+
 namespace
 {
 lanelet::LineString3d getLineStringFromArcLength(

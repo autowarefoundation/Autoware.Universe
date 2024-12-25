@@ -18,6 +18,9 @@
 
 #include <gtest/gtest.h>
 
+#include <string>
+#include <vector>
+
 using autoware::universe_utils::LinearRing2d;
 using autoware_planning_msgs::msg::TrajectoryPoint;
 using geometry_msgs::msg::PoseWithCovariance;

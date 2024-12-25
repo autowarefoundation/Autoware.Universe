@@ -1,20 +1,21 @@
 from glob import glob
 import os
 
+from setuptools import find_packages
 from setuptools import setup
 
 package_name = "autoware_carla_interface"
 
 setup(
     name=package_name,
-    version="0.0.0",
-    packages=[package_name],
+    version="0.40.0",
+    packages=find_packages(where="src"),
     data_files=[
-        ("share/" + package_name, glob("config/*")),
-        ("share/" + package_name, glob("calibration_maps/*.csv")),
-        ("share/" + package_name, ["package.xml"]),
-        (os.path.join("share", package_name), glob("launch/autoware_carla_interface.launch.xml")),
-        ("share/ament_index/resource_index/packages", ["resource/autoware_carla_interface"]),
+        ("share/ament_index/resource_index/packages", [f"resource/{package_name}"]),
+        (os.path.join("share", package_name), ["package.xml"]),
+        (os.path.join("share", package_name), glob("config/*")),
+        (os.path.join("share", package_name), glob("calibration_maps/*.csv")),
+        (os.path.join("share", package_name), glob("launch/*.launch.xml")),
     ],
     install_requires=["setuptools"],
     zip_safe=True,

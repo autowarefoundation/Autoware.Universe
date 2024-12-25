@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <chrono>
 #include <limits>
+#include <memory>
 #include <vector>
 
 namespace autoware::velocity_smoother

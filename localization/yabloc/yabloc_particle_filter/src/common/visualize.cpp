@@ -16,6 +16,8 @@
 
 #include <yabloc_common/color.hpp>
 
+#include <algorithm>
+
 namespace yabloc::modularized_particle_filter
 {
 ParticleVisualizer::ParticleVisualizer(rclcpp::Node & node)

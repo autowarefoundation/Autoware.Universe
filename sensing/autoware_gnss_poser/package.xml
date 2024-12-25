@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_gnss_poser</name>
-  <version>1.0.0</version>
+  <version>0.40.0</version>
   <description>The ROS 2 autoware_gnss_poser package</description>
   <maintainer email="yamato.ando@tier4.jp">Yamato Ando</maintainer>
   <maintainer email="masahiro.sakamoto@tier4.jp">Masahiro Sakamoto</maintainer>
@@ -20,9 +20,9 @@
   <build_depend>libboost-dev</build_depend>
 
   <depend>autoware_component_interface_specs</depend>
+  <depend>autoware_component_interface_utils</depend>
   <depend>autoware_geography_utils</depend>
   <depend>autoware_sensing_msgs</depend>
-  <depend>component_interface_utils</depend>
   <depend>geographic_msgs</depend>
   <depend>geographiclib</depend>
   <depend>geometry_msgs</depend>

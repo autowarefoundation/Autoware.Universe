@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>autoware_radar_threshold_filter</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>autoware_radar_threshold_filter</description>
   <maintainer email="satoshi.tanaka@tier4.jp">Satoshi Tanaka</maintainer>
   <maintainer email="shunsuke.miura@tier4.jp">Shunsuke Miura</maintainer>

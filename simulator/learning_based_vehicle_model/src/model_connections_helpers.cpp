@@ -14,6 +14,8 @@
 
 #include "learning_based_vehicle_model/model_connections_helpers.hpp"
 
+#include <vector>
+
 std::vector<double> fillVectorUsingMap(
   std::vector<double> vector1, std::vector<double> vector2, const std::vector<int> & map,
   bool inverse)

@@ -16,6 +16,7 @@
 
 #include <tf2/LinearMath/Vector3.h>
 
+#include <algorithm>
 #include <iostream>
 #include <limits>
 

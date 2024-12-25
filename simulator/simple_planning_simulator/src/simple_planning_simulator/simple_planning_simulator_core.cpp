@@ -21,6 +21,7 @@
 #include "autoware_vehicle_info_utils/vehicle_info_utils.hpp"
 #include "rclcpp_components/register_node_macro.hpp"
 #include "simple_planning_simulator/vehicle_model/sim_model.hpp"
+#include "simple_planning_simulator/vehicle_model/sim_model_actuation_cmd.hpp"
 
 #include <autoware_lanelet2_extension/utility/message_conversion.hpp>
 #include <autoware_lanelet2_extension/utility/query.hpp>
@@ -34,9 +35,11 @@
 #include <chrono>
 #include <filesystem>
 #include <iostream>
+#include <limits>
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 using namespace std::literals::chrono_literals;
 
@@ -147,7 +150,7 @@ SimplePlanningSimulator::SimplePlanningSimulator(const rclcpp::NodeOptions & opt
   // Initial value must be set to current_input_command_ with the correct type.
   // If not, the vehicle_model will not be updated, and it will die when publishing the state.
   const auto vehicle_model_type_str = declare_parameter("vehicle_model_type", "IDEAL_STEER_VEL");
-  if (vehicle_model_type_str == "ACTUATION_CMD") {
+  if (vehicle_model_type_str.find("ACTUATION_CMD") != std::string::npos) {
     current_input_command_ = ActuationCommandStamped();
     sub_actuation_cmd_ = create_subscription<ActuationCommandStamped>(
       "input/actuation_command", QoS{1},
@@ -311,9 +314,7 @@ void SimplePlanningSimulator::initialize_vehicle_model(const std::string & vehic
 
     vehicle_model_ptr_ = std::make_shared<SimModelLearnedSteerVel>(
       timer_sampling_time_ms_ / 1000.0, model_module_paths, model_param_paths, model_class_names);
-  } else if (vehicle_model_type_str == "ACTUATION_CMD") {
-    vehicle_model_type_ = VehicleModelType::ACTUATION_CMD;
-
+  } else if (vehicle_model_type_str.find("ACTUATION_CMD") != std::string::npos) {
     // time delay
     const double accel_time_delay = declare_parameter<double>("accel_time_delay");
     const double accel_time_constant = declare_parameter<double>("accel_time_constant");
@@ -323,37 +324,77 @@ void SimplePlanningSimulator::initialize_vehicle_model(const std::string & vehic
     // command conversion flag
     const bool convert_accel_cmd = declare_parameter<bool>("convert_accel_cmd");
     const bool convert_brake_cmd = declare_parameter<bool>("convert_brake_cmd");
-    const bool convert_steer_cmd = declare_parameter<bool>("convert_steer_cmd");
 
     // actuation conversion map
     const std::string accel_map_path = declare_parameter<std::string>("accel_map_path");
     const std::string brake_map_path = declare_parameter<std::string>("brake_map_path");
 
-    // init vehicle model depending on convert_steer_cmd_method
-    if (convert_steer_cmd) {
-      const std::string convert_steer_cmd_method =
-        declare_parameter<std::string>("convert_steer_cmd_method");
-      if (convert_steer_cmd_method == "vgr") {
-        const double vgr_coef_a = declare_parameter<double>("vgr_coef_a");
-        const double vgr_coef_b = declare_parameter<double>("vgr_coef_b");
-        const double vgr_coef_c = declare_parameter<double>("vgr_coef_c");
-        vehicle_model_ptr_ = std::make_shared<SimModelActuationCmd>(
-          vel_lim, steer_lim, vel_rate_lim, steer_rate_lim, wheelbase,
-          timer_sampling_time_ms_ / 1000.0, accel_time_delay, accel_time_constant, brake_time_delay,
-          brake_time_constant, steer_time_delay, steer_time_constant, steer_bias, convert_accel_cmd,
-          convert_brake_cmd, convert_steer_cmd, accel_map_path, brake_map_path, vgr_coef_a,
-          vgr_coef_b, vgr_coef_c);
-      } else if (convert_steer_cmd_method == "steer_map") {
-        const std::string steer_map_path = declare_parameter<std::string>("steer_map_path");
-        vehicle_model_ptr_ = std::make_shared<SimModelActuationCmd>(
-          vel_lim, steer_lim, vel_rate_lim, steer_rate_lim, wheelbase,
-          timer_sampling_time_ms_ / 1000.0, accel_time_delay, accel_time_constant, brake_time_delay,
-          brake_time_constant, steer_time_delay, steer_time_constant, steer_bias, convert_accel_cmd,
-          convert_brake_cmd, convert_steer_cmd, accel_map_path, brake_map_path, steer_map_path);
-      } else {
-        throw std::invalid_argument(
-          "Invalid convert_steer_cmd_method: " + convert_steer_cmd_method);
-      }
+    if (vehicle_model_type_str == "ACTUATION_CMD") {
+      vehicle_model_type_ = VehicleModelType::ACTUATION_CMD;
+      vehicle_model_ptr_ = std::make_shared<SimModelActuationCmd>(
+        vel_lim, steer_lim, vel_rate_lim, steer_rate_lim, wheelbase,
+        timer_sampling_time_ms_ / 1000.0, accel_time_delay, accel_time_constant, brake_time_delay,
+        brake_time_constant, steer_time_delay, steer_time_constant, steer_bias, convert_accel_cmd,
+        convert_brake_cmd, accel_map_path, brake_map_path);
+    } else if (vehicle_model_type_str == "ACTUATION_CMD_VGR") {
+      vehicle_model_type_ = VehicleModelType::ACTUATION_CMD_VGR;
+      const double vgr_coef_a = declare_parameter<double>("vgr_coef_a");
+      const double vgr_coef_b = declare_parameter<double>("vgr_coef_b");
+      const double vgr_coef_c = declare_parameter<double>("vgr_coef_c");
+      vehicle_model_ptr_ = std::make_shared<SimModelActuationCmdVGR>(
+        vel_lim, steer_lim, vel_rate_lim, steer_rate_lim, wheelbase,
+        timer_sampling_time_ms_ / 1000.0, accel_time_delay, accel_time_constant, brake_time_delay,
+        brake_time_constant, steer_time_delay, steer_time_constant, steer_bias, convert_accel_cmd,
+        convert_brake_cmd, accel_map_path, brake_map_path, vgr_coef_a, vgr_coef_b, vgr_coef_c);
+    } else if (vehicle_model_type_str == "ACTUATION_CMD_MECHANICAL") {
+      vehicle_model_type_ = VehicleModelType::ACTUATION_CMD_MECHANICAL;
+      const double vgr_coef_a = declare_parameter<double>("vgr_coef_a");
+      const double vgr_coef_b = declare_parameter<double>("vgr_coef_b");
+      const double vgr_coef_c = declare_parameter<double>("vgr_coef_c");
+
+      const MechanicalParams mechanical_params = std::invoke([this]() -> MechanicalParams {
+        const std::string ns = "mechanical_params.";
+        MechanicalParams p;
+        p.kp = declare_parameter<double>(ns + "kp");
+        p.ki = declare_parameter<double>(ns + "ki");
+        p.kd = declare_parameter<double>(ns + "kd");
+        p.ff_gain = declare_parameter<double>(ns + "ff_gain");
+        p.angle_limit = declare_parameter<double>(ns + "angle_limit");
+        p.rate_limit = declare_parameter<double>(ns + "rate_limit");
+        p.dead_zone_threshold = declare_parameter<double>(ns + "dead_zone_threshold");
+        p.poly_a = declare_parameter<double>(ns + "poly_a");
+        p.poly_b = declare_parameter<double>(ns + "poly_b");
+        p.poly_c = declare_parameter<double>(ns + "poly_c");
+        p.poly_d = declare_parameter<double>(ns + "poly_d");
+        p.poly_e = declare_parameter<double>(ns + "poly_e");
+        p.poly_f = declare_parameter<double>(ns + "poly_f");
+        p.poly_g = declare_parameter<double>(ns + "poly_g");
+        p.poly_h = declare_parameter<double>(ns + "poly_h");
+        p.inertia = declare_parameter<double>(ns + "inertia");
+        p.damping = declare_parameter<double>(ns + "damping");
+        p.stiffness = declare_parameter<double>(ns + "stiffness");
+        p.friction = declare_parameter<double>(ns + "friction");
+        p.steering_torque_limit = declare_parameter<double>(ns + "steering_torque_limit");
+        p.torque_delay_time = declare_parameter<double>(ns + "torque_delay_time");
+        return p;
+      });
+      vehicle_model_ptr_ = std::make_shared<SimModelActuationCmdMechanical>(
+        vel_lim, steer_lim, vel_rate_lim, steer_rate_lim, wheelbase,
+        timer_sampling_time_ms_ / 1000.0, accel_time_delay, accel_time_constant, brake_time_delay,
+        brake_time_constant, steer_time_delay, steer_time_constant, steer_bias, convert_accel_cmd,
+        convert_brake_cmd, accel_map_path, brake_map_path, vgr_coef_a, vgr_coef_b, vgr_coef_c,
+        mechanical_params);
+    } else if (vehicle_model_type_str == "ACTUATION_CMD_STEER_MAP") {
+      vehicle_model_type_ = VehicleModelType::ACTUATION_CMD_STEER_MAP;
+      const std::string steer_map_path = declare_parameter<std::string>("steer_map_path");
+      vehicle_model_ptr_ = std::make_shared<SimModelActuationCmdSteerMap>(
+        vel_lim, steer_lim, vel_rate_lim, steer_rate_lim, wheelbase,
+        timer_sampling_time_ms_ / 1000.0, accel_time_delay, accel_time_constant, brake_time_delay,
+        brake_time_constant, steer_time_delay, steer_time_constant, steer_bias, convert_accel_cmd,
+        convert_brake_cmd, accel_map_path, brake_map_path, steer_map_path);
+    } else {
+      throw std::invalid_argument(
+        "Invalid ACTUATION_CMD vehicle_model_type: " + vehicle_model_type_str);
     }
   } else {
     throw std::invalid_argument("Invalid vehicle_model_type: " + vehicle_model_type_str);
@@ -710,7 +751,10 @@ void SimplePlanningSimulator::set_initial_state(const Pose & pose, const Twist &
     vehicle_model_type_ == VehicleModelType::DELAY_STEER_ACC_GEARED ||
     vehicle_model_type_ == VehicleModelType::DELAY_STEER_ACC_GEARED_WO_FALL_GUARD ||
     vehicle_model_type_ == VehicleModelType::DELAY_STEER_MAP_ACC_GEARED ||
-    vehicle_model_type_ == VehicleModelType::ACTUATION_CMD) {
+    vehicle_model_type_ == VehicleModelType::ACTUATION_CMD ||
+    vehicle_model_type_ == VehicleModelType::ACTUATION_CMD_VGR ||
+    vehicle_model_type_ == VehicleModelType::ACTUATION_CMD_MECHANICAL ||
+    vehicle_model_type_ == VehicleModelType::ACTUATION_CMD_STEER_MAP) {
     state << x, y, yaw, vx, steer, accx;
   }
   vehicle_model_ptr_->setState(state);

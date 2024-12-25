@@ -1,7 +1,10 @@
 <launch>
   <arg name="config_file" default="$(find-pkg-share autoware_processing_time_checker)/config/processing_time_checker.param.yaml"/>
+  <!--  # if output_metrics=true, metrics are written to `<ros2_logging_directory>/autoware_metrics/<node_name>-<time_stamp>.json`. -->
+  <arg name="output_metrics" default="false"/>
 
   <node pkg="autoware_processing_time_checker" exec="processing_time_checker_node" name="processing_time_checker" output="screen">
     <param from="$(var config_file)"/>
+    <param name="output_metrics" value="$(var output_metrics)"/>
   </node>
 </launch>

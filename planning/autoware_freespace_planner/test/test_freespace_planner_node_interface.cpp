@@ -20,6 +20,7 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
 #include <vector>
 
 using autoware::freespace_planner::FreespacePlannerNode;

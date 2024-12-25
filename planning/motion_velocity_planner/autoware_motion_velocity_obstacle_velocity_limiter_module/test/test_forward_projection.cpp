@@ -24,6 +24,7 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
+#include <iostream>
 
 constexpr auto EPS = 1e-15;
 constexpr auto EPS_APPROX = 1e-3;

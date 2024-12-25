@@ -39,7 +39,7 @@ GNSSPoser::GNSSPoser(const rclcpp::NodeOptions & node_options)
   gnss_pose_pub_method_(static_cast<int>(declare_parameter<int>("gnss_pose_pub_method")))
 {
   // Subscribe to map_projector_info topic
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   adaptor.init_sub(
     sub_map_projector_info_, [this](const MapProjectorInfo::Message::ConstSharedPtr msg) {
       callback_map_projector_info(msg);

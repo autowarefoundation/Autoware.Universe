@@ -16,6 +16,8 @@
 
 #include <gtest/gtest.h>
 
+#include <string>
+
 namespace autoware::ekf_localizer
 {
 

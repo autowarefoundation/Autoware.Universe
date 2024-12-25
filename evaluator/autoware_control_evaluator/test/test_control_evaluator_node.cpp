@@ -21,13 +21,14 @@
 #include <autoware/control_evaluator/control_evaluator_node.hpp>
 
 #include "autoware_planning_msgs/msg/trajectory.hpp"
-#include "diagnostic_msgs/msg/diagnostic_array.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
+#include <tier4_metric_msgs/msg/metric_array.hpp>
 
 #include "boost/lexical_cast.hpp"
 
 #include <tf2/LinearMath/Quaternion.h>
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -36,7 +37,8 @@
 using EvalNode = control_diagnostics::ControlEvaluatorNode;
 using Trajectory = autoware_planning_msgs::msg::Trajectory;
 using TrajectoryPoint = autoware_planning_msgs::msg::TrajectoryPoint;
-using diagnostic_msgs::msg::DiagnosticArray;
+using MetricArrayMsg = tier4_metric_msgs::msg::MetricArray;
+using geometry_msgs::msg::AccelWithCovarianceStamped;
 using nav_msgs::msg::Odometry;
 
 constexpr double epsilon = 1e-6;
@@ -51,6 +53,7 @@ protected:
     rclcpp::NodeOptions options;
     const auto share_dir =
       ament_index_cpp::get_package_share_directory("autoware_control_evaluator");
+    options.arguments({"--ros-args", "-p", "output_metrics:=false"});
 
     dummy_node = std::make_shared<rclcpp::Node>("control_evaluator_test_node");
     eval_node = std::make_shared<EvalNode>(options);
@@ -69,6 +72,8 @@ protected:
       rclcpp::create_publisher<Trajectory>(dummy_node, "/control_evaluator/input/trajectory", 1);
     odom_pub_ =
       rclcpp::create_publisher<Odometry>(dummy_node, "/control_evaluator/input/odometry", 1);
+    acc_pub_ = rclcpp::create_publisher<AccelWithCovarianceStamped>(
+      dummy_node, "/control_evaluator/input/acceleration", 1);
     tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(dummy_node);
     publishEgoPose(0.0, 0.0, 0.0);
   }
@@ -77,14 +82,15 @@ protected:
 
   void setTargetMetric(const std::string & metric_str)
   {
-    const auto is_target_metric = [metric_str](const auto & status) {
-      return status.name == metric_str;
+    const auto is_target_metric = [metric_str](const auto & metric) {
+      return metric.name == metric_str;
     };
-    metric_sub_ = rclcpp::create_subscription<DiagnosticArray>(
-      dummy_node, "/control_evaluator/metrics", 1, [=](const DiagnosticArray::ConstSharedPtr msg) {
-        const auto it = std::find_if(msg->status.begin(), msg->status.end(), is_target_metric);
-        if (it != msg->status.end()) {
-          metric_value_ = boost::lexical_cast<double>(it->values[0].value);
+    metric_sub_ = rclcpp::create_subscription<MetricArrayMsg>(
+      dummy_node, "/control_evaluator/metrics", 1, [=](const MetricArrayMsg::ConstSharedPtr msg) {
+        const auto it =
+          std::find_if(msg->metric_array.begin(), msg->metric_array.end(), is_target_metric);
+        if (it != msg->metric_array.end()) {
+          metric_value_ = boost::lexical_cast<double>(it->value);
           metric_updated_ = true;
         }
       });
@@ -106,9 +112,7 @@ protected:
   void publishTrajectory(const Trajectory & traj)
   {
     traj_pub_->publish(traj);
-    rclcpp::spin_some(eval_node);
-    rclcpp::spin_some(dummy_node);
-    rclcpp::sleep_for(std::chrono::milliseconds(100));
+    spin_some();
   }
 
   double publishTrajectoryAndGetMetric(const Trajectory & traj)
@@ -116,9 +120,7 @@ protected:
     metric_updated_ = false;
     traj_pub_->publish(traj);
     while (!metric_updated_) {
-      rclcpp::spin_some(eval_node);
-      rclcpp::spin_some(dummy_node);
-      rclcpp::sleep_for(std::chrono::milliseconds(100));
+      spin_some();
     }
     return metric_value_;
   }
@@ -137,8 +139,36 @@ protected:
     odom.pose.pose.orientation.y = q.y();
     odom.pose.pose.orientation.z = q.z();
     odom.pose.pose.orientation.w = q.w();
-
     odom_pub_->publish(odom);
+    spin_some();
+  }
+
+  void publishEgoAcc(const double acc1)
+  {
+    AccelWithCovarianceStamped acc_msg;
+    acc_msg.header.frame_id = "baselink";
+    acc_msg.header.stamp = dummy_node->now();
+    acc_msg.accel.accel.linear.x = acc1;
+    acc_pub_->publish(acc_msg);
+    spin_some();
+  }
+
+  double publishEgoAccAndGetMetric(const double acc)
+  {
+    metric_updated_ = false;
+    AccelWithCovarianceStamped acc_msg;
+    acc_msg.header.frame_id = "baselink";
+
+    acc_msg.header.stamp = dummy_node->now();
+    acc_msg.accel.accel.linear.x = acc;
+    acc_pub_->publish(acc_msg);
+    while (!metric_updated_) {
+      spin_some();
+    }
+    return metric_value_;
+  }
+  void spin_some()
+  {
     rclcpp::spin_some(eval_node);
     rclcpp::spin_some(dummy_node);
     rclcpp::sleep_for(std::chrono::milliseconds(100));
@@ -150,10 +180,11 @@ protected:
   // Node
   rclcpp::Node::SharedPtr dummy_node;
   EvalNode::SharedPtr eval_node;
-  // Trajectory publishers
+  // publishers
   rclcpp::Publisher<Trajectory>::SharedPtr traj_pub_;
   rclcpp::Publisher<Odometry>::SharedPtr odom_pub_;
-  rclcpp::Subscription<DiagnosticArray>::SharedPtr metric_sub_;
+  rclcpp::Publisher<AccelWithCovarianceStamped>::SharedPtr acc_pub_;
+  rclcpp::Subscription<MetricArrayMsg>::SharedPtr metric_sub_;
   // TF broadcaster
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 };
@@ -194,4 +225,24 @@ TEST_F(EvalTest, TestLateralDeviation)
 
   publishEgoPose(1.0, 1.0, 0.0);
   EXPECT_NEAR(publishTrajectoryAndGetMetric(t), 1.0, epsilon);
+}
+
+TEST_F(EvalTest, TestKinematicStateAcc)
+{
+  setTargetMetric("kinematic_state/acc");
+  Trajectory t = makeTrajectory({{0.0, 0.0}, {1.0, 0.0}});
+  publishTrajectory(t);
+  publishEgoPose(0.0, 0.0, 0.0);
+  EXPECT_NEAR(publishEgoAccAndGetMetric(2.0), 2.0, epsilon);
+}
+
+TEST_F(EvalTest, TestKinematicStateJerk)
+{
+  setTargetMetric("kinematic_state/jerk");
+  Trajectory t = makeTrajectory({{0.0, 0.0}, {1.0, 0.0}});
+  publishTrajectory(t);
+  publishEgoPose(0.0, 0.0, 0.0);
+  // there is about 0.1 sec delay in spin_some
+  publishEgoAcc(0.0);
+  EXPECT_NEAR(publishEgoAccAndGetMetric(1), 10.0, 0.5);
 }

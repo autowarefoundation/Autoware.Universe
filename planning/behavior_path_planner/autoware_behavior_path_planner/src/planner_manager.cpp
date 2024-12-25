@@ -25,8 +25,13 @@
 
 #include <boost/scope_exit.hpp>
 
+#include <algorithm>
+#include <iostream>
 #include <memory>
 #include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 namespace autoware::behavior_path_planner
 {
@@ -177,6 +182,8 @@ BehaviorModuleOutput PlannerManager::run(const std::shared_ptr<PlannerData> & da
   std::for_each(manager_ptrs_.begin(), manager_ptrs_.end(), [](const auto & m) {
     m->updateObserver();
     m->publishRTCStatus();
+    m->publishSteeringFactor();
+    m->publishVelocityFactor();
   });
 
   generateCombinedDrivableArea(result_output.valid_output, data);
@@ -749,8 +756,6 @@ BehaviorModuleOutput SubPlannerManager::run(
   module_ptr->postProcess();
 
   module_ptr->updateCurrentState();
-
-  module_ptr->publishSteeringFactor();
 
   module_ptr->publishObjectsOfInterestMarker();
 

@@ -33,7 +33,7 @@ RoutingAdaptor::RoutingAdaptor(const rclcpp::NodeOptions & options)
   sub_waypoint_ = create_subscription<PoseStamped>(
     "~/input/waypoint", 10, std::bind(&RoutingAdaptor::on_waypoint, this, _1));
 
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   adaptor.init_cli(cli_reroute_);
   adaptor.init_cli(cli_route_);
   adaptor.init_cli(cli_clear_);

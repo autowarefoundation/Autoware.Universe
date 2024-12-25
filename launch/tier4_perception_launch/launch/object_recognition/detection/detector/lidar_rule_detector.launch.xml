@@ -1,20 +1,31 @@
 <?xml version="1.0"?>
 <launch>
+  <!-- Current namespace -->
+  <arg name="ns" description="current namespace"/>
+
   <!-- External interfaces -->
   <arg name="node/pointcloud_container"/>
   <arg name="input/pointcloud_map/pointcloud"/>
   <arg name="input/obstacle_segmentation/pointcloud"/>
+  <arg name="output/cluster_objects"/>
   <arg name="output/objects"/>
+
+  <!-- Internal interfaces -->
+  <let name="euclidean_cluster/input/pointcloud" value="$(var input/pointcloud_map/pointcloud)"/>
+  <let name="euclidean_cluster/output/clusters" value="$(var ns)/clustering/clusters"/>
+  <let name="shape_estimation/input/objects" value="$(var ns)/clustering/clusters"/>
+  <let name="shape_estimation/output/objects" value="$(var output/cluster_objects)"/>
+  <let name="detected_object_feature_remover/input" value="$(var output/cluster_objects)"/>
+  <let name="detected_object_feature_remover/output" value="$(var output/objects)"/>
 
   <!-- Clustering -->
   <group>
     <push-ros-namespace namespace="clustering"/>
     <group>
       <include file="$(find-pkg-share autoware_euclidean_cluster)/launch/voxel_grid_based_euclidean_cluster.launch.xml">
-        <arg name="input_pointcloud" value="$(var input/pointcloud_map/pointcloud)"/>
-        <arg name="output_clusters" value="clusters"/>
+        <arg name="input_pointcloud" value="$(var euclidean_cluster/input/pointcloud)"/>
+        <arg name="output_clusters" value="$(var euclidean_cluster/output/clusters)"/>
         <arg name="use_low_height_cropbox" value="$(var use_low_height_cropbox)"/>
-
         <arg name="use_pointcloud_container" value="true"/>
         <arg name="pointcloud_container_name" value="$(var node/pointcloud_container)"/>
       </include>
@@ -22,16 +33,16 @@
 
     <group>
       <include file="$(find-pkg-share autoware_shape_estimation)/launch/shape_estimation.launch.xml">
-        <arg name="input/objects" value="clusters"/>
-        <arg name="output/objects" value="objects_with_feature"/>
+        <arg name="input/objects" value="$(var shape_estimation/input/objects)"/>
+        <arg name="output/objects" value="$(var shape_estimation/output/objects)"/>
       </include>
     </group>
 
     <!-- convert DynamicObjectsWithFeatureArray to DynamicObjects -->
     <group>
       <include file="$(find-pkg-share autoware_detected_object_feature_remover)/launch/detected_object_feature_remover.launch.xml">
-        <arg name="input" value="objects_with_feature"/>
-        <arg name="output" value="$(var output/objects)"/>
+        <arg name="input" value="$(var detected_object_feature_remover/input)"/>
+        <arg name="output" value="$(var detected_object_feature_remover/output)"/>
       </include>
     </group>
   </group>

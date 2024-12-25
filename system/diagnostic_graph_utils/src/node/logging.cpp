@@ -19,6 +19,7 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include <string>
 #include <vector>
 
 namespace diagnostic_graph_utils
@@ -33,8 +34,13 @@ LoggingNode::LoggingNode(const rclcpp::NodeOptions & options) : Node("logging", 
   sub_graph_.register_create_callback(std::bind(&LoggingNode::on_create, this, _1));
   sub_graph_.subscribe(*this, 1);
 
+  pub_error_graph_text_ = create_publisher<autoware_internal_debug_msgs::msg::StringStamped>(
+    "~/debug/error_graph_text", rclcpp::QoS(1));
+
   const auto period = rclcpp::Rate(declare_parameter<double>("show_rate")).period();
   timer_ = rclcpp::create_timer(this, get_clock(), period, [this]() { on_timer(); });
+
+  enable_terminal_log_ = declare_parameter<bool>("enable_terminal_log");
 }
 
 void LoggingNode::on_create(DiagGraph::ConstSharedPtr graph)
@@ -52,12 +58,24 @@ void LoggingNode::on_create(DiagGraph::ConstSharedPtr graph)
 
 void LoggingNode::on_timer()
 {
-  static const auto message = "The target mode is not available for the following reasons:";
+  static const auto prefix_message = "The target mode is not available for the following reasons:";
   if (root_unit_ && root_unit_->level() != DiagUnit::DiagnosticStatus::OK) {
     dump_text_.str("");
     dump_text_.clear(std::stringstream::goodbit);
-    dump_unit(root_unit_, 0, "  ");
-    RCLCPP_WARN_STREAM(get_logger(), message << std::endl << dump_text_.str());
+    dump_unit(root_unit_, 0, "");
+
+    if (enable_terminal_log_) {
+      RCLCPP_WARN_STREAM(get_logger(), prefix_message << std::endl << dump_text_.str());
+    }
+
+    autoware_internal_debug_msgs::msg::StringStamped message;
+    message.stamp = now();
+    message.data = dump_text_.str();
+    pub_error_graph_text_->publish(message);
+  } else {
+    autoware_internal_debug_msgs::msg::StringStamped message;
+    message.stamp = now();
+    pub_error_graph_text_->publish(message);
   }
 }
 
@@ -85,7 +103,7 @@ void LoggingNode::dump_unit(DiagUnit * unit, int depth, const std::string & inde
 
   dump_text_ << indent << "- " + path << " " << text_level(unit->level()) << std::endl;
   for (const auto & child : unit->children()) {
-    dump_unit(child.unit, depth + 1, indent + "  ");
+    dump_unit(child.unit, depth + 1, indent + "    ");
   }
 }
 

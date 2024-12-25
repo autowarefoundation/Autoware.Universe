@@ -2,11 +2,12 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_compare_map_segmentation</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>The ROS 2 autoware_compare_map_segmentation package</description>
   <maintainer email="abrahammonrroy@yahoo.com">amc-nu</maintainer>
   <maintainer email="yukihiro.saito@tier4.jp">Yukihiro Saito</maintainer>
   <maintainer email="dai.nguyen@tier4.jp">Dai Nguyen</maintainer>
+  <maintainer email="yoshi.ri@tier4.jp">Yoshi Ri</maintainer>
   <license>Apache License 2.0</license>
 
   <!-- Original authors -->

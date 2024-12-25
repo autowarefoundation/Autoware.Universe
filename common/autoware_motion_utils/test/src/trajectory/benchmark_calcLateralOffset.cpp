@@ -26,8 +26,6 @@ using autoware::universe_utils::createPoint;
 using autoware::universe_utils::createQuaternionFromRPY;
 using autoware_planning_msgs::msg::Trajectory;
 
-constexpr double epsilon = 1e-6;
-
 geometry_msgs::msg::Pose createPose(
   double x, double y, double z, double roll, double pitch, double yaw)
 {

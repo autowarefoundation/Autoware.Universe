@@ -25,6 +25,7 @@
 #include <regex>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>

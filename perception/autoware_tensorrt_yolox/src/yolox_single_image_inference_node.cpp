@@ -15,6 +15,8 @@
 #include <autoware/tensorrt_yolox/tensorrt_yolox.hpp>
 #include <rclcpp/rclcpp.hpp>
 
+#include <vector>
+
 #if (defined(_MSC_VER) or (defined(__GNUC__) and (7 <= __GNUC_MAJOR__)))
 #include <filesystem>
 namespace fs = ::std::filesystem;

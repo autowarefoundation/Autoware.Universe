@@ -14,6 +14,8 @@
 
 #include "autoware/kalman_filter/time_delay_kalman_filter.hpp"
 
+#include <iostream>
+
 namespace autoware::kalman_filter
 {
 TimeDelayKalmanFilter::TimeDelayKalmanFilter()

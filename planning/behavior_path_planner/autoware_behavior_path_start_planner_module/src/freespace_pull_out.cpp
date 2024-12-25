@@ -21,6 +21,8 @@
 
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
 
+#include <algorithm>
+#include <limits>
 #include <memory>
 #include <vector>
 
@@ -38,12 +40,13 @@ FreespacePullOut::FreespacePullOut(
   if (parameters.freespace_planner_algorithm == "astar") {
     use_back_ = parameters.astar_parameters.use_back;
     planner_ = std::make_unique<AstarSearch>(
-      parameters.freespace_planner_common_parameters, vehicle_shape, parameters.astar_parameters);
+      parameters.freespace_planner_common_parameters, vehicle_shape, parameters.astar_parameters,
+      node.get_clock());
   } else if (parameters.freespace_planner_algorithm == "rrtstar") {
     use_back_ = true;  // no option for disabling back in rrtstar
     planner_ = std::make_unique<RRTStar>(
-      parameters.freespace_planner_common_parameters, vehicle_shape,
-      parameters.rrt_star_parameters);
+      parameters.freespace_planner_common_parameters, vehicle_shape, parameters.rrt_star_parameters,
+      node.get_clock());
   }
 }
 

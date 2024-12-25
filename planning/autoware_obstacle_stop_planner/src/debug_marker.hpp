@@ -21,7 +21,6 @@
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 #include <tier4_debug_msgs/msg/float32_multi_array_stamped.hpp>
-#include <tier4_planning_msgs/msg/stop_reason_array.hpp>
 #include <visualization_msgs/msg/marker.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
@@ -47,9 +46,6 @@ using autoware_adapi_v1_msgs::msg::PlanningBehavior;
 using autoware_adapi_v1_msgs::msg::VelocityFactor;
 using autoware_adapi_v1_msgs::msg::VelocityFactorArray;
 using tier4_debug_msgs::msg::Float32MultiArrayStamped;
-using tier4_planning_msgs::msg::StopFactor;
-using tier4_planning_msgs::msg::StopReason;
-using tier4_planning_msgs::msg::StopReasonArray;
 
 enum class PolygonType : int8_t { Vehicle = 0, Collision, SlowDownRange, SlowDown, Obstacle };
 
@@ -77,7 +73,7 @@ public:
    * @brief get all the debug values as an std::array
    * @return array of all debug values
    */
-  std::array<double, static_cast<int>(TYPE::SIZE)> getValues() const { return values_; }
+  const std::array<double, static_cast<int>(TYPE::SIZE)> & getValues() const { return values_; }
   /**
    * @brief set the given type to the given value
    * @param [in] type TYPE of the value
@@ -113,7 +109,6 @@ public:
   bool pushObstaclePoint(const pcl::PointXYZ & obstacle_point, const PointType & type);
   MarkerArray makeVirtualWallMarker();
   MarkerArray makeVisualizationMarker();
-  StopReasonArray makeStopReasonArray();
   VelocityFactorArray makeVelocityFactorArray();
 
   void setDebugValues(const DebugValues::TYPE type, const double val)
@@ -125,7 +120,6 @@ public:
 private:
   rclcpp::Publisher<MarkerArray>::SharedPtr virtual_wall_pub_;
   rclcpp::Publisher<MarkerArray>::SharedPtr debug_viz_pub_;
-  rclcpp::Publisher<StopReasonArray>::SharedPtr stop_reason_pub_;
   rclcpp::Publisher<VelocityFactorArray>::SharedPtr velocity_factor_pub_;
   rclcpp::Publisher<Float32MultiArrayStamped>::SharedPtr pub_debug_values_;
   rclcpp::Node * node_;

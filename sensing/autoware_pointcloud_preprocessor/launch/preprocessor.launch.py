@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
+from ament_index_python.packages import get_package_share_directory
 import launch
 from launch.actions import DeclareLaunchArgument
 from launch.actions import LogInfo
@@ -20,6 +23,7 @@ from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PythonExpression
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
+from launch_ros.parameter_descriptions import ParameterFile
 
 
 def launch_setup(context, *args, **kwargs):
@@ -33,6 +37,25 @@ def launch_setup(context, *args, **kwargs):
         separate_concatenate_node_and_time_sync_node.lower() == "true"
     )
 
+    concatenate_and_time_sync_node_param = ParameterFile(
+        param_file=LaunchConfiguration("concatenate_and_time_sync_node_param_path").perform(
+            context
+        ),
+        allow_substs=True,
+    )
+    concatenate_pointclouds_node_param = ParameterFile(
+        param_file=LaunchConfiguration("concatenate_pointclouds_node_param_path").perform(context),
+        allow_substs=True,
+    )
+    time_synchronizer_node_param = ParameterFile(
+        param_file=LaunchConfiguration("time_synchronizer_node_param_path").perform(context),
+        allow_substs=True,
+    )
+    crop_box_filter_node_param = ParameterFile(
+        param_file=LaunchConfiguration("crop_box_filter_node_param_path").perform(context),
+        allow_substs=True,
+    )
+
     if not is_separate_concatenate_node_and_time_sync_node:
         sync_and_concat_component = ComposableNode(
             package=pkg,
@@ -43,13 +66,11 @@ def launch_setup(context, *args, **kwargs):
                 ("output", "points_raw/concatenated"),
             ],
             parameters=[
+                concatenate_and_time_sync_node_param,
                 {
                     "input_topics": LaunchConfiguration("input_points_raw_list"),
                     "output_frame": LaunchConfiguration("tf_output_frame"),
-                    "approximate_sync": True,
-                    "publish_synchronized_pointcloud": False,
-                    "input_twist_topic_type": "twist",
-                }
+                },
             ],
         )
         concat_components = [sync_and_concat_component]
@@ -63,11 +84,11 @@ def launch_setup(context, *args, **kwargs):
                 ("output", "points_raw/concatenated"),
             ],
             parameters=[
+                time_synchronizer_node_param,
                 {
                     "input_topics": LaunchConfiguration("input_points_raw_list"),
                     "output_frame": LaunchConfiguration("tf_output_frame"),
-                    "approximate_sync": True,
-                }
+                },
             ],
         )
 
@@ -77,11 +98,11 @@ def launch_setup(context, *args, **kwargs):
             name="concatenate_filter",
             remappings=[("output", "points_raw/concatenated")],
             parameters=[
+                concatenate_pointclouds_node_param,
                 {
                     "input_topics": LaunchConfiguration("input_points_raw_list"),
                     "output_frame": LaunchConfiguration("tf_output_frame"),
-                    "approximate_sync": True,
-                }
+                },
             ],
         )
         concat_components = [time_sync_component, concat_component]
@@ -107,17 +128,11 @@ def launch_setup(context, *args, **kwargs):
             ("output", LaunchConfiguration("output_points_raw")),
         ],
         parameters=[
+            crop_box_filter_node_param,
             {
                 "input_frame": LaunchConfiguration("tf_output_frame"),
                 "output_frame": LaunchConfiguration("tf_output_frame"),
-                "min_x": -200.0,
-                "max_x": 1000.0,
-                "min_y": -50.0,
-                "max_y": 50.0,
-                "min_z": -2.0,
-                "max_z": 3.0,
-                "negative": False,
-            }
+            },
         ],
     )
 
@@ -146,6 +161,9 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
     launch_arguments = []
+    autoware_pointcloud_preprocessor_share_dir = get_package_share_directory(
+        "autoware_pointcloud_preprocessor"
+    )
 
     def add_launch_arg(name: str, default_value=None, description=None):
         # a default_value of None is equivalent to not passing that kwarg at all
@@ -161,6 +179,43 @@ def generate_launch_description():
     )
     add_launch_arg("output_points_raw", "/points_raw/cropbox/filtered")
     add_launch_arg("tf_output_frame", "base_link")
+    add_launch_arg(
+        "concatenate_and_time_sync_node_param_path",
+        os.path.join(
+            autoware_pointcloud_preprocessor_share_dir,
+            "config",
+            "concatenate_and_time_sync_node.param.yaml",
+        ),
+        description="path to parameter file of concatenate and time sync node",
+    )
+    add_launch_arg(
+        "concatenate_pointclouds_node_param_path",
+        os.path.join(
+            autoware_pointcloud_preprocessor_share_dir,
+            "config",
+            "concatenate_pointclouds.param.yaml",
+        ),
+        description="path to parameter file of concatenate pointclouds node",
+    )
+    add_launch_arg(
+        "time_synchronizer_node_param_path",
+        os.path.join(
+            autoware_pointcloud_preprocessor_share_dir,
+            "config",
+            "time_synchronizer_node.param.yaml",
+        ),
+        description="path to parameter file of time synchronizer node",
+    )
+    add_launch_arg(
+        "crop_box_filter_node_param_path",
+        os.path.join(
+            autoware_pointcloud_preprocessor_share_dir,
+            "config",
+            "crop_box_filter_node.param.yaml",
+        ),
+        description="path to parameter file of crop box filter node",
+    )
+
     add_launch_arg(
         "separate_concatenate_node_and_time_sync_node",
         "true",

@@ -47,7 +47,7 @@ DetectionAreaModule::DetectionAreaModule(
   velocity_factor_.init(PlanningBehavior::USER_DEFINED_DETECTION_AREA);
 }
 
-bool DetectionAreaModule::modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason)
+bool DetectionAreaModule::modifyPathVelocity(PathWithLaneId * path)
 {
   // Store original path
   const auto original_path = *path;
@@ -55,7 +55,6 @@ bool DetectionAreaModule::modifyPathVelocity(PathWithLaneId * path, StopReason *
   // Reset data
   debug_data_ = DebugData();
   debug_data_.base_link2front = planner_data_->vehicle_info_.max_longitudinal_offset_m;
-  *stop_reason = planning_utils::initializeStopReason(StopReason::DETECTION_AREA);
 
   // Find obstacles in detection area
   const auto obstacle_points = detection_area::get_obstacle_points(
@@ -112,8 +111,10 @@ bool DetectionAreaModule::modifyPathVelocity(PathWithLaneId * path, StopReason *
   setSafe(detection_area::can_clear_stop_state(
     last_obstacle_found_time_, clock_->now(), planner_param_.state_clear_time));
   if (isActivated()) {
-    state_ = State::GO;
     last_obstacle_found_time_ = {};
+    if (!planner_param_.suppress_pass_judge_when_stopping || !is_stopped) {
+      state_ = State::GO;
+    }
     return true;
   }
 
@@ -182,25 +183,9 @@ bool DetectionAreaModule::modifyPathVelocity(PathWithLaneId * path, StopReason *
 
   // Create StopReason
   {
-    StopFactor stop_factor{};
-    stop_factor.stop_pose = stop_point->second;
-    stop_factor.stop_factor_points = obstacle_points;
-    planning_utils::appendStopReason(stop_factor, stop_reason);
     velocity_factor_.set(
       path->points, planner_data_->current_odometry->pose, stop_point->second,
       VelocityFactor::UNKNOWN);
-  }
-
-  // Create legacy StopReason
-  {
-    const auto insert_idx = stop_point->first + 1;
-
-    if (
-      !first_stop_path_point_index_ ||
-      static_cast<int>(insert_idx) < first_stop_path_point_index_) {
-      debug_data_.first_stop_pose = stop_point->second;
-      first_stop_path_point_index_ = static_cast<int>(insert_idx);
-    }
   }
 
   return true;

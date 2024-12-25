@@ -23,6 +23,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <vector>
+
 using autoware::behavior_path_planner::PathWithLaneId;
 using autoware::behavior_path_planner::Pose;
 using autoware::behavior_path_planner::utils::FrenetPoint;

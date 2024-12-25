@@ -4,6 +4,8 @@ project(autoware_mpc_lateral_controller)
 find_package(autoware_cmake REQUIRED)
 autoware_package()
 
+find_package(fmt REQUIRED)
+
 ament_auto_add_library(steering_offset_lib SHARED
   src/steering_offset/steering_offset.cpp
 )

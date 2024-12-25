@@ -80,7 +80,7 @@ void OccupancyGridBasedCollisionDetector::setMap(const nav_msgs::msg::OccupancyG
   for (uint32_t i = 0; i < height; i++) {
     is_obstacle_table.at(i).resize(width);
     for (uint32_t j = 0; j < width; j++) {
-      const int cost = costmap_.data[i * width + j];
+      const int cost = costmap_.data[i * width + j];  // NOLINT
 
       if (cost < 0 || param_.obstacle_threshold <= cost) {
         is_obstacle_table[i][j] = true;

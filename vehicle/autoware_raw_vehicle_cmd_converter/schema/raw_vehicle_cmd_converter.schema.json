@@ -180,6 +180,11 @@
           "type": "boolean",
           "default": "true",
           "description": "convert actuation to steering status or not. Whether to subscribe to actuation_status and calculate and publish steering_status For example, receive the steering wheel angle and calculate the steering wheel angle based on the gear ratio. If false, the vehicle interface must publish steering_status."
+        },
+        "use_vehicle_adaptor": {
+          "type": "boolean",
+          "default": "false",
+          "description": "flag to enable feature that compensates control commands according to vehicle dynamics."
         }
       },
       "required": [

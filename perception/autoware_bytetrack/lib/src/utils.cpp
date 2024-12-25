@@ -39,7 +39,12 @@
 #include "byte_tracker.h"
 #include "lapjv.h"
 
+#include <algorithm>
 #include <cstddef>
+#include <iostream>
+#include <limits>
+#include <map>
+#include <vector>
 
 std::vector<STrack *> ByteTracker::joint_stracks(
   std::vector<STrack *> & tlista, std::vector<STrack> & tlistb)
@@ -292,14 +297,14 @@ double ByteTracker::lapjv(
     }
   }
 
-  if (extend_cost || cost_limit < LONG_MAX) {
+  if (extend_cost || cost_limit < std::numeric_limits<float>::max()) {
     std::vector<std::vector<float>> cost_c_extended;
 
     n = n_rows + n_cols;
     cost_c_extended.resize(n);
     for (size_t i = 0; i < cost_c_extended.size(); i++) cost_c_extended[i].resize(n);
 
-    if (cost_limit < LONG_MAX) {
+    if (cost_limit < std::numeric_limits<float>::max()) {
       for (size_t i = 0; i < cost_c_extended.size(); i++) {
         for (size_t j = 0; j < cost_c_extended[i].size(); j++) {
           cost_c_extended[i][j] = cost_limit / 2.0;

@@ -30,7 +30,11 @@
 
 #include <boost/geometry/strategies/strategies.hpp>
 
+#include <algorithm>
+#include <iostream>
 #include <limits>
+#include <memory>
+#include <vector>
 
 namespace autoware::behavior_path_planner::drivable_area_expansion
 {

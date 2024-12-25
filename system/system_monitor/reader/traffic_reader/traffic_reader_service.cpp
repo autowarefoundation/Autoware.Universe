@@ -23,7 +23,13 @@
 #include <boost/process.hpp>
 
 #include <fmt/format.h>
+#include <signal.h>
 #include <syslog.h>
+
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace process = boost::process;
 
@@ -120,6 +126,9 @@ void TrafficReaderService::handle_message(const char * buffer)
     case Request::GET_RESULT:
       get_result();
       break;
+    case Request::SKIP_NETHOGS:
+      skip_nethogs();
+      break;
     default:
       syslog(LOG_WARNING, "Unknown message. %d\n", request_id);
       break;
@@ -151,6 +160,19 @@ void TrafficReaderService::start_nethogs(boost::archive::text_iarchive & archive
   // Run nethogs
   stop_ = false;
   thread_ = std::thread(&TrafficReaderService::execute_nethogs, this);
+}
+
+void TrafficReaderService::skip_nethogs()
+{
+  syslog(LOG_INFO, "Skipping nethogs...\n");
+
+  if (thread_.joinable()) {
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
+      stop_ = true;
+    }
+    thread_.join();
+  }
 }
 
 void TrafficReaderService::get_result()
@@ -234,7 +256,9 @@ void TrafficReaderService::execute_nethogs()
     }
   }
 
-  c.terminate();
+  // Send SIGKILL instead of using c.terminate() to avoid a zombie process
+  kill(c.id(), SIGKILL);
+  c.wait();
 
   std::ostringstream out_stream;
   is_error >> out_stream.rdbuf();

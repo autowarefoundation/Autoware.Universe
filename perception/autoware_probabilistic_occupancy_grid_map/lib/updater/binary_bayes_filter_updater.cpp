@@ -17,6 +17,7 @@
 #include "autoware/probabilistic_occupancy_grid_map/cost_value/cost_value.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 namespace autoware::occupancy_grid_map
 {
@@ -63,7 +64,8 @@ inline unsigned char OccupancyGridMapBBFUpdater::applyBBF(
     po_hat = ((po + (0.5f * inv_v_ratio)) / ((1.f * inv_v_ratio) + 1.f));
   }
   return std::min(
-    std::max(static_cast<unsigned char>(po_hat * 255.f + 0.5f), static_cast<unsigned char>(1)),
+    std::max(
+      static_cast<unsigned char>(std::lround(po_hat * 255.f)), static_cast<unsigned char>(1)),
     static_cast<unsigned char>(254));
 }
 

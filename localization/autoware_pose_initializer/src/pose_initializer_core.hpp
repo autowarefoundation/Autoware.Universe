@@ -15,11 +15,10 @@
 #ifndef POSE_INITIALIZER_CORE_HPP_
 #define POSE_INITIALIZER_CORE_HPP_
 
-#include "autoware/localization_util/diagnostics_module.hpp"
-
 #include <autoware/component_interface_specs/localization.hpp>
+#include <autoware/component_interface_utils/rclcpp.hpp>
+#include <autoware/universe_utils/ros/diagnostics_interface.hpp>
 #include <autoware/universe_utils/ros/logger_level_configure.hpp>
-#include <component_interface_utils/rclcpp.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
@@ -41,15 +40,15 @@ public:
   explicit PoseInitializer(const rclcpp::NodeOptions & options);
 
 private:
-  using ServiceException = component_interface_utils::ServiceException;
+  using ServiceException = autoware::component_interface_utils::ServiceException;
   using Initialize = autoware::component_interface_specs::localization::Initialize;
   using State = autoware::component_interface_specs::localization::InitializationState;
   using PoseWithCovarianceStamped = geometry_msgs::msg::PoseWithCovarianceStamped;
 
   rclcpp::CallbackGroup::SharedPtr group_srv_;
   rclcpp::Publisher<PoseWithCovarianceStamped>::SharedPtr pub_reset_;
-  component_interface_utils::Publisher<State>::SharedPtr pub_state_;
-  component_interface_utils::Service<Initialize>::SharedPtr srv_initialize_;
+  autoware::component_interface_utils::Publisher<State>::SharedPtr pub_state_;
+  autoware::component_interface_utils::Service<Initialize>::SharedPtr srv_initialize_;
   State::Message state_;
   std::array<double, 36> output_pose_covariance_{};
   std::array<double, 36> gnss_particle_covariance_{};
@@ -61,7 +60,7 @@ private:
   std::unique_ptr<EkfLocalizationTriggerModule> ekf_localization_trigger_;
   std::unique_ptr<NdtLocalizationTriggerModule> ndt_localization_trigger_;
   std::unique_ptr<autoware::universe_utils::LoggerLevelConfigure> logger_configure_;
-  std::unique_ptr<autoware::localization_util::DiagnosticsModule> diagnostics_pose_reliable_;
+  std::unique_ptr<autoware::universe_utils::DiagnosticInterface> diagnostics_pose_reliable_;
   double stop_check_duration_;
 
   void change_node_trigger(bool flag, bool need_spin = false);

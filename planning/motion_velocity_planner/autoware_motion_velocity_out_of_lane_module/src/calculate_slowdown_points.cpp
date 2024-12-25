@@ -127,4 +127,21 @@ std::optional<geometry_msgs::msg::Pose> calculate_slowdown_point(
   }
   return slowdown_point;
 }
+
+void calculate_min_stop_and_slowdown_distances(
+  out_of_lane::EgoData & ego_data, const PlannerData & planner_data,
+  const std::optional<geometry_msgs::msg::Pose> & previous_slowdown_pose)
+{
+  ego_data.min_stop_distance = planner_data.calculate_min_deceleration_distance(0.0).value_or(0.0);
+  if (previous_slowdown_pose) {
+    // Ensure we do not remove the previous slowdown point due to the min distance limit
+    const auto previous_slowdown_pose_arc_length = motion_utils::calcSignedArcLength(
+      ego_data.trajectory_points, 0UL, previous_slowdown_pose->position);
+    ego_data.min_stop_distance =
+      std::min(previous_slowdown_pose_arc_length, ego_data.min_stop_distance);
+  }
+  ego_data.min_stop_arc_length =
+    ego_data.longitudinal_offset_to_first_trajectory_index + ego_data.min_stop_distance;
+}
+
 }  // namespace autoware::motion_velocity_planner::out_of_lane

@@ -21,6 +21,7 @@
 #include <gtest/internal/gtest-port.h>
 #include <tf2/LinearMath/Quaternion.h>
 
+#include <algorithm>
 #include <limits>
 #include <vector>
 

@@ -35,6 +35,7 @@ enum Request {
   NONE = 0,
   START_NETHOGS,
   GET_RESULT,
+  SKIP_NETHOGS,
 };
 
 /**

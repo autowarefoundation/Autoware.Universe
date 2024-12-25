@@ -22,7 +22,9 @@
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/geometry/Point.h>
 
+#include <memory>
 #include <utility>
+#include <vector>
 
 namespace
 {

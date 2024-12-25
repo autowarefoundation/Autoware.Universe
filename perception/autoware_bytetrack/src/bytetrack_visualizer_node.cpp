@@ -17,6 +17,10 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
+#include <algorithm>
+#include <memory>
+#include <vector>
+
 #if __has_include(<cv_bridge/cv_bridge.hpp>)
 #include <cv_bridge/cv_bridge.hpp>
 #else
@@ -34,7 +38,7 @@ ByteTrackVisualizerNode::ByteTrackVisualizerNode(const rclcpp::NodeOptions & nod
 {
   using std::chrono_literals::operator""ms;
 
-  use_raw_ = declare_parameter("use_raw", false);
+  use_raw_ = declare_parameter<bool>("use_raw");
 
   // Create timer to find proper settings for subscribed topics
   timer_ = rclcpp::create_timer(

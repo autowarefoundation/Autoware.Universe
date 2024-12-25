@@ -20,6 +20,7 @@
 #include <autoware/motion_utils/trajectory/path_with_lane_id.hpp>
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
 
+#include <algorithm>
 #include <string>
 #include <utility>
 #include <vector>
@@ -60,8 +61,8 @@ void PathShifter::setPath(const PathWithLaneId & path)
 {
   reference_path_ = path;
 
-  updateShiftLinesIndices(shift_lines_);
-  sortShiftLinesAlongPath(shift_lines_);
+  update_shift_lines_indices(shift_lines_);
+  sort_shift_lines_along_path(shift_lines_);
 }
 void PathShifter::setVelocity(const double velocity)
 {
@@ -82,16 +83,16 @@ void PathShifter::addShiftLine(const ShiftLine & line)
 {
   shift_lines_.push_back(line);
 
-  updateShiftLinesIndices(shift_lines_);
-  sortShiftLinesAlongPath(shift_lines_);
+  update_shift_lines_indices(shift_lines_);
+  sort_shift_lines_along_path(shift_lines_);
 }
 
 void PathShifter::setShiftLines(const std::vector<ShiftLine> & lines)
 {
   shift_lines_ = lines;
 
-  updateShiftLinesIndices(shift_lines_);
-  sortShiftLinesAlongPath(shift_lines_);
+  update_shift_lines_indices(shift_lines_);
+  sort_shift_lines_along_path(shift_lines_);
 }
 
 bool PathShifter::generate(
@@ -111,7 +112,7 @@ bool PathShifter::generate(
   if (shift_lines_.empty()) {
     RCLCPP_DEBUG_STREAM_THROTTLE(
       logger_, clock_, 3000, "shift_lines_ is empty. Return reference with base offset.");
-    shiftBaseLength(shifted_path, base_offset_);
+    shift_base_length(shifted_path, base_offset_);
     return true;
   }
 
@@ -133,7 +134,7 @@ bool PathShifter::generate(
   }
 
   // Check if the shift points are sorted correctly
-  if (!checkShiftLinesAlignment(shift_lines_)) {
+  if (!check_shift_lines_alignment(shift_lines_)) {
     RCLCPP_ERROR_STREAM(logger_, "Failed to sort shift points..!!");
     return false;
   }
@@ -149,8 +150,8 @@ bool PathShifter::generate(
   }
 
   // Calculate shifted path
-  type == SHIFT_TYPE::SPLINE ? applySplineShifter(shifted_path, offset_back)
-                             : applyLinearShifter(shifted_path);
+  type == SHIFT_TYPE::SPLINE ? apply_spline_shifter(shifted_path, offset_back)
+                             : apply_linear_shifter(shifted_path);
 
   shifted_path->path.points = removeOverlapPoints(shifted_path->path.points);
   // Use orientation before shift to remove points in reverse order
@@ -173,11 +174,11 @@ bool PathShifter::generate(
   return true;
 }
 
-void PathShifter::applyLinearShifter(ShiftedPath * shifted_path) const
+void PathShifter::apply_linear_shifter(ShiftedPath * shifted_path) const
 {
   const auto arclength_arr = utils::calcPathArcLengthArray(reference_path_);
 
-  shiftBaseLength(shifted_path, base_offset_);
+  shift_base_length(shifted_path, base_offset_);
 
   constexpr double epsilon = 1.0e-8;  // to avoid 0 division
 
@@ -202,16 +203,16 @@ void PathShifter::applyLinearShifter(ShiftedPath * shifted_path) const
       }
 
       // Apply shifting.
-      addLateralOffsetOnIndexPoint(shifted_path, ith_shift_length, i);
+      add_lateral_offset_on_index_point(shifted_path, ith_shift_length, i);
     }
   }
 }
 
-void PathShifter::applySplineShifter(ShiftedPath * shifted_path, const bool offset_back) const
+void PathShifter::apply_spline_shifter(ShiftedPath * shifted_path, const bool offset_back) const
 {
   const auto arclength_arr = utils::calcPathArcLengthArray(reference_path_);
 
-  shiftBaseLength(shifted_path, base_offset_);
+  shift_base_length(shifted_path, base_offset_);
 
   constexpr double epsilon = 1.0e-8;  // to avoid 0 division
 
@@ -235,7 +236,7 @@ void PathShifter::applySplineShifter(ShiftedPath * shifted_path, const bool offs
     // TODO(Watanabe) write docs.
     // These points are defined to achieve the constant-jerk shifting (see the header description).
     const auto [base_distance, base_length] =
-      calcBaseLengths(shifting_arclength, delta_shift, offset_back);
+      calc_base_lengths(shifting_arclength, delta_shift, offset_back);
 
     RCLCPP_DEBUG(
       logger_, "base_distance = %s, base_length = %s", toStr(base_distance).c_str(),
@@ -259,7 +260,7 @@ void PathShifter::applySplineShifter(ShiftedPath * shifted_path, const bool offs
     {
       size_t i = shift_line.start_idx + 1;
       for (const auto & itr : query_length) {
-        addLateralOffsetOnIndexPoint(shifted_path, itr, i);
+        add_lateral_offset_on_index_point(shifted_path, itr, i);
         ++i;
       }
     }
@@ -267,18 +268,19 @@ void PathShifter::applySplineShifter(ShiftedPath * shifted_path, const bool offs
     if (offset_back) {
       // Apply shifting after shift
       for (size_t i = shift_line.end_idx; i < shifted_path->path.points.size(); ++i) {
-        addLateralOffsetOnIndexPoint(shifted_path, delta_shift, i);
+        add_lateral_offset_on_index_point(shifted_path, delta_shift, i);
       }
     } else {
       // Apply shifting before shift
       for (size_t i = 0; i < shift_line.start_idx + 1; ++i) {
-        addLateralOffsetOnIndexPoint(shifted_path, query_length.front(), i);
+        add_lateral_offset_on_index_point(shifted_path, query_length.front(), i);
       }
     }
   }
 }
 
-std::pair<std::vector<double>, std::vector<double>> PathShifter::getBaseLengthsWithoutAccelLimit(
+std::pair<std::vector<double>, std::vector<double>>
+PathShifter::get_base_lengths_without_accel_limit(
   const double arclength, const double shift_length, const bool offset_back)
 {
   const auto s = arclength;
@@ -291,7 +293,8 @@ std::pair<std::vector<double>, std::vector<double>> PathShifter::getBaseLengthsW
   return std::pair{base_lon, base_lat};
 }
 
-std::pair<std::vector<double>, std::vector<double>> PathShifter::getBaseLengthsWithoutAccelLimit(
+std::pair<std::vector<double>, std::vector<double>>
+PathShifter::get_base_lengths_without_accel_limit(
   const double arclength, const double shift_length, const double velocity,
   const double longitudinal_acc, const double total_time, const bool offset_back)
 {
@@ -312,7 +315,7 @@ std::pair<std::vector<double>, std::vector<double>> PathShifter::getBaseLengthsW
   return std::pair{base_lon, base_lat};
 }
 
-std::pair<std::vector<double>, std::vector<double>> PathShifter::calcBaseLengths(
+std::pair<std::vector<double>, std::vector<double>> PathShifter::calc_base_lengths(
   const double arclength, const double shift_length, const bool offset_back) const
 {
   const auto v0 = std::abs(velocity_);
@@ -325,7 +328,7 @@ std::pair<std::vector<double>, std::vector<double>> PathShifter::calcBaseLengths
   if (v0 < 1.0e-5 && a < acc_threshold) {
     // no need to consider acceleration limit
     RCLCPP_DEBUG(logger_, "set velocity is zero. lateral acc limit is ignored");
-    return getBaseLengthsWithoutAccelLimit(arclength, shift_length, offset_back);
+    return get_base_lengths_without_accel_limit(arclength, shift_length, offset_back);
   }
 
   const auto S = arclength;
@@ -338,7 +341,7 @@ std::pair<std::vector<double>, std::vector<double>> PathShifter::calcBaseLengths
     RCLCPP_DEBUG_THROTTLE(
       logger_, clock_, 3000, "No need to consider lateral acc limit. max: %f, limit: %f",
       lateral_a_max, lateral_acc_limit_);
-    return getBaseLengthsWithoutAccelLimit(S, shift_length, v0, a, T, offset_back);
+    return get_base_lengths_without_accel_limit(S, shift_length, v0, a, T, offset_back);
   }
 
   const auto tj = T / 2.0 - 2.0 * L / (lateral_acc_limit_ * T);
@@ -352,7 +355,7 @@ std::pair<std::vector<double>, std::vector<double>> PathShifter::calcBaseLengths
       logger_, clock_, 3000,
       "Acc limit is too small to be applied. Tj: %f, Ta: %f, j: %f, a_max: %f, acc_limit: %f", tj,
       ta, lat_jerk, lateral_a_max, lateral_acc_limit_);
-    return getBaseLengthsWithoutAccelLimit(S, shift_length, offset_back);
+    return get_base_lengths_without_accel_limit(S, shift_length, offset_back);
   }
 
   const auto tj3 = tj * tj * tj;
@@ -395,7 +398,7 @@ std::pair<std::vector<double>, std::vector<double>> PathShifter::calcBaseLengths
   return {base_lon, base_lat};
 }
 
-void PathShifter::updateShiftLinesIndices(ShiftLineArray & shift_lines) const
+void PathShifter::update_shift_lines_indices(ShiftLineArray & shift_lines) const
 {
   if (reference_path_.points.empty()) {
     RCLCPP_ERROR(
@@ -412,7 +415,7 @@ void PathShifter::updateShiftLinesIndices(ShiftLineArray & shift_lines) const
   }
 }
 
-bool PathShifter::checkShiftLinesAlignment(const ShiftLineArray & shift_lines) const
+bool PathShifter::check_shift_lines_alignment(const ShiftLineArray & shift_lines) const
 {
   for (const auto & l : shift_lines) {
     RCLCPP_DEBUG(logger_, "shift point = %s", toStr(l).c_str());
@@ -428,7 +431,7 @@ bool PathShifter::checkShiftLinesAlignment(const ShiftLineArray & shift_lines) c
   return true;
 }
 
-void PathShifter::sortShiftLinesAlongPath(ShiftLineArray & shift_lines) const
+void PathShifter::sort_shift_lines_along_path(ShiftLineArray & shift_lines) const
 {
   if (shift_lines.empty()) {
     RCLCPP_DEBUG_STREAM_THROTTLE(logger_, clock_, 3000, "shift_lines is empty. do nothing.");
@@ -494,10 +497,10 @@ void PathShifter::removeBehindShiftLineAndSetBaseOffset(const size_t nearest_idx
 
   setShiftLines(new_shift_lines);
 
-  setBaseOffset(new_base_offset);
+  set_base_offset(new_base_offset);
 }
 
-void PathShifter::addLateralOffsetOnIndexPoint(ShiftedPath * path, double offset, size_t index)
+void PathShifter::add_lateral_offset_on_index_point(ShiftedPath * path, double offset, size_t index)
 {
   if (fabs(offset) < 1.0e-8) {
     return;
@@ -511,12 +514,12 @@ void PathShifter::addLateralOffsetOnIndexPoint(ShiftedPath * path, double offset
   path->shift_length.at(index) += offset;
 }
 
-void PathShifter::shiftBaseLength(ShiftedPath * path, double offset)
+void PathShifter::shift_base_length(ShiftedPath * path, double offset)
 {
   constexpr double base_offset_thr = 1.0e-4;
   if (std::abs(offset) > base_offset_thr) {
     for (size_t i = 0; i < path->path.points.size(); ++i) {
-      addLateralOffsetOnIndexPoint(path, offset, i);
+      add_lateral_offset_on_index_point(path, offset, i);
     }
   }
 }

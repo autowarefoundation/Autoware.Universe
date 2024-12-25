@@ -22,6 +22,8 @@
 
 #include <boost/geometry/geometry.hpp>
 
+#include <vector>
+
 namespace yabloc
 {
 float Area::unit_length = -1;

@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>mrm_comfortable_stop_operator</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>The MRM comfortable stop operator package</description>
   <maintainer email="makoto.kurihara@tier4.jp">Makoto Kurihara</maintainer>
   <maintainer email="tomohito.ando@tier4.jp">Tomohito Ando</maintainer>
@@ -12,6 +12,7 @@
   <buildtool_depend>autoware_cmake</buildtool_depend>
 
   <depend>autoware_adapi_v1_msgs</depend>
+  <depend>autoware_universe_utils</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
   <depend>std_msgs</depend>

@@ -14,12 +14,12 @@
 
 #include "autoware/external_velocity_limit_selector/external_velocity_limit_selector_node.hpp"
 
-#include <deque>
+#include <cstddef>
 #include <memory>
+#include <ostream>
 #include <string>
 #include <unordered_map>
 #include <utility>
-#include <vector>
 
 namespace autoware::external_velocity_limit_selector
 {
@@ -34,12 +34,17 @@ VelocityLimit getHardestLimit(
   hardest_limit.max_velocity = node_param.max_vel;
 
   VelocityLimitConstraints normal_constraints{};
+  normal_constraints.max_acceleration = node_param.normal.max_acc;
   normal_constraints.min_acceleration = node_param.normal.min_acc;
   normal_constraints.min_jerk = node_param.normal.min_jerk;
   normal_constraints.max_jerk = node_param.normal.max_jerk;
 
   double hardest_max_velocity = node_param.max_vel;
   double hardest_max_jerk = 0.0;
+  double hardest_max_acceleration = 0.0;
+  std::string hardest_max_acceleration_key;
+  size_t constraint_num = 0;
+  size_t acceleration_constraint_num = 0;
 
   for (const auto & limit : velocity_limits) {
     // guard nan, inf
@@ -59,11 +64,32 @@ VelocityLimit getHardestLimit(
         ? limit.second.constraints
         : normal_constraints;
 
+    if (limit.second.use_constraints) {
+      constraint_num++;
+      if (limit.second.constraints.max_acceleration > normal_constraints.max_acceleration) {
+        acceleration_constraint_num++;
+        hardest_max_acceleration_key = limit.first;
+      }
+    }
+
+    if (hardest_max_acceleration < limit.second.constraints.max_acceleration) {
+      hardest_max_acceleration_key = limit.first;
+      hardest_max_acceleration = limit.second.constraints.max_acceleration;
+    }
+
     // find hardest jerk
     if (hardest_max_jerk < constraints.max_jerk) {
       hardest_limit.constraints = constraints;
       hardest_limit.use_constraints = true;
       hardest_max_jerk = constraints.max_jerk;
+    }
+  }
+
+  if (constraint_num > 0 && constraint_num == acceleration_constraint_num) {
+    if (velocity_limits.find(hardest_max_acceleration_key) != velocity_limits.end()) {
+      const auto constraints = velocity_limits.at(hardest_max_acceleration_key).constraints;
+      hardest_limit.constraints = constraints;
+      hardest_limit.use_constraints = true;
     }
   }
 

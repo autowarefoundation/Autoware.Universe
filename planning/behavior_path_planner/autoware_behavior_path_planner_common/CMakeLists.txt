@@ -8,7 +8,6 @@ find_package(magic_enum CONFIG REQUIRED)
 
 ament_auto_add_library(${PROJECT_NAME} SHARED
   src/turn_signal_decider.cpp
-  src/interface/steering_factor_interface.cpp
   src/interface/scene_module_visitor.cpp
   src/interface/scene_module_interface.cpp
   src/interface/scene_module_manager_interface.cpp
@@ -36,6 +35,7 @@ if(BUILD_TESTING)
   ament_add_ros_isolated_gmock(test_${PROJECT_NAME}_utilities
     test/test_utils.cpp
     test/test_path_utils.cpp
+    test/test_traffic_light_utils.cpp
   )
 
   target_link_libraries(test_${PROJECT_NAME}_utilities
@@ -45,6 +45,7 @@ if(BUILD_TESTING)
   ament_add_ros_isolated_gmock(test_${PROJECT_NAME}_drivable_area_expansion
     test/test_drivable_area_expansion.cpp
     test/test_footprints.cpp
+    test/test_static_drivable_area.cpp
   )
 
   target_link_libraries(test_${PROJECT_NAME}_drivable_area_expansion
@@ -76,6 +77,14 @@ if(BUILD_TESTING)
     ${PROJECT_NAME}
   )
 
+  ament_add_ros_isolated_gmock(test_${PROJECT_NAME}_path_shifter
+    test/test_path_shifter.cpp
+  )
+
+  target_link_libraries(test_${PROJECT_NAME}_path_shifter
+    ${PROJECT_NAME}
+  )
+
   ament_add_ros_isolated_gmock(test_${PROJECT_NAME}_turn_signal
     test/test_turn_signal.cpp
   )
@@ -85,4 +94,6 @@ if(BUILD_TESTING)
   )
 endif()
 
-ament_auto_package()
+ament_auto_package(INSTALL_TO_SHARE
+  test_data
+)

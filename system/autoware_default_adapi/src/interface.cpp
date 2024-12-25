@@ -21,11 +21,11 @@ InterfaceNode::InterfaceNode(const rclcpp::NodeOptions & options) : Node("interf
 {
   const auto on_interface_version = [](auto, auto res) {
     res->major = 1;
-    res->minor = 5;
+    res->minor = 6;
     res->patch = 0;
   };
 
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   adaptor.init_srv(srv_, on_interface_version);
 }
 

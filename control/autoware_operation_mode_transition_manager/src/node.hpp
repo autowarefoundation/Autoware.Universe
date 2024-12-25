@@ -19,8 +19,8 @@
 #include "state.hpp"
 
 #include <autoware/component_interface_specs/system.hpp>
+#include <autoware/component_interface_utils/rclcpp.hpp>
 #include <autoware/universe_utils/ros/polling_subscriber.hpp>
-#include <component_interface_utils/rclcpp.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <memory>
@@ -39,9 +39,12 @@ private:
     autoware::component_interface_specs::system::ChangeAutowareControl;
   using ChangeOperationModeAPI = autoware::component_interface_specs::system::ChangeOperationMode;
   using OperationModeStateAPI = autoware::component_interface_specs::system::OperationModeState;
-  component_interface_utils::Service<ChangeAutowareControlAPI>::SharedPtr srv_autoware_control_;
-  component_interface_utils::Service<ChangeOperationModeAPI>::SharedPtr srv_operation_mode_;
-  component_interface_utils::Publisher<OperationModeStateAPI>::SharedPtr pub_operation_mode_;
+  autoware::component_interface_utils::Service<ChangeAutowareControlAPI>::SharedPtr
+    srv_autoware_control_;
+  autoware::component_interface_utils::Service<ChangeOperationModeAPI>::SharedPtr
+    srv_operation_mode_;
+  autoware::component_interface_utils::Publisher<OperationModeStateAPI>::SharedPtr
+    pub_operation_mode_;
   void onChangeAutowareControl(
     const ChangeAutowareControlAPI::Service::Request::SharedPtr request,
     const ChangeAutowareControlAPI::Service::Response::SharedPtr response);

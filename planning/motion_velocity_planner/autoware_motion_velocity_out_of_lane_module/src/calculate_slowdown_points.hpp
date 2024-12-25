@@ -17,6 +17,7 @@
 
 #include "types.hpp"
 
+#include <autoware/motion_velocity_planner_common/planner_data.hpp>
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
 #include <geometry_msgs/msg/pose.hpp>
@@ -53,5 +54,13 @@ std::optional<geometry_msgs::msg::Pose> calculate_pose_ahead_of_collision(
 /// @return optional slowdown point to insert in the trajectory
 std::optional<geometry_msgs::msg::Pose> calculate_slowdown_point(
   const EgoData & ego_data, const OutOfLaneData & out_of_lane_data, PlannerParam params);
+
+/// @brief calculate the minimum stop and slowdown distances of ego
+/// @param [inout] ego_data ego data where minimum stop and slowdown distances are set
+/// @param [in] planner_data data with vehicle related information
+/// @param [in] previous_slowdown_pose previous slowdown pose
+void calculate_min_stop_and_slowdown_distances(
+  out_of_lane::EgoData & ego_data, const PlannerData & planner_data,
+  const std::optional<geometry_msgs::msg::Pose> & previous_slowdown_pose);
 }  // namespace autoware::motion_velocity_planner::out_of_lane
 #endif  // CALCULATE_SLOWDOWN_POINTS_HPP_

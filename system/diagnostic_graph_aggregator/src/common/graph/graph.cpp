@@ -19,6 +19,7 @@
 #include "loader.hpp"
 #include "units.hpp"
 
+#include <string>
 #include <unordered_map>
 
 namespace diagnostic_graph_aggregator

@@ -37,7 +37,6 @@
     <remap from="~/output/turn_indicators_cmd" to="/planning/turn_indicators_cmd"/>
     <remap from="~/output/hazard_lights_cmd" to="/planning/hazard_lights_cmd"/>
     <remap from="~/output/modified_goal" to="/planning/scenario_planning/modified_goal"/>
-    <remap from="~/output/stop_reasons" to="/planning/scenario_planning/status/stop_reasons"/>
     <!-- params -->
     <param name="launch_modules" value="$(var behavior_path_planner_launch_modules)"/>
     <!-- load config -->

@@ -37,6 +37,8 @@ public:
   using DiagnosticStatus = diagnostic_msgs::msg::DiagnosticStatus;
   using DiagnosticLevel = DiagnosticStatus::_level_type;
 
+  virtual ~DiagUnit() = default;
+
   struct DiagChild
   {
     DiagLink * link;

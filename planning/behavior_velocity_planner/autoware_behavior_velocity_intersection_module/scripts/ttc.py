@@ -22,13 +22,13 @@ from threading import Lock
 import time
 
 from PIL import Image
+from autoware_internal_debug_msgs.msg import Float64MultiArrayStamped
 import imageio
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import rclpy
 from rclpy.node import Node
-from tier4_debug_msgs.msg import Float64MultiArrayStamped
 
 matplotlib.use("TKAgg")
 

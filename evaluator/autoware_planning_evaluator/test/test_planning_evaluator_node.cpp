@@ -1,4 +1,4 @@
-// Copyright 2021 Tier IV, Inc.
+// Copyright 2024 Tier IV, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,11 +22,12 @@
 
 #include "autoware_perception_msgs/msg/predicted_objects.hpp"
 #include "autoware_planning_msgs/msg/trajectory.hpp"
-#include "diagnostic_msgs/msg/diagnostic_array.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
+#include <tier4_metric_msgs/msg/metric_array.hpp>
 
 #include "boost/lexical_cast.hpp"
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -37,7 +38,7 @@ using Trajectory = autoware_planning_msgs::msg::Trajectory;
 using TrajectoryPoint = autoware_planning_msgs::msg::TrajectoryPoint;
 using Objects = autoware_perception_msgs::msg::PredictedObjects;
 using autoware_planning_msgs::msg::PoseWithUuidStamped;
-using diagnostic_msgs::msg::DiagnosticArray;
+using MetricArrayMsg = tier4_metric_msgs::msg::MetricArray;
 using nav_msgs::msg::Odometry;
 
 constexpr double epsilon = 1e-6;
@@ -53,7 +54,8 @@ protected:
     const auto share_dir =
       ament_index_cpp::get_package_share_directory("autoware_planning_evaluator");
     options.arguments(
-      {"--ros-args", "--params-file", share_dir + "/config/planning_evaluator.param.yaml"});
+      {"--ros-args", "--params-file", share_dir + "/config/planning_evaluator.param.yaml", "-p",
+       "output_metrics:=false"});
 
     dummy_node = std::make_shared<rclcpp::Node>("planning_evaluator_test_node");
     eval_node = std::make_shared<EvalNode>(options);
@@ -86,17 +88,18 @@ protected:
 
   ~EvalTest() override { rclcpp::shutdown(); }
 
-  void setTargetMetric(planning_diagnostics::Metric metric)
+  void setTargetMetric(planning_diagnostics::Metric metric, const std::string & postfix = "/mean")
   {
     const auto metric_str = planning_diagnostics::metric_to_str.at(metric);
-    const auto is_target_metric = [metric_str](const auto & status) {
-      return status.name == metric_str;
+    const auto is_target_metric = [metric_str, postfix](const auto & metric) {
+      return metric.name == metric_str + postfix;
     };
-    metric_sub_ = rclcpp::create_subscription<DiagnosticArray>(
-      dummy_node, "/planning_evaluator/metrics", 1, [=](const DiagnosticArray::ConstSharedPtr msg) {
-        const auto it = std::find_if(msg->status.begin(), msg->status.end(), is_target_metric);
-        if (it != msg->status.end()) {
-          metric_value_ = boost::lexical_cast<double>(it->values[2].value);
+    metric_sub_ = rclcpp::create_subscription<MetricArrayMsg>(
+      dummy_node, "/planning_evaluator/metrics", 1, [=](const MetricArrayMsg::ConstSharedPtr msg) {
+        const auto it =
+          std::find_if(msg->metric_array.begin(), msg->metric_array.end(), is_target_metric);
+        if (it != msg->metric_array.end()) {
+          metric_value_ = boost::lexical_cast<double>(it->value);
           metric_updated_ = true;
         }
       });
@@ -207,7 +210,7 @@ protected:
   rclcpp::Publisher<Objects>::SharedPtr objects_pub_;
   rclcpp::Publisher<PoseWithUuidStamped>::SharedPtr modified_goal_pub_;
   rclcpp::Publisher<Odometry>::SharedPtr odom_pub_;
-  rclcpp::Subscription<DiagnosticArray>::SharedPtr metric_sub_;
+  rclcpp::Subscription<MetricArrayMsg>::SharedPtr metric_sub_;
   // TF broadcaster
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 };

@@ -20,7 +20,7 @@
     description="Select localization mode. Options are 'none', 'api' or 'pose_twist_estimator'. 'pose_twist_estimator' starts most of the localization modules except for the ndt_scan_matcher. 'api' starts an external API for initial position estimation. 'none' does not start any localization-related process."
   />
   <arg name="launch_dummy_doors"/>
-  <arg name="launch_diagnostic_converter"/>
+  <arg name="launch_scenario_simulator_v2_adapter"/>
   <arg name="vehicle_info_param_file"/>
   <arg name="raw_vehicle_cmd_converter_param_path"/>
 
@@ -89,6 +89,9 @@
             <arg name="object_recognition_tracking_object_merger_data_association_matrix_param_path" value="$(var object_recognition_tracking_object_merger_data_association_matrix_param_path)"/>
             <arg name="object_recognition_tracking_object_merger_node_param_path" value="$(var object_recognition_tracking_object_merger_node_param_path)"/>
             <arg name="use_multi_channel_tracker_merger" value="false"/>
+            <arg name="use_radar_tracking_fusion" value="true"/>
+            <arg name="use_detection_by_tracker" value="true"/>
+            <arg name="use_validator" value="true"/>
           </include>
         </group>
         <!-- prediction module -->
@@ -188,9 +191,9 @@
       <push-ros-namespace namespace="sensing"/>
       <arg name="input_vehicle_velocity_topic" default="/vehicle/status/velocity_status"/>
       <arg name="output_twist_with_covariance" default="/sensing/vehicle_velocity_converter/twist_with_covariance"/>
-      <arg name="config_file" default="$(find-pkg-share vehicle_velocity_converter)/config/vehicle_velocity_converter.param.yaml"/>
+      <arg name="config_file" default="$(find-pkg-share autoware_vehicle_velocity_converter)/config/vehicle_velocity_converter.param.yaml"/>
 
-      <node pkg="vehicle_velocity_converter" exec="vehicle_velocity_converter_node" output="both">
+      <node pkg="autoware_vehicle_velocity_converter" exec="autoware_vehicle_velocity_converter_node" output="both">
         <param from="$(var config_file)"/>
         <remap from="velocity_status" to="$(var input_vehicle_velocity_topic)"/>
         <remap from="twist_with_covariance" to="$(var output_twist_with_covariance)"/>
@@ -203,10 +206,10 @@
     <include file="$(find-pkg-share vehicle_door_simulator)/launch/vehicle_door_simulator.launch.xml"/>
   </group>
 
-  <!-- Diagnostic Converter -->
-  <group if="$(var launch_diagnostic_converter)">
-    <node name="diagnostic_converter" exec="diagnostic_converter" pkg="diagnostic_converter" output="screen">
-      <param name="diagnostic_topics" value="[/planning/planning_evaluator/metrics, /control/control_evaluator/metrics, /diagnostics_err, /system/processing_time_checker/metrics]"/>
+  <!-- Simulator Adapter -->
+  <group if="$(var launch_scenario_simulator_v2_adapter)">
+    <node name="scenario_simulator_v2_adapter" exec="scenario_simulator_v2_adapter" pkg="scenario_simulator_v2_adapter" output="screen">
+      <param name="metric_topic_list" value="[/planning/planning_evaluator/metrics, /control/control_evaluator/metrics, /system/processing_time_checker/metrics]"/>
     </node>
   </group>
 

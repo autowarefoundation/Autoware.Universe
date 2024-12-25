@@ -14,6 +14,9 @@
 
 #include "perception_online_evaluator/utils/objects_filtering.hpp"
 
+#include <limits>
+#include <vector>
+
 namespace perception_diagnostics
 {
 namespace filter

@@ -19,7 +19,6 @@
 #include "perception_online_evaluator/metrics/deviation_metrics.hpp"
 #include "perception_online_evaluator/metrics/metric.hpp"
 #include "perception_online_evaluator/parameters.hpp"
-#include "perception_online_evaluator/stat.hpp"
 #include "perception_online_evaluator/utils/objects_filtering.hpp"
 #include "tf2_ros/buffer.h"
 

@@ -28,7 +28,7 @@ The `exclusive_or` function will test whether two values cast to different boole
 #include <iostream>
 
 // using-directive is just for illustration; don't do this in practice
-using namespace autoware::common::helper_functions::comparisons;
+using namespace autoware::qp_interface::helper_functions::comparisons;
 
 static constexpr auto epsilon = 0.2;
 static constexpr auto relative_epsilon = 0.01;

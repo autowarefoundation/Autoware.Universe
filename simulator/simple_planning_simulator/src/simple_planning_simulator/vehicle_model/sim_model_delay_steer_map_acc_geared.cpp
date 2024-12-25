@@ -17,6 +17,7 @@
 #include "autoware_vehicle_msgs/msg/gear_command.hpp"
 
 #include <algorithm>
+#include <string>
 
 SimModelDelaySteerMapAccGeared::SimModelDelaySteerMapAccGeared(
   double vx_lim, double steer_lim, double vx_rate_lim, double steer_rate_lim, double wheelbase,

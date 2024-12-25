@@ -65,16 +65,16 @@ bool operator<(const FusionRecordArr & r1, const FusionRecordArr & r2)
 class MultiCameraFusion : public rclcpp::Node
 {
 public:
-  typedef sensor_msgs::msg::CameraInfo CamInfoType;
-  typedef tier4_perception_msgs::msg::TrafficLightRoi RoiType;
-  typedef tier4_perception_msgs::msg::TrafficLight SignalType;
-  typedef tier4_perception_msgs::msg::TrafficLightArray SignalArrayType;
-  typedef tier4_perception_msgs::msg::TrafficLightRoiArray RoiArrayType;
-  typedef tier4_perception_msgs::msg::TrafficLightRoi::_traffic_light_id_type IdType;
-  typedef autoware_perception_msgs::msg::TrafficLightGroup NewSignalType;
-  typedef autoware_perception_msgs::msg::TrafficLightGroupArray NewSignalArrayType;
+  using CamInfoType = sensor_msgs::msg::CameraInfo;
+  using RoiType = tier4_perception_msgs::msg::TrafficLightRoi;
+  using SignalType = tier4_perception_msgs::msg::TrafficLight;
+  using SignalArrayType = tier4_perception_msgs::msg::TrafficLightArray;
+  using RoiArrayType = tier4_perception_msgs::msg::TrafficLightRoiArray;
+  using IdType = tier4_perception_msgs::msg::TrafficLightRoi::_traffic_light_id_type;
+  using NewSignalType = autoware_perception_msgs::msg::TrafficLightGroup;
+  using NewSignalArrayType = autoware_perception_msgs::msg::TrafficLightGroupArray;
 
-  typedef std::pair<RoiArrayType, SignalArrayType> RecordArrayType;
+  using RecordArrayType = std::pair<RoiArrayType, SignalArrayType>;
 
   explicit MultiCameraFusion(const rclcpp::NodeOptions & node_options);
 
@@ -91,14 +91,14 @@ private:
     const std::map<IdType, FusionRecord> & grouped_record_map, NewSignalArrayType & msg_out);
 
   void groupFusion(
-    std::map<IdType, FusionRecord> & fused_record_map,
+    const std::map<IdType, FusionRecord> & fused_record_map,
     std::map<IdType, FusionRecord> & grouped_record_map);
 
-  typedef mf::sync_policies::ExactTime<CamInfoType, RoiArrayType, SignalArrayType> ExactSyncPolicy;
-  typedef mf::Synchronizer<ExactSyncPolicy> ExactSync;
-  typedef mf::sync_policies::ApproximateTime<CamInfoType, RoiArrayType, SignalArrayType>
-    ApproximateSyncPolicy;
-  typedef mf::Synchronizer<ApproximateSyncPolicy> ApproximateSync;
+  using ExactSyncPolicy = mf::sync_policies::ExactTime<CamInfoType, RoiArrayType, SignalArrayType>;
+  using ExactSync = mf::Synchronizer<ExactSyncPolicy>;
+  using ApproximateSyncPolicy =
+    mf::sync_policies::ApproximateTime<CamInfoType, RoiArrayType, SignalArrayType>;
+  using ApproximateSync = mf::Synchronizer<ApproximateSyncPolicy>;
 
   std::vector<std::unique_ptr<mf::Subscriber<SignalArrayType>>> signal_subs_;
   std::vector<std::unique_ptr<mf::Subscriber<RoiArrayType>>> roi_subs_;

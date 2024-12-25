@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <utility>
 
 namespace autoware::control_validator
 {
@@ -191,9 +192,7 @@ void ControlValidator::validate(
   const Odometry & kinematics)
 {
   if (predicted_trajectory.points.size() < 2) {
-    RCLCPP_ERROR_THROTTLE(
-      get_logger(), *get_clock(), 1000,
-      "predicted_trajectory size is less than 2. Cannot validate.");
+    RCLCPP_DEBUG(get_logger(), "predicted_trajectory size is less than 2. Cannot validate.");
     return;
   }
   if (reference_trajectory.points.size() < 2) {

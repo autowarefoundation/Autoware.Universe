@@ -57,8 +57,6 @@ MpcLateralController::MpcLateralController(
   p_filt.traj_resample_dist = dp_double("traj_resample_dist");
   p_filt.extend_trajectory_for_end_yaw_control = dp_bool("extend_trajectory_for_end_yaw_control");
 
-  m_mpc->m_admissible_position_error = dp_double("admissible_position_error");
-  m_mpc->m_admissible_yaw_error_rad = dp_double("admissible_yaw_error_rad");
   m_mpc->m_use_steer_prediction = dp_bool("use_steer_prediction");
   m_mpc->m_param.steer_tau = dp_double("vehicle_model_steer_tau");
 
@@ -235,20 +233,17 @@ std::shared_ptr<SteeringOffsetEstimator> MpcLateralController::createSteerOffset
 
 void MpcLateralController::setStatus(diagnostic_updater::DiagnosticStatusWrapper & stat)
 {
-  if (m_is_mpc_solved) {
+  if (m_mpc_solved_status.result) {
     stat.summary(diagnostic_msgs::msg::DiagnosticStatus::OK, "MPC succeeded.");
   } else {
-    const std::string error_msg = "The MPC solver failed. Call MRM to stop the car.";
+    const std::string error_msg = "MPC failed due to " + m_mpc_solved_status.reason;
     stat.summary(diagnostic_msgs::msg::DiagnosticStatus::ERROR, error_msg);
   }
 }
 
 void MpcLateralController::setupDiag()
 {
-  auto & d = diag_updater_;
-  d->setHardwareID("mpc_lateral_controller");
-
-  d->add("MPC_solve_checker", [&](auto & stat) { setStatus(stat); });
+  diag_updater_->add("MPC_solve_checker", [&](auto & stat) { setStatus(stat); });
 }
 
 trajectory_follower::LateralOutput MpcLateralController::run(
@@ -276,10 +271,17 @@ trajectory_follower::LateralOutput MpcLateralController::run(
     m_is_ctrl_cmd_prev_initialized = true;
   }
 
-  const bool is_mpc_solved = m_mpc->calculateMPC(
-    m_current_steering, m_current_kinematic_state, ctrl_cmd, predicted_traj, debug_values);
+  trajectory_follower::LateralHorizon ctrl_cmd_horizon{};
+  const auto mpc_solved_status = m_mpc->calculateMPC(
+    m_current_steering, m_current_kinematic_state, ctrl_cmd, predicted_traj, debug_values,
+    ctrl_cmd_horizon);
 
-  m_is_mpc_solved = is_mpc_solved;  // for diagnostic updater
+  if (
+    (m_mpc_solved_status.result == true && mpc_solved_status.result == false) ||
+    (!mpc_solved_status.result && mpc_solved_status.reason != m_mpc_solved_status.reason)) {
+    RCLCPP_ERROR(logger_, "MPC failed due to %s", mpc_solved_status.reason.c_str());
+  }
+  m_mpc_solved_status = mpc_solved_status;  // for diagnostic updater
 
   diag_updater_->force_update();
 
@@ -288,7 +290,7 @@ trajectory_follower::LateralOutput MpcLateralController::run(
   // the vehicle will return to the path by re-planning the trajectory or external operation.
   // After the recovery, the previous value of the optimization may deviate greatly from
   // the actual steer angle, and it may make the optimization result unstable.
-  if (!is_mpc_solved || !is_under_control) {
+  if (!mpc_solved_status.result || !is_under_control) {
     m_mpc->resetPrevResult(m_current_steering);
   } else {
     setSteeringToHistory(ctrl_cmd);
@@ -304,9 +306,13 @@ trajectory_follower::LateralOutput MpcLateralController::run(
   publishPredictedTraj(predicted_traj);
   publishDebugValues(debug_values);
 
-  const auto createLateralOutput = [this](const auto & cmd, const bool is_mpc_solved) {
+  const auto createLateralOutput =
+    [this](
+      const auto & cmd, const bool is_mpc_solved,
+      const auto & cmd_horizon) -> trajectory_follower::LateralOutput {
     trajectory_follower::LateralOutput output;
     output.control_cmd = createCtrlCmdMsg(cmd);
+    output.control_cmd_horizon = createCtrlCmdHorizonMsg(cmd_horizon);
     // To be sure current steering of the vehicle is desired steering angle, we need to check
     // following conditions.
     // 1. At the last loop, mpc should be solved because command should be optimized output.
@@ -325,16 +331,15 @@ trajectory_follower::LateralOutput MpcLateralController::run(
     }
     // Use previous command value as previous raw steer command
     m_mpc->m_raw_steer_cmd_prev = m_ctrl_cmd_prev.steering_tire_angle;
-    return createLateralOutput(m_ctrl_cmd_prev, false);
+    return createLateralOutput(m_ctrl_cmd_prev, false, ctrl_cmd_horizon);
   }
 
-  if (!is_mpc_solved) {
-    warn_throttle("MPC is not solved. publish 0 velocity.");
+  if (!mpc_solved_status.result) {
     ctrl_cmd = getStopControlCommand();
   }
 
   m_ctrl_cmd_prev = ctrl_cmd;
-  return createLateralOutput(ctrl_cmd, is_mpc_solved);
+  return createLateralOutput(ctrl_cmd, mpc_solved_status.result, ctrl_cmd_horizon);
 }
 
 bool MpcLateralController::isSteerConverged(const Lateral & cmd) const
@@ -427,9 +432,16 @@ Lateral MpcLateralController::getInitialControlCommand() const
 
 bool MpcLateralController::isStoppedState() const
 {
+  const double current_vel = m_current_kinematic_state.twist.twist.linear.x;
   // If the nearest index is not found, return false
-  if (m_current_trajectory.points.empty()) {
+  if (
+    m_current_trajectory.points.empty() || std::fabs(current_vel) > m_stop_state_entry_ego_speed) {
     return false;
+  }
+
+  const auto latest_published_cmd = m_ctrl_cmd_prev;  // use prev_cmd as a latest published command
+  if (m_keep_steer_control_until_converged && !isSteerConverged(latest_published_cmd)) {
+    return false;  // not stopState: keep control
   }
 
   // Note: This function used to take into account the distance to the stop line
@@ -440,21 +452,23 @@ bool MpcLateralController::isStoppedState() const
     m_current_trajectory.points, m_current_kinematic_state.pose.pose, m_ego_nearest_dist_threshold,
     m_ego_nearest_yaw_threshold);
 
-  const double current_vel = m_current_kinematic_state.twist.twist.linear.x;
-  const double target_vel = m_current_trajectory.points.at(nearest).longitudinal_velocity_mps;
+  // It is possible that stop is executed earlier than stop point, and velocity controller
+  // will not start when the distance from ego to stop point is less than 0.5 meter.
+  // So we use a distance margin to ensure we can detect stopped state.
+  static constexpr double distance_margin = 1.0;
+  const double target_vel = std::invoke([&]() -> double {
+    auto min_vel = m_current_trajectory.points.at(nearest).longitudinal_velocity_mps;
+    auto covered_distance = 0.0;
+    for (auto i = nearest + 1; i < m_current_trajectory.points.size(); ++i) {
+      min_vel = std::min(min_vel, m_current_trajectory.points.at(i).longitudinal_velocity_mps);
+      covered_distance += autoware::universe_utils::calcDistance2d(
+        m_current_trajectory.points.at(i - 1).pose, m_current_trajectory.points.at(i).pose);
+      if (covered_distance > distance_margin) break;
+    }
+    return min_vel;
+  });
 
-  const auto latest_published_cmd = m_ctrl_cmd_prev;  // use prev_cmd as a latest published command
-  if (m_keep_steer_control_until_converged && !isSteerConverged(latest_published_cmd)) {
-    return false;  // not stopState: keep control
-  }
-
-  if (
-    std::fabs(current_vel) < m_stop_state_entry_ego_speed &&
-    std::fabs(target_vel) < m_stop_state_entry_target_speed) {
-    return true;
-  } else {
-    return false;
-  }
+  return std::fabs(target_vel) < m_stop_state_entry_target_speed;
 }
 
 Lateral MpcLateralController::createCtrlCmdMsg(const Lateral & ctrl_cmd)
@@ -462,6 +476,17 @@ Lateral MpcLateralController::createCtrlCmdMsg(const Lateral & ctrl_cmd)
   auto out = ctrl_cmd;
   out.stamp = clock_->now();
   m_steer_cmd_prev = out.steering_tire_angle;
+  return out;
+}
+
+LateralHorizon MpcLateralController::createCtrlCmdHorizonMsg(
+  const LateralHorizon & ctrl_cmd_horizon) const
+{
+  auto out = ctrl_cmd_horizon;
+  const auto now = clock_->now();
+  for (auto & cmd : out.controls) {
+    cmd.stamp = now;
+  }
   return out;
 }
 

@@ -20,6 +20,7 @@
 
 #include <autoware_adapi_v1_msgs/msg/operation_mode_state.hpp>
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
+#include <autoware_perception_msgs/msg/tracked_objects.hpp>
 #include <autoware_perception_msgs/msg/traffic_light_group_array.hpp>
 #include <autoware_planning_msgs/msg/lanelet_primitive.hpp>
 #include <autoware_planning_msgs/msg/lanelet_route.hpp>
@@ -33,7 +34,10 @@
 #include <yaml-cpp/yaml.h>
 
 #include <array>
+#include <memory>
+#include <optional>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace autoware::test_utils
@@ -45,6 +49,9 @@ using autoware_perception_msgs::msg::PredictedObjectKinematics;
 using autoware_perception_msgs::msg::PredictedObjects;
 using autoware_perception_msgs::msg::PredictedPath;
 using autoware_perception_msgs::msg::Shape;
+using autoware_perception_msgs::msg::TrackedObject;
+using autoware_perception_msgs::msg::TrackedObjectKinematics;
+using autoware_perception_msgs::msg::TrackedObjects;
 using autoware_perception_msgs::msg::TrafficLightElement;
 using autoware_perception_msgs::msg::TrafficLightGroup;
 using autoware_perception_msgs::msg::TrafficLightGroupArray;
@@ -130,6 +137,9 @@ template <>
 std::vector<LaneletSegment> parse(const YAML::Node & node);
 
 template <>
+LaneletRoute parse(const YAML::Node & node);
+
+template <>
 std::vector<PathPointWithLaneId> parse(const YAML::Node & node);
 
 template <>
@@ -152,6 +162,15 @@ PredictedObject parse(const YAML::Node & node);
 
 template <>
 PredictedObjects parse(const YAML::Node & node);
+
+template <>
+TrackedObjectKinematics parse(const YAML::Node & node);
+
+template <>
+TrackedObject parse(const YAML::Node & node);
+
+template <>
+TrackedObjects parse(const YAML::Node & node);
 
 template <>
 TrafficLightGroupArray parse(const YAML::Node & node);
@@ -179,10 +198,18 @@ template <typename T>
 T parse(const std::string & filename);
 
 template <>
-LaneletRoute parse(const std::string & filename);
+std::optional<LaneletRoute> parse(const std::string & filename);
 
 template <>
-PathWithLaneId parse(const std::string & filename);
+std::optional<PathWithLaneId> parse(const std::string & filename);
+
+template <typename MessageType>
+auto create_const_shared_ptr(MessageType && payload)
+{
+  using UnqualifiedType = typename std::decay_t<MessageType>;
+  return std::make_shared<const UnqualifiedType>(std::forward<MessageType>(payload));
+}
+
 }  // namespace autoware::test_utils
 
 #endif  // AUTOWARE_TEST_UTILS__MOCK_DATA_PARSER_HPP_

@@ -17,8 +17,8 @@
 
 #define FMT_HEADER_ONLY
 
-#include "autoware/localization_util/diagnostics_module.hpp"
 #include "autoware/localization_util/smart_pose_buffer.hpp"
+#include "autoware/universe_utils/ros/diagnostics_interface.hpp"
 #include "hyper_parameters.hpp"
 #include "map_update_module.hpp"
 #include "ndt_omp/multigrid_ndt_omp.h"
@@ -211,12 +211,12 @@ private:
   std::unique_ptr<autoware::localization_util::SmartPoseBuffer> regularization_pose_buffer_;
 
   std::atomic<bool> is_activated_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_scan_points_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_initial_pose_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_regularization_pose_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_map_update_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_ndt_align_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_trigger_node_;
+  std::unique_ptr<DiagnosticInterface> diagnostics_scan_points_;
+  std::unique_ptr<DiagnosticInterface> diagnostics_initial_pose_;
+  std::unique_ptr<DiagnosticInterface> diagnostics_regularization_pose_;
+  std::unique_ptr<DiagnosticInterface> diagnostics_map_update_;
+  std::unique_ptr<DiagnosticInterface> diagnostics_ndt_align_;
+  std::unique_ptr<DiagnosticInterface> diagnostics_trigger_node_;
   std::unique_ptr<MapUpdateModule> map_update_module_;
   std::unique_ptr<autoware::universe_utils::LoggerLevelConfigure> logger_configure_;
 

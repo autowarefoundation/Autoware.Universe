@@ -22,6 +22,8 @@
 
 #include <tf2/convert.h>
 
+#include <string>
+
 namespace tf2
 {
 void fromMsg(const geometry_msgs::msg::PoseStamped & msg, tf2::Stamped<tf2::Transform> & out)

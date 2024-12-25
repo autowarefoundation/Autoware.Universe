@@ -40,8 +40,7 @@ public:
     const std::shared_ptr<AvoidanceByLCParameters> & avoidance_by_lane_change_parameters,
     const std::unordered_map<std::string, std::shared_ptr<RTCInterface>> & rtc_interface_ptr_map,
     std::unordered_map<std::string, std::shared_ptr<ObjectsOfInterestMarkerInterface>> &
-      objects_of_interest_marker_interface_ptr_map,
-    std::shared_ptr<SteeringFactorInterface> & steering_factor_interface_ptr);
+      objects_of_interest_marker_interface_ptr_map);
 
   bool isExecutionRequested() const override;
 

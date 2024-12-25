@@ -15,7 +15,9 @@
 #include "autoware_raw_vehicle_cmd_converter/csv_loader.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace autoware::raw_vehicle_cmd_converter

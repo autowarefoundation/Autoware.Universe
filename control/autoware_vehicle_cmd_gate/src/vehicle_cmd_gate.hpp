@@ -137,7 +137,6 @@ private:
   bool is_engaged_;
   bool is_system_emergency_ = false;
   bool is_external_emergency_stop_ = false;
-  bool is_filtered_marker_published_ = false;
   double current_steer_ = 0;
   GateMode current_gate_mode_;
   MrmState current_mrm_state_;
@@ -270,9 +269,6 @@ private:
   // stop checker
   std::unique_ptr<VehicleStopChecker> vehicle_stop_checker_;
   double stop_check_duration_;
-
-  // processing time
-  autoware::universe_utils::StopWatch<std::chrono::milliseconds> stop_watch;
 
   // debug
   MarkerArray createMarkerArray(const IsFilterActivated & filter_activated);

@@ -19,6 +19,7 @@
 #include <iomanip>
 #include <numeric>
 #include <sstream>
+#include <vector>
 
 namespace autoware::signal_processing
 {

@@ -24,6 +24,7 @@
 
 #include <limits>
 #include <memory>
+#include <string>
 using autoware::external_cmd_converter::ExternalCmdConverterNode;
 using nav_msgs::msg::Odometry;
 using tier4_control_msgs::msg::GateMode;

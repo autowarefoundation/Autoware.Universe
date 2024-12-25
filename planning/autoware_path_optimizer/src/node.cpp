@@ -25,6 +25,9 @@
 #include <chrono>
 #include <iostream>
 #include <limits>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace autoware::path_optimizer
 {
@@ -222,7 +225,7 @@ void PathOptimizer::resetPreviousData()
 
 void PathOptimizer::onPath(const Path::ConstSharedPtr path_ptr)
 {
-  time_keeper_->start_track(__func__);
+  universe_utils::ScopedTimeTrack st(__func__, *time_keeper_);
   stop_watch_.tic();
 
   // check if input path is valid
@@ -277,8 +280,6 @@ void PathOptimizer::onPath(const Path::ConstSharedPtr path_ptr)
     autoware::motion_utils::convertToTrajectory(full_traj_points, path_ptr->header);
   traj_pub_->publish(output_traj_msg);
   published_time_publisher_->publish_if_subscribed(traj_pub_, output_traj_msg.header.stamp);
-
-  time_keeper_->end_track(__func__);
 }
 
 bool PathOptimizer::checkInputPath(const Path & path, rclcpp::Clock clock) const

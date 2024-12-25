@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_costmap_generator</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>The autoware_costmap_generator package</description>
   <maintainer email="kosuke.takeuchi@tier4.jp">Kosuke Takeuchi</maintainer>
   <maintainer email="takamasa.horibe@tier4.jp">Takamasa Horibe</maintainer>
@@ -19,6 +19,7 @@
   <depend>autoware_lanelet2_extension</depend>
   <depend>autoware_map_msgs</depend>
   <depend>autoware_perception_msgs</depend>
+  <depend>autoware_test_utils</depend>
   <depend>autoware_universe_utils</depend>
   <depend>generate_parameter_library</depend>
   <depend>grid_map_ros</depend>

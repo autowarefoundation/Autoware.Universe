@@ -31,6 +31,7 @@ struct Parameters
   struct
   {
     double min_point_dist_m = 0.1;
+    double evaluation_time_s = 5.0;
     struct
     {
       double max_dist_m = 5.0;

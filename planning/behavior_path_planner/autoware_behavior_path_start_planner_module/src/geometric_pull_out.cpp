@@ -22,6 +22,10 @@
 
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
 
+#include <limits>
+#include <memory>
+#include <utility>
+
 using autoware::motion_utils::findNearestIndex;
 using autoware::universe_utils::calcDistance2d;
 using autoware::universe_utils::calcOffsetPose;

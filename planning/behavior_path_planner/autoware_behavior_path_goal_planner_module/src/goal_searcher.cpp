@@ -29,7 +29,9 @@
 
 #include <lanelet2_core/geometry/Polygon.h>
 
+#include <algorithm>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace autoware::behavior_path_planner
@@ -102,6 +104,16 @@ GoalCandidates GoalSearcher::search(const std::shared_ptr<const PlannerData> & p
 {
   GoalCandidates goal_candidates{};
 
+  const auto reference_goal_pose_opt = goal_planner_utils::calcRefinedGoal(
+    planner_data->route_handler->getOriginalGoalPose(), planner_data->route_handler,
+    left_side_parking_, planner_data->parameters.vehicle_width,
+    planner_data->parameters.base_link2front, planner_data->parameters.base_link2rear, parameters_);
+
+  if (!reference_goal_pose_opt) {
+    return goal_candidates;
+  }
+  const auto & reference_goal_pose = reference_goal_pose_opt.value();
+
   const auto & route_handler = planner_data->route_handler;
   const double forward_length = parameters_.forward_goal_search_length;
   const double backward_length = parameters_.backward_goal_search_length;
@@ -122,7 +134,7 @@ GoalCandidates GoalSearcher::search(const std::shared_ptr<const PlannerData> & p
   const auto departure_check_lane = goal_planner_utils::createDepartureCheckLanelet(
     pull_over_lanes, *route_handler, left_side_parking_);
   const auto goal_arc_coords =
-    lanelet::utils::getArcCoordinates(pull_over_lanes, reference_goal_pose_);
+    lanelet::utils::getArcCoordinates(pull_over_lanes, reference_goal_pose);
   const double s_start = std::max(0.0, goal_arc_coords.length - backward_length);
   const double s_end = goal_arc_coords.length + forward_length;
   const double longitudinal_interval = use_bus_stop_area
@@ -163,7 +175,7 @@ GoalCandidates GoalSearcher::search(const std::shared_ptr<const PlannerData> & p
     const Pose original_search_pose = calcOffsetPose(center_pose, 0, offset_from_center_line, 0);
     const double longitudinal_distance_from_original_goal =
       std::abs(autoware::motion_utils::calcSignedArcLength(
-        center_line_path.points, reference_goal_pose_.position, original_search_pose.position));
+        center_line_path.points, reference_goal_pose.position, original_search_pose.position));
     original_search_poses.push_back(original_search_pose);  // for createAreaPolygon
     Pose search_pose{};
     // search goal_pose in lateral direction
@@ -232,7 +244,7 @@ GoalCandidates GoalSearcher::search(const std::shared_ptr<const PlannerData> & p
 
 void GoalSearcher::countObjectsToAvoid(
   GoalCandidates & goal_candidates, const PredictedObjects & objects,
-  const std::shared_ptr<const PlannerData> & planner_data) const
+  const std::shared_ptr<const PlannerData> & planner_data, const Pose & reference_goal_pose) const
 {
   const auto & route_handler = planner_data->route_handler;
   const double forward_length = parameters_.forward_goal_search_length;
@@ -244,7 +256,7 @@ void GoalSearcher::countObjectsToAvoid(
       *route_handler, left_side_parking_, parameters_.backward_goal_search_length,
       parameters_.forward_goal_search_length);
     const auto goal_arc_coords =
-      lanelet::utils::getArcCoordinates(pull_over_lanes, reference_goal_pose_);
+      lanelet::utils::getArcCoordinates(pull_over_lanes, reference_goal_pose);
     const double s_start = std::max(0.0, goal_arc_coords.length - backward_length);
     const double s_end = goal_arc_coords.length + forward_length;
     const auto center_line_path = utils::resamplePathWithSpline(
@@ -302,8 +314,18 @@ void GoalSearcher::update(
   const std::shared_ptr<OccupancyGridBasedCollisionDetector> occupancy_grid_map,
   const std::shared_ptr<const PlannerData> & planner_data, const PredictedObjects & objects) const
 {
+  const auto refined_goal_opt = goal_planner_utils::calcRefinedGoal(
+    planner_data->route_handler->getOriginalGoalPose(), planner_data->route_handler,
+    left_side_parking_, planner_data->parameters.vehicle_width,
+    planner_data->parameters.base_link2front, planner_data->parameters.base_link2rear, parameters_);
+
+  if (!refined_goal_opt) {
+    return;
+  }
+
+  const auto & refined_goal = refined_goal_opt.value();
   if (parameters_.prioritize_goals_before_objects) {
-    countObjectsToAvoid(goal_candidates, objects, planner_data);
+    countObjectsToAvoid(goal_candidates, objects, planner_data, refined_goal);
   }
 
   if (parameters_.goal_priority == "minimum_weighted_distance") {

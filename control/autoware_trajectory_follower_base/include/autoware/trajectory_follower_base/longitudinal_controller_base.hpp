@@ -15,6 +15,7 @@
 #ifndef AUTOWARE__TRAJECTORY_FOLLOWER_BASE__LONGITUDINAL_CONTROLLER_BASE_HPP_
 #define AUTOWARE__TRAJECTORY_FOLLOWER_BASE__LONGITUDINAL_CONTROLLER_BASE_HPP_
 
+#include "autoware/trajectory_follower_base/control_horizon.hpp"
 #include "autoware/trajectory_follower_base/input_data.hpp"
 #include "autoware/trajectory_follower_base/sync_data.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -25,9 +26,11 @@
 
 namespace autoware::motion::control::trajectory_follower
 {
+using autoware_control_msgs::msg::Longitudinal;
 struct LongitudinalOutput
 {
-  autoware_control_msgs::msg::Longitudinal control_cmd;
+  Longitudinal control_cmd;
+  LongitudinalHorizon control_cmd_horizon;
   LongitudinalSyncData sync_data;
 };
 class LongitudinalControllerBase

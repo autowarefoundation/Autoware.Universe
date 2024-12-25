@@ -16,6 +16,9 @@
 
 #include <gtest/gtest.h>
 
+#include <string>
+#include <vector>
+
 TEST(TestSuite, box3DToDetectedObject)
 {
   std::vector<std::string> class_names = {"CAR",     "TRUCK",     "BUS",       "TRAILER",

@@ -15,14 +15,16 @@
 #ifndef AUTOWARE__PLANNING_EVALUATOR__METRICS__STABILITY_METRICS_HPP_
 #define AUTOWARE__PLANNING_EVALUATOR__METRICS__STABILITY_METRICS_HPP_
 
-#include "autoware/planning_evaluator/stat.hpp"
+#include "autoware/universe_utils/math/accumulator.hpp"
 
 #include "autoware_planning_msgs/msg/trajectory.hpp"
+#include <nav_msgs/msg/odometry.hpp>
 
 namespace planning_diagnostics
 {
 namespace metrics
 {
+using autoware::universe_utils::Accumulator;
 using autoware_planning_msgs::msg::Trajectory;
 
 /**
@@ -31,7 +33,7 @@ using autoware_planning_msgs::msg::Trajectory;
  * @param [in] traj2 second trajectory
  * @return calculated statistics
  */
-Stat<double> calcFrechetDistance(const Trajectory & traj1, const Trajectory & traj2);
+Accumulator<double> calcFrechetDistance(const Trajectory & traj1, const Trajectory & traj2);
 
 /**
  * @brief calculate the lateral distance between two trajectories
@@ -39,7 +41,24 @@ Stat<double> calcFrechetDistance(const Trajectory & traj1, const Trajectory & tr
  * @param [in] traj2 second trajectory
  * @return calculated statistics
  */
-Stat<double> calcLateralDistance(const Trajectory & traj1, const Trajectory & traj2);
+Accumulator<double> calcLateralDistance(const Trajectory & traj1, const Trajectory & traj2);
+
+/**
+ * @brief calculate the total lateral displacement between two trajectories
+ * @details Evaluates the cumulative absolute lateral displacement by sampling points
+ *          along the first trajectory and measuring their offset from the second trajectory.
+ *          The evaluation section length is determined by the ego vehicle's velocity and
+ *          the specified evaluation time.
+ *
+ * @param traj1 first trajectory to compare
+ * @param traj2 second trajectory to compare against
+ * @param [in] ego_odom current ego vehicle odometry containing pose and velocity
+ * @param [in]  trajectory_eval_time_s time duration for trajectory evaluation in seconds
+ * @return statistical accumulator containing the total lateral displacement
+ */
+Accumulator<double> calcTrajectoryLateralDisplacement(
+  const Trajectory traj1, const Trajectory traj2, const nav_msgs::msg::Odometry & ego_odom,
+  const double trajectory_eval_time_s);
 
 }  // namespace metrics
 }  // namespace planning_diagnostics

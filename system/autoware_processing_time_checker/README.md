@@ -23,13 +23,15 @@ ros2 launch autoware_processing_time_checker processing_time_checker.launch.xml
 
 ### Output
 
-| Name                                      | Type                              | Description                        |
-| ----------------------------------------- | --------------------------------- | ---------------------------------- |
-| `/system/processing_time_checker/metrics` | `diagnostic_msgs/DiagnosticArray` | processing time of all the modules |
+| Name                                      | Type                                  | Description                        |
+| ----------------------------------------- | ------------------------------------- | ---------------------------------- |
+| `/system/processing_time_checker/metrics` | `tier4_metric_msgs::msg::MetricArray` | processing time of all the modules |
 
 ## Parameters
 
 {{ json_to_markdown("system/autoware_processing_time_checker/schema/processing_time_checker.schema.json") }}
+
+If `output_metrics = true`, the node writes the statics of the processing_time measured during its lifetime to `<ros2_logging_directory>/autoware_metrics/<node_name>-<time_stamp>.json` when shut down.
 
 ## Assumptions / Known limits
 

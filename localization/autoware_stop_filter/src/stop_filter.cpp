@@ -22,8 +22,6 @@
 #include <string>
 #include <utility>
 
-using std::placeholders::_1;
-
 namespace autoware::stop_filter
 {
 StopFilter::StopFilter(const rclcpp::NodeOptions & node_options)
@@ -33,7 +31,7 @@ StopFilter::StopFilter(const rclcpp::NodeOptions & node_options)
   wz_threshold_ = declare_parameter<double>("wz_threshold");
 
   sub_odom_ = create_subscription<nav_msgs::msg::Odometry>(
-    "input/odom", 1, std::bind(&StopFilter::callback_odometry, this, _1));
+    "input/odom", 1, std::bind(&StopFilter::callback_odometry, this, std::placeholders::_1));
 
   pub_odom_ = create_publisher<nav_msgs::msg::Odometry>("output/odom", 1);
   pub_stop_flag_ = create_publisher<tier4_debug_msgs::msg::BoolStamped>("debug/stop_flag", 1);

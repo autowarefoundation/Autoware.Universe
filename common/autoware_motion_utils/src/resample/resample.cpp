@@ -21,7 +21,10 @@
 #include "autoware/motion_utils/trajectory/trajectory.hpp"
 #include "autoware/universe_utils/geometry/geometry.hpp"
 
+#include <algorithm>
 #include <cstdlib>
+#include <iostream>
+#include <vector>
 
 namespace autoware::motion_utils
 {

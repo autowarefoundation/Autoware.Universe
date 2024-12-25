@@ -17,7 +17,7 @@ If the transformation from `base_link` to the antenna cannot be obtained, it out
 
 | Name                           | Type                                                    | Description                                                                                                                    |
 | ------------------------------ | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `/map/map_projector_info`      | `tier4_map_msgs::msg::MapProjectorInfo`                 | map projection info                                                                                                            |
+| `/map/map_projector_info`      | `autoware_map_msgs::msg::MapProjectorInfo`              | map projection info                                                                                                            |
 | `~/input/fix`                  | `sensor_msgs::msg::NavSatFix`                           | gnss status message                                                                                                            |
 | `~/input/autoware_orientation` | `autoware_sensing_msgs::msg::GnssInsOrientationStamped` | orientation [click here for more details](https://github.com/autowarefoundation/autoware_msgs/tree/main/autoware_sensing_msgs) |
 

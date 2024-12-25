@@ -37,13 +37,11 @@ NoDrivableLaneModule::NoDrivableLaneModule(
   velocity_factor_.init(PlanningBehavior::NO_DRIVABLE_LANE);
 }
 
-bool NoDrivableLaneModule::modifyPathVelocity(PathWithLaneId * path, StopReason * stop_reason)
+bool NoDrivableLaneModule::modifyPathVelocity(PathWithLaneId * path)
 {
   if (path->points.empty()) {
     return false;
   }
-
-  *stop_reason = planning_utils::initializeStopReason(StopReason::NO_DRIVABLE_LANE);
 
   const auto & ego_pos = planner_data_->current_odometry->pose.position;
   const auto & lanelet_map_ptr = planner_data_->route_handler_->getLaneletMapPtr();
@@ -82,7 +80,7 @@ bool NoDrivableLaneModule::modifyPathVelocity(PathWithLaneId * path, StopReason 
         RCLCPP_INFO(logger_, "Approaching ");
       }
 
-      handle_approaching_state(path, stop_reason);
+      handle_approaching_state(path);
 
       break;
     }
@@ -92,7 +90,7 @@ bool NoDrivableLaneModule::modifyPathVelocity(PathWithLaneId * path, StopReason 
         RCLCPP_INFO(logger_, "INSIDE_NO_DRIVABLE_LANE");
       }
 
-      handle_inside_no_drivable_lane_state(path, stop_reason);
+      handle_inside_no_drivable_lane_state(path);
 
       break;
     }
@@ -102,7 +100,7 @@ bool NoDrivableLaneModule::modifyPathVelocity(PathWithLaneId * path, StopReason 
         RCLCPP_INFO(logger_, "STOPPED");
       }
 
-      handle_stopped_state(path, stop_reason);
+      handle_stopped_state(path);
 
       break;
     }
@@ -131,7 +129,7 @@ void NoDrivableLaneModule::handle_init_state()
   }
 }
 
-void NoDrivableLaneModule::handle_approaching_state(PathWithLaneId * path, StopReason * stop_reason)
+void NoDrivableLaneModule::handle_approaching_state(PathWithLaneId * path)
 {
   const double longitudinal_offset =
     -1.0 * (planner_param_.stop_margin + planner_data_->vehicle_info_.max_longitudinal_offset_m);
@@ -163,11 +161,7 @@ void NoDrivableLaneModule::handle_approaching_state(PathWithLaneId * path, StopR
 
   // Get stop point and stop factor
   {
-    tier4_planning_msgs::msg::StopFactor stop_factor;
     const auto & stop_pose = op_stop_pose.value();
-    stop_factor.stop_pose = stop_pose;
-    stop_factor.stop_factor_points.push_back(stop_point);
-    planning_utils::appendStopReason(stop_factor, stop_reason);
     velocity_factor_.set(
       path->points, planner_data_->current_odometry->pose, stop_pose, VelocityFactor::APPROACHING);
 
@@ -205,8 +199,7 @@ void NoDrivableLaneModule::handle_approaching_state(PathWithLaneId * path, StopR
   }
 }
 
-void NoDrivableLaneModule::handle_inside_no_drivable_lane_state(
-  PathWithLaneId * path, StopReason * stop_reason)
+void NoDrivableLaneModule::handle_inside_no_drivable_lane_state(PathWithLaneId * path)
 {
   const auto & current_point = planner_data_->current_odometry->pose.position;
   const size_t current_seg_idx = findEgoSegmentIndex(path->points);
@@ -216,11 +209,7 @@ void NoDrivableLaneModule::handle_inside_no_drivable_lane_state(
 
   // Get stop point and stop factor
   {
-    tier4_planning_msgs::msg::StopFactor stop_factor;
     const auto & stop_pose = autoware::universe_utils::getPose(path->points.at(0));
-    stop_factor.stop_pose = stop_pose;
-    stop_factor.stop_factor_points.push_back(current_point);
-    planning_utils::appendStopReason(stop_factor, stop_reason);
     velocity_factor_.set(
       path->points, planner_data_->current_odometry->pose, stop_pose, VelocityFactor::APPROACHING);
 
@@ -239,7 +228,7 @@ void NoDrivableLaneModule::handle_inside_no_drivable_lane_state(
   }
 }
 
-void NoDrivableLaneModule::handle_stopped_state(PathWithLaneId * path, StopReason * stop_reason)
+void NoDrivableLaneModule::handle_stopped_state(PathWithLaneId * path)
 {
   const auto & stopped_pose = autoware::motion_utils::calcLongitudinalOffsetPose(
     path->points, planner_data_->current_odometry->pose.position, 0.0);
@@ -258,11 +247,7 @@ void NoDrivableLaneModule::handle_stopped_state(PathWithLaneId * path, StopReaso
 
   // Get stop point and stop factor
   {
-    tier4_planning_msgs::msg::StopFactor stop_factor;
     const auto & stop_pose = ego_pos_on_path.pose;
-    stop_factor.stop_pose = stop_pose;
-    stop_factor.stop_factor_points.push_back(stop_pose.position);
-    planning_utils::appendStopReason(stop_factor, stop_reason);
     velocity_factor_.set(
       path->points, planner_data_->current_odometry->pose, stop_pose, VelocityFactor::STOPPED);
 

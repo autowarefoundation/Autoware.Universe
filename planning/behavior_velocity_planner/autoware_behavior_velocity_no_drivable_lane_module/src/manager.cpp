@@ -17,6 +17,7 @@
 #include <autoware/behavior_velocity_planner_common/utilization/util.hpp>
 #include <autoware/universe_utils/ros/parameter.hpp>
 
+#include <memory>
 #include <string>
 
 namespace autoware::behavior_velocity_planner

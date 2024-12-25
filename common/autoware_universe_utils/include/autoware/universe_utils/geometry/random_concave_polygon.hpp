@@ -17,7 +17,9 @@
 
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
+#include <optional>
 #include <vector>
+
 namespace autoware::universe_utils
 {
 /// @brief generate a random non-convex polygon
@@ -25,7 +27,7 @@ namespace autoware::universe_utils
 /// @param max points will be generated in the range [-max, max]
 /// @details algorithm from
 /// https://digitalscholarship.unlv.edu/cgi/viewcontent.cgi?article=3183&context=thesesdissertations
-Polygon2d random_concave_polygon(const size_t vertices, const double max);
+std::optional<Polygon2d> random_concave_polygon(const size_t vertices, const double max);
 
 /// @brief checks for collisions between two vectors of convex polygons using a specified collision
 /// detection algorithm

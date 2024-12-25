@@ -18,6 +18,8 @@
 
 #include <algorithm>
 #include <numeric>
+#include <string>
+#include <vector>
 
 namespace autoware::pointcloud_preprocessor
 {

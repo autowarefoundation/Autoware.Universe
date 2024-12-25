@@ -18,6 +18,8 @@
 
 #include <gtest/gtest.h>
 
+#include <vector>
+
 namespace autoware::imu_corrector
 {
 class GyroBiasEstimationModuleTest : public ::testing::Test

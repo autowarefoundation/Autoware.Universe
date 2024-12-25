@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_motion_velocity_planner_node</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>Node of the motion_velocity_planner</description>
 
   <maintainer email="maxime.clement@tier4.jp">Maxime Clement</maintainer>
@@ -18,6 +18,7 @@
 
   <build_depend>rosidl_default_generators</build_depend>
 
+  <depend>autoware_internal_debug_msgs</depend>
   <depend>autoware_map_msgs</depend>
   <depend>autoware_motion_utils</depend>
   <depend>autoware_motion_velocity_planner_common</depend>
@@ -25,7 +26,6 @@
   <depend>autoware_planning_msgs</depend>
   <depend>autoware_universe_utils</depend>
   <depend>autoware_velocity_smoother</depend>
-  <depend>diagnostic_msgs</depend>
   <depend>eigen</depend>
   <depend>geometry_msgs</depend>
   <depend>libboost-dev</depend>
@@ -38,8 +38,7 @@
   <depend>tf2_eigen</depend>
   <depend>tf2_geometry_msgs</depend>
   <depend>tf2_ros</depend>
-  <depend>tier4_debug_msgs</depend>
-  <depend>tier4_planning_msgs</depend>
+  <depend>tier4_metric_msgs</depend>
   <depend>visualization_msgs</depend>
 
   <exec_depend>rosidl_default_runtime</exec_depend>

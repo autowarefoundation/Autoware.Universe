@@ -50,8 +50,8 @@ None
 | `grid_length_y`              | int    | size of gridmap for y direction                                                                |
 | `grid_position_x`            | int    | offset from coordinate in x direction                                                          |
 | `grid_position_y`            | int    | offset from coordinate in y direction                                                          |
-| `maximum_lidar_height_thres` | double | maximum height threshold for pointcloud data                                                   |
-| `minimum_lidar_height_thres` | double | minimum height threshold for pointcloud data                                                   |
+| `maximum_lidar_height_thres` | double | maximum height threshold for pointcloud data (relative to the vehicle_frame)                   |
+| `minimum_lidar_height_thres` | double | minimum height threshold for pointcloud data (relative to the vehicle_frame)                   |
 | `expand_rectangle_size`      | double | expand object's rectangle with this value                                                      |
 | `size_of_expansion_kernel`   | int    | kernel size for blurring effect on object's costmap                                            |
 

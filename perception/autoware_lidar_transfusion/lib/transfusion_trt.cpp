@@ -26,6 +26,7 @@
 #include <memory>
 #include <random>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace autoware::lidar_transfusion
@@ -175,6 +176,13 @@ bool TransfusionTRT::preprocess(
   }
 
   if (params_input > config_.max_voxels_) {
+    rclcpp::Clock clock{RCL_ROS_TIME};
+    RCLCPP_WARN_THROTTLE(
+      rclcpp::get_logger("lidar_transfusion"), clock, 1000,
+      "The actual number of voxels (%u) exceeds its maximum value (%zu). "
+      "Please considering increasing it since it may limit the detection performance.",
+      params_input, config_.max_voxels_);
+
     params_input = config_.max_voxels_;
   }
   RCLCPP_DEBUG_STREAM(

@@ -17,7 +17,11 @@
 #include "autoware/image_projection_based_fusion/utils/geometry.hpp"
 #include "autoware/image_projection_based_fusion/utils/utils.hpp"
 
+#include <autoware/universe_utils/system/time_keeper.hpp>
 #include <perception_utils/run_length_encoder.hpp>
+
+#include <memory>
+#include <vector>
 
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
@@ -29,6 +33,8 @@
 
 namespace autoware::image_projection_based_fusion
 {
+using autoware::universe_utils::ScopedTimeTrack;
+
 SegmentPointCloudFusionNode::SegmentPointCloudFusionNode(const rclcpp::NodeOptions & options)
 : FusionNode<PointCloud2, PointCloud2, Image>("segmentation_pointcloud_fusion", options)
 {
@@ -46,11 +52,17 @@ SegmentPointCloudFusionNode::SegmentPointCloudFusionNode(const rclcpp::NodeOptio
 
 void SegmentPointCloudFusionNode::preprocess(__attribute__((unused)) PointCloud2 & pointcloud_msg)
 {
+  std::unique_ptr<ScopedTimeTrack> st_ptr;
+  if (time_keeper_) st_ptr = std::make_unique<ScopedTimeTrack>(__func__, *time_keeper_);
+
   return;
 }
 
 void SegmentPointCloudFusionNode::postprocess(PointCloud2 & pointcloud_msg)
 {
+  std::unique_ptr<ScopedTimeTrack> st_ptr;
+  if (time_keeper_) st_ptr = std::make_unique<ScopedTimeTrack>(__func__, *time_keeper_);
+
   auto original_cloud = std::make_shared<PointCloud2>(pointcloud_msg);
 
   int point_step = original_cloud->point_step;
@@ -75,17 +87,20 @@ void SegmentPointCloudFusionNode::postprocess(PointCloud2 & pointcloud_msg)
 }
 
 void SegmentPointCloudFusionNode::fuseOnSingleImage(
-  const PointCloud2 & input_pointcloud_msg, __attribute__((unused)) const std::size_t image_id,
-  [[maybe_unused]] const Image & input_mask, __attribute__((unused)) const CameraInfo & camera_info,
-  __attribute__((unused)) PointCloud2 & output_cloud)
+  const PointCloud2 & input_pointcloud_msg, const std::size_t image_id,
+  [[maybe_unused]] const Image & input_mask, __attribute__((unused)) PointCloud2 & output_cloud)
 {
+  std::unique_ptr<ScopedTimeTrack> st_ptr;
+  if (time_keeper_) st_ptr = std::make_unique<ScopedTimeTrack>(__func__, *time_keeper_);
+
   if (input_pointcloud_msg.data.empty()) {
     return;
   }
-  if (!checkCameraInfo(camera_info)) return;
   if (input_mask.height == 0 || input_mask.width == 0) {
     return;
   }
+
+  const sensor_msgs::msg::CameraInfo & camera_info = camera_projectors_[image_id].getCameraInfo();
   std::vector<uint8_t> mask_data(input_mask.data.begin(), input_mask.data.end());
   cv::Mat mask = perception_utils::runLengthDecoder(mask_data, input_mask.height, input_mask.width);
 
@@ -100,8 +115,6 @@ void SegmentPointCloudFusionNode::fuseOnSingleImage(
   const int orig_height = camera_info.height;
   // resize mask to the same size as the camera image
   cv::resize(mask, mask, cv::Size(orig_width, orig_height), 0, 0, cv::INTER_NEAREST);
-  image_geometry::PinholeCameraModel pinhole_camera_model;
-  pinhole_camera_model.fromCameraInfo(camera_info);
 
   geometry_msgs::msg::TransformStamped transform_stamped;
   // transform pointcloud from frame id to camera optical frame id
@@ -136,12 +149,9 @@ void SegmentPointCloudFusionNode::fuseOnSingleImage(
       continue;
     }
 
-    Eigen::Vector2d projected_point = calcRawImageProjectedPoint(
-      pinhole_camera_model, cv::Point3d(transformed_x, transformed_y, transformed_z));
-
-    bool is_inside_image = projected_point.x() > 0 && projected_point.x() < camera_info.width &&
-                           projected_point.y() > 0 && projected_point.y() < camera_info.height;
-    if (!is_inside_image) {
+    Eigen::Vector2d projected_point;
+    if (!camera_projectors_[image_id].calcImageProjectedPoint(
+          cv::Point3d(transformed_x, transformed_y, transformed_z), projected_point)) {
       continue;
     }
 

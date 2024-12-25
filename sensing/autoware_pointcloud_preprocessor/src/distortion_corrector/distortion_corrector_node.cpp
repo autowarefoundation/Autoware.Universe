@@ -16,6 +16,10 @@
 
 #include "autoware/pointcloud_preprocessor/distortion_corrector/distortion_corrector.hpp"
 
+#include <memory>
+#include <string>
+#include <utility>
+
 namespace autoware::pointcloud_preprocessor
 {
 /** @brief Constructor. */

@@ -30,8 +30,10 @@
 #include <fmt/format.h>
 
 #include <algorithm>
+#include <cstdio>
 #include <regex>
 #include <string>
+#include <utility>
 
 namespace bp = boost::process;
 namespace fs = boost::filesystem;

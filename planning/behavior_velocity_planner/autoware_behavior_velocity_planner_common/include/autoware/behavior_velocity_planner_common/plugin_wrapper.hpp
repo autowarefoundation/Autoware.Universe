@@ -38,10 +38,6 @@ public:
   {
     scene_manager_->updateSceneModuleInstances(planner_data, path);
   }
-  std::optional<int> getFirstStopPathPointIndex() override
-  {
-    return scene_manager_->getFirstStopPathPointIndex();
-  }
   const char * getModuleName() override { return scene_manager_->getModuleName(); }
 
 private:

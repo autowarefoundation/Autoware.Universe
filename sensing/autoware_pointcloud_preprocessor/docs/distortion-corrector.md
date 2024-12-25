@@ -55,16 +55,9 @@ ros2 launch autoware_pointcloud_preprocessor distortion_corrector.launch.xml
   - `hesai`: (x: 90 degrees, y: 0 degrees)
   - `others`: (x: 0 degrees, y: 90 degrees) and (x: 270 degrees, y: 0 degrees)
 
-<table>
-  <tr>
-    <td><img src="./image/velodyne.drawio.png" alt="velodyne azimuth coordinate"></td>
-    <td><img src="./image/hesai.drawio.png" alt="hesai azimuth coordinate"></td>
-   </tr>
-   <tr>
-    <td><p style="text-align: center;">Velodyne azimuth coordinate</p></td>
-    <td><p style="text-align: center;">Hesai azimuth coordinate</p></td>
-  </tr>
-</table>
+| ![Velodyne Azimuth Coordinate](./image/velodyne.drawio.png) | ![Hesai Azimuth Coordinate](./image/hesai.drawio.png) |
+| :---------------------------------------------------------: | :---------------------------------------------------: |
+|               **Velodyne azimuth coordinate**               |             **Hesai azimuth coordinate**              |
 
 ## References/External links
 

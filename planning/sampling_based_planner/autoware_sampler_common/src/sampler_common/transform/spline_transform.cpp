@@ -18,6 +18,7 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <vector>
 
 namespace autoware::sampler_common::transform
 {

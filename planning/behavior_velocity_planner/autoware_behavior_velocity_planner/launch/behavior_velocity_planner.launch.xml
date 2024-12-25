@@ -11,6 +11,7 @@
   <!-- module config path -->
   <arg name="behavior_velocity_config_path"/>
   <arg name="behavior_velocity_smoother_type_param_path"/>
+  <arg name="behavior_velocity_planner_param_path"/>
   <arg name="behavior_velocity_planner_common_param_path"/>
   <arg name="behavior_velocity_planner_blind_spot_module_param_path"/>
   <arg name="behavior_velocity_planner_crosswalk_module_param_path"/>
@@ -26,7 +27,6 @@
   <arg name="behavior_velocity_planner_speed_bump_module_param_path"/>
   <arg name="behavior_velocity_planner_no_drivable_lane_module_param_path"/>
   <!-- <arg name="behavior_velocity_planner_template_module_param_path"/> -->
-  <arg name="behavior_velocity_planner_param_file" default="$(find-pkg-share behavior_velocity_planner)/config/behavior_velocity_planner.param.yaml"/>
 
   <node pkg="autoware_behavior_velocity_planner" exec="behavior_velocity_planner_node" name="behavior_velocity_planner" output="screen">
     <!-- topic remap -->
@@ -53,6 +53,7 @@
     <param from="$(var vehicle_param_file)"/>
     <param from="$(var nearest_search_param_path)"/>
     <param from="$(var behavior_velocity_smoother_type_param_path)"/>
+    <param from="$(var behavior_velocity_planner_param_path)"/>
     <param from="$(var behavior_velocity_planner_common_param_path)"/>
     <param from="$(var behavior_velocity_planner_blind_spot_module_param_path)"/>
     <param from="$(var behavior_velocity_planner_crosswalk_module_param_path)"/>
@@ -68,7 +69,5 @@
     <param from="$(var behavior_velocity_planner_speed_bump_module_param_path)"/>
     <param from="$(var behavior_velocity_planner_no_drivable_lane_module_param_path)"/>
     <!-- <param from="$(var behavior_velocity_planner_template_param_path)"/> -->
-
-    <param from="$(var behavior_velocity_planner_param_file)"/>
   </node>
 </launch>

@@ -20,6 +20,8 @@
 
 #include <rmw/qos_profiles.h>
 
+#include <algorithm>
+#include <memory>
 #include <utility>
 #include <vector>
 

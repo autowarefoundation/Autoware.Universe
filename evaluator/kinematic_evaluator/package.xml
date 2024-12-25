@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>kinematic_evaluator</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>kinematic evaluator ROS 2 node</description>
 
   <maintainer email="dominik.jargot@robotec.ai">Dominik Jargot</maintainer>
@@ -29,6 +29,7 @@
   <depend>tf2_ros</depend>
 
   <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_index_cpp</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>autoware_lint_common</test_depend>
 

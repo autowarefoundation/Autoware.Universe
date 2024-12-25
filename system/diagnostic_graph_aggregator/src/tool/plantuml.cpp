@@ -16,6 +16,7 @@
 #include "graph/units.hpp"
 
 #include <iostream>
+#include <string>
 
 namespace diagnostic_graph_aggregator
 {

@@ -23,7 +23,7 @@ if(NOT ${autoware_tensorrt_common_FOUND})
   )
   return()
 endif()
-find_package(cuda_utils REQUIRED)
+find_package(autoware_cuda_utils REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
   src/node.cpp
@@ -38,7 +38,7 @@ add_library(${PROJECT_NAME} SHARED
 target_include_directories(${PROJECT_NAME} PRIVATE
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>"
-  ${cuda_utils_INCLUDE_DIRS}
+  ${autoware_cuda_utils_INCLUDE_DIRS}
   ${pcl_conversions_INCLUDE_DIRS}
   ${autoware_universe_utils_INCLUDE_DIRS}
   ${autoware_perception_msgs_INCLUDE_DIRS}

@@ -41,7 +41,7 @@ AutowareStateNode::AutowareStateNode(const rclcpp::NodeOptions & options)
     "/autoware/shutdown",
     std::bind(&AutowareStateNode::on_shutdown, this, std::placeholders::_1, std::placeholders::_2));
 
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   adaptor.init_sub(sub_localization_, this, &AutowareStateNode::on_localization);
   adaptor.init_sub(sub_routing_, this, &AutowareStateNode::on_routing);
   adaptor.init_sub(sub_operation_mode_, this, &AutowareStateNode::on_operation_mode);

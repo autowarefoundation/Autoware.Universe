@@ -15,9 +15,9 @@
 #ifndef DUMMY_DIAG_PUBLISHER__DUMMY_DIAG_PUBLISHER_CORE_HPP_
 #define DUMMY_DIAG_PUBLISHER__DUMMY_DIAG_PUBLISHER_CORE_HPP_
 
-#include <diagnostic_updater/diagnostic_updater.hpp>
-#include <rcl_interfaces/msg/detail/set_parameters_result__struct.hpp>
 #include <rclcpp/rclcpp.hpp>
+
+#include <diagnostic_msgs/msg/diagnostic_array.hpp>
 
 #include <optional>
 #include <string>
@@ -64,27 +64,12 @@ private:
 
   std::optional<Status> convertStrToStatus(std::string & status_str);
   std::string convertStatusToStr(const Status & status);
+  diagnostic_msgs::msg::DiagnosticStatus::_level_type convertStatusToLevel(const Status & status);
 
-  // Dynamic Reconfigure
-  OnSetParametersCallbackHandle::SharedPtr set_param_res_;
-  rcl_interfaces::msg::SetParametersResult paramCallback(
-    const std::vector<rclcpp::Parameter> & parameters);
-
-  rcl_interfaces::msg::SetParametersResult updateDiag(
-    const std::string diag_name, DummyDiagConfig & config, bool is_active, const Status status);
-
-  // Diagnostic Updater
-  // Set long period to reduce automatic update
-  diagnostic_updater::Updater updater_{this, 1000.0 /* sec */};
-
-  void produceOKDiagnostics(diagnostic_updater::DiagnosticStatusWrapper & stat);
-  void produceErrorDiagnostics(diagnostic_updater::DiagnosticStatusWrapper & stat);
-  void produceWarnDiagnostics(diagnostic_updater::DiagnosticStatusWrapper & stat);
-  void produceStaleDiagnostics(diagnostic_updater::DiagnosticStatusWrapper & stat);
-  void addDiagByStatus(const std::string & diag_name, const Status status);
   // Timer
   void onTimer();
   rclcpp::TimerBase::SharedPtr timer_;
+  rclcpp::Publisher<diagnostic_msgs::msg::DiagnosticArray>::SharedPtr pub_;
 };
 
 #endif  // DUMMY_DIAG_PUBLISHER__DUMMY_DIAG_PUBLISHER_CORE_HPP_

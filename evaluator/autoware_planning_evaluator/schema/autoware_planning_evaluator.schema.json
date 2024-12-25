@@ -6,10 +6,10 @@
     "autoware_planning_evaluator": {
       "type": "object",
       "properties": {
-        "output_file": {
-          "description": "output metrics file path",
-          "type": "string",
-          "default": ""
+        "output_metrics": {
+          "description": "If true, the evaluation node writes the metrics' statics to `<ros2_logging_directory>/autoware_metrics/<node_name>-<time_stamp>.json` when the node shut down,",
+          "type": "boolean",
+          "default": "false"
         },
         "ego_frame": {
           "description": "reference frame of ego",
@@ -34,6 +34,7 @@
             "lateral_deviation",
             "yaw_deviation",
             "velocity_deviation",
+            "lateral_trajectory_displacement",
             "stability",
             "stability_frechet",
             "obstacle_distance",

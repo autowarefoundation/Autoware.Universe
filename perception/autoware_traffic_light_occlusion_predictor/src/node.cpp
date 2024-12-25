@@ -117,7 +117,8 @@ void TrafficLightOcclusionPredictorNode::mapCallback(
         continue;
       }
       lanelet::ConstLineString3d string3d = static_cast<lanelet::ConstLineString3d>(lsp);
-      traffic_light_position_map_[lsp.id()] = traffic_light_utils::getTrafficLightCenter(string3d);
+      traffic_light_position_map_[lsp.id()] =
+        autoware::traffic_light_utils::getTrafficLightCenter(string3d);
     }
   }
 }
@@ -166,7 +167,7 @@ void TrafficLightOcclusionPredictorNode::syncCallback(
     out_msg_.signals.push_back(in_signal_msg->signals.at(i));
 
     if (occlusion_ratios[i] >= config_.max_occlusion_ratio) {
-      traffic_light_utils::setSignalUnknown(out_msg_.signals.at(predicted_num + i), 0.0);
+      autoware::traffic_light_utils::setSignalUnknown(out_msg_.signals.at(predicted_num + i), 0.0);
     }
   }
 

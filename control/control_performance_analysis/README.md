@@ -44,34 +44,34 @@ Error acceleration calculations are made based on the velocity calculations abov
 
 #### control_performance_analysis::msg::DrivingMonitorStamped
 
-| Name                         | Type  | Description                                              |
-| ---------------------------- | ----- | -------------------------------------------------------- |
-| `longitudinal_acceleration`  | float | [m / s^2]                                                |
-| `longitudinal_jerk`          | float | [m / s^3]                                                |
-| `lateral_acceleration`       | float | [m / s^2]                                                |
-| `lateral_jerk`               | float | [m / s^3]                                                |
-| `desired_steering_angle`     | float | [rad]                                                    |
-| `controller_processing_time` | float | Timestamp between last two control command messages [ms] |
+| Name                         | Type  | Description                                                           |
+| ---------------------------- | ----- | --------------------------------------------------------------------- |
+| `longitudinal_acceleration`  | float | $[ \mathrm{m/s^2} ]$                                                  |
+| `longitudinal_jerk`          | float | $[ \mathrm{m/s^3} ]$                                                  |
+| `lateral_acceleration`       | float | $[ \mathrm{m/s^2} ]$                                                  |
+| `lateral_jerk`               | float | $[ \mathrm{m/s^3} ]$                                                  |
+| `desired_steering_angle`     | float | $[ \mathrm{rad} ]$                                                    |
+| `controller_processing_time` | float | Timestamp between last two control command messages $[ \mathrm{ms} ]$ |
 
 #### control_performance_analysis::msg::ErrorStamped
 
-| Name                                       | Type  | Description                                                                                                       |
-| ------------------------------------------ | ----- | ----------------------------------------------------------------------------------------------------------------- |
-| `lateral_error`                            | float | [m]                                                                                                               |
-| `lateral_error_velocity`                   | float | [m / s]                                                                                                           |
-| `lateral_error_acceleration`               | float | [m / s^2]                                                                                                         |
-| `longitudinal_error`                       | float | [m]                                                                                                               |
-| `longitudinal_error_velocity`              | float | [m / s]                                                                                                           |
-| `longitudinal_error_acceleration`          | float | [m / s^2]                                                                                                         |
-| `heading_error`                            | float | [rad]                                                                                                             |
-| `heading_error_velocity`                   | float | [rad / s]                                                                                                         |
-| `control_effort_energy`                    | float | [u * R * u^T]                                                                                                     |
-| `error_energy`                             | float | lateral_error^2 + heading_error^2                                                                                 |
-| `value_approximation`                      | float | V = xPx' ; Value function from DARE Lyap matrix P                                                                 |
-| `curvature_estimate`                       | float | [1 / m]                                                                                                           |
-| `curvature_estimate_pp`                    | float | [1 / m]                                                                                                           |
-| `vehicle_velocity_error`                   | float | [m / s]                                                                                                           |
-| `tracking_curvature_discontinuity_ability` | float | Measures the ability to tracking the curvature changes [`abs(delta(curvature)) / (1 + abs(delta(lateral_error))`] |
+| Name                                       | Type  | Description                                                                                                                               |
+| ------------------------------------------ | ----- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `lateral_error`                            | float | $[ \mathrm{m} ]$                                                                                                                          |
+| `lateral_error_velocity`                   | float | $[ \mathrm{m/s} ]$                                                                                                                        |
+| `lateral_error_acceleration`               | float | $[ \mathrm{m/s^2} ]$                                                                                                                      |
+| `longitudinal_error`                       | float | $[ \mathrm{m} ]$                                                                                                                          |
+| `longitudinal_error_velocity`              | float | $[ \mathrm{m/s} ]$                                                                                                                        |
+| `longitudinal_error_acceleration`          | float | $[ \mathrm{m/s^2} ]$                                                                                                                      |
+| `heading_error`                            | float | $[ \mathrm{rad} ]$                                                                                                                        |
+| `heading_error_velocity`                   | float | $[ \mathrm{rad/s} ]$                                                                                                                      |
+| `control_effort_energy`                    | float | $[ \mathbf{u}^\top \mathbf{R} \mathbf{u} ]$ simplified to $[ R \cdot u^2 ]$                                                               |
+| `error_energy`                             | float | $e_{\text{lat}}^2 + e_\theta^2$ (squared lateral error + squared heading error)                                                           |
+| `value_approximation`                      | float | $V = \mathbf{x}^\top \mathbf{P} \mathbf{x}$; Value function from DARE Lyapunov matrix $\mathbf{P}$                                        |
+| `curvature_estimate`                       | float | $[ \mathrm{1/m} ]$                                                                                                                        |
+| `curvature_estimate_pp`                    | float | $[ \mathrm{1/m} ]$                                                                                                                        |
+| `vehicle_velocity_error`                   | float | $[ \mathrm{m/s} ]$                                                                                                                        |
+| `tracking_curvature_discontinuity_ability` | float | Measures the ability to track curvature changes $\frac{\lvert \Delta(\text{curvature}) \rvert}{1 + \lvert \Delta(e_{\text{lat}}) \rvert}$ |
 
 ## Parameters
 

@@ -25,8 +25,9 @@
 #include <pluginlib/class_loader.hpp>
 #include <rclcpp/rclcpp.hpp>
 
+#include <autoware_internal_debug_msgs/msg/float64_stamped.hpp>
+#include <autoware_internal_debug_msgs/msg/string_stamped.hpp>
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
-#include <tier4_planning_msgs/msg/stop_reason_array.hpp>
 
 #include <lanelet2_core/primitives/Lanelet.h>
 
@@ -42,12 +43,11 @@ namespace autoware::behavior_path_planner
 
 using autoware::universe_utils::StopWatch;
 using tier4_planning_msgs::msg::PathWithLaneId;
-using tier4_planning_msgs::msg::StopReasonArray;
 using SceneModulePtr = std::shared_ptr<SceneModuleInterface>;
 using SceneModuleManagerPtr = std::shared_ptr<SceneModuleManagerInterface>;
 using DebugPublisher = autoware::universe_utils::DebugPublisher;
-using DebugDoubleMsg = tier4_debug_msgs::msg::Float64Stamped;
-using DebugStringMsg = tier4_debug_msgs::msg::StringStamped;
+using DebugDoubleMsg = autoware_internal_debug_msgs::msg::Float64Stamped;
+using DebugStringMsg = autoware_internal_debug_msgs::msg::StringStamped;
 
 struct SceneModuleUpdateInfo
 {
@@ -482,36 +482,6 @@ public:
     }
 
     return ret;
-  }
-
-  /**
-   * @brief aggregate launched module's stop reasons.
-   * @return stop reason array
-   */
-  StopReasonArray getStopReasons() const
-  {
-    StopReasonArray stop_reason_array;
-    stop_reason_array.header.frame_id = "map";
-    stop_reason_array.header.stamp = clock_.now();
-
-    const auto approved_module_ptrs = approved_modules();
-    const auto candidate_module_ptrs = candidate_modules();
-
-    std::for_each(approved_module_ptrs.begin(), approved_module_ptrs.end(), [&](const auto & m) {
-      const auto reason = m->getStopReason();
-      if (reason.reason != "") {
-        stop_reason_array.stop_reasons.push_back(m->getStopReason());
-      }
-    });
-
-    std::for_each(candidate_module_ptrs.begin(), candidate_module_ptrs.end(), [&](const auto & m) {
-      const auto reason = m->getStopReason();
-      if (reason.reason != "") {
-        stop_reason_array.stop_reasons.push_back(m->getStopReason());
-      }
-    });
-
-    return stop_reason_array;
   }
 
   /**

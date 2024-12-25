@@ -15,12 +15,13 @@
 #ifndef LOCALIZATION_EVALUATOR__METRICS__LOCALIZATION_METRICS_HPP_
 #define LOCALIZATION_EVALUATOR__METRICS__LOCALIZATION_METRICS_HPP_
 
-#include "localization_evaluator/stat.hpp"
+#include "autoware/universe_utils/math/accumulator.hpp"
 
 #include <nav_msgs/msg/odometry.hpp>
 
 namespace localization_diagnostics
 {
+using autoware::universe_utils::Accumulator;
 namespace metrics
 {
 /**
@@ -30,8 +31,8 @@ namespace metrics
  * @param [in] lateral_ref reference lateral position
  * @return calculated statistics
  */
-Stat<double> updateLateralStats(
-  const Stat<double> stat_prev, const double & lateral_pos, const double & lateral_ref);
+Accumulator<double> updateLateralStats(
+  const Accumulator<double> stat_prev, const double & lateral_pos, const double & lateral_ref);
 
 /**
  * @brief calculate absolute localization error
@@ -40,8 +41,8 @@ Stat<double> updateLateralStats(
  * @param [in] pos_ref reference position of the vehicle
  * @return calculated statistics
  */
-Stat<double> updateAbsoluteStats(
-  const Stat<double> stat_prev, const geometry_msgs::msg::Point & pos,
+Accumulator<double> updateAbsoluteStats(
+  const Accumulator<double> stat_prev, const geometry_msgs::msg::Point & pos,
   const geometry_msgs::msg::Point & pos_ref);
 
 }  // namespace metrics

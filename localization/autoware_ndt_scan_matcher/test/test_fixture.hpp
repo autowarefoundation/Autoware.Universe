@@ -28,6 +28,7 @@
 #include <rcl_yaml_param_parser/parser.h>
 #include <tf2_ros/static_transform_broadcaster.h>
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>

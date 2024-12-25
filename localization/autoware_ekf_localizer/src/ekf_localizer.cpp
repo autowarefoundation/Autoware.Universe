@@ -33,6 +33,7 @@
 #include <queue>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace autoware::ekf_localizer
 {
@@ -61,12 +62,6 @@ EKFLocalizer::EKFLocalizer(const rclcpp::NodeOptions & node_options)
     this, get_clock(), rclcpp::Duration::from_seconds(ekf_dt_),
     std::bind(&EKFLocalizer::timer_callback, this));
 
-  if (params_.publish_tf_) {
-    timer_tf_ = rclcpp::create_timer(
-      this, get_clock(), rclcpp::Rate(params_.tf_rate_).period(),
-      std::bind(&EKFLocalizer::timer_tf_callback, this));
-  }
-
   pub_pose_ = create_publisher<geometry_msgs::msg::PoseStamped>("ekf_pose", 1);
   pub_pose_cov_ =
     create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>("ekf_pose_with_covariance", 1);
@@ -79,6 +74,8 @@ EKFLocalizer::EKFLocalizer(const rclcpp::NodeOptions & node_options)
   pub_biased_pose_cov_ = create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "ekf_biased_pose_with_covariance", 1);
   pub_diag_ = this->create_publisher<diagnostic_msgs::msg::DiagnosticArray>("/diagnostics", 10);
+  pub_processing_time_ =
+    create_publisher<tier4_debug_msgs::msg::Float64Stamped>("debug/processing_time_ms", 1);
   sub_initialpose_ = create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "initialpose", 1, std::bind(&EKFLocalizer::callback_initial_pose, this, _1));
   sub_pose_with_cov_ = create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
@@ -135,6 +132,8 @@ void EKFLocalizer::update_predict_frequency(const rclcpp::Time & current_time)
  */
 void EKFLocalizer::timer_callback()
 {
+  stop_watch_timer_cb_.tic();
+
   const rclcpp::Time current_time = this->now();
 
   if (!is_activated_) {
@@ -225,28 +224,12 @@ void EKFLocalizer::timer_callback()
   /* publish ekf result */
   publish_estimate_result(current_ekf_pose, current_biased_ekf_pose, current_ekf_twist);
   publish_diagnostics(current_ekf_pose, current_time);
-}
 
-/*
- * timer_tf_callback
- */
-void EKFLocalizer::timer_tf_callback()
-{
-  if (!is_activated_) {
-    return;
-  }
-
-  if (params_.pose_frame_id.empty()) {
-    return;
-  }
-
-  const rclcpp::Time current_time = this->now();
-
-  geometry_msgs::msg::TransformStamped transform_stamped;
-  transform_stamped = autoware::universe_utils::pose2transform(
-    ekf_module_->get_current_pose(current_time, false), "base_link");
-  transform_stamped.header.stamp = current_time;
-  tf_br_->sendTransform(transform_stamped);
+  /* publish processing time */
+  const double elapsed_time = stop_watch_timer_cb_.toc();
+  pub_processing_time_->publish(tier4_debug_msgs::build<tier4_debug_msgs::msg::Float64Stamped>()
+                                  .stamp(current_time)
+                                  .data(elapsed_time));
 }
 
 /*
@@ -363,6 +346,11 @@ void EKFLocalizer::publish_estimate_result(
   odometry.pose = pose_cov.pose;
   odometry.twist = twist_cov.twist;
   pub_odom_->publish(odometry);
+
+  /* publish tf */
+  const geometry_msgs::msg::TransformStamped transform_stamped =
+    autoware::universe_utils::pose2transform(current_ekf_pose, "base_link");
+  tf_br_->sendTransform(transform_stamped);
 }
 
 void EKFLocalizer::publish_diagnostics(

@@ -124,7 +124,6 @@ private:
   double detection_successful_rate_;
   bool enable_ray_tracing_;
   bool use_object_recognition_;
-  bool use_real_param_;
   bool use_base_link_z_;
   bool publish_ground_truth_objects_;
   std::unique_ptr<PointCloudCreator> pointcloud_creator_;

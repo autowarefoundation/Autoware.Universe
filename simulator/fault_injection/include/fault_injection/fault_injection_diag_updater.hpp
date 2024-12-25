@@ -51,6 +51,7 @@
 
 #include <diagnostic_updater/diagnostic_updater.hpp>
 
+#include <cstdio>
 #include <memory>
 #include <string>
 #include <utility>

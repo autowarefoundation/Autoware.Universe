@@ -18,6 +18,7 @@
 #include <autoware_lanelet2_extension/utility/query.hpp>
 
 #include <algorithm>
+#include <map>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -102,8 +103,8 @@ V at_or(const std::unordered_map<K, V> & map, const K & key, const V & value)
 autoware_perception_msgs::msg::TrafficLightElement convert(
   const tier4_perception_msgs::msg::TrafficLightElement & input)
 {
-  typedef tier4_perception_msgs::msg::TrafficLightElement OldElem;
-  typedef autoware_perception_msgs::msg::TrafficLightElement NewElem;
+  using OldElem = tier4_perception_msgs::msg::TrafficLightElement;
+  using NewElem = autoware_perception_msgs::msg::TrafficLightElement;
   static const std::unordered_map<OldElem::_color_type, NewElem::_color_type> color_map(
     {{OldElem::RED, NewElem::RED},
      {OldElem::AMBER, NewElem::AMBER},
@@ -292,7 +293,7 @@ void MultiCameraFusion::multiCameraFusion(std::map<IdType, FusionRecord> & fused
 }
 
 void MultiCameraFusion::groupFusion(
-  std::map<IdType, FusionRecord> & fused_record_map,
+  const std::map<IdType, FusionRecord> & fused_record_map,
   std::map<IdType, FusionRecord> & grouped_record_map)
 {
   grouped_record_map.clear();

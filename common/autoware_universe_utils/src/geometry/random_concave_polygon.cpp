@@ -19,9 +19,15 @@
 #include <boost/geometry/algorithms/convex_hull.hpp>
 #include <boost/geometry/algorithms/correct.hpp>
 #include <boost/geometry/algorithms/intersects.hpp>
+#include <boost/geometry/algorithms/is_valid.hpp>
 #include <boost/geometry/strategies/agnostic/hull_graham_andrew.hpp>
 
+#include <algorithm>
+#include <limits>
+#include <list>
 #include <random>
+#include <utility>
+#include <vector>
 
 namespace autoware::universe_utils
 {
@@ -138,30 +144,23 @@ bool intersecting(const Edge & e, const Polygon2d & polygon)
 }
 
 /// @brief checks if an edge is valid for a given polygon and set of points
-bool is_valid(const Edge & e, const Polygon2d & P, const std::vector<Point2d> & Q)
+bool is_valid(const Edge & e, const Polygon2d & P, const std::list<Point2d> & Q)
 {
-  bool valid = false;
-  size_t i = 0;
-
-  while (!valid && i < Q.size()) {
-    const Point2d & q = Q[i];
+  for (const Point2d & q : Q) {
     Edge e1 = {e.first, q};
     Edge e2 = {q, e.second};
     bool intersects_e1 = intersecting(e1, P);
     bool intersects_e2 = intersecting(e2, P);
-
-    if (!intersects_e1 && !intersects_e2) {
-      valid = true;
+    if (intersects_e1 || intersects_e2) {
+      return false;
     }
-
-    ++i;
   }
 
-  return valid;
+  return true;
 }
 
 /// @brief finds the nearest node from a set of points to an edge
-Point2d get_nearest_node(const std::vector<Point2d> & Q, const Edge & e)
+Point2d get_nearest_node(const std::list<Point2d> & Q, const Edge & e)
 {
   double min_distance = std::numeric_limits<double>::max();
   Point2d nearest_node(0, 0);
@@ -178,7 +177,7 @@ Point2d get_nearest_node(const std::vector<Point2d> & Q, const Edge & e)
 }
 
 /// @brief finds the edge that is closest to the given set of points
-Edge get_breaking_edge(const PolygonWithEdges & polygon_with_edges, const std::vector<Point2d> & Q)
+Edge get_breaking_edge(const PolygonWithEdges & polygon_with_edges, const std::list<Point2d> & Q)
 {
   double min_distance = std::numeric_limits<double>::max();
   Edge e_breaking;
@@ -229,7 +228,7 @@ void insert_node(PolygonWithEdges & polygon_with_edges, const Point2d & w, const
 }
 
 /// @brief removes a node from a set of points
-void remove_node(std::vector<Point2d> & Q, const Point2d & w)
+void remove_node(std::list<Point2d> & Q, const Point2d & w)
 {
   const double epsilon = 1e-9;
 
@@ -243,7 +242,7 @@ void remove_node(std::vector<Point2d> & Q, const Point2d & w)
 }
 
 /// @brief marks edges as valid if they are valid according to the polygon and points
-void mark_valid_edges(PolygonWithEdges & polygon_with_edges, const std::vector<Point2d> & Q)
+void mark_valid_edges(PolygonWithEdges & polygon_with_edges, const std::list<Point2d> & Q)
 {
   for (auto & edge : polygon_with_edges.edges) {
     if (is_valid(edge, polygon_with_edges.polygon, Q)) {
@@ -256,8 +255,7 @@ void mark_valid_edges(PolygonWithEdges & polygon_with_edges, const std::vector<P
 Polygon2d inward_denting(LinearRing2d & ring)
 {
   LinearRing2d convex_ring;
-  std::vector<Point2d> q;
-  q.reserve(ring.size());
+  std::list<Point2d> q;
   boost::geometry::strategy::convex_hull::graham_andrew<LinearRing2d, Point2d> strategy;
   boost::geometry::convex_hull(ring, convex_ring, strategy);
   PolygonWithEdges polygon_with_edges;
@@ -342,7 +340,7 @@ bool test_intersection(
   return false;
 }
 
-Polygon2d random_concave_polygon(const size_t vertices, const double max)
+std::optional<Polygon2d> random_concave_polygon(const size_t vertices, const double max)
 {
   if (vertices < 4) {
     return Polygon2d();
@@ -376,7 +374,7 @@ Polygon2d random_concave_polygon(const size_t vertices, const double max)
     // apply inward denting algorithm
     poly = inward_denting(points);
     // check for convexity
-    if (!is_convex(poly)) {
+    if (!is_convex(poly) && boost::geometry::is_valid(poly) && poly.outer().size() != vertices) {
       is_non_convex = true;
     }
     LinearRing2d poly_outer = poly.outer();

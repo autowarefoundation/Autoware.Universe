@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for scenario_simulator_v2 Adapter",
+  "type": "object",
+  "definitions": {
+    "scenario_simulator_v2_adapter": {
+      "type": "object",
+      "properties": {
+        "update_rate": {
+          "type": "number",
+          "default": 10,
+          "exclusiveMinimum": 2,
+          "description": "The scanning and update frequency of the checker."
+        },
+        "metric_topic_list": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The topic name list of the processing time."
+        }
+      },
+      "required": ["update_rate", "metric_topic_list"]
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/scenario_simulator_v2_adapter"
+        }
+      },
+      "required": ["ros__parameters"]
+    }
+  },
+  "required": ["/**"]
+}

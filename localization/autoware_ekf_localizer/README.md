@@ -54,6 +54,7 @@ This package includes the following features:
 | `ekf_twist`                       | `geometry_msgs::msg::TwistStamped`               | Estimated twist.                                      |
 | `ekf_twist_with_covariance`       | `geometry_msgs::msg::TwistWithCovarianceStamped` | The estimated twist with covariance.                  |
 | `diagnostics`                     | `diagnostics_msgs::msg::DiagnosticArray`         | The diagnostic information.                           |
+| `debug/processing_time_ms`        | `tier4_debug_msgs::msg::Float64Stamped`          | The processing time [ms].                             |
 
 ### Published TF
 

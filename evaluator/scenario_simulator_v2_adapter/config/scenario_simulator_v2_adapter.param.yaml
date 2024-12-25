@@ -1,0 +1,7 @@
+/**:
+  ros__parameters:
+    update_rate: 10.0
+    metric_topic_list:
+      - /planning/planning_evaluator/metrics
+      - /control/control_evaluator/metrics
+      - /system/processing_time_checker/metrics

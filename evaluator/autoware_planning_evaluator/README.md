@@ -13,6 +13,7 @@ Metrics are calculated using the following information:
 - the previous trajectory `T(-1)`.
 - the _reference_ trajectory assumed to be used as the reference to plan `T(0)`.
 - the current ego pose.
+- the current ego odometry.
 - the set of objects in the environment.
 
 These information are maintained by an instance of class `MetricsCalculator`
@@ -20,7 +21,7 @@ which is also responsible for calculating metrics.
 
 ### Stat
 
-Each metric is calculated using a `Stat` instance which contains
+Each metric is calculated using a `autoware::universe_utils::Accumulator` instance which contains
 the minimum, maximum, and mean values calculated for the metric
 as well as the number of values measured.
 
@@ -35,7 +36,7 @@ The `MetricsCalculator` is responsible for calculating metric statistics
 through calls to function:
 
 ```C++
-Stat<double> MetricsCalculator::calculate(const Metric metric, const Trajectory & traj) const;
+Accumulator<double> MetricsCalculator::calculate(const Metric metric, const Trajectory & traj) const;
 ```
 
 Adding a new metric `M` requires the following steps:
@@ -58,12 +59,12 @@ Adding a new metric `M` requires the following steps:
 
 Each metric is published on a topic named after the metric name.
 
-| Name        | Type                                    | Description                                             |
-| ----------- | --------------------------------------- | ------------------------------------------------------- |
-| `~/metrics` | `diagnostic_msgs::msg::DiagnosticArray` | DiagnosticArray with a DiagnosticStatus for each metric |
+| Name        | Type                                  | Description                                                       |
+| ----------- | ------------------------------------- | ----------------------------------------------------------------- |
+| `~/metrics` | `tier4_metric_msgs::msg::MetricArray` | MetricArray with many metrics of `tier4_metric_msgs::msg::Metric` |
 
-When shut down, the evaluation node writes the values of the metrics measured during its lifetime
-to a file as specified by the `output_file` parameter.
+If `output_metrics = true`, the evaluation node writes the statics of the metrics measured during its lifetime
+to `<ros2_logging_directory>/autoware_metrics/<node_name>-<time_stamp>.json` when shut down.
 
 ## Parameters
 

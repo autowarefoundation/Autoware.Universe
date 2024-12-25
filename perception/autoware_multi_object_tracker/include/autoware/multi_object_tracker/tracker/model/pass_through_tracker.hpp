@@ -19,8 +19,10 @@
 #ifndef AUTOWARE__MULTI_OBJECT_TRACKER__TRACKER__MODEL__PASS_THROUGH_TRACKER_HPP_
 #define AUTOWARE__MULTI_OBJECT_TRACKER__TRACKER__MODEL__PASS_THROUGH_TRACKER_HPP_
 
-#include "autoware/kalman_filter/kalman_filter.hpp"
+#include "autoware/multi_object_tracker/object_model/types.hpp"
 #include "tracker_base.hpp"
+
+#include <autoware/kalman_filter/kalman_filter.hpp>
 
 namespace autoware::multi_object_tracker
 {
@@ -28,23 +30,19 @@ namespace autoware::multi_object_tracker
 class PassThroughTracker : public Tracker
 {
 private:
-  autoware_perception_msgs::msg::DetectedObject object_;
-  autoware_perception_msgs::msg::DetectedObject prev_observed_object_;
+  types::DynamicObject object_;
+  types::DynamicObject prev_observed_object_;
   rclcpp::Logger logger_;
   rclcpp::Time last_update_time_;
 
 public:
   PassThroughTracker(
-    const rclcpp::Time & time, const autoware_perception_msgs::msg::DetectedObject & object,
-    const geometry_msgs::msg::Transform & self_transform, const size_t channel_size,
-    const uint & channel_index);
+    const rclcpp::Time & time, const types::DynamicObject & object, const size_t channel_size);
   bool predict(const rclcpp::Time & time) override;
   bool measure(
-    const autoware_perception_msgs::msg::DetectedObject & object, const rclcpp::Time & time,
+    const types::DynamicObject & object, const rclcpp::Time & time,
     const geometry_msgs::msg::Transform & self_transform) override;
-  bool getTrackedObject(
-    const rclcpp::Time & time,
-    autoware_perception_msgs::msg::TrackedObject & object) const override;
+  bool getTrackedObject(const rclcpp::Time & time, types::DynamicObject & object) const override;
 };
 
 }  // namespace autoware::multi_object_tracker

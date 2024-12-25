@@ -30,6 +30,14 @@
 #include <fmt/format.h>
 #include <lanelet2_core/geometry/Polygon.h>
 
+#include <algorithm>
+#include <limits>
+#include <list>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
 namespace autoware::behavior_velocity_planner
 {
 namespace bg = boost::geometry;
@@ -144,7 +152,7 @@ void IntersectionModule::updateObjectInfoManagerCollision(
   const IntersectionModule::TimeDistanceArray & time_distance_array,
   const IntersectionModule::TrafficPrioritizedLevel & traffic_prioritized_level,
   const bool passed_1st_judge_line_first_time, const bool passed_2nd_judge_line_first_time,
-  tier4_debug_msgs::msg::Float64MultiArrayStamped * object_ttc_time_array)
+  autoware_internal_debug_msgs::msg::Float64MultiArrayStamped * object_ttc_time_array)
 {
   const auto & intersection_lanelets = intersection_lanelets_.value();
 
@@ -807,7 +815,7 @@ std::optional<size_t> IntersectionModule::checkAngleForTargetLanelets(
 IntersectionModule::TimeDistanceArray IntersectionModule::calcIntersectionPassingTime(
   const tier4_planning_msgs::msg::PathWithLaneId & path, const bool is_prioritized,
   const IntersectionStopLines & intersection_stoplines,
-  tier4_debug_msgs::msg::Float64MultiArrayStamped * ego_ttc_array) const
+  autoware_internal_debug_msgs::msg::Float64MultiArrayStamped * ego_ttc_array) const
 {
   const double intersection_velocity =
     planner_param_.collision_detection.velocity_profile.default_velocity;

@@ -17,6 +17,7 @@
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
 
 #include <limits>
+#include <vector>
 
 namespace autoware::motion_velocity_planner::dynamic_obstacle_stop
 {

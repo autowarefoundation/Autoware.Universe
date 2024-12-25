@@ -16,6 +16,11 @@
 
 #include "autoware/lidar_transfusion/utils.hpp"
 
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 namespace autoware::lidar_transfusion
 {
 
@@ -60,9 +65,6 @@ LidarTransfusionNode::LidarTransfusionNode(const rclcpp::NodeOptions & options)
     static_cast<float>(this->declare_parameter<double>("circle_nms_dist_threshold", descriptor));
   {  // IoU NMS
     NMSParams p;
-    p.nms_type_ = NMS_TYPE::IoU_BEV;
-    p.target_class_names_ =
-      this->declare_parameter<std::vector<std::string>>("iou_nms_target_class_names", descriptor);
     p.search_distance_2d_ =
       this->declare_parameter<double>("iou_nms_search_distance_2d", descriptor);
     p.iou_threshold_ = this->declare_parameter<double>("iou_nms_threshold", descriptor);

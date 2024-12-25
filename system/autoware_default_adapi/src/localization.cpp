@@ -22,7 +22,7 @@ namespace autoware::default_adapi
 LocalizationNode::LocalizationNode(const rclcpp::NodeOptions & options)
 : Node("localization", options)
 {
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   group_cli_ = create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
   adaptor.relay_message(pub_state_, sub_state_);
   adaptor.init_cli(cli_initialize_);
@@ -30,8 +30,8 @@ LocalizationNode::LocalizationNode(const rclcpp::NodeOptions & options)
 }
 
 void LocalizationNode::on_initialize(
-  const autoware_ad_api::localization::Initialize::Service::Request::SharedPtr req,
-  const autoware_ad_api::localization::Initialize::Service::Response::SharedPtr res)
+  const autoware::adapi_specs::localization::Initialize::Service::Request::SharedPtr req,
+  const autoware::adapi_specs::localization::Initialize::Service::Response::SharedPtr res)
 {
   res->status = localization_conversion::convert_call(cli_initialize_, req);
 }

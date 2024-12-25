@@ -25,7 +25,10 @@
 #include <autoware/motion_utils/trajectory/path_shift.hpp>
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
 
+#include <algorithm>
+#include <limits>
 #include <memory>
+#include <utility>
 #include <vector>
 
 using autoware::motion_utils::findNearestIndex;
@@ -67,6 +70,8 @@ std::optional<PullOutPath> ShiftPullOut::plan(
   std::vector<lanelet::Id> fused_id_start_to_end{};
   std::optional<autoware::universe_utils::Polygon2d> fused_polygon_start_to_end = std::nullopt;
 
+  std::vector<lanelet::Id> fused_id_crop_points{};
+  std::optional<autoware::universe_utils::Polygon2d> fused_polygon_crop_points = std::nullopt;
   // get safe path
   for (auto & pull_out_path : pull_out_paths) {
     universe_utils::ScopedTimeTrack st("get safe path", *time_keeper_);
@@ -121,7 +126,8 @@ std::optional<PullOutPath> ShiftPullOut::plan(
         common_parameters.ego_nearest_yaw_threshold);
 
     const auto cropped_path = lane_departure_checker_->cropPointsOutsideOfLanes(
-      lanelet_map_ptr, shift_path, start_segment_idx);
+      lanelet_map_ptr, shift_path, start_segment_idx, fused_id_crop_points,
+      fused_polygon_crop_points);
     if (cropped_path.points.empty()) {
       planner_debug_data.conditions_evaluation.emplace_back("cropped path is empty");
       continue;

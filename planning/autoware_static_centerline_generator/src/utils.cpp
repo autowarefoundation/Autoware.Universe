@@ -23,7 +23,10 @@
 #include <lanelet2_core/geometry/Lanelet.h>
 
 #include <limits>
+#include <memory>
+#include <string>
 #include <utility>
+#include <vector>
 
 namespace autoware::static_centerline_generator
 {

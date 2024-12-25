@@ -14,6 +14,10 @@
 
 #include "autoware/planning_evaluator/motion_evaluator_node.hpp"
 
+#include <nlohmann/json.hpp>
+
+#include <chrono>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -32,7 +36,7 @@ MotionEvaluatorNode::MotionEvaluatorNode(const rclcpp::NodeOptions & node_option
     "~/input/twist", rclcpp::QoS{1},
     std::bind(&MotionEvaluatorNode::onOdom, this, std::placeholders::_1));
 
-  output_file_str_ = declare_parameter<std::string>("output_file");
+  output_metrics_ = declare_parameter<bool>("output_metrics");
 
   // List of metrics to calculate
   for (const std::string & selected_metric :
@@ -44,22 +48,56 @@ MotionEvaluatorNode::MotionEvaluatorNode(const rclcpp::NodeOptions & node_option
 
 MotionEvaluatorNode::~MotionEvaluatorNode()
 {
-  // column width is the maximum size we might print + 1 for the space between columns
-  const auto column_width = 20;  // std::to_string(std::numeric_limits<double>::max()).size() + 1;
-  // Write data using format
-  std::ofstream f(output_file_str_);
-  f << std::fixed << std::left;
-  for (Metric metric : metrics_) {
-    f << std::setw(3 * column_width) << metric_descriptions.at(metric);
+  if (!output_metrics_) {
+    return;
   }
-  f << std::endl;
-  for (Metric metric : metrics_) {
-    const auto & stat = metrics_calculator_.calculate(metric, accumulated_trajectory_);
-    if (stat) {
-      f /* << std::setw(3 * column_width) */ << *stat << " ";
+  try {
+    // generate json data
+    using json = nlohmann::json;
+    json j;
+    for (Metric metric : metrics_) {
+      const std::string base_name = metric_to_str.at(metric) + "/";
+      const auto & stat = metrics_calculator_.calculate(metric, accumulated_trajectory_);
+      if (stat) {
+        j[base_name + "min"] = stat->min();
+        j[base_name + "max"] = stat->max();
+        j[base_name + "mean"] = stat->mean();
+      }
     }
+
+    // get output folder
+    const std::string output_folder_str =
+      rclcpp::get_logging_directory().string() + "/autoware_metrics";
+    if (!std::filesystem::exists(output_folder_str)) {
+      if (!std::filesystem::create_directories(output_folder_str)) {
+        RCLCPP_ERROR(
+          this->get_logger(), "Failed to create directories: %s", output_folder_str.c_str());
+        return;
+      }
+    }
+
+    // get time stamp
+    std::time_t now_time_t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::tm * local_time = std::localtime(&now_time_t);
+    std::ostringstream oss;
+    oss << std::put_time(local_time, "%Y-%m-%d-%H-%M-%S");
+    std::string cur_time_str = oss.str();
+
+    // Write metrics .json to file
+    const std::string output_file_str =
+      output_folder_str + "/autoware_motion_evaluator-" + cur_time_str + ".json";
+    std::ofstream f(output_file_str);
+    if (f.is_open()) {
+      f << j.dump(4);
+      f.close();
+    } else {
+      RCLCPP_ERROR(this->get_logger(), "Failed to open file: %s", output_file_str.c_str());
+    }
+  } catch (const std::exception & e) {
+    std::cerr << "Exception in MotionEvaluatorNode destructor: " << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unknown exception in MotionEvaluatorNode destructor" << std::endl;
   }
-  f.close();
 }
 
 void MotionEvaluatorNode::onOdom(const nav_msgs::msg::Odometry::SharedPtr msg)

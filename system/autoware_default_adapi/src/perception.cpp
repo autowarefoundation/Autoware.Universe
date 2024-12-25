@@ -14,12 +14,13 @@
 
 #include "perception.hpp"
 
+#include <unordered_map>
 #include <vector>
 
 namespace autoware::default_adapi
 {
 
-using DynamicObjectArray = autoware_ad_api::perception::DynamicObjectArray;
+using DynamicObjectArray = autoware::adapi_specs::perception::DynamicObjectArray;
 using ObjectClassification = autoware_adapi_v1_msgs::msg::ObjectClassification;
 using DynamicObject = autoware_adapi_v1_msgs::msg::DynamicObject;
 using DynamicObjectPath = autoware_adapi_v1_msgs::msg::DynamicObjectPath;
@@ -34,7 +35,7 @@ std::unordered_map<uint8_t, uint8_t> shape_type_ = {
 
 PerceptionNode::PerceptionNode(const rclcpp::NodeOptions & options) : Node("perception", options)
 {
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   adaptor.init_pub(pub_object_recognized_);
   adaptor.init_sub(sub_object_recognized_, this, &PerceptionNode::object_recognize);
 }

@@ -51,8 +51,6 @@ CrosswalkModuleManager::CrosswalkModuleManager(rclcpp::Node & node)
     getOrDeclareParameter<double>(node, ns + ".stop_position.stop_distance_from_object_preferred");
   cp.stop_distance_from_object_limit =
     getOrDeclareParameter<double>(node, ns + ".stop_position.stop_distance_from_object_limit");
-  cp.far_object_threshold =
-    getOrDeclareParameter<double>(node, ns + ".stop_position.far_object_threshold");
   cp.stop_position_threshold =
     getOrDeclareParameter<double>(node, ns + ".stop_position.stop_position_threshold");
   cp.min_acc_preferred =

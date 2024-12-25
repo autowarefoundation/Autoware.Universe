@@ -22,7 +22,7 @@ namespace automatic_pose_initializer
 AutomaticPoseInitializer::AutomaticPoseInitializer(const rclcpp::NodeOptions & options)
 : Node("automatic_pose_initializer", options)
 {
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   group_cli_ = create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
   adaptor.init_cli(cli_initialize_, group_cli_);
   adaptor.init_sub(sub_state_, [this](const State::Message::ConstSharedPtr msg) { state_ = *msg; });
@@ -41,7 +41,7 @@ void AutomaticPoseInitializer::on_timer()
     try {
       const auto req = std::make_shared<Initialize::Service::Request>();
       cli_initialize_->call(req);
-    } catch (const component_interface_utils::ServiceException & error) {
+    } catch (const autoware::component_interface_utils::ServiceException & error) {
     }
   }
   timer_->reset();

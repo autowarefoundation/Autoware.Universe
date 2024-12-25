@@ -23,6 +23,7 @@
 #include "utils.hpp"
 
 #include <algorithm>
+#include <vector>
 
 namespace autoware::static_centerline_generator
 {

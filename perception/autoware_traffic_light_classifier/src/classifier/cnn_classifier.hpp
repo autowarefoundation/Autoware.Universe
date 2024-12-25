@@ -17,10 +17,10 @@
 
 #include "classifier_interface.hpp"
 
+#include <autoware/cuda_utils/cuda_unique_ptr.hpp>
+#include <autoware/cuda_utils/stream_unique_ptr.hpp>
 #include <autoware/tensorrt_classifier/tensorrt_classifier.hpp>
 #include <autoware/tensorrt_common/tensorrt_common.hpp>
-#include <cuda_utils/cuda_unique_ptr.hpp>
-#include <cuda_utils/stream_unique_ptr.hpp>
 #include <image_transport/image_transport.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -44,10 +44,10 @@
 namespace autoware::traffic_light
 {
 
-using cuda_utils::CudaUniquePtr;
-using cuda_utils::CudaUniquePtrHost;
-using cuda_utils::makeCudaStream;
-using cuda_utils::StreamUniquePtr;
+using autoware::cuda_utils::CudaUniquePtr;
+using autoware::cuda_utils::CudaUniquePtrHost;
+using autoware::cuda_utils::makeCudaStream;
+using autoware::cuda_utils::StreamUniquePtr;
 
 class CNNClassifier : public ClassifierInterface
 {

@@ -21,10 +21,10 @@
 #include <autoware/behavior_velocity_planner_common/utilization/util.hpp>
 #include <autoware_vehicle_info_utils/vehicle_info_utils.hpp>
 
+#include <autoware_internal_debug_msgs/msg/float32_stamped.hpp>
 #include <autoware_perception_msgs/msg/predicted_object.hpp>
 #include <autoware_perception_msgs/msg/shape.hpp>
 #include <autoware_planning_msgs/msg/path_point.hpp>
-#include <tier4_debug_msgs/msg/float32_stamped.hpp>
 #include <unique_identifier_msgs/msg/uuid.hpp>
 
 #include <string>
@@ -39,11 +39,11 @@ using autoware::universe_utils::LineString2d;
 using autoware::universe_utils::Point2d;
 using autoware::universe_utils::Polygon2d;
 using autoware::vehicle_info_utils::VehicleInfo;
+using autoware_internal_debug_msgs::msg::Float32Stamped;
 using autoware_perception_msgs::msg::ObjectClassification;
 using autoware_perception_msgs::msg::PredictedObjects;
 using autoware_perception_msgs::msg::Shape;
 using autoware_planning_msgs::msg::PathPoint;
-using tier4_debug_msgs::msg::Float32Stamped;
 using tier4_planning_msgs::msg::PathWithLaneId;
 using PathPointsWithLaneId = std::vector<tier4_planning_msgs::msg::PathPointWithLaneId>;
 struct CommonParam
@@ -255,7 +255,8 @@ std::optional<std::vector<geometry_msgs::msg::Point>> createDetectionAreaPolygon
 
 // extend path to the pose of goal
 PathWithLaneId extendPath(const PathWithLaneId & input, const double extend_distance);
-PathPoint createExtendPathPoint(const double extend_distance, const PathPoint & goal_point);
+PathPointWithLaneId createExtendPathPoint(
+  const double extend_distance, const PathPointWithLaneId & goal_point);
 
 DetectionMethod toEnum(const std::string & detection_method);
 

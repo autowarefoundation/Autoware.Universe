@@ -25,6 +25,7 @@
 #include <autoware_motion_velocity_planner_node/srv/unload_plugin.hpp>
 #include <rclcpp/rclcpp.hpp>
 
+#include <autoware_internal_debug_msgs/msg/float64_stamped.hpp>
 #include <autoware_map_msgs/msg/lanelet_map_bin.hpp>
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <autoware_perception_msgs/msg/traffic_signal_array.hpp>
@@ -32,7 +33,6 @@
 #include <nav_msgs/msg/occupancy_grid.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
-#include <tier4_debug_msgs/msg/float64_stamped.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
 #include <tf2_ros/buffer.h>
@@ -43,8 +43,6 @@
 #include <mutex>
 #include <string>
 #include <vector>
-
-using DiagnosticArray = diagnostic_msgs::msg::DiagnosticArray;
 
 namespace autoware::motion_velocity_planner
 {
@@ -82,9 +80,6 @@ private:
   autoware::universe_utils::InterProcessPollingSubscriber<
     autoware_perception_msgs::msg::TrafficLightGroupArray>
     sub_traffic_signals_{this, "~/input/traffic_signals"};
-  autoware::universe_utils::InterProcessPollingSubscriber<
-    tier4_v2x_msgs::msg::VirtualTrafficLightStateArray>
-    sub_virtual_traffic_light_states_{this, "~/input/virtual_traffic_light_states"};
   rclcpp::Subscription<autoware_map_msgs::msg::LaneletMapBin>::SharedPtr sub_lanelet_map_;
 
   void on_trajectory(
@@ -102,9 +97,10 @@ private:
     velocity_factor_publisher_;
   autoware::universe_utils::ProcessingTimePublisher processing_diag_publisher_{
     this, "~/debug/processing_time_ms_diag"};
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float64Stamped>::SharedPtr processing_time_publisher_;
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float64Stamped>::SharedPtr
+    processing_time_publisher_;
   autoware::universe_utils::PublishedTimePublisher published_time_publisher_{this};
-  rclcpp::Publisher<DiagnosticArray>::SharedPtr diagnostics_pub_;
+  rclcpp::Publisher<MetricArray>::SharedPtr metrics_pub_;
 
   //  parameters
   rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr set_param_callback_;

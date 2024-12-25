@@ -22,7 +22,10 @@
 
 #include <gtest/gtest.h>
 
+#include <iostream>
 #include <memory>
+#include <string>
+#include <utility>
 #include <vector>
 
 /*

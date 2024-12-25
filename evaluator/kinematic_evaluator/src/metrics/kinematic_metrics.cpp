@@ -19,9 +19,9 @@ namespace kinematic_diagnostics
 namespace metrics
 {
 
-Stat<double> updateVelocityStats(const double & value, const Stat<double> stat_prev)
+Accumulator<double> updateVelocityStats(const double & value, const Accumulator<double> stat_prev)
 {
-  Stat<double> stat(stat_prev);
+  Accumulator<double> stat(stat_prev);
   stat.add(value);
   return stat;
 }

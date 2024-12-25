@@ -48,14 +48,6 @@ ResultOfMultiNdtCovarianceEstimation estimate_xy_covariance_by_multi_ndt_score(
     pclomp::MultiGridNormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>> & ndt_ptr,
   const std::vector<Eigen::Matrix4f> & poses_to_search, const double temperature);
 
-/** \brief Find rotation matrix aligning covariance to principal axes
- * (1) Compute eigenvalues and eigenvectors
- * (2) Compute angle for first eigenvector
- * (3) Return rotation matrix
- */
-Eigen::Matrix2d find_rotation_matrix_aligning_covariance_to_principal_axes(
-  const Eigen::Matrix2d & matrix);
-
 /** \brief Propose poses to search.
  * (1) Compute covariance by Laplace approximation
  * (2) Find rotation matrix aligning covariance to principal axes

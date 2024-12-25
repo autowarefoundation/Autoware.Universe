@@ -14,6 +14,10 @@
 
 #include "learning_based_vehicle_model/interconnected_model.hpp"
 
+#include <string>
+#include <tuple>
+#include <vector>
+
 void InterconnectedModel::mapInputs(std::vector<char *> in_names)
 {
   // index in "map_in_to_sig_vec" is index in "in_names" and value in "map_in_to_sig_vec" is index

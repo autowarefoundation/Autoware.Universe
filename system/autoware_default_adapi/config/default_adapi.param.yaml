@@ -6,3 +6,7 @@
   ros__parameters:
     require_accept_start: false
     stop_check_duration: 1.0
+
+/adapi/node/vehicle_door:
+  ros__parameters:
+    check_autoware_control: true

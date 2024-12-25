@@ -15,19 +15,19 @@
 #ifndef UTILS__TYPES_HPP_
 #define UTILS__TYPES_HPP_
 
-#include <component_interface_utils/rclcpp.hpp>
+#include <autoware/component_interface_utils/rclcpp.hpp>
 
 namespace autoware::default_adapi
 {
 
 template <class T>
-using Pub = typename component_interface_utils::Publisher<T>::SharedPtr;
+using Pub = typename autoware::component_interface_utils::Publisher<T>::SharedPtr;
 template <class T>
-using Sub = typename component_interface_utils::Subscription<T>::SharedPtr;
+using Sub = typename autoware::component_interface_utils::Subscription<T>::SharedPtr;
 template <class T>
-using Cli = typename component_interface_utils::Client<T>::SharedPtr;
+using Cli = typename autoware::component_interface_utils::Client<T>::SharedPtr;
 template <class T>
-using Srv = typename component_interface_utils::Service<T>::SharedPtr;
+using Srv = typename autoware::component_interface_utils::Service<T>::SharedPtr;
 
 }  // namespace autoware::default_adapi
 

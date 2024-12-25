@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.22)
 project(autoware_planning_evaluator)
 
 find_package(autoware_cmake REQUIRED)

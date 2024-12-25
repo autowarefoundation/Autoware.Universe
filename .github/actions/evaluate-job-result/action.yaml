@@ -1,0 +1,45 @@
+name: Evaluate Job Result
+description: Evaluates the result of a job and updates the summary.
+inputs:
+  job_result:
+    description: Result of the job to evaluate (e.g., success, failure, skipped)
+    required: true
+    type: string
+  job_name:
+    description: Name of the job to evaluate
+    required: true
+    type: string
+  expected_results:
+    description: Comma-separated list of acceptable results (e.g., success,skipped)
+    required: true
+    type: string
+outputs:
+  failed:
+    description: Indicates if the job failed
+    value: ${{ steps.evaluate.outputs.failed }}
+
+runs:
+  using: composite
+  steps:
+    - name: Evaluate Job Result
+      id: evaluate
+      run: |
+        JOB_RESULT="${{ inputs.job_result }}"
+        IFS=',' read -ra EXPECTED <<< "${{ inputs.expected_results }}"
+        FAILED=false
+
+        for RESULT in "${EXPECTED[@]}"; do
+          if [[ "$JOB_RESULT" == "$RESULT" ]]; then
+            echo "- **${{ inputs.job_name }}:** "$JOB_RESULT" ✅" >> "$GITHUB_STEP_SUMMARY"
+            echo "failed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+        done
+
+        # If no expected result matched
+        echo "::error::${{ inputs.job_name }} failed. ❌"
+        echo "- **${{ inputs.job_name }}:** failed ❌" >> "$GITHUB_STEP_SUMMARY"
+        echo "failed=true" >> "$GITHUB_OUTPUT"
+
+        exit 1
+      shell: bash

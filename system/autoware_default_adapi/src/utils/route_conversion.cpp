@@ -115,13 +115,13 @@ ExternalState convert_state(const InternalState & internal)
   const auto convert = [](InternalState::_state_type state) {
     switch(state) {
       // TODO(Takagi, Isamu): Add adapi state.
-      case InternalState::INITIALIZING: return ExternalState::UNSET;
+      case InternalState::INITIALIZING: return ExternalState::UNSET; // NOLINT
       case InternalState::UNSET:        return ExternalState::UNSET;
       case InternalState::ROUTING:      return ExternalState::UNSET;
       case InternalState::SET:          return ExternalState::SET;
       case InternalState::REROUTING:    return ExternalState::CHANGING;
       case InternalState::ARRIVED:      return ExternalState::ARRIVED;
-      case InternalState::ABORTED:      return ExternalState::SET;
+      case InternalState::ABORTED:      return ExternalState::SET;  // NOLINT
       case InternalState::INTERRUPTED:  return ExternalState::SET;
       default:                          return ExternalState::UNKNOWN;
     }

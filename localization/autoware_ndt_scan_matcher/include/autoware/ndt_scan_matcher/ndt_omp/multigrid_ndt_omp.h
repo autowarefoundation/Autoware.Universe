@@ -67,6 +67,7 @@
 
 #include <pcl/registration/registration.h>
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -132,15 +133,6 @@ public:
   /** \brief Empty destructor */
   virtual ~MultiGridNormalDistributionsTransform() {}
 
-  void setNumThreads(int n)
-  {
-    params_.num_threads = n;
-
-    target_cells_.setThreadNum(params_.num_threads);
-  }
-
-  inline int getNumThreads() const { return params_.num_threads; }
-
   inline void setInputSource(const PointCloudSourceConstPtr & input)
   {
     // This is to avoid segmentation fault when setting null input
@@ -177,43 +169,6 @@ public:
     target_cells_.createKdtree();
     target_cloud_updated_ = false;
   }
-
-  /** \brief Set/change the voxel grid resolution.
-   * \param[in] resolution side length of voxels
-   */
-  inline void setResolution(float resolution)
-  {
-    // Prevents unnecessary voxel initiations
-    if (params_.resolution != resolution) {
-      params_.resolution = resolution;
-      if (input_) init();
-    }
-  }
-
-  /** \brief Get voxel grid resolution.
-   * \return side length of voxels
-   */
-  inline float getResolution() const { return (params_.resolution); }
-
-  /** \brief Get the newton line search maximum step length.
-   * \return maximum step length
-   */
-  inline double getStepSize() const { return (params_.step_size); }
-
-  /** \brief Set/change the newton line search maximum step length.
-   * \param[in] step_size maximum step length
-   */
-  inline void setStepSize(double step_size) { params_.step_size = step_size; }
-
-  /** \brief Get the point cloud outlier ratio.
-   * \return outlier ratio
-   */
-  inline double getOutlierRatio() const { return (outlier_ratio_); }
-
-  /** \brief Set/change the point cloud outlier ratio.
-   * \param[in] outlier_ratio outlier ratio
-   */
-  inline void setOutlierRatio(double outlier_ratio) { outlier_ratio_ = outlier_ratio; }
 
   /** \brief Get the registration alignment probability.
    * \return transformation probability
@@ -271,11 +226,6 @@ public:
   pcl::PointCloud<pcl::PointXYZI> calculateNearestVoxelScoreEachPoint(
     const PointCloudSource & cloud) const;
 
-  inline void setRegularizationScaleFactor(float regularization_scale_factor)
-  {
-    params_.regularization_scale_factor = regularization_scale_factor;
-  }
-
   inline void setRegularizationPose(Eigen::Matrix4f regularization_pose)
   {
     regularization_pose_ = regularization_pose;
@@ -297,29 +247,6 @@ public:
     ndt_result.hessian = getHessian();
     return ndt_result;
   }
-
-  /** \brief Set the transformation epsilon (maximum allowable translation squared
-   * difference between two consecutive transformations) in order for an optimization to
-   * be considered as having converged to the final solution. \param[in] epsilon the
-   * transformation epsilon in order for an optimization to be considered as having
-   * converged to the final solution.
-   */
-  inline void setTransformationEpsilon(double epsilon) { params_.trans_epsilon = epsilon; }
-
-  /** \brief Get the transformation epsilon (maximum allowable translation squared
-   * difference between two consecutive transformations) as set by the user.
-   */
-  inline double getTransformationEpsilon() { return (params_.trans_epsilon); }
-
-  inline void setMaximumIterations(int max_iterations)
-  {
-    params_.max_iterations = max_iterations;
-    max_iterations_ = params_.max_iterations;
-  }
-
-  inline int getMaxIterations() const { return params_.max_iterations; }
-
-  inline int getMaxIterations() { return params_.max_iterations; }
 
   void setParams(const NdtParams & ndt_params)
   {

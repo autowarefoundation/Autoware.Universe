@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>autoware_frenet_planner</name>
-  <version>0.0.1</version>
+  <version>0.40.0</version>
   <description>The autoware_frenet_planner package for trajectory generation in Frenet frame</description>
   <author email="maxime.clement@tier4.jp">Maxime CLEMENT</author>
   <maintainer email="maxime.clement@tier4.jp">Maxime CLEMENT</maintainer>

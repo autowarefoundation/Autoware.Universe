@@ -20,6 +20,9 @@
 
 #include <rclcpp/rclcpp.hpp>
 
+#include <iostream>
+#include <utility>
+
 namespace autoware::behavior_velocity_planner
 {
 using autoware::motion_utils::calcSignedArcLength;
@@ -70,8 +73,7 @@ SpeedBumpModule::SpeedBumpModule(
   }
 }
 
-bool SpeedBumpModule::modifyPathVelocity(
-  PathWithLaneId * path, [[maybe_unused]] StopReason * stop_reason)
+bool SpeedBumpModule::modifyPathVelocity(PathWithLaneId * path)
 {
   if (path->points.empty()) {
     return false;

@@ -16,6 +16,8 @@
 
 #include "autoware/behavior_path_planner_common/interface/scene_module_interface.hpp"
 
+#include <memory>
+
 namespace autoware::behavior_path_planner
 {
 std::shared_ptr<AvoidanceDebugMsgArray> SceneModuleVisitor::getAvoidanceModuleDebugMsg() const

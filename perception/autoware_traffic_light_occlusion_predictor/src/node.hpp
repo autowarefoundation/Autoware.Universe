@@ -17,9 +17,9 @@
 
 #include "occlusion_predictor.hpp"
 
+#include <autoware/traffic_light_utils/traffic_light_utils.hpp>
 #include <perception_utils/prime_synchronizer.hpp>
 #include <rclcpp/rclcpp.hpp>
-#include <traffic_light_utils/traffic_light_utils.hpp>
 
 #include <autoware_map_msgs/msg/lanelet_map_bin.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>

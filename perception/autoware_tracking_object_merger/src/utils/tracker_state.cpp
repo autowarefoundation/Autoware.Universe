@@ -16,6 +16,11 @@
 
 #include "autoware/tracking_object_merger/utils/utils.hpp"
 
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
+
 namespace autoware::tracking_object_merger
 {
 

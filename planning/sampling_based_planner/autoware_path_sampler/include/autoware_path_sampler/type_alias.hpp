@@ -15,6 +15,7 @@
 #ifndef AUTOWARE_PATH_SAMPLER__TYPE_ALIAS_HPP_
 #define AUTOWARE_PATH_SAMPLER__TYPE_ALIAS_HPP_
 
+#include "autoware_internal_debug_msgs/msg/string_stamped.hpp"
 #include "autoware_perception_msgs/msg/predicted_objects.hpp"
 #include "autoware_planning_msgs/msg/path.hpp"
 #include "autoware_planning_msgs/msg/path_point.hpp"
@@ -25,7 +26,6 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "std_msgs/msg/header.hpp"
-#include "tier4_debug_msgs/msg/string_stamped.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
 
 namespace autoware::path_sampler
@@ -45,7 +45,7 @@ using nav_msgs::msg::Odometry;
 using visualization_msgs::msg::Marker;
 using visualization_msgs::msg::MarkerArray;
 // debug
-using tier4_debug_msgs::msg::StringStamped;
+using autoware_internal_debug_msgs::msg::StringStamped;
 }  // namespace autoware::path_sampler
 
 #endif  // AUTOWARE_PATH_SAMPLER__TYPE_ALIAS_HPP_

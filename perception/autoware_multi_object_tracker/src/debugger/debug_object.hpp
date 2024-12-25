@@ -77,7 +77,6 @@ private:
 
   std::vector<ObjectData> object_data_list_;
   std::list<int32_t> unused_marker_ids_;
-  int32_t marker_id_ = 0;
   std::vector<std::vector<ObjectData>> object_data_groups_;
 
   std::vector<std::string> channel_names_;
@@ -89,8 +88,7 @@ public:
   }
   void collect(
     const rclcpp::Time & message_time, const std::list<std::shared_ptr<Tracker>> & list_tracker,
-    const uint & channel_index,
-    const autoware_perception_msgs::msg::DetectedObjects & detected_objects,
+    const types::DynamicObjectList & detected_objects,
     const std::unordered_map<int, int> & direct_assignment,
     const std::unordered_map<int, int> & reverse_assignment);
 

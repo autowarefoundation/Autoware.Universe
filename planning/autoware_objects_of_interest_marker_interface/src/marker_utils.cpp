@@ -14,6 +14,8 @@
 
 #include "autoware/objects_of_interest_marker_interface/marker_utils.hpp"
 
+#include <string>
+
 namespace autoware::objects_of_interest_marker_interface::marker_utils
 {
 using geometry_msgs::msg::Point;

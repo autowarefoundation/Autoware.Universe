@@ -18,6 +18,9 @@
 
 #include <sensor_msgs/point_cloud2_iterator.hpp>
 
+#include <memory>
+#include <string>
+#include <tuple>
 #include <type_traits>
 
 namespace autoware::lidar_transfusion

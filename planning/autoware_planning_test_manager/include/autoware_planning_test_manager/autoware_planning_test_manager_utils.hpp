@@ -22,7 +22,9 @@
 #include <geometry_msgs/msg/pose.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 
+#include <iostream>
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace autoware_planning_test_manager::utils
@@ -33,9 +35,11 @@ using geometry_msgs::msg::Pose;
 using nav_msgs::msg::Odometry;
 using RouteSections = std::vector<autoware_planning_msgs::msg::LaneletSegment>;
 
-Pose createPoseFromLaneID(const lanelet::Id & lane_id)
+inline Pose createPoseFromLaneID(
+  const lanelet::Id & lane_id, const std::string & package_name = "autoware_test_utils",
+  const std::string & map_filename = "lanelet2_map.osm")
 {
-  auto map_bin_msg = autoware::test_utils::makeMapBinMsg();
+  auto map_bin_msg = autoware::test_utils::makeMapBinMsg(package_name, map_filename);
   // create route_handler
   auto route_handler = std::make_shared<RouteHandler>();
   route_handler->setMap(map_bin_msg);
@@ -66,16 +70,19 @@ Pose createPoseFromLaneID(const lanelet::Id & lane_id)
 
 // Function to create a route from given start and goal lanelet ids
 // start pose and goal pose are set to the middle of the lanelet
-LaneletRoute makeBehaviorRouteFromLaneId(const int & start_lane_id, const int & goal_lane_id)
+inline LaneletRoute makeBehaviorRouteFromLaneId(
+  const int & start_lane_id, const int & goal_lane_id,
+  const std::string & package_name = "autoware_test_utils",
+  const std::string & map_filename = "lanelet2_map.osm")
 {
   LaneletRoute route;
   route.header.frame_id = "map";
-  auto start_pose = createPoseFromLaneID(start_lane_id);
-  auto goal_pose = createPoseFromLaneID(goal_lane_id);
+  auto start_pose = createPoseFromLaneID(start_lane_id, package_name, map_filename);
+  auto goal_pose = createPoseFromLaneID(goal_lane_id, package_name, map_filename);
   route.start_pose = start_pose;
   route.goal_pose = goal_pose;
 
-  auto map_bin_msg = autoware::test_utils::makeMapBinMsg();
+  auto map_bin_msg = autoware::test_utils::makeMapBinMsg(package_name, map_filename);
   // create route_handler
   auto route_handler = std::make_shared<RouteHandler>();
   route_handler->setMap(map_bin_msg);
@@ -112,7 +119,7 @@ LaneletRoute makeBehaviorRouteFromLaneId(const int & start_lane_id, const int & 
   return route;
 }
 
-Odometry makeInitialPoseFromLaneId(const lanelet::Id & lane_id)
+inline Odometry makeInitialPoseFromLaneId(const lanelet::Id & lane_id)
 {
   Odometry current_odometry;
   current_odometry.pose.pose = createPoseFromLaneID(lane_id);

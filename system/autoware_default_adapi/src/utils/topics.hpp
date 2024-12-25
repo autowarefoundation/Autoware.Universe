@@ -15,7 +15,7 @@
 #ifndef UTILS__TOPICS_HPP_
 #define UTILS__TOPICS_HPP_
 
-#include <component_interface_utils/rclcpp.hpp>
+#include <autoware/component_interface_utils/rclcpp.hpp>
 #include <rclcpp/time.hpp>
 
 #include <optional>

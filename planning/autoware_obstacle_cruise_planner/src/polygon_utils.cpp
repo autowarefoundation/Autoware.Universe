@@ -18,6 +18,11 @@
 #include "autoware/universe_utils/geometry/boost_polygon_utils.hpp"
 #include "autoware/universe_utils/geometry/geometry.hpp"
 
+#include <algorithm>
+#include <limits>
+#include <utility>
+#include <vector>
+
 namespace
 {
 PointWithStamp calcNearestCollisionPoint(

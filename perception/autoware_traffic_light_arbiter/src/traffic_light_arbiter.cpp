@@ -20,6 +20,7 @@
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_core/primitives/BasicRegulatoryElements.h>
 
+#include <algorithm>
 #include <map>
 #include <memory>
 #include <tuple>
@@ -70,6 +71,7 @@ namespace autoware
 TrafficLightArbiter::TrafficLightArbiter(const rclcpp::NodeOptions & options)
 : Node("traffic_light_arbiter", options)
 {
+  external_delay_tolerance_ = this->declare_parameter<double>("external_delay_tolerance", 5.0);
   external_time_tolerance_ = this->declare_parameter<double>("external_time_tolerance", 5.0);
   perception_time_tolerance_ = this->declare_parameter<double>("perception_time_tolerance", 1.0);
   external_priority_ = this->declare_parameter<bool>("external_priority", false);
@@ -119,7 +121,7 @@ void TrafficLightArbiter::onPerceptionMsg(const TrafficSignalArray::ConstSharedP
   latest_perception_msg_ = *msg;
 
   if (
-    (rclcpp::Time(msg->stamp) - rclcpp::Time(latest_external_msg_.stamp)).seconds() >
+    std::abs((rclcpp::Time(msg->stamp) - rclcpp::Time(latest_external_msg_.stamp)).seconds()) >
     external_time_tolerance_) {
     latest_external_msg_.traffic_light_groups.clear();
   }
@@ -129,10 +131,16 @@ void TrafficLightArbiter::onPerceptionMsg(const TrafficSignalArray::ConstSharedP
 
 void TrafficLightArbiter::onExternalMsg(const TrafficSignalArray::ConstSharedPtr msg)
 {
+  if (std::abs((this->now() - rclcpp::Time(msg->stamp)).seconds()) > external_delay_tolerance_) {
+    RCLCPP_WARN_THROTTLE(
+      get_logger(), *get_clock(), 5000, "Received outdated V2X traffic signal messages");
+    return;
+  }
+
   latest_external_msg_ = *msg;
 
   if (
-    (rclcpp::Time(msg->stamp) - rclcpp::Time(latest_perception_msg_.stamp)).seconds() >
+    std::abs((rclcpp::Time(msg->stamp) - rclcpp::Time(latest_perception_msg_.stamp)).seconds()) >
     perception_time_tolerance_) {
     latest_perception_msg_.traffic_light_groups.clear();
   }
@@ -229,6 +237,13 @@ void TrafficLightArbiter::arbitrateAndPublish(const builtin_interfaces::msg::Tim
   }
 
   pub_->publish(output_signals_msg);
+
+  const auto latest_time =
+    std::max(rclcpp::Time(latest_perception_msg_.stamp), rclcpp::Time(latest_external_msg_.stamp));
+  if (rclcpp::Time(output_signals_msg.stamp) < latest_time) {
+    RCLCPP_WARN_THROTTLE(
+      get_logger(), *get_clock(), 5000, "Published traffic signal messages are not latest");
+  }
 }
 }  // namespace autoware
 

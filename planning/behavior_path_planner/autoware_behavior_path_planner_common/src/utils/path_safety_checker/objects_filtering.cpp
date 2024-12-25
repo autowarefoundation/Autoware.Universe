@@ -23,14 +23,16 @@
 #include <boost/geometry/algorithms/distance.hpp>
 
 #include <algorithm>
+#include <limits>
+#include <memory>
+#include <utility>
+#include <vector>
 
 namespace autoware::behavior_path_planner::utils::path_safety_checker::filter
 {
-bool velocity_filter(const PredictedObject & object, double velocity_threshold, double max_velocity)
+bool velocity_filter(const Twist & object_twist, double velocity_threshold, double max_velocity)
 {
-  const auto v_norm = std::hypot(
-    object.kinematics.initial_twist_with_covariance.twist.linear.x,
-    object.kinematics.initial_twist_with_covariance.twist.linear.y);
+  const auto v_norm = std::hypot(object_twist.linear.x, object_twist.linear.y);
   return (velocity_threshold < v_norm && v_norm < max_velocity);
 }
 
@@ -54,6 +56,20 @@ bool is_within_circle(
   const double dist =
     std::hypot(reference_point.x - object_pos.x, reference_point.y - object_pos.y);
   return dist < search_radius;
+}
+
+bool is_vehicle(const ObjectClassification & classification)
+{
+  switch (classification.label) {
+    case ObjectClassification::CAR:
+    case ObjectClassification::TRUCK:
+    case ObjectClassification::BUS:
+    case ObjectClassification::TRAILER:
+    case ObjectClassification::MOTORCYCLE:
+      return true;
+    default:
+      return false;
+  }
 }
 }  // namespace autoware::behavior_path_planner::utils::path_safety_checker::filter
 
@@ -148,7 +164,8 @@ PredictedObjects filterObjectsByVelocity(
   const PredictedObjects & objects, double velocity_threshold, double max_velocity)
 {
   const auto filter = [&](const auto & object) {
-    return filter::velocity_filter(object, velocity_threshold, max_velocity);
+    return filter::velocity_filter(
+      object.kinematics.initial_twist_with_covariance.twist, velocity_threshold, max_velocity);
   };
 
   auto filtered = objects;

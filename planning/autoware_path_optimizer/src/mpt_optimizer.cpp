@@ -26,8 +26,12 @@
 #include <algorithm>
 #include <chrono>
 #include <limits>
+#include <memory>
 #include <optional>
+#include <string>
 #include <tuple>
+#include <utility>
+#include <vector>
 
 namespace autoware::path_optimizer
 {

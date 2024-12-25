@@ -16,14 +16,14 @@
 
 #include <gtest/gtest.h>
 
+#include <vector>
+
 TEST(NonMaximumSuppressionTest, Apply)
 {
   autoware::lidar_transfusion::NonMaximumSuppression nms;
   autoware::lidar_transfusion::NMSParams params;
   params.search_distance_2d_ = 1.0;
   params.iou_threshold_ = 0.2;
-  params.nms_type_ = autoware::lidar_transfusion::NMS_TYPE::IoU_BEV;
-  params.target_class_names_ = {"CAR"};
   nms.setParameters(params);
 
   std::vector<autoware::lidar_transfusion::DetectedObject> input_objects(4);

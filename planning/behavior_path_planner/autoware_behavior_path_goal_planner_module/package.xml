@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_behavior_path_goal_planner_module</name>
-  <version>0.1.0</version>
+  <version>0.40.0</version>
   <description>The autoware_behavior_path_goal_planner_module package</description>
 
   <maintainer email="kosuke.takeuchi@tier4.jp">Kosuke Takeuchi</maintainer>
@@ -22,8 +22,10 @@
 
   <depend>autoware_behavior_path_planner</depend>
   <depend>autoware_behavior_path_planner_common</depend>
+  <depend>autoware_bezier_sampler</depend>
   <depend>autoware_motion_utils</depend>
   <depend>autoware_rtc_interface</depend>
+  <depend>autoware_test_utils</depend>
   <depend>autoware_universe_utils</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
@@ -34,7 +36,6 @@
   <test_depend>ament_index_cpp</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>autoware_lint_common</test_depend>
-  <test_depend>autoware_test_utils</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

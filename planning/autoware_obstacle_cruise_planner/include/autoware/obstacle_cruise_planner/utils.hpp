@@ -93,6 +93,10 @@ size_t getIndexWithLongitudinalOffset(
   }
   return 0;
 }
+
+VelocityFactorArray makeVelocityFactorArray(
+  const rclcpp::Time & time, const std::string & behavior = PlanningBehavior::ROUTE_OBSTACLE,
+  const std::optional<geometry_msgs::msg::Pose> pose = std::nullopt);
 }  // namespace obstacle_cruise_utils
 
 #endif  // AUTOWARE__OBSTACLE_CRUISE_PLANNER__UTILS_HPP_

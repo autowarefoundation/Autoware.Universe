@@ -20,10 +20,12 @@
 
 #include <algorithm>
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <numeric>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 static void trimLeft(std::string & s)
@@ -170,13 +172,14 @@ TrtClassifier::TrtClassifier(
     std::accumulate(input_dims.d + 1, input_dims.d + input_dims.nbDims, 1, std::multiplies<int>());
 
   const auto output_dims = trt_common_->getBindingDimensions(1);
-  input_d_ = cuda_utils::make_unique<float[]>(batch_config[2] * input_size);
+  input_d_ = autoware::cuda_utils::make_unique<float[]>(batch_config[2] * input_size);
   out_elem_num_ = std::accumulate(
     output_dims.d + 1, output_dims.d + output_dims.nbDims, 1, std::multiplies<int>());
   out_elem_num_ = out_elem_num_ * batch_config[2];
   out_elem_num_per_batch_ = static_cast<int>(out_elem_num_ / batch_config[2]);
-  out_prob_d_ = cuda_utils::make_unique<float[]>(out_elem_num_);
-  out_prob_h_ = cuda_utils::make_unique_host<float[]>(out_elem_num_, cudaHostAllocPortable);
+  out_prob_d_ = autoware::cuda_utils::make_unique<float[]>(out_elem_num_);
+  out_prob_h_ =
+    autoware::cuda_utils::make_unique_host<float[]>(out_elem_num_, cudaHostAllocPortable);
 
   if (cuda) {
     m_cuda = true;
@@ -190,9 +193,15 @@ TrtClassifier::TrtClassifier(
 
 TrtClassifier::~TrtClassifier()
 {
-  if (m_cuda) {
-    if (h_img_) CHECK_CUDA_ERROR(cudaFreeHost(h_img_));
-    if (d_img_) CHECK_CUDA_ERROR(cudaFree(d_img_));
+  try {
+    if (m_cuda) {
+      if (h_img_) CHECK_CUDA_ERROR(cudaFreeHost(h_img_));
+      if (d_img_) CHECK_CUDA_ERROR(cudaFree(d_img_));
+    }
+  } catch (const std::exception & e) {
+    std::cerr << "Exception in TrtClassifier destructor: " << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unknown exception in TrtClassifier destructor" << std::endl;
   }
 }
 

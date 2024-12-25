@@ -16,7 +16,9 @@
 
 #include <Eigen/Core>
 
+#include <algorithm>
 #include <iostream>
+#include <vector>
 
 VelocityOptimizer::VelocityOptimizer(
   const double max_s_weight, const double max_v_weight, const double over_s_safety_weight,

@@ -13,6 +13,22 @@
     publish_rate: 10.0
     world_frame_id: map
     enable_delay_compensation: false
+    consider_odometry_uncertainty: false
+
+    # tracker parameters
+    tracker_lifetime: 1.0  # [s]
+    min_known_object_removal_iou: 0.1  # [ratio]
+    min_unknown_object_removal_iou: 0.001  # [ratio]
+    distance_threshold: 5.0  # [m]
+    confident_count_threshold:
+      UNKNOWN: 3
+      CAR: 3
+      TRUCK: 3
+      BUS: 3
+      TRAILER: 3
+      MOTORBIKE: 3
+      BICYCLE: 3
+      PEDESTRIAN: 3
 
     # debug parameters
     publish_processing_time: false

@@ -61,7 +61,7 @@ VehicleInfoNode::VehicleInfoNode(const rclcpp::NodeOptions & options)
   dimensions_.footprint.points.push_back(create_point(-b, -l));
   dimensions_.footprint.points.push_back(create_point(-b, +r));
 
-  const auto adaptor = component_interface_utils::NodeAdaptor(this);
+  const auto adaptor = autoware::component_interface_utils::NodeAdaptor(this);
   adaptor.init_srv(srv_dimensions_, on_vehicle_dimensions);
 }
 

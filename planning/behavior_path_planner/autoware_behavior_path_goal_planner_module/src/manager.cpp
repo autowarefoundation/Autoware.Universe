@@ -31,7 +31,7 @@ std::unique_ptr<SceneModuleInterface> GoalPlannerModuleManager::createNewSceneMo
 {
   return std::make_unique<GoalPlannerModule>(
     name_, *node_, parameters_, rtc_interface_ptr_map_,
-    objects_of_interest_marker_interface_ptr_map_, steering_factor_interface_ptr_);
+    objects_of_interest_marker_interface_ptr_map_);
 }
 
 GoalPlannerParameters GoalPlannerModuleManager::initGoalPlannerParameters(
@@ -545,7 +545,6 @@ void GoalPlannerModuleManager::updateModuleParams(
 
   // parallel parking common
   {
-    const std::string ns = base_ns + "pull_over.parallel_parking.";
     p->parallel_parking_parameters.center_line_path_interval =
       p->center_line_path_interval;  // for geometric parallel parking
   }

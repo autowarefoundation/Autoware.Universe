@@ -17,7 +17,7 @@ jobs:
     permissions:
       issues: write
       pull-requests: write
-      contents: write
+      contents: read
     name: Run pr agent on every pull request, respond to user comments
     steps:
       - name: PR Agent action step
@@ -35,6 +35,7 @@ jobs:
           config.model_turbo: gpt-4o
           config.max_model_tokens: 64000
           pr_code_suggestions.max_context_tokens: 12000
+          # cSpell:ignore commitable
           pr_code_suggestions.commitable_code_suggestions: true
           pr_reviewer.enable_review_labels_effort: false
           pr_reviewer.enable_review_labels_security: false

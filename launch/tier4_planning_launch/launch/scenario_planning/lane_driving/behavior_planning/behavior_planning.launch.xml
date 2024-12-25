@@ -233,6 +233,7 @@
       <param from="$(var velocity_smoother_param_path)"/>
       <param from="$(var behavior_velocity_smoother_type_param_path)"/>
       <param from="$(var behavior_velocity_planner_common_param_path)"/>
+      <param from="$(var behavior_velocity_planner_param_path)"/>
       <param name="launch_modules" value="$(var behavior_velocity_planner_launch_modules)"/>
       <param name="enable_all_modules_auto_mode" value="$(var enable_all_modules_auto_mode)"/>
       <param name="is_simulation" value="$(var is_simulation)"/>
@@ -254,7 +255,7 @@
       <extra_arg name="use_intra_process_comms" value="false"/>
     </composable_node>
 
-    <composable_node pkg="glog_component" plugin="GlogComponent" name="glog_component" namespace=""/>
+    <composable_node pkg="autoware_glog_component" plugin="autoware::glog_component::GlogComponent" name="glog_component" namespace=""/>
   </node_container>
 
   <group if="$(var launch_compare_map_pipeline)">

@@ -15,9 +15,9 @@
 #ifndef FAIL_SAFE_HPP_
 #define FAIL_SAFE_HPP_
 
+#include <autoware/adapi_specs/fail_safe.hpp>
 #include <autoware/component_interface_specs/system.hpp>
-#include <autoware_ad_api_specs/fail_safe.hpp>
-#include <component_interface_utils/rclcpp.hpp>
+#include <autoware/component_interface_utils/rclcpp.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 // This file should be included after messages.
@@ -32,8 +32,8 @@ public:
   explicit FailSafeNode(const rclcpp::NodeOptions & options);
 
 private:
-  using MrmState = autoware_ad_api::fail_safe::MrmState::Message;
-  Pub<autoware_ad_api::fail_safe::MrmState> pub_mrm_state_;
+  using MrmState = autoware::adapi_specs::fail_safe::MrmState::Message;
+  Pub<autoware::adapi_specs::fail_safe::MrmState> pub_mrm_state_;
   Sub<autoware::component_interface_specs::system::MrmState> sub_mrm_state_;
   MrmState prev_state_;
   void on_state(const MrmState::ConstSharedPtr msg);

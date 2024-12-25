@@ -16,6 +16,9 @@
 
 #include <autoware/motion_utils/trajectory/trajectory.hpp>
 
+#include <deque>
+#include <vector>
+
 namespace autoware::freespace_planner::utils
 {
 
@@ -87,11 +90,12 @@ size_t get_next_target_index(
 }
 
 Trajectory get_partial_trajectory(
-  const Trajectory & trajectory, const size_t start_index, const size_t end_index)
+  const Trajectory & trajectory, const size_t start_index, const size_t end_index,
+  const rclcpp::Clock::SharedPtr clock)
 {
   Trajectory partial_trajectory;
   partial_trajectory.header = trajectory.header;
-  partial_trajectory.header.stamp = rclcpp::Clock().now();
+  partial_trajectory.header.stamp = clock->now();
 
   partial_trajectory.points.reserve(trajectory.points.size());
   for (size_t i = start_index; i <= end_index; ++i) {
@@ -134,12 +138,13 @@ Trajectory create_trajectory(
   return trajectory;
 }
 
-Trajectory create_stop_trajectory(const PoseStamped & current_pose)
+Trajectory create_stop_trajectory(
+  const PoseStamped & current_pose, const rclcpp::Clock::SharedPtr clock)
 {
   PlannerWaypoints waypoints;
   PlannerWaypoint waypoint;
 
-  waypoints.header.stamp = rclcpp::Clock().now();
+  waypoints.header.stamp = clock->now();
   waypoints.header.frame_id = current_pose.header.frame_id;
   waypoint.pose.header = waypoints.header;
   waypoint.pose.pose = current_pose.pose;
@@ -171,8 +176,8 @@ bool is_stopped(
 
 bool is_near_target(const Pose & target_pose, const Pose & current_pose, const double th_distance_m)
 {
-  const double long_disp_to_target =
-    autoware::universe_utils::calcLongitudinalDeviation(target_pose, current_pose.position);
-  return std::abs(long_disp_to_target) < th_distance_m;
+  const auto pose_dev = autoware::universe_utils::calcPoseDeviation(target_pose, current_pose);
+  return abs(pose_dev.yaw) < M_PI_2 && abs(pose_dev.longitudinal) < th_distance_m &&
+         abs(pose_dev.lateral) < th_distance_m;
 }
 }  // namespace autoware::freespace_planner::utils

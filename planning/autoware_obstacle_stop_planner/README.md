@@ -24,10 +24,9 @@
 
 ### Output topics
 
-| Name                   | Type                                 | Description                            |
-| ---------------------- | ------------------------------------ | -------------------------------------- |
-| `~output/trajectory`   | autoware_planning_msgs::Trajectory   | trajectory to be followed              |
-| `~output/stop_reasons` | tier4_planning_msgs::StopReasonArray | reasons that cause the vehicle to stop |
+| Name                 | Type                               | Description               |
+| -------------------- | ---------------------------------- | ------------------------- |
+| `~output/trajectory` | autoware_planning_msgs::Trajectory | trajectory to be followed |
 
 ### Common Parameter
 

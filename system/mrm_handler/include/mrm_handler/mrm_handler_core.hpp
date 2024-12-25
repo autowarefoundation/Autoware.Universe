@@ -29,6 +29,7 @@
 #include <autoware_vehicle_msgs/msg/control_mode_report.hpp>
 #include <autoware_vehicle_msgs/msg/gear_command.hpp>
 #include <autoware_vehicle_msgs/msg/hazard_lights_command.hpp>
+#include <tier4_system_msgs/msg/emergency_holding_state.hpp>
 #include <tier4_system_msgs/msg/mrm_behavior_status.hpp>
 #include <tier4_system_msgs/msg/operation_mode_availability.hpp>
 #include <tier4_system_msgs/srv/operate_mrm.hpp>
@@ -108,6 +109,10 @@ private:
 
   autoware_adapi_v1_msgs::msg::MrmState mrm_state_;
   void publishMrmState();
+
+  rclcpp::Publisher<tier4_system_msgs::msg::EmergencyHoldingState>::SharedPtr
+    pub_emergency_holding_;
+  void publishEmergencyHolding();
 
   // Clients
   rclcpp::CallbackGroup::SharedPtr client_mrm_pull_over_group_;

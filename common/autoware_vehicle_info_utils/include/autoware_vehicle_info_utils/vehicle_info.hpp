@@ -71,6 +71,7 @@ struct VehicleInfo
 
   double calcMaxCurvature() const;
   double calcCurvatureFromSteerAngle(const double steer_angle) const;
+  double calcSteerAngleFromCurvature(const double curvature) const;
 };
 
 /// Create vehicle info from base parameters

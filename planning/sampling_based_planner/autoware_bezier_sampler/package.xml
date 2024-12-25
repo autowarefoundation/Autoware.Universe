@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>autoware_bezier_sampler</name>
-  <version>0.0.1</version>
+  <version>0.40.0</version>
   <description>Package to sample trajectories using Bézier curves</description>
   <author email="maxime.clement@tier4.jp">Maxime CLEMENT</author>
   <maintainer email="maxime.clement@tier4.jp">Maxime CLEMENT</maintainer>

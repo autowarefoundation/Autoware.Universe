@@ -27,7 +27,7 @@ ament_auto_add_library(${PROJECT_NAME}
   src/camera/semantic_segmentation.cpp
   src/camera/camera_pose_initializer_core.cpp)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${EIGEN3_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${EIGEN3_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES} Sophus::Sophus)
 ament_target_dependencies(${PROJECT_NAME} OpenCV)
 

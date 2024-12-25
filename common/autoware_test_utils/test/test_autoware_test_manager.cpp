@@ -20,6 +20,9 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+#include <string>
+
 class RelayNode : public rclcpp::Node
 {
 public:

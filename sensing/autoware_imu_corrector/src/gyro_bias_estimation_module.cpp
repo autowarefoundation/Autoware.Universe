@@ -17,6 +17,8 @@
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <rclcpp/rclcpp.hpp>
 
+#include <vector>
+
 namespace autoware::imu_corrector
 {
 
