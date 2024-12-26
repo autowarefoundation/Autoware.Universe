@@ -14457,9 +14457,7 @@
 </tbody>
 </table>
 <p>After processing the data through the <code>concatenate_and_time_synchronize_node</code>, the outputs from all LiDARs are combined into a single comprehensive point cloud that provides a complete view of the environment:</p>
-<div style="margin: 0 auto; max-width: 500px">
 <p><img alt="Full Scene View" src="../image/concatenate_all.png"></p>
-</div>
 <p>This resulting point cloud allows autonomous systems to detect obstacles, map the environment, and navigate more effectively, leveraging the complementary fields of view from multiple LiDAR sensors.</p>
 <h2 id="inner-workings-algorithms">Inner Workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
 <p><img alt="concatenate_algorithm" src="../image/concatenate_algorithm.drawio.svg"></p>
@@ -14677,13 +14675,13 @@ colcon<span class="w"> </span>build<span class="w"> </span>--symlink-install<spa
 colcon<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--packages-select<span class="w"> </span>autoware_pointcloud_preprocessor<span class="w"> </span>--event-handlers<span class="w"> </span>console_cohesion+
 </code></pre></div>
 <h2 id="debug-and-diagnostics">Debug and Diagnostics<a class="headerlink" href="#debug-and-diagnostics" title="Permanent link">#</a></h2>
-<p>To verify whether the node has successfully concatenated the point clouds, the user can examine the <code>/diagnostics</code> topic using the following command:</p>
+<p>To verify whether the node has successfully concatenated the point clouds, the user can examine rqt or the <code>/diagnostics</code> topic using the following command:</p>
 <div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/diagnostics
 </code></pre></div>
 <p>Below is an example output when the point clouds are concatenated successfully:</p>
 <ul>
-<li>Each point cloud has a value of <code>1</code>.</li>
-<li>The <code>concatenate status</code> is <code>1</code>.</li>
+<li>Each point cloud has a value of <code>True</code>.</li>
+<li>The <code>cloud concatenation success</code> is <code>True</code>.</li>
 <li>The <code>level</code> value is <code>\0</code>. (diagnostic_msgs::msg::DiagnosticStatus::OK)</li>
 </ul>
 <div class="highlight"><pre><span></span><code>header:
@@ -14705,23 +14703,23 @@ status:
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.169229984'</span>
 <span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync<span class="w"> </span>timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.159229994'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync
-<span class="w">    </span>value:<span class="w"> </span><span class="s1">'1'</span>
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
 <span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync<span class="w"> </span>timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.194104910'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync
-<span class="w">    </span>value:<span class="w"> </span><span class="s1">'1'</span>
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
 <span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/top/pointcloud_before_sync<span class="w"> </span>timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.234578133'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/top/pointcloud_before_sync
-<span class="w">    </span>value:<span class="w"> </span><span class="s1">'1'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>concatenate<span class="w"> </span>status
-<span class="w">    </span>value:<span class="w"> </span><span class="s1">'1'</span>
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/top/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>cloud<span class="w"> </span>concatenation<span class="w"> </span>success
+<span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
 </code></pre></div>
 <p>Below is an example when point clouds fail to concatenate successfully.</p>
 <ul>
-<li>Some point clouds might have values of <code>0</code>.</li>
-<li>The <code>concatenate status</code> is <code>0</code>.</li>
+<li>Some point clouds might have values of <code>False</code>.</li>
+<li>The <code>cloud concatenation success</code> is <code>False</code>.</li>
 <li>The <code>level</code> value is <code>\x02</code>. (diagnostic_msgs::msg::DiagnosticStatus::ERROR)</li>
 </ul>
 <div class="highlight"><pre><span></span><code>header:
@@ -14743,16 +14741,16 @@ status:
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.869827986'</span>
 <span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync<span class="w"> </span>timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.859827995'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync
-<span class="w">    </span>value:<span class="w"> </span><span class="s1">'1'</span>
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
 <span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync<span class="w"> </span>timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.895193815'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync
-<span class="w">    </span>value:<span class="w"> </span><span class="s1">'1'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/top/pointcloud_before_sync
-<span class="w">    </span>value:<span class="w"> </span><span class="s1">'0'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>concatenate<span class="w"> </span>status
-<span class="w">    </span>value:<span class="w"> </span><span class="s1">'0'</span>
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/top/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">    </span>value:<span class="w"> </span><span class="s1">'False'</span>
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>cloud<span class="w"> </span>concatenation<span class="w"> </span>success
+<span class="w">    </span>value:<span class="w"> </span><span class="s1">'False'</span>
 </code></pre></div>
 <h2 id="node-separation-options">Node separation options<a class="headerlink" href="#node-separation-options" title="Permanent link">#</a></h2>
 <p>There is also an option to separate the concatenate_and_time_sync_node into two nodes: one for <code>time synchronization</code> and another for <code>concatenate pointclouds</code> (<a href="https://github.com/autowarefoundation/autoware.universe/pull/3312">See this PR</a>).</p>
