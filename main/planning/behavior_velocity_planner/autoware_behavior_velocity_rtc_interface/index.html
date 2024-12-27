@@ -8,20 +8,20 @@
       
       
       
-        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_run_out_module/">
+        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/main/planning/behavior_velocity_planner/autoware_behavior_velocity_rtc_interface/">
       
       
-        <link rel="prev" href="../autoware_behavior_velocity_rtc_interface/">
+        <link rel="prev" href="../autoware_behavior_velocity_planner_common/">
       
       
-        <link rel="next" href="../autoware_behavior_velocity_speed_bump_module/">
+        <link rel="next" href="../autoware_behavior_velocity_run_out_module/">
       
       <link rel="icon" href="../../../docs/assets/images/autoware-foundation.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.20">
     
     
       
-        <title>Index - Autoware Universe Documentation</title>
+        <title>Behavior Velocity RTC Interface - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#run-out" class="md-skip">
+        <a href="#behavior-velocity-rtc-interface" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Index
+              Behavior Velocity RTC Interface
             
           </span>
         </div>
@@ -8394,7 +8394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="." class="md-nav__link">
+      <a href="../autoware_behavior_velocity_run_out_module" class="md-nav__link">
         Run Out
       </a>
     </li>
@@ -14175,62 +14175,8 @@
   
   
   
+    
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#run-out" class="md-nav__link">
-    Run Out
-  </a>
-  
-    <nav class="md-nav" aria-label="Run Out">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#role" class="md-nav__link">
-    Role
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#activation-timing" class="md-nav__link">
-    Activation Timing
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#inner-workings-algorithms" class="md-nav__link">
-    Inner-workings / Algorithms
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#module-parameters" class="md-nav__link">
-    Module Parameters
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#future-extensions-unimplemented-parts" class="md-nav__link">
-    Future extensions / Unimplemented parts
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -14248,397 +14194,8 @@
   
 
 
-  <h1>Index</h1>
-
-<div><h2 id="run-out">Run Out<a class="headerlink" href="#run-out" title="Permanent link">#</a></h2>
-<h3 id="role">Role<a class="headerlink" href="#role" title="Permanent link">#</a></h3>
-<p><code>run_out</code> is the module that decelerates and stops for dynamic obstacles such as pedestrians, bicycles and motorcycles.</p>
-<p><img alt="brief" src="docs/run_out_overview.svg"></p>
-<h3 id="activation-timing">Activation Timing<a class="headerlink" href="#activation-timing" title="Permanent link">#</a></h3>
-<p>This module is activated if <code>launch_run_out</code> becomes true</p>
-<h3 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h3>
-<h4 id="flow-chart">Flow chart<a class="headerlink" href="#flow-chart" title="Permanent link">#</a></h4>
-<p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U3R5bGVUeXBlPSJ0ZXh0L2NzcyIgZGF0YS1kaWFncmFtLXR5cGU9IkFDVElWSVRZIiBoZWlnaHQ9IjcwNXB4IiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBzdHlsZT0id2lkdGg6Mzg1cHg7aGVpZ2h0OjcwNXB4O2JhY2tncm91bmQ6I0ZGRkZGRjsiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDM4NSA3MDUiIHdpZHRoPSIzODVweCIgem9vbUFuZFBhbj0ibWFnbmlmeSI+PHRpdGxlPm1vZGlmeVBhdGhWZWxvY2l0eTwvdGl0bGU+PGRlZnMvPjxnPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iYm9sZCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxNTQuMjczNCIgeD0iMTE0LjA2NDUiIHk9IjMyLjk5NTEiPm1vZGlmeVBhdGhWZWxvY2l0eTwvdGV4dD48ZWxsaXBzZSBjeD0iMTkyLjcwMTIiIGN5PSI1Ny4yOTY5IiBmaWxsPSIjMjIyMjIyIiByeD0iMTAiIHJ5PSIxMCIgc3R5bGU9InN0cm9rZTojMjIyMjIyO3N0cm9rZS13aWR0aDoxOyIvPjxyZWN0IGZpbGw9Im5vbmUiIGhlaWdodD0iMTkwLjIwMzEiIHN0eWxlPSJzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS41OyIgd2lkdGg9IjM2My40MDIzIiB4PSIxMSIgeT0iNzcuMjk2OSIvPjxwYXRoIGQ9Ik0xMzQuMTk2Myw3Ny4yOTY5IEwxMzQuMTk2Myw4Ni41OTM4IEwxMjQuMTk2Myw5Ni41OTM4IEwxMSw5Ni41OTM4ICIgZmlsbD0ibm9uZSIgc3R5bGU9InN0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTEzLjE5NjMiIHg9IjE0IiB5PSI5MS4yOTIiPlByZXByb2Nlc3MgcGF0aDwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMzQzLjQwMjMiIHg9IjIxIiB5PSIxMTMuNTkzOCIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjMyMy40MDIzIiB4PSIzMSIgeT0iMTM0LjczMjQiPkNhbGN1bGF0ZSB0aGUgZXhwZWN0ZWQgdGFyZ2V0IHZlbG9jaXR5IGZvciBlZ28gdmVoaWNsZTwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iOTMuMDg5OCIgeD0iMTQ2LjE1NjMiIHk9IjE2Ny41NjI1Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iNzMuMDg5OCIgeD0iMTU2LjE1NjMiIHk9IjE4OC43MDEyIj5FeHRlbmQgcGF0aDwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMTg3Ljg4ODciIHg9Ijk4Ljc1NjgiIHk9IjIyMS41MzEzIi8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTY3Ljg4ODciIHg9IjEwOC43NTY4IiB5PSIyNDIuNjY5OSI+VHJpbSBwYXRoIGZyb20gZWdvIHBvc2l0aW9uPC90ZXh0PjxyZWN0IGZpbGw9Im5vbmUiIGhlaWdodD0iMTM2LjIzNDQiIHN0eWxlPSJzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS41OyIgd2lkdGg9IjMxMC45NjA5IiB4PSIzNy4yMjA3IiB5PSIyNzcuNSIvPjxwYXRoIGQ9Ik0xOTQuODk3NSwyNzcuNSBMMTk0Ljg5NzUsMjg2Ljc5NjkgTDE4NC44OTc1LDI5Ni43OTY5IEwzNy4yMjA3LDI5Ni43OTY5ICIgZmlsbD0ibm9uZSIgc3R5bGU9InN0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTQ3LjY3NjgiIHg9IjQwLjIyMDciIHk9IjI5MS40OTUxIj5QcmVwcm9jZXNzIG9ic3RhY2xlczwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMjkwLjQ1NyIgeD0iNDcuNDcyNyIgeT0iMzEzLjc5NjkiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIyNzAuNDU3IiB4PSI1Ny40NzI3IiB5PSIzMzQuOTM1NSI+Q3JlYXRlIGRhdGEgb2YgYWJzdHJhY3RlZCBkeW5hbWljIG9ic3RhY2xlczwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMjkwLjk2MDkiIHg9IjQ3LjIyMDciIHk9IjM2Ny43NjU2Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjcwLjk2MDkiIHg9IjU3LjIyMDciIHk9IjM4OC45MDQzIj5FeGNsdWRlIG9ic3RhY2xlcyBvdXRzaWRlIG9mIHBhcnRpdGlvbiBsYW5lbGV0PC90ZXh0PjxyZWN0IGZpbGw9Im5vbmUiIGhlaWdodD0iODIuMjY1NiIgc3R5bGU9InN0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7IiB3aWR0aD0iMjc3LjMzOTgiIHg9IjU0LjAzMTMiIHk9IjQyMy43MzQ0Ii8+PHBhdGggZD0iTTE5NS43ODAzLDQyMy43MzQ0IEwxOTUuNzgwMyw0MzMuMDMxMyBMMTg1Ljc4MDMsNDQzLjAzMTMgTDU0LjAzMTMsNDQzLjAzMTMgIiBmaWxsPSJub25lIiBzdHlsZT0ic3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuNTsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxMzEuNzQ5IiB4PSI1Ny4wMzEzIiB5PSI0MzcuNzI5NSI+Q29sbGlzaW9uX2RldGVjdGlvbjwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMjU3LjMzOTgiIHg9IjY0LjAzMTMiIHk9IjQ2MC4wMzEzIi8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjM3LjMzOTgiIHg9Ijc0LjAzMTMiIHk9IjQ4MS4xNjk5Ij5EZXRlY3QgY29sbGlzaW9uIHdpdGggZHluYW1pYyBvYnN0YWNsZXM8L3RleHQ+PHJlY3QgZmlsbD0ibm9uZSIgaGVpZ2h0PSIxMzYuMjM0NCIgc3R5bGU9InN0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7IiB3aWR0aD0iMzE0LjY2OTkiIHg9IjM1LjM2NjIiIHk9IjUxNiIvPjxwYXRoIGQ9Ik0xNDQuNjg1NSw1MTYgTDE0NC42ODU1LDUyNS4yOTY5IEwxMzQuNjg1NSw1MzUuMjk2OSBMMzUuMzY2Miw1MzUuMjk2OSAiIGZpbGw9Im5vbmUiIHN0eWxlPSJzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS41OyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9Ijk5LjMxOTMiIHg9IjM4LjM2NjIiIHk9IjUyOS45OTUxIj5JbnNlcnQgdmVsb2NpdHk8L3RleHQ+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjI2OS44NDM4IiB4PSI1Ny43NzkzIiB5PSI1NTIuMjk2OSIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjI0OS44NDM4IiB4PSI2Ny43NzkzIiB5PSI1NzMuNDM1NSI+SW5zZXJ0IHZlbG9jaXR5IHRvIGRlY2VsZXJhdGUgZm9yIG9ic3RhY2xlczwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMjk0LjY2OTkiIHg9IjQ1LjM2NjIiIHk9IjYwNi4yNjU2Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjc0LjY2OTkiIHg9IjU1LjM2NjIiIHk9IjYyNy40MDQzIj5MaW1pdCB2ZWxvY2l0eSB3aXRoIHNwZWNpZmllZCBqZXJrIGFuZCBhY2MgbGltaXQ8L3RleHQ+PGVsbGlwc2UgY3g9IjE5Mi43MDEyIiBjeT0iNjgzLjIzNDQiIGZpbGw9Im5vbmUiIHJ4PSIxMSIgcnk9IjExIiBzdHlsZT0ic3Ryb2tlOiMyMjIyMjI7c3Ryb2tlLXdpZHRoOjE7Ii8+PGVsbGlwc2UgY3g9IjE5Mi43MDEyIiBjeT0iNjgzLjIzNDQiIGZpbGw9IiMyMjIyMjIiIHJ4PSI2IiByeT0iNiIgc3R5bGU9InN0cm9rZTojMjIyMjIyO3N0cm9rZS13aWR0aDoxOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiIHgxPSIxOTIuNzAxMiIgeDI9IjE5Mi43MDEyIiB5MT0iMTQ3LjU2MjUiIHkyPSIxNjcuNTYyNSIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTg4LjcwMTIsMTU3LjU2MjUsMTkyLjcwMTIsMTY3LjU2MjUsMTk2LjcwMTIsMTU3LjU2MjUsMTkyLjcwMTIsMTYxLjU2MjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7IiB4MT0iMTkyLjcwMTIiIHgyPSIxOTIuNzAxMiIgeTE9IjIwMS41MzEzIiB5Mj0iMjIxLjUzMTMiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE4OC43MDEyLDIxMS41MzEzLDE5Mi43MDEyLDIyMS41MzEzLDE5Ni43MDEyLDIxMS41MzEzLDE5Mi43MDEyLDIxNS41MzEzIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIgeDE9IjE5Mi43MDEyIiB4Mj0iMTkyLjcwMTIiIHkxPSI2Ny4yOTY5IiB5Mj0iMTEzLjU5MzgiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE4OC43MDEyLDEwMy41OTM4LDE5Mi43MDEyLDExMy41OTM4LDE5Ni43MDEyLDEwMy41OTM4LDE5Mi43MDEyLDEwNy41OTM4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIgeDE9IjE5Mi43MDEyIiB4Mj0iMTkyLjcwMTIiIHkxPSIzNDcuNzY1NiIgeTI9IjM2Ny43NjU2Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIxODguNzAxMiwzNTcuNzY1NiwxOTIuNzAxMiwzNjcuNzY1NiwxOTYuNzAxMiwzNTcuNzY1NiwxOTIuNzAxMiwzNjEuNzY1NiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiIHgxPSIxOTIuNzAxMiIgeDI9IjE5Mi43MDEyIiB5MT0iMjU1LjUiIHkyPSIzMTMuNzk2OSIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTg4LjcwMTIsMzAzLjc5NjksMTkyLjcwMTIsMzEzLjc5NjksMTk2LjcwMTIsMzAzLjc5NjksMTkyLjcwMTIsMzA3Ljc5NjkiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7IiB4MT0iMTkyLjcwMTIiIHgyPSIxOTIuNzAxMiIgeTE9IjQwMS43MzQ0IiB5Mj0iNDYwLjAzMTMiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE4OC43MDEyLDQ1MC4wMzEzLDE5Mi43MDEyLDQ2MC4wMzEzLDE5Ni43MDEyLDQ1MC4wMzEzLDE5Mi43MDEyLDQ1NC4wMzEzIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIgeDE9IjE5Mi43MDEyIiB4Mj0iMTkyLjcwMTIiIHkxPSI1ODYuMjY1NiIgeTI9IjYwNi4yNjU2Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIxODguNzAxMiw1OTYuMjY1NiwxOTIuNzAxMiw2MDYuMjY1NiwxOTYuNzAxMiw1OTYuMjY1NiwxOTIuNzAxMiw2MDAuMjY1NiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiIHgxPSIxOTIuNzAxMiIgeDI9IjE5Mi43MDEyIiB5MT0iNDk0IiB5Mj0iNTUyLjI5NjkiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE4OC43MDEyLDU0Mi4yOTY5LDE5Mi43MDEyLDU1Mi4yOTY5LDE5Ni43MDEyLDU0Mi4yOTY5LDE5Mi43MDEyLDU0Ni4yOTY5IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIgeDE9IjE5Mi43MDEyIiB4Mj0iMTkyLjcwMTIiIHkxPSI2NDAuMjM0NCIgeTI9IjY3Mi4yMzQ0Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIxODguNzAxMiw2NjIuMjM0NCwxOTIuNzAxMiw2NzIuMjM0NCwxOTYuNzAxMiw2NjIuMjM0NCwxOTIuNzAxMiw2NjYuMjM0NCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjwhLS1TUkM9W1RQNzFKaUNtMzhSbFVHZmhaejRUMW1TYTNaaVdoaVhCZENzR3JiN1ltWWg0ay1DNEtDUzRieWZuX2x4X1BxVFA0eTRlV1VFb0hwcXpLWEJGa2hZZ01ESXZSNXpNYldhcy1xQXZZQVRROFBqbzAtemtzNjdvU3E4YnExQzFkSkR2Zkczc3h2NEtOaF9EODRlMUVlZXJKa21KUlRybVVyUVFHWlVvcXFGWGlUU0dZdW5UY2dOc3RBdHgtOHoyM1dQZlRsS0JmTDNaMkFXODRXN2ppYzJkMlNrNDhfakx0X0R6Y1dFakZQMVBBeFRFWDNLa3VLSTl6MWZZOW9ibmpWOGZhRGg4TGRNNmN0dTJfdENEUnNtcF9QN19zLXZrZ2JKTVROTWhnbndlRzIxbENBTERzSFB3T1VVNlVueHZHanJwZ3hxNkh4T0RGNUR2MFJIemVfVUdjaEdYTDlOeTJHMDBdLS0+PC9nPjwvc3ZnPg==" class="uml" alt="uml diagram" title=""></p>
-<h4 id="preprocess-path">Preprocess path<a class="headerlink" href="#preprocess-path" title="Permanent link">#</a></h4>
-<h5 id="calculate-the-expected-target-velocity-for-ego-vehicle">Calculate the expected target velocity for ego vehicle<a class="headerlink" href="#calculate-the-expected-target-velocity-for-ego-vehicle" title="Permanent link">#</a></h5>
-<p>Calculate the expected target velocity for the ego vehicle path to calculate time to collision with obstacles more precisely.
-The expected target velocity is calculated with <a href="https://github.com/autowarefoundation/autoware.universe/tree/main/planning/autoware_velocity_smoother">autoware velocity smoother module</a> by using current velocity, current acceleration and velocity limits directed by the map and external API.</p>
-<p><img alt="brief" src="docs/calculate_expected_target_velocity.svg"></p>
-<h5 id="extend-the-path">Extend the path<a class="headerlink" href="#extend-the-path" title="Permanent link">#</a></h5>
-<p>The path is extended by the length of base link to front to consider obstacles after the goal.</p>
-<h5 id="trim-path-from-ego-position">Trim path from ego position<a class="headerlink" href="#trim-path-from-ego-position" title="Permanent link">#</a></h5>
-<p>The path is trimmed from ego position to a certain distance to reduce calculation time.
-Trimmed distance is specified by parameter of <code>detection_distance</code>.</p>
-<h4 id="preprocess-obstacles">Preprocess obstacles<a class="headerlink" href="#preprocess-obstacles" title="Permanent link">#</a></h4>
-<h5 id="create-data-of-abstracted-dynamic-obstacle">Create data of abstracted dynamic obstacle<a class="headerlink" href="#create-data-of-abstracted-dynamic-obstacle" title="Permanent link">#</a></h5>
-<p>This module can handle multiple types of obstacles by creating abstracted dynamic obstacle data layer. Currently we have 3 types of detection method (Object, ObjectWithoutPath, Points) to create abstracted obstacle data.</p>
-<h6 id="abstracted-dynamic-obstacle">Abstracted dynamic obstacle<a class="headerlink" href="#abstracted-dynamic-obstacle" title="Permanent link">#</a></h6>
-<p>Abstracted obstacle data has following information.</p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>pose</td>
-<td><code>geometry_msgs::msg::Pose</code></td>
-<td>pose of the obstacle</td>
-</tr>
-<tr>
-<td>classifications</td>
-<td><code>std::vector&lt;autoware_perception_msgs::msg::ObjectClassification&gt;</code></td>
-<td>classifications with probability</td>
-</tr>
-<tr>
-<td>shape</td>
-<td><code>autoware_perception_msgs::msg::Shape</code></td>
-<td>shape of the obstacle</td>
-</tr>
-<tr>
-<td>predicted_paths</td>
-<td><code>std::vector&lt;DynamicObstacle::PredictedPath&gt;</code></td>
-<td>predicted paths with confidence. this data doesn't have time step because we use minimum and maximum velocity instead.</td>
-</tr>
-<tr>
-<td>min_velocity_mps</td>
-<td><code>float</code></td>
-<td>minimum velocity of the obstacle. specified by parameter of <code>dynamic_obstacle.min_vel_kmph</code></td>
-</tr>
-<tr>
-<td>max_velocity_mps</td>
-<td><code>float</code></td>
-<td>maximum velocity of the obstacle. specified by parameter of <code>dynamic_obstacle.max_vel_kmph</code></td>
-</tr>
-</tbody>
-</table>
-<p>Enter the maximum/minimum velocity of the object as a parameter, adding enough margin to the expected velocity. This parameter is used to create polygons for <a href=".#Collision-detection">collision detection</a>.</p>
-<p>Future work: Determine the maximum/minimum velocity from the estimated velocity with covariance of the object</p>
-<h6 id="3-types-of-detection-method">3 types of detection method<a class="headerlink" href="#3-types-of-detection-method" title="Permanent link">#</a></h6>
-<p>We have 3 types of detection method to meet different safety and availability requirements. The characteristics of them are shown in the table below.
-Method of <code>Object</code> has high availability (less false positive) because it detects only objects whose predicted path is on the lane. However, sometimes it is not safe because perception may fail to detect obstacles or generate incorrect predicted paths.
-On the other hand, method of <code>Points</code> has high safety (less false negative) because it uses pointcloud as input. Since points don't have a predicted path, the path that moves in the direction normal to the path of ego vehicle is considered to be the predicted path of abstracted dynamic obstacle data. However, without proper adjustment of filter of points, it may detect a lot of points and it will result in very low availability.
-Method of <code>ObjectWithoutPath</code> has the characteristics of an intermediate of <code>Object</code> and <code>Points</code>.</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Object</td>
-<td>use an object with the predicted path for collision detection.</td>
-</tr>
-<tr>
-<td>ObjectWithoutPath</td>
-<td>use an object but not use the predicted path for collision detection. replace the path assuming that an object jumps out to the lane at specified velocity.</td>
-</tr>
-<tr>
-<td>Points</td>
-<td>use filtered points for collision detection. the path is created assuming that points jump out to the lane. points are regarded as an small circular shaped obstacle.</td>
-</tr>
-</tbody>
-</table>
-<p><img alt="brief" src="docs/create_dynamic_obstacle.svg"></p>
-<h5 id="exclude-obstacles-outside-of-partition">Exclude obstacles outside of partition<a class="headerlink" href="#exclude-obstacles-outside-of-partition" title="Permanent link">#</a></h5>
-<p>This module can exclude the obstacles outside of partition such as guardrail, fence, and wall.
-We need lanelet map that has the information of partition to use this feature.
-By this feature, we can reduce unnecessary deceleration by obstacles that are unlikely to jump out to the lane.
-You can choose whether to use this feature by parameter of <code>use_partition_lanelet</code>.</p>
-<p><img alt="brief" src="docs/exclude_obstacles_by_partition.svg"></p>
-<h5 id="exclude-obstacles-by-label">Exclude obstacles by label<a class="headerlink" href="#exclude-obstacles-by-label" title="Permanent link">#</a></h5>
-<p>This module only acts on target obstacles defined by the <code>target_obstacle_types</code> parameter. If an obstacle of a type not specified by said parameter is detected, it will be ignored by this module.</p>
-<h5 id="exclude-obstacles-that-are-already-on-the-ego-vehicles-path">Exclude obstacles that are already on the ego vehicle's path<a class="headerlink" href="#exclude-obstacles-that-are-already-on-the-ego-vehicles-path" title="Permanent link">#</a></h5>
-<p>In the cases were an obstacle is already on the ego vehicle's path, it cannot "cut in" into the ego's path anymore (which is the situation this module tries to handle) so it might be useful to exclude obstacles already on the vehicle's footprint path. By setting the parameter <code>exclude_obstacles_already_in_path</code> to true, this module will exclude the obstacles that are considered to be already on the ego vehicle's path for more than <code>keep_obstacle_on_path_time_threshold</code>. The module considers the ego vehicle's closest path point to each obstacle's current position, and determines the lateral distance between the obstacle and the right and left sides of the ego vehicle. If the obstacle is located within the left and right extremes of the vehicle for that pose, then it is considered to be inside the ego vehicle's footprint path and it is excluded. The virtual width of the vehicle used to detect if an obstacle is within the path or not, can be adjusted by the <code>ego_footprint_extra_margin</code> parameter.</p>
-<h5 id="exclude-obstacles-that-cross-the-ego-vehicles-cut-line">Exclude obstacles that cross the ego vehicle's "cut line"<a class="headerlink" href="#exclude-obstacles-that-cross-the-ego-vehicles-cut-line" title="Permanent link">#</a></h5>
-<p>This module can exclude obstacles that have predicted paths that will cross the back side of the ego vehicle. It excludes obstacles if their predicted path crosses the ego's "cut line". The "cut line" is a virtual line segment that is perpendicular to the ego vehicle and that passes through the ego's base link.</p>
-<p>You can choose whether to use this feature by setting the parameter <code>use_ego_cut_line</code> to <code>true</code> or <code>false</code>. The width of the line can be tuned with the parameter <code>ego_cut_line_length</code>.</p>
-<p><img alt="brief" src="docs/ego_cut_line.svg"></p>
-<h4 id="collision-detection">Collision detection<a class="headerlink" href="#collision-detection" title="Permanent link">#</a></h4>
-<h5 id="detect-collision-with-dynamic-obstacles">Detect collision with dynamic obstacles<a class="headerlink" href="#detect-collision-with-dynamic-obstacles" title="Permanent link">#</a></h5>
-<p>Along the ego vehicle path, determine the points where collision detection is to be performed for each <code>detection_span</code>.</p>
-<p>The travel times to the each points are calculated from <a href=".#Calculate-the-expected-target-velocity-for-ego-vehicle">the expected target velocity</a>.</p>
-<p><img alt="brief" src="docs/create_polygon_on_path_point.svg"></p>
-<p>For the each points, collision detection is performed using the footprint polygon of the ego vehicle and the polygon of the predicted location of the obstacles.
-The predicted location of the obstacles is described as rectangle or polygon that has the range calculated by min velocity, max velocity and the ego vehicle's travel time to the point.
-If the input type of the dynamic obstacle is <code>Points</code>, the obstacle shape is defined as a small cylinder.</p>
-<p><img alt="brief" src="docs/collision_detection_for_shape.svg"></p>
-<p>Multiple points are detected as collision points because collision detection is calculated between two polygons.
-So we select the point that is on the same side as the obstacle and close to ego vehicle as the collision point.</p>
-<p><img alt="brief" src="docs/collision_points.svg"></p>
-<h4 id="insert-velocity">Insert velocity<a class="headerlink" href="#insert-velocity" title="Permanent link">#</a></h4>
-<h5 id="insert-velocity-to-decelerate-for-obstacles">Insert velocity to decelerate for obstacles<a class="headerlink" href="#insert-velocity-to-decelerate-for-obstacles" title="Permanent link">#</a></h5>
-<p>If the collision is detected, stop point is inserted on distance of base link to front + stop margin from the selected collision point. The base link to front means the distance between base_link (center of rear-wheel axis) and front of the car. Stop margin is determined by the parameter of <code>stop_margin</code>.</p>
-<p><img alt="brief" src="docs/insert_velocity.svg"></p>
-<h4 id="insert-velocity-to-approach-the-obstacles">Insert velocity to approach the obstacles<a class="headerlink" href="#insert-velocity-to-approach-the-obstacles" title="Permanent link">#</a></h4>
-<p>If you select the method of <code>Points</code> or <code>ObjectWithoutPath</code>, sometimes ego keeps stopping in front of the obstacle.
-To avoid this problem, This feature has option to approach the obstacle with slow velocity after stopping.
-If the parameter of <code>approaching.enable</code> is set to true, ego will approach the obstacle after ego stopped for <code>state.stop_time_thresh</code> seconds.
-The maximum velocity of approaching can be specified by the parameter of <code>approaching.limit_vel_kmph</code>.
-The decision to approach the obstacle is determined by a simple state transition as following image.</p>
-<p><img alt="brief" src="docs/insert_velocity_to_approach.svg"></p>
-<p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U3R5bGVUeXBlPSJ0ZXh0L2NzcyIgZGF0YS1kaWFncmFtLXR5cGU9IlNUQVRFIiBoZWlnaHQ9IjE4NnB4IiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBzdHlsZT0id2lkdGg6MTI3MnB4O2hlaWdodDoxODZweDtiYWNrZ3JvdW5kOiNGRkZGRkY7IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxMjcyIDE4NiIgd2lkdGg9IjEyNzJweCIgem9vbUFuZFBhbj0ibWFnbmlmeSI+PHRpdGxlPlN0YXRlIHRyYW5zaXRpb24gZm9yIGFwcHJvYWNoaW5nIHRoZSBvYnN0YWNsZTwvdGl0bGU+PGRlZnMvPjxnPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iYm9sZCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIzNTcuOTg0NCIgeD0iNDUwLjI4MDUiIHk9IjIyLjk5NTEiPlN0YXRlIHRyYW5zaXRpb24gZm9yIGFwcHJvYWNoaW5nIHRoZSBvYnN0YWNsZTwvdGV4dD48ZWxsaXBzZSBjeD0iMTYiIGN5PSI5Ni44NjI4IiBmaWxsPSIjMjIyMjIyIiByeD0iMTAiIHJ5PSIxMCIgc3R5bGU9InN0cm9rZTojMjIyMjIyO3N0cm9rZS13aWR0aDoxOyIvPjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iNDAiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iNTAiIHg9Ijg3IiB5PSI3Ni44NjI4Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjEuODY4MiIgeD0iMTAxLjA2NTkiIHk9IjEwMS43MDk1Ij5HTzwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjQwIiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjUwIiB4PSI1OTMuNSIgeT0iNDcuODYyOCIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjM2LjkwMDQiIHg9IjYwMC4wNDk4IiB5PSI3Mi43MDk1Ij5TVE9QPC90ZXh0PjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iNDAiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iODcuMDg4OSIgeD0iMTA4NCIgeT0iMTA1Ljg2MjgiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI3Ny4wODg5IiB4PSIxMDg5IiB5PSIxMzAuNzA5NSI+QVBQUk9BQ0g8L3RleHQ+PCEtLWxpbmsgKnN0YXJ0KiB0byBHTy0tPjxnIGlkPSJsaW5rXypzdGFydCpfR08iPjxwYXRoIGQ9Ik0yNi4zNiw5Ni44NjI4IEM0MC4yOSw5Ni44NjI4IDYwLjk1LDk2Ljg2MjggODAuNjUsOTYuODYyOCAiIGZpbGw9Im5vbmUiIGlkPSIqc3RhcnQqLXRvLUdPIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSI4Ni42NSw5Ni44NjI4LDc3LjY1LDkyLjg2MjgsODEuNjUsOTYuODYyOCw3Ny42NSwxMDAuODYyOCw4Ni42NSw5Ni44NjI4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PC9nPjwhLS1saW5rIEdPIHRvIFNUT1AtLT48ZyBpZD0ibGlua19HT19TVE9QIj48cGF0aCBkPSJNMTM3LjMzLDg3LjA0MjggQzE0Ni40OCw4My44MTI4IDE1Ny4wNyw4MC42MDI4IDE2Nyw3OC44NjI4IEMzMjcuNjgsNTAuNzcyOCA1MTkuNDc1LDYwLjcxODYgNTg3LjMzNSw2NS41Mjg2ICIgZmlsbD0ibm9uZSIgaWQ9IkdPLXRvLVNUT1AiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjU5My4zMiw2NS45NTI4LDU4NC42MjUzLDYxLjMyNjUsNTg4LjMzMjUsNjUuNTk5Myw1ODQuMDU5Nyw2OS4zMDY0LDU5My4zMiw2NS45NTI4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjQ3LjM5OTkiIHg9IjE3NC41IiB5PSI1Ni45Mjk3Ij5DdXJyZW50IHZlbG9jaXR5IGlzIGxlc3MgdGhhbiB0aHJlc2hvbGQ8L3RleHQ+PC9nPjwhLS1saW5rIFNUT1AgdG8gR08tLT48ZyBpZD0ibGlua19TVE9QX0dPIj48cGF0aCBkPSJNNTkzLjAxLDc0LjA3MjggQzU1Ny4yNiw4Mi43OTI4IDQ4OC41NCw5OC4yMzI4IDQyOSwxMDMuODYyOCBDMzEzLjA3LDExNC44MzI4IDI4My4yLDExMS4zNjI4IDE2NywxMDMuODYyOCBDMTU3LjI4LDEwMy4yMzI4IDE1Mi41ODMyLDEwMi44MDYxIDE0My4zNDMyLDEwMS41MjYxICIgZmlsbD0ibm9uZSIgaWQ9IlNUT1AtdG8tR08iIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjEzNy40LDEwMC43MDI4LDE0NS43NjYsMTA1Ljg5OTksMTQyLjM1MjcsMTAxLjM4ODksMTQ2Ljg2MzcsOTcuOTc1NiwxMzcuNCwxMDAuNzAyOCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEzIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjI2MC43NjE3IiB4PSIxNjgiIHk9Ijk5LjkyOTciPkN1cnJlbnQgdmVsb2NpdHkgaXMgbGFyZ2VyIHRoYW4gdGhyZXNob2xkPC90ZXh0PjwvZz48IS0tbGluayBTVE9QIHRvIEFQUFJPQUNILS0+PGcgaWQ9ImxpbmtfU1RPUF9BUFBST0FDSCI+PHBhdGggZD0iTTY0My45Niw3MC42NjI4IEM3MjQuMzcsNzkuODYyOCA5NzUuMzI4OSwxMDguNTYwNCAxMDc3Ljc5ODksMTIwLjI5MDQgIiBmaWxsPSJub25lIiBpZD0iU1RPUC10by1BUFBST0FDSCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTA4My43NiwxMjAuOTcyOCwxMDc1LjI3MzMsMTE1Ljk3NTIsMTA3OC43OTI0LDEyMC40MDQxLDEwNzQuMzYzNSwxMjMuOTIzMywxMDgzLjc2LDEyMC45NzI4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjQ0Ljg3MzUiIHg9IjgwOSIgeT0iODYuOTI5NyI+U3RvcCBkdXJhdGlvbiBpcyBsYXJnZXIgdGhhbiB0aHJlc2hvbGQ8L3RleHQ+PC9nPjwhLS1saW5rIEFQUFJPQUNIIHRvIEdPLS0+PGcgaWQ9ImxpbmtfQVBQUk9BQ0hfR08iPjxwYXRoIGQ9Ik0xMDgzLjYzLDEyNy44MTI4IEMxMDE3Ljg2LDEzMC43MDI4IDg4OC4xOCwxMzUuOTYyOCA3NzgsMTM3Ljg2MjggQzUwNi4zNSwxNDIuNTMyOCA0MzEuNzgsMTc5LjcyMjggMTY3LDExOC44NjI4IEMxNTcuMDQsMTE2LjU3MjggMTUyLjA0NDIsMTE1LjAyNzggMTQyLjk3NDIsMTExLjEzNzggIiBmaWxsPSJub25lIiBpZD0iQVBQUk9BQ0gtdG8tR08iIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjEzNy40NiwxMDguNzcyOCwxNDQuMTU0NywxMTUuOTk2NCwxNDIuMDU1MiwxMTAuNzQzNiwxNDcuMzA4LDEwOC42NDQxLDEzNy40NiwxMDguNzcyOCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEzIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjE2Ni40MjI5IiB4PSI1MzMuMzYzIiB5PSIxMTguOTI5NyI+VGhlcmUgYXJlIG5vIG9ic3RhY2xlcyBvcjwvdGV4dD48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMyIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIzMTMuMTQ4OSIgeD0iNDY0LjEzMjMiIHk9IjEzNC4wNjI1Ij5kaXN0YW5jZSB0byB0aGUgb2JzdGFjbGUgaXMgbGFyZ2VyIHRoYW4gdGhyZXNob2xkPC90ZXh0PjwvZz48IS0tbGluayBBUFBST0FDSCB0byBBUFBST0FDSC0tPjxnIGlkPSJsaW5rX0FQUFJPQUNIX0FQUFJPQUNIIj48cGF0aCBkPSJNMTA5Ni4zMiwxMDUuNTUyOCBDMTA4Mi45Nyw4OC41OTI4IDEwOTMuMzgsNzAuODYyOCAxMTI3LjU0LDcwLjg2MjggQzExNjEuNzEsNzAuODYyOCAxMTc1LjgzMTEsODMuODc4MiAxMTYyLjQ4MTEsMTAwLjgzODIgIiBmaWxsPSJub25lIiBpZD0iQVBQUk9BQ0gtdG8tQVBQUk9BQ0giIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjExNTguNzcsMTA1LjU1MjgsMTE2Ny40Nzk3LDEwMC45NTQ5LDExNjEuODYyNiwxMDEuNjIzOSwxMTYxLjE5MzYsOTYuMDA2OCwxMTU4Ljc3LDEwNS41NTI4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjY0LjAwNTQiIHg9Ijk5NS41NCIgeT0iNjEuOTI5NyI+QXBwcm9hY2ggZHVyYXRpb24gaXMgbGVzcyB0aGFuIHRocmVzaG9sZDwvdGV4dD48L2c+PCEtLVNSQz1bWlAzRFFXQ24zOEpsVmVldjVfODJFSElNN0RCUkJqdFNzWHZTTXJhQk5EbDhJWTVsN3NUUkRaeWJxOEVEOVZuOUNuRk80LVlodzE2VWdYQ2tvWmNQSTdrNVBXWEZHVTVQb0NyelBPczRLUXFJTDZvZ1Y2dlpkbU1zNUNkTTFLdUpEMTNvUHJOaDhYZHB6bEkxclVlUHN6dmktX2FyeGxlMVFzbUU4ZkdLdG5JcHVvUTFBb0JMc2RZUnNZTEtHdXhVcER6Xzlab1loNG1henptNXg4UlhqVXlzQm1xVkRIVnVXelhQLUtEczhQUXprcTEyaUVzYWxCWWhRRFJWS3VrZXJTZEhFUkhoel96U1NBTWwteXRuTGtGVkw0dTBdLS0+PC9nPjwvc3ZnPg==" class="uml" alt="uml diagram" title=""></p>
-<h5 id="limit-velocity-with-specified-jerk-and-acc-limit">Limit velocity with specified jerk and acc limit<a class="headerlink" href="#limit-velocity-with-specified-jerk-and-acc-limit" title="Permanent link">#</a></h5>
-<p>The maximum slowdown velocity is calculated in order not to slowdown too much.
-See the <a href="../autoware_behavior_velocity_occlusion_spot_module/#maximum-slowdown-velocity">Occlusion Spot document</a> for more details.
-You can choose whether to use this feature by parameter of <code>slow_down_limit.enable</code>.</p>
-<h3 id="module-parameters">Module Parameters<a class="headerlink" href="#module-parameters" title="Permanent link">#</a></h3>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>detection_method</code></td>
-<td>string</td>
-<td>[-] candidate: Object, ObjectWithoutPath, Points</td>
-</tr>
-<tr>
-<td><code>target_obstacle_types</code></td>
-<td>vector of string</td>
-<td>[-] specifies which obstacle types will be considered by the module, if the obstacles classification type is not written here, it will be ignored. candidate: ["PEDESTRIAN", "BICYCLE","MOTORCYCLE"]</td>
-</tr>
-<tr>
-<td><code>use_partition_lanelet</code></td>
-<td>bool</td>
-<td>[-] whether to use partition lanelet map data</td>
-</tr>
-<tr>
-<td><code>specify_decel_jerk</code></td>
-<td>bool</td>
-<td>[-] whether to specify jerk when ego decelerates</td>
-</tr>
-<tr>
-<td><code>stop_margin</code></td>
-<td>double</td>
-<td>[m] the vehicle decelerates to be able to stop with this margin</td>
-</tr>
-<tr>
-<td><code>passing_margin</code></td>
-<td>double</td>
-<td>[m] the vehicle begins to accelerate if the vehicle's front in predicted position is ahead of the obstacle + this margin</td>
-</tr>
-<tr>
-<td><code>deceleration_jerk</code></td>
-<td>double</td>
-<td>[m/s^3] ego decelerates with this jerk when stopping for obstacles</td>
-</tr>
-<tr>
-<td><code>detection_distance</code></td>
-<td>double</td>
-<td>[m] ahead distance from ego to detect the obstacles</td>
-</tr>
-<tr>
-<td><code>detection_span</code></td>
-<td>double</td>
-<td>[m] calculate collision with this span to reduce calculation time</td>
-</tr>
-<tr>
-<td><code>min_vel_ego_kmph</code></td>
-<td>double</td>
-<td>[km/h] min velocity to calculate time to collision</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Parameter /detection_area</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>margin_ahead</code></td>
-<td>double</td>
-<td>[m] ahead margin for detection area polygon</td>
-</tr>
-<tr>
-<td><code>margin_behind</code></td>
-<td>double</td>
-<td>[m] behind margin for detection area polygon</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Parameter /dynamic_obstacle</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>use_mandatory_area</code></td>
-<td>double</td>
-<td>[-] whether to use mandatory detection area</td>
-</tr>
-<tr>
-<td><code>assume_fixed_velocity.enable</code></td>
-<td>double</td>
-<td>[-] If enabled, the obstacle's velocity is assumed to be within the minimum and maximum velocity values specified below</td>
-</tr>
-<tr>
-<td><code>assume_fixed_velocity.min_vel_kmph</code></td>
-<td>double</td>
-<td>[km/h] minimum velocity for dynamic obstacles</td>
-</tr>
-<tr>
-<td><code>assume_fixed_velocity.max_vel_kmph</code></td>
-<td>double</td>
-<td>[km/h] maximum velocity for dynamic obstacles</td>
-</tr>
-<tr>
-<td><code>diameter</code></td>
-<td>double</td>
-<td>[m] diameter of obstacles. used for creating dynamic obstacles from points</td>
-</tr>
-<tr>
-<td><code>height</code></td>
-<td>double</td>
-<td>[m] height of obstacles. used for creating dynamic obstacles from points</td>
-</tr>
-<tr>
-<td><code>max_prediction_time</code></td>
-<td>double</td>
-<td>[sec] create predicted path until this time</td>
-</tr>
-<tr>
-<td><code>time_step</code></td>
-<td>double</td>
-<td>[sec] time step for each path step. used for creating dynamic obstacles from points or objects without path</td>
-</tr>
-<tr>
-<td><code>points_interval</code></td>
-<td>double</td>
-<td>[m] divide obstacle points into groups with this interval, and detect only lateral nearest point. used only for Points method</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Parameter /approaching</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>enable</code></td>
-<td>bool</td>
-<td>[-] whether to enable approaching after stopping</td>
-</tr>
-<tr>
-<td><code>margin</code></td>
-<td>double</td>
-<td>[m] distance on how close ego approaches the obstacle</td>
-</tr>
-<tr>
-<td><code>limit_vel_kmph</code></td>
-<td>double</td>
-<td>[km/h] limit velocity for approaching after stopping</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Parameter /state</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>stop_thresh</code></td>
-<td>double</td>
-<td>[m/s] threshold to decide if ego is stopping</td>
-</tr>
-<tr>
-<td><code>stop_time_thresh</code></td>
-<td>double</td>
-<td>[sec] threshold for stopping time to transit to approaching state</td>
-</tr>
-<tr>
-<td><code>disable_approach_dist</code></td>
-<td>double</td>
-<td>[m] end the approaching state if distance to the obstacle is longer than this value</td>
-</tr>
-<tr>
-<td><code>keep_approach_duration</code></td>
-<td>double</td>
-<td>[sec] keep approach state for this duration to avoid chattering of state transition</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Parameter /slow_down_limit</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>enable</code></td>
-<td>bool</td>
-<td>[-] whether to enable to limit velocity with max jerk and acc</td>
-</tr>
-<tr>
-<td><code>max_jerk</code></td>
-<td>double</td>
-<td>[m/s^3] minimum jerk deceleration for safe brake.</td>
-</tr>
-<tr>
-<td><code>max_acc</code></td>
-<td>double</td>
-<td>[m/s^2] minimum accel deceleration for safe brake.</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Parameter /ignore_momentary_detection</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>enable</code></td>
-<td>bool</td>
-<td>[-] whether to ignore momentary detection</td>
-</tr>
-<tr>
-<td><code>time_threshold</code></td>
-<td>double</td>
-<td>[sec] ignores detections that persist for less than this duration</td>
-</tr>
-</tbody>
-</table>
-<h3 id="future-extensions-unimplemented-parts">Future extensions / Unimplemented parts<a class="headerlink" href="#future-extensions-unimplemented-parts" title="Permanent link">#</a></h3>
-<ul>
-<li>Calculate obstacle's min velocity and max velocity from covariance</li>
-<li>Detect collisions with polygon object</li>
-<li>Handle the case when the predicted path of obstacles are not straight line<ul>
-<li>Currently collision check is calculated based on the assumption that the predicted path of the obstacle is a straight line</li>
-</ul>
-</li>
-</ul></div>
+<div><h1 id="behavior-velocity-rtc-interface">Behavior Velocity RTC Interface<a class="headerlink" href="#behavior-velocity-rtc-interface" title="Permanent link">#</a></h1>
+<p>This package provides a behavior velocity interface with RTC, which are used in the <code>behavior_velocity_planner</code> node and modules.</p></div>
 
 
 
@@ -14665,7 +14222,7 @@ You can choose whether to use this feature by parameter of <code>slow_down_limit
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../autoware_behavior_velocity_rtc_interface/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Behavior Velocity RTC Interface" rel="prev">
+          <a href="../autoware_behavior_velocity_planner_common/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Behavior Velocity Planner Common" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -14674,14 +14231,14 @@ You can choose whether to use this feature by parameter of <code>slow_down_limit
                 Previous
               </span>
               <div class="md-ellipsis">
-                Behavior Velocity RTC Interface
+                Behavior Velocity Planner Common
               </div>
             </div>
           </a>
         
         
           
-          <a href="../autoware_behavior_velocity_speed_bump_module/" class="md-footer__link md-footer__link--next" aria-label="Next: Index" rel="next">
+          <a href="../autoware_behavior_velocity_run_out_module/" class="md-footer__link md-footer__link--next" aria-label="Next: Index" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
