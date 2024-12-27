@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#macro-rendering-error" class="md-skip">
+        <a href="#object_merger" class="md-skip">
           Skip to content
         </a>
       
@@ -10097,7 +10097,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../sensing/autoware_pointcloud_preprocessor/docs/blockage_diag/" class="md-nav__link">
+      <a href="../../sensing/autoware_pointcloud_preprocessor/docs/blockage-diag/" class="md-nav__link">
         blockage_diag
       </a>
     </li>
@@ -13463,6 +13463,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_14_1" id="__nav_14_1_label" tabindex="0">
@@ -13557,6 +13559,52 @@
         <label class="md-nav__title" for="__nav_14_1_2">
           <span class="md-nav__icon md-icon"></span>
           Autoware overlay rviz plugin
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_14_1_3" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../visualization/autoware_overlay_rviz_plugin/autoware_string_stamped_overlay_rviz_plugin/">Autoware string stamped overlay rviz plugin</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_14_1_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_14_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Autoware string stamped overlay rviz plugin
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -14130,6 +14178,104 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    Purpose
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithms" class="md-nav__link">
+    Inner-workings / Algorithms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs-outputs" class="md-nav__link">
+    Inputs / Outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Inputs / Outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    Input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    Output
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips" class="md-nav__link">
+    Tips
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-known-limits" class="md-nav__link">
+    Assumptions / Known limits
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-error-detection-and-handling" class="md-nav__link">
+    (Optional) Error detection and handling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-performance-characterization" class="md-nav__link">
+    (Optional) Performance characterization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-referencesexternal-links" class="md-nav__link">
+    (Optional) References/External links
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-future-extensions-unimplemented-parts" class="md-nav__link">
+    (Optional) Future extensions / Unimplemented parts
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -14146,23 +14292,240 @@
   
 
 
-<div><h1 id="macro-rendering-error"><em>Macro Rendering Error</em><a class="headerlink" href="#macro-rendering-error" title="Permanent link">#</a></h1>
-<p><em>File</em>: <code>perception/autoware_object_merger/README.md</code></p>
-<p><em>KeyError</em>: 'definitions'</p>
-<div class="highlight"><pre><span></span><code>Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/mkdocs_macros/plugin.py", line 688, in render
-    return md_template.render(**page_variables)
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 1295, in render
-    self.environment.handle_exception()
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "&lt;template&gt;", line 29, in top-level template code
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 72, in json_to_markdown
-    return format_json(data)
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 61, in format_json
-    parameters = list(json_data["definitions"].values())[0]["properties"]
-KeyError: 'definitions'
-</code></pre></div></div>
+<div><h1 id="object_merger">object_merger<a class="headerlink" href="#object_merger" title="Permanent link">#</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
+<p>object_merger is a package for merging detected objects from two methods by data association.</p>
+<h2 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
+<p>The successive shortest path algorithm is used to solve the data association problem (the minimum-cost flow problem). The cost is calculated by the distance between two objects and gate functions are applied to reset cost, s.t. the maximum distance, the maximum area and the minimum area.</p>
+<h2 id="inputs-outputs">Inputs / Outputs<a class="headerlink" href="#inputs-outputs" title="Permanent link">#</a></h2>
+<h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input/object0</code></td>
+<td><code>autoware_perception_msgs::msg::DetectedObjects</code></td>
+<td>detection objects</td>
+</tr>
+<tr>
+<td><code>input/object1</code></td>
+<td><code>autoware_perception_msgs::msg::DetectedObjects</code></td>
+<td>detection objects</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output">Output<a class="headerlink" href="#output" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>output/object</code></td>
+<td><code>autoware_perception_msgs::msg::DetectedObjects</code></td>
+<td>modified Objects</td>
+</tr>
+</tbody>
+</table>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
+<ul>
+<li>object association merger</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sync_queue_size</td>
+<td>integer</td>
+<td>The size of the synchronization queue.</td>
+<td>20</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>precision_threshold_to_judge_overlapped</td>
+<td>float</td>
+<td>The precision threshold to judge if objects are overlapped.</td>
+<td>0.4</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>recall_threshold_to_judge_overlapped</td>
+<td>float</td>
+<td>The recall threshold to judge if objects are overlapped.</td>
+<td>0.5</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>remove_overlapped_unknown_objects</td>
+<td>boolean</td>
+<td>Flag to remove overlapped unknown objects.</td>
+<td>True</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>base_link_frame_id</td>
+<td>string</td>
+<td>The frame ID of the association frame.</td>
+<td>base_link</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>priority_mode</td>
+<td>integer</td>
+<td>Index for the priority_mode.</td>
+<td>3</td>
+<td>[0, 1, 2, 3]</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>data association matrix</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>can_assign_matrix</td>
+<td>array</td>
+<td>Assignment table for data association.</td>
+<td>[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1]</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>max_dist_matrix</td>
+<td>array</td>
+<td>Maximum distance table for data association.</td>
+<td>[4.0, 4.0, 5.0, 5.0, 5.0, 2.0, 2.0, 2.0, 4.0, 2.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 5.0, 5.0, 5.0, 5.0, 5.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 3.0, 2.0, 1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 3.0, 2.0, 1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 2.0]</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>max_rad_matrix</td>
+<td>array</td>
+<td>Maximum angle table for data association. If value is greater than pi, it will be ignored.</td>
+<td>[3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 1.047, 1.047, 1.047, 1.047, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15, 3.15]</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>min_iou_matrix</td>
+<td>array</td>
+<td>Minimum IoU threshold matrix for data association. If value is negative, it will be ignored.</td>
+<td>[0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.3, 0.2, 0.2, 0.2, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.2, 0.3, 0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>overlapped judge</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>distance_threshold_list</td>
+<td>array</td>
+<td>Distance threshold for each class used in judging overlap.</td>
+<td>[9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0]</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>generalized_iou_threshold</td>
+<td>array</td>
+<td>Generalized IoU threshold for each class.</td>
+<td>[-0.1, -0.1, -0.1, -0.6, -0.6, -0.1, -0.1, -0.1]</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">#</a></h2>
+<ul>
+<li>False Positive Unknown object detected by clustering method sometimes raises the risk of sudden stop and interferes with Planning module. If ML based detector rarely misses objects, you can tune the parameter of object_merger and make Perception module ignore unknown objects.<ul>
+<li>If you want to remove unknown object close to large vehicle,<ul>
+<li>use HIGH <code>distance_threshold_list</code><ul>
+<li>However, this causes high computational load</li>
+</ul>
+</li>
+<li>use LOW <code>precision_threshold_to_judge_overlapped</code></li>
+<li>use LOW <code>generalized_iou_threshold</code><ul>
+<li>However, these 2 params raise the risk of overlooking object close to known object.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="assumptions-known-limits">Assumptions / Known limits<a class="headerlink" href="#assumptions-known-limits" title="Permanent link">#</a></h2>
+<!-- Write assumptions and limitations of your implementation.
+
+Example:
+  This algorithm assumes obstacles are not moving, so if they rapidly move after the vehicle started to avoid them, it might collide with them.
+  Also, this algorithm doesn't care about blind spots. In general, since too close obstacles aren't visible due to the sensing performance limit, please take enough margin to obstacles.
+-->
+
+<h2 id="optional-error-detection-and-handling">(Optional) Error detection and handling<a class="headerlink" href="#optional-error-detection-and-handling" title="Permanent link">#</a></h2>
+<!-- Write how to detect errors and how to recover from them.
+
+Example:
+  This package can handle up to 20 obstacles. If more obstacles found, this node will give up and raise diagnostic errors.
+-->
+
+<h2 id="optional-performance-characterization">(Optional) Performance characterization<a class="headerlink" href="#optional-performance-characterization" title="Permanent link">#</a></h2>
+<!-- Write performance information like complexity. If it wouldn't be the bottleneck, not necessary.
+
+Example:
+  ### Complexity
+
+  This algorithm is O(N).
+
+  ### Processing time
+
+  ...
+-->
+
+<h2 id="optional-referencesexternal-links">(Optional) References/External links<a class="headerlink" href="#optional-referencesexternal-links" title="Permanent link">#</a></h2>
+<!-- Write links you referred to when you implemented.
+
+Example:
+  [1] {link_to_a_thesis}
+  [2] {link_to_an_issue}
+-->
+
+<h2 id="optional-future-extensions-unimplemented-parts">(Optional) Future extensions / Unimplemented parts<a class="headerlink" href="#optional-future-extensions-unimplemented-parts" title="Permanent link">#</a></h2>
+<p>Data association algorithm was the same as that of multi_object_tracker, but the algorithm of multi_object_tracker was already updated.</p></div>
 
 
 
