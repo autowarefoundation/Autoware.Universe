@@ -14625,8 +14625,8 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <p class="admonition-title">Warning</p>
 <p>Generating path using Frenet planner applies only when ego is near terminal start</p>
 </div>
-<p>If the ego vehicle is far from the terminal, the lane change module defaults to using the path shifter. This ensures that the lane change is completed while the target lane remains a neighbor of the current lane. However, this approach may result in high curvature paths near the terminal, potentially causing long vehicles to deviate from the lane.</p>
-<p>To address this, the lane change module provides an option to choose between the path shifter and the Frenet planner. The Frenet planner allows for some flexibility in the lane change endpoint, extending the lane changing end point slightly beyond the current lane's neighbors.</p>
+<p>If the ego vehicle is far from the terminal, the lane change module defaults to using the <a href="https://autowarefoundation.github.io/autoware.universe/main/planning/behavior_path_planner/autoware_behavior_path_planner_common/docs/behavior_path_planner_path_generation_design/">path shifter</a>. This ensures that the lane change is completed while the target lane remains a neighbor of the current lane. However, this approach may result in high curvature paths near the terminal, potentially causing long vehicles to deviate from the lane.</p>
+<p>To address this, the lane change module provides an option to choose between the path shifter and the <a href="https://autowarefoundation.github.io/autoware.universe/main/planning/sampling_based_planner/autoware_frenet_planner/">Frenet planner</a>. The Frenet planner allows for some flexibility in the lane change endpoint, extending the lane changing end point slightly beyond the current lane's neighbors.</p>
 <p>The following table provides comparisons between the planners</p>
 <div align="center">
   <table>
