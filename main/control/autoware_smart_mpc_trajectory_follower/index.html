@@ -14330,7 +14330,7 @@ Note that a large number of terminals are automatically opened at runtime, but t
 From the time you begin this process until all terminals are closed, autoware should not be running.</p>
 </blockquote>
 <p>Instead, the same result can be obtained by executing the following command in a python environment:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">autoware_smart_mpc_trajectory_follower.training_and_data_check</span> <span class="kn">import</span> <span class="n">train_drive_NN_model</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">autoware_smart_mpc_trajectory_follower.training_and_data_check</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_drive_NN_model</span>
 <span class="n">model_trainer</span> <span class="o">=</span> <span class="n">train_drive_NN_model</span><span class="o">.</span><span class="n">train_drive_NN_model</span><span class="p">()</span>
 <span class="n">model_trainer</span><span class="o">.</span><span class="n">transform_rosbag_to_csv</span><span class="p">(</span><span class="n">rosbag_dir</span><span class="p">)</span>
 </code></pre></div>
@@ -14340,7 +14340,7 @@ At this time, all CSV files in <code>rosbag_dir</code> are automatically deleted
 If <code>trained_model_parameter:memory_for_training:use_memory_for_training</code> in <a href="./autoware_smart_mpc_trajectory_follower/param/trained_model_param.yaml">trained_model_param.yaml</a> is set to <code>true</code>, training is performed on models that include LSTM, and if it is set to <code>false</code>, training is performed on models that do not include LSTM.
 When using LSTM, cell states and hidden states are updated based on historical time series data and reflected in the prediction.</p>
 <p>The paths of the rosbag directories used for training and validation, <code>dir_0</code>, <code>dir_1</code>, <code>dir_2</code>,..., <code>dir_val_0</code>, <code>dir_val_1</code>, <code>dir_val_2</code>,... and the directory <code>save_dir</code> where you save the models, the model can be saved in the python environment as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">autoware_smart_mpc_trajectory_follower.training_and_data_check</span> <span class="kn">import</span> <span class="n">train_drive_NN_model</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">autoware_smart_mpc_trajectory_follower.training_and_data_check</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_drive_NN_model</span>
 <span class="n">model_trainer</span> <span class="o">=</span> <span class="n">train_drive_NN_model</span><span class="o">.</span><span class="n">train_drive_NN_model</span><span class="p">()</span>
 <span class="n">model_trainer</span><span class="o">.</span><span class="n">add_data_from_csv</span><span class="p">(</span><span class="n">dir_0</span><span class="p">,</span> <span class="n">add_mode</span><span class="o">=</span><span class="s2">"as_train"</span><span class="p">)</span>
 <span class="n">model_trainer</span><span class="o">.</span><span class="n">add_data_from_csv</span><span class="p">(</span><span class="n">dir_1</span><span class="p">,</span> <span class="n">add_mode</span><span class="o">=</span><span class="s2">"as_train"</span><span class="p">)</span>

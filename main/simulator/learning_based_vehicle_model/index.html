@@ -14283,33 +14283,33 @@
 <!-- Required -->
 
 <p>To use this package <code>python3</code> and <code>pybind11</code> need to be installed. The only assumption on Python sub-models is their interface.</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">PythonSubmodelInterface</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">PythonSubmodelInterface</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>  <span class="c1"># Required</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>  <span class="c1"># Required</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Calculate forward pass through the model and returns next_state.</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">get_state_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># Required</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_state_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># Required</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return list of string names of the model states (outputs).</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">get_action_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># Required</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_action_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># Required</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return list of string names of the model actions (inputs).</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># Required</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># Required</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Reset model. This function is called after load_params().</span>
 <span class="sd">        """</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">load_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>  <span class="c1"># Required</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>  <span class="c1"># Required</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Load parameters of the model.</span>
 <span class="sd">        Inputs:</span>
@@ -14317,7 +14317,7 @@
 <span class="sd">        """</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">dtSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>  <span class="c1"># Required</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dtSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>  <span class="c1"># Required</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Set dt of the model.</span>
 <span class="sd">        Inputs:</span>
