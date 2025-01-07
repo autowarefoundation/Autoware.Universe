@@ -14996,6 +14996,7 @@ The pose_estimator is expected to publish the base_link in the map coordinate sy
 <h3 id="the-conditions-that-result-in-a-warn-state">The conditions that result in a WARN state<a class="headerlink" href="#the-conditions-that-result-in-a-warn-state" title="Permanent link">#</a></h3>
 <ul>
 <li>The node is not in the activate state.</li>
+<li>The initial pose is not set.</li>
 <li>The number of consecutive no measurement update via the Pose/Twist topic exceeds the <code>pose_no_update_count_threshold_warn</code>/<code>twist_no_update_count_threshold_warn</code>.</li>
 <li>The timestamp of the Pose/Twist topic is beyond the delay compensation range.</li>
 <li>The Pose/Twist topic is beyond the range of Mahalanobis distance for covariance estimation.</li>
