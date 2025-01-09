@@ -10097,7 +10097,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../sensing/autoware_pointcloud_preprocessor/docs/blockage_diag/" class="md-nav__link">
+      <a href="../../sensing/autoware_pointcloud_preprocessor/docs/blockage-diag/" class="md-nav__link">
         blockage_diag
       </a>
     </li>
@@ -13463,6 +13463,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_14_1" id="__nav_14_1_label" tabindex="0">
@@ -13557,6 +13559,52 @@
         <label class="md-nav__title" for="__nav_14_1_2">
           <span class="md-nav__icon md-icon"></span>
           Autoware overlay rviz plugin
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_14_1_3" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../visualization/autoware_overlay_rviz_plugin/autoware_string_stamped_overlay_rviz_plugin/">Autoware string stamped overlay rviz plugin</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_14_1_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_14_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Autoware string stamped overlay rviz plugin
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -14159,6 +14207,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#approximate-camera-projection" class="md-nav__link">
+    Approximate camera projection
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#detail-description-of-each-fusions-algorithm-is-in-the-following-links" class="md-nav__link">
     Detail description of each fusion's algorithm is in the following links
   </a>
@@ -14279,6 +14334,9 @@ Although it is preferred to move all the ROS parameters in <code>.param.yaml</co
 </code></pre></div>
 <h4 id="known-limits">Known Limits<a class="headerlink" href="#known-limits" title="Permanent link">#</a></h4>
 <p>The rclcpp::TimerBase timer could not break a for loop, therefore even if time is out when fusing a roi msg at the middle, the program will run until all msgs are fused.</p>
+<h3 id="approximate-camera-projection">Approximate camera projection<a class="headerlink" href="#approximate-camera-projection" title="Permanent link">#</a></h3>
+<p>For algorithms like <code>pointpainting_fusion</code>, the computation required to project points onto an unrectified (raw) image can be substantial. To address this, an option is provided to reduce the computational load. Set the <a href="config/fusion_common.param.yaml"><code>approximate_camera_projection parameter</code></a> to <code>true</code> for each camera (ROIs). If the corresponding <code>point_project_to_unrectified_image</code> parameter is also set to true, the projections will be pre-cached.</p>
+<p>The cached projections are calculated using a grid, with the grid size specified by the <code>approximation_grid_width_size</code> and <code>approximation_grid_height_size</code> parameters in the <a href="config/fusion_common.param.yaml">configuration file</a>. The centers of the grid are used as the projected points.</p>
 <h3 id="detail-description-of-each-fusions-algorithm-is-in-the-following-links">Detail description of each fusion's algorithm is in the following links<a class="headerlink" href="#detail-description-of-each-fusions-algorithm-is-in-the-following-links" title="Permanent link">#</a></h3>
 <table>
 <thead>

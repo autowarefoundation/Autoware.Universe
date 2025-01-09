@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#macro-rendering-error" class="md-skip">
+        <a href="#autoware_occupancy_grid_map_outlier_filter" class="md-skip">
           Skip to content
         </a>
       
@@ -10097,7 +10097,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../sensing/autoware_pointcloud_preprocessor/docs/blockage_diag/" class="md-nav__link">
+      <a href="../../sensing/autoware_pointcloud_preprocessor/docs/blockage-diag/" class="md-nav__link">
         blockage_diag
       </a>
     </li>
@@ -13463,6 +13463,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_14_1" id="__nav_14_1_label" tabindex="0">
@@ -13557,6 +13559,52 @@
         <label class="md-nav__title" for="__nav_14_1_2">
           <span class="md-nav__icon md-icon"></span>
           Autoware overlay rviz plugin
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_14_1_3" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../visualization/autoware_overlay_rviz_plugin/autoware_string_stamped_overlay_rviz_plugin/">Autoware string stamped overlay rviz plugin</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_14_1_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_14_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Autoware string stamped overlay rviz plugin
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -14130,6 +14178,97 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    Purpose
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inner-workings-algorithms" class="md-nav__link">
+    Inner-workings / Algorithms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs-outputs" class="md-nav__link">
+    Inputs / Outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Inputs / Outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#input" class="md-nav__link">
+    Input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    Output
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-known-limits" class="md-nav__link">
+    Assumptions / Known limits
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-error-detection-and-handling" class="md-nav__link">
+    (Optional) Error detection and handling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-performance-characterization" class="md-nav__link">
+    (Optional) Performance characterization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-referencesexternal-links" class="md-nav__link">
+    (Optional) References/External links
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-future-extensions-unimplemented-parts" class="md-nav__link">
+    (Optional) Future extensions / Unimplemented parts
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -14146,21 +14285,173 @@
   
 
 
-<div><h1 id="macro-rendering-error"><em>Macro Rendering Error</em><a class="headerlink" href="#macro-rendering-error" title="Permanent link">#</a></h1>
-<p><em>File</em>: <code>perception/autoware_occupancy_grid_map_outlier_filter/README.md</code></p>
-<p><em>FileNotFoundError</em>: [Errno 2] No such file or directory: 'perception/occupancy_grid_map_outlier_filter/schema/occupancy_grid_map_outlier_filter.schema.json'</p>
-<div class="highlight"><pre><span></span><code>Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/mkdocs_macros/plugin.py", line 688, in render
-    return md_template.render(**page_variables)
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 1295, in render
-    self.environment.handle_exception()
-  File "/opt/hostedtoolcache/Python/3.8.18/x64/lib/python3.8/site-packages/jinja2/environment.py", line 942, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "&lt;template&gt;", line 43, in top-level template code
-  File "/home/runner/work/autoware.universe/autoware.universe/mkdocs_macros.py", line 70, in json_to_markdown
-    with open(json_schema_file_path) as f:
-FileNotFoundError: [Errno 2] No such file or directory: 'perception/occupancy_grid_map_outlier_filter/schema/occupancy_grid_map_outlier_filter.schema.json'
-</code></pre></div></div>
+<div><h1 id="autoware_occupancy_grid_map_outlier_filter">autoware_occupancy_grid_map_outlier_filter<a class="headerlink" href="#autoware_occupancy_grid_map_outlier_filter" title="Permanent link">#</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
+<p>This node is an outlier filter based on a occupancy grid map.
+Depending on the implementation of occupancy grid map, it can be called an outlier filter in time series, since the occupancy grid map expresses the occupancy probabilities in time series.</p>
+<h2 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
+<ol>
+<li>
+<p>Use the occupancy grid map to separate point clouds into those with low occupancy probability and those with high occupancy probability.</p>
+</li>
+<li>
+<p>The point clouds that belong to the low occupancy probability are not necessarily outliers. In particular, the top of the moving object tends to belong to the low occupancy probability. Therefore, if <code>use_radius_search_2d_filter</code> is true, then apply an radius search 2d outlier filter to the point cloud that is determined to have a low occupancy probability.</p>
+<ol>
+<li>For each low occupancy probability point, determine the outlier from the radius (<code>radius_search_2d_filter/search_radius</code>) and the number of point clouds. In this case, the point cloud to be referenced is not only low occupancy probability points, but all point cloud including high occupancy probability points.</li>
+<li>The number of point clouds can be multiplied by <code>radius_search_2d_filter/min_points_and_distance_ratio</code> and distance from base link. However, the minimum and maximum number of point clouds is limited.</li>
+</ol>
+</li>
+</ol>
+<p>The following video is a sample. Yellow points are high occupancy probability, green points are low occupancy probability which is not an outlier, and red points are outliers. At around 0:15 and 1:16 in the first video, a bird crosses the road, but it is considered as an outlier.</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=hEVv0LaTpP8">movie1</a></li>
+<li><a href="https://www.youtube.com/watch?v=VaHs1CdLcD0">movie2</a></li>
+</ul>
+<p><img alt="occupancy_grid_map_outlier_filter" src="image/occupancy_grid_map_outlier_filter.drawio.svg"></p>
+<h2 id="inputs-outputs">Inputs / Outputs<a class="headerlink" href="#inputs-outputs" title="Permanent link">#</a></h2>
+<h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/input/pointcloud</code></td>
+<td><code>sensor_msgs/PointCloud2</code></td>
+<td>Obstacle point cloud with ground removed.</td>
+</tr>
+<tr>
+<td><code>~/input/occupancy_grid_map</code></td>
+<td><code>nav_msgs/OccupancyGrid</code></td>
+<td>A map in which the probability of the presence of an obstacle is occupancy probability map</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output">Output<a class="headerlink" href="#output" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/output/pointcloud</code></td>
+<td><code>sensor_msgs/PointCloud2</code></td>
+<td>Point cloud with outliers removed. trajectory</td>
+</tr>
+<tr>
+<td><code>~/output/debug/outlier/pointcloud</code></td>
+<td><code>sensor_msgs/PointCloud2</code></td>
+<td>Point clouds removed as outliers.</td>
+</tr>
+<tr>
+<td><code>~/output/debug/low_confidence/pointcloud</code></td>
+<td><code>sensor_msgs/PointCloud2</code></td>
+<td>Point clouds that had a low probability of occupancy in the occupancy grid map. However, it is not considered as an outlier.</td>
+</tr>
+<tr>
+<td><code>~/output/debug/high_confidence/pointcloud</code></td>
+<td><code>sensor_msgs/PointCloud2</code></td>
+<td>Point clouds that had a high probability of occupancy in the occupancy grid map. trajectory</td>
+</tr>
+</tbody>
+</table>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>radius_search_2d_filter.search_radius</td>
+<td>float</td>
+<td>Radius when calculating the density</td>
+<td>1.0</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>radius_search_2d_filter.min_points_and_distance_ratio</td>
+<td>float</td>
+<td>Threshold value of the number of point clouds per radius when the distance from baselink is 1m, because the number of point clouds varies with the distance from baselink</td>
+<td>400.0</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>radius_search_2d_filter.min_points</td>
+<td>float</td>
+<td>Minimum number of point clouds per radius</td>
+<td>4</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>radius_search_2d_filter.max_points</td>
+<td>float</td>
+<td>Maximum number of point clouds per radius</td>
+<td>70</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>radius_search_2d_filter.max_filter_points_nb</td>
+<td>float</td>
+<td>Maximum number of point clouds to be filtered</td>
+<td>15000</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>map_frame</td>
+<td>string</td>
+<td>map frame id</td>
+<td>map</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>base_link_frame</td>
+<td>string</td>
+<td>base link frame id</td>
+<td>base_link</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>cost_threshold</td>
+<td>float</td>
+<td>Cost threshold of occupancy grid map (0~100). 100 means 100% probability that there is an obstacle, close to 50 means that it is indistinguishable whether it is an obstacle or free space, 0 means that there is no obstacle</td>
+<td>45</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>use_radius_search_2d_filter</td>
+<td>boolean</td>
+<td>Whether or not to apply density-based outlier filters to objects that are judged to have low probability of occupancy on the occupancy grid map</td>
+<td>True</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>enable_debugger</td>
+<td>boolean</td>
+<td>Whether to output the point cloud for debugging</td>
+<td>False</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<h2 id="assumptions-known-limits">Assumptions / Known limits<a class="headerlink" href="#assumptions-known-limits" title="Permanent link">#</a></h2>
+<h2 id="optional-error-detection-and-handling">(Optional) Error detection and handling<a class="headerlink" href="#optional-error-detection-and-handling" title="Permanent link">#</a></h2>
+<h2 id="optional-performance-characterization">(Optional) Performance characterization<a class="headerlink" href="#optional-performance-characterization" title="Permanent link">#</a></h2>
+<h2 id="optional-referencesexternal-links">(Optional) References/External links<a class="headerlink" href="#optional-referencesexternal-links" title="Permanent link">#</a></h2>
+<h2 id="optional-future-extensions-unimplemented-parts">(Optional) Future extensions / Unimplemented parts<a class="headerlink" href="#optional-future-extensions-unimplemented-parts" title="Permanent link">#</a></h2></div>
 
 
 

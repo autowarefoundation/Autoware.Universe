@@ -233,7 +233,7 @@
                 <br style="font-size: 16px"/>
                 = node(i) + node(i+1)
                 <br/>
-                = all segment has two points
+                = all segments have two points
               </div>
             </div>
           </div>
