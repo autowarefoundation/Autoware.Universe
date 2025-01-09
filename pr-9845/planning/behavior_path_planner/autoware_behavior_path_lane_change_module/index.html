@@ -14303,13 +14303,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#limitation" class="md-nav__link">
-    Limitation
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -14394,6 +14387,13 @@
         <li class="md-nav__item">
   <a href="#debug-marker-visualization" class="md-nav__link">
     Debug Marker &amp; Visualization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitation" class="md-nav__link">
+    Limitation
   </a>
   
 </li>
@@ -14756,13 +14756,6 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <li>If safety parameters are tuned too aggressively, it becomes harder to cancel or abort the lane change. This reduces tolerance for unexpected behaviors from surrounding vehicles, such as a trailing vehicle in the target lane suddenly accelerating or a leading vehicle suddenly decelerating. Aggressive settings leave less room for error during the maneuver.</li>
 </ul>
 <p><img alt="stop" src="images/lane_change-cant_cancel_no_abort.png"></p>
-<h3 id="limitation">Limitation<a class="headerlink" href="#limitation" title="Permanent link">#</a></h3>
-<ol>
-<li>When a lane change is canceled, the lane change module returns <code>ModuleStatus::FAILURE</code>. As the module is removed from the approved module stack (see <a href="https://autowarefoundation.github.io/autoware.universe/main/planning/behavior_path_planner/autoware_behavior_path_planner/docs/behavior_path_planner_manager_design/#failure-modules">Failure modules</a>), a new instance of the lane change module is initiated. Due to this, any information stored prior to the reset is lost. For example, the <code>lane_change_prepare_duration</code> in the <code>TransientData</code> is reset to its maximum value.</li>
-<li>The lane change module has no knowledge of any velocity modifications introduced to the path after it is approved. This is because other modules may add deceleration points after subscribing to the behavior path planner output, and the final velocity is managed by the <a href="https://autowarefoundation.github.io/autoware.universe/pr-9845/planning/autoware_velocity_smoother/">velocity smoother</a>. Since this limitation affects <strong>CANCEL</strong>, the lane change module mitigates it by <a href="#sampling-accelerations-along-lane-changing-path">sampling accelerations along the approved lane change path</a>. These sampled accelerations are used during safety checks to estimate the velocity that might occur if the ego vehicle decelerates.</li>
-<li>Ideally, the abort path should account for whether its execution would affect trailing vehicles in the current lane. However, the lane change module does not evaluate such interactions or assess whether the abort path is safe. As a result, <strong>the abort path is not guaranteed to be safe</strong>. To minimize the risk of unsafe situations, the abort maneuver is only permitted if the ego vehicle has not yet diverged from the current lane.</li>
-<li>Due to limited resources, the abort path logic is not fully optimized. The generated path may overshoot, causing the return trajectory to slightly shift toward the opposite lane. This can be dangerous, especially if the opposite lane has traffic moving in the opposite direction. Furthermore, the logic does not account for different vehicle types, which can lead to varying effects. For instance, the behavior might differ significantly between a bus and a small passenger car.</li>
-</ol>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
 <h3 id="essential-lane-change-parameters">Essential lane change parameters<a class="headerlink" href="#essential-lane-change-parameters" title="Permanent link">#</a></h3>
 <p>The following parameters are configurable in <a href="https://github.com/autowarefoundation/autoware_launch/blob/main/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/lane_change/lane_change.param.yaml">lane_change.param.yaml</a></p>
@@ -15616,6 +15609,13 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <li>Object is safe or not, shown by the color of the polygon (Green = Safe, Red = unsafe)</li>
 <li>Valid candidate paths.</li>
 <li>Position when lane changing start and end.</li>
+</ol>
+<h2 id="limitation">Limitation<a class="headerlink" href="#limitation" title="Permanent link">#</a></h2>
+<ol>
+<li>When a lane change is canceled, the lane change module returns <code>ModuleStatus::FAILURE</code>. As the module is removed from the approved module stack (see <a href="https://autowarefoundation.github.io/autoware.universe/main/planning/behavior_path_planner/autoware_behavior_path_planner/docs/behavior_path_planner_manager_design/#failure-modules">Failure modules</a>), a new instance of the lane change module is initiated. Due to this, any information stored prior to the reset is lost. For example, the <code>lane_change_prepare_duration</code> in the <code>TransientData</code> is reset to its maximum value.</li>
+<li>The lane change module has no knowledge of any velocity modifications introduced to the path after it is approved. This is because other modules may add deceleration points after subscribing to the behavior path planner output, and the final velocity is managed by the <a href="https://autowarefoundation.github.io/autoware.universe/pr-9845/planning/autoware_velocity_smoother/">velocity smoother</a>. Since this limitation affects <strong>CANCEL</strong>, the lane change module mitigates it by <a href="#sampling-accelerations-along-lane-changing-path">sampling accelerations along the approved lane change path</a>. These sampled accelerations are used during safety checks to estimate the velocity that might occur if the ego vehicle decelerates.</li>
+<li>Ideally, the abort path should account for whether its execution would affect trailing vehicles in the current lane. However, the lane change module does not evaluate such interactions or assess whether the abort path is safe. As a result, <strong>the abort path is not guaranteed to be safe</strong>. To minimize the risk of unsafe situations, the abort maneuver is only permitted if the ego vehicle has not yet diverged from the current lane.</li>
+<li>Due to limited resources, the abort path logic is not fully optimized. The generated path may overshoot, causing the return trajectory to slightly shift toward the opposite lane. This can be dangerous, especially if the opposite lane has traffic moving in the opposite direction. Furthermore, the logic does not account for different vehicle types, which can lead to varying effects. For instance, the behavior might differ significantly between a bus and a small passenger car.</li>
 </ol></div>
 
 
