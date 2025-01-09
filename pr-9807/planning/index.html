@@ -14214,8 +14214,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#parameters-configuration" class="md-nav__link">
-    Parameters configuration
+  <a href="#parameter-configuration" class="md-nav__link">
+    Parameter Configuration
   </a>
   
 </li>
@@ -14297,7 +14297,7 @@
 <h3 id="how-to-enable-or-disable-planning-module">How to Enable or Disable Planning Module<a class="headerlink" href="#how-to-enable-or-disable-planning-module" title="Permanent link">#</a></h3>
 <p>Enabling and disabling modules involves managing settings in key configuration and launch files.</p>
 <h3 id="key-files-for-configuration">Key Files for Configuration<a class="headerlink" href="#key-files-for-configuration" title="Permanent link">#</a></h3>
-<p>The <code>default_preset.yaml</code> file acts as the primary configuration file, where planning modules can be disable or enabled. Furthermore, users can also set the type of motion planner across various motion planners. For example:</p>
+<p>The <code>default_preset.yaml</code> file acts as the primary configuration file, where planning modules can be disabled or enabled. Furthermore, users can also set the type of motion planner across various motion planners. For example:</p>
 <ul>
 <li><code>launch_avoidance_module</code>: Set to <code>true</code> to enable the avoidance module, or <code>false</code> to disable it.</li>
 <li><code>motion_stop_planner_type</code>: Set <code>default</code> to either <code>obstacle_stop_planner</code> or <code>obstacle_cruise_planner</code>.</li>
@@ -14310,19 +14310,19 @@
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;param</span><span class="w"> </span><span class="na">name=</span><span class="s">"avoidance.enable_module"</span><span class="w"> </span><span class="na">value=</span><span class="s">"$(var launch_avoidance_module)"</span><span class="nt">/&gt;</span>
 </code></pre></div>
 <p>corresponds to launch_avoidance_module from <code>default_preset.yaml</code>.</p>
-<h3 id="parameters-configuration">Parameters configuration<a class="headerlink" href="#parameters-configuration" title="Permanent link">#</a></h3>
+<h3 id="parameter-configuration">Parameter Configuration<a class="headerlink" href="#parameter-configuration" title="Permanent link">#</a></h3>
 <p>There are multiple parameters available for configuration, and users have the option to modify them in <a href="https://github.com/autowarefoundation/autoware_launch/tree/main/autoware_launch/config/planning">here</a>. It's important to note that not all parameters are adjustable via <code>rqt_reconfigure</code>. To ensure the changes are effective, modify the parameters and then restart Autoware. Additionally, detailed information about each parameter is available in the corresponding documents under the planning tab.</p>
 <h3 id="integrating-a-custom-module-into-autoware-a-step-by-step-guide">Integrating a Custom Module into Autoware: A Step-by-Step Guide<a class="headerlink" href="#integrating-a-custom-module-into-autoware-a-step-by-step-guide" title="Permanent link">#</a></h3>
 <p>This guide outlines the steps for integrating your custom module into Autoware:</p>
 <ul>
-<li>Add your modules to the <code>default_preset.yaml</code> file. For example</li>
+<li>Add your modules to the <code>default_preset.yaml</code> file. For example:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">arg</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">launch_intersection_module</span>
 <span class="w">  </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">"true"</span>
 </code></pre></div>
 <ul>
-<li>Incorporate your modules into the <a href="https://github.com/autowarefoundation/autoware.universe/tree/main/launch/tier4_planning_launch/launch/scenario_planning">launcher</a>. For example in <a href="https://github.com/autowarefoundation/autoware.universe/blob/main/launch/tier4_planning_launch/launch/scenario_planning/lane_driving/behavior_planning/behavior_planning.launch.xml">behavior_planning.launch.xml</a>:</li>
+<li>Incorporate your modules into the <a href="https://github.com/autowarefoundation/autoware.universe/tree/main/launch/tier4_planning_launch/launch/scenario_planning">launcher</a>. For example, in <a href="https://github.com/autowarefoundation/autoware.universe/blob/main/launch/tier4_planning_launch/launch/scenario_planning/lane_driving/behavior_planning/behavior_planning.launch.xml">behavior_planning.launch.xml</a>:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;arg</span><span class="w"> </span><span class="na">name=</span><span class="s">"launch_intersection_module"</span><span class="w"> </span><span class="na">default=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
 
@@ -14333,13 +14333,13 @@
 <span class="nt">/&gt;</span>
 </code></pre></div>
 <ul>
-<li>If applicable, place your parameter folder within the appropriate existing parameter folder. For example <a href="https://github.com/autowarefoundation/autoware_launch/blob/main/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/intersection.param.yaml">intersection_module's parameters</a> is in <a href="https://github.com/autowarefoundation/autoware_launch/tree/main/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner">behavior_velocity_planner</a>.</li>
-<li>Insert the path of your parameters in the <a href="https://github.com/autowarefoundation/autoware_launch/blob/main/autoware_launch/launch/components/tier4_planning_component.launch.xml">tier4_planning_component.launch.xml</a>. For example <code>behavior_velocity_planner_intersection_module_param_path</code> is used.</li>
+<li>If applicable, place your parameter folder within the appropriate existing parameter folder. For example, <a href="https://github.com/autowarefoundation/autoware_launch/blob/main/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/intersection.param.yaml">intersection_module's parameters</a> are in <a href="https://github.com/autowarefoundation/autoware_launch/tree/main/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner">behavior_velocity_planner</a>.</li>
+<li>Insert the path of your parameters in the <a href="https://github.com/autowarefoundation/autoware_launch/blob/main/autoware_launch/launch/components/tier4_planning_component.launch.xml">tier4_planning_component.launch.xml</a>. For example, <code>behavior_velocity_planner_intersection_module_param_path</code> is used.</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;arg</span><span class="w"> </span><span class="na">name=</span><span class="s">"behavior_velocity_planner_intersection_module_param_path"</span><span class="w"> </span><span class="na">value=</span><span class="s">"$(var behavior_velocity_config_path)/intersection.param.yaml"</span><span class="nt">/&gt;</span>
 </code></pre></div>
 <ul>
-<li>Define your parameter path variable within the corresponding launcher. For example in <a href="https://github.com/autowarefoundation/autoware.universe/blob/04aa54bf5fb0c88e70198ca74b9ac343cc3457bf/launch/tier4_planning_launch/launch/scenario_planning/lane_driving/behavior_planning/behavior_planning.launch.xml#L191">behavior_planning.launch.xml</a></li>
+<li>Define your parameter path variable within the corresponding launcher. For example, in <a href="https://github.com/autowarefoundation/autoware.universe/blob/04aa54bf5fb0c88e70198ca74b9ac343cc3457bf/launch/tier4_planning_launch/launch/scenario_planning/lane_driving/behavior_planning/behavior_planning.launch.xml#L191">behavior_planning.launch.xml</a></li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;param</span><span class="w"> </span><span class="na">from=</span><span class="s">"$(var behavior_velocity_planner_intersection_module_param_path)"</span><span class="nt">/&gt;</span>
 </code></pre></div>
@@ -14348,7 +14348,7 @@
 <p>Depending on the specific module you wish to add, the relevant files and steps may vary. This guide provides a general overview and serves as a starting point. It's important to adapt these instructions to the specifics of your module.</p>
 </div>
 <h2 id="join-our-community-driven-effort">Join Our Community-Driven Effort<a class="headerlink" href="#join-our-community-driven-effort" title="Permanent link">#</a></h2>
-<p>Autoware thrives on community collaboration. Every contribution, big or small, is invaluable to us. Whether it's reporting bugs, suggesting improvements, offering new ideas, or anything else you can think of – we welcome it all with open arms.</p>
+<p>Autoware thrives on community collaboration. Every contribution, big or small, is invaluable to us. Whether it's reporting bugs, suggesting improvements, offering new ideas, or anything else you can think of – we welcome all contributions with open arms.</p>
 <h3 id="how-to-contribute">How to Contribute?<a class="headerlink" href="#how-to-contribute" title="Permanent link">#</a></h3>
 <p>Ready to contribute? Great! To get started, simply visit our <a href="https://autowarefoundation.github.io/autoware-documentation/main/contributing/">Contributing Guidelines</a> where you'll find all the information you need to jump in. This includes instructions on submitting bug reports, proposing feature enhancements, and even contributing to the codebase.</p>
 <h3 id="join-our-planning-control-working-group-meetings">Join Our Planning &amp; Control Working Group Meetings<a class="headerlink" href="#join-our-planning-control-working-group-meetings" title="Permanent link">#</a></h3>
@@ -14363,7 +14363,7 @@
 <p>Interested in joining our meetings? We’d love to have you! For more information on how to participate, visit the following link: <a href="https://github.com/autowarefoundation/autoware-projects/wiki/Autoware-Planning-Control-Working-Group#how-to-participate-in-the-working-group">How to participate in the working group</a>.</p>
 <h3 id="citations">Citations<a class="headerlink" href="#citations" title="Permanent link">#</a></h3>
 <p>Occasionally, we publish papers specific to the Planning Component in Autoware. We encourage you to explore these publications and find valuable insights for your work. If you find them useful and incorporate any of our methodologies or algorithms in your projects, citing our papers would be immensely helpful. This support allows us to reach a broader audience and continue contributing to the field.</p>
-<p>If you use the Jerk Constrained Velocity Planning algorithm in <a href="autoware_velocity_smoother/">Motion Velocity Smoother</a> module in the Planning Component, we kindly request you to cite the relevant paper.</p>
+<p>If you use the Jerk Constrained Velocity Planning algorithm in the <a href="autoware_velocity_smoother/">Motion Velocity Smoother</a> module in the Planning Component, we kindly request you cite the relevant paper.</p>
 <!-- cspell:ignore Shimizu, Horibe, Watanabe, Kato -->
 
 <p>Y. Shimizu, T. Horibe, F. Watanabe and S. Kato, "<a href="https://arxiv.org/abs/2202.10029">Jerk Constrained Velocity Planning for an Autonomous Vehicle: Linear Programming Approach</a>," 2022 International Conference on Robotics and Automation (ICRA)</p>
