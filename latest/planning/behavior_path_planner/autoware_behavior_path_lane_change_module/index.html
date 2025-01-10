@@ -14234,13 +14234,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#aborting-lane-change" class="md-nav__link">
-    Aborting lane change
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -14257,6 +14250,61 @@
   <a href="#terminal-lane-change-path" class="md-nav__link">
     Terminal Lane Change Path
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aborting-a-previously-approved-lane-change" class="md-nav__link">
+    Aborting a Previously Approved Lane Change
+  </a>
+  
+    <nav class="md-nav" aria-label="Aborting a Previously Approved Lane Change">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#preventing-oscillating-paths-when-unsafe" class="md-nav__link">
+    Preventing Oscillating Paths When Unsafe
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluating-ego-vehicles-position-to-prevent-abrupt-maneuvers" class="md-nav__link">
+    Evaluating Ego Vehicle's Position to Prevent Abrupt Maneuvers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checking-approved-path-safety" class="md-nav__link">
+    Checking Approved Path Safety
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cancel" class="md-nav__link">
+    Cancel
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#abort" class="md-nav__link">
+    Abort
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stopcruise" class="md-nav__link">
+    Stop/Cruise
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -14339,6 +14387,13 @@
         <li class="md-nav__item">
   <a href="#debug-marker-visualization" class="md-nav__link">
     Debug Marker &amp; Visualization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitation" class="md-nav__link">
+    Limitation
   </a>
   
 </li>
@@ -14577,24 +14632,6 @@ To regulate lane change on crosswalks, intersections, or traffic lights, set <co
 If the ego vehicle gets stuck, to avoid stuck, it enables lane change in crosswalk/intersection.
 If the ego vehicle stops more than <code>stuck_detection.stop_time</code> seconds, it is regarded as a stuck.
 If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code>, it is regarded as stopping.</p>
-<h3 id="aborting-lane-change">Aborting lane change<a class="headerlink" href="#aborting-lane-change" title="Permanent link">#</a></h3>
-<p>The abort process may result in three different outcome; Cancel, Abort and Stop/Cruise.</p>
-<p>The following depicts the flow of the abort lane change check.</p>
-<p><img src="data:image/svg+xml;base64,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" class="uml" alt="uml diagram" title=""></p>
-<p>During a lane change, a safety check is made in consideration of the deceleration of the ego vehicle, and a safety check is made for <code>cancel.deceleration_sampling_num</code> deceleration patterns, and the lane change will be canceled if the abort condition is satisfied for all deceleration patterns.</p>
-<p>To preventive measure for lane change path oscillations caused by alternating safe and unsafe conditions, an additional hysteresis count check is implemented before executing an abort or cancel maneuver. If unsafe, the <code>unsafe_hysteresis_count_</code> is incremented and compared against <code>unsafe_hysteresis_threshold</code>; exceeding it prompts an abort condition check, ensuring decisions are made with consideration to recent safety assessments as shown in flow chart above. This mechanism stabilizes decision-making, preventing abrupt changes due to transient unsafe conditions.</p>
-<p><img src="data:image/svg+xml;base64,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" class="uml" alt="uml diagram" title=""></p>
-<h4 id="cancel">Cancel<a class="headerlink" href="#cancel" title="Permanent link">#</a></h4>
-<p>Suppose the lane change trajectory is evaluated as unsafe. In that case, if the ego vehicle has not departed from the current lane yet, the trajectory will be reset, and the ego vehicle will resume the lane following the maneuver.</p>
-<p>The function can be enabled by setting <code>enable_on_prepare_phase</code> to <code>true</code>.</p>
-<p>The following image illustrates the cancel process.</p>
-<p><img alt="cancel" src="images/lane_change-cancel.png"></p>
-<h4 id="abort">Abort<a class="headerlink" href="#abort" title="Permanent link">#</a></h4>
-<p>Assume the ego vehicle has already departed from the current lane. In that case, it is dangerous to cancel the path, and it will cause the ego vehicle to change the heading direction abruptly. In this case, planning a trajectory that allows the ego vehicle to return to the current path while minimizing the heading changes is necessary. In this case, the lane change module will generate an abort path. The following images show an example of the abort path. Do note that the function DOESN'T GUARANTEE a safe abort process, as it didn't check the presence of the surrounding objects and/or their reactions. The function can be enable manually by setting both <code>enable_on_prepare_phase</code> and <code>enable_on_lane_changing_phase</code> to <code>true</code>. The parameter <code>max_lateral_jerk</code> need to be set to a high value in order for it to work.</p>
-<p><img alt="abort" src="images/lane_change-abort.png"></p>
-<h4 id="stopcruise">Stop/Cruise<a class="headerlink" href="#stopcruise" title="Permanent link">#</a></h4>
-<p>The last behavior will also occur if the ego vehicle has departed from the current lane. If the abort function is disabled or the abort is no longer possible, the ego vehicle will attempt to stop or transition to the obstacle cruise mode. Do note that the module DOESN'T GUARANTEE safe maneuver due to the unexpected behavior that might've occurred during these critical scenarios. The following images illustrate the situation.</p>
-<p><img alt="stop" src="images/lane_change-cant_cancel_no_abort.png"></p>
 <h2 id="lane-change-completion-checks">Lane change completion checks<a class="headerlink" href="#lane-change-completion-checks" title="Permanent link">#</a></h2>
 <p>To determine if the ego vehicle has successfully changed lanes, one of two criteria must be met: either the longitudinal or the lateral criteria.</p>
 <p>For the longitudinal criteria, the ego vehicle must pass the lane-changing end pose and be within the <code>finish_judge_buffer</code> distance from it. The module then checks if the ego vehicle is in the target lane. If true, the module returns success. This check ensures that the planner manager updates the root lanelet correctly based on the ego vehicle's current pose. Without this check, if the ego vehicle is changing lanes while avoiding an obstacle and its current pose is in the original lane, the planner manager might set the root lanelet as the original lane. This would force the ego vehicle to perform the lane change again. With the target lane check, the ego vehicle is confirmed to be in the target lane, and the planner manager can correctly update the root lanelets.</p>
@@ -14602,10 +14639,123 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <p>The process of determining lane change completion is shown in the following diagram.</p>
 <p><img src="data:image/svg+xml;base64,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" class="uml" alt="uml diagram" title=""></p>
 <h2 id="terminal-lane-change-path">Terminal Lane Change Path<a class="headerlink" href="#terminal-lane-change-path" title="Permanent link">#</a></h2>
-<p>Depending on the space configuration around the Ego vehicle, it is possible that a valid LC path cannot be generated. If that happens, then Ego will get stuck at <code>terminal_start</code> and will be not be able to proceed. Therefore we introduced the terminal LC path feature; when ego gets near to the terminal point (dist to <code>terminal_start</code> is less than the maximum lane change length) a terminal lane changing path will be computed starting from the terminal start point on the current lane and connects to the target lane. The terminal path only needs to be computed once in each execution of LC module. If no valid candidate paths are found in the path generation process, then the terminal path will be used as a fallback candidate path, the safety of the terminal path is not ensured and therefore it can only be force approved. The following images illustrate the expected behavior without and with the terminal path feature respectively:</p>
+<p>Depending on the space configuration around the Ego vehicle, it is possible that a valid LC path cannot be generated. If that happens, then Ego will get stuck at <code>terminal_start</code> and not be able to proceed. Therefore we introduced the terminal LC path feature; when ego gets near to the terminal point (dist to <code>terminal_start</code> is less than the maximum lane change length) a terminal lane changing path will be computed starting from the terminal start point on the current lane and connects to the target lane. The terminal path only needs to be computed once in each execution of LC module. If no valid candidate paths are found in the path generation process, then the terminal path will be used as a fallback candidate path, the safety of the terminal path is not ensured and therefore it can only be force approved. The following images illustrate the expected behavior without and with the terminal path feature respectively:</p>
 <p><img alt="no terminal path" src="images/lane_change-no_terminal_path.png"></p>
 <p><img alt="terminal path" src="images/lane_change-terminal_path.png"></p>
 <p>Additionally if terminal path feature is enabled and path is computed, stop point placement can be configured to be at the edge of the current lane instead of at the <code>terminal_start</code> position, as indicated by the dashed red line in the image above.</p>
+<h2 id="aborting-a-previously-approved-lane-change">Aborting a Previously Approved Lane Change<a class="headerlink" href="#aborting-a-previously-approved-lane-change" title="Permanent link">#</a></h2>
+<p>Once the lane change path is approved, there are several situations where we may need to abort the maneuver. The abort process is triggered when any of the following conditions is met</p>
+<ol>
+<li>The ego vehicle is near a traffic light, crosswalk, or intersection, and it is possible to complete the lane change after the ego vehicle passes these areas.</li>
+<li>The target object list is updated, requiring us to <a href="#delay-lane-change-check">delay lane change</a></li>
+<li>The lane change is forcefully canceled via <a href="https://autowarefoundation.github.io/autoware-documentation/main/design/autoware-interfaces/ad-api/features/cooperation/">RTC</a>.</li>
+<li>The path has become unsafe.</li>
+</ol>
+<p>Furthermore, if the path has become unsafe, there are three possible outcomes for the maneuver:</p>
+<ol>
+<li><strong>CANCEL</strong>: The approved lane change path is canceled, and the ego vehicle resumes its previous maneuver.</li>
+<li><strong>ABORT</strong>: The lane change module generates a return path to bring the ego vehicle back to its current lane.</li>
+<li><strong>CRUISE</strong> or <strong>STOP</strong>: If aborting is not feasible, the ego vehicle continues with the lane change. <a href="https://autowarefoundation.github.io/autoware.universe/main/planning/autoware_obstacle_cruise_planner/">Another module</a> should decide whether the ego vehicle should cruise or stop in this scenario.</li>
+</ol>
+<p><strong>CANCEL</strong> can be enabled by setting the <code>cancel.enable_on_prepare_phase</code> flag to <code>true</code>, and <strong>ABORT</strong> can be enabled by setting the <code>cancel.enable_on_lane_changing_phase</code> flag to true.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Enabling <strong>CANCEL</strong> is a prerequisite for enabling <strong>ABORT</strong>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When <strong>CANCEL</strong> is disabled, all maneuvers will default to either <strong>CRUISE</strong> or <strong>STOP</strong>.</p>
+</div>
+<p>The chart shows the high level flow of the lane change abort process.</p>
+<p><img src="data:image/svg+xml;base64,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" class="uml" alt="uml diagram" title=""></p>
+<h3 id="preventing-oscillating-paths-when-unsafe">Preventing Oscillating Paths When Unsafe<a class="headerlink" href="#preventing-oscillating-paths-when-unsafe" title="Permanent link">#</a></h3>
+<p>Lane change paths can oscillate when conditions switch between safe and unsafe. To address this, a hysteresis count check is added before executing an abort maneuver. When the path is unsafe, the <code>unsafe_hysteresis_count_</code> increases. If it exceeds the <code>unsafe_hysteresis_threshold</code>, an abort condition check is triggered. This logic stabilizes the path approval process and prevents abrupt changes caused by temporary unsafe conditions.</p>
+<p><img src="data:image/svg+xml;base64,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" class="uml" alt="uml diagram" title=""></p>
+<h3 id="evaluating-ego-vehicles-position-to-prevent-abrupt-maneuvers">Evaluating Ego Vehicle's Position to Prevent Abrupt Maneuvers<a class="headerlink" href="#evaluating-ego-vehicles-position-to-prevent-abrupt-maneuvers" title="Permanent link">#</a></h3>
+<p>To avoid abrupt maneuvers during <strong>CANCEL</strong> or <strong>ABORT</strong>, the lane change module ensures the ego vehicle can safely return to the original lane. This is done through geometric checks that verify whether the ego vehicle remains within the lane boundaries.</p>
+<p>The edges of the ego vehicle’s footprint are compared against the boundary of the current lane to determine if they exceed the overhang tolerance, <code>cancel.overhang_tolerance</code>. If the distance from any edge of the footprint to the boundary exceeds this threshold, the vehicle is considered to be diverging.</p>
+<p>The footprints checked against the lane boundary include:</p>
+<ol>
+<li>Current Footprint: Based on the ego vehicle's current position.</li>
+<li>
+<p>Future Footprint: Based on the ego vehicle's estimated position after traveling a distance, calculated as <span class="arithmatex">\(𝑑_{est}=𝑣_{ego} \cdot \Delta_{𝑡}\)</span>, where</p>
+<ul>
+<li><span class="arithmatex">\(v_{ego}\)</span> is ego vehicle's current velocity</li>
+<li><span class="arithmatex">\(\Delta_{t}\)</span> is parameterized time constant value, <code>cancel.delta_time</code>.</li>
+</ul>
+<p>as depicted in the following diagram</p>
+<p><img alt="can_return" src="images/check_able_to_return.png"></p>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ego vehicle is considered capable of safely returning to the current lane only if <strong>BOTH</strong> the current and future footprint checks are <code>true</code>.</p>
+</div>
+<h3 id="checking-approved-path-safety">Checking Approved Path Safety<a class="headerlink" href="#checking-approved-path-safety" title="Permanent link">#</a></h3>
+<p>The lane change module samples accelerations along the path and recalculates velocity to perform safety checks. The motivation for this feature is explained in the <a href="#limitation">Limitation</a> section.</p>
+<p>The computation of sampled accelerations is as follows:</p>
+<p>Let</p>
+<div class="arithmatex">\[
+\text{resolution} = \frac{a_{\text{min}} - a_{\text{LC}}}{N}
+\]</div>
+<p>The sequence of sampled accelerations is then given as</p>
+<div class="arithmatex">\[
+\text{acc} = a_{\text{LC}} + k \cdot \text{resolution}, \quad k = [0, N]
+\]</div>
+<p>where</p>
+<ul>
+<li><span class="arithmatex">\(a_{\text{min}}\)</span>, is the minimum of the parameterized <a href="https://github.com/autowarefoundation/autoware_launch/blob/main/autoware_launch/config/planning/scenario_planning/common/common.param.yaml">global acceleration constant</a> <code>normal.min_acc</code> or the <a href="#essential-lane-change-parameters">parameterized constant</a> <code>trajectory.min_longitudinal_acceleration</code>.</li>
+<li><span class="arithmatex">\(a_{\text{LC}}\)</span> is the acceleration used to generate the approved path.</li>
+<li><span class="arithmatex">\(N\)</span> is the parameterized constant <code>cancel.deceleration_sampling</code></li>
+</ul>
+<p>If none of the sampled accelerations pass the safety check, the lane change path will be canceled, subject to the <a href="#preventing-oscillating-paths-when-unsafe">hysteresis check</a>.</p>
+<h3 id="cancel">Cancel<a class="headerlink" href="#cancel" title="Permanent link">#</a></h3>
+<p>When lane change is canceled, the approved path is reset. After the reset, the ego vehicle will return to following the original reference path (the last approved path before the lane change started), as illustrated in the following image</p>
+<p><img alt="cancel" src="images/lane_change-cancel.png"></p>
+<p>The following parameters can be configured to tune the behavior of the cancel process:</p>
+<ol>
+<li><a href="#safety-constraints-to-cancel-lane-change-path">Safety constraints</a> for cancel.</li>
+<li><a href="#safety-constraints-specifically-for-stopped-or-parked-vehicles">Safety constraints</a> for parked vehicle.</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To ensure feasible behavior, all safety constraint values must be equal to or less than their corresponding parameters in the <a href="#safety-constraints-during-lane-change-path-is-computed">execution</a> settings.</p>
+<ul>
+<li>The closer the values, the more conservative the lane change behavior will be. This means it will be easier to cancel the lane change but harder for the ego vehicle to complete a lane change.</li>
+<li>The larger the difference, the more aggressive the lane change behavior will be. This makes it harder to cancel the lane change but easier for the ego vehicle to change lanes.</li>
+</ul>
+</div>
+<h3 id="abort">Abort<a class="headerlink" href="#abort" title="Permanent link">#</a></h3>
+<p>During the prepare phase, the ego vehicle follows the previously approved path. However, once the ego vehicle begins the lane change, its heading starts to diverge from this path. Resetting to the previously approved path in this situation would cause abrupt steering, as the controller would attempt to rapidly realign the vehicle with the reference trajectory.</p>
+<p>Instead, the lane change module generates an abort path. This return path is specifically designed to guide the ego vehicle back to the current lane, avoiding any sudden maneuvers. The following image provides an illustration of the abort process.</p>
+<p><img alt="abort" src="images/lane_change-abort.png"></p>
+<p>The abort path is generated by shifting the approved lane change path using the path shifter. This ensures the continuity in lateral velocity, and prevents abrupt changes in the vehicle’s movement. The abort start shift and abort end shift are computed as follows:</p>
+<ol>
+<li>Start Shift: <span class="arithmatex">\(d_{start}^{abort} = v_{ego} \cdot \Delta_{t}\)</span></li>
+<li>End Shift: <span class="arithmatex">\(d_{end}^{abort} = v_{ego} \cdot ( \Delta_{t} + t_{end} )\)</span></li>
+</ol>
+<ul>
+<li><span class="arithmatex">\(v_{ego}\)</span> is ego vehicle's current velocity</li>
+<li><span class="arithmatex">\(\Delta_{t}\)</span> is parameterized time constant value, <code>cancel.delta_time</code>.</li>
+<li><span class="arithmatex">\(t_{end}\)</span> is the parameterized time constant value, <code>cancel.duration</code>.</li>
+</ul>
+<p>as depicted in the following diagram</p>
+<p><img alt="abort_computation" src="images/lane_change-abort_computation.png"></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When executing the abort process, comfort is not a primary concern. However, due to safety considerations, limited real-world testing has been conducted to tune or validate this parameter. Currently, the maximum lateral jerk is set to an arbitrary value. To avoid generating a path with excessive lateral jerk, this value can be configured using <code>cancel.max_lateral_jerk</code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Lane change module returns <code>ModuleStatus::FAILURE</code> once abort is completed.</p>
+</div>
+<h3 id="stopcruise">Stop/Cruise<a class="headerlink" href="#stopcruise" title="Permanent link">#</a></h3>
+<p>Once canceling or aborting the lane change is no longer an option, the ego vehicle will proceed with the lane change. This can happen in the following situations:</p>
+<ul>
+<li>The ego vehicle is performing a lane change near a terminal or dead-end, making it impossible to return to the original lane. In such cases, completing the lane change is necessary.</li>
+<li>If safety parameters are tuned too aggressively, it becomes harder to cancel or abort the lane change. This reduces tolerance for unexpected behaviors from surrounding vehicles, such as a trailing vehicle in the target lane suddenly accelerating or a leading vehicle suddenly decelerating. Aggressive settings leave less room for error during the maneuver.</li>
+</ul>
+<p><img alt="stop" src="images/lane_change-cant_cancel_no_abort.png"></p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
 <h3 id="essential-lane-change-parameters">Essential lane change parameters<a class="headerlink" href="#essential-lane-change-parameters" title="Permanent link">#</a></h3>
 <p>The following parameters are configurable in <a href="https://github.com/autowarefoundation/autoware_launch/blob/main/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/lane_change/lane_change.param.yaml">lane_change.param.yaml</a></p>
@@ -15459,6 +15609,13 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <li>Object is safe or not, shown by the color of the polygon (Green = Safe, Red = unsafe)</li>
 <li>Valid candidate paths.</li>
 <li>Position when lane changing start and end.</li>
+</ol>
+<h2 id="limitation">Limitation<a class="headerlink" href="#limitation" title="Permanent link">#</a></h2>
+<ol>
+<li>When a lane change is canceled, the lane change module returns <code>ModuleStatus::FAILURE</code>. As the module is removed from the approved module stack (see <a href="https://autowarefoundation.github.io/autoware.universe/main/planning/behavior_path_planner/autoware_behavior_path_planner/docs/behavior_path_planner_manager_design/#failure-modules">Failure modules</a>), a new instance of the lane change module is initiated. Due to this, any information stored prior to the reset is lost. For example, the <code>lane_change_prepare_duration</code> in the <code>TransientData</code> is reset to its maximum value.</li>
+<li>The lane change module has no knowledge of any velocity modifications introduced to the path after it is approved. This is because other modules may add deceleration points after subscribing to the behavior path planner output, and the final velocity is managed by the <a href="https://autowarefoundation.github.io/autoware.universe/pr-9845/planning/autoware_velocity_smoother/">velocity smoother</a>. Since this limitation affects <strong>CANCEL</strong>, the lane change module mitigates it by <a href="#checking-approved-path-safety">sampling accelerations along the approved lane change path</a>. These sampled accelerations are used during safety checks to estimate the velocity that might occur if the ego vehicle decelerates.</li>
+<li>Ideally, the abort path should account for whether its execution would affect trailing vehicles in the current lane. However, the lane change module does not evaluate such interactions or assess whether the abort path is safe. As a result, <strong>the abort path is not guaranteed to be safe</strong>. To minimize the risk of unsafe situations, the abort maneuver is only permitted if the ego vehicle has not yet diverged from the current lane.</li>
+<li>Due to limited resources, the abort path logic is not fully optimized. The generated path may overshoot, causing the return trajectory to slightly shift toward the opposite lane. This can be dangerous, especially if the opposite lane has traffic moving in the opposite direction. Furthermore, the logic does not account for different vehicle types, which can lead to varying effects. For instance, the behavior might differ significantly between a bus and a small passenger car.</li>
 </ol></div>
 
 
