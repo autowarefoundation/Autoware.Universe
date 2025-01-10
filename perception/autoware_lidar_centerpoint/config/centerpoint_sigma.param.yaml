@@ -18,3 +18,4 @@
     densification_params:
       world_frame_id: map
       num_past_frames: 1
+    max_voxel_size: 40000

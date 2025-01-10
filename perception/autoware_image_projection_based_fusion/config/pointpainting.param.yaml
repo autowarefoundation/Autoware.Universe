@@ -19,3 +19,4 @@
     omp_params:
       # omp params
       num_threads: 1
+    max_voxel_size: 40000

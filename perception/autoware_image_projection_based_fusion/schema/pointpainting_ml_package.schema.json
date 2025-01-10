@@ -27,11 +27,6 @@
               "description": "A number of channels of point feature layer.",
               "default": 7
             },
-            "max_voxel_size": {
-              "type": "integer",
-              "description": "A maximum size of voxel grid.",
-              "default": 40000
-            },
             "point_cloud_range": {
               "type": "array",
               "description": "An array of distance ranges of each class, this must have same length with `class_names`.",

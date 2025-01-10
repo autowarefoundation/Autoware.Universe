@@ -143,7 +143,7 @@ PointPaintingFusionNode::PointPaintingFusionNode(const rclcpp::NodeOptions & opt
   const std::size_t point_feature_size = static_cast<std::size_t>(
     this->declare_parameter<std::int64_t>("model_params.point_feature_size"));
   const std::size_t max_voxel_size =
-    static_cast<std::size_t>(this->declare_parameter<std::int64_t>("model_params.max_voxel_size"));
+    static_cast<std::size_t>(this->declare_parameter<std::int64_t>("max_voxel_size"));
   pointcloud_range = this->declare_parameter<std::vector<double>>("model_params.point_cloud_range");
   const auto voxel_size = this->declare_parameter<std::vector<double>>("model_params.voxel_size");
   const std::size_t downsample_factor = static_cast<std::size_t>(

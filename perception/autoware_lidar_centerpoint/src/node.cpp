@@ -62,7 +62,7 @@ LidarCenterPointNode::LidarCenterPointNode(const rclcpp::NodeOptions & node_opti
     this->declare_parameter<std::int64_t>("model_params.point_feature_size"));
   has_variance_ = this->declare_parameter<bool>("model_params.has_variance");
   const std::size_t max_voxel_size =
-    static_cast<std::size_t>(this->declare_parameter<std::int64_t>("model_params.max_voxel_size"));
+    static_cast<std::size_t>(this->declare_parameter<std::int64_t>("max_voxel_size"));
   const auto point_cloud_range =
     this->declare_parameter<std::vector<double>>("model_params.point_cloud_range");
   const auto voxel_size = this->declare_parameter<std::vector<double>>("model_params.voxel_size");

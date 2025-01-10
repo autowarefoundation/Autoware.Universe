@@ -88,6 +88,11 @@
               "minimum": 1
             }
           }
+        },
+        "max_voxel_size": {
+          "type": "integer",
+          "description": "A maximum size of voxel grid.",
+          "default": 40000
         }
       },
       "required": []

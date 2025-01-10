@@ -36,7 +36,6 @@ Note that these parameters are associated with ONNX file, predefined during the 
 | -------------------------------------- | ------------ | ------------------------------------------------ | --------------------------------------------------------------------- |
 | `model_params.class_names`             | list[string] | ["CAR", "TRUCK", "BUS", "BICYCLE", "PEDESTRIAN"] | list of class names for model outputs                                 |
 | `model_params.point_feature_size`      | int          | `4`                                              | number of features per point in the point cloud                       |
-| `model_params.max_voxel_size`          | int          | `40000`                                          | maximum number of voxels                                              |
 | `model_params.point_cloud_range`       | list[double] | [-76.8, -76.8, -4.0, 76.8, 76.8, 6.0]            | detection range [min_x, min_y, min_z, max_x, max_y, max_z] [m]        |
 | `model_params.voxel_size`              | list[double] | [0.32, 0.32, 10.0]                               | size of each voxel [x, y, z] [m]                                      |
 | `model_params.downsample_factor`       | int          | `1`                                              | downsample factor for coordinates                                     |
@@ -61,6 +60,7 @@ Note that these parameters are associated with ONNX file, predefined during the 
 | `post_process_params.has_twist`                  | boolean      | false                     | Indicates whether the model outputs twist value.              |
 | `densification_params.world_frame_id`            | string       | `map`                     | the world frame id to fuse multi-frame pointcloud             |
 | `densification_params.num_past_frames`           | int          | `1`                       | the number of past frames to fuse with the current frame      |
+| `max_voxel_size`                                 | int          | `40000`                   | maximum number of voxels                                      |
 
 ### The `build_only` option
 
