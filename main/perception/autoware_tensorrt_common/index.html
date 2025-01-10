@@ -14185,9 +14185,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#purpose" class="md-nav__link">
-    Purpose
+  <a href="#usage" class="md-nav__link">
+    Usage
   </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-tensorrt-common-instance-and-setup-engine" class="md-nav__link">
+    Create a tensorrt common instance and setup engine
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-input-and-output-tensors" class="md-nav__link">
+    Setting input and output tensors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execute-inference" class="md-nav__link">
+    Execute inference
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -14210,9 +14237,58 @@
 
 
 <div><h1 id="autoware_tensorrt_common">autoware_tensorrt_common<a class="headerlink" href="#autoware_tensorrt_common" title="Permanent link">#</a></h1>
-<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
-<p>This package contains a library of common functions related to TensorRT.<br>
-This package may include functions for handling TensorRT engine and calibration algorithm used for quantization</p></div>
+<p>This package provides a high-level API to work with TensorRT. This library simplifies the process of loading, building, and executing TensorRT inference engines using ONNX models. It also includes utilities for profiling and managing TensorRT execution contexts, making it easier to integrate TensorRT-based packages in Autoware.</p>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
+<p>Here is an example usage of the library. For the full API documentation, please refer to the doxygen documentation (see header <a href="include/autoware/tensorrt_common/tensorrt_common.hpp">file</a>).</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;autoware/tensorrt_common/tensorrt_common.hpp&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">autoware</span><span class="o">::</span><span class="n">tensorrt_common</span><span class="o">::</span><span class="n">TrtCommon</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">autoware</span><span class="o">::</span><span class="n">tensorrt_common</span><span class="o">::</span><span class="n">TrtCommonConfig</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">autoware</span><span class="o">::</span><span class="n">tensorrt_common</span><span class="o">::</span><span class="n">TensorInfo</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">autoware</span><span class="o">::</span><span class="n">tensorrt_common</span><span class="o">::</span><span class="n">NetworkIO</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">autoware</span><span class="o">::</span><span class="n">tensorrt_common</span><span class="o">::</span><span class="n">ProfileDims</span><span class="p">;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">TrtCommon</span><span class="o">&gt;</span><span class="w"> </span><span class="n">trt_common_</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="create-a-tensorrt-common-instance-and-setup-engine">Create a tensorrt common instance and setup engine<a class="headerlink" href="#create-a-tensorrt-common-instance-and-setup-engine" title="Permanent link">#</a></h3>
+<ul>
+<li>With minimal configuration.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">trt_common_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">TrtCommon</span><span class="o">&gt;</span><span class="p">(</span><span class="n">TrtCommonConfig</span><span class="p">(</span><span class="s">"/path/to/onnx/model.onnx"</span><span class="p">));</span>
+<span class="n">trt_common_</span><span class="o">-&gt;</span><span class="n">setup</span><span class="p">();</span>
+</code></pre></div>
+<ul>
+<li>With full configuration.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">trt_common_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">TrtCommon</span><span class="o">&gt;</span><span class="p">(</span><span class="n">TrtCommonConfig</span><span class="p">(</span><span class="s">"/path/to/onnx/model.onnx"</span><span class="p">,</span><span class="w"> </span><span class="s">"fp16"</span><span class="p">,</span><span class="w"> </span><span class="s">"/path/to/engine/model.engine"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="mi">1ULL</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">30U</span><span class="p">),</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">));</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">NetworkIO</span><span class="o">&gt;</span><span class="w"> </span><span class="n">network_io</span><span class="p">{</span>
+<span class="w">  </span><span class="n">NetworkIO</span><span class="p">(</span><span class="s">"sample_input"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">512</span><span class="p">}}),</span><span class="w"> </span><span class="n">NetworkIO</span><span class="p">(</span><span class="s">"sample_output"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">50</span><span class="p">}})};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ProfileDims</span><span class="o">&gt;</span><span class="w"> </span><span class="n">profile_dims</span><span class="p">{</span>
+<span class="w">  </span><span class="n">ProfileDims</span><span class="p">(</span><span class="s">"sample_input"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">512</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">512</span><span class="p">}},</span><span class="w"> </span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">512</span><span class="p">}})};</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">network_io_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">NetworkIO</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">network_io</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">profile_dims_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ProfileDims</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">profile_dims</span><span class="p">);</span>
+
+<span class="n">trt_common_</span><span class="o">-&gt;</span><span class="n">setup</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">profile_dims_ptr</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">network_io_ptr</span><span class="p">));</span>
+</code></pre></div>
+<p>By defining network IO names and dimensions, an extra shapes validation will be performed after building / loading engine. This is useful to ensure the model is compatible with current code for preprocessing as it might consists of operations dependent on tensor shapes.</p>
+<p>Profile dimension is used to specify the min, opt, and max dimensions for dynamic shapes.</p>
+<p>Network IO or / and profile dimensions can be omitted if not needed.</p>
+<h3 id="setting-input-and-output-tensors">Setting input and output tensors<a class="headerlink" href="#setting-input-and-output-tensors" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="n">success</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="n">trt_common_</span><span class="o">-&gt;</span><span class="n">setTensor</span><span class="p">(</span><span class="s">"sample_input"</span><span class="p">,</span><span class="w"> </span><span class="n">sample_input_d_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">nvinfer1</span><span class="o">::</span><span class="n">Dims</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">var_size</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">512</span><span class="p">}});</span>
+<span class="n">success</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="n">trt_common_</span><span class="o">-&gt;</span><span class="n">setTensor</span><span class="p">(</span><span class="s">"sample_output"</span><span class="p">,</span><span class="w"> </span><span class="n">sample_output_d_</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="execute-inference">Execute inference<a class="headerlink" href="#execute-inference" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trt_common_</span><span class="o">-&gt;</span><span class="n">enqueueV3</span><span class="p">(</span><span class="n">stream_</span><span class="p">);</span>
+<span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">;</span>
+</code></pre></div></div>
 
 
 
