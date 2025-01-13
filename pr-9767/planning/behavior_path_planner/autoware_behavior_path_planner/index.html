@@ -14253,8 +14253,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-to-enable-or-disable-the-modules" class="md-nav__link">
-    How to enable or disable the modules
+  <a href="#how-to-enable-or-disable-modules" class="md-nav__link">
+    How to Enable or Disable Modules
   </a>
   
 </li>
@@ -14268,7 +14268,7 @@
       
         <li class="md-nav__item">
   <a href="#collision-assessment-safety-check" class="md-nav__link">
-    Collision Assessment / Safety check
+    Collision Assessment / Safety Check
   </a>
   
 </li>
@@ -14349,10 +14349,10 @@
 <div><h1 id="behavior-path-planner">Behavior Path Planner<a class="headerlink" href="#behavior-path-planner" title="Permanent link">#</a></h1>
 <p>The Behavior Path Planner's main objective is to significantly enhance the safety of autonomous vehicles by minimizing the risk of accidents. It improves driving efficiency through time conservation and underpins reliability with its rule-based approach. Additionally, it allows users to integrate their own custom behavior modules or use it with different types of vehicles, such as cars, buses, and delivery robots, as well as in various environments, from busy urban streets to open highways.</p>
 <p>The module begins by thoroughly analyzing the ego vehicle's current situation, including its position, speed, and surrounding environment. This analysis leads to essential driving decisions about lane changes or stopping and subsequently generates a path that is both safe and efficient. It considers road geometry, traffic rules, and dynamic conditions while also incorporating obstacle avoidance to respond to static and dynamic obstacles such as other vehicles, pedestrians, or unexpected roadblocks, ensuring safe navigation.</p>
-<p>Moreover, the planner actively interacts with other traffic participants, predicting their actions and accordingly adjusting the vehicle's path. This ensures not only the safety of the autonomous vehicle but also contributes to smooth traffic flow. Its adherence to traffic laws, including speed limits and traffic signals, further guarantees lawful and predictable driving behavior. The planner is also designed to minimize sudden or abrupt maneuvers, aiming for a comfortable and natural driving experience.</p>
+<p>Moreover, the planner responds to the behavior of other traffic participants, predicting their actions and accordingly adjusting the vehicle's path. This ensures not only the safety of the autonomous vehicle but also contributes to smooth traffic flow. Its adherence to traffic laws, including speed limits and compliance with traffic signals, further guarantees lawful and predictable driving behavior. The planner is also designed to minimize sudden or abrupt maneuvers, aiming for a comfortable and natural driving experience.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The <a href="https://autowarefoundation.github.io/autoware-documentation/main/design/autoware-architecture/planning/">Planning Component Design</a> Document outlines the foundational philosophy guiding the design and future development of the Behavior Path Planner module. We strongly encourage readers to consult this document to understand the rationale behind its current configuration and the direction of its ongoing development.</p>
+<p>The <a href="https://autowarefoundation.github.io/autoware-documentation/main/design/autoware-architecture/planning/">Planning Component Design</a> documentation outlines the foundational philosophy guiding the design and future development of the Behavior Path Planner module. We strongly encourage readers to consult this document to understand the rationale behind its current configuration and the direction of its ongoing development.</p>
 </div>
 <h2 id="purpose-use-cases">Purpose / Use Cases<a class="headerlink" href="#purpose-use-cases" title="Permanent link">#</a></h2>
 <p>Essentially, the module has three primary responsibilities:</p>
@@ -14363,7 +14363,7 @@
 </ol>
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">#</a></h2>
 <h3 id="supported-scene-modules">Supported Scene Modules<a class="headerlink" href="#supported-scene-modules" title="Permanent link">#</a></h3>
-<p>Behavior Path Planner has following scene modules</p>
+<p>Behavior Path Planner has the following scene modules</p>
 <table>
 <thead>
 <tr>
@@ -14375,12 +14375,12 @@
 <tbody>
 <tr>
 <td align="left">Lane Following</td>
-<td align="left">this module generates reference path from lanelet centerline.</td>
+<td align="left">This module generates a reference path from lanelet centerline.</td>
 <td align="left">LINK</td>
 </tr>
 <tr>
 <td align="left">Static Obstacle Avoidance</td>
-<td align="left">this module generates avoidance path when there is objects that should be avoid.</td>
+<td align="left">This module generates an avoidance path when there are objects that should be avoided.</td>
 <td align="left"><a href="../autoware_behavior_path_static_obstacle_avoidance_module/">LINK</a></td>
 </tr>
 <tr>
@@ -14390,12 +14390,12 @@
 </tr>
 <tr>
 <td align="left">Avoidance By Lane Change</td>
-<td align="left">this module generates lane change path when there is objects that should be avoid.</td>
+<td align="left">This module generates a lane change path when there are objects that should be avoided.</td>
 <td align="left"><a href="../behavior_path_avoidance_by_lane_change_module/README.md">LINK</a></td>
 </tr>
 <tr>
 <td align="left">Lane Change</td>
-<td align="left">this module is performed when it is necessary and a collision check with other vehicles is cleared.</td>
+<td align="left">This module is performed when it is necessary and a collision check with other vehicles is cleared.</td>
 <td align="left"><a href="../autoware_behavior_path_lane_change_module/">LINK</a></td>
 </tr>
 <tr>
@@ -14405,24 +14405,24 @@
 </tr>
 <tr>
 <td align="left">Goal Planner</td>
-<td align="left">this module is performed when ego-vehicle is in the road lane and goal is in the shoulder lane. ego-vehicle will stop at the goal.</td>
+<td align="left">This module is performed when the ego vehicle is in a driving lane and the goal is in the shoulder lane. The ego vehicle will stop at the goal.</td>
 <td align="left"><a href="../autoware_behavior_path_goal_planner_module/">LINK</a></td>
 </tr>
 <tr>
 <td align="left">Start Planner</td>
-<td align="left">this module is performed when ego-vehicle is stationary and footprint of ego-vehicle is included in shoulder lane. This module ends when ego-vehicle merges into the road.</td>
+<td align="left">This module is performed when the ego vehicle is stationary and the footprint of the ego vehicle is included in the shoulder lane. This module ends when the ego vehicle merges into the road.</td>
 <td align="left"><a href="../autoware_behavior_path_start_planner_module/">LINK</a></td>
 </tr>
 <tr>
 <td align="left">Side Shift</td>
-<td align="left">(for remote control) shift the path to left or right according to an external instruction.</td>
+<td align="left">This module shifts the path to the left or right based on external instructions, intended for remote control applications.</td>
 <td align="left"><a href="../autoware_behavior_path_side_shift_module/">LINK</a></td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>click on the following images to view the video of their execution</p>
+<p>Click on the following images to view videos of their execution</p>
 <p></p><div align="center">
     <table>
         <tr>
@@ -14442,11 +14442,11 @@
 <p class="admonition-title">Note</p>
 <p>Users can refer to <a href="https://autowarefoundation.github.io/autoware-documentation/main/design/autoware-architecture/planning/#supported-functions">Planning component design</a> for some additional behavior.</p>
 </div>
-<h4 id="how-to-add-or-implement-new-module">How to add or implement new module?<a class="headerlink" href="#how-to-add-or-implement-new-module" title="Permanent link">#</a></h4>
-<p>All scene modules are implemented by inheriting base class <code>scene_module_interface.hpp</code>.</p>
+<h4 id="how-to-add-or-implement-new-module">How to add or implement new module<a class="headerlink" href="#how-to-add-or-implement-new-module" title="Permanent link">#</a></h4>
+<p>All scene modules are implemented by inheriting the base class <code>scene_module_interface.hpp</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>The remainder of this subsection is work in progress (WIP).</p>
+<p>The remainder of this subsection is a work in progress (WIP).</p>
 </div>
 <h3 id="planner-manager">Planner Manager<a class="headerlink" href="#planner-manager" title="Permanent link">#</a></h3>
 <p>The Planner Manager's responsibilities include:</p>
@@ -14457,12 +14457,12 @@
 </ol>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>To check the scene module's transition, i.e.: registered, approved and candidate modules, set <code>verbose: true</code> in the <a href="https://github.com/autowarefoundation/autoware_launch/blob/0cd5d891a36ac34a32a417205905c109f2bafe7b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/behavior_path_planner.param.yaml#L3">behavior path planner configuration file</a>.</p>
+<p>To check the scene module's transition – i.e., registered, approved and candidate modules – set <code>verbose: true</code> in the <a href="https://github.com/autowarefoundation/autoware_launch/blob/0cd5d891a36ac34a32a417205905c109f2bafe7b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/behavior_path_planner.param.yaml#L3">Behavior Path Planner configuration file</a>.</p>
 <p><img alt="Scene module's transition table" src="image/checking_module_transition.png"></p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For more in-depth information, refer to <a href="docs/behavior_path_planner_manager_design/">Manager design</a> document.</p>
+<p>For more in-depth information, refer to the <a href="docs/behavior_path_planner_manager_design/">Manager design</a> document.</p>
 </div>
 <h2 id="inputs-outputs-api">Inputs / Outputs / API<a class="headerlink" href="#inputs-outputs-api" title="Permanent link">#</a></h2>
 <h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">#</a></h3>
@@ -14480,67 +14480,67 @@
 <td align="left">~/input/odometry</td>
 <td align="center">○</td>
 <td align="left"><code>nav_msgs::msg::Odometry</code></td>
-<td align="left">for ego velocity.</td>
+<td align="left">For ego velocity</td>
 </tr>
 <tr>
 <td align="left">~/input/accel</td>
 <td align="center">○</td>
 <td align="left"><code>geometry_msgs::msg::AccelWithCovarianceStamped</code></td>
-<td align="left">for ego acceleration.</td>
+<td align="left">For ego acceleration</td>
 </tr>
 <tr>
 <td align="left">~/input/objects</td>
 <td align="center">○</td>
 <td align="left"><code>autoware_perception_msgs::msg::PredictedObjects</code></td>
-<td align="left">dynamic objects from perception module.</td>
+<td align="left">Dynamic objects from the perception module</td>
 </tr>
 <tr>
 <td align="left">~/input/occupancy_grid_map</td>
 <td align="center">○</td>
 <td align="left"><code>nav_msgs::msg::OccupancyGrid</code></td>
-<td align="left">occupancy grid map from perception module. This is used for only Goal Planner module.</td>
+<td align="left">Occupancy grid map from the perception module. This is used for only the Goal Planner module</td>
 </tr>
 <tr>
 <td align="left">~/input/traffic_signals</td>
 <td align="center">○</td>
 <td align="left"><code>autoware_perception_msgs::msg::TrafficLightGroupArray</code></td>
-<td align="left">traffic signals information from the perception module</td>
+<td align="left">Traffic signal information from the perception module</td>
 </tr>
 <tr>
 <td align="left">~/input/vector_map</td>
 <td align="center">○</td>
 <td align="left"><code>autoware_map_msgs::msg::LaneletMapBin</code></td>
-<td align="left">vector map information.</td>
+<td align="left">Vector map information</td>
 </tr>
 <tr>
 <td align="left">~/input/route</td>
 <td align="center">○</td>
 <td align="left"><code>autoware_planning_msgs::msg::LaneletRoute</code></td>
-<td align="left">current route from start to goal.</td>
+<td align="left">Current route from start to goal</td>
 </tr>
 <tr>
 <td align="left">~/input/scenario</td>
 <td align="center">○</td>
 <td align="left"><code>tier4_planning_msgs::msg::Scenario</code></td>
-<td align="left">Launches behavior path planner if current scenario == <code>Scenario:LaneDriving</code>.</td>
+<td align="left">Launches Behavior Path Planner if current scenario == <code>Scenario:LaneDriving</code></td>
 </tr>
 <tr>
 <td align="left">~/input/lateral_offset</td>
 <td align="center">△</td>
 <td align="left"><code>tier4_planning_msgs::msg::LateralOffset</code></td>
-<td align="left">lateral offset to trigger side shift</td>
+<td align="left">Lateral offset to trigger side shift</td>
 </tr>
 <tr>
 <td align="left">~/system/operation_mode/state</td>
 <td align="center">○</td>
 <td align="left"><code>autoware_adapi_v1_msgs::msg::OperationModeState</code></td>
-<td align="left">Allows planning module to know if vehicle is in autonomous mode or can be controlled<sup><a href="https://github.com/autowarefoundation/autoware.universe/blob/main/system/autoware_default_adapi/document/operation-mode.md">ref</a></sup></td>
+<td align="left">Allows the planning module to know if vehicle is in autonomous mode or if it can be controlled<sup><a href="https://github.com/autowarefoundation/autoware.universe/blob/main/system/autoware_default_adapi/document/operation-mode.md">ref</a></sup></td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li>○ Mandatory: Planning Module would not work if anyone of this is not present.</li>
-<li>△ Optional: Some module would not work, but Planning Module can still be operated.</li>
+<li>○ Mandatory: The planning module would not work if anyone of these were not present.</li>
+<li>△ Optional: Some modules would not work, but the planning module can still be operated.</li>
 </ul>
 <h3 id="output">Output<a class="headerlink" href="#output" title="Permanent link">#</a></h3>
 <table>
@@ -14556,31 +14556,31 @@
 <tr>
 <td align="left">~/output/path</td>
 <td align="left"><code>tier4_planning_msgs::msg::PathWithLaneId</code></td>
-<td align="left">the path generated by modules.</td>
+<td align="left">The path generated by modules</td>
 <td><code>volatile</code></td>
 </tr>
 <tr>
 <td align="left">~/output/turn_indicators_cmd</td>
 <td align="left"><code>autoware_vehicle_msgs::msg::TurnIndicatorsCommand</code></td>
-<td align="left">turn indicators command.</td>
+<td align="left">Turn indicators command</td>
 <td><code>volatile</code></td>
 </tr>
 <tr>
 <td align="left">~/output/hazard_lights_cmd</td>
 <td align="left"><code>autoware_vehicle_msgs::msg::HazardLightsCommand</code></td>
-<td align="left">hazard lights command.</td>
+<td align="left">Hazard lights command</td>
 <td><code>volatile</code></td>
 </tr>
 <tr>
 <td align="left">~/output/modified_goal</td>
 <td align="left"><code>autoware_planning_msgs::msg::PoseWithUuidStamped</code></td>
-<td align="left">output modified goal commands.</td>
+<td align="left">Output modified goal commands</td>
 <td><code>transient_local</code></td>
 </tr>
 <tr>
 <td align="left">~/output/reroute_availability</td>
 <td align="left"><code>tier4_planning_msgs::msg::RerouteAvailability</code></td>
-<td align="left">the path the module is about to take. to be executed as soon as external approval is obtained.</td>
+<td align="left">The path the module is about to take. To be executed as soon as external approval is obtained</td>
 <td><code>volatile</code></td>
 </tr>
 </tbody>
@@ -14599,19 +14599,19 @@
 <tr>
 <td align="left">~/debug/avoidance_debug_message_array</td>
 <td align="left"><code>tier4_planning_msgs::msg::AvoidanceDebugMsgArray</code></td>
-<td align="left">debug message for avoidance. notify users reasons for avoidance path cannot be generated.</td>
+<td align="left">Debug message for avoidance. Notifies users of reasons avoidance path cannot be generated</td>
 <td><code>volatile</code></td>
 </tr>
 <tr>
 <td align="left">~/debug/lane_change_debug_message_array</td>
 <td align="left"><code>tier4_planning_msgs::msg::LaneChangeDebugMsgArray</code></td>
-<td align="left">debug message for lane change. notify users unsafe reason during lane changing process</td>
+<td align="left">Debug message for lane change. Notifies users of unsafe conditions during lane-changing process</td>
 <td><code>volatile</code></td>
 </tr>
 <tr>
 <td align="left">~/debug/maximum_drivable_area</td>
 <td align="left"><code>visualization_msgs::msg::MarkerArray</code></td>
-<td align="left">shows maximum static drivable area.</td>
+<td align="left">Shows maximum static drivable area</td>
 <td><code>volatile</code></td>
 </tr>
 <tr>
@@ -14623,30 +14623,30 @@
 <tr>
 <td align="left">~/debug/bound</td>
 <td align="left"><code>visualization_msgs::msg::MarkerArray</code></td>
-<td align="left">debug for static drivable area</td>
+<td align="left">Debug for static drivable area</td>
 <td><code>volatile</code></td>
 </tr>
 <tr>
 <td align="left">~/planning/path_candidate/*</td>
 <td align="left"><code>autoware_planning_msgs::msg::Path</code></td>
-<td align="left">the path before approval.</td>
+<td align="left">The path before approval</td>
 <td><code>volatile</code></td>
 </tr>
 <tr>
 <td align="left">~/planning/path_reference/*</td>
 <td align="left"><code>autoware_planning_msgs::msg::Path</code></td>
-<td align="left">reference path generated by each modules.</td>
+<td align="left">Reference path generated by each module</td>
 <td><code>volatile</code></td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For specific information of which topics are being subscribed and published, refer to <a href="https://github.com/autowarefoundation/autoware.universe/blob/9000f430c937764c14e43109539302f1f878ed70/planning/behavior_path_planner/launch/behavior_path_planner.launch.xml#L36-L49">behavior_path_planner.xml</a>.</p>
+<p>For specific information about which topics are being subscribed to and published, refer to <a href="https://github.com/autowarefoundation/autoware.universe/blob/9000f430c937764c14e43109539302f1f878ed70/planning/behavior_path_planner/launch/behavior_path_planner.launch.xml#L36-L49">behavior_path_planner.xml</a>.</p>
 </div>
-<h2 id="how-to-enable-or-disable-the-modules">How to enable or disable the modules<a class="headerlink" href="#how-to-enable-or-disable-the-modules" title="Permanent link">#</a></h2>
-<p>Enabling and disabling the modules in the behavior path planner is primarily managed through two key files: <code>default_preset.yaml</code> and <code>behavior_path_planner.launch.xml</code>.</p>
-<p>The <code>default_preset.yaml</code> file acts as a configuration file for enabling or disabling specific modules within the planner. It contains a series of arguments which represent the behavior path planner's modules or features. For example:</p>
+<h2 id="how-to-enable-or-disable-modules">How to Enable or Disable Modules<a class="headerlink" href="#how-to-enable-or-disable-modules" title="Permanent link">#</a></h2>
+<p>Enabling and disabling the modules in the Behavior Path Planner is primarily managed through two key files: <code>default_preset.yaml</code> and <code>behavior_path_planner.launch.xml</code>.</p>
+<p>The <code>default_preset.yaml</code> file acts as a configuration file for enabling or disabling specific modules within the planner. It contains a series of arguments which represent the Behavior Path Planner's modules or features. For example:</p>
 <ul>
 <li><code>launch_static_obstacle_avoidance_module</code>: Set to <code>true</code> to enable the avoidance module, or <code>false</code> to disable it.</li>
 </ul>
@@ -14654,22 +14654,21 @@
 <p class="admonition-title">Note</p>
 <p>Click <a href="https://github.com/autowarefoundation/autoware_launch/blob/main/autoware_launch/config/planning/preset/default_preset.yaml">here</a> to view the <code>default_preset.yaml</code>.</p>
 </div>
-<p>The <code>behavior_path_planner.launch.xml</code> file references the settings defined in <code>default_preset.yaml</code> to apply the configurations when the behavior path planner's node is running. For instance, the parameter <code>static_obstacle_avoidance.enable_module</code> in</p>
+<p>The <code>behavior_path_planner.launch.xml</code> file references the settings defined in <code>default_preset.yaml</code> to apply the configurations when the Behavior Path Planner's node is running. For instance, the parameter <code>static_obstacle_avoidance.enable_module</code> in the following segment corresponds to launch_static_obstacle_avoidance_module from <code>default_preset.yaml</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;param</span><span class="w"> </span><span class="na">name=</span><span class="s">"static_obstacle_avoidance.enable_module"</span><span class="w"> </span><span class="na">value=</span><span class="s">"$(var launch_static_obstacle_avoidance_module)"</span><span class="nt">/&gt;</span>
 </code></pre></div>
-<p>corresponds to launch_static_obstacle_avoidance_module from <code>default_preset.yaml</code>.</p>
 <p>Therefore, to enable or disable a module, simply set the corresponding module in <code>default_preset.yaml</code> to <code>true</code> or <code>false</code>. These changes will be applied upon the next launch of Autoware.</p>
 <h2 id="generating-path">Generating Path<a class="headerlink" href="#generating-path" title="Permanent link">#</a></h2>
 <p>A sophisticated methodology is used for path generation, particularly focusing on maneuvers like lane changes and avoidance. At the core of this design is the smooth lateral shifting of the reference path, achieved through a constant-jerk profile. This approach ensures a consistent rate of change in acceleration, facilitating smooth transitions and minimizing abrupt changes in lateral dynamics, crucial for passenger comfort and safety.</p>
 <p>The design involves complex mathematical formulations for calculating the lateral shift of the vehicle's path over time. These calculations include determining lateral displacement, velocity, and acceleration, while considering the vehicle's lateral acceleration and velocity limits. This is essential for ensuring that the vehicle's movements remain safe and manageable.</p>
 <p>The <code>ShiftLine</code> struct (as seen <a href="https://github.com/autowarefoundation/autoware.universe/blob/9000f430c937764c14e43109539302f1f878ed70/planning/behavior_path_planner/include/behavior_path_planner/utils/path_shifter/path_shifter.hpp#L35-L48">here</a>) is utilized to represent points along the path where the lateral shift starts and ends. It includes details like the start and end points in absolute coordinates, the relative shift lengths at these points compared to the reference path, and the associated indexes on the reference path. This struct is integral to managing the path shifts, as it allows the path planner to dynamically adjust the trajectory based on the vehicle's current position and planned maneuver.</p>
 <p>Furthermore, the design and its implementation incorporate various equations and mathematical models to calculate essential parameters for the path shift. These include the total distance of the lateral shift, the maximum allowable lateral acceleration and jerk, and the total time required for the shift. Practical considerations are also noted, such as simplifying assumptions in the absence of a specific time interval for most lane change and avoidance cases.</p>
-<p>The shifted path generation logic enables the behavior path planner to dynamically generate safe and efficient paths, precisely controlling the vehicle’s lateral movements to ensure the smooth execution of lane changes and avoidance maneuvers. This careful planning and execution adhere to the vehicle's dynamic capabilities and safety constraints, maximizing efficiency and safety in autonomous vehicle navigation.</p>
+<p>The shifted path generation logic enables the Behavior Path Planner to dynamically generate safe and efficient paths, precisely controlling the vehicle’s lateral movements to ensure the smooth execution of lane changes and avoidance maneuvers. This careful planning and execution adhere to the vehicle's dynamic capabilities and safety constraints, maximizing efficiency and safety in autonomous vehicle navigation.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you're a math lover, refer to <a href="../autoware_behavior_path_planner_common/docs/behavior_path_planner_path_generation_design/">Path Generation Design</a> for the nitty-gritty.</p>
 </div>
-<h2 id="collision-assessment-safety-check">Collision Assessment / Safety check<a class="headerlink" href="#collision-assessment-safety-check" title="Permanent link">#</a></h2>
+<h2 id="collision-assessment-safety-check">Collision Assessment / Safety Check<a class="headerlink" href="#collision-assessment-safety-check" title="Permanent link">#</a></h2>
 <p>The purpose of the collision assessment function in the Behavior Path Planner is to evaluate the potential for collisions with target objects across all modules. It is utilized in two scenarios:</p>
 <ol>
 <li>During candidate path generation, to ensure that the generated candidate path is collision-free.</li>
@@ -14699,7 +14698,7 @@
 <p>Static drivable area expansion operates under assumptions about the correct arrangement of lanes and the coverage of both the front and rear of the vehicle within the left and right boundaries. Key parameters for drivable area generation include extra footprint offsets for the ego vehicle, the handling of dynamic objects, maximum expansion distance, and specific methods for expansion. Additionally, since each module generates its own drivable area, before passing it as the input to generate the next running module's drivable area, or before generating a unified drivable area, the system sorts drivable lanes based on the vehicle's passage order. This ensures the correct definition of the lanes used in drivable area generation.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Further details can is provided in <a href="../autoware_behavior_path_planner_common/docs/behavior_path_planner_drivable_area_design/">Drivable Area Design</a>.</p>
+<p>Further details can be found in <a href="../autoware_behavior_path_planner_common/docs/behavior_path_planner_drivable_area_design/">Drivable Area Design</a>.</p>
 </div>
 <h3 id="dynamic-drivable-area-logic">Dynamic Drivable Area Logic<a class="headerlink" href="#dynamic-drivable-area-logic" title="Permanent link">#</a></h3>
 <p>Large vehicles require much more space, which sometimes causes them to veer out of their current lane. A typical example being a bus making a turn at a corner. In such cases, relying on a static drivable area is insufficient, since the static method depends on lane information provided by high-definition maps. To overcome the limitations of the static approach, the dynamic drivable area expansion algorithm adjusts the navigable space for an autonomous vehicle in real-time. It conserves computational power by reusing previously calculated path data, updating only when there is a significant change in the vehicle's position. The system evaluates the minimum lane width necessary to accommodate the vehicle's turning radius and other dynamic factors. It then calculates the optimal expansion of the drivable area's boundaries to ensure there is adequate space for safe maneuvering, taking into account the vehicle's path curvature. The rate at which these boundaries can expand or contract is moderated to maintain stability in the vehicle's navigation. The algorithm aims to maximize the drivable space while avoiding fixed obstacles and adhering to legal driving limits. Finally, it applies these boundary adjustments and smooths out the path curvature calculations to ensure a safe and legally compliant navigable path is maintained throughout the vehicle's operation.</p>
@@ -14718,7 +14717,7 @@
 <h2 id="rerouting">Rerouting<a class="headerlink" href="#rerouting" title="Permanent link">#</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Rerouting is a feature that was still under progress. Further information will be included on a later date.</p>
+<p>The rerouting feature is under development. Further information will be included at a later date.</p>
 </div>
 <h2 id="parameters-and-configuration">Parameters and Configuration<a class="headerlink" href="#parameters-and-configuration" title="Permanent link">#</a></h2>
 <p>The <a href="https://github.com/autowarefoundation/autoware_launch/tree/main/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner">configuration files</a> are organized in a hierarchical directory structure for ease of navigation and management. Each subdirectory contains specific configuration files relevant to its module. The root directory holds general configuration files that apply to the overall behavior of the planner. The following is an overview of the directory structure with the respective configuration files.</p>
@@ -14753,8 +14752,8 @@
 </code></pre></div>
 <h2 id="limitations-future-work">Limitations &amp; Future Work<a class="headerlink" href="#limitations-future-work" title="Permanent link">#</a></h2>
 <ol>
-<li>Goal Planner module cannot be simultaneously executed together with other modules.</li>
-<li>Module is not designed as plugin. Integrating custom module is not straightforward and user have to modify some part of the behavior path planner main code.</li>
+<li>The Goal Planner module cannot be simultaneously executed together with other modules.</li>
+<li>The module is not designed as a plugin. Integrating a custom module is not straightforward. Users have to modify part of the Behavior Path Planner's main code.</li>
 </ol></div>
 
 
