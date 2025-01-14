@@ -2423,3 +2423,222 @@ TEST(geometry, intersectConcavePolygonRand)
     std::printf("\tTotal:\n\t\tTriangulation = %2.2f ms\n", triangulation_ns / 1e6);
   }
 }
+
+bool polygon_equal(
+  const autoware::universe_utils::Polygon2d & A, const autoware::universe_utils::Polygon2d & B,
+  double max_difference_threshold, bool area = false)
+{
+  const auto & outer_A = A.outer();
+  const auto & outer_B = B.outer();
+
+  int n = outer_A.size() - 1;
+  int m = outer_B.size() - 1;
+  std::cout << n << ", " << m << "\n";
+
+  if (n != m || area) {
+    std::vector<autoware::universe_utils::Polygon2d> diff;
+    boost::geometry::difference(A, B, diff);
+    double area_diff = 0.0;
+    for (const auto & poly : diff) {
+      area_diff += boost::geometry::area(poly);
+    }
+    if (area_diff < 1e-6) {
+      return true;
+    } else {
+      std::printf("Area Difference: %2.8f%% \n", area_diff / boost::geometry::area(A) * 100);
+      return false;
+    }
+  }
+
+  int start_index_B = -1;
+  double min_distance = std::numeric_limits<double>::max();
+
+  for (int i = 0; i < m; ++i) {
+    double dist = boost::geometry::distance(outer_A[0], outer_B[i]) +
+                  boost::geometry::distance(outer_A[1], outer_B[i + 1]);
+    if (dist < min_distance) {
+      min_distance = dist;
+      start_index_B = i;
+    }
+  }
+
+  if (start_index_B == -1) {
+    std::cout << "No common starting point found\n";
+    return false;
+  }
+
+  std::vector<autoware::universe_utils::Point2d> rotated_B(outer_B.begin(), outer_B.end() - 1);
+  std::rotate(rotated_B.begin(), rotated_B.begin() + start_index_B, rotated_B.end());
+
+  for (int i = 0; i < n - 1; ++i) {
+    double x_diff = std::abs(outer_A[i].x() - rotated_B[i].x());
+    double y_diff = std::abs(outer_A[i].y() - rotated_B[i].y());
+
+    if (x_diff >= max_difference_threshold || y_diff >= max_difference_threshold) {
+      std::cout << outer_A[i].x() << ", " << outer_A[i].y() << ": A\n";
+      std::cout << rotated_B[i].x() << ", " << rotated_B[i].y() << ": B\n";
+      std::cout << std::abs(rotated_B[i].x() - outer_A[i].x()) << ", "
+                << std::abs(rotated_B[i].y() - outer_A[i].y()) << ": Difference\n";
+      return false;
+    }
+  }
+
+  return true;
+}
+
+bool polygon_equal_vector(
+  std::vector<autoware::universe_utils::Polygon2d> & customPolygons,
+  std::vector<autoware::universe_utils::Polygon2d> & boostPolygons, double max_difference_threshold)
+{
+  std::sort(
+    customPolygons.begin(), customPolygons.end(),
+    [](
+      const autoware::universe_utils::Polygon2d & a,
+      const autoware::universe_utils::Polygon2d & b) {
+      return std::abs(boost::geometry::area(a)) < std::abs(boost::geometry::area(b));
+    });
+
+  std::sort(
+    boostPolygons.begin(), boostPolygons.end(),
+    [](
+      const autoware::universe_utils::Polygon2d & a,
+      const autoware::universe_utils::Polygon2d & b) {
+      return std::abs(boost::geometry::area(a)) < std::abs(boost::geometry::area(b));
+    });
+
+  if (customPolygons.size() != boostPolygons.size()) {
+    double customArea = 0.0;
+    double boostArea = 0.0;
+
+    for (const auto & polygon : customPolygons) {
+      customArea += boost::geometry::area(polygon);
+    }
+
+    for (const auto & polygon : boostPolygons) {
+      boostArea += boost::geometry::area(polygon);
+    }
+
+    if (std::abs(customArea - boostArea) < 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  for (size_t i = 0; i < customPolygons.size(); ++i) {
+    if (!polygon_equal(customPolygons[i], boostPolygons[i], max_difference_threshold)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+TEST(geometry, BufferPolygonAndPointComparisonWithStrategies)
+{
+  std::vector<autoware::universe_utils::Polygon2d> polygons;
+  std::vector<autoware::universe_utils::Point2d> points;
+
+  constexpr auto polygons_nb = 100;
+  constexpr auto points_nb = 50;
+  constexpr auto max_vertices = 10;
+  constexpr auto max_values = 1000;
+  constexpr double offsetDistance = 100.0;
+  constexpr double segment = 32.0;
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<> dis(0.0, max_values);
+
+  autoware::universe_utils::StopWatch<std::chrono::nanoseconds, std::chrono::nanoseconds> sw;
+
+  for (auto vertices = 4UL; vertices < max_vertices; ++vertices) {
+    double custom_buffer_polygon_ns = 0.0;
+    double boost_buffer_polygon_ns = 0.0;
+    double custom_buffer_point_ns = 0.0;
+    double boost_buffer_point_ns = 0.0;
+
+    int count_matching_polygon_buffer = 0;
+    int count_different_polygon_buffer = 0;
+
+    int count_matching_point_buffer = 0;
+    int count_different_point_buffer = 0;
+
+    polygons.clear();
+
+    for (auto i = 0; i < polygons_nb; ++i) {
+      auto polygon_opt = autoware::universe_utils::random_concave_polygon(vertices, max_values);
+      if (polygon_opt.has_value()) {
+        polygons.push_back(polygon_opt.value());
+      }
+    }
+
+    for (auto i = 0; i < points_nb; ++i) {
+      points.push_back(autoware::universe_utils::Point2d(dis(gen), dis(gen)));
+    }
+
+    boost::geometry::strategy::buffer::distance_symmetric<double> distance_strategy(offsetDistance);
+    boost::geometry::strategy::buffer::join_round join_strategy(segment);
+    boost::geometry::strategy::buffer::end_round end_strategy(segment);
+    boost::geometry::strategy::buffer::point_circle circle_strategy(segment);
+    boost::geometry::strategy::buffer::side_straight side_strategy;
+
+    for (const auto & polygon_ : polygons) {
+      sw.tic();
+      autoware::universe_utils::Polygon2d offsetPolygon = buffer(polygon_, offsetDistance, segment);
+      custom_buffer_polygon_ns += sw.toc();
+
+      boost::geometry::model::multi_polygon<autoware::universe_utils::Polygon2d>
+        boost_offsetPolygon;
+      sw.tic();
+      boost::geometry::buffer(
+        polygon_, boost_offsetPolygon, distance_strategy, side_strategy, join_strategy,
+        end_strategy, circle_strategy);
+      boost_buffer_polygon_ns += sw.toc();
+
+      bool buffer_polygon_match =
+        polygon_equal(offsetPolygon, boost_offsetPolygon[0], epsilon, true);
+      if (buffer_polygon_match) {
+        ++count_matching_polygon_buffer;
+      } else {
+        for (size_t k = 0; k < polygon_.outer().size() - 1; ++k) {
+          const auto & point = polygon_.outer()[k];
+          auto x = point.x();
+          auto y = point.y();
+          std::cout << "original polygon point: (" << x << ", " << y << ")\n";
+        }
+        std::cout << "end\n";
+        ++count_different_polygon_buffer;
+      }
+    }
+
+    for (const auto & point : points) {
+      sw.tic();
+      autoware::universe_utils::Polygon2d offsetPoint = buffer(point, offsetDistance, segment);
+      custom_buffer_point_ns += sw.toc();
+
+      boost::geometry::model::multi_polygon<autoware::universe_utils::Polygon2d> boost_offsetPoint;
+      sw.tic();
+      boost::geometry::buffer(
+        point, boost_offsetPoint, distance_strategy, side_strategy, join_strategy, end_strategy,
+        circle_strategy);
+      boost_buffer_point_ns += sw.toc();
+
+      bool buffer_point_match = polygon_equal(offsetPoint, boost_offsetPoint[0], epsilon, false);
+      if (buffer_point_match) {
+        ++count_matching_point_buffer;
+      } else {
+        ++count_different_point_buffer;
+      }
+    }
+    std::printf("Buffer Performance Comparison with Strategies (%ld Vertices):\n", vertices);
+    std::printf("\tCustom Buffer (Polygons): %2.2f ms\n", custom_buffer_polygon_ns / 1e6);
+    std::printf("\tBoost Buffer (Polygons):  %2.2f ms\n", boost_buffer_polygon_ns / 1e6);
+    std::printf("\tCustom Buffer (Points):   %2.2f ms\n", custom_buffer_point_ns / 1e6);
+    std::printf("\tBoost Buffer (Points):    %2.2f ms\n", boost_buffer_point_ns / 1e6);
+    std::printf(
+      "\t\tMatching Polygon = %d\n\t\tDifferent Polygon = %d\n", count_matching_polygon_buffer,
+      count_different_polygon_buffer);
+    std::printf(
+      "\t\tMatching Point = %d\n\t\tDifferent Point = %d\n", count_matching_point_buffer,
+      count_different_point_buffer);
+  }
+}

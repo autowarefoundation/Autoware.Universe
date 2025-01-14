@@ -18,6 +18,7 @@
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
 #include <optional>
+#include <random>
 #include <vector>
 
 namespace autoware::universe_utils
