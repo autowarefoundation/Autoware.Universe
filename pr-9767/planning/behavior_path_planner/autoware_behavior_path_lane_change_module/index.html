@@ -14686,6 +14686,18 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
   </table>
 </div>
 
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The planner can be enabled or disabled using the <code>frenet.enable</code> flag.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since only a segment of the target lane is used as input to generate the lane change path, the end pose of the lane change segment may not smoothly connect to the target lane centerline. To address this, increase the value of <code>frenet.th_curvature_smoothing</code> to improve the smoothness.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The yaw difference threshold (<code>frenet.th_yaw_diff</code>) limits the maximum curvature difference between the end of the prepare segment and the lane change segment. This threshold might prevent the generation of a lane change path when the lane curvature is high. In such cases, you can increase the frenet.th_yaw_diff value. However, note that if the prepare path was initially shifted by other modules, the resultant steering may not be continuous.</p>
+</div>
 <h2 id="aborting-a-previously-approved-lane-change">Aborting a Previously Approved Lane Change<a class="headerlink" href="#aborting-a-previously-approved-lane-change" title="Permanent link">#</a></h2>
 <p>Once the lane change path is approved, there are several situations where we may need to abort the maneuver. The abort process is triggered when any of the following conditions is met</p>
 <ol>
