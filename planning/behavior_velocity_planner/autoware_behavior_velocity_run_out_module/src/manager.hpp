@@ -25,7 +25,7 @@
 
 namespace autoware::behavior_velocity_planner
 {
-class RunOutModuleManager : public SceneModuleManagerInterface
+class RunOutModuleManager : public SceneModuleManagerInterface<>
 {
 public:
   explicit RunOutModuleManager(rclcpp::Node & node);

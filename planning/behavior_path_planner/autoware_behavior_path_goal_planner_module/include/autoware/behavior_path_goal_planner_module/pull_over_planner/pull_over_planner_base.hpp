@@ -33,6 +33,7 @@ namespace autoware::behavior_path_planner
 {
 enum class PullOverPlannerType {
   SHIFT,
+  BEZIER,
   ARC_FORWARD,
   ARC_BACKWARD,
   FREESPACE,
@@ -129,7 +130,7 @@ public:
   virtual std::optional<PullOverPath> plan(
     const GoalCandidate & modified_goal_pose, const size_t id,
     const std::shared_ptr<const PlannerData> planner_data,
-    const BehaviorModuleOutput & previous_module_output) = 0;
+    const BehaviorModuleOutput & upstream_module_output) = 0;
 
 protected:
   const autoware::vehicle_info_utils::VehicleInfo vehicle_info_;

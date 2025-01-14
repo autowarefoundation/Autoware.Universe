@@ -22,12 +22,12 @@
 #include "object_manager.hpp"
 #include "result.hpp"
 
-#include <autoware/behavior_velocity_planner_common/scene_module_interface.hpp>
 #include <autoware/behavior_velocity_planner_common/utilization/state_machine.hpp>
+#include <autoware/behavior_velocity_rtc_interface/scene_module_interface_with_rtc.hpp>
 #include <autoware/motion_utils/marker/virtual_wall_marker_creator.hpp>
 #include <rclcpp/rclcpp.hpp>
 
-#include <tier4_debug_msgs/msg/float64_multi_array_stamped.hpp>
+#include <autoware_internal_debug_msgs/msg/float64_multi_array_stamped.hpp>
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/Forward.h>
@@ -46,7 +46,7 @@
 namespace autoware::behavior_velocity_planner
 {
 
-class IntersectionModule : public SceneModuleInterface
+class IntersectionModule : public SceneModuleInterfaceWithRTC
 {
 public:
   struct PlannerParam
@@ -748,7 +748,7 @@ private:
     const PathLanelets & path_lanelets, const TimeDistanceArray & time_distance_array,
     const TrafficPrioritizedLevel & traffic_prioritized_level,
     const bool passed_1st_judge_line_first_time, const bool passed_2nd_judge_line_first_time,
-    tier4_debug_msgs::msg::Float64MultiArrayStamped * object_ttc_time_array);
+    autoware_internal_debug_msgs::msg::Float64MultiArrayStamped * object_ttc_time_array);
 
   void cutPredictPathWithinDuration(
     const builtin_interfaces::msg::Time & object_stamp, const double time_thr,
@@ -809,13 +809,15 @@ private:
   TimeDistanceArray calcIntersectionPassingTime(
     const tier4_planning_msgs::msg::PathWithLaneId & path, const bool is_prioritized,
     const IntersectionStopLines & intersection_stoplines,
-    tier4_debug_msgs::msg::Float64MultiArrayStamped * ego_ttc_array) const;
+    autoware_internal_debug_msgs::msg::Float64MultiArrayStamped * ego_ttc_array) const;
   /** @} */
 
   mutable DebugData debug_data_;
   mutable InternalDebugData internal_debug_data_{};
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float64MultiArrayStamped>::SharedPtr ego_ttc_pub_;
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float64MultiArrayStamped>::SharedPtr object_ttc_pub_;
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float64MultiArrayStamped>::SharedPtr
+    ego_ttc_pub_;
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float64MultiArrayStamped>::SharedPtr
+    object_ttc_pub_;
 };
 
 }  // namespace autoware::behavior_velocity_planner

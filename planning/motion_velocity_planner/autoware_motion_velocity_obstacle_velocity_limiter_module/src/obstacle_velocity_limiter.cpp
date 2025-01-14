@@ -29,7 +29,7 @@ namespace autoware::motion_velocity_planner::obstacle_velocity_limiter
 {
 
 multi_polygon_t createPolygonMasks(
-  const autoware_perception_msgs::msg::PredictedObjects & dynamic_obstacles, const double buffer,
+  const std::vector<PlannerData::Object> & dynamic_obstacles, const double buffer,
   const double min_vel)
 {
   return createObjectPolygons(dynamic_obstacles, buffer, min_vel);

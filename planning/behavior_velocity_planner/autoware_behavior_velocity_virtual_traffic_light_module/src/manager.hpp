@@ -20,16 +20,20 @@
 #include <autoware/behavior_velocity_planner_common/plugin_interface.hpp>
 #include <autoware/behavior_velocity_planner_common/plugin_wrapper.hpp>
 #include <autoware/behavior_velocity_planner_common/scene_module_interface.hpp>
+#include <autoware/universe_utils/ros/polling_subscriber.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <tier4_v2x_msgs/msg/infrastructure_command_array.hpp>
+#include <tier4_v2x_msgs/msg/virtual_traffic_light_state_array.hpp>
 
 #include <functional>
 #include <memory>
 
 namespace autoware::behavior_velocity_planner
 {
-class VirtualTrafficLightModuleManager : public SceneModuleManagerInterface
+class VirtualTrafficLightModuleManager
+: public SceneModuleManagerInterface<VirtualTrafficLightModule>
 {
 public:
   explicit VirtualTrafficLightModuleManager(rclcpp::Node & node);
@@ -38,10 +42,20 @@ public:
 
 private:
   VirtualTrafficLightModule::PlannerParam planner_param_;
+
+  void modifyPathVelocity(tier4_planning_msgs::msg::PathWithLaneId * path) override;
+
   void launchNewModules(const tier4_planning_msgs::msg::PathWithLaneId & path) override;
 
-  std::function<bool(const std::shared_ptr<SceneModuleInterface> &)> getModuleExpiredFunction(
+  std::function<bool(const std::shared_ptr<VirtualTrafficLightModule> &)> getModuleExpiredFunction(
     const tier4_planning_msgs::msg::PathWithLaneId & path) override;
+
+  autoware::universe_utils::InterProcessPollingSubscriber<
+    tier4_v2x_msgs::msg::VirtualTrafficLightStateArray>::SharedPtr
+    sub_virtual_traffic_light_states_;
+
+  rclcpp::Publisher<tier4_v2x_msgs::msg::InfrastructureCommandArray>::SharedPtr
+    pub_infrastructure_commands_;
 };
 
 class VirtualTrafficLightModulePlugin : public PluginWrapper<VirtualTrafficLightModuleManager>

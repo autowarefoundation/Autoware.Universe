@@ -124,22 +124,22 @@ LidarMarkerLocalizer::LidarMarkerLocalizer(const rclcpp::NodeOptions & node_opti
   tf_buffer_ = std::make_shared<tf2_ros::Buffer>(this->get_clock());
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_, this, false);
 
-  diagnostics_module_.reset(
-    new autoware::localization_util::DiagnosticsModule(this, "marker_detection_status"));
+  diagnostics_interface_.reset(
+    new autoware::universe_utils::DiagnosticsInterface(this, "marker_detection_status"));
 }
 
 void LidarMarkerLocalizer::initialize_diagnostics()
 {
-  diagnostics_module_->clear();
-  diagnostics_module_->add_key_value("is_received_map", false);
-  diagnostics_module_->add_key_value("is_received_self_pose", false);
-  diagnostics_module_->add_key_value("detect_marker_num", 0);
-  diagnostics_module_->add_key_value("distance_self_pose_to_nearest_marker", 0.0);
-  diagnostics_module_->add_key_value(
+  diagnostics_interface_->clear();
+  diagnostics_interface_->add_key_value("is_received_map", false);
+  diagnostics_interface_->add_key_value("is_received_self_pose", false);
+  diagnostics_interface_->add_key_value("detect_marker_num", 0);
+  diagnostics_interface_->add_key_value("distance_self_pose_to_nearest_marker", 0.0);
+  diagnostics_interface_->add_key_value(
     "limit_distance_from_self_pose_to_nearest_marker",
     param_.limit_distance_from_self_pose_to_nearest_marker);
-  diagnostics_module_->add_key_value("distance_lanelet2_marker_to_detected_marker", 0.0);
-  diagnostics_module_->add_key_value(
+  diagnostics_interface_->add_key_value("distance_lanelet2_marker_to_detected_marker", 0.0);
+  diagnostics_interface_->add_key_value(
     "limit_distance_from_lanelet2_marker_to_detected_marker",
     param_.limit_distance_from_self_pose_to_marker);
 }
@@ -176,7 +176,7 @@ void LidarMarkerLocalizer::points_callback(const PointCloud2::ConstSharedPtr & p
 
   main_process(points_msg_ptr);
 
-  diagnostics_module_->publish(sensor_ros_time);
+  diagnostics_interface_->publish(sensor_ros_time);
 }
 
 void LidarMarkerLocalizer::main_process(const PointCloud2::ConstSharedPtr & points_msg_ptr)
@@ -186,13 +186,13 @@ void LidarMarkerLocalizer::main_process(const PointCloud2::ConstSharedPtr & poin
   // (1) check if the map have be received
   const std::vector<landmark_manager::Landmark> map_landmarks = landmark_manager_.get_landmarks();
   const bool is_received_map = !map_landmarks.empty();
-  diagnostics_module_->add_key_value("is_received_map", is_received_map);
+  diagnostics_interface_->add_key_value("is_received_map", is_received_map);
   if (!is_received_map) {
     std::stringstream message;
     message << "Not receive the landmark information. Please check if the vector map is being "
             << "published and if the landmark information is correctly specified.";
     RCLCPP_INFO_STREAM_THROTTLE(this->get_logger(), *this->get_clock(), 1000, message.str());
-    diagnostics_module_->update_level_and_message(
+    diagnostics_interface_->update_level_and_message(
       diagnostic_msgs::msg::DiagnosticStatus::WARN, message.str());
     return;
   }
@@ -202,13 +202,13 @@ void LidarMarkerLocalizer::main_process(const PointCloud2::ConstSharedPtr & poin
     interpolate_result = ekf_pose_buffer_->interpolate(sensor_ros_time);
 
   const bool is_received_self_pose = interpolate_result != std::nullopt;
-  diagnostics_module_->add_key_value("is_received_self_pose", is_received_self_pose);
+  diagnostics_interface_->add_key_value("is_received_self_pose", is_received_self_pose);
   if (!is_received_self_pose) {
     std::stringstream message;
     message << "Could not get self_pose. Please check if the self pose is being published and if "
             << "the timestamp of the self pose is correctly specified";
     RCLCPP_INFO_STREAM_THROTTLE(this->get_logger(), *this->get_clock(), 1000, message.str());
-    diagnostics_module_->update_level_and_message(
+    diagnostics_interface_->update_level_and_message(
       diagnostic_msgs::msg::DiagnosticStatus::WARN, message.str());
     return;
   }
@@ -221,7 +221,7 @@ void LidarMarkerLocalizer::main_process(const PointCloud2::ConstSharedPtr & poin
     detect_landmarks(points_msg_ptr);
 
   const bool is_detected_marker = !detected_landmarks.empty();
-  diagnostics_module_->add_key_value("detect_marker_num", detected_landmarks.size());
+  diagnostics_interface_->add_key_value("detect_marker_num", detected_landmarks.size());
 
   // (4) check distance to the nearest marker
   const landmark_manager::Landmark nearest_marker = get_nearest_landmark(self_pose, map_landmarks);
@@ -230,7 +230,7 @@ void LidarMarkerLocalizer::main_process(const PointCloud2::ConstSharedPtr & poin
 
   const double distance_from_self_pose_to_nearest_marker =
     std::abs(nearest_marker_pose_on_base_link.position.x);
-  diagnostics_module_->add_key_value(
+  diagnostics_interface_->add_key_value(
     "distance_self_pose_to_nearest_marker", distance_from_self_pose_to_nearest_marker);
 
   const bool is_exist_marker_within_self_pose =
@@ -242,14 +242,14 @@ void LidarMarkerLocalizer::main_process(const PointCloud2::ConstSharedPtr & poin
       std::stringstream message;
       message << "Could not detect marker, because the distance from self_pose to nearest_marker "
               << "is too far (" << distance_from_self_pose_to_nearest_marker << " [m]).";
-      diagnostics_module_->update_level_and_message(
+      diagnostics_interface_->update_level_and_message(
         diagnostic_msgs::msg::DiagnosticStatus::OK, message.str());
     } else {
       std::stringstream message;
       message << "Could not detect marker, although the distance from self_pose to nearest_marker "
               << "is near (" << distance_from_self_pose_to_nearest_marker << " [m]).";
       RCLCPP_INFO_STREAM_THROTTLE(this->get_logger(), *this->get_clock(), 1000, message.str());
-      diagnostics_module_->update_level_and_message(
+      diagnostics_interface_->update_level_and_message(
         diagnostic_msgs::msg::DiagnosticStatus::WARN, message.str());
     }
     return;
@@ -279,13 +279,13 @@ void LidarMarkerLocalizer::main_process(const PointCloud2::ConstSharedPtr & poin
   const bool is_exist_marker_within_lanelet2_map =
     diff_norm < param_.limit_distance_from_self_pose_to_marker;
 
-  diagnostics_module_->add_key_value("distance_lanelet2_marker_to_detected_marker", diff_norm);
+  diagnostics_interface_->add_key_value("distance_lanelet2_marker_to_detected_marker", diff_norm);
   if (!is_exist_marker_within_lanelet2_map) {
     std::stringstream message;
     message << "The distance from lanelet2 to the detect marker is too far(" << diff_norm
             << " [m]). The limit is " << param_.limit_distance_from_self_pose_to_marker << ".";
     RCLCPP_INFO_STREAM_THROTTLE(this->get_logger(), *this->get_clock(), 1000, message.str());
-    diagnostics_module_->update_level_and_message(
+    diagnostics_interface_->update_level_and_message(
       diagnostic_msgs::msg::DiagnosticStatus::WARN, message.str());
     return;
   }

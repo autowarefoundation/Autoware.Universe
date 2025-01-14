@@ -19,10 +19,10 @@ from collections import deque
 from copy import deepcopy
 
 from ament_index_python.packages import get_package_share_directory
+from autoware_internal_debug_msgs.msg import StringStamped
 import matplotlib.pyplot as plt
 import rclpy
 from rclpy.node import Node
-from tier4_debug_msgs.msg import StringStamped
 import yaml
 
 

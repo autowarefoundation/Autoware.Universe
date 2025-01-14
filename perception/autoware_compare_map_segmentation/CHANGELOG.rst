@@ -2,6 +2,37 @@
 Changelog for package autoware_compare_map_segmentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.40.0 (2024-12-12)
+-------------------
+* Merge branch 'main' into release-0.40.0
+* Revert "chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)"
+  This reverts commit c9f0f2688c57b0f657f5c1f28f036a970682e7f5.
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)
+  * chore(package.xml): bump version to 0.39.0
+  * fix: fix ticket links in CHANGELOG.rst
+  * fix: remove unnecessary diff
+  ---------
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(compare_map_segmentation): rename defined type (`#9181 <https://github.com/autowarefoundation/autoware.universe/issues/9181>`_)
+* fix(cpplint): include what you use - perception (`#9569 <https://github.com/autowarefoundation/autoware.universe/issues/9569>`_)
+* 0.39.0
+* update changelog
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(compare_map_segmentation): add maintainer (`#9371 <https://github.com/autowarefoundation/autoware.universe/issues/9371>`_)
+* fix(compare_map_segmentation): timer period mismatched with parameter (`#9259 <https://github.com/autowarefoundation/autoware.universe/issues/9259>`_)
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* fix(autoware_compare_map_segmentation): fix cppcheck constVariableReference (`#9196 <https://github.com/autowarefoundation/autoware.universe/issues/9196>`_)
+* Contributors: Esteve Fernandez, Fumiya Watanabe, M. Fatih Cırıt, Ryohsuke Mitsudome, Ryuta Kambe, Yutaka Kondo, badai nguyen
+
 0.39.0 (2024-11-25)
 -------------------
 * Merge commit '6a1ddbd08bd' into release-0.39.0

@@ -13,6 +13,7 @@ Metrics are calculated using the following information:
 - the previous trajectory `T(-1)`.
 - the _reference_ trajectory assumed to be used as the reference to plan `T(0)`.
 - the current ego pose.
+- the current ego odometry.
 - the set of objects in the environment.
 
 These information are maintained by an instance of class `MetricsCalculator`

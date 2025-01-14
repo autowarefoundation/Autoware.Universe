@@ -56,7 +56,7 @@ MapUpdateModule::MapUpdateModule(
 
 void MapUpdateModule::callback_timer(
   const bool is_activated, const std::optional<geometry_msgs::msg::Point> & position,
-  std::unique_ptr<DiagnosticsModule> & diagnostics_ptr)
+  std::unique_ptr<DiagnosticsInterface> & diagnostics_ptr)
 {
   // check is_activated
   diagnostics_ptr->add_key_value("is_activated", is_activated);
@@ -86,7 +86,8 @@ void MapUpdateModule::callback_timer(
 }
 
 bool MapUpdateModule::should_update_map(
-  const geometry_msgs::msg::Point & position, std::unique_ptr<DiagnosticsModule> & diagnostics_ptr)
+  const geometry_msgs::msg::Point & position,
+  std::unique_ptr<DiagnosticsInterface> & diagnostics_ptr)
 {
   last_update_position_mtx_.lock();
 
@@ -141,7 +142,8 @@ bool MapUpdateModule::out_of_map_range(const geometry_msgs::msg::Point & positio
 }
 
 void MapUpdateModule::update_map(
-  const geometry_msgs::msg::Point & position, std::unique_ptr<DiagnosticsModule> & diagnostics_ptr)
+  const geometry_msgs::msg::Point & position,
+  std::unique_ptr<DiagnosticsInterface> & diagnostics_ptr)
 {
   diagnostics_ptr->add_key_value("is_need_rebuild", need_rebuild_);
 
@@ -229,7 +231,7 @@ void MapUpdateModule::update_map(
 
 bool MapUpdateModule::update_ndt(
   const geometry_msgs::msg::Point & position, NdtType & ndt,
-  std::unique_ptr<DiagnosticsModule> & diagnostics_ptr)
+  std::unique_ptr<DiagnosticsInterface> & diagnostics_ptr)
 {
   diagnostics_ptr->add_key_value("maps_size_before", ndt.getCurrentMapIDs().size());
 

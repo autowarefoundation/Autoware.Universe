@@ -77,7 +77,7 @@
   <arg name="image_number" default="6" description="choose image raw number(1-8)"/>
   <arg name="use_vector_map" default="true" description="use vector map in prediction"/>
   <arg name="use_pointcloud_map" default="true" description="use pointcloud map in detection"/>
-  <arg name="use_low_height_cropbox" default="true" description="use low height crop filter in clustering"/>
+  <arg name="use_low_height_cropbox" default="true" description="use low height crop filter in the euclidean clustering"/>
   <arg name="use_object_filter" default="true" description="use object filter"/>
   <arg name="objects_filter_method" default="lanelet_filter" description="options: `lanelet_filter` or `position_filter`"/>
   <arg name="use_roi_based_cluster" default="true" description="use roi_based_cluster in clustering"/>
@@ -272,6 +272,7 @@
           <arg name="use_multi_channel_tracker_merger" value="$(var use_multi_channel_tracker_merger)"/>
           <arg name="use_radar_tracking_fusion" value="$(var use_radar_tracking_fusion)"/>
           <arg name="use_detection_by_tracker" value="$(var use_detection_by_tracker)"/>
+          <arg name="use_validator" value="$(var use_object_validator)"/>
         </include>
       </group>
 

@@ -14,6 +14,8 @@
       - lateral_deviation
       - yaw_deviation
       - velocity_deviation
+      - lateral_trajectory_displacement_local
+      - lateral_trajectory_displacement_lookahead
       - stability
       - stability_frechet
       - obstacle_distance
@@ -24,6 +26,7 @@
 
     trajectory:
       min_point_dist_m: 0.1 # [m] minimum distance between two successive points to use for angle calculation
+      evaluation_time_s: 5.0 # [s] time duration for trajectory evaluation in seconds
       lookahead:
         max_dist_m: 5.0 # [m] maximum distance from ego along the trajectory to use for calculation
         max_time_s: 3.0 # [s] maximum time ahead of ego along the trajectory to use for calculation

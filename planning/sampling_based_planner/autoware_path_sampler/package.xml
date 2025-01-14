@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_path_sampler</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>Package for the sampling-based path planner</description>
   <maintainer email="maxime.clement@tier4.jp">Maxime CLEMENT</maintainer>
   <license>Apache License 2.0</license>
@@ -15,6 +15,7 @@
 
   <depend>autoware_bezier_sampler</depend>
   <depend>autoware_frenet_planner</depend>
+  <depend>autoware_internal_debug_msgs</depend>
   <depend>autoware_interpolation</depend>
   <depend>autoware_motion_utils</depend>
   <depend>autoware_perception_msgs</depend>

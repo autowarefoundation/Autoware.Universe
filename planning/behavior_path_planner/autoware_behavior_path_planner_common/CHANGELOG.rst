@@ -2,6 +2,143 @@
 Changelog for package autoware_behavior_path_planner_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.40.0 (2024-12-12)
+-------------------
+* Merge branch 'main' into release-0.40.0
+* Revert "chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)"
+  This reverts commit c9f0f2688c57b0f657f5c1f28f036a970682e7f5.
+* build(behavior_path_planner_common): fix #include <rclcpp/clock.hpp> (`#6297 <https://github.com/autowarefoundation/autoware.universe/issues/6297>`_)
+* feat(behavior_path_planner): add detail text to virutal wall (`#9600 <https://github.com/autowarefoundation/autoware.universe/issues/9600>`_)
+  * feat(behavior_path_planner): add detail text to virutal wall
+  * goal is far
+  * pull over start pose is far
+  * fix lc build
+  * fix build
+  * Update planning/behavior_path_planner/autoware_behavior_path_goal_planner_module/src/goal_planner_module.cpp
+  ---------
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* fix(lane_change): check obj predicted path when filtering (`#9385 <https://github.com/autowarefoundation/autoware.universe/issues/9385>`_)
+  * RT1-8537 check object's predicted path when filtering
+  * use ranges view in get_line_string_paths
+  * check only vehicle type predicted path
+  * Refactor naming
+  * fix grammatical
+  * Update planning/behavior_path_planner/autoware_behavior_path_lane_change_module/src/utils/utils.cpp
+  Co-authored-by: Maxime CLEMENT <78338830+maxime-clem@users.noreply.github.com>
+  * precommit and grammar fix
+  ---------
+  Co-authored-by: Maxime CLEMENT <78338830+maxime-clem@users.noreply.github.com>
+* chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)
+  * chore(package.xml): bump version to 0.39.0
+  * fix: fix ticket links in CHANGELOG.rst
+  * fix: remove unnecessary diff
+  ---------
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* fix(cpplint): include what you use - planning (`#9570 <https://github.com/autowarefoundation/autoware.universe/issues/9570>`_)
+* test(bpp_common): add unit test for utils (`#9469 <https://github.com/autowarefoundation/autoware.universe/issues/9469>`_)
+  * add easy unit test
+  * fix clang tidy warning and add unit test
+  * add more unit test
+  * add docstring
+  ---------
+* test(bpp_common): add unit test for object filtering (`#9408 <https://github.com/autowarefoundation/autoware.universe/issues/9408>`_)
+  * add unit test for all function
+  * add function to create bounding nox object
+  ---------
+* test(bpp_common): add unit test for traffic light utils (`#9441 <https://github.com/autowarefoundation/autoware.universe/issues/9441>`_)
+  * add test data for traffic light utils
+  * add unit test function
+  * fix style
+  * use test_utils::resolve_plg_share_uri for map path
+  ---------
+* fix(bpp)!: remove stop reason (`#9449 <https://github.com/autowarefoundation/autoware.universe/issues/9449>`_)
+  fix(bpp): remove stop reason
+* 0.39.0
+* update changelog
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(behavior_path_planner_common): add package maintainer (`#9429 <https://github.com/autowarefoundation/autoware.universe/issues/9429>`_)
+  add package maintainer
+* refactor(lane_change): separate target lane leading based on obj behavior (`#9372 <https://github.com/autowarefoundation/autoware.universe/issues/9372>`_)
+  * separate target lane leading objects based on behavior (RT1-8532)
+  * fixed overlapped filtering and lanes debug marker
+  * combine filteredObjects function
+  * renaming functions and type
+  * update some logic to check is stopped
+  * rename expanded to stopped_outside_boundary
+  * Include docstring
+  * rename stopped_outside_boundary → stopped_at_bound
+  * Update planning/behavior_path_planner/autoware_behavior_path_planner_common/include/autoware/behavior_path_planner_common/utils/path_safety_checker/objects_filtering.hpp
+  Co-authored-by: mkquda <168697710+mkquda@users.noreply.github.com>
+  * Update planning/behavior_path_planner/autoware_behavior_path_planner_common/include/autoware/behavior_path_planner_common/utils/path_safety_checker/objects_filtering.hpp
+  Co-authored-by: mkquda <168697710+mkquda@users.noreply.github.com>
+  * spell-check
+  ---------
+  Co-authored-by: mkquda <168697710+mkquda@users.noreply.github.com>
+* refactor(goal_planner): rename shoulder_lane to pull_over_lane (`#9422 <https://github.com/autowarefoundation/autoware.universe/issues/9422>`_)
+* fix(behavior_path_planner_common): prevent duplicated point insertion in cutOverlappedLanes (`#9363 <https://github.com/autowarefoundation/autoware.universe/issues/9363>`_)
+* feat(behavior_path_planner_common): use azimuth for interpolatePose (`#9362 <https://github.com/autowarefoundation/autoware.universe/issues/9362>`_)
+* test(bpp_common): add unit test for safety check (`#9386 <https://github.com/autowarefoundation/autoware.universe/issues/9386>`_)
+  * fix docstring
+  * add basic collision test
+  * add some more tests
+  * add unit test for all functions
+  * remove unecessary header and space
+  ---------
+* refactor(traffic_light_utils): prefix package and namespace with autoware (`#9251 <https://github.com/autowarefoundation/autoware.universe/issues/9251>`_)
+* feat(bpp): add velocity interface (`#9344 <https://github.com/autowarefoundation/autoware.universe/issues/9344>`_)
+  * feat(bpp): add velocity interface
+  * fix(adapi): subscribe additional velocity factors
+  ---------
+* refactor(factor): move steering factor interface to motion utils (`#9337 <https://github.com/autowarefoundation/autoware.universe/issues/9337>`_)
+* fix(bpp): update collided polygon pose only once (`#9338 <https://github.com/autowarefoundation/autoware.universe/issues/9338>`_)
+  * fix(bpp): update collided polygon pose only once
+  * add expected pose
+  ---------
+* refactor(bpp): rework steering factor interface (`#9325 <https://github.com/autowarefoundation/autoware.universe/issues/9325>`_)
+  * refactor(bpp): rework steering factor interface
+  * refactor(soa): rework steering factor interface
+  * refactor(AbLC): rework steering factor interface
+  * refactor(doa): rework steering factor interface
+  * refactor(lc): rework steering factor interface
+  * refactor(gp): rework steering factor interface
+  * refactor(sp): rework steering factor interface
+  * refactor(sbp): rework steering factor interface
+  * refactor(ss): rework steering factor interface
+  ---------
+* test(bpp_common): add tests for the static drivable area (`#9324 <https://github.com/autowarefoundation/autoware.universe/issues/9324>`_)
+* feat(goal_planner): safety check with only parking path (`#9293 <https://github.com/autowarefoundation/autoware.universe/issues/9293>`_)
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* fix(behavior_path_planner_common): use boost intersects instead of overlaps (`#9289 <https://github.com/autowarefoundation/autoware.universe/issues/9289>`_)
+  * fix(behavior_path_planner_common): use boost intersects instead of overlaps
+  * Update planning/behavior_path_planner/autoware_behavior_path_planner_common/src/utils/path_safety_checker/safety_check.cpp
+  Co-authored-by: Go Sakayori <go-sakayori@users.noreply.github.com>
+  ---------
+  Co-authored-by: Go Sakayori <go-sakayori@users.noreply.github.com>
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* fix(bpp): prevent accessing nullopt (`#9269 <https://github.com/autowarefoundation/autoware.universe/issues/9269>`_)
+* test(behavior_path_planner_common): add unit test for path shifter (`#9239 <https://github.com/autowarefoundation/autoware.universe/issues/9239>`_)
+  * add unit test for path shifter
+  * fix unnecessary modification
+  * fix spelling mistake
+  * add docstring
+  ---------
+* test(bpp_common): add unit test for safety check (`#9223 <https://github.com/autowarefoundation/autoware.universe/issues/9223>`_)
+  * add test for object collision
+  * add test for more functions
+  * add docstring
+  * fix lane change
+  ---------
+* fix(bpp): prevent accessing nullopt (`#9204 <https://github.com/autowarefoundation/autoware.universe/issues/9204>`_)
+  fix(bpp): calcDistanceToRedTrafficLight null
+* Contributors: Esteve Fernandez, Felix F Xu, Fumiya Watanabe, Go Sakayori, Kosuke Takeuchi, M. Fatih Cırıt, Maxime CLEMENT, Ryohsuke Mitsudome, Satoshi OTA, Shumpei Wakabayashi, Yutaka Kondo, Zulfaqar Azmi, mkquda
+
 0.39.0 (2024-11-25)
 -------------------
 * Merge commit '6a1ddbd08bd' into release-0.39.0

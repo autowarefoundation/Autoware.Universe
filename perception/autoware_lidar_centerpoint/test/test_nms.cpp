@@ -24,8 +24,6 @@ TEST(NonMaximumSuppressionTest, Apply)
   autoware::lidar_centerpoint::NMSParams params;
   params.search_distance_2d_ = 1.0;
   params.iou_threshold_ = 0.2;
-  params.nms_type_ = autoware::lidar_centerpoint::NMS_TYPE::IoU_BEV;
-  params.target_class_names_ = {"CAR"};
   nms.setParameters(params);
 
   std::vector<autoware::lidar_centerpoint::DetectedObject> input_objects(4);

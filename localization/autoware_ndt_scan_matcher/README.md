@@ -25,26 +25,26 @@ One optional function is regularization. Please see the regularization chapter i
 
 ### Output
 
-| Name                              | Type                                            | Description                                                                                                                              |
-| --------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `ndt_pose`                        | `geometry_msgs::msg::PoseStamped`               | estimated pose                                                                                                                           |
-| `ndt_pose_with_covariance`        | `geometry_msgs::msg::PoseWithCovarianceStamped` | estimated pose with covariance                                                                                                           |
-| `/diagnostics`                    | `diagnostic_msgs::msg::DiagnosticArray`         | diagnostics                                                                                                                              |
-| `points_aligned`                  | `sensor_msgs::msg::PointCloud2`                 | [debug topic] pointcloud aligned by scan matching                                                                                        |
-| `points_aligned_no_ground`        | `sensor_msgs::msg::PointCloud2`                 | [debug topic] no ground pointcloud aligned by scan matching                                                                              |
-| `initial_pose_with_covariance`    | `geometry_msgs::msg::PoseWithCovarianceStamped` | [debug topic] initial pose used in scan matching                                                                                         |
-| `multi_ndt_pose`                  | `geometry_msgs::msg::PoseArray`                 | [debug topic] estimated poses from multiple initial poses in real-time covariance estimation                                             |
-| `multi_initial_pose`              | `geometry_msgs::msg::PoseArray`                 | [debug topic] initial poses for real-time covariance estimation                                                                          |
-| `exe_time_ms`                     | `tier4_debug_msgs::msg::Float32Stamped`         | [debug topic] execution time for scan matching [ms]                                                                                      |
-| `transform_probability`           | `tier4_debug_msgs::msg::Float32Stamped`         | [debug topic] score of scan matching                                                                                                     |
-| `no_ground_transform_probability` | `tier4_debug_msgs::msg::Float32Stamped`         | [debug topic] score of scan matching based on no ground LiDAR scan                                                                       |
-| `iteration_num`                   | `tier4_debug_msgs::msg::Int32Stamped`           | [debug topic] number of scan matching iterations                                                                                         |
-| `initial_to_result_relative_pose` | `geometry_msgs::msg::PoseStamped`               | [debug topic] relative pose between the initial point and the convergence point                                                          |
-| `initial_to_result_distance`      | `tier4_debug_msgs::msg::Float32Stamped`         | [debug topic] distance difference between the initial point and the convergence point [m]                                                |
-| `initial_to_result_distance_old`  | `tier4_debug_msgs::msg::Float32Stamped`         | [debug topic] distance difference between the older of the two initial points used in linear interpolation and the convergence point [m] |
-| `initial_to_result_distance_new`  | `tier4_debug_msgs::msg::Float32Stamped`         | [debug topic] distance difference between the newer of the two initial points used in linear interpolation and the convergence point [m] |
-| `ndt_marker`                      | `visualization_msgs::msg::MarkerArray`          | [debug topic] markers for debugging                                                                                                      |
-| `monte_carlo_initial_pose_marker` | `visualization_msgs::msg::MarkerArray`          | [debug topic] particles used in initial position estimation                                                                              |
+| Name                              | Type                                                | Description                                                                                                                              |
+| --------------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `ndt_pose`                        | `geometry_msgs::msg::PoseStamped`                   | estimated pose                                                                                                                           |
+| `ndt_pose_with_covariance`        | `geometry_msgs::msg::PoseWithCovarianceStamped`     | estimated pose with covariance                                                                                                           |
+| `/diagnostics`                    | `diagnostic_msgs::msg::DiagnosticArray`             | diagnostics                                                                                                                              |
+| `points_aligned`                  | `sensor_msgs::msg::PointCloud2`                     | [debug topic] pointcloud aligned by scan matching                                                                                        |
+| `points_aligned_no_ground`        | `sensor_msgs::msg::PointCloud2`                     | [debug topic] no ground pointcloud aligned by scan matching                                                                              |
+| `initial_pose_with_covariance`    | `geometry_msgs::msg::PoseWithCovarianceStamped`     | [debug topic] initial pose used in scan matching                                                                                         |
+| `multi_ndt_pose`                  | `geometry_msgs::msg::PoseArray`                     | [debug topic] estimated poses from multiple initial poses in real-time covariance estimation                                             |
+| `multi_initial_pose`              | `geometry_msgs::msg::PoseArray`                     | [debug topic] initial poses for real-time covariance estimation                                                                          |
+| `exe_time_ms`                     | `autoware_internal_debug_msgs::msg::Float32Stamped` | [debug topic] execution time for scan matching [ms]                                                                                      |
+| `transform_probability`           | `autoware_internal_debug_msgs::msg::Float32Stamped` | [debug topic] score of scan matching                                                                                                     |
+| `no_ground_transform_probability` | `autoware_internal_debug_msgs::msg::Float32Stamped` | [debug topic] score of scan matching based on no ground LiDAR scan                                                                       |
+| `iteration_num`                   | `autoware_internal_debug_msgs::msg::Int32Stamped`   | [debug topic] number of scan matching iterations                                                                                         |
+| `initial_to_result_relative_pose` | `geometry_msgs::msg::PoseStamped`                   | [debug topic] relative pose between the initial point and the convergence point                                                          |
+| `initial_to_result_distance`      | `autoware_internal_debug_msgs::msg::Float32Stamped` | [debug topic] distance difference between the initial point and the convergence point [m]                                                |
+| `initial_to_result_distance_old`  | `autoware_internal_debug_msgs::msg::Float32Stamped` | [debug topic] distance difference between the older of the two initial points used in linear interpolation and the convergence point [m] |
+| `initial_to_result_distance_new`  | `autoware_internal_debug_msgs::msg::Float32Stamped` | [debug topic] distance difference between the newer of the two initial points used in linear interpolation and the convergence point [m] |
+| `ndt_marker`                      | `visualization_msgs::msg::MarkerArray`              | [debug topic] markers for debugging                                                                                                      |
+| `monte_carlo_initial_pose_marker` | `visualization_msgs::msg::MarkerArray`              | [debug topic] particles used in initial position estimation                                                                              |
 
 ### Service
 

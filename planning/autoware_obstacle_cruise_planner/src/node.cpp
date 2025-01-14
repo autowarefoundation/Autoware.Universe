@@ -515,10 +515,9 @@ ObstacleCruisePlannerNode::ObstacleCruisePlannerNode(const rclcpp::NodeOptions &
 
   // debug publisher
   debug_calculation_time_pub_ = create_publisher<Float64Stamped>("~/debug/processing_time_ms", 1);
-  debug_cruise_wall_marker_pub_ = create_publisher<MarkerArray>("~/debug/cruise/virtual_wall", 1);
-  debug_stop_wall_marker_pub_ = create_publisher<MarkerArray>("~/virtual_wall", 1);
-  debug_slow_down_wall_marker_pub_ =
-    create_publisher<MarkerArray>("~/debug/slow_down/virtual_wall", 1);
+  debug_cruise_wall_marker_pub_ = create_publisher<MarkerArray>("~/virtual_wall/cruise", 1);
+  debug_stop_wall_marker_pub_ = create_publisher<MarkerArray>("~/virtual_wall/stop", 1);
+  debug_slow_down_wall_marker_pub_ = create_publisher<MarkerArray>("~/virtual_wall/slow_down", 1);
   debug_marker_pub_ = create_publisher<MarkerArray>("~/debug/marker", 1);
   debug_stop_planning_info_pub_ =
     create_publisher<Float32MultiArrayStamped>("~/debug/stop_planning_info", 1);
@@ -729,6 +728,7 @@ void ObstacleCruisePlannerNode::onTrajectory(const Trajectory::ConstSharedPtr ms
   planner_ptr_->publishMetrics(now());
   publishDebugMarker();
   publishDebugInfo();
+  objects_of_interest_marker_interface_.publishMarkerArray();
 
   // 9. Publish and print calculation time
   const double calculation_time = stop_watch_.toc(__func__);
@@ -1385,7 +1385,8 @@ std::optional<CruiseObstacle> ObstacleCruisePlannerNode::createYieldCruiseObstac
     obstacle.pose,
     obstacle.longitudinal_velocity,
     obstacle.approach_velocity,
-    collision_points.value()};
+    collision_points.value(),
+    true};
 }
 
 std::optional<std::vector<CruiseObstacle>> ObstacleCruisePlannerNode::findYieldCruiseObstacles(
@@ -1456,6 +1457,9 @@ std::optional<std::vector<CruiseObstacle>> ObstacleCruisePlannerNode::findYieldC
         const auto yield_obstacle = createYieldCruiseObstacle(moving_obstacle, traj_points);
         if (yield_obstacle) {
           yield_obstacles.push_back(*yield_obstacle);
+          using autoware::objects_of_interest_marker_interface::ColorName;
+          objects_of_interest_marker_interface_.insertObjectData(
+            stopped_obstacle.pose, stopped_obstacle.shape, ColorName::RED);
         }
       }
     }

@@ -35,21 +35,21 @@ public:
     if (voxels_num.size() == 3) {
       max_voxels_ = voxels_num[2];
 
-      voxels_num_[0] = voxels_num[0];
-      voxels_num_[1] = voxels_num[1];
-      voxels_num_[2] = voxels_num[2];
+      voxels_num_[0] = static_cast<int32_t>(voxels_num[0]);
+      voxels_num_[1] = static_cast<int32_t>(voxels_num[1]);
+      voxels_num_[2] = static_cast<int32_t>(voxels_num[2]);
 
-      min_voxel_size_ = voxels_num[0];
-      opt_voxel_size_ = voxels_num[1];
-      max_voxel_size_ = voxels_num[2];
+      min_voxel_size_ = static_cast<int32_t>(voxels_num[0]);
+      opt_voxel_size_ = static_cast<int32_t>(voxels_num[1]);
+      max_voxel_size_ = static_cast<int32_t>(voxels_num[2]);
 
-      min_points_size_ = voxels_num[0];
-      opt_points_size_ = voxels_num[1];
-      max_points_size_ = voxels_num[2];
+      min_points_size_ = static_cast<int32_t>(voxels_num[0]);
+      opt_points_size_ = static_cast<int32_t>(voxels_num[1]);
+      max_points_size_ = static_cast<int32_t>(voxels_num[2]);
 
-      min_coors_size_ = voxels_num[0];
-      opt_coors_size_ = voxels_num[1];
-      max_coors_size_ = voxels_num[2];
+      min_coors_size_ = static_cast<int32_t>(voxels_num[0]);
+      opt_coors_size_ = static_cast<int32_t>(voxels_num[1]);
+      max_coors_size_ = static_cast<int32_t>(voxels_num[2]);
     }
     if (point_cloud_range.size() == 6) {
       min_x_range_ = static_cast<float>(point_cloud_range[0]);
@@ -91,7 +91,7 @@ public:
   std::size_t cloud_capacity_{};
   ///// KERNEL PARAMETERS /////
   const std::size_t threads_for_voxel_{256};  // threads number for a block
-  const std::size_t points_per_voxel_{20};
+  const int32_t points_per_voxel_{20};
   const std::size_t warp_size_{32};          // one warp(32 threads) for one pillar
   const std::size_t pillars_per_block_{64};  // one thread deals with one pillar
                                              // and a block has pillars_per_block threads
@@ -99,9 +99,9 @@ public:
   std::size_t max_voxels_{60000};
 
   ///// NETWORK PARAMETERS /////
-  const std::size_t batch_size_{1};
-  const std::size_t num_classes_{5};
-  const std::size_t num_point_feature_size_{5};  // x, y, z, intensity, lag
+  const int32_t batch_size_{1};
+  const int32_t num_classes_{5};
+  const int32_t num_point_feature_size_{5};  // x, y, z, intensity, lag
   // the dimension of the input cloud
   float min_x_range_{-76.8};
   float max_x_range_{76.8};
@@ -114,9 +114,9 @@ public:
   float voxel_y_size_{0.3};
   float voxel_z_size_{8.0};
   const std::size_t out_size_factor_{4};
-  const std::size_t max_num_points_per_pillar_{points_per_voxel_};
-  const std::size_t num_point_values_{4};
-  std::size_t num_proposals_{200};
+  const int32_t max_num_points_per_pillar_{points_per_voxel_};
+  const int32_t num_point_values_{4};
+  int32_t num_proposals_{200};
   // the number of feature maps for pillar scatter
   const std::size_t num_feature_scatter_{pillar_feature_size_};
   // the score threshold for classification
@@ -126,7 +126,7 @@ public:
   std::size_t max_num_pillars_{max_voxels_};
   const std::size_t pillar_points_bev_{max_num_points_per_pillar_ * max_num_pillars_};
   // the detected boxes result decode by (x, y, z, w, l, h, yaw)
-  const std::size_t num_box_values_{8};
+  const int32_t num_box_values_{8};
   // the input size of the 2D backbone network
   std::size_t grid_x_size_{512};
   std::size_t grid_y_size_{512};
@@ -136,33 +136,33 @@ public:
   std::size_t feature_y_size_{grid_y_size_ / out_size_factor_};
 
   ///// RUNTIME DIMENSIONS /////
-  std::vector<std::size_t> voxels_num_{5000, 30000, 60000};
+  std::vector<int32_t> voxels_num_{5000, 30000, 60000};
   // voxels
-  std::size_t min_voxel_size_{voxels_num_[0]};
-  std::size_t opt_voxel_size_{voxels_num_[1]};
-  std::size_t max_voxel_size_{voxels_num_[2]};
+  int32_t min_voxel_size_{voxels_num_[0]};
+  int32_t opt_voxel_size_{voxels_num_[1]};
+  int32_t max_voxel_size_{voxels_num_[2]};
 
-  std::size_t min_point_in_voxel_size_{points_per_voxel_};
-  std::size_t opt_point_in_voxel_size_{points_per_voxel_};
-  std::size_t max_point_in_voxel_size_{points_per_voxel_};
+  int32_t min_point_in_voxel_size_{points_per_voxel_};
+  int32_t opt_point_in_voxel_size_{points_per_voxel_};
+  int32_t max_point_in_voxel_size_{points_per_voxel_};
 
-  std::size_t min_network_feature_size_{num_point_feature_size_};
-  std::size_t opt_network_feature_size_{num_point_feature_size_};
-  std::size_t max_network_feature_size_{num_point_feature_size_};
+  int32_t min_network_feature_size_{num_point_feature_size_};
+  int32_t opt_network_feature_size_{num_point_feature_size_};
+  int32_t max_network_feature_size_{num_point_feature_size_};
 
   // num_points
-  std::size_t min_points_size_{voxels_num_[0]};
-  std::size_t opt_points_size_{voxels_num_[1]};
-  std::size_t max_points_size_{voxels_num_[2]};
+  int32_t min_points_size_{voxels_num_[0]};
+  int32_t opt_points_size_{voxels_num_[1]};
+  int32_t max_points_size_{voxels_num_[2]};
 
   // coors
-  std::size_t min_coors_size_{voxels_num_[0]};
-  std::size_t opt_coors_size_{voxels_num_[1]};
-  std::size_t max_coors_size_{voxels_num_[2]};
+  int32_t min_coors_size_{voxels_num_[0]};
+  int32_t opt_coors_size_{voxels_num_[1]};
+  int32_t max_coors_size_{voxels_num_[2]};
 
-  std::size_t min_coors_dim_size_{num_point_values_};
-  std::size_t opt_coors_dim_size_{num_point_values_};
-  std::size_t max_coors_dim_size_{num_point_values_};
+  int32_t min_coors_dim_size_{num_point_values_};
+  int32_t opt_coors_dim_size_{num_point_values_};
+  int32_t max_coors_dim_size_{num_point_values_};
 };
 
 }  // namespace autoware::lidar_transfusion

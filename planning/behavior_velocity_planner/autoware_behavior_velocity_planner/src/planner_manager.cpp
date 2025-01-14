@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "planner_manager.hpp"
+#include "autoware/behavior_velocity_planner/planner_manager.hpp"
 
 #include <autoware/motion_utils/trajectory/interpolation.hpp>
 #include <autoware/motion_utils/trajectory/trajectory.hpp>

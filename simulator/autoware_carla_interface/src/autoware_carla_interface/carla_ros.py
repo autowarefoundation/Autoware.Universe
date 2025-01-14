@@ -147,7 +147,7 @@ class carla_ros2_interface(object):
             elif sensor["type"] == "sensor.lidar.ray_cast":
                 if sensor["id"] in self.sensor_frequencies:
                     self.pub_lidar[sensor["id"]] = self.ros2_node.create_publisher(
-                        PointCloud2, f'/sensing/lidar/{sensor["id"]}/pointcloud', 10
+                        PointCloud2, f'/sensing/lidar/{sensor["id"]}/pointcloud_before_sync', 10
                     )
                 else:
                     self.ros2_node.get_logger().info(

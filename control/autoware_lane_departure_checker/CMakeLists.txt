@@ -14,6 +14,7 @@ ament_auto_add_library(autoware_lane_departure_checker SHARED
   src/lane_departure_checker_node/lane_departure_checker.cpp
   src/lane_departure_checker_node/lane_departure_checker_node.cpp
   src/lane_departure_checker_node/utils.cpp
+  src/lane_departure_checker_node/parameters.cpp
 )
 
 rclcpp_components_register_node(${PROJECT_NAME}

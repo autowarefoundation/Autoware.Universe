@@ -76,14 +76,14 @@ ColorRGBA ObjectsOfInterestMarkerInterface::getColor(
   const ColorName & color_name, const float alpha)
 {
   switch (color_name) {
+    case ColorName::GRAY:
+      return coloring::getGray(alpha);
     case ColorName::GREEN:
       return coloring::getGreen(alpha);
     case ColorName::AMBER:
       return coloring::getAmber(alpha);
     case ColorName::RED:
       return coloring::getRed(alpha);
-    case ColorName::GRAY:
-      return coloring::getGray(alpha);
     default:
       return coloring::getGray(alpha);
   }

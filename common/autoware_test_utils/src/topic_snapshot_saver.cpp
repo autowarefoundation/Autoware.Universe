@@ -25,6 +25,7 @@
 #include <geometry_msgs/msg/accel_with_covariance_stamped.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <std_srvs/srv/empty.hpp>
+#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <yaml-cpp/yaml.h>
 
@@ -46,7 +47,8 @@ using MessageType = std::variant<
   autoware_adapi_v1_msgs::msg::OperationModeState,        // 3
   autoware_planning_msgs::msg::LaneletRoute,              // 4
   autoware_perception_msgs::msg::TrafficLightGroupArray,  // 5
-  autoware_perception_msgs::msg::TrackedObjects           // 6
+  autoware_perception_msgs::msg::TrackedObjects,          // 6
+  tier4_planning_msgs::msg::PathWithLaneId                // 7
   >;
 
 std::optional<size_t> get_topic_index(const std::string & name)
@@ -71,6 +73,9 @@ std::optional<size_t> get_topic_index(const std::string & name)
   }
   if (name == "TrackedObjects") {
     return 6;
+  }
+  if (name == "PathWithLaneId") {
+    return 7;
   }
   return std::nullopt;
 }
@@ -196,6 +201,7 @@ public:
       REGISTER_CALLBACK(4);
       REGISTER_CALLBACK(5);
       REGISTER_CALLBACK(6);
+      REGISTER_CALLBACK(7);
     }
   }
 
@@ -243,6 +249,7 @@ private:
       REGISTER_WRITE_TYPE(4);
       REGISTER_WRITE_TYPE(5);
       REGISTER_WRITE_TYPE(6);
+      REGISTER_WRITE_TYPE(7);
     }
 
     const std::string desc = std::string(R"(#
@@ -253,7 +260,7 @@ private:
 # map_path_uri: package://<package-name>/<resource-path>
 # fields(this is array)
 #   - name: <field-name-for-your-yaml-of-this-topic, str>
-#     type: either {Odometry | AccelWithCovarianceStamped | PredictedObjects | OperationModeState | LaneletRoute | TrafficLightGroupArray | TrackedObjects | TBD}
+#     type: either {Odometry | AccelWithCovarianceStamped | PredictedObjects | OperationModeState | LaneletRoute | TrafficLightGroupArray | TrackedObjects | PathWithLaneId | TBD}
 #     topic: <topic-name, str>
 #
 )");

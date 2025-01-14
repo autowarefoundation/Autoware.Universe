@@ -46,12 +46,6 @@
               "minimum": 0.0,
               "maximum": 1.0
             },
-            "iou_nms_target_class_names": {
-              "type": "array",
-              "description": "An array of class names to be target in NMS.",
-              "default": ["CAR"],
-              "uniqueItems": true
-            },
             "iou_nms_search_distance_2d": {
               "type": "number",
               "description": "A maximum distance value to search the nearest objects.",

@@ -55,10 +55,10 @@ object_model::StateCovariance covarianceFromObjectClass(const ObjectClassificati
   return obj_class_model.measurement_covariance;
 }
 
-DetectedObject modelUncertaintyByClass(
-  const DetectedObject & object, const ObjectClassification & object_class)
+types::DynamicObject modelUncertaintyByClass(
+  const types::DynamicObject & object, const ObjectClassification & object_class)
 {
-  DetectedObject updating_object = object;
+  types::DynamicObject updating_object = object;
 
   // measurement noise covariance
   const object_model::StateCovariance measurement_covariance =
@@ -87,8 +87,7 @@ DetectedObject modelUncertaintyByClass(
   pose_cov[XYZRPY_COV_IDX::YAW_Y] = 0.0;                           // yaw - y
   pose_cov[XYZRPY_COV_IDX::YAW_YAW] = measurement_covariance.yaw;  // yaw - yaw
   const bool is_yaw_available =
-    object.kinematics.orientation_availability !=
-    autoware_perception_msgs::msg::DetectedObjectKinematics::UNAVAILABLE;
+    object.kinematics.orientation_availability != types::OrientationAvailability::UNAVAILABLE;
   if (!is_yaw_available) {
     pose_cov[XYZRPY_COV_IDX::YAW_YAW] *= 1e3;  // yaw is not available, multiply large value
   }
@@ -103,10 +102,11 @@ DetectedObject modelUncertaintyByClass(
   return updating_object;
 }
 
-DetectedObjects modelUncertainty(const DetectedObjects & detected_objects)
+types::DynamicObjectList modelUncertainty(const types::DynamicObjectList & detected_objects)
 {
-  DetectedObjects updating_objects;
+  types::DynamicObjectList updating_objects;
   updating_objects.header = detected_objects.header;
+  updating_objects.channel_index = detected_objects.channel_index;
   for (const auto & object : detected_objects.objects) {
     if (object.kinematics.has_position_covariance) {
       updating_objects.objects.push_back(object);
@@ -119,7 +119,7 @@ DetectedObjects modelUncertainty(const DetectedObjects & detected_objects)
   return updating_objects;
 }
 
-void normalizeUncertainty(DetectedObjects & detected_objects)
+void normalizeUncertainty(types::DynamicObjectList & detected_objects)
 {
   constexpr double min_cov_dist = 1e-4;
   constexpr double min_cov_rad = 1e-6;
@@ -140,7 +140,7 @@ void normalizeUncertainty(DetectedObjects & detected_objects)
   }
 }
 
-void addOdometryUncertainty(const Odometry & odometry, DetectedObjects & detected_objects)
+void addOdometryUncertainty(const Odometry & odometry, types::DynamicObjectList & detected_objects)
 {
   const auto & odom_pose = odometry.pose.pose;
   const auto & odom_pose_cov = odometry.pose.covariance;

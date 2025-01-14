@@ -40,6 +40,8 @@ RawVehicleCommandConverterNode::RawVehicleCommandConverterNode(
   // for steering steer controller
   use_steer_ff_ = declare_parameter<bool>("use_steer_ff");
   use_steer_fb_ = declare_parameter<bool>("use_steer_fb");
+  use_vehicle_adaptor_ = declare_parameter<bool>("use_vehicle_adaptor", false);
+
   if (convert_accel_cmd_) {
     if (!accel_map_.readAccelMapFromCSV(csv_path_accel_map, true)) {
       throw std::invalid_argument("Accel map is invalid.");
@@ -116,15 +118,21 @@ RawVehicleCommandConverterNode::RawVehicleCommandConverterNode(
   debug_pub_steer_pid_ = create_publisher<Float32MultiArrayStamped>(
     "/vehicle/raw_vehicle_cmd_converter/debug/steer_pid", 1);
 
+  if (use_vehicle_adaptor_) {
+    pub_compensated_control_cmd_ = create_publisher<Control>(
+      "/vehicle/raw_vehicle_cmd_converter/debug/compensated_control_cmd", 1);
+  }
+
   logger_configure_ = std::make_unique<autoware::universe_utils::LoggerLevelConfigure>(this);
 }
 
 void RawVehicleCommandConverterNode::publishActuationCmd()
 {
-  if (!current_twist_ptr_ || !control_cmd_ptr_ || !current_steer_ptr_) {
+  /* check if all necessary data is available */
+  if (!current_odometry_ || !control_cmd_ptr_ || !current_steer_ptr_) {
     RCLCPP_WARN_EXPRESSION(
       get_logger(), is_debugging_, "some pointers are null: %s, %s, %s",
-      !current_twist_ptr_ ? "twist" : "", !control_cmd_ptr_ ? "cmd" : "",
+      !current_odometry_ ? "odometry" : "", !control_cmd_ptr_ ? "cmd" : "",
       !current_steer_ptr_ ? "steer" : "");
     return;
   }
@@ -136,14 +144,34 @@ void RawVehicleCommandConverterNode::publishActuationCmd()
     }
   }
 
+  /* compensate control command if vehicle adaptor is enabled */
+  Control control_cmd = *control_cmd_ptr_;
+  if (use_vehicle_adaptor_) {
+    const auto current_accel = sub_accel_.takeData();
+    const auto current_operation_mode = sub_operation_mode_.takeData();
+    const auto control_horizon = sub_control_horizon_.takeData();
+    if (!current_accel || !current_operation_mode || !control_horizon) {
+      RCLCPP_WARN_EXPRESSION(
+        get_logger(), is_debugging_, "some pointers are null: %s, %s %s",
+        !current_accel ? "accel" : "", !current_operation_mode ? "operation_mode" : "",
+        !control_horizon ? "control_horizon" : "");
+      return;
+    }
+    control_cmd = vehicle_adaptor_.compensate(
+      *control_cmd_ptr_, *current_odometry_, *current_accel, *current_steer_ptr_,
+      *current_operation_mode, *control_horizon);
+    pub_compensated_control_cmd_->publish(control_cmd);
+  }
+
+  /* calculate actuation command */
   double desired_accel_cmd = 0.0;
   double desired_brake_cmd = 0.0;
   double desired_steer_cmd = 0.0;
   ActuationCommandStamped actuation_cmd;
-  const double acc = control_cmd_ptr_->longitudinal.acceleration;
-  const double vel = current_twist_ptr_->twist.linear.x;
-  const double steer = control_cmd_ptr_->lateral.steering_tire_angle;
-  const double steer_rate = control_cmd_ptr_->lateral.steering_tire_rotation_rate;
+  const double acc = control_cmd.longitudinal.acceleration;
+  const double vel = current_odometry_->twist.twist.linear.x;
+  const double steer = control_cmd.lateral.steering_tire_angle;
+  const double steer_rate = control_cmd.lateral.steering_tire_rotation_rate;
   bool accel_cmd_is_zero = true;
   if (convert_accel_cmd_) {
     desired_accel_cmd = calculateAccelMap(vel, acc, accel_cmd_is_zero);
@@ -173,7 +201,7 @@ void RawVehicleCommandConverterNode::publishActuationCmd()
     desired_steer_cmd = calculateSteerFromMap(vel, steer, steer_rate);
   }
   actuation_cmd.header.frame_id = "base_link";
-  actuation_cmd.header.stamp = control_cmd_ptr_->stamp;
+  actuation_cmd.header.stamp = control_cmd.stamp;
   actuation_cmd.actuation.accel_cmd = desired_accel_cmd;
   actuation_cmd.actuation.brake_cmd = desired_brake_cmd;
   actuation_cmd.actuation.steer_cmd = desired_steer_cmd;
@@ -252,12 +280,7 @@ double RawVehicleCommandConverterNode::calculateBrakeMap(
 
 void RawVehicleCommandConverterNode::onControlCmd(const Control::ConstSharedPtr msg)
 {
-  const auto odometry_msg = sub_odometry_.takeData();
-  if (odometry_msg) {
-    current_twist_ptr_ = std::make_unique<TwistStamped>();
-    current_twist_ptr_->header = odometry_msg->header;
-    current_twist_ptr_->twist = odometry_msg->twist.twist;
-  }
+  current_odometry_ = sub_odometry_.takeData();
   control_cmd_ptr_ = msg;
   publishActuationCmd();
 }
@@ -277,14 +300,11 @@ void RawVehicleCommandConverterNode::onActuationStatus(
   }
 
   // calculate steering status from actuation status
-  const auto odometry_msg = sub_odometry_.takeData();
-  if (odometry_msg) {
+  current_odometry_ = sub_odometry_.takeData();
+  if (current_odometry_) {
     if (convert_steer_cmd_method_.value() == "vgr") {
-      current_twist_ptr_ = std::make_unique<TwistStamped>();
-      current_twist_ptr_->header = odometry_msg->header;
-      current_twist_ptr_->twist = odometry_msg->twist.twist;
       current_steer_ptr_ = std::make_unique<double>(vgr_.calculateSteeringTireState(
-        current_twist_ptr_->twist.linear.x, actuation_status_ptr_->status.steer_status));
+        current_odometry_->twist.twist.linear.x, actuation_status_ptr_->status.steer_status));
       Steering steering_msg{};
       steering_msg.steering_tire_angle = *current_steer_ptr_;
       pub_steering_status_->publish(steering_msg);

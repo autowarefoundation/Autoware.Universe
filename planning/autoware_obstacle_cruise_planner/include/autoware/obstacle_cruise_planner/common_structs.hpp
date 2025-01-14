@@ -169,12 +169,15 @@ struct CruiseObstacle : public TargetObstacleInterface
   CruiseObstacle(
     const std::string & arg_uuid, const rclcpp::Time & arg_stamp,
     const geometry_msgs::msg::Pose & arg_pose, const double arg_lon_velocity,
-    const double arg_lat_velocity, const std::vector<PointWithStamp> & arg_collision_points)
+    const double arg_lat_velocity, const std::vector<PointWithStamp> & arg_collision_points,
+    bool arg_is_yield_obstacle = false)
   : TargetObstacleInterface(arg_uuid, arg_stamp, arg_pose, arg_lon_velocity, arg_lat_velocity),
-    collision_points(arg_collision_points)
+    collision_points(arg_collision_points),
+    is_yield_obstacle(arg_is_yield_obstacle)
   {
   }
   std::vector<PointWithStamp> collision_points;  // time-series collision points
+  bool is_yield_obstacle;
 };
 
 struct SlowDownObstacle : public TargetObstacleInterface

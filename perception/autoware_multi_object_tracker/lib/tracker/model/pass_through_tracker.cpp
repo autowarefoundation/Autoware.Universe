@@ -18,12 +18,10 @@
 #define EIGEN_MPL2_ONLY
 #include "autoware/multi_object_tracker/tracker/model/pass_through_tracker.hpp"
 
-#include "autoware/multi_object_tracker/utils/utils.hpp"
-#include "autoware/object_recognition_utils/object_recognition_utils.hpp"
-#include "autoware/universe_utils/ros/msg_covariance.hpp"
-
 #include <Eigen/Core>
 #include <Eigen/Geometry>
+#include <autoware/object_recognition_utils/object_recognition_utils.hpp>
+#include <autoware/universe_utils/ros/msg_covariance.hpp>
 
 #include <bits/stdc++.h>
 #include <tf2/LinearMath/Matrix3x3.h>
@@ -40,9 +38,7 @@ namespace autoware::multi_object_tracker
 {
 
 PassThroughTracker::PassThroughTracker(
-  const rclcpp::Time & time, const autoware_perception_msgs::msg::DetectedObject & object,
-  const geometry_msgs::msg::Transform & /*self_transform*/, const size_t channel_size,
-  const uint & channel_index)
+  const rclcpp::Time & time, const types::DynamicObject & object, const size_t channel_size)
 : Tracker(time, object.classification, channel_size),
   logger_(rclcpp::get_logger("PassThroughTracker")),
   last_update_time_(time)
@@ -51,7 +47,7 @@ PassThroughTracker::PassThroughTracker(
   prev_observed_object_ = object;
 
   // initialize existence probability
-  initializeExistenceProbabilities(channel_index, object.existence_probability);
+  initializeExistenceProbabilities(object.channel_index, object.existence_probability);
 }
 
 bool PassThroughTracker::predict(const rclcpp::Time & time)
@@ -66,7 +62,7 @@ bool PassThroughTracker::predict(const rclcpp::Time & time)
 }
 
 bool PassThroughTracker::measure(
-  const autoware_perception_msgs::msg::DetectedObject & object, const rclcpp::Time & time,
+  const types::DynamicObject & object, const rclcpp::Time & time,
   const geometry_msgs::msg::Transform & self_transform)
 {
   prev_observed_object_ = object_;
@@ -88,10 +84,10 @@ bool PassThroughTracker::measure(
 }
 
 bool PassThroughTracker::getTrackedObject(
-  const rclcpp::Time & time, autoware_perception_msgs::msg::TrackedObject & object) const
+  const rclcpp::Time & time, types::DynamicObject & object) const
 {
   using autoware::universe_utils::xyzrpy_covariance_index::XYZRPY_COV_IDX;
-  object = autoware::object_recognition_utils::toTrackedObject(object_);
+  object = object_;
   object.object_id = getUUID();
   object.classification = getClassification();
   object.kinematics.pose_with_covariance.covariance[XYZRPY_COV_IDX::X_X] = 0.0;

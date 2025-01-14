@@ -29,9 +29,10 @@ Pose2Twist::Pose2Twist(const rclcpp::NodeOptions & options) : rclcpp::Node("pose
   durable_qos.transient_local();
 
   twist_pub_ = create_publisher<geometry_msgs::msg::TwistStamped>("twist", durable_qos);
-  linear_x_pub_ = create_publisher<tier4_debug_msgs::msg::Float32Stamped>("linear_x", durable_qos);
+  linear_x_pub_ =
+    create_publisher<autoware_internal_debug_msgs::msg::Float32Stamped>("linear_x", durable_qos);
   angular_z_pub_ =
-    create_publisher<tier4_debug_msgs::msg::Float32Stamped>("angular_z", durable_qos);
+    create_publisher<autoware_internal_debug_msgs::msg::Float32Stamped>("angular_z", durable_qos);
   // Note: this callback publishes topics above
   pose_sub_ = create_subscription<geometry_msgs::msg::PoseStamped>(
     "pose", queue_size, std::bind(&Pose2Twist::callback_pose, this, _1));
@@ -105,12 +106,12 @@ void Pose2Twist::callback_pose(geometry_msgs::msg::PoseStamped::SharedPtr pose_m
   twist_msg.header.frame_id = "base_link";
   twist_pub_->publish(twist_msg);
 
-  tier4_debug_msgs::msg::Float32Stamped linear_x_msg;
+  autoware_internal_debug_msgs::msg::Float32Stamped linear_x_msg;
   linear_x_msg.stamp = this->now();
   linear_x_msg.data = static_cast<float>(twist_msg.twist.linear.x);
   linear_x_pub_->publish(linear_x_msg);
 
-  tier4_debug_msgs::msg::Float32Stamped angular_z_msg;
+  autoware_internal_debug_msgs::msg::Float32Stamped angular_z_msg;
   angular_z_msg.stamp = this->now();
   angular_z_msg.data = static_cast<float>(twist_msg.twist.angular.z);
   angular_z_pub_->publish(angular_z_msg);

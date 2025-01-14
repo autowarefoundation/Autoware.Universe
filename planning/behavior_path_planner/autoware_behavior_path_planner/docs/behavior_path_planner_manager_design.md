@@ -533,9 +533,9 @@ If this case happened in the slot, `is_upstream_waiting_approved` is set to true
 
 ### Failure modules
 
-The failure modules return the status `ModuleStatus::FAILURE`. The manager removes the module from approved modules stack as well as waiting approval modules, but the failure module is not moved to candidate modules stack.
+If a module returns `ModuleStatus::FAILURE`, the manager removes the failed module. Additionally, all modules after the failed module are removed, even if they did not return `ModuleStatus::FAILURE`. These modules are not added back to the candidate modules stack and will instead run again from the beginning. Once these modules are removed, the output of the module prior to the failed module will be used as the planner's output.
 
-As a result, the module A's output is used as approved modules stack.
+As shown in the example below, modules B, A, and C are running. When module A returns `ModuleStatus::FAILURE`, both module A and C are removed from the approved modules stack. Module B's output is then used as the final output of the planner.
 
 ![failure_modules](../image/manager/failure_modules.drawio.svg)
 

@@ -56,6 +56,76 @@
           "description": "If True, tracker use timers to schedule publishers and use prediction step to extrapolate object state at desired timestamp.",
           "default": false
         },
+        "consider_odometry_uncertainty": {
+          "type": "boolean",
+          "description": "If True, consider odometry uncertainty in tracking.",
+          "default": false
+        },
+        "tracker_lifetime": {
+          "type": "number",
+          "description": "Lifetime of the tracker in seconds.",
+          "default": 1.0
+        },
+        "min_known_object_removal_iou": {
+          "type": "number",
+          "description": "Minimum IOU between associated objects with known label to remove younger tracker",
+          "default": 0.1
+        },
+        "min_unknown_object_removal_iou": {
+          "type": "number",
+          "description": "Minimum IOU between associated objects with unknown label to remove unknown tracker",
+          "default": 0.001
+        },
+        "distance_threshold": {
+          "type": "number",
+          "description": "Distance threshold in meters.",
+          "default": 5.0
+        },
+        "confident_count_threshold": {
+          "type": "object",
+          "properties": {
+            "UNKNOWN": {
+              "type": "number",
+              "description": "Number of measurements to consider tracker as confident for unknown object classes.",
+              "default": 3
+            },
+            "CAR": {
+              "type": "number",
+              "description": "Number of measurements to consider tracker as confident for car object classes.",
+              "default": 3
+            },
+            "TRUCK": {
+              "type": "number",
+              "description": "Number of measurements to consider tracker as confident for truck object classes.",
+              "default": 3
+            },
+            "BUS": {
+              "type": "number",
+              "description": "Number of measurements to consider tracker as confident for bus object classes.",
+              "default": 3
+            },
+            "TRAILER": {
+              "type": "number",
+              "description": "Number of measurements to consider tracker as confident for trailer object classes.",
+              "default": 3
+            },
+            "MOTORBIKE": {
+              "type": "number",
+              "description": "Number of measurements to consider tracker as confident for motorbike object classes.",
+              "default": 3
+            },
+            "BICYCLE": {
+              "type": "number",
+              "description": "Number of measurements to consider tracker as confident for bicycle object classes.",
+              "default": 3
+            },
+            "PEDESTRIAN": {
+              "type": "number",
+              "description": "Number of measurements to consider tracker as confident for pedestrian object classes.",
+              "default": 3
+            }
+          }
+        },
         "publish_processing_time": {
           "type": "boolean",
           "description": "Enable to publish debug message of process time information.",
@@ -93,6 +163,12 @@
         "publish_rate",
         "world_frame_id",
         "enable_delay_compensation",
+        "consider_odometry_uncertainty",
+        "tracker_lifetime",
+        "min_known_object_removal_iou",
+        "min_unknown_object_removal_iou",
+        "distance_threshold",
+        "confident_count_threshold",
         "publish_processing_time",
         "publish_tentative_objects",
         "publish_debug_markers",

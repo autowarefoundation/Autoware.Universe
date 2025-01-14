@@ -152,6 +152,7 @@ private:
   typedef message_filters::Synchronizer<SyncPolicy> Sync;
   Sync sync_;
   PointsNumThresholdParam points_num_threshold_param_;
+  double validate_max_distance_sq_;  // maximum object distance to validate, squared [m^2]
 
   std::shared_ptr<Debugger> debugger_;
   bool using_2d_validator_;

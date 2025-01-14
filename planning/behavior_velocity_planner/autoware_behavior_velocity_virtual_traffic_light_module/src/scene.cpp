@@ -333,12 +333,12 @@ bool VirtualTrafficLightModule::isNearAnyEndLine(const size_t end_line_idx)
 std::optional<tier4_v2x_msgs::msg::VirtualTrafficLightState>
 VirtualTrafficLightModule::findCorrespondingState()
 {
-  // No message
-  if (!planner_data_->virtual_traffic_light_states) {
+  // Note: This variable is set by virtual traffic light's manager.
+  if (!virtual_traffic_light_states_) {
     return {};
   }
 
-  for (const auto & state : planner_data_->virtual_traffic_light_states->states) {
+  for (const auto & state : virtual_traffic_light_states_->states) {
     if (state.id == map_data_.instrument_id) {
       return state;
     }
@@ -456,5 +456,24 @@ void VirtualTrafficLightModule::insertStopVelocityAtEndLine(
   // Set data for visualization
   module_data_.stop_head_pose_at_end_line =
     calcHeadPose(stop_pose, planner_data_->vehicle_info_.max_longitudinal_offset_m);
+}
+
+std::optional<tier4_v2x_msgs::msg::InfrastructureCommand>
+VirtualTrafficLightModule::getInfrastructureCommand() const
+{
+  return infrastructure_command_;
+}
+
+void VirtualTrafficLightModule::setInfrastructureCommand(
+  const std::optional<tier4_v2x_msgs::msg::InfrastructureCommand> & command)
+{
+  infrastructure_command_ = command;
+}
+
+void VirtualTrafficLightModule::setVirtualTrafficLightStates(
+  const tier4_v2x_msgs::msg::VirtualTrafficLightStateArray::ConstSharedPtr
+    virtual_traffic_light_states)
+{
+  virtual_traffic_light_states_ = virtual_traffic_light_states;
 }
 }  // namespace autoware::behavior_velocity_planner

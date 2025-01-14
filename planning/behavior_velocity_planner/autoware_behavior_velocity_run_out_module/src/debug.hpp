@@ -18,17 +18,17 @@
 
 #include <autoware/motion_utils/marker/virtual_wall_marker_creator.hpp>
 
-#include <tier4_debug_msgs/msg/float32_multi_array_stamped.hpp>
-#include <tier4_debug_msgs/msg/int32_stamped.hpp>
+#include <autoware_internal_debug_msgs/msg/float32_multi_array_stamped.hpp>
+#include <autoware_internal_debug_msgs/msg/int32_stamped.hpp>
 
 #include <memory>
 #include <string>
 #include <vector>
 namespace autoware::behavior_velocity_planner
 {
+using autoware_internal_debug_msgs::msg::Float32MultiArrayStamped;
+using autoware_internal_debug_msgs::msg::Int32Stamped;
 using sensor_msgs::msg::PointCloud2;
-using tier4_debug_msgs::msg::Float32MultiArrayStamped;
-using tier4_debug_msgs::msg::Int32Stamped;
 
 class DebugValues
 {

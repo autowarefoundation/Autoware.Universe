@@ -15,10 +15,10 @@
 #ifndef AUTOWARE__BEHAVIOR_PATH_LANE_CHANGE_MODULE__INTERFACE_HPP_
 #define AUTOWARE__BEHAVIOR_PATH_LANE_CHANGE_MODULE__INTERFACE_HPP_
 
+#include "autoware/behavior_path_lane_change_module/base_class.hpp"
 #include "autoware/behavior_path_lane_change_module/scene.hpp"
-#include "autoware/behavior_path_lane_change_module/utils/base_class.hpp"
-#include "autoware/behavior_path_lane_change_module/utils/data_structs.hpp"
-#include "autoware/behavior_path_lane_change_module/utils/path.hpp"
+#include "autoware/behavior_path_lane_change_module/structs/data.hpp"
+#include "autoware/behavior_path_lane_change_module/structs/path.hpp"
 #include "autoware/behavior_path_planner_common/interface/scene_module_interface.hpp"
 #include "autoware/behavior_path_planner_common/turn_signal_decider.hpp"
 #include "autoware/behavior_path_planner_common/utils/path_shifter/path_shifter.hpp"
@@ -35,6 +35,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <utility>
 
 namespace autoware::behavior_path_planner
 {
@@ -120,6 +121,8 @@ protected:
     }
   }
 
+  std::pair<LaneChangeStates, std::string_view> check_transit_failure();
+
   void updateDebugMarker() const;
 
   void updateSteeringFactorPtr(const BehaviorModuleOutput & output);
@@ -129,13 +132,13 @@ protected:
 
   mutable MarkerArray virtual_wall_marker_;
 
-  std::unique_ptr<PathWithLaneId> prev_approved_path_;
-
   void clearAbortApproval() { is_abort_path_approved_ = false; }
 
   bool is_abort_path_approved_{false};
 
   bool is_abort_approval_requested_{false};
+
+  lane_change::InterfaceDebug interface_debug_;
 };
 }  // namespace autoware::behavior_path_planner
 

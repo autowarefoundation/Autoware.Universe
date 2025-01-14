@@ -41,7 +41,7 @@ NoStoppingAreaModule::NoStoppingAreaModule(
   const lanelet::autoware::NoStoppingArea & no_stopping_area_reg_elem,
   const PlannerParam & planner_param, const rclcpp::Logger & logger,
   const rclcpp::Clock::SharedPtr clock)
-: SceneModuleInterface(module_id, logger, clock),
+: SceneModuleInterfaceWithRTC(module_id, logger, clock),
   lane_id_(lane_id),
   no_stopping_area_reg_elem_(no_stopping_area_reg_elem),
   planner_param_(planner_param),

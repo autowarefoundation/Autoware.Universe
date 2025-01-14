@@ -246,7 +246,7 @@ void ScanGroundFilterComponent::classifyPointCloud(
       float radius_distance_from_gnd = pd.radius - prev_gnd_radius;
       float height_from_gnd = point_curr.z - prev_gnd_point.z;
       float height_from_obj = point_curr.z - non_ground_cluster.getAverageHeight();
-      bool calculate_slope = false;
+      bool calculate_slope = true;
       bool is_point_close_to_prev =
         (points_distance <
          (pd.radius * radial_divider_angle_rad_ + split_points_distance_tolerance_));
@@ -264,8 +264,6 @@ void ScanGroundFilterComponent::classifyPointCloud(
         // close to the previous point, set point follow label
         point_label_curr = PointLabel::POINT_FOLLOW;
         calculate_slope = false;
-      } else {
-        calculate_slope = true;
       }
       if (is_point_close_to_prev) {
         height_from_gnd = point_curr.z - ground_cluster.getAverageHeight();

@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>tier4_map_launch</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>The tier4_map_launch package</description>
   <maintainer email="ryu.yamamoto@tier4.jp">Ryu Yamamoto</maintainer>
   <maintainer email="kento.yabuuchi.2@tier4.jp">Kento Yabuuchi</maintainer>

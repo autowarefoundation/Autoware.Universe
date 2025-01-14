@@ -29,7 +29,6 @@ using namespace diagnostic_graph_aggregator;  // NOLINT(build/namespaces)
 
 using diagnostic_msgs::msg::DiagnosticArray;
 using diagnostic_msgs::msg::DiagnosticStatus;
-using tier4_system_msgs::msg::DiagnosticGraph;
 
 constexpr auto OK = DiagnosticStatus::OK;
 constexpr auto WARN = DiagnosticStatus::WARN;

@@ -29,10 +29,7 @@
 #include <nav_msgs/msg/occupancy_grid.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 #include <std_msgs/msg/header.hpp>
-#include <tier4_api_msgs/msg/crosswalk_status.hpp>
-#include <tier4_api_msgs/msg/intersection_status.hpp>
 #include <tier4_planning_msgs/msg/velocity_limit.hpp>
-#include <tier4_v2x_msgs/msg/virtual_traffic_light_state_array.hpp>
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -66,7 +63,6 @@ struct PlannerData
   std::map<lanelet::Id, TrafficSignalStamped> traffic_light_id_map_raw_;
   std::map<lanelet::Id, TrafficSignalStamped> traffic_light_id_map_last_observed_;
   std::optional<tier4_planning_msgs::msg::VelocityLimit> external_velocity_limit;
-  tier4_v2x_msgs::msg::VirtualTrafficLightStateArray::ConstSharedPtr virtual_traffic_light_states;
 
   bool is_simulation = false;
 

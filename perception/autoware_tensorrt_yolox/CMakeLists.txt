@@ -10,6 +10,9 @@ endif()
 find_package(autoware_cmake REQUIRED)
 autoware_package()
 
+# TODO(amadeuszsz): Remove -Wno-deprecated-declarations once removing implicit quantization
+add_compile_options(-Wno-deprecated-declarations)
+
 find_package(OpenCV REQUIRED)
 
 option(CUDA_VERBOSE "Verbose output of CUDA modules" OFF)

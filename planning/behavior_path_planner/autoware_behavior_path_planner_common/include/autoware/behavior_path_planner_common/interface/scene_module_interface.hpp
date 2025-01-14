@@ -270,34 +270,40 @@ public:
 
   std::string name() const { return name_; }
 
-  std::optional<Pose> getStopPose() const
+  PoseWithDetailOpt getStopPose() const
   {
     if (!stop_pose_) {
       return {};
     }
 
     const auto & base_link2front = planner_data_->parameters.base_link2front;
-    return calcOffsetPose(stop_pose_.value(), base_link2front, 0.0, 0.0);
+    return PoseWithDetail(
+      calcOffsetPose(stop_pose_.value().pose, base_link2front, 0.0, 0.0),
+      stop_pose_.value().detail);
   }
 
-  std::optional<Pose> getSlowPose() const
+  PoseWithDetailOpt getSlowPose() const
   {
     if (!slow_pose_) {
       return {};
     }
 
     const auto & base_link2front = planner_data_->parameters.base_link2front;
-    return calcOffsetPose(slow_pose_.value(), base_link2front, 0.0, 0.0);
+    return PoseWithDetail(
+      calcOffsetPose(slow_pose_.value().pose, base_link2front, 0.0, 0.0),
+      slow_pose_.value().detail);
   }
 
-  std::optional<Pose> getDeadPose() const
+  PoseWithDetailOpt getDeadPose() const
   {
     if (!dead_pose_) {
       return {};
     }
 
     const auto & base_link2front = planner_data_->parameters.base_link2front;
-    return calcOffsetPose(dead_pose_.value(), base_link2front, 0.0, 0.0);
+    return PoseWithDetail(
+      calcOffsetPose(dead_pose_.value().pose, base_link2front, 0.0, 0.0),
+      dead_pose_.value().detail);
   }
 
   void resetWallPoses() const
@@ -556,7 +562,7 @@ protected:
   {
     if (stop_pose_.has_value()) {
       velocity_factor_interface_.set(
-        path.points, getEgoPose(), stop_pose_.value(), VelocityFactor::APPROACHING, "stop");
+        path.points, getEgoPose(), stop_pose_.value().pose, VelocityFactor::APPROACHING, "stop");
       return;
     }
 
@@ -565,7 +571,7 @@ protected:
     }
 
     velocity_factor_interface_.set(
-      path.points, getEgoPose(), slow_pose_.value(), VelocityFactor::APPROACHING, "slow down");
+      path.points, getEgoPose(), slow_pose_.value().pose, VelocityFactor::APPROACHING, "slow down");
   }
 
   void setDrivableLanes(const std::vector<DrivableLanes> & drivable_lanes);
@@ -625,11 +631,11 @@ protected:
 
   mutable VelocityFactorInterface velocity_factor_interface_;
 
-  mutable std::optional<Pose> stop_pose_{std::nullopt};
+  mutable PoseWithDetailOpt stop_pose_{std::nullopt};
 
-  mutable std::optional<Pose> slow_pose_{std::nullopt};
+  mutable PoseWithDetailOpt slow_pose_{std::nullopt};
 
-  mutable std::optional<Pose> dead_pose_{std::nullopt};
+  mutable PoseWithDetailOpt dead_pose_{std::nullopt};
 
   mutable MarkerArray info_marker_;
 

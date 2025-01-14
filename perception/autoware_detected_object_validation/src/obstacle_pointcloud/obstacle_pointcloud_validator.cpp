@@ -295,6 +295,8 @@ ObstaclePointCloudBasedValidator::ObstaclePointCloudBasedValidator(
     declare_parameter<std::vector<int64_t>>("max_points_num");
   points_num_threshold_param_.min_points_and_distance_ratio =
     declare_parameter<std::vector<double>>("min_points_and_distance_ratio");
+  const double validate_max_distance = declare_parameter<double>("validate_max_distance_m");
+  validate_max_distance_sq_ = validate_max_distance * validate_max_distance;
 
   using_2d_validator_ = declare_parameter<bool>("using_2d_validator");
 
@@ -346,6 +348,18 @@ void ObstaclePointCloudBasedValidator::onObjectsAndObstaclePointCloud(
   for (size_t i = 0; i < transformed_objects.objects.size(); ++i) {
     const auto & transformed_object = transformed_objects.objects.at(i);
     const auto & object = input_objects->objects.at(i);
+    // check object distance
+    const double distance_sq =
+      transformed_object.kinematics.pose_with_covariance.pose.position.x *
+        transformed_object.kinematics.pose_with_covariance.pose.position.x +
+      transformed_object.kinematics.pose_with_covariance.pose.position.y *
+        transformed_object.kinematics.pose_with_covariance.pose.position.y;
+    if (distance_sq > validate_max_distance_sq_) {
+      // pass to output
+      output.objects.push_back(object);
+      continue;
+    }
+
     const auto validated =
       validation_is_ready ? validator_->validate_object(transformed_object) : false;
     if (debugger_) {

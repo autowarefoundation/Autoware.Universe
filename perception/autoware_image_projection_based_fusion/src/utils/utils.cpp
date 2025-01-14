@@ -44,20 +44,6 @@ bool checkCameraInfo(const sensor_msgs::msg::CameraInfo & camera_info)
   return true;
 }
 
-Eigen::Vector2d calcRawImageProjectedPoint(
-  const image_geometry::PinholeCameraModel & pinhole_camera_model, const cv::Point3d & point3d,
-  const bool & unrectify)
-{
-  const cv::Point2d rectified_image_point = pinhole_camera_model.project3dToPixel(point3d);
-
-  if (!unrectify) {
-    return Eigen::Vector2d(rectified_image_point.x, rectified_image_point.y);
-  }
-  const cv::Point2d raw_image_point = pinhole_camera_model.unrectifyPoint(rectified_image_point);
-
-  return Eigen::Vector2d(raw_image_point.x, raw_image_point.y);
-}
-
 std::optional<geometry_msgs::msg::TransformStamped> getTransformStamped(
   const tf2_ros::Buffer & tf_buffer, const std::string & target_frame_id,
   const std::string & source_frame_id, const rclcpp::Time & time)
@@ -81,8 +67,8 @@ Eigen::Affine3d transformToEigen(const geometry_msgs::msg::Transform & t)
 }
 
 void closest_cluster(
-  const PointCloud2 & cluster, const double cluster_2d_tolerance, const int min_cluster_size,
-  const pcl::PointXYZ & center, PointCloud2 & out_cluster)
+  const PointCloudMsgType & cluster, const double cluster_2d_tolerance, const int min_cluster_size,
+  const pcl::PointXYZ & center, PointCloudMsgType & out_cluster)
 {
   // sort point by distance to camera origin
 
@@ -137,8 +123,8 @@ void closest_cluster(
 }
 
 void updateOutputFusedObjects(
-  std::vector<DetectedObjectWithFeature> & output_objs, std::vector<PointCloud2> & clusters,
-  const std::vector<size_t> & clusters_data_size, const PointCloud2 & in_cloud,
+  std::vector<DetectedObjectWithFeature> & output_objs, std::vector<PointCloudMsgType> & clusters,
+  const std::vector<size_t> & clusters_data_size, const PointCloudMsgType & in_cloud,
   const std_msgs::msg::Header & in_roi_header, const tf2_ros::Buffer & tf_buffer,
   const int min_cluster_size, const int max_cluster_size, const float cluster_2d_tolerance,
   std::vector<DetectedObjectWithFeature> & output_fused_objects)
@@ -176,7 +162,7 @@ void updateOutputFusedObjects(
 
     // TODO(badai-nguyen): change to interface to select refine criteria like closest, largest
     //  to output refine cluster and centroid
-    sensor_msgs::msg::PointCloud2 refine_cluster;
+    PointCloudMsgType refine_cluster;
     closest_cluster(
       cluster, cluster_2d_tolerance, min_cluster_size, camera_orig_point_frame, refine_cluster);
     if (
@@ -198,7 +184,7 @@ void updateOutputFusedObjects(
   }
 }
 
-geometry_msgs::msg::Point getCentroid(const sensor_msgs::msg::PointCloud2 & pointcloud)
+geometry_msgs::msg::Point getCentroid(const PointCloudMsgType & pointcloud)
 {
   geometry_msgs::msg::Point centroid;
   centroid.x = 0.0f;

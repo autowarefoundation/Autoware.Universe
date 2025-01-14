@@ -15,9 +15,10 @@
 #ifndef AUTOWARE__BEHAVIOR_VELOCITY_BLIND_SPOT_MODULE__SCENE_HPP_
 #define AUTOWARE__BEHAVIOR_VELOCITY_BLIND_SPOT_MODULE__SCENE_HPP_
 
+#include <autoware/behavior_velocity_blind_spot_module/parameter.hpp>
 #include <autoware/behavior_velocity_blind_spot_module/util.hpp>
-#include <autoware/behavior_velocity_planner_common/scene_module_interface.hpp>
 #include <autoware/behavior_velocity_planner_common/utilization/state_machine.hpp>
+#include <autoware/behavior_velocity_rtc_interface/scene_module_interface_with_rtc.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
@@ -59,7 +60,7 @@ struct Safe
 
 using BlindSpotDecision = std::variant<InternalError, OverPassJudge, Unsafe, Safe>;
 
-class BlindSpotModule : public SceneModuleInterface
+class BlindSpotModule : public SceneModuleInterfaceWithRTC
 {
 public:
   struct DebugData
@@ -70,20 +71,6 @@ public:
   };
 
 public:
-  struct PlannerParam
-  {
-    bool use_pass_judge_line;
-    double stop_line_margin;
-    double backward_detection_length;
-    double ignore_width_from_center_line;
-    double adjacent_extend_width;
-    double opposite_adjacent_extend_width;
-    double max_future_movement_time;
-    double ttc_min;
-    double ttc_max;
-    double ttc_ego_minimal_velocity;
-  };
-
   BlindSpotModule(
     const int64_t module_id, const int64_t lane_id, const TurnDirection turn_direction,
     const std::shared_ptr<const PlannerData> planner_data, const PlannerParam & planner_param,

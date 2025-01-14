@@ -2,6 +2,43 @@
 Changelog for package system_monitor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.40.0 (2024-12-12)
+-------------------
+* Merge branch 'main' into release-0.40.0
+* Revert "chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)"
+  This reverts commit c9f0f2688c57b0f657f5c1f28f036a970682e7f5.
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)
+  * chore(package.xml): bump version to 0.39.0
+  * fix: fix ticket links in CHANGELOG.rst
+  * fix: remove unnecessary diff
+  ---------
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* ci(pre-commit): update cpplint to 2.0.0 (`#9557 <https://github.com/autowarefoundation/autoware.universe/issues/9557>`_)
+* fix(cpplint): include what you use - system (`#9573 <https://github.com/autowarefoundation/autoware.universe/issues/9573>`_)
+* 0.39.0
+* update changelog
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* feat(system_monitor): add on/off config for network traffic monitor (`#9069 <https://github.com/autowarefoundation/autoware.universe/issues/9069>`_)
+  * feat(system_monitor): add config for network traffic monitor
+  * fix: change function name from stop to skip
+  ---------
+* feat(system_monitor): support loopback network interface (`#9067 <https://github.com/autowarefoundation/autoware.universe/issues/9067>`_)
+  * feat(system_monitor): support loopback network interface
+  * style(pre-commit): autofix
+  ---------
+  Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
+* Contributors: Esteve Fernandez, Fumiya Watanabe, M. Fatih Cırıt, Ryohsuke Mitsudome, Yutaka Kondo, awf-autoware-bot[bot], iwatake
+
 0.39.0 (2024-11-25)
 -------------------
 * Merge commit '6a1ddbd08bd' into release-0.39.0

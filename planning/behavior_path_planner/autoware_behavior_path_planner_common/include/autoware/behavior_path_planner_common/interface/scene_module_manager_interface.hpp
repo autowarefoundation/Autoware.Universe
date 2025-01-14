@@ -16,6 +16,7 @@
 #ifndef AUTOWARE__BEHAVIOR_PATH_PLANNER_COMMON__INTERFACE__SCENE_MODULE_MANAGER_INTERFACE_HPP_
 #define AUTOWARE__BEHAVIOR_PATH_PLANNER_COMMON__INTERFACE__SCENE_MODULE_MANAGER_INTERFACE_HPP_
 
+#include "autoware/behavior_path_planner_common/data_manager.hpp"
 #include "autoware/behavior_path_planner_common/interface/scene_module_interface.hpp"
 #include "autoware/universe_utils/ros/parameter.hpp"
 
@@ -34,7 +35,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-
 namespace autoware::behavior_path_planner
 {
 
@@ -160,25 +160,23 @@ public:
         continue;
       }
 
-      const auto opt_stop_pose = m.lock()->getStopPose();
-      if (!!opt_stop_pose) {
-        const auto virtual_wall = createStopVirtualWallMarker(
-          opt_stop_pose.value(), m.lock()->name(), rclcpp::Clock().now(), marker_id);
-        appendMarkerArray(virtual_wall, &markers);
-      }
+      const std::vector<std::pair<
+        PoseWithDetailOpt, std::function<MarkerArray(
+                             const geometry_msgs::msg::Pose &, const std::string &, rclcpp::Time,
+                             uint32_t, double, const std::string &, bool)>>>
+        pose_and_func_vec = {
+          {m.lock()->getStopPose(), createStopVirtualWallMarker},
+          {m.lock()->getSlowPose(), createSlowDownVirtualWallMarker},
+          {m.lock()->getDeadPose(), createDeadLineVirtualWallMarker}};
 
-      const auto opt_slow_pose = m.lock()->getSlowPose();
-      if (!!opt_slow_pose) {
-        const auto virtual_wall = createSlowDownVirtualWallMarker(
-          opt_slow_pose.value(), m.lock()->name(), rclcpp::Clock().now(), marker_id);
-        appendMarkerArray(virtual_wall, &markers);
-      }
-
-      const auto opt_dead_pose = m.lock()->getDeadPose();
-      if (!!opt_dead_pose) {
-        const auto virtual_wall = createDeadLineVirtualWallMarker(
-          opt_dead_pose.value(), m.lock()->name(), rclcpp::Clock().now(), marker_id);
-        appendMarkerArray(virtual_wall, &markers);
+      for (const auto & [opt_pose, create_virtual_wall] : pose_and_func_vec) {
+        if (!!opt_pose) {
+          const auto detail = opt_pose.value().detail;
+          const auto text = m.lock()->name() + (detail.empty() ? "" : " (" + detail + ")");
+          const auto virtual_wall = create_virtual_wall(
+            opt_pose.value().pose, text, rclcpp::Clock().now(), marker_id, 0.0, "", true);
+          appendMarkerArray(virtual_wall, &markers);
+        }
       }
 
       const auto module_specific_wall = m.lock()->getModuleVirtualWall();

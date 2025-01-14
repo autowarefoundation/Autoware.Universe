@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_motion_velocity_out_of_lane_module</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>The motion_velocity_out_of_lane_module package</description>
 
   <maintainer email="maxime.clement@tier4.jp">Maxime Clement</maintainer>
@@ -29,7 +29,6 @@
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>tf2</depend>
-  <depend>tier4_planning_msgs</depend>
   <depend>visualization_msgs</depend>
 
   <test_depend>ament_cmake_ros</test_depend>

@@ -155,13 +155,11 @@ std::vector<autoware::tensorrt_yolox::Colormap> get_seg_colormap(const std::stri
 namespace autoware::tensorrt_yolox
 {
 TrtYoloX::TrtYoloX(
-  const std::string & model_path, const std::string & precision, const int num_class,
-  const float score_threshold, const float nms_threshold,
-  autoware::tensorrt_common::BuildConfig build_config, const bool use_gpu_preprocess,
-  const uint8_t gpu_id, std::string calibration_image_list_path, const double norm_factor,
-  [[maybe_unused]] const std::string & cache_dir,
-  const autoware::tensorrt_common::BatchConfig & batch_config, const size_t max_workspace_size,
-  const std::string & color_map_path)
+  TrtCommonConfig & trt_config, const int num_class, const float score_threshold,
+  const float nms_threshold, const bool use_gpu_preprocess, const uint8_t gpu_id,
+  std::string calibration_image_list_path, const double norm_factor,
+  [[maybe_unused]] const std::string & cache_dir, const std::string & color_map_path,
+  const CalibrationConfig & calib_config)
 : gpu_id_(gpu_id), is_gpu_initialized_(false)
 {
   if (!setCudaDeviceId(gpu_id_)) {
@@ -172,13 +170,29 @@ TrtYoloX::TrtYoloX(
   src_width_ = -1;
   src_height_ = -1;
   norm_factor_ = norm_factor;
-  batch_size_ = batch_config[2];
   multitask_ = 0;
   sematic_color_map_ = get_seg_colormap(color_map_path);
   stream_ = makeCudaStream();
 
-  if (precision == "int8") {
-    if (build_config.clip_value <= 0.0) {
+  trt_common_ = std::make_unique<TrtConvCalib>(trt_config);
+
+  const auto network_input_dims = trt_common_->getTensorShape(0);
+  batch_size_ = network_input_dims.d[0];
+  const auto input_channel = network_input_dims.d[1];
+  const auto input_height = network_input_dims.d[2];
+  const auto input_width = network_input_dims.d[3];
+
+  auto profile_dims_ptr = std::make_unique<std::vector<autoware::tensorrt_common::ProfileDims>>();
+
+  std::vector<autoware::tensorrt_common::ProfileDims> profile_dims{
+    autoware::tensorrt_common::ProfileDims(
+      0, {4, {batch_size_, input_channel, input_height, input_width}},
+      {4, {batch_size_, input_channel, input_height, input_width}},
+      {4, {batch_size_, input_channel, input_height, input_width}})};
+  *profile_dims_ptr = profile_dims;
+
+  if (trt_config.precision == "int8") {
+    if (calib_config.clip_value <= 0.0) {
       if (calibration_image_list_path.empty()) {
         throw std::runtime_error(
           "calibration_image_list_path should be passed to generate int8 engine "
@@ -189,19 +203,17 @@ TrtYoloX::TrtYoloX(
       calibration_image_list_path = "";
     }
 
-    int max_batch_size = batch_size_;
-    nvinfer1::Dims input_dims = autoware::tensorrt_common::get_input_dims(model_path);
     std::vector<std::string> calibration_images;
     if (calibration_image_list_path != "") {
       calibration_images = loadImageList(calibration_image_list_path, "");
     }
-    tensorrt_yolox::ImageStream stream(max_batch_size, input_dims, calibration_images);
-    fs::path calibration_table{model_path};
+    tensorrt_yolox::ImageStream stream(batch_size_, network_input_dims, calibration_images);
+    fs::path calibration_table{trt_config.onnx_path};
     std::string ext = "";
-    if (build_config.calib_type_str == "Entropy") {
+    if (calib_config.calib_type_str == "Entropy") {
       ext = "EntropyV2-";
     } else if (
-      build_config.calib_type_str == "Legacy" || build_config.calib_type_str == "Percentile") {
+      calib_config.calib_type_str == "Legacy" || calib_config.calib_type_str == "Percentile") {
       ext = "Legacy-";
     } else {
       ext = "MinMax-";
@@ -209,17 +221,17 @@ TrtYoloX::TrtYoloX(
 
     ext += "calibration.table";
     calibration_table.replace_extension(ext);
-    fs::path histogram_table{model_path};
+    fs::path histogram_table{trt_config.onnx_path};
     ext = "histogram.table";
     histogram_table.replace_extension(ext);
 
     std::unique_ptr<nvinfer1::IInt8Calibrator> calibrator;
-    if (build_config.calib_type_str == "Entropy") {
+    if (calib_config.calib_type_str == "Entropy") {
       calibrator.reset(
         new tensorrt_yolox::Int8EntropyCalibrator(stream, calibration_table, norm_factor_));
 
     } else if (
-      build_config.calib_type_str == "Legacy" || build_config.calib_type_str == "Percentile") {
+      calib_config.calib_type_str == "Legacy" || calib_config.calib_type_str == "Percentile") {
       const double quantile = 0.999999;
       const double cutoff = 0.999999;
       calibrator.reset(new tensorrt_yolox::Int8LegacyCalibrator(
@@ -228,22 +240,20 @@ TrtYoloX::TrtYoloX(
       calibrator.reset(
         new tensorrt_yolox::Int8MinMaxCalibrator(stream, calibration_table, norm_factor_));
     }
-    trt_common_ = std::make_unique<autoware::tensorrt_common::TrtCommon>(
-      model_path, precision, std::move(calibrator), batch_config, max_workspace_size, build_config);
+    if (!trt_common_->setupWithCalibrator(
+          std::move(calibrator), calib_config, std::move((profile_dims_ptr)))) {
+      throw std::runtime_error("Failed to setup TensorRT engine with calibrator");
+    }
   } else {
-    trt_common_ = std::make_unique<autoware::tensorrt_common::TrtCommon>(
-      model_path, precision, nullptr, batch_config, max_workspace_size, build_config);
-  }
-  trt_common_->setup();
-
-  if (!trt_common_->isInitialized()) {
-    return;
+    if (!trt_common_->setup(std::move(profile_dims_ptr))) {
+      throw std::runtime_error("Failed to setup TensorRT engine");
+    }
   }
 
   // Judge whether decoding output is required
   // Plain models require decoding, while models with EfficientNMS_TRT module don't.
   // If getNbBindings == 5, the model contains EfficientNMS_TRT
-  switch (trt_common_->getNbBindings()) {
+  switch (trt_common_->getNbIOTensors()) {
     case 2:
       // Specified model is plain one.
       // Bindings are: [input, output]
@@ -273,16 +283,16 @@ TrtYoloX::TrtYoloX(
       */
   }
   // GPU memory allocation
-  const auto input_dims = trt_common_->getBindingDimensions(0);
+  const auto input_dims = trt_common_->getTensorShape(0);
   const auto input_size =
     std::accumulate(input_dims.d + 1, input_dims.d + input_dims.nbDims, 1, std::multiplies<int>());
   if (needs_output_decode_) {
-    const auto output_dims = trt_common_->getBindingDimensions(1);
-    input_d_ = autoware::cuda_utils::make_unique<float[]>(batch_config[2] * input_size);
+    const auto output_dims = trt_common_->getTensorShape(1);
+    input_d_ = autoware::cuda_utils::make_unique<float[]>(batch_size_ * input_size);
     out_elem_num_ = std::accumulate(
       output_dims.d + 1, output_dims.d + output_dims.nbDims, 1, std::multiplies<int>());
-    out_elem_num_ = out_elem_num_ * batch_config[2];
-    out_elem_num_per_batch_ = static_cast<int>(out_elem_num_ / batch_config[2]);
+    out_elem_num_ = out_elem_num_ * batch_size_;
+    out_elem_num_per_batch_ = static_cast<int>(out_elem_num_ / batch_size_);
     out_prob_d_ = autoware::cuda_utils::make_unique<float[]>(out_elem_num_);
     out_prob_h_ =
       autoware::cuda_utils::make_unique_host<float[]>(out_elem_num_, cudaHostAllocPortable);
@@ -298,29 +308,27 @@ TrtYoloX::TrtYoloX(
       output_strides_ = {8, 16, 32, 4};
     }
   } else {
-    const auto out_scores_dims = trt_common_->getBindingDimensions(3);
+    const auto out_scores_dims = trt_common_->getTensorShape(3);
     max_detections_ = out_scores_dims.d[1];
-    input_d_ = autoware::cuda_utils::make_unique<float[]>(batch_config[2] * input_size);
-    out_num_detections_d_ = autoware::cuda_utils::make_unique<int32_t[]>(batch_config[2]);
-    out_boxes_d_ =
-      autoware::cuda_utils::make_unique<float[]>(batch_config[2] * max_detections_ * 4);
-    out_scores_d_ = autoware::cuda_utils::make_unique<float[]>(batch_config[2] * max_detections_);
-    out_classes_d_ =
-      autoware::cuda_utils::make_unique<int32_t[]>(batch_config[2] * max_detections_);
+    input_d_ = autoware::cuda_utils::make_unique<float[]>(batch_size_ * input_size);
+    out_num_detections_d_ = autoware::cuda_utils::make_unique<int32_t[]>(batch_size_);
+    out_boxes_d_ = autoware::cuda_utils::make_unique<float[]>(batch_size_ * max_detections_ * 4);
+    out_scores_d_ = autoware::cuda_utils::make_unique<float[]>(batch_size_ * max_detections_);
+    out_classes_d_ = autoware::cuda_utils::make_unique<int32_t[]>(batch_size_ * max_detections_);
   }
   if (multitask_) {
     // Allocate buffer for segmentation
     segmentation_out_elem_num_ = 0;
     for (int m = 0; m < multitask_; m++) {
       const auto output_dims =
-        trt_common_->getBindingDimensions(m + 2);  // 0 : input, 1 : output for detections
+        trt_common_->getTensorShape(m + 2);  // 0 : input, 1 : output for detections
       size_t out_elem_num = std::accumulate(
         output_dims.d + 1, output_dims.d + output_dims.nbDims, 1, std::multiplies<int>());
-      out_elem_num = out_elem_num * batch_config[2];
+      out_elem_num = out_elem_num * batch_size_;
       segmentation_out_elem_num_ += out_elem_num;
     }
     segmentation_out_elem_num_per_batch_ =
-      static_cast<int>(segmentation_out_elem_num_ / batch_config[2]);
+      static_cast<int>(segmentation_out_elem_num_ / batch_size_);
     segmentation_out_prob_d_ =
       autoware::cuda_utils::make_unique<float[]>(segmentation_out_elem_num_);
     segmentation_out_prob_h_ = autoware::cuda_utils::make_unique_host<float[]>(
@@ -341,16 +349,22 @@ TrtYoloX::TrtYoloX(
 
 TrtYoloX::~TrtYoloX()
 {
-  if (use_gpu_preprocess_) {
-    if (image_buf_h_) {
-      image_buf_h_.reset();
+  try {
+    if (use_gpu_preprocess_) {
+      if (image_buf_h_) {
+        image_buf_h_.reset();
+      }
+      if (image_buf_d_) {
+        image_buf_d_.reset();
+      }
+      if (argmax_buf_d_) {
+        argmax_buf_d_.reset();
+      }
     }
-    if (image_buf_d_) {
-      image_buf_d_.reset();
-    }
-    if (argmax_buf_d_) {
-      argmax_buf_d_.reset();
-    }
+  } catch (const std::exception & e) {
+    std::cerr << "Exception in TrtYoloX destructor: " << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unknown exception in TrtYoloX destructor" << std::endl;
   }
 }
 
@@ -381,7 +395,7 @@ void TrtYoloX::initPreprocessBuffer(int width, int height)
   src_width_ = width;
   src_height_ = height;
   if (use_gpu_preprocess_) {
-    auto input_dims = trt_common_->getBindingDimensions(0);
+    auto input_dims = trt_common_->getTensorShape(0);
     bool const hasRuntimeDim = std::any_of(
       input_dims.d, input_dims.d + input_dims.nbDims,
       [](int32_t input_dim) { return input_dim == -1; });
@@ -389,7 +403,9 @@ void TrtYoloX::initPreprocessBuffer(int width, int height)
       input_dims.d[0] = batch_size_;
     }
     if (!image_buf_h_) {
-      trt_common_->setBindingDimensions(0, input_dims);
+      if (!trt_common_->setInputShape(0, input_dims)) {
+        return;
+      }
       scales_.clear();
     }
     const float input_height = static_cast<float>(input_dims.d[2]);
@@ -408,7 +424,7 @@ void TrtYoloX::initPreprocessBuffer(int width, int height)
       size_t argmax_out_elem_num = 0;
       for (int m = 0; m < multitask_; m++) {
         const auto output_dims =
-          trt_common_->getBindingDimensions(m + 2);  // 0 : input, 1 : output for detections
+          trt_common_->getTensorShape(m + 2);  // 0 : input, 1 : output for detections
         const float scale = std::min(
           output_dims.d[3] / static_cast<float>(width),
           output_dims.d[2] / static_cast<float>(height));
@@ -435,7 +451,7 @@ void TrtYoloX::printProfiling(void)
 void TrtYoloX::preprocessGpu(const std::vector<cv::Mat> & images)
 {
   const auto batch_size = images.size();
-  auto input_dims = trt_common_->getBindingDimensions(0);
+  auto input_dims = trt_common_->getTensorShape(0);
 
   input_dims.d[0] = batch_size;
   for (const auto & image : images) {
@@ -463,7 +479,9 @@ void TrtYoloX::preprocessGpu(const std::vector<cv::Mat> & images)
     src_height_ = height;
   }
   if (!image_buf_h_) {
-    trt_common_->setBindingDimensions(0, input_dims);
+    if (!trt_common_->setInputShape(0, input_dims)) {
+      return;
+    }
     scales_.clear();
   }
   const float input_height = static_cast<float>(input_dims.d[2]);
@@ -489,7 +507,7 @@ void TrtYoloX::preprocessGpu(const std::vector<cv::Mat> & images)
     if (multitask_) {
       for (int m = 0; m < multitask_; m++) {
         const auto output_dims =
-          trt_common_->getBindingDimensions(m + 2);  // 0: input, 1: output for detections
+          trt_common_->getTensorShape(m + 2);  // 0: input, 1: output for detections
         const float scale = std::min(
           output_dims.d[3] / static_cast<float>(image.cols),
           output_dims.d[2] / static_cast<float>(image.rows));
@@ -524,9 +542,11 @@ void TrtYoloX::preprocessGpu(const std::vector<cv::Mat> & images)
 void TrtYoloX::preprocess(const std::vector<cv::Mat> & images)
 {
   const auto batch_size = images.size();
-  auto input_dims = trt_common_->getBindingDimensions(0);
+  auto input_dims = trt_common_->getTensorShape(0);
   input_dims.d[0] = batch_size;
-  trt_common_->setBindingDimensions(0, input_dims);
+  if (!trt_common_->setInputShape(0, input_dims)) {
+    return;
+  }
   const float input_height = static_cast<float>(input_dims.d[2]);
   const float input_width = static_cast<float>(input_dims.d[3]);
   std::vector<cv::Mat> dst_images;
@@ -561,9 +581,6 @@ bool TrtYoloX::doInference(
   if (!setCudaDeviceId(gpu_id_)) {
     return false;
   }
-  if (!trt_common_->isInitialized()) {
-    return false;
-  }
 
   if (use_gpu_preprocess_) {
     preprocessGpu(images);
@@ -582,7 +599,7 @@ void TrtYoloX::preprocessWithRoiGpu(
   const std::vector<cv::Mat> & images, const std::vector<cv::Rect> & rois)
 {
   const auto batch_size = images.size();
-  auto input_dims = trt_common_->getBindingDimensions(0);
+  auto input_dims = trt_common_->getTensorShape(0);
 
   input_dims.d[0] = batch_size;
   for (const auto & image : images) {
@@ -604,7 +621,9 @@ void TrtYoloX::preprocessWithRoiGpu(
     src_height_ = height;
   }
   if (!image_buf_h_) {
-    trt_common_->setBindingDimensions(0, input_dims);
+    if (!trt_common_->setInputShape(0, input_dims)) {
+      return;
+    }
   }
   const float input_height = static_cast<float>(input_dims.d[2]);
   const float input_width = static_cast<float>(input_dims.d[3]);
@@ -656,9 +675,11 @@ void TrtYoloX::preprocessWithRoi(
   const std::vector<cv::Mat> & images, const std::vector<cv::Rect> & rois)
 {
   const auto batch_size = images.size();
-  auto input_dims = trt_common_->getBindingDimensions(0);
+  auto input_dims = trt_common_->getTensorShape(0);
   input_dims.d[0] = batch_size;
-  trt_common_->setBindingDimensions(0, input_dims);
+  if (!trt_common_->setInputShape(0, input_dims)) {
+    return;
+  }
   const float input_height = static_cast<float>(input_dims.d[2]);
   const float input_width = static_cast<float>(input_dims.d[3]);
   std::vector<cv::Mat> dst_images;
@@ -694,7 +715,7 @@ void TrtYoloX::preprocessWithRoi(
 void TrtYoloX::multiScalePreprocessGpu(const cv::Mat & image, const std::vector<cv::Rect> & rois)
 {
   const auto batch_size = rois.size();
-  auto input_dims = trt_common_->getBindingDimensions(0);
+  auto input_dims = trt_common_->getTensorShape(0);
 
   input_dims.d[0] = batch_size;
 
@@ -716,7 +737,9 @@ void TrtYoloX::multiScalePreprocessGpu(const cv::Mat & image, const std::vector<
   src_height_ = height;
 
   if (!image_buf_h_) {
-    trt_common_->setBindingDimensions(0, input_dims);
+    if (!trt_common_->setInputShape(0, input_dims)) {
+      return;
+    }
   }
   const float input_height = static_cast<float>(input_dims.d[2]);
   const float input_width = static_cast<float>(input_dims.d[3]);
@@ -764,9 +787,11 @@ void TrtYoloX::multiScalePreprocessGpu(const cv::Mat & image, const std::vector<
 void TrtYoloX::multiScalePreprocess(const cv::Mat & image, const std::vector<cv::Rect> & rois)
 {
   const auto batch_size = rois.size();
-  auto input_dims = trt_common_->getBindingDimensions(0);
+  auto input_dims = trt_common_->getTensorShape(0);
   input_dims.d[0] = batch_size;
-  trt_common_->setBindingDimensions(0, input_dims);
+  if (!trt_common_->setInputShape(0, input_dims)) {
+    return;
+  }
   const float input_height = static_cast<float>(input_dims.d[2]);
   const float input_width = static_cast<float>(input_dims.d[3]);
   std::vector<cv::Mat> dst_images;
@@ -800,9 +825,6 @@ void TrtYoloX::multiScalePreprocess(const cv::Mat & image, const std::vector<cv:
 bool TrtYoloX::doInferenceWithRoi(
   const std::vector<cv::Mat> & images, ObjectArrays & objects, const std::vector<cv::Rect> & rois)
 {
-  if (!trt_common_->isInitialized()) {
-    return false;
-  }
   if (use_gpu_preprocess_) {
     preprocessWithRoiGpu(images, rois);
   } else {
@@ -821,9 +843,6 @@ bool TrtYoloX::doInferenceWithRoi(
 bool TrtYoloX::doMultiScaleInference(
   const cv::Mat & image, ObjectArrays & objects, const std::vector<cv::Rect> & rois)
 {
-  if (!trt_common_->isInitialized()) {
-    return false;
-  }
   if (use_gpu_preprocess_) {
     multiScalePreprocessGpu(image, rois);
   } else {
@@ -843,8 +862,10 @@ bool TrtYoloX::feedforward(const std::vector<cv::Mat> & images, ObjectArrays & o
   std::vector<void *> buffers = {
     input_d_.get(), out_num_detections_d_.get(), out_boxes_d_.get(), out_scores_d_.get(),
     out_classes_d_.get()};
-
-  trt_common_->enqueueV2(buffers.data(), *stream_, nullptr);
+  if (!trt_common_->setTensorsAddresses(buffers)) {
+    return false;
+  }
+  trt_common_->enqueueV3(*stream_);
 
   const auto batch_size = images.size();
   auto out_num_detections = std::make_unique<int32_t[]>(batch_size);
@@ -897,7 +918,11 @@ bool TrtYoloX::feedforwardAndDecode(
   if (multitask_) {
     buffers = {input_d_.get(), out_prob_d_.get(), segmentation_out_prob_d_.get()};
   }
-  trt_common_->enqueueV2(buffers.data(), *stream_, nullptr);
+
+  if (!trt_common_->setTensorsAddresses(buffers)) {
+    return false;
+  }
+  trt_common_->enqueueV3(*stream_);
 
   const auto batch_size = images.size();
 
@@ -927,7 +952,7 @@ bool TrtYoloX::feedforwardAndDecode(
         static_cast<int>(segmentation_out_elem_num_ / segmentation_out_elem_num_per_batch_);
       for (int m = 0; m < multitask_; m++) {
         const auto output_dims =
-          trt_common_->getBindingDimensions(m + 2);  // 0 : input, 1 : output for detections
+          trt_common_->getTensorShape(m + 2);  // 0 : input, 1 : output for detections
         size_t out_elem_num = std::accumulate(
           output_dims.d + 1, output_dims.d + output_dims.nbDims, 1, std::multiplies<int>());
         out_elem_num = out_elem_num * batch;
@@ -966,7 +991,10 @@ bool TrtYoloX::multiScaleFeedforward(const cv::Mat & image, int batch_size, Obje
     input_d_.get(), out_num_detections_d_.get(), out_boxes_d_.get(), out_scores_d_.get(),
     out_classes_d_.get()};
 
-  trt_common_->enqueueV2(buffers.data(), *stream_, nullptr);
+  if (!trt_common_->setTensorsAddresses(buffers)) {
+    return false;
+  }
+  trt_common_->enqueueV3(*stream_);
 
   auto out_num_detections = std::make_unique<int32_t[]>(batch_size);
   auto out_boxes = std::make_unique<float[]>(4 * batch_size * max_detections_);
@@ -1014,7 +1042,10 @@ bool TrtYoloX::multiScaleFeedforwardAndDecode(
   const cv::Mat & image, int batch_size, ObjectArrays & objects)
 {
   std::vector<void *> buffers = {input_d_.get(), out_prob_d_.get()};
-  trt_common_->enqueueV2(buffers.data(), *stream_, nullptr);
+  if (!trt_common_->setTensorsAddresses(buffers)) {
+    return false;
+  }
+  trt_common_->enqueueV3(*stream_);
 
   CHECK_CUDA_ERROR(cudaMemcpyAsync(
     out_prob_h_.get(), out_prob_d_.get(), sizeof(float) * out_elem_num_, cudaMemcpyDeviceToHost,
@@ -1036,7 +1067,7 @@ void TrtYoloX::decodeOutputs(
   float * prob, ObjectArray & objects, float scale, cv::Size & img_size) const
 {
   ObjectArray proposals;
-  auto input_dims = trt_common_->getBindingDimensions(0);
+  auto input_dims = trt_common_->getTensorShape(0);
   const float input_height = static_cast<float>(input_dims.d[2]);
   const float input_width = static_cast<float>(input_dims.d[3]);
   std::vector<GridAndStride> grid_strides;
@@ -1290,6 +1321,11 @@ void TrtYoloX::getColorizedMask(
       cmask.at<cv::Vec3b>(y, x)[2] = colormap[id].color[0];
     }
   }
+}
+
+int TrtYoloX::getBatchSize() const
+{
+  return batch_size_;
 }
 
 }  // namespace autoware::tensorrt_yolox

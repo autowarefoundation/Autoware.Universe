@@ -2,6 +2,49 @@
 Changelog for package autoware_behavior_path_sampling_planner_module
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.40.0 (2024-12-12)
+-------------------
+* Merge branch 'main' into release-0.40.0
+* Revert "chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)"
+  This reverts commit c9f0f2688c57b0f657f5c1f28f036a970682e7f5.
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)
+  * chore(package.xml): bump version to 0.39.0
+  * fix: fix ticket links in CHANGELOG.rst
+  * fix: remove unnecessary diff
+  ---------
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* fix(cpplint): include what you use - planning (`#9570 <https://github.com/autowarefoundation/autoware.universe/issues/9570>`_)
+* 0.39.0
+* update changelog
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* fix(autoware_behavior_path_sampling_planner_module): fix clang-diagnostic-unused-variable (`#9404 <https://github.com/autowarefoundation/autoware.universe/issues/9404>`_)
+  fix: clang-diagnostic-unused-variable
+* fix(autoware_behavior_path_sampling_planner_module): fix invalid parameter file (`#9231 <https://github.com/autowarefoundation/autoware.universe/issues/9231>`_)
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* refactor(bpp): rework steering factor interface (`#9325 <https://github.com/autowarefoundation/autoware.universe/issues/9325>`_)
+  * refactor(bpp): rework steering factor interface
+  * refactor(soa): rework steering factor interface
+  * refactor(AbLC): rework steering factor interface
+  * refactor(doa): rework steering factor interface
+  * refactor(lc): rework steering factor interface
+  * refactor(gp): rework steering factor interface
+  * refactor(sp): rework steering factor interface
+  * refactor(sbp): rework steering factor interface
+  * refactor(ss): rework steering factor interface
+  ---------
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* fix(autoware_behavior_path_sampling_planner_module): fix cppcheck unusedVariable (`#9190 <https://github.com/autowarefoundation/autoware.universe/issues/9190>`_)
+* Contributors: Esteve Fernandez, Fumiya Watanabe, M. Fatih Cırıt, Ryohsuke Mitsudome, Ryuta Kambe, Satoshi OTA, Yutaka Kondo, kobayu858
+
 0.39.0 (2024-11-25)
 -------------------
 * Merge commit '6a1ddbd08bd' into release-0.39.0

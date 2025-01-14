@@ -811,7 +811,7 @@ void RunOutModule::insertVelocityForState(
 
   // insert velocity for each state
   switch (state) {
-    case State::GO: {
+    case State::GO: {  // NOLINT
       insertStoppingVelocity(target_obstacle, current_pose, current_vel, current_acc, output_path);
       break;
     }

@@ -34,7 +34,6 @@ using namespace std::literals;
 using std::chrono::duration;
 using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
-using std::placeholders::_1;
 
 namespace
 {
@@ -73,6 +72,7 @@ enum class RadarTrackObjectID {
 RadarTracksMsgsConverterNode::RadarTracksMsgsConverterNode(const rclcpp::NodeOptions & node_options)
 : Node("radar_tracks_msgs_converter", node_options)
 {
+  using std::placeholders::_1;
   // Parameter Server
   set_param_res_ = this->add_on_set_parameters_callback(
     std::bind(&RadarTracksMsgsConverterNode::onSetParam, this, _1));

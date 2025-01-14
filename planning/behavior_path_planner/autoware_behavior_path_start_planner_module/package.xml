@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_behavior_path_start_planner_module</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>The autoware_behavior_path_start_planner_module package</description>
 
   <maintainer email="kosuke.takeuchi@tier4.jp">Kosuke Takeuchi</maintainer>
@@ -22,6 +22,7 @@
 
   <depend>autoware_behavior_path_planner</depend>
   <depend>autoware_behavior_path_planner_common</depend>
+  <depend>autoware_freespace_planning_algorithms</depend>
   <depend>autoware_motion_utils</depend>
   <depend>autoware_rtc_interface</depend>
   <depend>autoware_universe_utils</depend>

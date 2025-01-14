@@ -6,5 +6,6 @@
     <param name="root_path" value="$(var root_path)"/>
     <param name="max_depth" value="$(var max_depth)"/>
     <param name="show_rate" value="$(var show_rate)"/>
+    <param name="enable_terminal_log" value="$(var enable_terminal_log)"/>
   </node>
 </launch>

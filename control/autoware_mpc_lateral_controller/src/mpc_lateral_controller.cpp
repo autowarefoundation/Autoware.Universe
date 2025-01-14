@@ -57,8 +57,6 @@ MpcLateralController::MpcLateralController(
   p_filt.traj_resample_dist = dp_double("traj_resample_dist");
   p_filt.extend_trajectory_for_end_yaw_control = dp_bool("extend_trajectory_for_end_yaw_control");
 
-  m_mpc->m_admissible_position_error = dp_double("admissible_position_error");
-  m_mpc->m_admissible_yaw_error_rad = dp_double("admissible_yaw_error_rad");
   m_mpc->m_use_steer_prediction = dp_bool("use_steer_prediction");
   m_mpc->m_param.steer_tau = dp_double("vehicle_model_steer_tau");
 
@@ -434,9 +432,16 @@ Lateral MpcLateralController::getInitialControlCommand() const
 
 bool MpcLateralController::isStoppedState() const
 {
+  const double current_vel = m_current_kinematic_state.twist.twist.linear.x;
   // If the nearest index is not found, return false
-  if (m_current_trajectory.points.empty()) {
+  if (
+    m_current_trajectory.points.empty() || std::fabs(current_vel) > m_stop_state_entry_ego_speed) {
     return false;
+  }
+
+  const auto latest_published_cmd = m_ctrl_cmd_prev;  // use prev_cmd as a latest published command
+  if (m_keep_steer_control_until_converged && !isSteerConverged(latest_published_cmd)) {
+    return false;  // not stopState: keep control
   }
 
   // Note: This function used to take into account the distance to the stop line
@@ -447,21 +452,23 @@ bool MpcLateralController::isStoppedState() const
     m_current_trajectory.points, m_current_kinematic_state.pose.pose, m_ego_nearest_dist_threshold,
     m_ego_nearest_yaw_threshold);
 
-  const double current_vel = m_current_kinematic_state.twist.twist.linear.x;
-  const double target_vel = m_current_trajectory.points.at(nearest).longitudinal_velocity_mps;
+  // It is possible that stop is executed earlier than stop point, and velocity controller
+  // will not start when the distance from ego to stop point is less than 0.5 meter.
+  // So we use a distance margin to ensure we can detect stopped state.
+  static constexpr double distance_margin = 1.0;
+  const double target_vel = std::invoke([&]() -> double {
+    auto min_vel = m_current_trajectory.points.at(nearest).longitudinal_velocity_mps;
+    auto covered_distance = 0.0;
+    for (auto i = nearest + 1; i < m_current_trajectory.points.size(); ++i) {
+      min_vel = std::min(min_vel, m_current_trajectory.points.at(i).longitudinal_velocity_mps);
+      covered_distance += autoware::universe_utils::calcDistance2d(
+        m_current_trajectory.points.at(i - 1).pose, m_current_trajectory.points.at(i).pose);
+      if (covered_distance > distance_margin) break;
+    }
+    return min_vel;
+  });
 
-  const auto latest_published_cmd = m_ctrl_cmd_prev;  // use prev_cmd as a latest published command
-  if (m_keep_steer_control_until_converged && !isSteerConverged(latest_published_cmd)) {
-    return false;  // not stopState: keep control
-  }
-
-  if (
-    std::fabs(current_vel) < m_stop_state_entry_ego_speed &&
-    std::fabs(target_vel) < m_stop_state_entry_target_speed) {
-    return true;
-  } else {
-    return false;
-  }
+  return std::fabs(target_vel) < m_stop_state_entry_target_speed;
 }
 
 Lateral MpcLateralController::createCtrlCmdMsg(const Lateral & ctrl_cmd)

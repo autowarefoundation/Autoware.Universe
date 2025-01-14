@@ -15,226 +15,367 @@
 #ifndef AUTOWARE__TENSORRT_COMMON__TENSORRT_COMMON_HPP_
 #define AUTOWARE__TENSORRT_COMMON__TENSORRT_COMMON_HPP_
 
-#ifndef YOLOX_STANDALONE
-#include <rclcpp/rclcpp.hpp>
-
-#include <iostream>
-#endif
+#include "autoware/tensorrt_common/logger.hpp"
+#include "autoware/tensorrt_common/profiler.hpp"
+#include "autoware/tensorrt_common/utils.hpp"
 
 #include <NvInfer.h>
 #include <NvOnnxParser.h>
 
-#if (defined(_MSC_VER) or (defined(__GNUC__) and (7 <= __GNUC_MAJOR__)))
-#include <filesystem>
-namespace fs = ::std::filesystem;
-#else
-#include <experimental/filesystem>
-namespace fs = ::std::experimental::filesystem;
-#endif
-
-#include <autoware/tensorrt_common/logger.hpp>
-#include <autoware/tensorrt_common/simple_profiler.hpp>
-
 #include <memory>
-#include <sstream>
 #include <string>
+#include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace autoware
 {
 namespace tensorrt_common
 {
-/**
- * @struct BuildConfig
- * @brief Configuration to provide fine control regarding TensorRT builder
- */
-struct BuildConfig
-{
-  // type for calibration
-  std::string calib_type_str;
-
-  // DLA core ID that the process uses
-  int dla_core_id;
-
-  // flag for partial quantization in first layer
-  bool quantize_first_layer;  // For partial quantization
-
-  // flag for partial quantization in last layer
-  bool quantize_last_layer;  // For partial quantization
-
-  // flag for per-layer profiler using IProfiler
-  bool profile_per_layer;
-
-  // clip value for implicit quantization
-  double clip_value;  // For implicit quantization
-
-  // Supported calibration type
-  const std::array<std::string, 4> valid_calib_type = {"Entropy", "Legacy", "Percentile", "MinMax"};
-
-  BuildConfig()
-  : calib_type_str("MinMax"),
-    dla_core_id(-1),
-    quantize_first_layer(false),
-    quantize_last_layer(false),
-    profile_per_layer(false),
-    clip_value(0.0)
-  {
-  }
-
-  explicit BuildConfig(
-    const std::string & calib_type_str, const int dla_core_id = -1,
-    const bool quantize_first_layer = false, const bool quantize_last_layer = false,
-    const bool profile_per_layer = false, const double clip_value = 0.0)
-  : calib_type_str(calib_type_str),
-    dla_core_id(dla_core_id),
-    quantize_first_layer(quantize_first_layer),
-    quantize_last_layer(quantize_last_layer),
-    profile_per_layer(profile_per_layer),
-    clip_value(clip_value)
-  {
-#ifndef YOLOX_STANDALONE
-    if (
-      std::find(valid_calib_type.begin(), valid_calib_type.end(), calib_type_str) ==
-      valid_calib_type.end()) {
-      std::stringstream message;
-      message << "Invalid calibration type was specified: " << calib_type_str << std::endl
-              << "Valid value is one of: [Entropy, (Legacy | Percentile), MinMax]" << std::endl
-              << "Default calibration type will be used: MinMax" << std::endl;
-      std::cerr << message.str();
-    }
-#endif
-  }
-};
-
-nvinfer1::Dims get_input_dims(const std::string & onnx_file_path);
-
-const std::array<std::string, 3> valid_precisions = {"fp32", "fp16", "int8"};
-bool is_valid_precision_string(const std::string & precision);
-
 template <typename T>
 struct InferDeleter  // NOLINT
 {
-  void operator()(T * obj) const
-  {
-    if (obj) {
-#if TENSORRT_VERSION_MAJOR >= 8
-      delete obj;
-#else
-      obj->destroy();
-#endif
-    }
-  }
+  void operator()(T * obj) const { delete obj; }
 };
 
 template <typename T>
 using TrtUniquePtr = std::unique_ptr<T, InferDeleter<T>>;
 
-using BatchConfig = std::array<int32_t, 3>;
+using NetworkIOPtr = std::unique_ptr<std::vector<NetworkIO>>;
+using ProfileDimsPtr = std::unique_ptr<std::vector<ProfileDims>>;
+using TensorsVec = std::vector<std::pair<void *, nvinfer1::Dims>>;
+using TensorsMap = std::unordered_map<const char *, std::pair<void *, nvinfer1::Dims>>;
 
 /**
  * @class TrtCommon
- * @brief TensorRT common library
+ * @brief TensorRT common library.
  */
 class TrtCommon  // NOLINT
 {
 public:
   /**
    * @brief Construct TrtCommon.
-   * @param[in] mode_path ONNX model_path
-   * @param[in] precision precision for inference
-   * @param[in] calibrator pointer for any type of INT8 calibrator
-   * @param[in] batch_config configuration for batched execution
-   * @param[in] max_workspace_size maximum workspace for building TensorRT engine
-   * @param[in] buildConfig configuration including precision, calibration method, dla, remaining
-   * fp16 for first layer,  remaining fp16 for last layer and profiler for builder
-   * @param[in] plugin_paths path for custom plugin
+   *
+   * @param[in] trt_config Base configuration with ONNX model path as minimum required.
+   * parameter.
+   * @param[in] profiler Per-layer profiler.
+   * @param[in] plugin_paths Paths for TensorRT plugins.
    */
   TrtCommon(
-    const std::string & model_path, const std::string & precision,
-    std::unique_ptr<nvinfer1::IInt8Calibrator> calibrator = nullptr,
-    const BatchConfig & batch_config = {1, 1, 1}, const size_t max_workspace_size = (16 << 20),
-    const BuildConfig & buildConfig = BuildConfig(),
+    const TrtCommonConfig & trt_config,
+    const std::shared_ptr<Profiler> & profiler = std::make_shared<Profiler>(),
     const std::vector<std::string> & plugin_paths = {});
-
   /**
    * @brief Deconstruct TrtCommon
    */
   ~TrtCommon();
 
   /**
-   * @brief Load TensorRT engine
-   * @param[in] engine_file_path path for a engine file
-   * @return flag for whether loading are succeeded or failed
+   * @brief Setup for TensorRT execution including building and loading engine.
+   *
+   * @param[in] profile_dims Optimization profile of tensors for dynamic shapes.
+   * @param[in] network_io Network input/output tensors information.
+   * @return Whether setup is successful.
    */
-  bool loadEngine(const std::string & engine_file_path);
+  [[nodiscard]] virtual bool setup(
+    ProfileDimsPtr profile_dims = nullptr, NetworkIOPtr network_io = nullptr);
 
   /**
-   * @brief Output layer information including GFLOPs and parameters
-   * @param[in] onnx_file_path path for a onnx file
-   * @warning This function is based on darknet log.
+   * @brief Get TensorRT engine precision.
+   *
+   * @return string representation of TensorRT engine precision.
    */
-  void printNetworkInfo(const std::string & onnx_file_path);
+  [[nodiscard]] std::string getPrecision() const;
 
   /**
-   * @brief build TensorRT engine from ONNX
-   * @param[in] onnx_file_path path for a onnx file
-   * @param[in] output_engine_file_path path for a engine file
+   * @brief Get tensor name by index from TensorRT engine with fallback from TensorRT network.
+   *
+   * @param[in] index Tensor index.
+   * @return Tensor name.
    */
-  bool buildEngineFromOnnx(
-    const std::string & onnx_file_path, const std::string & output_engine_file_path);
+  [[nodiscard]] const char * getIOTensorName(const int32_t index) const;
 
   /**
-   * @brief setup for TensorRT execution including building and loading engine
+   * @brief Get number of IO tensors from TensorRT engine with fallback from TensorRT network.
+   *
+   * @return Number of IO tensors.
    */
-  void setup();
+  [[nodiscard]] int32_t getNbIOTensors() const;
 
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8500
-  void setupBindings(std::vector<void *> & bindings);
-#endif
+  /**
+   * @brief Get tensor shape by index from TensorRT engine with fallback from TensorRT network.
+   *
+   * @param[in] index Tensor index.
+   * @return Tensor shape.
+   */
+  [[nodiscard]] nvinfer1::Dims getTensorShape(const int32_t index) const;
 
-  bool isInitialized();
+  /**
+   * @brief Get tensor shape by name from TensorRT engine.
+   *
+   * @param[in] tensor_name Tensor name.
+   * @return Tensor shape.
+   */
+  [[nodiscard]] nvinfer1::Dims getTensorShape(const char * tensor_name) const;
 
-  nvinfer1::Dims getBindingDimensions(const int32_t index) const;
-  int32_t getNbBindings();
-  bool setBindingDimensions(const int32_t index, const nvinfer1::Dims & dimensions) const;
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8500
+  /**
+   * @brief Get input tensor shape by index from TensorRT network.
+   *
+   * @param[in] index Tensor index.
+   * @return Tensor shape.
+   */
+  [[nodiscard]] nvinfer1::Dims getInputDims(const int32_t index) const;
+
+  /**
+   * @brief Get output tensor shape by index from TensorRT network.
+   *
+   * @param[in] index Tensor index.
+   * @return Tensor shape.
+   */
+  [[nodiscard]] nvinfer1::Dims getOutputDims(const int32_t index) const;
+
+  /**
+   * @brief Set tensor address by index via TensorRT context.
+   *
+   * @param[in] index Tensor index.
+   * @param[in] data Tensor pointer.
+   * @return Whether setting tensor address is successful.
+   */
+  bool setTensorAddress(const int32_t index, void * data);
+
+  /**
+   * @brief Set tensor address by name via TensorRT context.
+   *
+   * @param[in] tensor_name Tensor name.
+   * @param[in] data Tensor pointer.
+   * @return Whether setting tensor address is successful.
+   */
+  bool setTensorAddress(const char * tensor_name, void * data);
+
+  /**
+   * @brief Set tensors addresses by indices via TensorRT context.
+   *
+   * @param[in] tensors Tensors pointers.
+   * @return Whether setting tensors addresses is successful.
+   */
+  bool setTensorsAddresses(std::vector<void *> & tensors);
+
+  /**
+   * @brief Set tensors addresses by names via TensorRT context.
+   *
+   * @param[in] tensors Tensors pointers.
+   * @return Whether setting tensors addresses is successful.
+   */
+  bool setTensorsAddresses(std::unordered_map<const char *, void *> & tensors);
+
+  /**
+   * @brief Set input shape by index via TensorRT context.
+   *
+   * @param[in] index Tensor index.
+   * @param[in] dimensions Tensor dimensions.
+   * @return Whether setting input shape is successful.
+   */
+  bool setInputShape(const int32_t index, const nvinfer1::Dims & dimensions);
+
+  /**
+   * @brief Set input shape by name via TensorRT context.
+   *
+   * @param[in] tensor_name Tensor name.
+   * @param[in] dimensions Tensor dimensions.
+   * @return Whether setting input shape is successful.
+   */
+  bool setInputShape(const char * tensor_name, const nvinfer1::Dims & dimensions);
+
+  /**
+   * @brief Set inputs shapes by indices via TensorRT context.
+   *
+   * @param[in] dimensions Vector of tensor dimensions with corresponding indices.
+   * @return Whether setting input shapes is successful.
+   */
+  bool setInputsShapes(const std::vector<nvinfer1::Dims> & dimensions);
+
+  /**
+   * @brief Set inputs shapes by names via TensorRT context.
+   *
+   * @param[in] dimensions Map of tensor dimensions with corresponding names as keys.
+   * @return Whether setting input shapes is successful.
+   */
+  bool setInputsShapes(const std::unordered_map<const char *, nvinfer1::Dims> & dimensions);
+
+  /**
+   * @brief Set tensor (address and shape) by index via TensorRT context.
+   *
+   * @param[in] index Tensor index.
+   * @param[in] data Tensor pointer.
+   * @param[in] dimensions Tensor dimensions.
+   * @return Whether setting tensor is successful.
+   */
+  bool setTensor(const int32_t index, void * data, nvinfer1::Dims dimensions = {});
+
+  /**
+   * @brief Set tensor (address and shape) by name via TensorRT context.
+   *
+   * @param[in] tensor_name Tensor name.
+   * @param[in] data Tensor pointer.
+   * @param[in] dimensions Tensor dimensions.
+   * @return Whether setting tensor is successful.
+   */
+  bool setTensor(const char * tensor_name, void * data, nvinfer1::Dims dimensions = {});
+
+  /**
+   * @brief Set tensors (addresses and shapes) by indices via TensorRT context.
+   *
+   * @param[in] tensors Vector of tensor pointers and dimensions with corresponding indices.
+   * @return Whether setting tensors is successful.
+   */
+  bool setTensors(TensorsVec & tensors);
+
+  /**
+   * @brief Set tensors (addresses and shapes) by names via TensorRT context.
+   *
+   * @param[in] tensors Map of tensor pointers and dimensions with corresponding names as keys.
+   * @return Whether setting tensors is successful.
+   */
+  bool setTensors(TensorsMap & tensors);
+
+  /**
+   * @brief Get per-layer profiler for model.
+   *
+   * @return Per-layer profiler.
+   */
+  [[nodiscard]] std::shared_ptr<Profiler> getModelProfiler();
+
+  /**
+   * @brief Get per-layer profiler for host.
+   *
+   * @return Per-layer profiler.
+   */
+  [[nodiscard]] std::shared_ptr<Profiler> getHostProfiler();
+
+  /**
+   * @brief Get TensorRT common configuration.
+   *
+   * @return TensorRT common configuration.
+   */
+  [[nodiscard]] std::shared_ptr<TrtCommonConfig> getTrtCommonConfig();
+
+  /**
+   * @brief Get TensorRT builder configuration.
+   *
+   * @return TensorRT builder configuration.
+   */
+  [[nodiscard]] std::shared_ptr<nvinfer1::IBuilderConfig> getBuilderConfig();
+
+  /**
+   * @brief Get TensorRT network definition.
+   *
+   * @return TensorRT network definition.
+   */
+  [[nodiscard]] std::shared_ptr<nvinfer1::INetworkDefinition> getNetwork();
+
+  /**
+   * @brief Get TensorRT logger.
+   *
+   * @return TensorRT logger.
+   */
+  [[nodiscard]] std::shared_ptr<Logger> getLogger();
+
+  /**
+   * @brief Execute inference via TensorRT context.
+   *
+   * @param[in] stream CUDA stream.
+   * @return Whether inference is successful.
+   */
   bool enqueueV3(cudaStream_t stream);
-#endif
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH < 10000
-  bool enqueueV2(void ** bindings, cudaStream_t stream, cudaEvent_t * input_consumed);
-#endif
 
   /**
-   * @brief output per-layer information
+   * @brief Print per-layer information.
    */
-  void printProfiling(void);
-
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8200
-  /**
-   * @brief get per-layer information for trt-engine-profiler
-   */
-  std::string getLayerInformation(nvinfer1::LayerInformationFormat format);
-#endif
+  void printProfiling() const;
 
 private:
-  Logger logger_;
-  fs::path model_file_path_;
+  /**
+   * @brief Initialize TensorRT common.
+   *
+   * @return Whether initialization is successful.
+   */
+  [[nodiscard]] bool initialize();
+
+  /**
+   * @brief Get per-layer information for trt-engine-profiler.
+   *
+   * @param[in] format Format for layer information.
+   * @return Layer information.
+   */
+  std::string getLayerInformation(nvinfer1::LayerInformationFormat format);
+
+  /**
+
+   * @brief Build TensorRT engine from ONNX.
+   *
+   * @return Whether building engine is successful.
+   */
+  bool buildEngineFromOnnx();
+
+  /**
+   * @brief Load TensorRT engine.
+   *
+   * @return Whether loading engine is successful.
+   */
+  bool loadEngine();
+
+  /**
+   * @brief Validate network input/output names and dimensions.
+   *
+   * @return Whether network input/output is valid.
+   */
+  bool validateNetworkIO();
+
+  /**
+   * @brief Validate optimization profile.
+   *
+   * @return Whether optimization profile is valid.
+   */
+  bool validateProfileDims();
+
+  //! @brief TensorRT runtime.
   TrtUniquePtr<nvinfer1::IRuntime> runtime_;
+
+  //! @brief TensorRT engine.
   TrtUniquePtr<nvinfer1::ICudaEngine> engine_;
+
+  //! @brief TensorRT execution context.
   TrtUniquePtr<nvinfer1::IExecutionContext> context_;
-  std::unique_ptr<nvinfer1::IInt8Calibrator> calibrator_;
 
-  std::string precision_;
-  BatchConfig batch_config_;
-  size_t max_workspace_size_;
-  bool is_initialized_{false};
+  //! @brief TensorRT builder.
+  TrtUniquePtr<nvinfer1::IBuilder> builder_;
 
-  // profiler for per-layer
-  SimpleProfiler model_profiler_;
-  // profiler for whole model
-  SimpleProfiler host_profiler_;
+  //! @brief TensorRT engine parser.
+  TrtUniquePtr<nvonnxparser::IParser> parser_;
 
-  std::unique_ptr<const BuildConfig> build_config_;
+  //! @brief TensorRT builder configuration.
+  std::shared_ptr<nvinfer1::IBuilderConfig> builder_config_;
+
+  //! @brief TensorRT network definition.
+  std::shared_ptr<nvinfer1::INetworkDefinition> network_;
+
+  //! @brief TrtCommon library base configuration.
+  std::shared_ptr<TrtCommonConfig> trt_config_;
+
+  //! @brief TensorRT logger.
+  std::shared_ptr<Logger> logger_;
+
+  //! @brief Per-layer profiler for host.
+  std::shared_ptr<Profiler> host_profiler_;
+
+  //! @brief Per-layer profiler for model.
+  std::shared_ptr<Profiler> model_profiler_;
+
+  //! @brief Model optimization profile.
+  ProfileDimsPtr profile_dims_;
+
+  //! @brief Model network input/output tensors information.
+  NetworkIOPtr network_io_;
 };
 
 }  // namespace tensorrt_common

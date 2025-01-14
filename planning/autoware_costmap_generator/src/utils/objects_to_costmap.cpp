@@ -200,10 +200,10 @@ grid_map::Matrix ObjectsToCostmap::makeCostmapFromObjects(
     grid_map::Polygon polygon;
     if (object.shape.type == autoware_perception_msgs::msg::Shape::POLYGON) {
       polygon = makePolygonFromObjectConvexHull(in_objects->header, object, expand_polygon_size);
-    } else if (object.shape.type == autoware_perception_msgs::msg::Shape::BOUNDING_BOX) {
+    } else if (object.shape.type == autoware_perception_msgs::msg::Shape::BOUNDING_BOX) {  // NOLINT
       polygon = makePolygonFromObjectBox(in_objects->header, object, expand_polygon_size);
     } else if (object.shape.type == autoware_perception_msgs::msg::Shape::CYLINDER) {
-      // TODO(Kenji Miyake): Add makePolygonFromObjectCylinder
+      // TODO(Kenji Miyake): Add makePolygonFromObjectCylinder and remove NOLINT
       polygon = makePolygonFromObjectBox(in_objects->header, object, expand_polygon_size);
     }
     const auto highest_probability_label = *std::max_element(

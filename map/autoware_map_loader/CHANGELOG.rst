@@ -2,6 +2,45 @@
 Changelog for package autoware_map_loader
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.40.0 (2024-12-12)
+-------------------
+* Merge branch 'main' into release-0.40.0
+* Revert "chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)"
+  This reverts commit c9f0f2688c57b0f657f5c1f28f036a970682e7f5.
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)
+  * chore(package.xml): bump version to 0.39.0
+  * fix: fix ticket links in CHANGELOG.rst
+  * fix: remove unnecessary diff
+  ---------
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* fix(cpplint): include what you use - map (`#9568 <https://github.com/autowarefoundation/autoware.universe/issues/9568>`_)
+* feat!: replace tier4_map_msgs with autoware_map_msgs for MapProjectorInfo (`#9392 <https://github.com/autowarefoundation/autoware.universe/issues/9392>`_)
+* fix: fix package names in changelog files (`#9500 <https://github.com/autowarefoundation/autoware.universe/issues/9500>`_)
+* update version
+* refactor(map_loader)!: prefix package and namespace with autoware (`#8927 <https://github.com/autowarefoundation/autoware.universe/issues/8927>`_)
+  * make lanelet2_map_visualization independent
+  * remove unused files
+  * remove unused package
+  * fix package name
+  * add autoware\_ prefix
+  * add autoware to exec name
+  * add autoware prefix
+  * removed unnecessary dependency
+  ---------
+* refactor(map_loader)!: prefix package and namespace with autoware (`#8927 <https://github.com/autowarefoundation/autoware.universe/issues/8927>`_)
+  * make lanelet2_map_visualization independent
+  * remove unused files
+  * remove unused package
+  * fix package name
+  * add autoware\_ prefix
+  * add autoware to exec name
+  * add autoware prefix
+  * removed unnecessary dependency
+  ---------
+* Contributors: Esteve Fernandez, Fumiya Watanabe, M. Fatih Cırıt, Masaki Baba, Ryohsuke Mitsudome, Yutaka Kondo
+
 0.39.0 (2024-11-25)
 -------------------
 * Merge commit '6a1ddbd08bd' into release-0.39.0

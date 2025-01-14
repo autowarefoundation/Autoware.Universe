@@ -2,6 +2,70 @@
 Changelog for package autoware_obstacle_cruise_planner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.40.0 (2024-12-12)
+-------------------
+* Merge branch 'main' into release-0.40.0
+* Revert "chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)"
+  This reverts commit c9f0f2688c57b0f657f5c1f28f036a970682e7f5.
+* refactor(obstacle_cruise_planner)!: refactor rviz and terminal info (`#9594 <https://github.com/autowarefoundation/autoware.universe/issues/9594>`_)
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)
+  * chore(package.xml): bump version to 0.39.0
+  * fix: fix ticket links in CHANGELOG.rst
+  * fix: remove unnecessary diff
+  ---------
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* fix(cpplint): include what you use - planning (`#9570 <https://github.com/autowarefoundation/autoware.universe/issues/9570>`_)
+* fix(obstacle_cruise_planner)!: remove stop reason (`#9464 <https://github.com/autowarefoundation/autoware.universe/issues/9464>`_)
+  fix(obstacle_cruise_planner): remove stop reason
+* 0.39.0
+* update changelog
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* feat(obstacle_cruise_planner): outputs velocity factor when the ego follows front vehicle. (`#9359 <https://github.com/autowarefoundation/autoware.universe/issues/9359>`_)
+  * feat(obstacle_cruise_planner): outputs velocity factor when the ego follows front vehicle.
+  * fix: cppcheck
+  ---------
+* fix(autoware_obstacle_cruise_planner): fix clang-diagnostic-delete-abstract-non-virtual-dtor (`#9419 <https://github.com/autowarefoundation/autoware.universe/issues/9419>`_)
+  fix: clang-diagnostic-delete-abstract-non-virtual-dtor
+* fix(autoware_obstacle_cruise_planner): fix clang-diagnostic-defaulted-function-deleted (`#9398 <https://github.com/autowarefoundation/autoware.universe/issues/9398>`_)
+  fix: clang-diagnostic-defaulted-function-deleted
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* feat(tier4_metric_msgs): apply tier4_metric_msgs for scenario_simulator_v2_adapter, control_evaluator, planning_evaluator, autonomous_emergency_braking, obstacle_cruise_planner, motion_velocity_planner, processing_time_checker (`#9180 <https://github.com/autowarefoundation/autoware.universe/issues/9180>`_)
+  * first commit
+  * fix building errs.
+  * change diagnostic messages to metric messages for publishing decision.
+  * fix bug about motion_velocity_planner
+  * change the diagnostic msg to metric msg in autoware_obstacle_cruise_planner.
+  * tmp save for planning_evaluator
+  * change the topic to which metrics published to.
+  * fix typo.
+  * remove unnesessary publishing of metrics.
+  * mke planning_evaluator publish msg of MetricArray instead of Diags.
+  * update aeb with metric type for decision.
+  * fix some bug
+  * remove autoware_evaluator_utils package.
+  * remove diagnostic_msgs dependency of planning_evaluator
+  * use metric_msgs for autoware_processing_time_checker.
+  * rewrite diagnostic_convertor to scenario_simulator_v2_adapter, supporting metric_msgs.
+  * pre-commit and fix typo
+  * publish metrics even if there is no metric in the MetricArray.
+  * modify the metric name of processing_time.
+  * update unit test for test_planning/control_evaluator
+  * manual pre-commit
+  ---------
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* chore(obstacle_cruise_planner): add function tests for a utils function (`#9206 <https://github.com/autowarefoundation/autoware.universe/issues/9206>`_)
+  * add utils test
+  ---------
+* Contributors: Esteve Fernandez, Fumiya Watanabe, Kem (TiankuiXian), M. Fatih Cırıt, Ryohsuke Mitsudome, Satoshi OTA, Yuki TAKAGI, Yutaka Kondo, kobayu858
+
 0.39.0 (2024-11-25)
 -------------------
 * Merge commit '6a1ddbd08bd' into release-0.39.0

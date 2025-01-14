@@ -106,3 +106,23 @@
 | --------------------------------------- | --------------- |
 | total packet reassembles failed         | 0               |
 | packet reassembles failed per unit time | 0               |
+
+## <u>UDP Buf Errors</u>
+
+/diagnostics/net_monitor: UDP Buf Errors
+
+<b>[summary]</b>
+
+| level | message        |
+| ----- | -------------- |
+| OK    | OK             |
+| WARN  | UDP buf errors |
+
+<b>[values]</b>
+
+| key                              | value (example) |
+| -------------------------------- | --------------- |
+| total UDP rcv buf errors         | 0               |
+| UDP rcv buf errors per unit time | 0               |
+| total UDP snd buf errors         | 0               |
+| UDP snd buf errors per unit time | 0               |

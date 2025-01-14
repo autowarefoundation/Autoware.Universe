@@ -39,7 +39,7 @@
 
 namespace autoware::behavior_velocity_planner
 {
-class OcclusionSpotModuleManager : public SceneModuleManagerInterface
+class OcclusionSpotModuleManager : public SceneModuleManagerInterface<>
 {
 public:
   explicit OcclusionSpotModuleManager(rclcpp::Node & node);

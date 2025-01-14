@@ -1127,9 +1127,7 @@ std::vector<lanelet::ConstPoint3d> getBoundWithHatchedRoadMarkings(
           get_corresponding_polygon_index(*current_polygon, bound_point.id()));
       }
     } else {
-      if (!polygon) {
-        will_close_polygon = true;
-      } else if (polygon.value().id() != current_polygon.value().id()) {
+      if (!polygon || polygon.value().id() != current_polygon.value().id()) {
         will_close_polygon = true;
       } else {
         current_polygon_border_indices.push_back(
@@ -1496,9 +1494,9 @@ std::vector<geometry_msgs::msg::Point> postProcess(
     [](const lanelet::ConstLineString3d & points, std::vector<geometry_msgs::msg::Point> & bound) {
       for (const auto & bound_p : points) {
         const auto cp = lanelet::utils::conversion::toGeomMsgPt(bound_p);
-        if (bound.empty()) {
-          bound.push_back(cp);
-        } else if (autoware::universe_utils::calcDistance2d(cp, bound.back()) > overlap_threshold) {
+        if (
+          bound.empty() ||
+          autoware::universe_utils::calcDistance2d(cp, bound.back()) > overlap_threshold) {
           bound.push_back(cp);
         }
       }

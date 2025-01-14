@@ -156,9 +156,8 @@ std::string ScenarioSelectorNode::selectScenarioByPosition()
       return tier4_planning_msgs::msg::Scenario::LANEDRIVING;
     } else if (is_in_parking_lot) {
       return tier4_planning_msgs::msg::Scenario::PARKING;
-    } else {
-      return tier4_planning_msgs::msg::Scenario::LANEDRIVING;
     }
+    return tier4_planning_msgs::msg::Scenario::LANEDRIVING;
   }
 
   if (current_scenario_ == tier4_planning_msgs::msg::Scenario::LANEDRIVING) {

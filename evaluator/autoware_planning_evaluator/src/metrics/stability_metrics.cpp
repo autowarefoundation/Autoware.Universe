@@ -14,7 +14,9 @@
 
 #include "autoware/planning_evaluator/metrics/stability_metrics.hpp"
 
+#include "autoware/motion_utils/resample/resample.hpp"
 #include "autoware/motion_utils/trajectory/trajectory.hpp"
+#include "autoware/planning_evaluator/metrics/metrics_utils.hpp"
 #include "autoware/universe_utils/geometry/geometry.hpp"
 
 #include <Eigen/Core>
@@ -92,6 +94,48 @@ Accumulator<double> calcLateralDistance(const Trajectory & traj1, const Trajecto
              std::sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
     }
     stat.add(dist);
+  }
+  return stat;
+}
+
+Accumulator<double> calcLookaheadLateralTrajectoryDisplacement(
+  const Trajectory traj1, const Trajectory traj2, const nav_msgs::msg::Odometry & ego_odom,
+  const double trajectory_eval_time_s)
+{
+  Accumulator<double> stat;
+
+  if (traj1.points.empty() || traj2.points.empty()) {
+    return stat;
+  }
+
+  const double ego_velocity =
+    std::hypot(ego_odom.twist.twist.linear.x, ego_odom.twist.twist.linear.y);
+
+  const double evaluation_section_length = trajectory_eval_time_s * std::abs(ego_velocity);
+
+  const double traj1_lookahead_distance =
+    utils::calc_lookahead_trajectory_distance(traj1, ego_odom.pose.pose);
+  const double traj2_lookahead_distance =
+    utils::calc_lookahead_trajectory_distance(traj2, ego_odom.pose.pose);
+
+  if (
+    traj1_lookahead_distance < evaluation_section_length ||
+    traj2_lookahead_distance < evaluation_section_length) {
+    return stat;
+  }
+
+  constexpr double num_evaluation_points = 10.0;
+  const double interval = evaluation_section_length / num_evaluation_points;
+
+  const auto resampled_traj1 = autoware::motion_utils::resampleTrajectory(
+    utils::get_lookahead_trajectory(
+      traj1, ego_odom.pose.pose, evaluation_section_length, trajectory_eval_time_s),
+    interval);
+
+  for (const auto & point : resampled_traj1.points) {
+    const auto p0 = autoware::universe_utils::getPoint(point);
+    const double dist = autoware::motion_utils::calcLateralOffset(traj2.points, p0);
+    stat.add(std::abs(dist));
   }
   return stat;
 }

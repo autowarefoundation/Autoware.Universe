@@ -15,9 +15,11 @@
 #ifndef AUTOWARE__IMAGE_PROJECTION_BASED_FUSION__FUSION_NODE_HPP_
 #define AUTOWARE__IMAGE_PROJECTION_BASED_FUSION__FUSION_NODE_HPP_
 
+#include <autoware/image_projection_based_fusion/camera_projection.hpp>
 #include <autoware/image_projection_based_fusion/debugger.hpp>
 #include <autoware/universe_utils/ros/debug_publisher.hpp>
 #include <autoware/universe_utils/system/stop_watch.hpp>
+#include <autoware/universe_utils/system/time_keeper.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <autoware_perception_msgs/msg/detected_objects.hpp>
@@ -38,7 +40,6 @@
 
 #include <map>
 #include <memory>
-#include <mutex>
 #include <set>
 #include <string>
 #include <utility>
@@ -50,13 +51,33 @@ using autoware_perception_msgs::msg::DetectedObject;
 using autoware_perception_msgs::msg::DetectedObjects;
 using sensor_msgs::msg::CameraInfo;
 using sensor_msgs::msg::Image;
-using sensor_msgs::msg::PointCloud2;
-using tier4_perception_msgs::msg::DetectedObjectsWithFeature;
+using PointCloudMsgType = sensor_msgs::msg::PointCloud2;
+using RoiMsgType = tier4_perception_msgs::msg::DetectedObjectsWithFeature;
+using ClusterMsgType = tier4_perception_msgs::msg::DetectedObjectsWithFeature;
+using ClusterObjType = tier4_perception_msgs::msg::DetectedObjectWithFeature;
 using tier4_perception_msgs::msg::DetectedObjectWithFeature;
 using PointCloud = pcl::PointCloud<pcl::PointXYZ>;
+using autoware::image_projection_based_fusion::CameraProjection;
 using autoware_perception_msgs::msg::ObjectClassification;
 
-template <class TargetMsg3D, class ObjType, class Msg2D>
+template <class Msg2D>
+struct Det2dStatus
+{
+  // camera index
+  std::size_t id = 0;
+  // camera projection
+  std::unique_ptr<CameraProjection> camera_projector_ptr;
+  bool project_to_unrectified_image = false;
+  bool approximate_camera_projection = false;
+  // process flags
+  bool is_fused = false;
+  // timing
+  double input_offset_ms = 0.0;
+  // cache
+  std::map<int64_t, typename Msg2D::ConstSharedPtr> cached_det2d_msgs;
+};
+
+template <class Msg3D, class Msg2D, class ExportObj>
 class FusionNode : public rclcpp::Node
 {
 public:
@@ -68,70 +89,71 @@ public:
   explicit FusionNode(
     const std::string & node_name, const rclcpp::NodeOptions & options, int queue_size);
 
-protected:
+private:
+  // Common process methods
   void cameraInfoCallback(
     const sensor_msgs::msg::CameraInfo::ConstSharedPtr input_camera_info_msg,
     const std::size_t camera_id);
 
-  virtual void preprocess(TargetMsg3D & output_msg);
-
-  // callback for Msg subscription
-  virtual void subCallback(const typename TargetMsg3D::ConstSharedPtr input_msg);
-
-  // callback for roi subscription
-
-  virtual void roiCallback(
-    const typename Msg2D::ConstSharedPtr input_roi_msg, const std::size_t roi_i);
-
-  virtual void fuseOnSingleImage(
-    const TargetMsg3D & input_msg, const std::size_t image_id, const Msg2D & input_roi_msg,
-    const sensor_msgs::msg::CameraInfo & camera_info, TargetMsg3D & output_msg) = 0;
-
-  // set args if you need
-  virtual void postprocess(TargetMsg3D & output_msg);
-
-  virtual void publish(const TargetMsg3D & output_msg);
-
+  // callback for timer
   void timer_callback();
   void setPeriod(const int64_t new_period);
+  void exportProcess();
 
-  std::size_t rois_number_{1};
-  tf2_ros::Buffer tf_buffer_;
-  tf2_ros::TransformListener tf_listener_;
+  // 2d detection management methods
+  bool checkAllDet2dFused()
+  {
+    for (const auto & det2d : det2d_list_) {
+      if (!det2d.is_fused) {
+        return false;
+      }
+    }
+    return true;
+  }
 
-  bool point_project_to_unrectified_image_{false};
+  // camera projection
+  float approx_grid_cell_w_size_;
+  float approx_grid_cell_h_size_;
 
-  // camera_info
-  std::map<std::size_t, sensor_msgs::msg::CameraInfo> camera_info_map_;
-  std::vector<rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr> camera_info_subs_;
-
+  // timer
   rclcpp::TimerBase::SharedPtr timer_;
   double timeout_ms_{};
   double match_threshold_ms_{};
-  std::vector<std::string> input_rois_topics_;
-  std::vector<std::string> input_camera_info_topics_;
-  std::vector<std::string> input_camera_topics_;
 
-  /** \brief A vector of subscriber. */
-  typename rclcpp::Subscription<TargetMsg3D>::SharedPtr sub_;
   std::vector<typename rclcpp::Subscription<Msg2D>::SharedPtr> rois_subs_;
-
-  // offsets between cameras and the lidars
-  std::vector<double> input_offset_ms_;
+  std::vector<rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr> camera_info_subs_;
 
   // cache for fusion
-  std::vector<bool> is_fused_;
-  std::pair<int64_t, typename TargetMsg3D::SharedPtr>
-    cached_msg_;  // first element is the timestamp in nanoseconds, second element is the message
-  std::vector<std::map<int64_t, typename Msg2D::ConstSharedPtr>> cached_roi_msgs_;
-  std::mutex mutex_cached_msgs_;
+  int64_t cached_det3d_msg_timestamp_;
+  typename Msg3D::SharedPtr cached_det3d_msg_ptr_;
 
-  // output publisher
-  typename rclcpp::Publisher<TargetMsg3D>::SharedPtr pub_ptr_;
+protected:
+  void setDet2DStatus(std::size_t rois_number);
 
-  // debugger
-  std::shared_ptr<Debugger> debugger_;
-  virtual bool out_of_scope(const ObjType & obj) = 0;
+  // callback for main subscription
+  void subCallback(const typename Msg3D::ConstSharedPtr input_msg);
+  // callback for roi subscription
+  void roiCallback(const typename Msg2D::ConstSharedPtr input_roi_msg, const std::size_t roi_i);
+
+  // Custom process methods
+  virtual void preprocess(Msg3D & output_msg);
+  virtual void fuseOnSingleImage(
+    const Msg3D & input_msg, const Det2dStatus<Msg2D> & det2d, const Msg2D & input_roi_msg,
+    Msg3D & output_msg) = 0;
+  virtual void postprocess(const Msg3D & processing_msg, ExportObj & output_msg);
+  virtual void publish(const ExportObj & output_msg);
+
+  // Members
+  tf2_ros::Buffer tf_buffer_;
+  tf2_ros::TransformListener tf_listener_;
+
+  // 2d detection management
+  std::vector<Det2dStatus<Msg2D>> det2d_list_;
+
+  /** \brief A vector of subscriber. */
+  typename rclcpp::Subscription<Msg3D>::SharedPtr sub_;
+
+  // parameters for out_of_scope filter
   float filter_scope_min_x_;
   float filter_scope_max_x_;
   float filter_scope_min_y_;
@@ -139,9 +161,20 @@ protected:
   float filter_scope_min_z_;
   float filter_scope_max_z_;
 
+  // output publisher
+  typename rclcpp::Publisher<ExportObj>::SharedPtr pub_ptr_;
+
+  // debugger
+  std::shared_ptr<Debugger> debugger_;
+
   /** \brief processing time publisher. **/
   std::unique_ptr<autoware::universe_utils::StopWatch<std::chrono::milliseconds>> stop_watch_ptr_;
   std::unique_ptr<autoware::universe_utils::DebugPublisher> debug_publisher_;
+
+  // timekeeper
+  rclcpp::Publisher<autoware::universe_utils::ProcessingTimeDetail>::SharedPtr
+    detailed_processing_time_publisher_;
+  std::shared_ptr<autoware::universe_utils::TimeKeeper> time_keeper_;
 };
 
 }  // namespace autoware::image_projection_based_fusion

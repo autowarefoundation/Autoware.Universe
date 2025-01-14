@@ -73,7 +73,7 @@ GyroOdometerNode::GyroOdometerNode(const rclcpp::NodeOptions & node_options)
     "twist_with_covariance", rclcpp::QoS{10});
 
   diagnostics_ =
-    std::make_unique<autoware::localization_util::DiagnosticsModule>(this, "gyro_odometer_status");
+    std::make_unique<autoware::universe_utils::DiagnosticsInterface>(this, "gyro_odometer_status");
 
   // TODO(YamatoAndo) createTimer
 }

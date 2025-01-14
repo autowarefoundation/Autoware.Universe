@@ -40,6 +40,9 @@ struct SamplingParameters
 std::vector<Bezier> sample(
   const autoware::sampler_common::State & initial, const autoware::sampler_common::State & final,
   const SamplingParameters & params);
+Bezier sample(
+  const autoware::sampler_common::State & initial, const autoware::sampler_common::State & final,
+  const double initial_velocity, const double final_velocity, const double acceleration);
 /// @brief generate a Bezier curve for the given states, velocities, and accelerations
 Bezier generate(
   const Eigen::Vector2d & initial_pose, const Eigen::Vector2d & final_pose,

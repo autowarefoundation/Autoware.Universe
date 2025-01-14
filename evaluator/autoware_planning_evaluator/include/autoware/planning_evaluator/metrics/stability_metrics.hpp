@@ -18,6 +18,7 @@
 #include "autoware/universe_utils/math/accumulator.hpp"
 
 #include "autoware_planning_msgs/msg/trajectory.hpp"
+#include <nav_msgs/msg/odometry.hpp>
 
 namespace planning_diagnostics
 {
@@ -41,6 +42,23 @@ Accumulator<double> calcFrechetDistance(const Trajectory & traj1, const Trajecto
  * @return calculated statistics
  */
 Accumulator<double> calcLateralDistance(const Trajectory & traj1, const Trajectory & traj2);
+
+/**
+ * @brief calculate the total lateral displacement between two trajectories
+ * @details Evaluates the cumulative absolute lateral displacement by sampling points
+ *          along the first trajectory and measuring their offset from the second trajectory.
+ *          The evaluation section length is determined by the ego vehicle's velocity and
+ *          the specified evaluation time.
+ *
+ * @param traj1 first trajectory to compare
+ * @param traj2 second trajectory to compare against
+ * @param [in] ego_odom current ego vehicle odometry containing pose and velocity
+ * @param [in]  trajectory_eval_time_s time duration for trajectory evaluation in seconds
+ * @return statistical accumulator containing the total lateral displacement
+ */
+Accumulator<double> calcLookaheadLateralTrajectoryDisplacement(
+  const Trajectory traj1, const Trajectory traj2, const nav_msgs::msg::Odometry & ego_odom,
+  const double trajectory_eval_time_s);
 
 }  // namespace metrics
 }  // namespace planning_diagnostics

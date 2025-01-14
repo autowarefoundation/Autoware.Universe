@@ -2,6 +2,66 @@
 Changelog for package autoware_behavior_velocity_planner_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.40.0 (2024-12-12)
+-------------------
+* Merge branch 'main' into release-0.40.0
+* Revert "chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)"
+  This reverts commit c9f0f2688c57b0f657f5c1f28f036a970682e7f5.
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)
+  * chore(package.xml): bump version to 0.39.0
+  * fix: fix ticket links in CHANGELOG.rst
+  * fix: remove unnecessary diff
+  ---------
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* test(autoware_behavior_velocity_planner_common): refactor and test autoware_behavior_velocity_planner_common (`#9551 <https://github.com/autowarefoundation/autoware.universe/issues/9551>`_)
+  * test(autoware_behavior_velocity_planner_common): refactor and test autoware_behavior_velocity_planner_common
+  * remove nodiscard
+  * update
+  * fix
+  * fix
+  * update
+  ---------
+* fix(cpplint): include what you use - planning (`#9570 <https://github.com/autowarefoundation/autoware.universe/issues/9570>`_)
+* feat(behavior_velocity_planner)!: remove stop_reason (`#9452 <https://github.com/autowarefoundation/autoware.universe/issues/9452>`_)
+* refactor(autoware_behavior_velocity_planner_common,autoware_behavior_velocity_planner): separate param files (`#9470 <https://github.com/autowarefoundation/autoware.universe/issues/9470>`_)
+  * refactor(autoware_behavior_velocity_planner_common,autoware_behavior_velocity_planner): separate param files
+  * Update planning/autoware_static_centerline_generator/test/test_static_centerline_generator.test.py
+  Co-authored-by: Kyoichi Sugahara <32741405+kyoichi-sugahara@users.noreply.github.com>
+  * fix
+  ---------
+  Co-authored-by: Kyoichi Sugahara <32741405+kyoichi-sugahara@users.noreply.github.com>
+* 0.39.0
+* update changelog
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* fix(autoware_behavior_velocity_planner_common): fix clang-diagnostic-unused-const-variable (`#9413 <https://github.com/autowarefoundation/autoware.universe/issues/9413>`_)
+  fix: clang-diagnostic-unused-const-variable
+* feat(behavior_velocity_planner): replace first_stop_path_point_index (`#9296 <https://github.com/autowarefoundation/autoware.universe/issues/9296>`_)
+  * feat(behavior_velocity_planner): replace first_stop_path_point_index
+  * add const
+  * Update planning/behavior_velocity_planner/autoware_behavior_velocity_traffic_light_module/src/scene.cpp
+  Co-authored-by: Kosuke Takeuchi <kosuke.tnp@gmail.com>
+  * Update planning/behavior_velocity_planner/autoware_behavior_velocity_planner/src/planner_manager.cpp
+  Co-authored-by: Kosuke Takeuchi <kosuke.tnp@gmail.com>
+  ---------
+  Co-authored-by: Kosuke Takeuchi <kosuke.tnp@gmail.com>
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* fix(bvp): remove expired module safely (`#9212 <https://github.com/autowarefoundation/autoware.universe/issues/9212>`_)
+  * fix(bvp): remove expired module safely
+  * fix: remove module id set
+  * fix: use itr to erase expired module
+  * fix: remove unused function
+  ---------
+* Contributors: Esteve Fernandez, Fumiya Watanabe, M. Fatih Cırıt, Mamoru Sobue, Ryohsuke Mitsudome, Satoshi OTA, Yukinari Hisaki, Yutaka Kondo, kobayu858
+
 0.39.0 (2024-11-25)
 -------------------
 * Merge commit '6a1ddbd08bd' into release-0.39.0

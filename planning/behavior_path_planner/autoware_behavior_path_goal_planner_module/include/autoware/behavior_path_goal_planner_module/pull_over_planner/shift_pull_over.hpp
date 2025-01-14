@@ -31,14 +31,12 @@ using autoware::lane_departure_checker::LaneDepartureChecker;
 class ShiftPullOver : public PullOverPlannerBase
 {
 public:
-  ShiftPullOver(
-    rclcpp::Node & node, const GoalPlannerParameters & parameters,
-    const LaneDepartureChecker & lane_departure_checker);
+  ShiftPullOver(rclcpp::Node & node, const GoalPlannerParameters & parameters);
   PullOverPlannerType getPlannerType() const override { return PullOverPlannerType::SHIFT; };
   std::optional<PullOverPath> plan(
     const GoalCandidate & modified_goal_pose, const size_t id,
     const std::shared_ptr<const PlannerData> planner_data,
-    const BehaviorModuleOutput & previous_module_output) override;
+    const BehaviorModuleOutput & upstream_module_output) override;
 
 protected:
   PathWithLaneId generateReferencePath(
@@ -49,7 +47,7 @@ protected:
   std::optional<PullOverPath> generatePullOverPath(
     const GoalCandidate & goal_candidate, const size_t id,
     const std::shared_ptr<const PlannerData> planner_data,
-    const BehaviorModuleOutput & previous_module_output, const lanelet::ConstLanelets & road_lanes,
+    const BehaviorModuleOutput & upstream_module_output, const lanelet::ConstLanelets & road_lanes,
     const lanelet::ConstLanelets & pull_over_lanes, const double lateral_jerk) const;
   static double calcBeforeShiftedArcLength(
     const PathWithLaneId & path, const double after_shifted_arc_length, const double dr);

@@ -171,11 +171,9 @@ void ImageDiagNode::ImageChecker(const sensor_msgs::msg::Image::ConstSharedPtr i
         cv::rectangle(
           diag_block_image, cv::Point(x, y), cv::Point(x + block_size_h, y + block_size_v),
           state_color_map_["BLOCKAGE"], -1, cv::LINE_AA);
-      } else if (region_state_vec[j] == Image_State::LOW_VIS) {
-        cv::rectangle(
-          diag_block_image, cv::Point(x, y), cv::Point(x + block_size_h, y + block_size_v),
-          state_color_map_["BACKLIGHT"], -1, cv::LINE_AA);
-      } else if (region_state_vec[j] == Image_State::BACKLIGHT) {
+      } else if (
+        region_state_vec[j] == Image_State::LOW_VIS ||
+        region_state_vec[j] == Image_State::BACKLIGHT) {
         cv::rectangle(
           diag_block_image, cv::Point(x, y), cv::Point(x + block_size_h, y + block_size_v),
           state_color_map_["BACKLIGHT"], -1, cv::LINE_AA);

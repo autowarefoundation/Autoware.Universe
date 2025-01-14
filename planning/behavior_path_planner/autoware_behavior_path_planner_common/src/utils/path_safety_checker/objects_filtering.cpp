@@ -57,6 +57,20 @@ bool is_within_circle(
     std::hypot(reference_point.x - object_pos.x, reference_point.y - object_pos.y);
   return dist < search_radius;
 }
+
+bool is_vehicle(const ObjectClassification & classification)
+{
+  switch (classification.label) {
+    case ObjectClassification::CAR:
+    case ObjectClassification::TRUCK:
+    case ObjectClassification::BUS:
+    case ObjectClassification::TRAILER:
+    case ObjectClassification::MOTORCYCLE:
+      return true;
+    default:
+      return false;
+  }
+}
 }  // namespace autoware::behavior_path_planner::utils::path_safety_checker::filter
 
 namespace autoware::behavior_path_planner::utils::path_safety_checker

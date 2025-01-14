@@ -25,6 +25,7 @@
 #include <chrono>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <memory>
 #include <string>
@@ -50,14 +51,16 @@ PlanningEvaluatorNode::PlanningEvaluatorNode(const rclcpp::NodeOptions & node_op
     declare_parameter<double>("trajectory.lookahead.max_dist_m");
   metrics_calculator_.parameters.trajectory.lookahead.max_time_s =
     declare_parameter<double>("trajectory.lookahead.max_time_s");
+  metrics_calculator_.parameters.trajectory.evaluation_time_s =
+    declare_parameter<double>("trajectory.evaluation_time_s");
   metrics_calculator_.parameters.obstacle.dist_thr_m =
     declare_parameter<double>("obstacle.dist_thr_m");
 
   output_metrics_ = declare_parameter<bool>("output_metrics");
   ego_frame_str_ = declare_parameter<std::string>("ego_frame");
 
-  processing_time_pub_ =
-    this->create_publisher<tier4_debug_msgs::msg::Float64Stamped>("~/debug/processing_time_ms", 1);
+  processing_time_pub_ = this->create_publisher<autoware_internal_debug_msgs::msg::Float64Stamped>(
+    "~/debug/processing_time_ms", 1);
 
   // List of metrics to calculate and publish
   metrics_pub_ = create_publisher<MetricArrayMsg>("~/metrics", 1);
@@ -74,45 +77,51 @@ PlanningEvaluatorNode::~PlanningEvaluatorNode()
     return;
   }
 
-  // generate json data
-  using json = nlohmann::json;
-  json j;
-  for (Metric metric : metrics_) {
-    const std::string base_name = metric_to_str.at(metric) + "/";
-    j[base_name + "min"] = metric_accumulators_[static_cast<size_t>(metric)][0].min();
-    j[base_name + "max"] = metric_accumulators_[static_cast<size_t>(metric)][1].max();
-    j[base_name + "mean"] = metric_accumulators_[static_cast<size_t>(metric)][2].mean();
-    j[base_name + "count"] = metric_accumulators_[static_cast<size_t>(metric)][2].count();
-    j[base_name + "description"] = metric_descriptions.at(metric);
-  }
-
-  // get output folder
-  const std::string output_folder_str =
-    rclcpp::get_logging_directory().string() + "/autoware_metrics";
-  if (!std::filesystem::exists(output_folder_str)) {
-    if (!std::filesystem::create_directories(output_folder_str)) {
-      RCLCPP_ERROR(
-        this->get_logger(), "Failed to create directories: %s", output_folder_str.c_str());
-      return;
+  try {
+    // generate json data
+    using json = nlohmann::json;
+    json j;
+    for (Metric metric : metrics_) {
+      const std::string base_name = metric_to_str.at(metric) + "/";
+      j[base_name + "min"] = metric_accumulators_[static_cast<size_t>(metric)][0].min();
+      j[base_name + "max"] = metric_accumulators_[static_cast<size_t>(metric)][1].max();
+      j[base_name + "mean"] = metric_accumulators_[static_cast<size_t>(metric)][2].mean();
+      j[base_name + "count"] = metric_accumulators_[static_cast<size_t>(metric)][2].count();
+      j[base_name + "description"] = metric_descriptions.at(metric);
     }
-  }
 
-  // get time stamp
-  std::time_t now_time_t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-  std::tm * local_time = std::localtime(&now_time_t);
-  std::ostringstream oss;
-  oss << std::put_time(local_time, "%Y-%m-%d-%H-%M-%S");
-  std::string cur_time_str = oss.str();
+    // get output folder
+    const std::string output_folder_str =
+      rclcpp::get_logging_directory().string() + "/autoware_metrics";
+    if (!std::filesystem::exists(output_folder_str)) {
+      if (!std::filesystem::create_directories(output_folder_str)) {
+        RCLCPP_ERROR(
+          this->get_logger(), "Failed to create directories: %s", output_folder_str.c_str());
+        return;
+      }
+    }
 
-  // Write metrics .json to file
-  const std::string output_file_str =
-    output_folder_str + "/autoware_planning_evaluator-" + cur_time_str + ".json";
-  std::ofstream f(output_file_str);
-  if (f.is_open()) {
-    f << j.dump(4);
-    f.close();
-  } else {
-    RCLCPP_ERROR(this->get_logger(), "Failed to open file: %s", output_file_str.c_str());
+    // get time stamp
+    std::time_t now_time_t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::tm * local_time = std::localtime(&now_time_t);
+    std::ostringstream oss;
+    oss << std::put_time(local_time, "%Y-%m-%d-%H-%M-%S");
+    std::string cur_time_str = oss.str();
+
+    // Write metrics .json to file
+    const std::string output_file_str =
+      output_folder_str + "/autoware_planning_evaluator-" + cur_time_str + ".json";
+    std::ofstream f(output_file_str);
+    if (f.is_open()) {
+      f << j.dump(4);
+      f.close();
+    } else {
+      RCLCPP_ERROR(this->get_logger(), "Failed to open file: %s", output_file_str.c_str());
+    }
+  } catch (const std::exception & e) {
+    std::cerr << "Exception in MotionEvaluatorNode destructor: " << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unknown exception in MotionEvaluatorNode destructor" << std::endl;
   }
 }
 
@@ -273,7 +282,7 @@ void PlanningEvaluatorNode::onTimer()
   metrics_msg_ = MetricArrayMsg{};
 
   // Publish ProcessingTime
-  tier4_debug_msgs::msg::Float64Stamped processing_time_msg;
+  autoware_internal_debug_msgs::msg::Float64Stamped processing_time_msg;
   processing_time_msg.stamp = get_clock()->now();
   processing_time_msg.data = stop_watch.toc();
   processing_time_pub_->publish(processing_time_msg);
@@ -343,7 +352,7 @@ void PlanningEvaluatorNode::onModifiedGoal(
 void PlanningEvaluatorNode::onOdometry(const Odometry::ConstSharedPtr odometry_msg)
 {
   if (!odometry_msg) return;
-  metrics_calculator_.setEgoPose(odometry_msg->pose.pose);
+  metrics_calculator_.setEgoPose(*odometry_msg);
   {
     getRouteData();
     if (route_handler_.isHandlerReady() && odometry_msg) {

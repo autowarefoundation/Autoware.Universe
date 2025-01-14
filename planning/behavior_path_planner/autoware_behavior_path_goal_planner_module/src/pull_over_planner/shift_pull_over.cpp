@@ -30,18 +30,17 @@
 
 namespace autoware::behavior_path_planner
 {
-ShiftPullOver::ShiftPullOver(
-  rclcpp::Node & node, const GoalPlannerParameters & parameters,
-  const LaneDepartureChecker & lane_departure_checker)
+ShiftPullOver::ShiftPullOver(rclcpp::Node & node, const GoalPlannerParameters & parameters)
 : PullOverPlannerBase{node, parameters},
-  lane_departure_checker_{lane_departure_checker},
+  lane_departure_checker_{
+    lane_departure_checker::Param{parameters.lane_departure_check_expansion_margin}, vehicle_info_},
   left_side_parking_{parameters.parking_policy == ParkingPolicy::LEFT_SIDE}
 {
 }
 std::optional<PullOverPath> ShiftPullOver::plan(
   const GoalCandidate & modified_goal_pose, const size_t id,
   const std::shared_ptr<const PlannerData> planner_data,
-  const BehaviorModuleOutput & previous_module_output)
+  const BehaviorModuleOutput & upstream_module_output)
 {
   const auto & route_handler = planner_data->route_handler;
   const double min_jerk = parameters_.minimum_lateral_jerk;
@@ -52,7 +51,7 @@ std::optional<PullOverPath> ShiftPullOver::plan(
   const double jerk_resolution = std::abs(max_jerk - min_jerk) / shift_sampling_num;
 
   const auto road_lanes = utils::getExtendedCurrentLanesFromPath(
-    previous_module_output.path, planner_data, backward_search_length, forward_search_length,
+    upstream_module_output.path, planner_data, backward_search_length, forward_search_length,
     /*forward_only_in_route*/ false);
 
   const auto pull_over_lanes = goal_planner_utils::getPullOverLanes(
@@ -64,10 +63,10 @@ std::optional<PullOverPath> ShiftPullOver::plan(
   // find safe one from paths with different jerk
   for (double lateral_jerk = min_jerk; lateral_jerk <= max_jerk; lateral_jerk += jerk_resolution) {
     const auto pull_over_path = generatePullOverPath(
-      modified_goal_pose, id, planner_data, previous_module_output, road_lanes, pull_over_lanes,
+      modified_goal_pose, id, planner_data, upstream_module_output, road_lanes, pull_over_lanes,
       lateral_jerk);
     if (!pull_over_path) continue;
-    return *pull_over_path;
+    return pull_over_path;
   }
 
   return {};
@@ -134,7 +133,7 @@ std::optional<PathWithLaneId> ShiftPullOver::cropPrevModulePath(
 std::optional<PullOverPath> ShiftPullOver::generatePullOverPath(
   const GoalCandidate & goal_candidate, const size_t id,
   const std::shared_ptr<const PlannerData> planner_data,
-  const BehaviorModuleOutput & previous_module_output, const lanelet::ConstLanelets & road_lanes,
+  const BehaviorModuleOutput & upstream_module_output, const lanelet::ConstLanelets & road_lanes,
   const lanelet::ConstLanelets & pull_over_lanes, const double lateral_jerk) const
 {
   const double pull_over_velocity = parameters_.pull_over_velocity;
@@ -151,7 +150,7 @@ std::optional<PullOverPath> ShiftPullOver::generatePullOverPath(
     generateReferencePath(planner_data, road_lanes, shift_end_pose),
     parameters_.center_line_path_interval);
   const auto prev_module_path = utils::resamplePathWithSpline(
-    previous_module_output.path, parameters_.center_line_path_interval);
+    upstream_module_output.path, parameters_.center_line_path_interval);
   const auto prev_module_path_terminal_pose = prev_module_path.points.back().point.pose;
 
   // process previous module path for path shifter input path

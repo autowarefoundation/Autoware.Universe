@@ -17,6 +17,7 @@
 
 #include <autoware/image_projection_based_fusion/pointpainting_fusion/voxel_generator.hpp>
 #include <autoware/lidar_centerpoint/centerpoint_trt.hpp>
+#include <autoware/tensorrt_common/utils.hpp>
 
 #include <memory>
 #include <string>
@@ -29,8 +30,8 @@ public:
   using autoware::lidar_centerpoint::CenterPointTRT::CenterPointTRT;
 
   explicit PointPaintingTRT(
-    const autoware::lidar_centerpoint::NetworkParam & encoder_param,
-    const autoware::lidar_centerpoint::NetworkParam & head_param,
+    const autoware::tensorrt_common::TrtCommonConfig & encoder_param,
+    const autoware::tensorrt_common::TrtCommonConfig & head_param,
     const autoware::lidar_centerpoint::DensificationParam & densification_param,
     const autoware::lidar_centerpoint::CenterPointConfig & config);
 

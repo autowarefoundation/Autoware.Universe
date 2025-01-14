@@ -15,9 +15,10 @@
 #ifndef PROCESSOR__INPUT_MANAGER_HPP_
 #define PROCESSOR__INPUT_MANAGER_HPP_
 
+#include "autoware/multi_object_tracker/object_model/types.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-#include "autoware_perception_msgs/msg/detected_objects.hpp"
+#include <autoware_perception_msgs/msg/detected_objects.hpp>
 
 #include <deque>
 #include <functional>
@@ -28,8 +29,7 @@
 
 namespace autoware::multi_object_tracker
 {
-using DetectedObjects = autoware_perception_msgs::msg::DetectedObjects;
-using ObjectsList = std::vector<std::pair<uint, DetectedObjects>>;
+using ObjectsList = std::vector<types::DynamicObjectList>;
 
 struct InputChannel
 {
@@ -82,11 +82,10 @@ private:
   bool is_spawn_enabled_{};
 
   size_t que_size_{30};
-  std::deque<DetectedObjects> objects_que_;
+  std::deque<types::DynamicObjectList> objects_que_;
 
   std::function<void(const uint &)> func_trigger_;
 
-  // bool is_time_initialized_{false};
   int initial_count_{0};
   double latency_mean_{};
   double latency_var_{};
@@ -115,7 +114,8 @@ public:
 
 private:
   rclcpp::Node & node_;
-  std::vector<rclcpp::Subscription<DetectedObjects>::SharedPtr> sub_objects_array_{};
+  std::vector<rclcpp::Subscription<autoware_perception_msgs::msg::DetectedObjects>::SharedPtr>
+    sub_objects_array_{};
 
   bool is_initialized_{false};
   rclcpp::Time latest_exported_object_time_;

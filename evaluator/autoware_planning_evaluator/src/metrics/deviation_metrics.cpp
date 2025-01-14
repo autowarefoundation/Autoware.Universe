@@ -45,6 +45,25 @@ Accumulator<double> calcLateralDeviation(const Trajectory & ref, const Trajector
   return stat;
 }
 
+Accumulator<double> calcLocalLateralTrajectoryDisplacement(
+  const Trajectory & prev, const Trajectory & traj, const Pose & ego_pose)
+{
+  Accumulator<double> stat;
+
+  if (prev.points.empty() || traj.points.empty()) {
+    return stat;
+  }
+
+  const auto prev_lateral_deviation =
+    autoware::motion_utils::calcLateralOffset(prev.points, ego_pose.position);
+  const auto traj_lateral_deviation =
+    autoware::motion_utils::calcLateralOffset(traj.points, ego_pose.position);
+  const auto lateral_trajectory_displacement =
+    std::abs(traj_lateral_deviation - prev_lateral_deviation);
+  stat.add(lateral_trajectory_displacement);
+  return stat;
+}
+
 Accumulator<double> calcYawDeviation(const Trajectory & ref, const Trajectory & traj)
 {
   Accumulator<double> stat;

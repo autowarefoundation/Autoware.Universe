@@ -30,6 +30,11 @@
           "default": [800, 800, 800, 800, 800, 800, 800, 800],
           "description": "Threshold value of the number of point clouds per object when the distance from baselink is 1m, because the number of point clouds varies with the distance from baselink."
         },
+        "validate_max_distance_m": {
+          "type": "number",
+          "default": 70.0,
+          "description": "The maximum distance from the baselink to the object to be validated"
+        },
         "using_2d_validator": {
           "type": "boolean",
           "default": false,

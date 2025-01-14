@@ -29,7 +29,7 @@
         "has_static_tf_only": {
           "type": "boolean",
           "description": "Flag to indicate if only static TF is used.",
-          "default": false
+          "default": "false"
         }
       },
       "required": [

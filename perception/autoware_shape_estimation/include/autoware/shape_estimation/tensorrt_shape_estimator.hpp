@@ -48,11 +48,7 @@ class TrtShapeEstimator
 {
 public:
   TrtShapeEstimator(
-    const std::string & model_path, const std::string & precision,
-    const autoware::tensorrt_common::BatchConfig & batch_config,
-    const size_t max_workspace_size = (1 << 30),
-    const autoware::tensorrt_common::BuildConfig build_config =
-      autoware::tensorrt_common::BuildConfig("MinMax", -1, false, false, false, 0.0));
+    const std::string & model_path, const std::string & precision, const int batch_size);
 
   ~TrtShapeEstimator() = default;
 

@@ -83,19 +83,18 @@ TrtYoloXNode::TrtYoloXNode(const rclcpp::NodeOptions & node_options)
   roi_overlay_segment_labels_.ANIMAL = declare_parameter<bool>("roi_overlay_segment_label.ANIMAL");
   replaceLabelMap();
 
-  autoware::tensorrt_common::BuildConfig build_config(
-    calibration_algorithm, dla_core_id, quantize_first_layer, quantize_last_layer,
-    profile_per_layer, clip_value);
+  TrtCommonConfig trt_config(
+    model_path, precision, "", (1ULL << 30U), dla_core_id, profile_per_layer);
+
+  CalibrationConfig calib_config(
+    calibration_algorithm, quantize_first_layer, quantize_last_layer, clip_value);
 
   const double norm_factor = 1.0;
   const std::string cache_dir = "";
-  const autoware::tensorrt_common::BatchConfig batch_config{1, 1, 1};
-  const size_t max_workspace_size = (1 << 30);
 
   trt_yolox_ = std::make_unique<tensorrt_yolox::TrtYoloX>(
-    model_path, precision, label_map_.size(), score_threshold, nms_threshold, build_config,
-    preprocess_on_gpu, gpu_id, calibration_image_list_path, norm_factor, cache_dir, batch_config,
-    max_workspace_size, color_map_path);
+    trt_config, label_map_.size(), score_threshold, nms_threshold, preprocess_on_gpu, gpu_id,
+    calibration_image_list_path, norm_factor, cache_dir, color_map_path, calib_config);
 
   if (!trt_yolox_->isGPUInitialized()) {
     RCLCPP_ERROR(this->get_logger(), "GPU %d does not exist or is not suitable.", gpu_id);

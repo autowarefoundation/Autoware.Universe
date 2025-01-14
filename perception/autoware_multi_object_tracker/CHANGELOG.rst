@@ -2,6 +2,57 @@
 Changelog for package autoware_multi_object_tracker
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.40.0 (2024-12-12)
+-------------------
+* Merge branch 'main' into release-0.40.0
+* Revert "chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)"
+  This reverts commit c9f0f2688c57b0f657f5c1f28f036a970682e7f5.
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)
+  * chore(package.xml): bump version to 0.39.0
+  * fix: fix ticket links in CHANGELOG.rst
+  * fix: remove unnecessary diff
+  ---------
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* fix(autoware_multi_object_tracker): measure latency with latest detection update time (`#9533 <https://github.com/autowarefoundation/autoware.universe/issues/9533>`_)
+  * fix: measure latency with latest detection update time
+  * fix: remove duplicated current_time
+  ---------
+* fix(cpplint): include what you use - perception (`#9569 <https://github.com/autowarefoundation/autoware.universe/issues/9569>`_)
+* ci(pre-commit): autoupdate (`#8949 <https://github.com/autowarefoundation/autoware.universe/issues/8949>`_)
+  Co-authored-by: M. Fatih Cırıt <mfc@autoware.org>
+* fix(autoware_multi_object_tracker): fix clang-diagnostic-unused-private-field (`#9491 <https://github.com/autowarefoundation/autoware.universe/issues/9491>`_)
+* 0.39.0
+* update changelog
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* feat(autoware_multi_object_tracker): new function to add odometry uncertainty (`#9139 <https://github.com/autowarefoundation/autoware.universe/issues/9139>`_)
+  * feat: add Odometry uncertainty to object tracking
+  * feat: Add odometry heading uncertainty to object pose covariance
+  feat: Rotate object pose covariance matrix to account for yaw uncertainty
+  Rotate the object pose covariance matrix in the uncertainty_processor.cpp file to account for the yaw uncertainty. This ensures that the covariance matrix accurately represents the position uncertainty of the object.
+  Refactor the code to rotate the covariance matrix using Eigen's Rotation2D class. The yaw uncertainty is added to the y-y element of the rotated covariance matrix. Finally, update the object_pose_cov array with the updated covariance values.
+  Closes `#123 <https://github.com/autowarefoundation/autoware.universe/issues/123>`_
+  * feat: Add odometry motion uncertainty to object pose covariance
+  refactoring
+  * feat: Update ego twist uncertainty to the object velocity uncertainty
+  * feat: update object twist covariance by odometry yaw rate uncertainty
+  * feat: move uncertainty modeling to input side
+  * feat: add option to select odometry uncertainty
+  * refactor: rename consider_odometry_uncertainty to enable_odometry_uncertainty
+  * fix: transform to world first, add odometry covariance later
+  style(pre-commit): autofix
+  * feat: Add odometry heading uncertainty to object pose covariance
+  ---------
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* Contributors: Esteve Fernandez, Fumiya Watanabe, M. Fatih Cırıt, Ryohsuke Mitsudome, Taekjin LEE, Yutaka Kondo, awf-autoware-bot[bot], kobayu858
+
 0.39.0 (2024-11-25)
 -------------------
 * fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)

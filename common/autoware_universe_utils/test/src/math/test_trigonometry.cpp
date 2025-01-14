@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <random>
 
 TEST(trigonometry, sin)
 {
@@ -60,11 +61,15 @@ float normalize_angle(double angle)
 
 TEST(trigonometry, opencv_fast_atan2)
 {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+
+  // Generate random x and y between -10.0 and 10.0 as float
+  std::uniform_real_distribution<float> dis(-10.0f, 10.0f);
+
   for (int i = 0; i < 100; ++i) {
-    // Generate random x and y between -10 and 10
-    std::srand(0);
-    float x = static_cast<float>(std::rand()) / RAND_MAX * 20.0 - 10.0;
-    float y = static_cast<float>(std::rand()) / RAND_MAX * 20.0 - 10.0;
+    const float x = dis(gen);
+    const float y = dis(gen);
 
     float fast_atan = autoware::universe_utils::opencv_fast_atan2(y, x);
     float std_atan = normalize_angle(std::atan2(y, x));

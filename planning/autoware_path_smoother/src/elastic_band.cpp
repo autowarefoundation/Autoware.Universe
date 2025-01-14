@@ -53,9 +53,7 @@ Eigen::SparseMatrix<double> makePMatrix(const int num_points)
           assign_value_to_triplet_vec(r, c, 6.0);
         }
       } else if (std::abs(c - r) == 1) {
-        if (r == 0 || r == num_points - 1) {
-          assign_value_to_triplet_vec(r, c, -2.0);
-        } else if (c == 0 || c == num_points - 1) {
+        if (r == 0 || r == num_points - 1 || c == 0 || c == num_points - 1) {
           assign_value_to_triplet_vec(r, c, -2.0);
         } else {
           assign_value_to_triplet_vec(r, c, -4.0);

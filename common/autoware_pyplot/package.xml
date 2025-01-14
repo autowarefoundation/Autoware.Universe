@@ -2,12 +2,11 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_pyplot</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>C++ interface for matplotlib based on pybind11</description>
   <maintainer email="mamoru.sobue@tier4.jp">Mamoru Sobue</maintainer>
   <maintainer email="yukinari.hisaki.2@tier4.jp">Yukinari Hisaki</maintainer>
   <license>Apache License 2.0</license>
-  <author email="koji.minoda@tier4.jp">Koji Minoda</author>
 
   <author email="mamoru.sobue@tier4.jp">Mamoru Sobue</author>
 

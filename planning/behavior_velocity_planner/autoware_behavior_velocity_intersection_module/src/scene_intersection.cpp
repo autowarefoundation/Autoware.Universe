@@ -53,7 +53,7 @@ IntersectionModule::IntersectionModule(
   const PlannerParam & planner_param, const std::set<lanelet::Id> & associative_ids,
   const std::string & turn_direction, const bool has_traffic_light, rclcpp::Node & node,
   const rclcpp::Logger logger, const rclcpp::Clock::SharedPtr clock)
-: SceneModuleInterface(module_id, logger, clock),
+: SceneModuleInterfaceWithRTC(module_id, logger, clock),
   planner_param_(planner_param),
   lane_id_(lane_id),
   associative_ids_(associative_ids),
@@ -88,10 +88,11 @@ IntersectionModule::IntersectionModule(
     static_occlusion_timeout_state_machine_.setState(StateMachine::State::STOP);
   }
 
-  ego_ttc_pub_ = node.create_publisher<tier4_debug_msgs::msg::Float64MultiArrayStamped>(
+  ego_ttc_pub_ = node.create_publisher<autoware_internal_debug_msgs::msg::Float64MultiArrayStamped>(
     "~/debug/intersection/ego_ttc", 1);
-  object_ttc_pub_ = node.create_publisher<tier4_debug_msgs::msg::Float64MultiArrayStamped>(
-    "~/debug/intersection/object_ttc", 1);
+  object_ttc_pub_ =
+    node.create_publisher<autoware_internal_debug_msgs::msg::Float64MultiArrayStamped>(
+      "~/debug/intersection/object_ttc", 1);
 }
 
 bool IntersectionModule::modifyPathVelocity(PathWithLaneId * path)
@@ -231,7 +232,7 @@ DecisionResult IntersectionModule::modifyPathVelocityDetail(PathWithLaneId * pat
   // calculate the expected vehicle speed and obtain the spatiotemporal profile of ego to the
   // exit of intersection
   // ==========================================================================================
-  tier4_debug_msgs::msg::Float64MultiArrayStamped ego_ttc_time_array;
+  autoware_internal_debug_msgs::msg::Float64MultiArrayStamped ego_ttc_time_array;
   const auto time_distance_array =
     calcIntersectionPassingTime(*path, is_prioritized, intersection_stoplines, &ego_ttc_time_array);
 
@@ -240,7 +241,7 @@ DecisionResult IntersectionModule::modifyPathVelocityDetail(PathWithLaneId * pat
   // passed each pass judge line for the first time, save current collision status for late
   // diagnosis
   // ==========================================================================================
-  tier4_debug_msgs::msg::Float64MultiArrayStamped object_ttc_time_array;
+  autoware_internal_debug_msgs::msg::Float64MultiArrayStamped object_ttc_time_array;
   updateObjectInfoManagerCollision(
     path_lanelets, time_distance_array, traffic_prioritized_level, safely_passed_1st_judge_line,
     safely_passed_2nd_judge_line, &object_ttc_time_array);
@@ -353,9 +354,7 @@ DecisionResult IntersectionModule::modifyPathVelocityDetail(PathWithLaneId * pat
         (std::fabs(dist_stopline) < planner_param_.common.stopline_overshoot_margin);
       const bool over_stopline = (dist_stopline < 0.0);
       const bool is_stopped_duration = planner_data_->isVehicleStopped(duration);
-      if (over_stopline) {
-        state_machine.setState(StateMachine::State::GO);
-      } else if (is_stopped_duration && approached_dist_stopline) {
+      if (over_stopline || (is_stopped_duration && approached_dist_stopline)) {
         state_machine.setState(StateMachine::State::GO);
       }
       return state_machine.getState() == StateMachine::State::GO;
@@ -366,12 +365,7 @@ DecisionResult IntersectionModule::modifyPathVelocityDetail(PathWithLaneId * pat
       (std::fabs(dist_stopline) < planner_param_.common.stopline_overshoot_margin);
     const bool over_stopline = (dist_stopline < -planner_param_.common.stopline_overshoot_margin);
     const bool is_stopped = planner_data_->isVehicleStopped(duration);
-    if (over_stopline) {
-      return true;
-    } else if (is_stopped && approached_dist_stopline) {
-      return true;
-    }
-    return false;
+    return over_stopline || (is_stopped && approached_dist_stopline);
   };
 
   const auto occlusion_wo_tl_pass_judge_line_idx =

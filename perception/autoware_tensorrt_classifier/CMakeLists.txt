@@ -6,6 +6,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -Wno-write-strings -fopen
 find_package(autoware_cmake REQUIRED)
 autoware_package()
 
+# TODO(amadeuszsz): Remove -Wno-deprecated-declarations once removing implicit quantization
+add_compile_options(-Wno-deprecated-declarations)
+
 find_package(CUDA)
 find_package(CUDNN)
 find_package(TENSORRT)

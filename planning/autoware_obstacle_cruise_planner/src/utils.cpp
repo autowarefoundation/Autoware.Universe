@@ -92,7 +92,7 @@ PoseWithStamp getCurrentObjectPose(
     getCurrentObjectPoseFromPredictedPaths(predicted_paths, obj_base_time, current_time);
 
   if (!interpolated_pose) {
-    RCLCPP_WARN(
+    RCLCPP_DEBUG(
       rclcpp::get_logger("ObstacleCruisePlanner"), "Failed to find the interpolated obstacle pose");
     return PoseWithStamp{obj_base_time, pose};
   }

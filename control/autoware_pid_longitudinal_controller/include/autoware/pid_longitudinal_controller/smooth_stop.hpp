@@ -15,6 +15,7 @@
 #ifndef AUTOWARE__PID_LONGITUDINAL_CONTROLLER__SMOOTH_STOP_HPP_
 #define AUTOWARE__PID_LONGITUDINAL_CONTROLLER__SMOOTH_STOP_HPP_
 
+#include "autoware/pid_longitudinal_controller/debug_values.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 #include <experimental/optional>  // NOLINT
@@ -85,7 +86,8 @@ public:
    */
   double calculate(
     const double stop_dist, const double current_vel, const double current_acc,
-    const std::vector<std::pair<rclcpp::Time, double>> & vel_hist, const double delay_time);
+    const std::vector<std::pair<rclcpp::Time, double>> & vel_hist, const double delay_time,
+    DebugValues & debug_values);
 
 private:
   struct Params
@@ -105,6 +107,8 @@ private:
     double strong_stop_dist;
   };
   Params m_params;
+
+  enum class Mode { STRONG = 0, WEAK, WEAK_STOP, STRONG_STOP };
 
   double m_strong_acc;
   rclcpp::Time m_weak_acc_time;

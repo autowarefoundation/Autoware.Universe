@@ -14,18 +14,24 @@
 
 #include "autoware/behavior_path_start_planner_module/pull_out_planner_base.hpp"
 
+#include <memory>
+
 namespace autoware::behavior_path_planner
 {
 bool PullOutPlannerBase::isPullOutPathCollided(
   autoware::behavior_path_planner::PullOutPath & pull_out_path,
+  const std::shared_ptr<const PlannerData> & planner_data,
   double collision_check_distance_from_end) const
 {
   universe_utils::ScopedTimeTrack st(__func__, *time_keeper_);
 
   // check for collisions
-  const auto & dynamic_objects = planner_data_->dynamic_object;
+  const auto & dynamic_objects = planner_data->dynamic_object;
+  if (!dynamic_objects) {
+    return false;
+  }
   const auto pull_out_lanes = start_planner_utils::getPullOutLanes(
-    planner_data_, planner_data_->parameters.backward_path_length + parameters_.max_back_distance);
+    planner_data, planner_data->parameters.backward_path_length + parameters_.max_back_distance);
   // extract stop objects in pull out lane for collision check
   const auto stop_objects = utils::path_safety_checker::filterObjectsByVelocity(
     *dynamic_objects, parameters_.th_moving_object_velocity);

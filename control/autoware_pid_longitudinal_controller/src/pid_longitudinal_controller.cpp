@@ -14,6 +14,7 @@
 
 #include "autoware/pid_longitudinal_controller/pid_longitudinal_controller.hpp"
 
+#include "autoware/motion_utils/marker/marker_helper.hpp"
 #include "autoware/motion_utils/trajectory/trajectory.hpp"
 #include "autoware/universe_utils/geometry/geometry.hpp"
 #include "autoware/universe_utils/math/normalization.hpp"
@@ -79,10 +80,6 @@ PidLongitudinalController::PidLongitudinalController(
     // emergency
     p.emergency_state_overshoot_stop_dist =
       node.declare_parameter<double>("emergency_state_overshoot_stop_dist");  // [m]
-    p.emergency_state_traj_trans_dev =
-      node.declare_parameter<double>("emergency_state_traj_trans_dev");  // [m]
-    p.emergency_state_traj_rot_dev =
-      node.declare_parameter<double>("emergency_state_traj_rot_dev");  // [m]
   }
 
   // parameters for drive state
@@ -199,6 +196,8 @@ PidLongitudinalController::PidLongitudinalController(
     m_slope_source = SlopeSource::TRAJECTORY_PITCH;
   } else if (slope_source == "trajectory_adaptive") {
     m_slope_source = SlopeSource::TRAJECTORY_ADAPTIVE;
+  } else if (slope_source == "trajectory_goal_adaptive") {
+    m_slope_source = SlopeSource::TRAJECTORY_GOAL_ADAPTIVE;
   } else {
     RCLCPP_ERROR(logger_, "Slope source is not valid. Using raw_pitch option as default");
     m_slope_source = SlopeSource::RAW_PITCH;
@@ -215,11 +214,11 @@ PidLongitudinalController::PidLongitudinalController(
       : node.declare_parameter<double>("ego_nearest_yaw_threshold");  // [rad]
 
   // subscriber, publisher
-  m_pub_slope = node.create_publisher<tier4_debug_msgs::msg::Float32MultiArrayStamped>(
+  m_pub_slope = node.create_publisher<autoware_internal_debug_msgs::msg::Float32MultiArrayStamped>(
     "~/output/slope_angle", rclcpp::QoS{1});
-  m_pub_debug = node.create_publisher<tier4_debug_msgs::msg::Float32MultiArrayStamped>(
+  m_pub_debug = node.create_publisher<autoware_internal_debug_msgs::msg::Float32MultiArrayStamped>(
     "~/output/longitudinal_diagnostic", rclcpp::QoS{1});
-  m_pub_stop_reason_marker = node.create_publisher<Marker>("~/output/stop_reason", rclcpp::QoS{1});
+  m_pub_virtual_wall_marker = node.create_publisher<MarkerArray>("~/virtual_wall", 1);
 
   // set parameter callback
   m_set_param_res = node.add_on_set_parameters_callback(
@@ -286,8 +285,6 @@ rcl_interfaces::msg::SetParametersResult PidLongitudinalController::paramCallbac
     update_param("stopped_state_entry_vel", p.stopped_state_entry_vel);
     update_param("stopped_state_entry_acc", p.stopped_state_entry_acc);
     update_param("emergency_state_overshoot_stop_dist", p.emergency_state_overshoot_stop_dist);
-    update_param("emergency_state_traj_trans_dev", p.emergency_state_traj_trans_dev);
-    update_param("emergency_state_traj_rot_dev", p.emergency_state_traj_rot_dev);
   }
 
   // drive state
@@ -423,24 +420,6 @@ trajectory_follower::LongitudinalOutput PidLongitudinalController::run(
 
   const auto control_data = getControlData(current_pose);
 
-  // self pose is far from trajectory
-  if (control_data.is_far_from_trajectory) {
-    if (m_enable_large_tracking_error_emergency) {
-      // update control state
-      changeControlState(ControlState::EMERGENCY, "the tracking error is too large");
-    }
-    const Motion raw_ctrl_cmd = calcEmergencyCtrlCmd(control_data.dt);  // calculate control command
-    m_prev_raw_ctrl_cmd = raw_ctrl_cmd;
-    const auto cmd_msg =
-      createCtrlCmdMsg(raw_ctrl_cmd, control_data.current_motion.vel);  // create control command
-    publishDebugData(raw_ctrl_cmd, control_data);                       // publish debug data
-    trajectory_follower::LongitudinalOutput output;
-    output.control_cmd = cmd_msg;
-    output.control_cmd_horizon.controls.push_back(cmd_msg);
-    output.control_cmd_horizon.time_step_ms = 0.0;
-    return output;
-  }
-
   // update control state
   updateControlState(control_data);
 
@@ -490,23 +469,6 @@ PidLongitudinalController::ControlData PidLongitudinalController::getControlData
   control_data.target_idx = control_data.nearest_idx;
   const auto nearest_point = current_interpolated_pose.first;
   auto target_point = current_interpolated_pose.first;
-
-  // check if the deviation is worth emergency
-  m_diagnostic_data.trans_deviation =
-    autoware::universe_utils::calcDistance2d(current_interpolated_pose.first, current_pose);
-  const bool is_dist_deviation_large =
-    m_state_transition_params.emergency_state_traj_trans_dev < m_diagnostic_data.trans_deviation;
-  m_diagnostic_data.rot_deviation = std::abs(autoware::universe_utils::normalizeRadian(
-    tf2::getYaw(current_interpolated_pose.first.pose.orientation) -
-    tf2::getYaw(current_pose.orientation)));
-  const bool is_yaw_deviation_large =
-    m_state_transition_params.emergency_state_traj_rot_dev < m_diagnostic_data.rot_deviation;
-
-  if (is_dist_deviation_large || is_yaw_deviation_large) {
-    // return here if nearest index is not found
-    control_data.is_far_from_trajectory = true;
-    return control_data;
-  }
 
   // Delay compensation - Calculate the distance we got, predicted velocity and predicted
   // acceleration after delay
@@ -562,35 +524,52 @@ PidLongitudinalController::ControlData PidLongitudinalController::getControlData
 
   // distance to stopline
   control_data.stop_dist = longitudinal_utils::calcStopDistance(
-    control_data.interpolated_traj.points.at(control_data.nearest_idx).pose,
-    control_data.interpolated_traj, m_ego_nearest_dist_threshold, m_ego_nearest_yaw_threshold);
+    current_pose, control_data.interpolated_traj, m_ego_nearest_dist_threshold,
+    m_ego_nearest_yaw_threshold);
 
   // pitch
   // NOTE: getPitchByTraj() calculates the pitch angle as defined in
   // ../media/slope_definition.drawio.svg while getPitchByPose() is not, so `raw_pitch` is reversed
   const double raw_pitch = (-1.0) * longitudinal_utils::getPitchByPose(current_pose.orientation);
+  m_lpf_pitch->filter(raw_pitch);
   const double traj_pitch = longitudinal_utils::getPitchByTraj(
     control_data.interpolated_traj, control_data.target_idx, m_wheel_base);
 
   if (m_slope_source == SlopeSource::RAW_PITCH) {
-    control_data.slope_angle = m_lpf_pitch->filter(raw_pitch);
+    control_data.slope_angle = m_lpf_pitch->getValue();
   } else if (m_slope_source == SlopeSource::TRAJECTORY_PITCH) {
     control_data.slope_angle = traj_pitch;
-  } else if (m_slope_source == SlopeSource::TRAJECTORY_ADAPTIVE) {
+  } else if (
+    m_slope_source == SlopeSource::TRAJECTORY_ADAPTIVE ||
+    m_slope_source == SlopeSource::TRAJECTORY_GOAL_ADAPTIVE) {
     // if velocity is high, use target idx for slope, otherwise, use raw_pitch
-    if (control_data.current_motion.vel > m_adaptive_trajectory_velocity_th) {
-      control_data.slope_angle = traj_pitch;
-      m_lpf_pitch->filter(raw_pitch);
-    } else {
-      control_data.slope_angle = m_lpf_pitch->filter(raw_pitch);
+    const bool is_vel_slow = control_data.current_motion.vel < m_adaptive_trajectory_velocity_th &&
+                             m_slope_source == SlopeSource::TRAJECTORY_ADAPTIVE;
+
+    const double goal_dist = autoware::motion_utils::calcSignedArcLength(
+      control_data.interpolated_traj.points, current_pose.position,
+      control_data.interpolated_traj.points.size() - 1);
+    const bool is_close_to_trajectory_end =
+      goal_dist < m_wheel_base && m_slope_source == SlopeSource::TRAJECTORY_GOAL_ADAPTIVE;
+
+    control_data.slope_angle =
+      (is_close_to_trajectory_end || is_vel_slow) ? m_lpf_pitch->getValue() : traj_pitch;
+
+    if (m_previous_slope_angle.has_value()) {
+      constexpr double gravity_const = 9.8;
+      control_data.slope_angle = std::clamp(
+        control_data.slope_angle,
+        m_previous_slope_angle.value() + m_min_jerk * control_data.dt / gravity_const,
+        m_previous_slope_angle.value() + m_max_jerk * control_data.dt / gravity_const);
     }
+    m_previous_slope_angle = control_data.slope_angle;
   } else {
     RCLCPP_ERROR_THROTTLE(
       logger_, *clock_, 3000, "Slope source is not valid. Using raw_pitch option as default");
-    control_data.slope_angle = m_lpf_pitch->filter(raw_pitch);
+    control_data.slope_angle = m_lpf_pitch->getValue();
   }
 
-  updatePitchDebugValues(control_data.slope_angle, traj_pitch, raw_pitch);
+  updatePitchDebugValues(control_data.slope_angle, traj_pitch, raw_pitch, m_lpf_pitch->getValue());
 
   return control_data;
 }
@@ -608,6 +587,11 @@ PidLongitudinalController::Motion PidLongitudinalController::calcEmergencyCtrlCm
   raw_ctrl_cmd.acc =
     longitudinal_utils::applyDiffLimitFilter(raw_ctrl_cmd.acc, m_prev_raw_ctrl_cmd.acc, dt, p.jerk);
   m_debug_values.setValues(DebugValues::TYPE::ACC_CMD_JERK_LIMITED, raw_ctrl_cmd.acc);
+
+  const auto virtual_wall_marker = autoware::motion_utils::createStopVirtualWallMarker(
+    m_current_kinematic_state.pose.pose, "velocity control\n (emergency)", clock_->now(), 0,
+    m_wheel_base + m_front_overhang);
+  m_pub_virtual_wall_marker->publish(virtual_wall_marker);
 
   return raw_ctrl_cmd;
 }
@@ -773,14 +757,12 @@ void PidLongitudinalController::updateControlState(const ControlData & control_d
         }
 
         // publish debug marker
-        auto marker = createDefaultMarker(
-          "map", clock_->now(), "stop_reason", 0, Marker::TEXT_VIEW_FACING,
-          createMarkerScale(0.0, 0.0, 1.0), createMarkerColor(1.0, 1.0, 1.0, 0.999));
-        marker.pose = autoware::universe_utils::calcOffsetPose(
-          m_current_kinematic_state.pose.pose, m_wheel_base + m_front_overhang,
-          m_vehicle_width / 2 + 2.0, 1.5);
-        marker.text = "steering not\nconverged";
-        m_pub_stop_reason_marker->publish(marker);
+        if (is_under_control) {
+          const auto virtual_wall_marker = autoware::motion_utils::createStopVirtualWallMarker(
+            m_current_kinematic_state.pose.pose, "velocity control\n(steering not converged)",
+            clock_->now(), 0, m_wheel_base + m_front_overhang);
+          m_pub_virtual_wall_marker->publish(virtual_wall_marker);
+        }
 
         // keep STOPPED
         return;
@@ -863,7 +845,7 @@ PidLongitudinalController::Motion PidLongitudinalController::calcCtrlCmd(
       } else if (m_control_state == ControlState::STOPPING) {
         raw_ctrl_cmd.acc = m_smooth_stop.calculate(
           control_data.stop_dist, control_data.current_motion.vel, control_data.current_motion.acc,
-          m_vel_hist, m_delay_compensation_time);
+          m_vel_hist, m_delay_compensation_time, m_debug_values);
         raw_ctrl_cmd.vel = m_stopped_state_params.vel;
 
         RCLCPP_DEBUG(
@@ -949,7 +931,7 @@ void PidLongitudinalController::publishDebugData(
   m_debug_values.setValues(DebugValues::TYPE::ACC_CMD_PUBLISHED, ctrl_cmd.acc);
 
   // publish debug values
-  tier4_debug_msgs::msg::Float32MultiArrayStamped debug_msg{};
+  autoware_internal_debug_msgs::msg::Float32MultiArrayStamped debug_msg{};
   debug_msg.stamp = clock_->now();
   for (const auto & v : m_debug_values.getValues()) {
     debug_msg.data.push_back(static_cast<decltype(debug_msg.data)::value_type>(v));
@@ -957,7 +939,7 @@ void PidLongitudinalController::publishDebugData(
   m_pub_debug->publish(debug_msg);
 
   // slope angle
-  tier4_debug_msgs::msg::Float32MultiArrayStamped slope_msg{};
+  autoware_internal_debug_msgs::msg::Float32MultiArrayStamped slope_msg{};
   slope_msg.stamp = clock_->now();
   slope_msg.data.push_back(
     static_cast<decltype(slope_msg.data)::value_type>(control_data.slope_angle));
@@ -1189,13 +1171,16 @@ double PidLongitudinalController::applyVelocityFeedback(const ControlData & cont
 }
 
 void PidLongitudinalController::updatePitchDebugValues(
-  const double pitch, const double traj_pitch, const double raw_pitch)
+  const double pitch_using, const double traj_pitch, const double localization_pitch,
+  const double localization_pitch_lpf)
 {
   const double to_degrees = (180.0 / static_cast<double>(M_PI));
-  m_debug_values.setValues(DebugValues::TYPE::PITCH_LPF_RAD, pitch);
-  m_debug_values.setValues(DebugValues::TYPE::PITCH_LPF_DEG, pitch * to_degrees);
-  m_debug_values.setValues(DebugValues::TYPE::PITCH_RAW_RAD, raw_pitch);
-  m_debug_values.setValues(DebugValues::TYPE::PITCH_RAW_DEG, raw_pitch * to_degrees);
+  m_debug_values.setValues(DebugValues::TYPE::PITCH_USING_RAD, pitch_using);
+  m_debug_values.setValues(DebugValues::TYPE::PITCH_USING_DEG, pitch_using * to_degrees);
+  m_debug_values.setValues(DebugValues::TYPE::PITCH_LPF_RAD, localization_pitch_lpf);
+  m_debug_values.setValues(DebugValues::TYPE::PITCH_LPF_DEG, localization_pitch_lpf * to_degrees);
+  m_debug_values.setValues(DebugValues::TYPE::PITCH_RAW_RAD, localization_pitch);
+  m_debug_values.setValues(DebugValues::TYPE::PITCH_RAW_DEG, localization_pitch * to_degrees);
   m_debug_values.setValues(DebugValues::TYPE::PITCH_RAW_TRAJ_RAD, traj_pitch);
   m_debug_values.setValues(DebugValues::TYPE::PITCH_RAW_TRAJ_DEG, traj_pitch * to_degrees);
 }
@@ -1239,23 +1224,7 @@ void PidLongitudinalController::checkControlState(
     msg = "emergency occurred due to ";
   }
 
-  if (
-    m_state_transition_params.emergency_state_traj_trans_dev < m_diagnostic_data.trans_deviation) {
-    msg += "translation deviation";
-  }
-
-  if (m_state_transition_params.emergency_state_traj_rot_dev < m_diagnostic_data.rot_deviation) {
-    msg += "rotation deviation";
-  }
-
   stat.add<int32_t>("control_state", static_cast<int32_t>(m_control_state));
-  stat.addf(
-    "translation deviation threshold", "%lf",
-    m_state_transition_params.emergency_state_traj_trans_dev);
-  stat.addf("translation deviation", "%lf", m_diagnostic_data.trans_deviation);
-  stat.addf(
-    "rotation deviation threshold", "%lf", m_state_transition_params.emergency_state_traj_rot_dev);
-  stat.addf("rotation deviation", "%lf", m_diagnostic_data.rot_deviation);
   stat.summary(level, msg);
 }
 

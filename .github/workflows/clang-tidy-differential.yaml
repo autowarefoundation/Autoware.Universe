@@ -1,0 +1,80 @@
+name: clang-tidy-differential
+
+on:
+  workflow_call:
+    inputs:
+      container:
+        required: true
+        type: string
+      container-suffix:
+        required: false
+        default: ""
+        type: string
+      runner:
+        default: ubuntu-24.04
+        required: false
+        type: string
+      run-condition:
+        default: true
+        required: false
+        type: boolean
+
+jobs:
+  clang-tidy-differential:
+    if: ${{ inputs.run-condition }}
+    runs-on: ${{ inputs.runner }}
+    container: ${{ inputs.container }}${{ inputs.container-suffix }}
+    steps:
+      - name: Set PR fetch depth
+        run: echo "PR_FETCH_DEPTH=$(( ${{ github.event.pull_request.commits }} + 1 ))" >> "${GITHUB_ENV}"
+
+      - name: Checkout PR branch and all PR commits
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: ${{ env.PR_FETCH_DEPTH }}
+
+      - name: Show machine specs
+        run: lscpu && free -h
+        shell: bash
+
+      - name: Show disk space before the tasks
+        run: df -h
+        shell: bash
+
+      - name: Remove exec_depend
+        uses: autowarefoundation/autoware-github-actions/remove-exec-depend@v1
+
+      - name: Get modified packages
+        id: get-modified-packages
+        uses: autowarefoundation/autoware-github-actions/get-modified-packages@v1
+
+      - name: Get changed files (existing files only)
+        id: get-changed-files
+        run: |
+          echo "changed-files=$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD | grep -E '\.(cpp|hpp)$' | while read -r file; do [ -e "$file" ] && echo -n "$file "; done)" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Export CUDA state as a variable for adding to cache key
+        run: |
+          build_type_cuda_state=nocuda
+          if [[ "${{ inputs.container-suffix }}" == "-cuda" ]]; then
+            build_type_cuda_state=cuda
+          fi
+          echo "BUILD_TYPE_CUDA_STATE=$build_type_cuda_state" >> "${GITHUB_ENV}"
+          echo "::notice::BUILD_TYPE_CUDA_STATE=$build_type_cuda_state"
+        shell: bash
+
+      - name: Run clang-tidy
+        if: ${{ steps.get-changed-files.outputs.changed-files != '' }}
+        uses: autowarefoundation/autoware-github-actions/clang-tidy@v1
+        with:
+          rosdistro: humble
+          target-packages: ${{ steps.get-modified-packages.outputs.modified-packages }}
+          clang-tidy-config-url: https://raw.githubusercontent.com/autowarefoundation/autoware/main/.clang-tidy-ci
+          clang-tidy-ignore-path: .clang-tidy-ignore
+          build-depends-repos: build_depends.repos
+          cache-key-element: ${{ env.BUILD_TYPE_CUDA_STATE }}
+
+      - name: Show disk space after the tasks
+        run: df -h

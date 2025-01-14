@@ -25,6 +25,8 @@
 #include <pluginlib/class_loader.hpp>
 #include <rclcpp/rclcpp.hpp>
 
+#include <autoware_internal_debug_msgs/msg/float64_stamped.hpp>
+#include <autoware_internal_debug_msgs/msg/string_stamped.hpp>
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/primitives/Lanelet.h>
@@ -44,8 +46,8 @@ using tier4_planning_msgs::msg::PathWithLaneId;
 using SceneModulePtr = std::shared_ptr<SceneModuleInterface>;
 using SceneModuleManagerPtr = std::shared_ptr<SceneModuleManagerInterface>;
 using DebugPublisher = autoware::universe_utils::DebugPublisher;
-using DebugDoubleMsg = tier4_debug_msgs::msg::Float64Stamped;
-using DebugStringMsg = tier4_debug_msgs::msg::StringStamped;
+using DebugDoubleMsg = autoware_internal_debug_msgs::msg::Float64Stamped;
+using DebugStringMsg = autoware_internal_debug_msgs::msg::StringStamped;
 
 struct SceneModuleUpdateInfo
 {

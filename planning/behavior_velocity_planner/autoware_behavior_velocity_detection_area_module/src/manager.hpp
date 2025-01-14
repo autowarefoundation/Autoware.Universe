@@ -29,7 +29,7 @@
 
 namespace autoware::behavior_velocity_planner
 {
-class DetectionAreaModuleManager : public SceneModuleManagerInterfaceWithRTC
+class DetectionAreaModuleManager : public SceneModuleManagerInterface<>
 {
 public:
   explicit DetectionAreaModuleManager(rclcpp::Node & node);

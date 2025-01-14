@@ -24,6 +24,7 @@ namespace autoware::ekf_localizer
 {
 
 diagnostic_msgs::msg::DiagnosticStatus check_process_activated(const bool is_activated);
+diagnostic_msgs::msg::DiagnosticStatus check_set_initialpose(const bool is_set_initialpose);
 
 diagnostic_msgs::msg::DiagnosticStatus check_measurement_updated(
   const std::string & measurement_type, const size_t no_update_count,

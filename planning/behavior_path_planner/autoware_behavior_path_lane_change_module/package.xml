@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_behavior_path_lane_change_module</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>The autoware_behavior_path_lane_change_module package</description>
 
   <maintainer email="fumiya.watanabe@tier4.jp">Fumiya Watanabe</maintainer>
@@ -23,9 +23,11 @@
 
   <depend>autoware_behavior_path_planner</depend>
   <depend>autoware_behavior_path_planner_common</depend>
+  <depend>autoware_frenet_planner</depend>
   <depend>autoware_motion_utils</depend>
   <depend>autoware_rtc_interface</depend>
   <depend>autoware_universe_utils</depend>
+  <depend>fmt</depend>
   <depend>pluginlib</depend>
   <depend>range-v3</depend>
   <depend>rclcpp</depend>

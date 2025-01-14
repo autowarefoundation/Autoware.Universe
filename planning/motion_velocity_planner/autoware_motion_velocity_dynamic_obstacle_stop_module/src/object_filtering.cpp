@@ -96,20 +96,22 @@ bool is_unavoidable(
 };
 
 std::vector<autoware_perception_msgs::msg::PredictedObject> filter_predicted_objects(
-  const autoware_perception_msgs::msg::PredictedObjects & objects, const EgoData & ego_data,
+  const std::vector<PlannerData::Object> & objects, const EgoData & ego_data,
   const PlannerParam & params, const double hysteresis)
 {
   std::vector<autoware_perception_msgs::msg::PredictedObject> filtered_objects;
-  for (const auto & object : objects.objects) {
-    const auto is_not_too_slow = object.kinematics.initial_twist_with_covariance.twist.linear.x >=
-                                 params.minimum_object_velocity;
+  for (const auto & object : objects) {
+    const auto & predicted_object = object.predicted_object;
+    const auto is_not_too_slow =
+      predicted_object.kinematics.initial_twist_with_covariance.twist.linear.x >=
+      params.minimum_object_velocity;
     if (
-      is_vehicle(object) && is_not_too_slow &&
-      is_in_range(object, ego_data.trajectory, params, hysteresis) &&
-      is_not_too_close(object, ego_data, params.ego_longitudinal_offset) &&
+      is_vehicle(predicted_object) && is_not_too_slow &&
+      is_in_range(predicted_object, ego_data.trajectory, params, hysteresis) &&
+      is_not_too_close(predicted_object, ego_data, params.ego_longitudinal_offset) &&
       (!params.ignore_unavoidable_collisions ||
-       !is_unavoidable(object, ego_data.pose, ego_data.earliest_stop_pose, params)))
-      filtered_objects.push_back(object);
+       !is_unavoidable(predicted_object, ego_data.pose, ego_data.earliest_stop_pose, params)))
+      filtered_objects.push_back(predicted_object);
   }
   return filtered_objects;
 }

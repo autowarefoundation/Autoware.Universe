@@ -44,7 +44,7 @@ TrafficLightModule::TrafficLightModule(
   const int64_t lane_id, const lanelet::TrafficLight & traffic_light_reg_elem,
   lanelet::ConstLanelet lane, const PlannerParam & planner_param, const rclcpp::Logger logger,
   const rclcpp::Clock::SharedPtr clock)
-: SceneModuleInterface(lane_id, logger, clock),
+: SceneModuleInterfaceWithRTC(lane_id, logger, clock),
   lane_id_(lane_id),
   traffic_light_reg_elem_(traffic_light_reg_elem),
   lane_(lane),

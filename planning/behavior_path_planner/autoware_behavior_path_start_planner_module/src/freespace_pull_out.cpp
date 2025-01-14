@@ -28,15 +28,11 @@
 
 namespace autoware::behavior_path_planner
 {
-FreespacePullOut::FreespacePullOut(
-  rclcpp::Node & node, const StartPlannerParameters & parameters,
-  const autoware::vehicle_info_utils::VehicleInfo & vehicle_info,
-  std::shared_ptr<universe_utils::TimeKeeper> time_keeper)
-: PullOutPlannerBase{node, parameters, time_keeper},
-  velocity_{parameters.freespace_planner_velocity}
+FreespacePullOut::FreespacePullOut(rclcpp::Node & node, const StartPlannerParameters & parameters)
+: PullOutPlannerBase{node, parameters}, velocity_{parameters.freespace_planner_velocity}
 {
   autoware::freespace_planning_algorithms::VehicleShape vehicle_shape(
-    vehicle_info, parameters.vehicle_shape_margin);
+    vehicle_info_, parameters.vehicle_shape_margin);
   if (parameters.freespace_planner_algorithm == "astar") {
     use_back_ = parameters.astar_parameters.use_back;
     planner_ = std::make_unique<AstarSearch>(
@@ -51,13 +47,14 @@ FreespacePullOut::FreespacePullOut(
 }
 
 std::optional<PullOutPath> FreespacePullOut::plan(
-  const Pose & start_pose, const Pose & end_pose, PlannerDebugData & planner_debug_data)
+  const Pose & start_pose, const Pose & end_pose,
+  const std::shared_ptr<const PlannerData> & planner_data, PlannerDebugData & planner_debug_data)
 {
-  const auto & route_handler = planner_data_->route_handler;
-  const double backward_path_length = planner_data_->parameters.backward_path_length;
-  const double forward_path_length = planner_data_->parameters.forward_path_length;
+  const auto & route_handler = planner_data->route_handler;
+  const double backward_path_length = planner_data->parameters.backward_path_length;
+  const double forward_path_length = planner_data->parameters.forward_path_length;
 
-  planner_->setMap(*planner_data_->costmap);
+  planner_->setMap(*planner_data->costmap);
 
   try {
     if (!planner_->makePlan(start_pose, end_pose)) {
@@ -69,11 +66,11 @@ std::optional<PullOutPath> FreespacePullOut::plan(
   }
 
   const auto road_lanes = utils::getExtendedCurrentLanes(
-    planner_data_, backward_path_length, std::numeric_limits<double>::max(),
+    planner_data, backward_path_length, std::numeric_limits<double>::max(),
     /*forward_only_in_route*/ true);
   // find candidate paths
   const auto pull_out_lanes =
-    start_planner_utils::getPullOutLanes(planner_data_, backward_path_length);
+    start_planner_utils::getPullOutLanes(planner_data, backward_path_length);
   const auto lanes = utils::combineLanelets(road_lanes, pull_out_lanes);
 
   const PathWithLaneId path =

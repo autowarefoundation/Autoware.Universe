@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_pose2twist</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>The autoware_pose2twist package</description>
   <maintainer email="yamato.ando@tier4.jp">Yamato Ando</maintainer>
   <maintainer email="masahiro.sakamoto@tier4.jp">Masahiro Sakamoto</maintainer>
@@ -17,11 +17,11 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>autoware_cmake</buildtool_depend>
 
+  <depend>autoware_internal_debug_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
   <depend>tf2_geometry_msgs</depend>
-  <depend>tier4_debug_msgs</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>autoware_lint_common</test_depend>

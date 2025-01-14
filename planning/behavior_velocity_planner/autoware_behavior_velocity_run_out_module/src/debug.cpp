@@ -316,7 +316,7 @@ void RunOutDebug::setAccelReason(const AccelReason & accel_reason)
 void RunOutDebug::publishDebugValue()
 {
   // publish debug values
-  tier4_debug_msgs::msg::Float32MultiArrayStamped debug_msg{};
+  autoware_internal_debug_msgs::msg::Float32MultiArrayStamped debug_msg{};
   debug_msg.stamp = node_.now();
   for (const auto & v : debug_values_.getValues()) {
     debug_msg.data.push_back(v);

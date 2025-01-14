@@ -29,7 +29,7 @@
 
 namespace autoware::behavior_velocity_planner
 {
-class SpeedBumpModuleManager : public SceneModuleManagerInterface
+class SpeedBumpModuleManager : public SceneModuleManagerInterface<>
 {
 public:
   explicit SpeedBumpModuleManager(rclcpp::Node & node);

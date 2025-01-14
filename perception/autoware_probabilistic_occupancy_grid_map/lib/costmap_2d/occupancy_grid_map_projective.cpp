@@ -153,10 +153,11 @@ void OccupancyGridMapProjectiveBlindSpot::updateWithPointCloud(
     const double dz = scan_z - obstacle_z;
 
     // Ignore obstacle points exceed the range of the raw points
-    if (raw_pointcloud_angle_bins.at(angle_bin_index).empty()) {
-      continue;  // No raw point in this angle bin
-    } else if (range > raw_pointcloud_angle_bins.at(angle_bin_index).back().range) {
-      continue;  // Obstacle point exceeds the range of the raw points
+    // No raw point in this angle bin, or obstacle point exceeds the range of the raw points
+    if (
+      raw_pointcloud_angle_bins.at(angle_bin_index).empty() ||
+      range > raw_pointcloud_angle_bins.at(angle_bin_index).back().range) {
+      continue;
     }
 
     if (dz > projection_dz_threshold_) {

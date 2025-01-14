@@ -127,7 +127,7 @@ void TrackerDebugger::startMeasurementTime(
   stamp_process_start_ = now;
   if (debug_settings_.publish_processing_time) {
     double input_latency_ms = (now - last_input_stamp_).seconds() * 1e3;
-    processing_time_publisher_->publish<tier4_debug_msgs::msg::Float64Stamped>(
+    processing_time_publisher_->publish<autoware_internal_debug_msgs::msg::Float64Stamped>(
       "debug/input_latency_ms", input_latency_ms);
   }
   // initialize debug time stamps
@@ -169,15 +169,15 @@ void TrackerDebugger::endPublishTime(const rclcpp::Time & now, const rclcpp::Tim
     double measurement_to_object_ms = (object_time - last_input_stamp_).seconds() * 1e3;
 
     // starting from the measurement time
-    processing_time_publisher_->publish<tier4_debug_msgs::msg::Float64Stamped>(
+    processing_time_publisher_->publish<autoware_internal_debug_msgs::msg::Float64Stamped>(
       "debug/pipeline_latency_ms", pipeline_latency_ms_);
-    processing_time_publisher_->publish<tier4_debug_msgs::msg::Float64Stamped>(
+    processing_time_publisher_->publish<autoware_internal_debug_msgs::msg::Float64Stamped>(
       "debug/cyclic_time_ms", cyclic_time_ms);
-    processing_time_publisher_->publish<tier4_debug_msgs::msg::Float64Stamped>(
+    processing_time_publisher_->publish<autoware_internal_debug_msgs::msg::Float64Stamped>(
       "debug/processing_time_ms", processing_time_ms);
-    processing_time_publisher_->publish<tier4_debug_msgs::msg::Float64Stamped>(
+    processing_time_publisher_->publish<autoware_internal_debug_msgs::msg::Float64Stamped>(
       "debug/processing_latency_ms", processing_latency_ms);
-    processing_time_publisher_->publish<tier4_debug_msgs::msg::Float64Stamped>(
+    processing_time_publisher_->publish<autoware_internal_debug_msgs::msg::Float64Stamped>(
       "debug/meas_to_tracked_object_ms", measurement_to_object_ms);
   }
   stamp_publish_output_ = now;
@@ -185,15 +185,13 @@ void TrackerDebugger::endPublishTime(const rclcpp::Time & now, const rclcpp::Tim
 
 void TrackerDebugger::collectObjectInfo(
   const rclcpp::Time & message_time, const std::list<std::shared_ptr<Tracker>> & list_tracker,
-  const uint & channel_index,
-  const autoware_perception_msgs::msg::DetectedObjects & detected_objects,
+  const types::DynamicObjectList & detected_objects,
   const std::unordered_map<int, int> & direct_assignment,
   const std::unordered_map<int, int> & reverse_assignment)
 {
   if (!debug_settings_.publish_debug_markers) return;
   object_debugger_.collect(
-    message_time, list_tracker, channel_index, detected_objects, direct_assignment,
-    reverse_assignment);
+    message_time, list_tracker, detected_objects, direct_assignment, reverse_assignment);
 }
 
 // ObjectDebugger

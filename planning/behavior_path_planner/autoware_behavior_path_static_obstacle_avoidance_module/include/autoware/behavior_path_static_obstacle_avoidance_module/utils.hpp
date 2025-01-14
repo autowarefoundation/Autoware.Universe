@@ -168,7 +168,7 @@ lanelet::ConstLanelets getExtendLanes(
  */
 void insertDecelPoint(
   const Point & p_src, const double offset, const double velocity, PathWithLaneId & path,
-  std::optional<Pose> & p_out);
+  PoseWithDetailOpt & p_out);
 
 /**
  * @brief update envelope polygon based on object position reliability.

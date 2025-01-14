@@ -40,7 +40,7 @@ The following video is a sample. Yellow points are high occupancy probability, g
 
 ## Parameters
 
-{{ json_to_markdown("perception/occupancy_grid_map_outlier_filter/schema/occupancy_grid_map_outlier_filter.schema.json") }}
+{{ json_to_markdown("perception/autoware_occupancy_grid_map_outlier_filter/schema/occupancy_grid_map_outlier_filter.schema.json") }}
 
 ## Assumptions / Known limits
 

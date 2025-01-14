@@ -1,0 +1,5 @@
+<library path="autoware_string_stamped_rviz_plugin">
+    <class name="autoware_string_stamped_rviz_plugin/StringStampedOverlayDisplay" type="autoware::string_stamped_rviz_plugin::StringStampedOverlayDisplay" base_class_type="rviz_common::Display">
+        <description>String stamped overlay plugin for the 3D view.</description>
+    </class>
+</library>

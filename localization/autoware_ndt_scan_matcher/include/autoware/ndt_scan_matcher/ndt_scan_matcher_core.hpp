@@ -17,8 +17,8 @@
 
 #define FMT_HEADER_ONLY
 
-#include "autoware/localization_util/diagnostics_module.hpp"
 #include "autoware/localization_util/smart_pose_buffer.hpp"
+#include "autoware/universe_utils/ros/diagnostics_interface.hpp"
 #include "hyper_parameters.hpp"
 #include "map_update_module.hpp"
 #include "ndt_omp/multigrid_ndt_omp.h"
@@ -26,6 +26,8 @@
 #include <autoware/universe_utils/ros/logger_level_configure.hpp>
 #include <rclcpp/rclcpp.hpp>
 
+#include <autoware_internal_debug_msgs/msg/float32_stamped.hpp>
+#include <autoware_internal_debug_msgs/msg/int32_stamped.hpp>
 #include <diagnostic_msgs/msg/diagnostic_array.hpp>
 #include <geometry_msgs/msg/pose_array.hpp>
 #include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
@@ -33,8 +35,6 @@
 #include <nav_msgs/msg/odometry.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 #include <std_srvs/srv/set_bool.hpp>
-#include <tier4_debug_msgs/msg/float32_stamped.hpp>
-#include <tier4_debug_msgs/msg/int32_stamped.hpp>
 #include <tier4_localization_msgs/srv/pose_with_covariance_stamped.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
@@ -166,23 +166,24 @@ private:
     initial_pose_with_covariance_pub_;
   rclcpp::Publisher<geometry_msgs::msg::PoseArray>::SharedPtr multi_ndt_pose_pub_;
   rclcpp::Publisher<geometry_msgs::msg::PoseArray>::SharedPtr multi_initial_pose_pub_;
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float32Stamped>::SharedPtr exe_time_pub_;
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float32Stamped>::SharedPtr transform_probability_pub_;
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float32Stamped>::SharedPtr
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float32Stamped>::SharedPtr exe_time_pub_;
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float32Stamped>::SharedPtr
+    transform_probability_pub_;
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float32Stamped>::SharedPtr
     nearest_voxel_transformation_likelihood_pub_;
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr voxel_score_points_pub_;
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float32Stamped>::SharedPtr
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float32Stamped>::SharedPtr
     no_ground_transform_probability_pub_;
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float32Stamped>::SharedPtr
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float32Stamped>::SharedPtr
     no_ground_nearest_voxel_transformation_likelihood_pub_;
-  rclcpp::Publisher<tier4_debug_msgs::msg::Int32Stamped>::SharedPtr iteration_num_pub_;
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Int32Stamped>::SharedPtr iteration_num_pub_;
   rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr
     initial_to_result_relative_pose_pub_;
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float32Stamped>::SharedPtr
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float32Stamped>::SharedPtr
     initial_to_result_distance_pub_;
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float32Stamped>::SharedPtr
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float32Stamped>::SharedPtr
     initial_to_result_distance_old_pub_;
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float32Stamped>::SharedPtr
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float32Stamped>::SharedPtr
     initial_to_result_distance_new_pub_;
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr ndt_marker_pub_;
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr
@@ -211,12 +212,12 @@ private:
   std::unique_ptr<autoware::localization_util::SmartPoseBuffer> regularization_pose_buffer_;
 
   std::atomic<bool> is_activated_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_scan_points_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_initial_pose_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_regularization_pose_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_map_update_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_ndt_align_;
-  std::unique_ptr<DiagnosticsModule> diagnostics_trigger_node_;
+  std::unique_ptr<DiagnosticsInterface> diagnostics_scan_points_;
+  std::unique_ptr<DiagnosticsInterface> diagnostics_initial_pose_;
+  std::unique_ptr<DiagnosticsInterface> diagnostics_regularization_pose_;
+  std::unique_ptr<DiagnosticsInterface> diagnostics_map_update_;
+  std::unique_ptr<DiagnosticsInterface> diagnostics_ndt_align_;
+  std::unique_ptr<DiagnosticsInterface> diagnostics_trigger_node_;
   std::unique_ptr<MapUpdateModule> map_update_module_;
   std::unique_ptr<autoware::universe_utils::LoggerLevelConfigure> logger_configure_;
 

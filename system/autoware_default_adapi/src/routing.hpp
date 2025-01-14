@@ -52,6 +52,7 @@ private:
   Cli<autoware::component_interface_specs::planning::ClearRoute> cli_clear_route_;
   Cli<autoware::component_interface_specs::system::ChangeOperationMode> cli_operation_mode_;
   Sub<autoware::component_interface_specs::system::OperationModeState> sub_operation_mode_;
+  bool is_autoware_control_;
   bool is_auto_mode_;
   State::Message state_;
 

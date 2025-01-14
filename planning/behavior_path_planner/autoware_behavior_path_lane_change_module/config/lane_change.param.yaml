@@ -5,9 +5,16 @@
       backward_length_buffer_for_end_of_lane: 3.0 # [m]
       backward_length_buffer_for_blocking_object: 3.0 # [m]
       backward_length_from_intersection: 5.0 # [m]
+      enable_stopped_vehicle_buffer: true
 
       # turn signal
       min_length_for_turn_signal_activation: 10.0 # [m]
+
+      # terminal path
+      terminal_path:
+        enable: true
+        disable_near_goal: true
+        stop_at_boundary: false
 
       # trajectory generation
       trajectory:
@@ -22,6 +29,7 @@
         lon_acc_sampling_num: 5
         lat_acc_sampling_num: 3
         lane_changing_decel_factor: 0.5
+        th_prepare_curvature: 0.03 # [/]
 
       # delay lane change
       delay_lane_change:
@@ -29,6 +37,12 @@
         check_only_parked_vehicle: false
         min_road_shoulder_width: 0.5  # [m]
         th_parked_vehicle_shift_ratio: 0.6
+
+      # trajectory generation near terminal using frenet planner
+      frenet:
+        enable: true
+        th_yaw_diff: 10.0  # [deg]
+        th_curvature_smoothing: 0.1 # [/]
 
       # safety check
       safety_check:

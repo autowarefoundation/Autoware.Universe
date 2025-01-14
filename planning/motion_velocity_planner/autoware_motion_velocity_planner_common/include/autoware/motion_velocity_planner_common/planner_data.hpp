@@ -31,10 +31,6 @@
 #include <nav_msgs/msg/odometry.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 #include <std_msgs/msg/header.hpp>
-#include <tier4_api_msgs/msg/crosswalk_status.hpp>
-#include <tier4_api_msgs/msg/intersection_status.hpp>
-#include <tier4_planning_msgs/msg/velocity_limit.hpp>
-#include <tier4_v2x_msgs/msg/virtual_traffic_light_state_array.hpp>
 
 #include <lanelet2_core/Forward.h>
 #include <pcl/point_cloud.h>
@@ -43,6 +39,7 @@
 #include <map>
 #include <memory>
 #include <optional>
+#include <vector>
 
 namespace autoware::motion_velocity_planner
 {
@@ -58,11 +55,72 @@ struct PlannerData
   {
   }
 
+  struct Object
+  {
+  public:
+    Object() = default;
+    explicit Object(const autoware_perception_msgs::msg::PredictedObject & arg_predicted_object)
+    : predicted_object(arg_predicted_object)
+    {
+    }
+
+    autoware_perception_msgs::msg::PredictedObject predicted_object;
+    // double get_lon_vel_relative_to_traj()
+    // {
+    //   if (!lon_vel_relative_to_traj) {
+    //     lon_vel_relative_to_traj = 0.0;
+    //   }
+    //   return *lon_vel_relative_to_traj;
+    // }
+    // double get_lat_vel_relative_to_traj()
+    // {
+    //   if (!lat_vel_relative_to_traj) {
+    //     lat_vel_relative_to_traj = 0.0;
+    //   }
+    //   return *lat_vel_relative_to_traj;
+    // }
+
+  private:
+    // TODO(murooka) implement the following variables and their functions.
+    // std::optional<double> dist_to_traj_poly{std::nullopt};
+    // std::optional<double> dist_to_traj_lateral{std::nullopt};
+    // std::optional<double> dist_from_ego_longitudinal{std::nullopt};
+    // std::optional<double> lon_vel_relative_to_traj{std::nullopt};
+    // std::optional<double> lat_vel_relative_to_traj{std::nullopt};
+  };
+
+  struct Pointcloud
+  {
+  public:
+    Pointcloud() = default;
+    explicit Pointcloud(const pcl::PointCloud<pcl::PointXYZ> & arg_pointcloud)
+    : pointcloud(arg_pointcloud)
+    {
+    }
+
+    pcl::PointCloud<pcl::PointXYZ> pointcloud;
+
+  private:
+    // NOTE: clustered result will be added.
+  };
+
+  void process_predicted_objects(
+    const autoware_perception_msgs::msg::PredictedObjects & predicted_objects)
+  {
+    predicted_objects_header = predicted_objects.header;
+
+    objects.clear();
+    for (const auto & predicted_object : predicted_objects.objects) {
+      objects.push_back(Object(predicted_object));
+    }
+  }
+
   // msgs from callbacks that are used for data-ready
   nav_msgs::msg::Odometry current_odometry;
   geometry_msgs::msg::AccelWithCovarianceStamped current_acceleration;
-  autoware_perception_msgs::msg::PredictedObjects predicted_objects;
-  pcl::PointCloud<pcl::PointXYZ> no_ground_pointcloud;
+  std_msgs::msg::Header predicted_objects_header;
+  std::vector<Object> objects;
+  Pointcloud no_ground_pointcloud;
   nav_msgs::msg::OccupancyGrid occupancy_grid;
   std::shared_ptr<route_handler::RouteHandler> route_handler;
 
@@ -75,8 +133,6 @@ struct PlannerData
   // last observed infomation for UNKNOWN
   std::map<lanelet::Id, TrafficSignalStamped> traffic_light_id_map_raw_;
   std::map<lanelet::Id, TrafficSignalStamped> traffic_light_id_map_last_observed_;
-  std::optional<tier4_planning_msgs::msg::VelocityLimit> external_velocity_limit;
-  tier4_v2x_msgs::msg::VirtualTrafficLightStateArray virtual_traffic_light_states;
 
   // velocity smoother
   std::shared_ptr<autoware::velocity_smoother::SmootherBase> velocity_smoother_;

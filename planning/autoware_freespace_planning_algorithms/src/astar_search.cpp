@@ -388,7 +388,7 @@ double AstarSearch::getExpansionDistance(const AstarNode & current_node) const
 double AstarSearch::getSteeringCost(const int steering_index) const
 {
   return planner_common_param_.curve_weight *
-         (abs(steering_index) / planner_common_param_.turning_steps);
+         (static_cast<double>(abs(steering_index)) / planner_common_param_.turning_steps);
 }
 
 double AstarSearch::getSteeringChangeCost(

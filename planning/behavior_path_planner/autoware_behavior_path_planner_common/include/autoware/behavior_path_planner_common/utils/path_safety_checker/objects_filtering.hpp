@@ -71,6 +71,16 @@ bool is_within_circle(
   const geometry_msgs::msg::Point & object_pos, const geometry_msgs::msg::Point & reference_point,
   const double search_radius);
 
+/**
+ * @brief Checks if the object classification represents a vehicle (CAR, TRUCK, BUS, TRAILER,
+ * MOTORCYCLE).
+ *
+ * @param classification The object classification to check.
+ * @return true If the classification is a vehicle type.
+ * @return false Otherwise.
+ */
+bool is_vehicle(const ObjectClassification & classification);
+
 }  // namespace autoware::behavior_path_planner::utils::path_safety_checker::filter
 
 namespace autoware::behavior_path_planner::utils::path_safety_checker

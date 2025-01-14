@@ -75,21 +75,18 @@ TrafficLightFineDetectorNode::TrafficLightFineDetectorNode(const rclcpp::NodeOpt
     RCLCPP_ERROR(this->get_logger(), "Could not find tlr id");
   }
 
-  const autoware::tensorrt_common::BuildConfig build_config =
-    autoware::tensorrt_common::BuildConfig("MinMax", -1, false, false, false, 0.0);
-
   const bool cuda_preprocess = true;
   const std::string calib_image_list = "";
   const double scale = 1.0;
   const std::string cache_dir = "";
-  nvinfer1::Dims input_dim = autoware::tensorrt_common::get_input_dims(model_path);
-  assert(input_dim.d[0] > 0);
-  batch_size_ = input_dim.d[0];
-  const autoware::tensorrt_common::BatchConfig batch_config{batch_size_, batch_size_, batch_size_};
+
+  auto trt_config = autoware::tensorrt_common::TrtCommonConfig(model_path, precision);
 
   trt_yolox_ = std::make_unique<autoware::tensorrt_yolox::TrtYoloX>(
-    model_path, precision, num_class, score_thresh_, nms_threshold, build_config, cuda_preprocess,
-    gpu_id, calib_image_list, scale, cache_dir, batch_config);
+    trt_config, num_class, score_thresh_, nms_threshold, cuda_preprocess, gpu_id, calib_image_list,
+    scale, cache_dir);
+
+  batch_size_ = trt_yolox_->getBatchSize();
 
   if (!trt_yolox_->isGPUInitialized()) {
     RCLCPP_ERROR(this->get_logger(), "GPU %d does not exist or is not suitable.", gpu_id);

@@ -16,143 +16,114 @@
 #define AUTOWARE__BEHAVIOR_PATH_GOAL_PLANNER_MODULE__THREAD_DATA_HPP_
 
 #include "autoware/behavior_path_goal_planner_module/decision_state.hpp"
-#include "autoware/behavior_path_planner_common/utils/path_safety_checker/path_safety_checker_parameters.hpp"
+#include "autoware/behavior_path_planner_common/interface/scene_module_interface.hpp"
 
 #include <rclcpp/rclcpp.hpp>
 
 #include <memory>
-#include <mutex>
 #include <optional>
+#include <utility>
 #include <vector>
 
 namespace autoware::behavior_path_planner
 {
 
-#define DEFINE_SETTER_WITH_MUTEX(TYPE, NAME)                  \
-public:                                                       \
-  void set_##NAME(const TYPE & value)                         \
-  {                                                           \
-    const std::lock_guard<std::recursive_mutex> lock(mutex_); \
-    NAME##_ = value;                                          \
-  }
-
-#define DEFINE_GETTER_WITH_MUTEX(TYPE, NAME)                  \
-public:                                                       \
-  TYPE get_##NAME() const                                     \
-  {                                                           \
-    const std::lock_guard<std::recursive_mutex> lock(mutex_); \
-    return NAME##_;                                           \
-  }
-
-#define DEFINE_SETTER_GETTER_WITH_MUTEX(TYPE, NAME) \
-  DEFINE_SETTER_WITH_MUTEX(TYPE, NAME)              \
-  DEFINE_GETTER_WITH_MUTEX(TYPE, NAME)
-
-class ThreadSafeData
+class LaneParkingRequest
 {
 public:
-  ThreadSafeData(std::recursive_mutex & mutex, rclcpp::Clock::SharedPtr clock)
-  : mutex_(mutex), clock_(clock)
+  LaneParkingRequest(
+    const autoware::universe_utils::LinearRing2d & vehicle_footprint,
+    const GoalCandidates & goal_candidates, const BehaviorModuleOutput & upstream_module_output)
+  : vehicle_footprint_(vehicle_footprint),
+    goal_candidates_(goal_candidates),
+    upstream_module_output_(upstream_module_output)
   {
   }
 
-  bool incrementPathIndex()
+  void update(
+    const PlannerData & planner_data, const ModuleStatus & current_status,
+    const BehaviorModuleOutput & upstream_module_output,
+    const std::optional<PullOverPath> & pull_over_path, const PathDecisionState & prev_data);
+
+  const autoware::universe_utils::LinearRing2d vehicle_footprint_;
+  const GoalCandidates goal_candidates_;
+
+  const std::shared_ptr<PlannerData> & get_planner_data() const { return planner_data_; }
+  const ModuleStatus & get_current_status() const { return current_status_; }
+  const BehaviorModuleOutput & get_upstream_module_output() const
   {
-    const std::lock_guard<std::recursive_mutex> lock(mutex_);
-    if (!pull_over_path_) {
-      return false;
-    }
-
-    return pull_over_path_->incrementPathIndex();
+    return upstream_module_output_;
   }
-
-  void set_pull_over_path(const PullOverPath & path)
-  {
-    const std::lock_guard<std::recursive_mutex> lock(mutex_);
-    set_pull_over_path_no_lock(path);
-  }
-
-  void set_pull_over_path(const std::shared_ptr<PullOverPath> & path)
-  {
-    const std::lock_guard<std::recursive_mutex> lock(mutex_);
-    set_pull_over_path_no_lock(path);
-  }
-
-  template <typename... Args>
-  void set(Args... args)
-  {
-    std::lock_guard<std::recursive_mutex> lock(mutex_);
-    (..., set_no_lock(args));
-  }
-
-  void clearPullOverPath()
-  {
-    const std::lock_guard<std::recursive_mutex> lock(mutex_);
-    pull_over_path_ = nullptr;
-  }
-
-  bool foundPullOverPath() const
-  {
-    const std::lock_guard<std::recursive_mutex> lock(mutex_);
-    if (!pull_over_path_) {
-      return false;
-    }
-
-    return true;
-  }
-
-  void reset()
-  {
-    const std::lock_guard<std::recursive_mutex> lock(mutex_);
-    pull_over_path_ = nullptr;
-    pull_over_path_candidates_.clear();
-    last_path_update_time_ = std::nullopt;
-    closest_start_pose_ = std::nullopt;
-    prev_data_ = PathDecisionState{};
-  }
-
-  // main --> lane
-  DEFINE_SETTER_GETTER_WITH_MUTEX(PathDecisionState, prev_data)
-
-  // lane --> main
-  DEFINE_SETTER_GETTER_WITH_MUTEX(std::optional<Pose>, closest_start_pose)
-  DEFINE_SETTER_GETTER_WITH_MUTEX(std::vector<PullOverPath>, pull_over_path_candidates)
-
-  // main <--> lane/freespace
-  DEFINE_GETTER_WITH_MUTEX(std::shared_ptr<PullOverPath>, pull_over_path)
-  DEFINE_GETTER_WITH_MUTEX(std::optional<rclcpp::Time>, last_path_update_time)
+  const std::optional<PullOverPath> & get_pull_over_path() const { return pull_over_path_; }
+  const PathDecisionState & get_prev_data() const { return prev_data_; }
 
 private:
-  void set_pull_over_path_no_lock(const PullOverPath & path)
-  {
-    pull_over_path_ = std::make_shared<PullOverPath>(path);
-
-    last_path_update_time_ = clock_->now();
-  }
-
-  void set_pull_over_path_no_lock(const std::shared_ptr<PullOverPath> & path)
-  {
-    pull_over_path_ = path;
-    last_path_update_time_ = clock_->now();
-  }
-
-  void set_no_lock(const std::vector<PullOverPath> & arg) { pull_over_path_candidates_ = arg; }
-  void set_no_lock(const std::shared_ptr<PullOverPath> & arg) { set_pull_over_path_no_lock(arg); }
-  void set_no_lock(const PullOverPath & arg) { set_pull_over_path_no_lock(arg); }
-
-  std::shared_ptr<PullOverPath> pull_over_path_{nullptr};
-  std::vector<PullOverPath> pull_over_path_candidates_;
-  std::optional<rclcpp::Time> last_path_update_time_;
-  std::optional<Pose> closest_start_pose_{};
-  PathDecisionState prev_data_{};
-
-  std::recursive_mutex & mutex_;
-  rclcpp::Clock::SharedPtr clock_;
+  std::shared_ptr<PlannerData> planner_data_;
+  ModuleStatus current_status_;
+  BehaviorModuleOutput upstream_module_output_;
+  std::optional<PullOverPath> pull_over_path_;  //<! pull over path selected by main thread
+  PathDecisionState prev_data_;
 };
 
-#undef DEFINE_SETTER_WITH_MUTEX
-#undef DEFINE_GETTER_WITH_MUTEX
-#undef DEFINE_SETTER_GETTER_WITH_MUTEX
+struct LaneParkingResponse
+{
+  std::vector<PullOverPath> pull_over_path_candidates;
+  std::optional<Pose> closest_start_pose;
+};
+
+class FreespaceParkingRequest
+{
+public:
+  FreespaceParkingRequest(
+    const GoalPlannerParameters & parameters,
+    const autoware::universe_utils::LinearRing2d & vehicle_footprint,
+    const GoalCandidates & goal_candidates, const PlannerData & planner_data)
+  : parameters_(parameters),
+    vehicle_footprint_(vehicle_footprint),
+    goal_candidates_(goal_candidates)
+  {
+    initializeOccupancyGridMap(planner_data, parameters_);
+  };
+
+  const ModuleStatus & getCurrentStatus() const { return current_status_; }
+  void update(
+    const PlannerData & planner_data, const ModuleStatus & current_status,
+    const std::optional<PullOverPath> & pull_over_path,
+    const std::optional<rclcpp::Time> & last_path_update_time, const bool is_stopped);
+
+  const GoalPlannerParameters parameters_;
+  const autoware::universe_utils::LinearRing2d vehicle_footprint_;
+  const GoalCandidates goal_candidates_;
+
+  const std::shared_ptr<PlannerData> & get_planner_data() const { return planner_data_; }
+  const ModuleStatus & get_current_status() const { return current_status_; }
+  std::shared_ptr<OccupancyGridBasedCollisionDetector> get_occupancy_grid_map() const
+  {
+    return occupancy_grid_map_;
+  }
+  const std::optional<PullOverPath> & get_pull_over_path() const { return pull_over_path_; }
+  const std::optional<rclcpp::Time> & get_last_path_update_time() const
+  {
+    return last_path_update_time_;
+  }
+  bool is_stopped() const { return is_stopped_; }
+
+private:
+  std::shared_ptr<PlannerData> planner_data_;
+  ModuleStatus current_status_;
+  std::shared_ptr<OccupancyGridBasedCollisionDetector> occupancy_grid_map_;
+  std::optional<PullOverPath> pull_over_path_;
+  std::optional<rclcpp::Time> last_path_update_time_;
+  bool is_stopped_;
+
+  void initializeOccupancyGridMap(
+    const PlannerData & planner_data, const GoalPlannerParameters & parameters);
+};
+
+struct FreespaceParkingResponse
+{
+  std::optional<PullOverPath> freespace_pull_over_path;
+};
 
 }  // namespace autoware::behavior_path_planner
 

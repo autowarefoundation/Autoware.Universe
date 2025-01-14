@@ -1,33 +1,33 @@
-## Stop Line
+# Stop Line
 
-### Role
+## Role
 
-This module plans velocity so that the vehicle can stop right before stop lines and restart driving after stopped.
+This module plans the vehicle's velocity to ensure it stops just before stop lines and can resume movement after stopping.
 
 ![stop line](docs/stop_line.svg)
 
-### Activation Timing
+## Activation Timing
 
 This module is activated when there is a stop line in a target lane.
 
-### Module Parameters
+## Module Parameters
 
 | Parameter                        | Type   | Description                                                                                                                                                                       |
 | -------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `stop_margin`                    | double | a margin that the vehicle tries to stop before stop_line                                                                                                                          |
-| `stop_duration_sec`              | double | [s] time parameter for the ego vehicle to stop in front of a stop line                                                                                                            |
-| `hold_stop_margin_distance`      | double | [m] parameter for restart prevention (See Algorithm section). Also, when the ego vehicle is within this distance from a stop line, the ego state becomes STOPPED from APPROACHING |
-| `use_initialization_stop_state`  | bool   | A flag to determine whether to return to the approaching state when the vehicle moves away from a stop line.                                                                      |
-| `show_stop_line_collision_check` | bool   | A flag to determine whether to show the debug information of collision check with a stop line                                                                                     |
+| `stop_margin`                    | double | Margin that the vehicle tries to stop in before stop_line                                                                                                                         |
+| `stop_duration_sec`              | double | [s] Time parameter for the ego vehicle to stop before stop line                                                                                                                   |
+| `hold_stop_margin_distance`      | double | [m] Parameter for restart prevention (See Algorithm section). Also, when the ego vehicle is within this distance from a stop line, the ego state becomes STOPPED from APPROACHING |
+| `use_initialization_stop_state`  | bool   | Flag to determine whether to return to the approaching state when the vehicle moves away from a stop line.                                                                        |
+| `show_stop_line_collision_check` | bool   | Flag to determine whether to show the debug information of collision check with a stop line                                                                                       |
 
-### Inner-workings / Algorithms
+## Inner-workings / Algorithms
 
 - Gets a stop line from map information.
-- insert a stop point on the path from the stop line defined in the map and the ego vehicle length.
+- Inserts a stop point on the path from the stop line defined in the map and the ego vehicle length.
 - Sets velocities of the path after the stop point to 0[m/s].
-- Release the inserted stop velocity when the vehicle stops at the stop point for `stop_duration_sec` seconds.
+- Releases the inserted stop velocity when the vehicle halts at the stop point for `stop_duration_sec` seconds.
 
-#### Flowchart
+### Flowchart
 
 ```plantuml
 @startuml
@@ -85,15 +85,15 @@ Then, we can get `offset segment` and `offset from segment start`.
 
 ![find_offset_segment](docs/./find_offset_segment.drawio.svg)
 
-After that, we can calculate a offset point from `offset segment` and `offset`. This will be `stop_pose`.
+After that, we can calculate an offset point from `offset segment` and `offset`. This will be `stop_pose`.
 
 ![calculate_stop_pose](docs/./calculate_stop_pose.drawio.svg)
 
-#### Restart prevention
+### Restart Prevention
 
-If it needs X meters (e.g. 0.5 meters) to stop once the vehicle starts moving due to the poor vehicle control performance, the vehicle goes over the stopping position that should be strictly observed when the vehicle starts to moving in order to approach the near stop point (e.g. 0.3 meters away).
+If the vehicle requires X meters (e.g. 0.5 meters) to stop once it starts moving due to poor vehicle control performance, it may overshoot the stopping position, which must be strictly observed. This happens when the vehicle begins to move in order to approach a nearby stop point (e.g. 0.3 meters away).
 
-This module has parameter `hold_stop_margin_distance` in order to prevent from these redundant restart. If the vehicle is stopped within `hold_stop_margin_distance` meters from stop point of the module (\_front_to_stop_line < hold_stop_margin_distance), the module judges that the vehicle has already stopped for the module's stop point and plans to keep stopping current position even if the vehicle is stopped due to other factors.
+This module includes the parameter `hold_stop_margin_distance` to prevent redundant restarts in such a situation. If the vehicle is stopped within `hold_stop_margin_distance` meters of the stop point (\_front_to_stop_line < hold_stop_margin_distance), the module determines that the vehicle has already stopped at the stop point and will maintain the current stopping position, even if the vehicle has come to a stop due to other factors.
 
 <figure markdown>
   ![example](docs/restart_prevention.svg){width=1000}

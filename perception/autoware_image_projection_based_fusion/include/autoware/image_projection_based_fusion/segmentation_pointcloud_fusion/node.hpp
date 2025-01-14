@@ -20,6 +20,7 @@
 #include <autoware/image_projection_based_fusion/utils/utils.hpp>
 #include <image_transport/image_transport.hpp>
 
+#include <memory>
 #include <string>
 #include <unordered_set>
 #include <utility>
@@ -33,10 +34,32 @@
 
 namespace autoware::image_projection_based_fusion
 {
-class SegmentPointCloudFusionNode : public FusionNode<PointCloud2, PointCloud2, Image>
+class SegmentPointCloudFusionNode : public FusionNode<PointCloudMsgType, Image, PointCloudMsgType>
 {
+public:
+  explicit SegmentPointCloudFusionNode(const rclcpp::NodeOptions & options);
+
 private:
-  rclcpp::Publisher<PointCloud2>::SharedPtr pub_pointcloud_ptr_;
+  void preprocess(PointCloudMsgType & pointcloud_msg) override;
+
+  void fuseOnSingleImage(
+    const PointCloudMsgType & input_pointcloud_msg, const Det2dStatus<Image> & det2d,
+    const Image & input_mask, PointCloudMsgType & output_pointcloud_msg) override;
+
+  inline void copyPointCloud(
+    const PointCloudMsgType & input, const int point_step, const size_t global_offset,
+    PointCloudMsgType & output, size_t & output_pointcloud_size)
+  {
+    std::memcpy(&output.data[output_pointcloud_size], &input.data[global_offset], point_step);
+    output_pointcloud_size += point_step;
+  }
+
+  void postprocess(
+    const PointCloudMsgType & pointcloud_msg, PointCloudMsgType & output_msg) override;
+
+  // debug
+  image_transport::Publisher pub_debug_mask_ptr_;
+
   std::vector<bool> filter_semantic_label_target_;
   float filter_distance_threshold_;
   // declare list of semantic label target, depend on trained data of yolox segmentation model
@@ -46,30 +69,8 @@ private:
     {"BIKE", false},          {"ROAD", false},         {"SIDEWALK", false},   {"ROAD_PAINT", false},
     {"CURBSTONE", false},     {"CROSSWALK", false},    {"VEGETATION", false}, {"SKY", false}};
 
-  image_transport::Publisher pub_debug_mask_ptr_;
   bool is_publish_debug_mask_;
   std::unordered_set<size_t> filter_global_offset_set_;
-
-public:
-  explicit SegmentPointCloudFusionNode(const rclcpp::NodeOptions & options);
-
-protected:
-  void preprocess(PointCloud2 & pointcloud_msg) override;
-
-  void postprocess(PointCloud2 & pointcloud_msg) override;
-
-  void fuseOnSingleImage(
-    const PointCloud2 & input_pointcloud_msg, const std::size_t image_id, const Image & input_mask,
-    const CameraInfo & camera_info, PointCloud2 & output_pointcloud_msg) override;
-
-  bool out_of_scope(const PointCloud2 & filtered_cloud) override;
-  inline void copyPointCloud(
-    const PointCloud2 & input, const int point_step, const size_t global_offset,
-    PointCloud2 & output, size_t & output_pointcloud_size)
-  {
-    std::memcpy(&output.data[output_pointcloud_size], &input.data[global_offset], point_step);
-    output_pointcloud_size += point_step;
-  }
 };
 
 }  // namespace autoware::image_projection_based_fusion

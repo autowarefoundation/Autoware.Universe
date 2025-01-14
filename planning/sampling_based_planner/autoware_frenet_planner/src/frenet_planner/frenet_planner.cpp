@@ -197,6 +197,15 @@ void calculateCartesian(
       trajectory.longitudinal_accelerations.push_back(0.0);
       trajectory.lateral_accelerations.push_back(0.0);
     }
+    for (auto i = 0UL; i < trajectory.points.size(); ++i) {
+      geometry_msgs::msg::Pose pose;
+      pose.position.x = trajectory.points[i].x();
+      pose.position.y = trajectory.points[i].y();
+      pose.position.z = 0.0;
+      pose.orientation =
+        autoware::universe_utils::createQuaternionFromRPY(0.0, 0.0, trajectory.yaws[i]);
+      trajectory.poses.push_back(pose);
+    }
   }
 }
 

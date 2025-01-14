@@ -56,6 +56,7 @@ EKFLocalizer::EKFLocalizer(const rclcpp::NodeOptions & node_options)
   twist_queue_(params_.twist_smoothing_steps)
 {
   is_activated_ = false;
+  is_set_initialpose_ = false;
 
   /* initialize ros system */
   timer_control_ = rclcpp::create_timer(
@@ -69,13 +70,14 @@ EKFLocalizer::EKFLocalizer(const rclcpp::NodeOptions & node_options)
   pub_twist_ = create_publisher<geometry_msgs::msg::TwistStamped>("ekf_twist", 1);
   pub_twist_cov_ = create_publisher<geometry_msgs::msg::TwistWithCovarianceStamped>(
     "ekf_twist_with_covariance", 1);
-  pub_yaw_bias_ = create_publisher<tier4_debug_msgs::msg::Float64Stamped>("estimated_yaw_bias", 1);
+  pub_yaw_bias_ =
+    create_publisher<autoware_internal_debug_msgs::msg::Float64Stamped>("estimated_yaw_bias", 1);
   pub_biased_pose_ = create_publisher<geometry_msgs::msg::PoseStamped>("ekf_biased_pose", 1);
   pub_biased_pose_cov_ = create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "ekf_biased_pose_with_covariance", 1);
   pub_diag_ = this->create_publisher<diagnostic_msgs::msg::DiagnosticArray>("/diagnostics", 10);
-  pub_processing_time_ =
-    create_publisher<tier4_debug_msgs::msg::Float64Stamped>("debug/processing_time_ms", 1);
+  pub_processing_time_ = create_publisher<autoware_internal_debug_msgs::msg::Float64Stamped>(
+    "debug/processing_time_ms", 1);
   sub_initialpose_ = create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "initialpose", 1, std::bind(&EKFLocalizer::callback_initial_pose, this, _1));
   sub_pose_with_cov_ = create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
@@ -139,6 +141,13 @@ void EKFLocalizer::timer_callback()
   if (!is_activated_) {
     warning_->warn_throttle(
       "The node is not activated. Provide initial pose to pose_initializer", 2000);
+    publish_diagnostics(geometry_msgs::msg::PoseStamped{}, current_time);
+    return;
+  }
+
+  if (!is_set_initialpose_) {
+    warning_->warn_throttle(
+      "Initial pose is not set. Provide initial pose to pose_initializer", 2000);
     publish_diagnostics(geometry_msgs::msg::PoseStamped{}, current_time);
     return;
   }
@@ -227,9 +236,10 @@ void EKFLocalizer::timer_callback()
 
   /* publish processing time */
   const double elapsed_time = stop_watch_timer_cb_.toc();
-  pub_processing_time_->publish(tier4_debug_msgs::build<tier4_debug_msgs::msg::Float64Stamped>()
-                                  .stamp(current_time)
-                                  .data(elapsed_time));
+  pub_processing_time_->publish(
+    autoware_internal_debug_msgs::build<autoware_internal_debug_msgs::msg::Float64Stamped>()
+      .stamp(current_time)
+      .data(elapsed_time));
 }
 
 /*
@@ -264,6 +274,8 @@ void EKFLocalizer::callback_initial_pose(
       params_.pose_frame_id.c_str(), msg->header.frame_id.c_str());
   }
   ekf_module_->initialize(*msg, transform);
+
+  is_set_initialpose_ = true;
 }
 
 /*
@@ -272,7 +284,7 @@ void EKFLocalizer::callback_initial_pose(
 void EKFLocalizer::callback_pose_with_covariance(
   geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
 {
-  if (!is_activated_) {
+  if (!is_activated_ && !is_set_initialpose_) {
     return;
   }
 
@@ -333,7 +345,7 @@ void EKFLocalizer::publish_estimate_result(
   pub_twist_cov_->publish(twist_cov);
 
   /* publish yaw bias */
-  tier4_debug_msgs::msg::Float64Stamped yawb;
+  autoware_internal_debug_msgs::msg::Float64Stamped yawb;
   yawb.stamp = current_ekf_twist.header.stamp;
   yawb.data = ekf_module_->get_yaw_bias();
   pub_yaw_bias_->publish(yawb);
@@ -359,8 +371,9 @@ void EKFLocalizer::publish_diagnostics(
   std::vector<diagnostic_msgs::msg::DiagnosticStatus> diag_status_array;
 
   diag_status_array.push_back(check_process_activated(is_activated_));
+  diag_status_array.push_back(check_set_initialpose(is_set_initialpose_));
 
-  if (is_activated_) {
+  if (is_activated_ && is_set_initialpose_) {
     diag_status_array.push_back(check_measurement_updated(
       "pose", pose_diag_info_.no_update_count, params_.pose_no_update_count_threshold_warn,
       params_.pose_no_update_count_threshold_error));
@@ -439,6 +452,7 @@ void EKFLocalizer::service_trigger_node(
     is_activated_ = true;
   } else {
     is_activated_ = false;
+    is_set_initialpose_ = false;
   }
   res->success = true;
 }

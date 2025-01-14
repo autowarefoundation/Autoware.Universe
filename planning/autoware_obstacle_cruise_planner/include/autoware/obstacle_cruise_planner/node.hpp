@@ -24,6 +24,7 @@
 #include "autoware/universe_utils/ros/polling_subscriber.hpp"
 #include "autoware/universe_utils/system/stop_watch.hpp"
 
+#include <autoware/objects_of_interest_marker_interface/objects_of_interest_marker_interface.hpp>
 #include <autoware/universe_utils/ros/published_time_publisher.hpp>
 #include <rclcpp/rclcpp.hpp>
 
@@ -180,6 +181,8 @@ private:
     this, "~/input/pointcloud"};
   autoware::universe_utils::InterProcessPollingSubscriber<AccelWithCovarianceStamped> acc_sub_{
     this, "~/input/acceleration"};
+  autoware::objects_of_interest_marker_interface::ObjectsOfInterestMarkerInterface
+    objects_of_interest_marker_interface_{this, "obstacle_cruise_planner"};
 
   std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
   std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};

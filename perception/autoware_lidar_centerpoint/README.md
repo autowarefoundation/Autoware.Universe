@@ -56,7 +56,6 @@ Note that these parameters are associated with ONNX file, predefined during the 
 | `trt_precision`                                  | string       | `fp16`                    | TensorRT inference precision: `fp32` or `fp16`                |
 | `post_process_params.score_threshold`            | double       | `0.4`                     | detected objects with score less than threshold are ignored   |
 | `post_process_params.yaw_norm_thresholds`        | list[double] | [0.3, 0.3, 0.3, 0.3, 0.0] | An array of distance threshold values of norm of yaw [rad].   |
-| `post_process_params.iou_nms_target_class_names` | list[string] | -                         | target classes for IoU-based Non Maximum Suppression          |
 | `post_process_params.iou_nms_search_distance_2d` | double       | -                         | If two objects are farther than the value, NMS isn't applied. |
 | `post_process_params.iou_nms_threshold`          | double       | -                         | IoU threshold for the IoU-based Non Maximum Suppression       |
 | `post_process_params.has_twist`                  | boolean      | false                     | Indicates whether the model outputs twist value.              |
@@ -267,7 +266,6 @@ point_cloud_range, point_feature_size, voxel_size, etc. according to the trainin
     encoder_in_feature_size: 9
     # post-process params
     circle_nms_dist_threshold: 0.5
-    iou_nms_target_class_names: ["CAR"]
     iou_nms_search_distance_2d: 10.0
     iou_nms_threshold: 0.1
     yaw_norm_thresholds: [0.3, 0.3, 0.3, 0.3, 0.0]

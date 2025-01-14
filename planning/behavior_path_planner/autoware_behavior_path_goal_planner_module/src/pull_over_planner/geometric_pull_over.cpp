@@ -26,11 +26,10 @@
 namespace autoware::behavior_path_planner
 {
 GeometricPullOver::GeometricPullOver(
-  rclcpp::Node & node, const GoalPlannerParameters & parameters,
-  const LaneDepartureChecker & lane_departure_checker, const bool is_forward)
+  rclcpp::Node & node, const GoalPlannerParameters & parameters, const bool is_forward)
 : PullOverPlannerBase{node, parameters},
-  parallel_parking_parameters_{parameters.parallel_parking_parameters},
-  lane_departure_checker_{lane_departure_checker},
+  lane_departure_checker_{
+    lane_departure_checker::Param{parameters.lane_departure_check_expansion_margin}, vehicle_info_},
   is_forward_{is_forward},
   left_side_parking_{parameters.parking_policy == ParkingPolicy::LEFT_SIDE}
 {
@@ -40,7 +39,7 @@ GeometricPullOver::GeometricPullOver(
 std::optional<PullOverPath> GeometricPullOver::plan(
   const GoalCandidate & modified_goal_pose, const size_t id,
   const std::shared_ptr<const PlannerData> planner_data,
-  [[maybe_unused]] const BehaviorModuleOutput & previous_module_output)
+  [[maybe_unused]] const BehaviorModuleOutput & upstream_module_output)
 {
   const auto & route_handler = planner_data->route_handler;
 
@@ -78,9 +77,6 @@ std::optional<PullOverPath> GeometricPullOver::plan(
   auto pull_over_path_opt = PullOverPath::create(
     getPlannerType(), id, planner_.getPaths(), planner_.getStartPose(), modified_goal_pose,
     planner_.getPairsTerminalVelocityAndAccel());
-  if (!pull_over_path_opt) {
-    return {};
-  }
-  return pull_over_path_opt.value();
+  return pull_over_path_opt;
 }
 }  // namespace autoware::behavior_path_planner

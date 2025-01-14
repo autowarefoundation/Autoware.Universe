@@ -16,9 +16,14 @@ if(NOT (CUDAToolkit_FOUND AND CUDNN_FOUND AND TENSORRT_FOUND))
   return()
 endif()
 
+if(TENSORRT_VERSION VERSION_LESS 8.5)
+  message(WARNING "Unsupported version TensorRT ${TENSORRT_VERSION} detected. This package requires TensorRT 8.5 or later.")
+  return()
+endif()
+
 add_library(${PROJECT_NAME} SHARED
   src/tensorrt_common.cpp
-  src/simple_profiler.cpp
+  src/profiler.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -42,7 +47,7 @@ set_target_properties(${PROJECT_NAME}
     CXX_EXTENSIONS NO
 )
 
-# TODO(autoware_tensorrt_common): Remove -Wno-deprecated-declarations once upgrading to TensorRT 8.5 is complete
+# TODO(amadeuszsz): Remove -Wno-deprecated-declarations once removing implicit quantization
 target_compile_options(${PROJECT_NAME} PRIVATE
   -Wall -Wextra -Wpedantic -Werror -Wno-deprecated-declarations
 )

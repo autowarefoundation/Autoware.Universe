@@ -153,11 +153,11 @@ StopFactor createStopFactor(
   return stop_factor;
 }
 
-tier4_debug_msgs::msg::StringStamped createStringStampedMessage(
+autoware_internal_debug_msgs::msg::StringStamped createStringStampedMessage(
   const rclcpp::Time & now, const int64_t module_id_,
   const std::vector<std::tuple<std::string, CollisionPoint, CollisionState>> & collision_points)
 {
-  tier4_debug_msgs::msg::StringStamped msg;
+  autoware_internal_debug_msgs::msg::StringStamped msg;
   msg.stamp = now;
   for (const auto & collision_point : collision_points) {
     std::stringstream ss;
@@ -176,7 +176,7 @@ CrosswalkModule::CrosswalkModule(
   const std::optional<int64_t> & reg_elem_id, const lanelet::LaneletMapPtr & lanelet_map_ptr,
   const PlannerParam & planner_param, const rclcpp::Logger & logger,
   const rclcpp::Clock::SharedPtr clock)
-: SceneModuleInterface(module_id, logger, clock),
+: SceneModuleInterfaceWithRTC(module_id, logger, clock),
   module_id_(module_id),
   planner_param_(planner_param),
   use_regulatory_element_(reg_elem_id)
@@ -199,8 +199,8 @@ CrosswalkModule::CrosswalkModule(
 
   road_ = lanelet_map_ptr->laneletLayer.get(lane_id);
 
-  collision_info_pub_ =
-    node.create_publisher<tier4_debug_msgs::msg::StringStamped>("~/debug/collision_info", 1);
+  collision_info_pub_ = node.create_publisher<autoware_internal_debug_msgs::msg::StringStamped>(
+    "~/debug/collision_info", 1);
 }
 
 bool CrosswalkModule::modifyPathVelocity(PathWithLaneId * path)

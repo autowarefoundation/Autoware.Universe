@@ -2,6 +2,82 @@
 Changelog for package autoware_behavior_path_static_obstacle_avoidance_module
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.40.0 (2024-12-12)
+-------------------
+* Merge branch 'main' into release-0.40.0
+* Revert "chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)"
+  This reverts commit c9f0f2688c57b0f657f5c1f28f036a970682e7f5.
+* feat(behavior_path_planner): add detail text to virutal wall (`#9600 <https://github.com/autowarefoundation/autoware.universe/issues/9600>`_)
+  * feat(behavior_path_planner): add detail text to virutal wall
+  * goal is far
+  * pull over start pose is far
+  * fix lc build
+  * fix build
+  * Update planning/behavior_path_planner/autoware_behavior_path_goal_planner_module/src/goal_planner_module.cpp
+  ---------
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)
+  * chore(package.xml): bump version to 0.39.0
+  * fix: fix ticket links in CHANGELOG.rst
+  * fix: remove unnecessary diff
+  ---------
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(autoware_behavior_path_static_obstacle_avoidance_module): add maintainer (`#9581 <https://github.com/autowarefoundation/autoware.universe/issues/9581>`_)
+* fix(cpplint): include what you use - planning (`#9570 <https://github.com/autowarefoundation/autoware.universe/issues/9570>`_)
+* fix(avoidance): remove stop reason (`#9364 <https://github.com/autowarefoundation/autoware.universe/issues/9364>`_)
+* 0.39.0
+* update changelog
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* perf(static_obstacle_avoidance): use lanelet::utils instead of route handle for closest lanelet (`#9367 <https://github.com/autowarefoundation/autoware.universe/issues/9367>`_)
+  use lanelet::utils for performance improvement
+* perf(static_obstacle_avoidance): remove redundant calculation related to lanelet functions (`#9355 <https://github.com/autowarefoundation/autoware.universe/issues/9355>`_)
+  * add traffic light distance and modified goal allowance to avoidance data
+  * add closest lanelet related variable to avoidanceData structure
+  * use route handler for checking closest lanelet
+  * use std::optional
+  ---------
+* feat(avoidance): output velocity factor (`#9345 <https://github.com/autowarefoundation/autoware.universe/issues/9345>`_)
+* fix(static_obstacle_avoidance): override setInitState (`#9340 <https://github.com/autowarefoundation/autoware.universe/issues/9340>`_)
+  override setInitState
+* refactor(bpp): rework steering factor interface (`#9325 <https://github.com/autowarefoundation/autoware.universe/issues/9325>`_)
+  * refactor(bpp): rework steering factor interface
+  * refactor(soa): rework steering factor interface
+  * refactor(AbLC): rework steering factor interface
+  * refactor(doa): rework steering factor interface
+  * refactor(lc): rework steering factor interface
+  * refactor(gp): rework steering factor interface
+  * refactor(sp): rework steering factor interface
+  * refactor(sbp): rework steering factor interface
+  * refactor(ss): rework steering factor interface
+  ---------
+* refactor(static obstacle avoidance): remove redundant calculation (`#9326 <https://github.com/autowarefoundation/autoware.universe/issues/9326>`_)
+  * refactor bases on clang tidy
+  * refactor extend backward length
+  * mover redundant calculation in getRoadShoulderDistance
+  ---------
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* test(bpp_common): add unit test for safety check (`#9223 <https://github.com/autowarefoundation/autoware.universe/issues/9223>`_)
+  * add test for object collision
+  * add test for more functions
+  * add docstring
+  * fix lane change
+  ---------
+* feat(static_obstacle_avoidance): operator request for ambiguous vehicle (`#9205 <https://github.com/autowarefoundation/autoware.universe/issues/9205>`_)
+  * add operator request feature
+  * Update planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/src/scene.cpp
+  Co-authored-by: Satoshi OTA <44889564+satoshi-ota@users.noreply.github.com>
+  ---------
+  Co-authored-by: Satoshi OTA <44889564+satoshi-ota@users.noreply.github.com>
+* Contributors: Esteve Fernandez, Fumiya Watanabe, Go Sakayori, Kosuke Takeuchi, M. Fatih Cırıt, Ryohsuke Mitsudome, Satoshi OTA, Yukinari Hisaki, Yutaka Kondo
+
 0.39.0 (2024-11-25)
 -------------------
 * Merge commit '6a1ddbd08bd' into release-0.39.0

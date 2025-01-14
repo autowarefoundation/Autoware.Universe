@@ -17,6 +17,7 @@
 #include "autoware/lidar_transfusion/preprocess/preprocess_kernel.hpp"
 #include "autoware/lidar_transfusion/transfusion_config.hpp"
 
+#include <autoware/tensorrt_common/utils.hpp>
 #include <autoware/universe_utils/math/constants.hpp>
 
 #include <algorithm>
@@ -27,25 +28,23 @@
 #include <random>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace autoware::lidar_transfusion
 {
 
 TransfusionTRT::TransfusionTRT(
-  const NetworkParam & network_param, const DensificationParam & densification_param,
-  const TransfusionConfig & config)
-: config_(config)
+  const tensorrt_common::TrtCommonConfig & trt_config,
+  const DensificationParam & densification_param, TransfusionConfig config)
+: config_(std::move(config))
 {
-  network_trt_ptr_ = std::make_unique<NetworkTRT>(config_);
-
-  network_trt_ptr_->init(
-    network_param.onnx_path(), network_param.engine_path(), network_param.trt_precision());
   vg_ptr_ = std::make_unique<VoxelGenerator>(densification_param, config_, stream_);
   stop_watch_ptr_ =
     std::make_unique<autoware::universe_utils::StopWatch<std::chrono::milliseconds>>();
   stop_watch_ptr_->tic("processing/inner");
   initPtr();
+  initTrt(trt_config);
 
   CHECK_CUDA_ERROR(cudaStreamCreate(&stream_));
 }
@@ -97,6 +96,51 @@ void TransfusionTRT::initPtr()
 
   pre_ptr_ = std::make_unique<PreprocessCuda>(config_, stream_);
   post_ptr_ = std::make_unique<PostprocessCuda>(config_, stream_);
+}
+
+void TransfusionTRT::initTrt(const tensorrt_common::TrtCommonConfig & trt_config)
+{
+  std::vector<autoware::tensorrt_common::NetworkIO> network_io{
+    autoware::tensorrt_common::NetworkIO(
+      "voxels", {3, {-1, config_.points_per_voxel_, config_.num_point_feature_size_}}),
+    autoware::tensorrt_common::NetworkIO("num_points", {1, {-1}}),
+    autoware::tensorrt_common::NetworkIO("coors", {2, {-1, config_.num_point_values_}}),
+    autoware::tensorrt_common::NetworkIO(
+      "cls_score0", {3, {config_.batch_size_, config_.num_classes_, config_.num_proposals_}}),
+    autoware::tensorrt_common::NetworkIO(
+      "bbox_pred0", {3, {config_.batch_size_, config_.num_box_values_, config_.num_proposals_}}),
+    autoware::tensorrt_common::NetworkIO(
+      "dir_cls_pred0", {3, {config_.batch_size_, 2, config_.num_proposals_}})};
+
+  std::vector<autoware::tensorrt_common::ProfileDims> profile_dims{
+    autoware::tensorrt_common::ProfileDims(
+      "voxels",
+      {3,
+       {config_.min_voxel_size_, config_.min_point_in_voxel_size_,
+        config_.min_network_feature_size_}},
+      {3,
+       {config_.opt_voxel_size_, config_.opt_point_in_voxel_size_,
+        config_.opt_network_feature_size_}},
+      {3,
+       {config_.max_voxel_size_, config_.max_point_in_voxel_size_,
+        config_.max_network_feature_size_}}),
+    autoware::tensorrt_common::ProfileDims(
+      "num_points", {1, {static_cast<int32_t>(config_.min_points_size_)}},
+      {1, {static_cast<int32_t>(config_.opt_points_size_)}},
+      {1, {static_cast<int32_t>(config_.max_points_size_)}}),
+    autoware::tensorrt_common::ProfileDims(
+      "coors", {2, {config_.min_coors_size_, config_.min_coors_dim_size_}},
+      {2, {config_.opt_coors_size_, config_.opt_coors_dim_size_}},
+      {2, {config_.max_coors_size_, config_.max_coors_dim_size_}})};
+
+  auto network_io_ptr =
+    std::make_unique<std::vector<autoware::tensorrt_common::NetworkIO>>(network_io);
+  auto profile_dims_ptr =
+    std::make_unique<std::vector<autoware::tensorrt_common::ProfileDims>>(profile_dims);
+
+  network_trt_ptr_ = std::make_unique<autoware::tensorrt_common::TrtCommon>(trt_config);
+  if (!network_trt_ptr_->setup(std::move(profile_dims_ptr), std::move(network_io_ptr)))
+    throw std::runtime_error("Failed to setup TRT engine.");
 }
 
 bool TransfusionTRT::detect(
@@ -166,8 +210,9 @@ bool TransfusionTRT::preprocess(
   CHECK_CUDA_ERROR(cudaMemcpyAsync(
     &params_input, params_input_d_.get(), sizeof(unsigned int), cudaMemcpyDeviceToHost, stream_));
   CHECK_CUDA_ERROR(cudaStreamSynchronize(stream_));
+  auto params_input_i32 = static_cast<int32_t>(params_input);
 
-  if (params_input < config_.min_voxel_size_) {
+  if (params_input_i32 < config_.min_voxel_size_) {
     RCLCPP_WARN_STREAM(
       rclcpp::get_logger("lidar_transfusion"),
       "Too few voxels (" << params_input << ") for actual optimization profile ("
@@ -185,39 +230,34 @@ bool TransfusionTRT::preprocess(
 
     params_input = config_.max_voxels_;
   }
+
   RCLCPP_DEBUG_STREAM(
     rclcpp::get_logger("lidar_transfusion"), "Generated input voxels: " << params_input);
 
-  network_trt_ptr_->context->setTensorAddress(
-    network_trt_ptr_->getTensorName(NetworkIO::voxels), voxel_features_d_.get());
-  network_trt_ptr_->context->setInputShape(
-    network_trt_ptr_->getTensorName(NetworkIO::voxels),
+  bool success = true;
+
+  // Inputs
+  success &= network_trt_ptr_->setTensor(
+    "voxels", voxel_features_d_.get(),
     nvinfer1::Dims3{
-      static_cast<int32_t>(params_input), static_cast<int32_t>(config_.max_num_points_per_pillar_),
+      params_input_i32, config_.max_num_points_per_pillar_,
       static_cast<int32_t>(config_.num_point_feature_size_)});
-  network_trt_ptr_->context->setTensorAddress(
-    network_trt_ptr_->getTensorName(NetworkIO::num_points), voxel_num_d_.get());
-  network_trt_ptr_->context->setInputShape(
-    network_trt_ptr_->getTensorName(NetworkIO::num_points),
-    nvinfer1::Dims{1, {static_cast<int32_t>(params_input)}});
-  network_trt_ptr_->context->setTensorAddress(
-    network_trt_ptr_->getTensorName(NetworkIO::coors), voxel_idxs_d_.get());
-  network_trt_ptr_->context->setInputShape(
-    network_trt_ptr_->getTensorName(NetworkIO::coors),
-    nvinfer1::Dims2{
-      static_cast<int32_t>(params_input), static_cast<int32_t>(config_.num_point_values_)});
-  network_trt_ptr_->context->setTensorAddress(
-    network_trt_ptr_->getTensorName(NetworkIO::cls_score), cls_output_d_.get());
-  network_trt_ptr_->context->setTensorAddress(
-    network_trt_ptr_->getTensorName(NetworkIO::bbox_pred), box_output_d_.get());
-  network_trt_ptr_->context->setTensorAddress(
-    network_trt_ptr_->getTensorName(NetworkIO::dir_pred), dir_cls_output_d_.get());
-  return true;
+  success &= network_trt_ptr_->setTensor(
+    "num_points", voxel_num_d_.get(), nvinfer1::Dims{1, {params_input_i32}});
+  success &= network_trt_ptr_->setTensor(
+    "coors", voxel_idxs_d_.get(), nvinfer1::Dims2{params_input_i32, config_.num_point_values_});
+
+  // Outputs
+  success &= network_trt_ptr_->setTensor("cls_score0", cls_output_d_.get());
+  success &= network_trt_ptr_->setTensor("bbox_pred0", box_output_d_.get());
+  success &= network_trt_ptr_->setTensor("dir_cls_pred0", dir_cls_output_d_.get());
+
+  return success;
 }
 
 bool TransfusionTRT::inference()
 {
-  auto status = network_trt_ptr_->context->enqueueV3(stream_);
+  auto status = network_trt_ptr_->enqueueV3(stream_);
   CHECK_CUDA_ERROR(cudaStreamSynchronize(stream_));
 
   if (!status) {

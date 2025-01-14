@@ -15,6 +15,7 @@
   <arg name="use_radar_tracking_fusion" default="false" description="use radar tracking fusion"/>
   <let name="use_radar_tracking_fusion" value="false" if="$(eval '&quot;$(var mode)&quot;!=&quot;camera_lidar_radar_fusion&quot;')"/>
   <arg name="use_multi_channel_tracker_merger"/>
+  <arg name="use_validator" description="use obstacle_pointcloud based validator"/>
 
   <!-- External interface -->
   <let name="input/detection_input_channels" value="['detected_objects']"/>
@@ -56,6 +57,7 @@
 
       <!-- tracking object merger to merge near objects and far objects -->
       <include file="$(find-pkg-share autoware_tracking_object_merger)/launch/decorative_tracker_merger.launch.xml">
+        <arg name="node_name" value="decorative_tracker_merger"/>
         <arg name="input/main_object" value="$(var tracker_merger/input/main_objects)"/>
         <arg name="input/sub_object" value="$(var tracker_merger/input/sub_objects)"/>
         <arg name="output" value="$(var tracker_merger/output/objects)"/>
@@ -68,21 +70,23 @@
   <!-- Object list for multi-channel tracker merger -->
   <group if="$(var use_multi_channel_tracker_merger)">
     <let name="detection_enabled_channels" value="$(var input/detection_input_channels)"/>
+    <let name="lidar_dnn_detection_output" value="$(var lidar_detection_model_type)_validated" if="$(var use_validator)"/>
+    <let name="lidar_dnn_detection_output" value="$(var lidar_detection_model_type)" unless="$(var use_validator)"/>
     <group scoped="false" if="$(eval '&quot;$(var mode)&quot;==&quot;camera_lidar_radar_fusion&quot;')">
-      <let name="detection_enabled_channels" value="['lidar_$(var lidar_detection_model)_validated','camera_lidar_fusion','detection_by_tracker','radar_far']" if="$(var use_detection_by_tracker)"/>
-      <let name="detection_enabled_channels" value="['lidar_$(var lidar_detection_model)_validated','camera_lidar_fusion','radar_far']" unless="$(var use_detection_by_tracker)"/>
+      <let name="detection_enabled_channels" value="['lidar_$(var lidar_dnn_detection_output)','camera_lidar_fusion','detection_by_tracker','radar_far']" if="$(var use_detection_by_tracker)"/>
+      <let name="detection_enabled_channels" value="['lidar_$(var lidar_dnn_detection_output)','camera_lidar_fusion','radar_far']" unless="$(var use_detection_by_tracker)"/>
     </group>
     <group scoped="false" if="$(eval '&quot;$(var mode)&quot;==&quot;camera_lidar_fusion&quot;')">
-      <let name="detection_enabled_channels" value="['lidar_$(var lidar_detection_model)_validated','camera_lidar_fusion','detection_by_tracker']" if="$(var use_detection_by_tracker)"/>
-      <let name="detection_enabled_channels" value="['lidar_$(var lidar_detection_model)_validated','camera_lidar_fusion']" unless="$(var use_detection_by_tracker)"/>
+      <let name="detection_enabled_channels" value="['lidar_$(var lidar_dnn_detection_output)','camera_lidar_fusion','detection_by_tracker']" if="$(var use_detection_by_tracker)"/>
+      <let name="detection_enabled_channels" value="['lidar_$(var lidar_dnn_detection_output)','camera_lidar_fusion']" unless="$(var use_detection_by_tracker)"/>
     </group>
     <group scoped="false" if="$(eval '&quot;$(var mode)&quot;==&quot;lidar_radar_fusion&quot;')">
-      <let name="detection_enabled_channels" value="['lidar_$(var lidar_detection_model)_validated','detection_by_tracker','radar_far']" if="$(var use_detection_by_tracker)"/>
-      <let name="detection_enabled_channels" value="['lidar_$(var lidar_detection_model)_validated','radar_far']" unless="$(var use_detection_by_tracker)"/>
+      <let name="detection_enabled_channels" value="['lidar_$(var lidar_dnn_detection_output)','detection_by_tracker','radar_far']" if="$(var use_detection_by_tracker)"/>
+      <let name="detection_enabled_channels" value="['lidar_$(var lidar_dnn_detection_output)','radar_far']" unless="$(var use_detection_by_tracker)"/>
     </group>
     <group scoped="false" if="$(eval '&quot;$(var mode)&quot;==&quot;lidar&quot;')">
-      <let name="detection_enabled_channels" value="['lidar_$(var lidar_detection_model)_validated','detection_by_tracker']" if="$(var use_detection_by_tracker)"/>
-      <let name="detection_enabled_channels" value="['lidar_$(var lidar_detection_model)_validated']" unless="$(var use_detection_by_tracker)"/>
+      <let name="detection_enabled_channels" value="['lidar_$(var lidar_dnn_detection_output)','detection_by_tracker']" if="$(var use_detection_by_tracker)"/>
+      <let name="detection_enabled_channels" value="['lidar_$(var lidar_dnn_detection_output)']" unless="$(var use_detection_by_tracker)"/>
     </group>
     <group scoped="false" if="$(eval '&quot;$(var mode)&quot;==&quot;radar&quot;')">
       <let name="detection_enabled_channels" value="['radar_far']"/>

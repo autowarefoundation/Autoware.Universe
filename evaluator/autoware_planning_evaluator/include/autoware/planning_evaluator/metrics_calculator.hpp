@@ -23,6 +23,7 @@
 #include "autoware_planning_msgs/msg/trajectory.hpp"
 #include "autoware_planning_msgs/msg/trajectory_point.hpp"
 #include "geometry_msgs/msg/pose.hpp"
+#include <nav_msgs/msg/odometry.hpp>
 
 #include <optional>
 
@@ -74,7 +75,7 @@ public:
    * @brief set the ego pose
    * @param [in] traj input previous trajectory
    */
-  void setEgoPose(const geometry_msgs::msg::Pose & pose);
+  void setEgoPose(const nav_msgs::msg::Odometry & ego_odometry);
 
   /**
    * @brief get the ego pose
@@ -83,23 +84,13 @@ public:
   Pose getEgoPose();
 
 private:
-  /**
-   * @brief trim a trajectory from the current ego pose to some fixed time or distance
-   * @param [in] traj input trajectory to trim
-   * @param [in] max_dist_m [m] maximum distance ahead of the ego pose
-   * @param [in] max_time_s [s] maximum time ahead of the ego pose
-   * @return sub-trajectory starting from the ego pose and of maximum length max_dist_m, maximum
-   * duration max_time_s
-   */
-  Trajectory getLookaheadTrajectory(
-    const Trajectory & traj, const double max_dist_m, const double max_time_s) const;
-
   Trajectory reference_trajectory_;
   Trajectory reference_trajectory_lookahead_;
   Trajectory previous_trajectory_;
   Trajectory previous_trajectory_lookahead_;
   PredictedObjects dynamic_objects_;
   geometry_msgs::msg::Pose ego_pose_;
+  nav_msgs::msg::Odometry ego_odometry_;
   PoseWithUuidStamped modified_goal_;
 };  // class MetricsCalculator
 

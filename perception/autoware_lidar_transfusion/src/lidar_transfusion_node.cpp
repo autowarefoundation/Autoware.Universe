@@ -65,9 +65,6 @@ LidarTransfusionNode::LidarTransfusionNode(const rclcpp::NodeOptions & options)
     static_cast<float>(this->declare_parameter<double>("circle_nms_dist_threshold", descriptor));
   {  // IoU NMS
     NMSParams p;
-    p.nms_type_ = NMS_TYPE::IoU_BEV;
-    p.target_class_names_ =
-      this->declare_parameter<std::vector<std::string>>("iou_nms_target_class_names", descriptor);
     p.search_distance_2d_ =
       this->declare_parameter<double>("iou_nms_search_distance_2d", descriptor);
     p.iou_threshold_ = this->declare_parameter<double>("iou_nms_threshold", descriptor);
@@ -78,7 +75,6 @@ LidarTransfusionNode::LidarTransfusionNode(const rclcpp::NodeOptions & options)
   const float score_threshold =
     static_cast<float>(this->declare_parameter<double>("score_threshold", descriptor));
 
-  NetworkParam network_param(onnx_path, engine_path, trt_precision);
   DensificationParam densification_param(
     densification_world_frame_id, densification_num_past_frames);
   TransfusionConfig config(
@@ -94,7 +90,9 @@ LidarTransfusionNode::LidarTransfusionNode(const rclcpp::NodeOptions & options)
   detection_class_remapper_.setParameters(
     allow_remapping_by_area_matrix, min_area_matrix, max_area_matrix);
 
-  detector_ptr_ = std::make_unique<TransfusionTRT>(network_param, densification_param, config);
+  auto trt_config = tensorrt_common::TrtCommonConfig(onnx_path, trt_precision, engine_path);
+
+  detector_ptr_ = std::make_unique<TransfusionTRT>(trt_config, densification_param, config);
 
   cloud_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
     "~/input/pointcloud", rclcpp::SensorDataQoS{}.keep_last(1),
@@ -158,7 +156,6 @@ void LidarTransfusionNode::cloudCallback(const sensor_msgs::msg::PointCloud2::Co
     objects_pub_->publish(output_msg);
     published_time_pub_->publish_if_subscribed(objects_pub_, output_msg.header.stamp);
   }
-
   // add processing time for debug
   if (debug_publisher_ptr_ && stop_watch_ptr_) {
     const double cyclic_time_ms = stop_watch_ptr_->toc("cyclic", true);

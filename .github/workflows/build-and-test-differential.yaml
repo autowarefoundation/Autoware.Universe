@@ -1,114 +1,44 @@
 name: build-and-test-differential
 
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - labeled
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
-  cancel-in-progress: true
+  workflow_call:
+    inputs:
+      container:
+        required: true
+        type: string
+      runner:
+        default: ubuntu-24.04
+        required: false
+        type: string
+      rosdistro:
+        default: humble
+        required: false
+        type: string
+      run-condition:
+        default: true
+        required: false
+        type: boolean
+      container-suffix:
+        required: false
+        default: ""
+        type: string
+    secrets:
+      codecov-token:
+        required: true
 
 env:
   CC: /usr/lib/ccache/gcc
   CXX: /usr/lib/ccache/g++
 
 jobs:
-  make-sure-label-is-present:
-    uses: autowarefoundation/autoware-github-actions/.github/workflows/make-sure-label-is-present.yaml@v1
-    with:
-      label: tag:run-build-and-test-differential
-
-  make-sure-require-cuda-label-is-present:
-    uses: autowarefoundation/autoware-github-actions/.github/workflows/make-sure-label-is-present.yaml@v1
-    with:
-      label: tag:require-cuda-build-and-test
-
-  prepare-build-and-test-differential:
-    runs-on: ubuntu-latest
-    needs: [make-sure-label-is-present, make-sure-require-cuda-label-is-present]
-    outputs:
-      cuda_build: ${{ steps.check-if-cuda-build-is-required.outputs.cuda_build }}
-    steps:
-      - name: Check if cuda-build is required
-        id: check-if-cuda-build-is-required
-        run: |
-          if ${{ needs.make-sure-require-cuda-label-is-present.outputs.result == 'true' }}; then
-            echo "cuda-build is required"
-            echo "cuda_build=true" >> $GITHUB_OUTPUT
-          else
-            echo "cuda-build is not required"
-            echo "cuda_build=false" >> $GITHUB_OUTPUT
-          fi
-        shell: bash
-      - name: Fail if the tag:run-build-and-test-differential is missing
-        if: ${{ needs.make-sure-label-is-present.outputs.result != 'true' }}
-        run: exit 1
-
   build-and-test-differential:
-    runs-on: ubuntu-latest
-    container: ghcr.io/autowarefoundation/autoware:universe-devel
-    needs: prepare-build-and-test-differential
+    if: ${{ inputs.run-condition }}
+    runs-on: ${{ inputs.runner }}
+    container: ${{ inputs.container }}${{ inputs.container-suffix }}
     steps:
       - name: Set PR fetch depth
         run: echo "PR_FETCH_DEPTH=$(( ${{ github.event.pull_request.commits }} + 1 ))" >> "${GITHUB_ENV}"
         shell: bash
-
-      - name: Checkout PR branch and all PR commits
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: ${{ env.PR_FETCH_DEPTH }}
-
-      - name: Run build-and-test-differential action
-        uses: ./.github/actions/build-and-test-differential
-        with:
-          rosdistro: humble
-          container: ghcr.io/autowarefoundation/autoware:universe-devel
-          container-suffix: ""
-          runner: ubuntu-latest
-          build-depends-repos: build_depends.repos
-          build-pre-command: ""
-          codecov-token: ${{ secrets.CODECOV_TOKEN }}
-
-  build-and-test-differential-cuda:
-    runs-on: codebuild-autoware-us-east-1-${{ github.run_id }}-${{ github.run_attempt }}-ubuntu-7.0-large
-    container: ghcr.io/autowarefoundation/autoware:universe-devel-cuda
-    needs: prepare-build-and-test-differential
-    if: ${{ needs.prepare-build-and-test-differential.outputs.cuda_build == 'true' }}
-    steps:
-      - name: Set PR fetch depth
-        run: echo "PR_FETCH_DEPTH=$(( ${{ github.event.pull_request.commits }} + 1 ))" >> "${GITHUB_ENV}"
-        shell: bash
-
-      - name: Checkout PR branch and all PR commits
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: ${{ env.PR_FETCH_DEPTH }}
-
-      - name: Run build-and-test-differential action
-        uses: ./.github/actions/build-and-test-differential
-        with:
-          rosdistro: humble
-          container: ghcr.io/autowarefoundation/autoware:universe-devel
-          container-suffix: -cuda
-          runner: codebuild-autoware-us-east-1-${{ github.run_id }}-${{ github.run_attempt }}-ubuntu-7.0-large
-          build-depends-repos: build_depends.repos
-          build-pre-command: taskset --cpu-list 0-5
-          codecov-token: ${{ secrets.CODECOV_TOKEN }}
-
-  clang-tidy-differential:
-    needs: [build-and-test-differential, prepare-build-and-test-differential]
-    if: ${{ needs.prepare-build-and-test-differential.outputs.cuda_build == 'false' }}
-    runs-on: ubuntu-latest
-    container: ghcr.io/autowarefoundation/autoware:universe-devel
-    steps:
-      - name: Set PR fetch depth
-        run: echo "PR_FETCH_DEPTH=$(( ${{ github.event.pull_request.commits }} + 1 ))" >> "${GITHUB_ENV}"
 
       - name: Checkout PR branch and all PR commits
         uses: actions/checkout@v4
@@ -118,6 +48,11 @@ jobs:
 
       - name: Show disk space before the tasks
         run: df -h
+        shell: bash
+
+      - name: Show machine specs
+        run: lscpu && free -h
+        shell: bash
 
       - name: Remove exec_depend
         uses: autowarefoundation/autoware-github-actions/remove-exec-depend@v1
@@ -126,66 +61,69 @@ jobs:
         id: get-modified-packages
         uses: autowarefoundation/autoware-github-actions/get-modified-packages@v1
 
-      - name: Get changed files (existing files only)
-        id: get-changed-files
+      - name: Create ccache directory
         run: |
-          echo "changed-files=$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD | grep -E '\.(cpp|hpp)$' | while read -r file; do [ -e "$file" ] && echo -n "$file "; done)" >> $GITHUB_OUTPUT
+          mkdir -p ${CCACHE_DIR}
+          du -sh ${CCACHE_DIR} && ccache -s
         shell: bash
 
-      - name: Run clang-tidy
-        if: ${{ steps.get-changed-files.outputs.changed-files != '' }}
-        uses: autowarefoundation/autoware-github-actions/clang-tidy@v1
+      - name: Attempt to restore ccache
+        uses: actions/cache/restore@v4
         with:
-          rosdistro: humble
+          path: |
+            /root/.ccache
+          key: ccache-main-${{ runner.arch }}-${{ inputs.rosdistro }}-${{ github.event.pull_request.base.sha }}
+          restore-keys: |
+            ccache-main-${{ runner.arch }}-${{ inputs.rosdistro }}-
+
+      - name: Show ccache stats before build and reset stats
+        run: |
+          du -sh ${CCACHE_DIR} && ccache -s
+          ccache --zero-stats
+        shell: bash
+
+      - name: Export CUDA state as a variable for adding to cache key
+        run: |
+          build_type_cuda_state=nocuda
+          if [[ "${{ inputs.container-suffix }}" == "-cuda" ]]; then
+            build_type_cuda_state=cuda
+          fi
+          echo "BUILD_TYPE_CUDA_STATE=$build_type_cuda_state" >> "${GITHUB_ENV}"
+          echo "::notice::BUILD_TYPE_CUDA_STATE=$build_type_cuda_state"
+        shell: bash
+
+      - name: Build
+        if: ${{ steps.get-modified-packages.outputs.modified-packages != '' }}
+        uses: autowarefoundation/autoware-github-actions/colcon-build@v1
+        with:
+          rosdistro: ${{ inputs.rosdistro }}
           target-packages: ${{ steps.get-modified-packages.outputs.modified-packages }}
-          clang-tidy-config-url: https://raw.githubusercontent.com/autowarefoundation/autoware/main/.clang-tidy-ci
-          clang-tidy-ignore-path: .clang-tidy-ignore
           build-depends-repos: build_depends.repos
-          cache-key-element: cuda
+          cache-key-element: ${{ env.BUILD_TYPE_CUDA_STATE }}
+
+      - name: Show ccache stats after build
+        run: du -sh ${CCACHE_DIR} && ccache -s
+        shell: bash
+
+      - name: Test
+        id: test
+        if: ${{ steps.get-modified-packages.outputs.modified-packages != '' }}
+        uses: autowarefoundation/autoware-github-actions/colcon-test@v1
+        with:
+          rosdistro: ${{ inputs.rosdistro }}
+          target-packages: ${{ steps.get-modified-packages.outputs.modified-packages }}
+          build-depends-repos: build_depends.repos
+
+      - name: Upload coverage to CodeCov
+        if: ${{ steps.test.outputs.coverage-report-files != '' }}
+        uses: codecov/codecov-action@v4
+        with:
+          files: ${{ steps.test.outputs.coverage-report-files }}
+          fail_ci_if_error: false
+          verbose: true
+          flags: differential${{ inputs.container-suffix }}
+          token: ${{ secrets.codecov-token }}
 
       - name: Show disk space after the tasks
         run: df -h
-
-  clang-tidy-differential-cuda:
-    needs: build-and-test-differential-cuda
-    runs-on: codebuild-autoware-us-east-1-${{ github.run_id }}-${{ github.run_attempt }}-ubuntu-7.0-large
-    container: ghcr.io/autowarefoundation/autoware:universe-devel-cuda
-    steps:
-      - name: Set PR fetch depth
-        run: echo "PR_FETCH_DEPTH=$(( ${{ github.event.pull_request.commits }} + 1 ))" >> "${GITHUB_ENV}"
-
-      - name: Checkout PR branch and all PR commits
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: ${{ env.PR_FETCH_DEPTH }}
-
-      - name: Show disk space before the tasks
-        run: df -h
-
-      - name: Remove exec_depend
-        uses: autowarefoundation/autoware-github-actions/remove-exec-depend@v1
-
-      - name: Get modified packages
-        id: get-modified-packages
-        uses: autowarefoundation/autoware-github-actions/get-modified-packages@v1
-
-      - name: Get changed files (existing files only)
-        id: get-changed-files
-        run: |
-          echo "changed-files=$(git diff --name-only "origin/${{ github.base_ref }}"...HEAD | grep -E '\.(cpp|hpp)$' | while read -r file; do [ -e "$file" ] && echo -n "$file "; done)" >> $GITHUB_OUTPUT
         shell: bash
-
-      - name: Run clang-tidy
-        if: ${{ steps.get-changed-files.outputs.changed-files != '' }}
-        uses: autowarefoundation/autoware-github-actions/clang-tidy@v1
-        with:
-          rosdistro: humble
-          target-packages: ${{ steps.get-modified-packages.outputs.modified-packages }}
-          clang-tidy-config-url: https://raw.githubusercontent.com/autowarefoundation/autoware/main/.clang-tidy-ci
-          clang-tidy-ignore-path: .clang-tidy-ignore
-          build-depends-repos: build_depends.repos
-          cache-key-element: cuda
-
-      - name: Show disk space after the tasks
-        run: df -h

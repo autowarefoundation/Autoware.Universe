@@ -12,102 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <autoware/tensorrt_common/tensorrt_common.hpp>
+#include "autoware/tensorrt_common/tensorrt_common.hpp"
 
+#include "autoware/tensorrt_common/logger.hpp"
+#include "autoware/tensorrt_common/utils.hpp"
+
+#include <NvInfer.h>
 #include <NvInferPlugin.h>
+#include <NvInferRuntimeBase.h>
 #include <dlfcn.h>
 
+#include <cmath>
 #include <fstream>
-#include <functional>
 #include <iostream>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
-
-namespace
-{
-template <class T>
-bool contain(const std::string & s, const T & v)
-{
-  return s.find(v) != std::string::npos;
-}
-}  // anonymous namespace
 
 namespace autoware
 {
 namespace tensorrt_common
 {
-nvinfer1::Dims get_input_dims(const std::string & onnx_file_path)
-{
-  Logger logger_;
-  auto builder = TrtUniquePtr<nvinfer1::IBuilder>(nvinfer1::createInferBuilder(logger_));
-  if (!builder) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create builder");
-  }
-
-  const auto explicitBatch =
-    1U << static_cast<uint32_t>(nvinfer1::NetworkDefinitionCreationFlag::kEXPLICIT_BATCH);
-
-  auto network =
-    TrtUniquePtr<nvinfer1::INetworkDefinition>(builder->createNetworkV2(explicitBatch));
-  if (!network) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create network");
-  }
-
-  auto config = TrtUniquePtr<nvinfer1::IBuilderConfig>(builder->createBuilderConfig());
-  if (!config) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create builder config");
-  }
-
-  auto parser = TrtUniquePtr<nvonnxparser::IParser>(nvonnxparser::createParser(*network, logger_));
-  if (!parser->parseFromFile(
-        onnx_file_path.c_str(), static_cast<int>(nvinfer1::ILogger::Severity::kERROR))) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Failed to parse onnx file");
-  }
-
-  const auto input = network->getInput(0);
-  return input->getDimensions();
-}
-
-bool is_valid_precision_string(const std::string & precision)
-{
-  if (
-    std::find(valid_precisions.begin(), valid_precisions.end(), precision) ==
-    valid_precisions.end()) {
-    std::stringstream message;
-    message << "Invalid precision was specified: " << precision << std::endl
-            << "Valid string is one of: [";
-    for (const auto & s : valid_precisions) {
-      message << s << ", ";
-    }
-    message << "] (case sensitive)" << std::endl;
-    std::cerr << message.str();
-    return false;
-  } else {
-    return true;
-  }
-}
 
 TrtCommon::TrtCommon(
-  const std::string & model_path, const std::string & precision,
-  std::unique_ptr<nvinfer1::IInt8Calibrator> calibrator, const BatchConfig & batch_config,
-  const size_t max_workspace_size, const BuildConfig & build_config,
+  const TrtCommonConfig & trt_config, const std::shared_ptr<Profiler> & profiler,
   const std::vector<std::string> & plugin_paths)
-: model_file_path_(model_path),
-  calibrator_(std::move(calibrator)),
-  precision_(precision),
-  batch_config_(batch_config),
-  max_workspace_size_(max_workspace_size),
-  model_profiler_("Model"),
-  host_profiler_("Host")
+: trt_config_(std::make_shared<TrtCommonConfig>(trt_config)),
+  host_profiler_(profiler),
+  model_profiler_(profiler)
 {
-  // Check given precision is valid one
-  if (!is_valid_precision_string(precision)) {
-    return;
-  }
-  build_config_ = std::make_unique<const BuildConfig>(build_config);
-
+  logger_ = std::make_shared<Logger>();
   for (const auto & plugin_path : plugin_paths) {
     int32_t flags{RTLD_LAZY};
 // cspell: ignore asan
@@ -120,519 +56,595 @@ TrtCommon::TrtCommon(
 #endif  // ENABLE_ASAN
     void * handle = dlopen(plugin_path.c_str(), flags);
     if (!handle) {
-      logger_.log(nvinfer1::ILogger::Severity::kERROR, "Could not load plugin library");
+      logger_->log(nvinfer1::ILogger::Severity::kERROR, "Could not load plugin library");
+    } else {
+      logger_->log(
+        nvinfer1::ILogger::Severity::kINFO, "Loaded plugin library: %s", plugin_path.c_str());
     }
   }
-  runtime_ = TrtUniquePtr<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(logger_));
-  if (build_config_->dla_core_id != -1) {
-    runtime_->setDLACore(build_config_->dla_core_id);
+  runtime_ = TrtUniquePtr<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(*logger_));
+  if (trt_config_->dla_core_id != -1) {
+    runtime_->setDLACore(trt_config_->dla_core_id);
   }
-  initLibNvInferPlugins(&logger_, "");
+  initLibNvInferPlugins(&*logger_, "");
+
+  if (!initialize()) {
+    throw std::runtime_error("Failed to initialize TensorRT");
+  }
 }
 
-TrtCommon::~TrtCommon()
-{
-}
+TrtCommon::~TrtCommon() = default;
 
-void TrtCommon::setup()
+bool TrtCommon::setup(ProfileDimsPtr profile_dims, NetworkIOPtr network_io)
 {
-  if (!fs::exists(model_file_path_)) {
-    is_initialized_ = false;
-    return;
+  profile_dims_ = std::move(profile_dims);
+  network_io_ = std::move(network_io);
+
+  // Set input profile
+  if (profile_dims_ && !profile_dims_->empty()) {
+    auto profile = builder_->createOptimizationProfile();
+    for (auto & profile_dim : *profile_dims_) {
+      if (profile_dim.tensor_name.empty()) {
+        profile_dim.tensor_name = getIOTensorName(profile_dim.tensor_index);
+      }
+      logger_->log(
+        nvinfer1::ILogger::Severity::kINFO, "Setting optimization profile for tensor: %s",
+        profile_dim.toString().c_str());
+      profile->setDimensions(
+        profile_dim.tensor_name.c_str(), nvinfer1::OptProfileSelector::kMIN, profile_dim.min_dims);
+      profile->setDimensions(
+        profile_dim.tensor_name.c_str(), nvinfer1::OptProfileSelector::kOPT, profile_dim.opt_dims);
+      profile->setDimensions(
+        profile_dim.tensor_name.c_str(), nvinfer1::OptProfileSelector::kMAX, profile_dim.max_dims);
+    }
+    builder_config_->addOptimizationProfile(profile);
   }
-  // cppcheck-suppress unreadVariable
-  std::string engine_path = model_file_path_;
-  if (model_file_path_.extension() == ".engine") {
-    std::cout << "Load ... " << model_file_path_ << std::endl;
-    loadEngine(model_file_path_);
-  } else if (model_file_path_.extension() == ".onnx") {
-    fs::path cache_engine_path{model_file_path_};
-    std::string ext;
-    std::string calib_name = "";
-    if (precision_ == "int8") {
-      if (build_config_->calib_type_str == "Entropy") {
-        calib_name = "EntropyV2-";
-      } else if (
-        build_config_->calib_type_str == "Legacy" ||
-        build_config_->calib_type_str == "Percentile") {
-        calib_name = "Legacy-";
-      } else {
-        calib_name = "MinMax-";
-      }
-    }
-    if (build_config_->dla_core_id != -1) {
-      ext = "DLA" + std::to_string(build_config_->dla_core_id) + "-" + calib_name + precision_;
-      if (build_config_->quantize_first_layer) {
-        ext += "-firstFP16";
-      }
-      if (build_config_->quantize_last_layer) {
-        ext += "-lastFP16";
-      }
-      ext += "-batch" + std::to_string(batch_config_[0]) + ".engine";
-    } else {
-      ext = calib_name + precision_;
-      if (build_config_->quantize_first_layer) {
-        ext += "-firstFP16";
-      }
-      if (build_config_->quantize_last_layer) {
-        ext += "-lastFP16";
-      }
-      ext += "-batch" + std::to_string(batch_config_[0]) + ".engine";
-    }
-    cache_engine_path.replace_extension(ext);
 
-    // Output Network Information
-    printNetworkInfo(model_file_path_);
+  auto build_engine_with_log = [this]() -> bool {
+    logger_->log(nvinfer1::ILogger::Severity::kINFO, "Starting to build engine");
+    auto log_thread = logger_->log_throttle(
+      nvinfer1::ILogger::Severity::kINFO,
+      "Applying optimizations and building TensorRT CUDA engine. Please wait for a few minutes...",
+      5);
+    auto success = buildEngineFromOnnx();
+    logger_->stop_throttle(log_thread);
+    logger_->log(nvinfer1::ILogger::Severity::kINFO, "Engine build completed");
+    return success;
+  };
 
-    if (fs::exists(cache_engine_path)) {
-      std::cout << "Loading... " << cache_engine_path << std::endl;
-      loadEngine(cache_engine_path);
-    } else {
-      std::cout << "Building... " << cache_engine_path << std::endl;
-      logger_.log(nvinfer1::ILogger::Severity::kINFO, "Start build engine");
-      auto log_thread = logger_.log_throttle(
-        nvinfer1::ILogger::Severity::kINFO,
-        "Applying optimizations and building TRT CUDA engine. Please wait for a few minutes...", 5);
-      buildEngineFromOnnx(model_file_path_, cache_engine_path);
-      logger_.stop_throttle(log_thread);
-      logger_.log(nvinfer1::ILogger::Severity::kINFO, "End build engine");
+  // Load engine file if it exists
+  if (fs::exists(trt_config_->engine_path)) {
+    logger_->log(nvinfer1::ILogger::Severity::kINFO, "Loading engine");
+    if (!loadEngine()) {
+      return false;
     }
-    // cppcheck-suppress unreadVariable
-    engine_path = cache_engine_path;
+    logger_->log(nvinfer1::ILogger::Severity::kINFO, "Network validation");
+    // Validate engine tensor shapes and optimization profile
+    if (!validateNetworkIO() || !validateProfileDims()) {
+      logger_->log(
+        nvinfer1::ILogger::Severity::kWARNING,
+        "Network validation failed for loaded engine from file. Rebuilding engine");
+      // Rebuild engine if the tensor shapes or optimization profile mismatch
+      if (!build_engine_with_log()) {
+        return false;
+      }
+    }
   } else {
-    is_initialized_ = false;
-    return;
+    // Build engine if engine has not been cached
+    if (!build_engine_with_log()) {
+      return false;
+    }
   }
 
-  context_ = TrtUniquePtr<nvinfer1::IExecutionContext>(engine_->createExecutionContext());
-  if (!context_) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create context");
-    is_initialized_ = false;
-    return;
+  // Validate engine nevertheless is loaded or rebuilt
+  if (!validateNetworkIO() || !validateProfileDims()) {
+    logger_->log(
+      nvinfer1::ILogger::Severity::kERROR,
+      "Final network validation failed. Possibly the input / output of the currently "
+      "deployed model has changed. Check your configuration file with the current model.");
+    return false;
   }
 
-  if (build_config_->profile_per_layer) {
-    context_->setProfiler(&model_profiler_);
-  }
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8200
-  // Write profiles for trt-engine-explorer
-  // See: https://github.com/NVIDIA/TensorRT/tree/main/tools/experimental/trt-engine-explorer
-  std::string j_ext = ".json";
-  fs::path json_path{engine_path};
-  json_path.replace_extension(j_ext);
-  std::string ret = getLayerInformation(nvinfer1::LayerInformationFormat::kJSON);
-  std::ofstream os(json_path, std::ofstream::trunc);
-  os << ret << std::flush;
-#endif
-
-  is_initialized_ = true;
-}
-
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8500
-void TrtCommon::setupBindings(std::vector<void *> & bindings)
-{
-  for (int32_t i = 0, e = engine_->getNbIOTensors(); i < e; i++) {
-    auto const name = engine_->getIOTensorName(i);
-    context_->setTensorAddress(name, bindings.at(i));
-  }
-}
-#endif
-
-bool TrtCommon::loadEngine(const std::string & engine_file_path)
-{
-  std::ifstream engine_file(engine_file_path);
-  std::stringstream engine_buffer;
-  engine_buffer << engine_file.rdbuf();
-  std::string engine_str = engine_buffer.str();
-  engine_ = TrtUniquePtr<nvinfer1::ICudaEngine>(runtime_->deserializeCudaEngine(
-    reinterpret_cast<const void *>(engine_str.data()), engine_str.size()));
+  logger_->log(nvinfer1::ILogger::Severity::kINFO, "Engine setup completed");
   return true;
 }
 
-void TrtCommon::printNetworkInfo(const std::string & onnx_file_path)
+std::string TrtCommon::getPrecision() const
 {
-  auto builder = TrtUniquePtr<nvinfer1::IBuilder>(nvinfer1::createInferBuilder(logger_));
-  if (!builder) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create builder");
-    return;
-  }
-
-  const auto explicitBatch =
-    1U << static_cast<uint32_t>(nvinfer1::NetworkDefinitionCreationFlag::kEXPLICIT_BATCH);
-
-  auto network =
-    TrtUniquePtr<nvinfer1::INetworkDefinition>(builder->createNetworkV2(explicitBatch));
-  if (!network) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create network");
-    return;
-  }
-
-  auto config = TrtUniquePtr<nvinfer1::IBuilderConfig>(builder->createBuilderConfig());
-  if (!config) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create builder config");
-    return;
-  }
-
-  if (precision_ == "fp16" || precision_ == "int8") {
-    config->setFlag(nvinfer1::BuilderFlag::kFP16);
-  }
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8400
-  config->setMemoryPoolLimit(nvinfer1::MemoryPoolType::kWORKSPACE, max_workspace_size_);
-#else
-  config->setMaxWorkspaceSize(max_workspace_size_);
-#endif
-
-  auto parser = TrtUniquePtr<nvonnxparser::IParser>(nvonnxparser::createParser(*network, logger_));
-  if (!parser->parseFromFile(
-        onnx_file_path.c_str(), static_cast<int>(nvinfer1::ILogger::Severity::kERROR))) {
-    return;
-  }
-  int num = network->getNbLayers();
-  float total_gflops = 0.0;
-  int total_params = 0;
-  for (int i = 0; i < num; i++) {
-    nvinfer1::ILayer * layer = network->getLayer(i);
-    auto layer_type = layer->getType();
-    if (build_config_->profile_per_layer) {
-      model_profiler_.setProfDict(layer);
-    }
-    if (layer_type == nvinfer1::LayerType::kCONSTANT) {
-      continue;
-    }
-    nvinfer1::ITensor * in = layer->getInput(0);
-    nvinfer1::Dims dim_in = in->getDimensions();
-    nvinfer1::ITensor * out = layer->getOutput(0);
-    nvinfer1::Dims dim_out = out->getDimensions();
-
-    if (layer_type == nvinfer1::LayerType::kCONVOLUTION) {
-      nvinfer1::IConvolutionLayer * conv = (nvinfer1::IConvolutionLayer *)layer;
-      nvinfer1::Dims k_dims = conv->getKernelSizeNd();
-      nvinfer1::Dims s_dims = conv->getStrideNd();
-      int groups = conv->getNbGroups();
-      int stride = s_dims.d[0];
-      int num_weights = (dim_in.d[1] / groups) * dim_out.d[1] * k_dims.d[0] * k_dims.d[1];
-      float gflops = (2 * num_weights) * (dim_in.d[3] / stride * dim_in.d[2] / stride / 1e9);
-      ;
-      total_gflops += gflops;
-      total_params += num_weights;
-      std::cout << "L" << i << " [conv " << k_dims.d[0] << "x" << k_dims.d[1] << " (" << groups
-                << ") " << "/" << s_dims.d[0] << "] " << dim_in.d[3] << "x" << dim_in.d[2] << "x"
-                << dim_in.d[1] << " -> " << dim_out.d[3] << "x" << dim_out.d[2] << "x"
-                << dim_out.d[1];
-      std::cout << " weights:" << num_weights;
-      std::cout << " GFLOPs:" << gflops;
-      std::cout << std::endl;
-    } else if (layer_type == nvinfer1::LayerType::kPOOLING) {
-      nvinfer1::IPoolingLayer * pool = (nvinfer1::IPoolingLayer *)layer;
-      auto p_type = pool->getPoolingType();
-      nvinfer1::Dims dim_stride = pool->getStrideNd();
-      nvinfer1::Dims dim_window = pool->getWindowSizeNd();
-
-      std::cout << "L" << i << " [";
-      if (p_type == nvinfer1::PoolingType::kMAX) {
-        std::cout << "max ";
-      } else if (p_type == nvinfer1::PoolingType::kAVERAGE) {
-        std::cout << "avg ";
-      } else if (p_type == nvinfer1::PoolingType::kMAX_AVERAGE_BLEND) {
-        std::cout << "max avg blend ";
-      }
-      float gflops = dim_in.d[1] * dim_window.d[0] / dim_stride.d[0] * dim_window.d[1] /
-                     dim_stride.d[1] * dim_in.d[2] * dim_in.d[3] / 1e9;
-      total_gflops += gflops;
-      std::cout << "pool " << dim_window.d[0] << "x" << dim_window.d[1] << "]";
-      std::cout << " GFLOPs:" << gflops;
-      std::cout << std::endl;
-    } else if (layer_type == nvinfer1::LayerType::kRESIZE) {
-      std::cout << "L" << i << " [resize]" << std::endl;
-    }
-  }
-  std::cout << "Total " << total_gflops << " GFLOPs" << std::endl;
-  std::cout << "Total " << total_params / 1000.0 / 1000.0 << " M params" << std::endl;
-  return;
+  return trt_config_->precision;
 }
 
-bool TrtCommon::buildEngineFromOnnx(
-  const std::string & onnx_file_path, const std::string & output_engine_file_path)
+const char * TrtCommon::getIOTensorName(const int32_t index) const
 {
-  auto builder = TrtUniquePtr<nvinfer1::IBuilder>(nvinfer1::createInferBuilder(logger_));
-  if (!builder) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create builder");
+  if (!engine_) {
+    logger_->log(
+      nvinfer1::ILogger::Severity::kWARNING,
+      "Engine is not initialized. Retrieving data from network");
+    if (!network_) {
+      logger_->log(nvinfer1::ILogger::Severity::kERROR, "Network is not initialized");
+      return nullptr;
+    }
+    auto num_inputs = network_->getNbInputs();
+    auto num_outputs = network_->getNbOutputs();
+    if (index < 0 || index >= num_inputs + num_outputs) {
+      logger_->log(
+        nvinfer1::ILogger::Severity::kERROR,
+        "Invalid index for I/O tensor: %d. Total I/O tensors: %d", index, num_inputs + num_outputs);
+      return nullptr;
+    }
+    if (index < num_inputs) {
+      return network_->getInput(index)->getName();
+    }
+    return network_->getOutput(index - num_inputs)->getName();
+  }
+
+  return engine_->getIOTensorName(index);
+}
+
+int32_t TrtCommon::getNbIOTensors() const
+{
+  if (!engine_) {
+    logger_->log(
+      nvinfer1::ILogger::Severity::kWARNING,
+      "Engine is not initialized. Retrieving data from network");
+    if (!network_) {
+      logger_->log(nvinfer1::ILogger::Severity::kERROR, "Network is not initialized");
+      return 0;
+    }
+    return network_->getNbInputs() + network_->getNbOutputs();
+  }
+  return engine_->getNbIOTensors();
+}
+
+nvinfer1::Dims TrtCommon::getTensorShape(const int32_t index) const
+{
+  if (!engine_) {
+    logger_->log(
+      nvinfer1::ILogger::Severity::kWARNING,
+      "Engine is not initialized. Retrieving data from network");
+    if (!network_) {
+      logger_->log(nvinfer1::ILogger::Severity::kERROR, "Network is not initialized");
+      return nvinfer1::Dims{};
+    }
+    auto num_inputs = network_->getNbInputs();
+    auto num_outputs = network_->getNbOutputs();
+    if (index < 0 || index >= num_inputs + num_outputs) {
+      logger_->log(
+        nvinfer1::ILogger::Severity::kERROR,
+        "Invalid index for I/O tensor: %d. Total I/O tensors: %d", index, num_inputs + num_outputs);
+      return nvinfer1::Dims{};
+    }
+    if (index < num_inputs) {
+      return network_->getInput(index)->getDimensions();
+    }
+    return network_->getOutput(index - num_inputs)->getDimensions();
+  }
+  auto const & name = getIOTensorName(index);
+  return getTensorShape(name);
+}
+
+nvinfer1::Dims TrtCommon::getTensorShape(const char * tensor_name) const
+{
+  if (!engine_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Engine is not initialized");
+    return nvinfer1::Dims{};
+  }
+  return engine_->getTensorShape(tensor_name);
+}
+
+nvinfer1::Dims TrtCommon::getInputDims(const int32_t index) const
+{
+  if (!network_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Network is not initialized");
+    return {};
+  }
+  const auto input = network_->getInput(index);
+  return input->getDimensions();
+}
+
+nvinfer1::Dims TrtCommon::getOutputDims(const int32_t index) const
+{
+  if (!network_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Network is not initialized");
+    return {};
+  }
+  const auto output = network_->getOutput(index);
+  return output->getDimensions();
+}
+
+bool TrtCommon::setTensorAddress(const int32_t index, void * data)
+{
+  auto const & name = getIOTensorName(index);
+  return setTensorAddress(name, data);
+}
+
+bool TrtCommon::setTensorAddress(const char * tensor_name, void * data)
+{
+  if (!context_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Context is not initialized");
+    return false;
+  }
+  auto success = context_->setTensorAddress(tensor_name, data);
+  if (!success) {
+    logger_->log(
+      nvinfer1::ILogger::Severity::kERROR,
+      "Failed to set tensor address for tensor: ", tensor_name);
+  }
+  return success;
+}
+
+bool TrtCommon::setTensorsAddresses(std::vector<void *> & tensors)
+{
+  bool success = true;
+  for (std::size_t i = 0, e = tensors.size(); i < e; i++) {
+    auto const name = getIOTensorName(i);
+    success &= setTensorAddress(name, tensors.at(i));
+  }
+  return success;
+}
+
+bool TrtCommon::setTensorsAddresses(std::unordered_map<const char *, void *> & tensors)
+{
+  bool success = true;
+  for (auto const & tensor : tensors) {
+    success &= setTensorAddress(tensor.first, tensor.second);
+  }
+  return success;
+}
+
+bool TrtCommon::setInputShape(const int32_t index, const nvinfer1::Dims & dimensions)
+{
+  auto const & name = getIOTensorName(index);
+  return setInputShape(name, dimensions);
+}
+
+bool TrtCommon::setInputShape(const char * tensor_name, const nvinfer1::Dims & dimensions)
+{
+  if (!context_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Context is not initialized");
+    return false;
+  }
+  auto success = context_->setInputShape(tensor_name, dimensions);
+  if (!success) {
+    logger_->log(
+      nvinfer1::ILogger::Severity::kERROR, "Failed to set input shape for tensor: ", tensor_name);
+  }
+  return success;
+}
+
+bool TrtCommon::setInputsShapes(const std::vector<nvinfer1::Dims> & dimensions)
+{
+  bool success = true;
+  for (std::size_t i = 0, e = dimensions.size(); i < e; i++) {
+    success &= setInputShape(i, dimensions.at(i));
+  }
+  return success;
+}
+
+bool TrtCommon::setInputsShapes(const std::unordered_map<const char *, nvinfer1::Dims> & dimensions)
+{
+  bool success = true;
+  for (auto const & dim : dimensions) {
+    success &= setInputShape(dim.first, dim.second);
+  }
+  return success;
+}
+
+bool TrtCommon::setTensor(const int32_t index, void * data, nvinfer1::Dims dimensions)
+{
+  auto success = setTensorAddress(index, data);
+  if (dimensions.nbDims > 0) {
+    success &= setInputShape(index, dimensions);
+  }
+  return success;
+}
+
+bool TrtCommon::setTensor(const char * tensor_name, void * data, nvinfer1::Dims dimensions)
+{
+  auto success = setTensorAddress(tensor_name, data);
+  if (dimensions.nbDims > 0) {
+    success &= setInputShape(tensor_name, dimensions);
+  }
+  return success;
+}
+
+bool TrtCommon::setTensors(TensorsVec & tensors)
+{
+  bool success = true;
+  for (std::size_t i = 0, e = tensors.size(); i < e; i++) {
+    success &= setTensor(i, tensors.at(i).first, tensors.at(i).second);
+  }
+  return success;
+}
+
+bool TrtCommon::setTensors(TensorsMap & tensors)
+{
+  bool success = true;
+  for (auto const & tensor : tensors) {
+    success &= setTensor(tensor.first, tensor.second.first, tensor.second.second);
+  }
+  return success;
+}
+
+std::shared_ptr<Profiler> TrtCommon::getModelProfiler()
+{
+  return model_profiler_;
+}
+
+std::shared_ptr<Profiler> TrtCommon::getHostProfiler()
+{
+  return host_profiler_;
+}
+
+std::shared_ptr<TrtCommonConfig> TrtCommon::getTrtCommonConfig()
+{
+  return trt_config_;
+}
+
+std::shared_ptr<nvinfer1::IBuilderConfig> TrtCommon::getBuilderConfig()
+{
+  return builder_config_;
+}
+
+std::shared_ptr<nvinfer1::INetworkDefinition> TrtCommon::getNetwork()
+{
+  return network_;
+}
+
+std::shared_ptr<Logger> TrtCommon::getLogger()
+{
+  return logger_;
+}
+
+bool TrtCommon::enqueueV3(cudaStream_t stream)
+{
+  if (!context_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Context is not initialized");
+    return false;
+  }
+  if (trt_config_->profile_per_layer) {
+    auto inference_start = std::chrono::high_resolution_clock::now();
+    auto success = context_->enqueueV3(stream);
+    auto inference_end = std::chrono::high_resolution_clock::now();
+    host_profiler_->reportLayerTime(
+      "inference_host",
+      std::chrono::duration<float, std::milli>(inference_end - inference_start).count());
+    return success;
+  }
+  return context_->enqueueV3(stream);
+}
+
+void TrtCommon::printProfiling() const
+{
+  logger_->log(
+    nvinfer1::ILogger::Severity::kINFO, "Host Profiling\n", host_profiler_->toString().c_str());
+  logger_->log(
+    nvinfer1::ILogger::Severity::kINFO, "Model Profiling\n", model_profiler_->toString().c_str());
+}
+
+std::string TrtCommon::getLayerInformation(nvinfer1::LayerInformationFormat format)
+{
+  if (!context_ || !engine_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Context or engine are not initialized");
+    return {};
+  }
+  auto inspector = std::unique_ptr<nvinfer1::IEngineInspector>(engine_->createEngineInspector());
+  inspector->setExecutionContext(&(*context_));
+  std::string result = inspector->getEngineInformation(format);
+  return result;
+}
+
+bool TrtCommon::initialize()
+{
+  if (!fs::exists(trt_config_->onnx_path) || trt_config_->onnx_path.extension() != ".onnx") {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Invalid ONNX file path or extension");
     return false;
   }
 
-  const auto explicitBatch =
+  builder_ = TrtUniquePtr<nvinfer1::IBuilder>(nvinfer1::createInferBuilder(*logger_));
+  if (!builder_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Fail to create builder");
+    return false;
+  }
+
+#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH < 10000
+  const auto explicit_batch =
     1U << static_cast<uint32_t>(nvinfer1::NetworkDefinitionCreationFlag::kEXPLICIT_BATCH);
+  network_ = TrtUniquePtr<nvinfer1::INetworkDefinition>(builder_->createNetworkV2(explicit_batch));
+#else
+  network_ = TrtUniquePtr<nvinfer1::INetworkDefinition>(builder_->createNetworkV2(0));
+#endif
 
-  auto network =
-    TrtUniquePtr<nvinfer1::INetworkDefinition>(builder->createNetworkV2(explicitBatch));
-  if (!network) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create network");
+  if (!network_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Fail to create network");
     return false;
   }
 
-  auto config = TrtUniquePtr<nvinfer1::IBuilderConfig>(builder->createBuilderConfig());
-  if (!config) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create builder config");
+  builder_config_ = TrtUniquePtr<nvinfer1::IBuilderConfig>(builder_->createBuilderConfig());
+  if (!builder_config_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Fail to create builder config");
     return false;
   }
 
-  int num_available_dla = builder->getNbDLACores();
-  if (build_config_->dla_core_id != -1) {
-    if (num_available_dla > 0) {
-      std::cout << "###" << num_available_dla << " DLAs are supported! ###" << std::endl;
-    } else {
-      std::cout << "###Warning : " << "No DLA is supported! ###" << std::endl;
-    }
-    config->setDefaultDeviceType(nvinfer1::DeviceType::kDLA);
-    config->setDLACore(build_config_->dla_core_id);
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8200
-    config->setFlag(nvinfer1::BuilderFlag::kPREFER_PRECISION_CONSTRAINTS);
-#else
-    config->setFlag(nvinfer1::BuilderFlag::kSTRICT_TYPES);
-#endif
-    config->setFlag(nvinfer1::BuilderFlag::kGPU_FALLBACK);
+  auto num_available_dla = builder_->getNbDLACores();
+  if (trt_config_->dla_core_id != -1) {
+    logger_->log(
+      nvinfer1::ILogger::Severity::kINFO, "Number of DLAs supported: %d", num_available_dla);
+    builder_config_->setDefaultDeviceType(nvinfer1::DeviceType::kDLA);
+    builder_config_->setDLACore(trt_config_->dla_core_id);
+    builder_config_->setFlag(nvinfer1::BuilderFlag::kPREFER_PRECISION_CONSTRAINTS);
+    builder_config_->setFlag(nvinfer1::BuilderFlag::kGPU_FALLBACK);
   }
-  if (precision_ == "fp16" || precision_ == "int8") {
-    config->setFlag(nvinfer1::BuilderFlag::kFP16);
+  if (trt_config_->precision == "fp16") {
+    builder_config_->setFlag(nvinfer1::BuilderFlag::kFP16);
+  } else if (trt_config_->precision == "int8") {
+    builder_config_->setFlag(nvinfer1::BuilderFlag::kINT8);
   }
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8400
-  config->setMemoryPoolLimit(nvinfer1::MemoryPoolType::kWORKSPACE, max_workspace_size_);
-#else
-  config->setMaxWorkspaceSize(max_workspace_size_);
-#endif
+  builder_config_->setMemoryPoolLimit(
+    nvinfer1::MemoryPoolType::kWORKSPACE, trt_config_->max_workspace_size);
 
-  auto parser = TrtUniquePtr<nvonnxparser::IParser>(nvonnxparser::createParser(*network, logger_));
-  if (!parser->parseFromFile(
-        onnx_file_path.c_str(), static_cast<int>(nvinfer1::ILogger::Severity::kERROR))) {
-    std::cout << "Failed to parse onnx file" << std::endl;
+  parser_ = TrtUniquePtr<nvonnxparser::IParser>(nvonnxparser::createParser(*network_, *logger_));
+  if (!parser_->parseFromFile(
+        trt_config_->onnx_path.c_str(),
+        static_cast<int32_t>(nvinfer1::ILogger::Severity::kERROR))) {
     return false;
   }
 
-  const int num = network->getNbLayers();
-  bool first = build_config_->quantize_first_layer;
-  bool last = build_config_->quantize_last_layer;
-  // Partial Quantization
-  if (precision_ == "int8") {
-    network->getInput(0)->setDynamicRange(0, 255.0);
-    for (int i = 0; i < num; i++) {
-      nvinfer1::ILayer * layer = network->getLayer(i);
-      auto layer_type = layer->getType();
-      std::string name = layer->getName();
-      nvinfer1::ITensor * out = layer->getOutput(0);
-      if (build_config_->clip_value > 0.0) {
-        std::cout << "Set max value for outputs : " << build_config_->clip_value << "  " << name
-                  << std::endl;
-        out->setDynamicRange(0.0, build_config_->clip_value);
-      }
-
-      if (layer_type == nvinfer1::LayerType::kCONVOLUTION) {
-        if (first) {
-          layer->setPrecision(nvinfer1::DataType::kHALF);
-          std::cout << "Set kHALF in " << name << std::endl;
-          first = false;
-        }
-        if (last) {
-          // cspell: ignore preds
-          if (
-            contain(name, "reg_preds") || contain(name, "cls_preds") ||
-            contain(name, "obj_preds")) {
-            layer->setPrecision(nvinfer1::DataType::kHALF);
-            std::cout << "Set kHALF in " << name << std::endl;
-          }
-          for (int j = num - 1; j >= 0; j--) {
-            nvinfer1::ILayer * inner_layer = network->getLayer(j);
-            auto inner_layer_type = inner_layer->getType();
-            std::string inner_name = inner_layer->getName();
-            if (inner_layer_type == nvinfer1::LayerType::kCONVOLUTION) {
-              inner_layer->setPrecision(nvinfer1::DataType::kHALF);
-              std::cout << "Set kHALF in " << inner_name << std::endl;
-              break;
-            }
-            if (inner_layer_type == nvinfer1::LayerType::kMATRIX_MULTIPLY) {
-              inner_layer->setPrecision(nvinfer1::DataType::kHALF);
-              std::cout << "Set kHALF in " << inner_name << std::endl;
-              break;
-            }
-          }
-        }
-      }
-    }
+  if (trt_config_->profile_per_layer) {
+    builder_config_->setProfilingVerbosity(nvinfer1::ProfilingVerbosity::kDETAILED);
   }
 
-  const auto input = network->getInput(0);
-  const auto input_dims = input->getDimensions();
-  const auto input_channel = input_dims.d[1];
-  const auto input_height = input_dims.d[2];
-  const auto input_width = input_dims.d[3];
-  const auto input_batch = input_dims.d[0];
+  return true;
+}
 
-  if (input_batch > 1) {
-    batch_config_[0] = input_batch;
-  }
-
-  if (batch_config_.at(0) > 1 && (batch_config_.at(0) == batch_config_.at(2))) {
-    // Attention : below API is deprecated in TRT8.4
-    builder->setMaxBatchSize(batch_config_.at(2));
-  } else {
-    if (build_config_->profile_per_layer) {
-      auto profile = builder->createOptimizationProfile();
-      profile->setDimensions(
-        network->getInput(0)->getName(), nvinfer1::OptProfileSelector::kMIN,
-        nvinfer1::Dims4{batch_config_.at(0), input_channel, input_height, input_width});
-      profile->setDimensions(
-        network->getInput(0)->getName(), nvinfer1::OptProfileSelector::kOPT,
-        nvinfer1::Dims4{batch_config_.at(1), input_channel, input_height, input_width});
-      profile->setDimensions(
-        network->getInput(0)->getName(), nvinfer1::OptProfileSelector::kMAX,
-        nvinfer1::Dims4{batch_config_.at(2), input_channel, input_height, input_width});
-      config->addOptimizationProfile(profile);
-    }
-  }
-  if (precision_ == "int8" && calibrator_) {
-    config->setFlag(nvinfer1::BuilderFlag::kINT8);
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8200
-    config->setFlag(nvinfer1::BuilderFlag::kPREFER_PRECISION_CONSTRAINTS);
-#else
-    config->setFlag(nvinfer1::BuilderFlag::kSTRICT_TYPES);
-#endif
-    // QAT requires no calibrator.
-    //    assert((calibrator != nullptr) && "Invalid calibrator for INT8 precision");
-    config->setInt8Calibrator(calibrator_.get());
-  }
-  if (build_config_->profile_per_layer) {
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8200
-    config->setProfilingVerbosity(nvinfer1::ProfilingVerbosity::kDETAILED);
-#else
-    config->setProfilingVerbosity(nvinfer1::ProfilingVerbosity::kVERBOSE);
-#endif
-  }
-
-#if TENSORRT_VERSION_MAJOR >= 8
-  auto plan =
-    TrtUniquePtr<nvinfer1::IHostMemory>(builder->buildSerializedNetwork(*network, *config));
+bool TrtCommon::buildEngineFromOnnx()
+{
+  // Build engine
+  auto plan = TrtUniquePtr<nvinfer1::IHostMemory>(
+    builder_->buildSerializedNetwork(*network_, *builder_config_));
   if (!plan) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create host memory");
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Fail to create host memory");
     return false;
   }
   engine_ = TrtUniquePtr<nvinfer1::ICudaEngine>(
     runtime_->deserializeCudaEngine(plan->data(), plan->size()));
-#else
-  engine_ = TrtUniquePtr<nvinfer1::ICudaEngine>(builder->buildEngineWithConfig(*network, *config));
-#endif
 
   if (!engine_) {
-    logger_.log(nvinfer1::ILogger::Severity::kERROR, "Fail to create engine");
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Fail to create engine");
     return false;
   }
 
-  // save engine
-#if TENSORRT_VERSION_MAJOR < 8
-  auto data = TrtUniquePtr<nvinfer1::IHostMemory>(engine_->serialize());
-#endif
+  // Save engine
   std::ofstream file;
-  file.open(output_engine_file_path, std::ios::binary | std::ios::out);
+  file.open(trt_config_->engine_path, std::ios::binary | std::ios::out);
   if (!file.is_open()) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Fail to open engine file");
     return false;
   }
-#if TENSORRT_VERSION_MAJOR < 8
-  file.write(reinterpret_cast<const char *>(data->data()), data->size());
-#else
-  file.write(reinterpret_cast<const char *>(plan->data()), plan->size());
-#endif
-
+  file.write(reinterpret_cast<const char *>(plan->data()), plan->size());  // NOLINT
   file.close();
+
+  context_ = TrtUniquePtr<nvinfer1::IExecutionContext>(engine_->createExecutionContext());
+  if (!context_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Fail to create context");
+    return false;
+  }
+
+  if (trt_config_->profile_per_layer) {
+    context_->setProfiler(&*model_profiler_);
+  }
+
+  fs::path json_path = trt_config_->engine_path.replace_extension(".json");
+  auto ret = getLayerInformation(nvinfer1::LayerInformationFormat::kJSON);
+  std::ofstream os(json_path, std::ofstream::trunc);
+  os << ret << std::flush;
+  os.close();
 
   return true;
 }
 
-bool TrtCommon::isInitialized()
+bool TrtCommon::loadEngine()
 {
-  return is_initialized_;
-}
+  std::ifstream engine_file(trt_config_->engine_path);
+  std::stringstream engine_buffer;
+  engine_buffer << engine_file.rdbuf();
+  std::string engine_str = engine_buffer.str();
 
-nvinfer1::Dims TrtCommon::getBindingDimensions(const int32_t index) const
-{
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + (NV_TENSOR_PATCH * 10) >= 8500
-  auto const & name = engine_->getIOTensorName(index);
-  auto dims = context_->getTensorShape(name);
-  bool const has_runtime_dim =
-    std::any_of(dims.d, dims.d + dims.nbDims, [](int32_t dim) { return dim == -1; });
-
-  if (has_runtime_dim) {
-    return dims;
-  } else {
-    return context_->getBindingDimensions(index);
+  engine_ = TrtUniquePtr<nvinfer1::ICudaEngine>(runtime_->deserializeCudaEngine(
+    reinterpret_cast<const void *>(  // NOLINT
+      engine_str.data()),
+    engine_str.size()));
+  if (!engine_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Fail to create engine");
+    return false;
   }
-#else
-  return context_->getBindingDimensions(index);
-#endif
-}
 
-int32_t TrtCommon::getNbBindings()
-{
-  return engine_->getNbBindings();
-}
-
-bool TrtCommon::setBindingDimensions(const int32_t index, const nvinfer1::Dims & dimensions) const
-{
-  return context_->setBindingDimensions(index, dimensions);
-}
-
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8500
-bool TrtCommon::enqueueV3(cudaStream_t stream)
-{
-  if (build_config_->profile_per_layer) {
-    auto inference_start = std::chrono::high_resolution_clock::now();
-
-    bool ret = context_->enqueueV3(stream);
-
-    auto inference_end = std::chrono::high_resolution_clock::now();
-    host_profiler_.reportLayerTime(
-      "inference",
-      std::chrono::duration<float, std::milli>(inference_end - inference_start).count());
-    return ret;
+  context_ = TrtUniquePtr<nvinfer1::IExecutionContext>(engine_->createExecutionContext());
+  if (!context_) {
+    logger_->log(nvinfer1::ILogger::Severity::kERROR, "Fail to create context");
+    return false;
   }
-  return context_->enqueueV3(stream);
-}
-#endif
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH < 10000
-bool TrtCommon::enqueueV2(void ** bindings, cudaStream_t stream, cudaEvent_t * input_consumed)
-{
-  if (build_config_->profile_per_layer) {
-    auto inference_start = std::chrono::high_resolution_clock::now();
 
-    bool ret = context_->enqueueV2(bindings, stream, input_consumed);
-
-    auto inference_end = std::chrono::high_resolution_clock::now();
-    host_profiler_.reportLayerTime(
-      "inference",
-      std::chrono::duration<float, std::milli>(inference_end - inference_start).count());
-    return ret;
-  } else {
-    return context_->enqueueV2(bindings, stream, input_consumed);
+  if (trt_config_->profile_per_layer) {
+    context_->setProfiler(&*model_profiler_);
   }
-}
-#endif
 
-void TrtCommon::printProfiling()
-{
-  std::cout << host_profiler_;
-  std::cout << std::endl;
-  std::cout << model_profiler_;
+  return true;
 }
 
-#if (NV_TENSORRT_MAJOR * 1000) + (NV_TENSORRT_MINOR * 100) + NV_TENSOR_PATCH >= 8200
-std::string TrtCommon::getLayerInformation(nvinfer1::LayerInformationFormat format)
+bool TrtCommon::validateProfileDims()
 {
-  auto runtime = std::unique_ptr<nvinfer1::IRuntime>(nvinfer1::createInferRuntime(logger_));
-  auto inspector = std::unique_ptr<nvinfer1::IEngineInspector>(engine_->createEngineInspector());
-  if (context_ != nullptr) {
-    inspector->setExecutionContext(&(*context_));
+  auto success = true;
+  if (!profile_dims_ || profile_dims_->empty()) {
+    logger_->log(
+      nvinfer1::ILogger::Severity::kWARNING,
+      "Input profile is empty, skipping validation. If network has dynamic shapes, it might lead "
+      "to undefined behavior.");
+    return success;
   }
-  std::string result = inspector->getEngineInformation(format);
-  return result;
+  if (engine_->getNbOptimizationProfiles() != 1) {
+    logger_->log(
+      nvinfer1::ILogger::Severity::kWARNING,
+      "Number of optimization profiles in the engine (%d) is not equal to 1. Selecting the first "
+      "cached profile.",
+      engine_->getNbOptimizationProfiles());
+  }
+
+  for (const auto & profile_dim : *profile_dims_) {
+    nvinfer1::Dims min_dims = engine_->getProfileShape(
+      profile_dim.tensor_name.c_str(), 0, nvinfer1::OptProfileSelector::kMIN);
+    nvinfer1::Dims opt_dims = engine_->getProfileShape(
+      profile_dim.tensor_name.c_str(), 0, nvinfer1::OptProfileSelector::kOPT);
+    nvinfer1::Dims max_dims = engine_->getProfileShape(
+      profile_dim.tensor_name.c_str(), 0, nvinfer1::OptProfileSelector::kMAX);
+    ProfileDims profile_from_engine{profile_dim.tensor_name, min_dims, opt_dims, max_dims};
+    if (profile_dim != profile_from_engine) {
+      logger_->log(
+        nvinfer1::ILogger::Severity::kWARNING,
+        "Invalid profile. Current configuration: %s. Cached engine: %s",
+        profile_dim.toString().c_str(), profile_from_engine.toString().c_str());
+      success = false;
+    }
+  }
+  return success;
 }
-#endif
+
+bool TrtCommon::validateNetworkIO()
+{
+  auto success = true;
+  if (!network_io_ || network_io_->empty()) {
+    logger_->log(
+      nvinfer1::ILogger::Severity::kWARNING,
+      "Network IO is empty, skipping validation. It might lead to undefined behavior");
+    return success;
+  }
+
+  if (network_io_->size() != static_cast<size_t>(getNbIOTensors())) {
+    std::string tensor_names = "[" + std::string(getIOTensorName(0));
+    for (int32_t i = 1; i < getNbIOTensors(); ++i) {
+      tensor_names += ", " + std::string(getIOTensorName(i));
+    }
+    tensor_names += "]";
+    logger_->log(
+      nvinfer1::ILogger::Severity::kWARNING,
+      "Number of tensors in the engine (%d) does not match number of tensors in the config (%d). "
+      "Tensors in the built engine: %s",
+      getNbIOTensors(), network_io_->size(), tensor_names.c_str());
+    success = false;
+  }
+  for (const auto & io : *network_io_) {
+    NetworkIO tensor_from_engine{io.tensor_name, getTensorShape(io.tensor_name.c_str())};
+    if (io != tensor_from_engine) {
+      logger_->log(
+        nvinfer1::ILogger::Severity::kERROR,
+        "Invalid tensor. Current configuration: %s. Cached engine: %s", io.toString().c_str(),
+        tensor_from_engine.toString().c_str());
+      success = false;
+    }
+  }
+
+  return success;
+}
 
 }  // namespace tensorrt_common
 }  // namespace autoware

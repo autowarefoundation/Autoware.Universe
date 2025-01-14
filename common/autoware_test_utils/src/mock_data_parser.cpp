@@ -66,6 +66,16 @@ std::array<double, 36> parse(const YAML::Node & node)
 }
 
 template <>
+Point parse(const YAML::Node & node)
+{
+  Point geom_point;
+  geom_point.x = node["x"].as<double>();
+  geom_point.y = node["y"].as<double>();
+  geom_point.z = node["z"].as<double>();
+  return geom_point;
+}
+
+template <>
 std::vector<Point> parse(const YAML::Node & node)
 {
   std::vector<Point> geom_points;
@@ -283,6 +293,46 @@ Shape parse(const YAML::Node & node)
   msg.dimensions.y = node["dimensions"]["y"].as<double>();
   msg.dimensions.z = node["dimensions"]["z"].as<double>();
   return msg;
+}
+
+template <>
+PathPoint parse(const YAML::Node & node)
+{
+  PathPoint point;
+  point.pose = parse<Pose>(node["pose"]);
+  point.longitudinal_velocity_mps = node["longitudinal_velocity_mps"].as<float>();
+  point.lateral_velocity_mps = node["lateral_velocity_mps"].as<float>();
+  point.heading_rate_rps = node["heading_rate_rps"].as<float>();
+  point.is_final = node["is_final"].as<bool>();
+  return point;
+}
+
+template <>
+PathPointWithLaneId parse(const YAML::Node & node)
+{
+  PathPointWithLaneId point;
+  point.point = parse<PathPoint>(node["point"]);
+  for (const auto & lane_id_node : node["lane_ids"]) {
+    point.lane_ids.push_back(lane_id_node.as<int64_t>());
+  }
+  return point;
+}
+
+template <>
+PathWithLaneId parse(const YAML::Node & node)
+{
+  PathWithLaneId path;
+  path.header = parse<Header>(node["header"]);
+  for (const auto & point_node : node["points"]) {
+    path.points.push_back(parse<PathPointWithLaneId>(point_node));
+  }
+  for (const auto & left_bound_node : node["left_bound"]) {
+    path.left_bound.push_back(parse<Point>(left_bound_node));
+  }
+  for (const auto & right_bound_node : node["right_bound"]) {
+    path.right_bound.push_back(parse<Point>(right_bound_node));
+  }
+  return path;
 }
 
 template <>

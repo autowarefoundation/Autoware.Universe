@@ -84,7 +84,6 @@ if(TRT_AVAIL AND CUDA_AVAIL AND CUDNN_AVAIL)
 
   ament_auto_add_library(${PROJECT_NAME}_lib SHARED
     lib/detection_class_remapper.cpp
-    lib/network/network_trt.cpp
     lib/postprocess/non_maximum_suppression.cpp
     lib/preprocess/voxel_generator.cpp
     lib/preprocess/pointcloud_densification.cpp

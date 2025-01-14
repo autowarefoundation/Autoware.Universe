@@ -49,22 +49,22 @@ using autoware::localization_util::matrix4f_to_pose;
 using autoware::localization_util::point_to_vector3d;
 using autoware::localization_util::pose_to_matrix4f;
 
-using autoware::localization_util::DiagnosticsModule;
 using autoware::localization_util::SmartPoseBuffer;
 using autoware::localization_util::TreeStructuredParzenEstimator;
+using autoware::universe_utils::DiagnosticsInterface;
 
-tier4_debug_msgs::msg::Float32Stamped make_float32_stamped(
+autoware_internal_debug_msgs::msg::Float32Stamped make_float32_stamped(
   const builtin_interfaces::msg::Time & stamp, const float data)
 {
-  using T = tier4_debug_msgs::msg::Float32Stamped;
-  return tier4_debug_msgs::build<T>().stamp(stamp).data(data);
+  using T = autoware_internal_debug_msgs::msg::Float32Stamped;
+  return autoware_internal_debug_msgs::build<T>().stamp(stamp).data(data);
 }
 
-tier4_debug_msgs::msg::Int32Stamped make_int32_stamped(
+autoware_internal_debug_msgs::msg::Int32Stamped make_int32_stamped(
   const builtin_interfaces::msg::Time & stamp, const int32_t data)
 {
-  using T = tier4_debug_msgs::msg::Int32Stamped;
-  return tier4_debug_msgs::build<T>().stamp(stamp).data(data);
+  using T = autoware_internal_debug_msgs::msg::Int32Stamped;
+  return autoware_internal_debug_msgs::build<T>().stamp(stamp).data(data);
 }
 
 std::array<double, 36> rotate_covariance(
@@ -141,7 +141,7 @@ NDTScanMatcher::NDTScanMatcher(const rclcpp::NodeOptions & options)
       std::make_unique<SmartPoseBuffer>(this->get_logger(), value_as_unlimited, value_as_unlimited);
 
     diagnostics_regularization_pose_ =
-      std::make_unique<DiagnosticsModule>(this, "regularization_pose_subscriber_status");
+      std::make_unique<DiagnosticsInterface>(this, "regularization_pose_subscriber_status");
   }
 
   sensor_aligned_pose_pub_ =
@@ -158,31 +158,34 @@ NDTScanMatcher::NDTScanMatcher(const rclcpp::NodeOptions & options)
   multi_ndt_pose_pub_ = this->create_publisher<geometry_msgs::msg::PoseArray>("multi_ndt_pose", 10);
   multi_initial_pose_pub_ =
     this->create_publisher<geometry_msgs::msg::PoseArray>("multi_initial_pose", 10);
-  exe_time_pub_ = this->create_publisher<tier4_debug_msgs::msg::Float32Stamped>("exe_time_ms", 10);
+  exe_time_pub_ =
+    this->create_publisher<autoware_internal_debug_msgs::msg::Float32Stamped>("exe_time_ms", 10);
   transform_probability_pub_ =
-    this->create_publisher<tier4_debug_msgs::msg::Float32Stamped>("transform_probability", 10);
+    this->create_publisher<autoware_internal_debug_msgs::msg::Float32Stamped>(
+      "transform_probability", 10);
   nearest_voxel_transformation_likelihood_pub_ =
-    this->create_publisher<tier4_debug_msgs::msg::Float32Stamped>(
+    this->create_publisher<autoware_internal_debug_msgs::msg::Float32Stamped>(
       "nearest_voxel_transformation_likelihood", 10);
   voxel_score_points_pub_ =
     this->create_publisher<sensor_msgs::msg::PointCloud2>("voxel_score_points", 10);
   no_ground_transform_probability_pub_ =
-    this->create_publisher<tier4_debug_msgs::msg::Float32Stamped>(
+    this->create_publisher<autoware_internal_debug_msgs::msg::Float32Stamped>(
       "no_ground_transform_probability", 10);
   no_ground_nearest_voxel_transformation_likelihood_pub_ =
-    this->create_publisher<tier4_debug_msgs::msg::Float32Stamped>(
+    this->create_publisher<autoware_internal_debug_msgs::msg::Float32Stamped>(
       "no_ground_nearest_voxel_transformation_likelihood", 10);
   iteration_num_pub_ =
-    this->create_publisher<tier4_debug_msgs::msg::Int32Stamped>("iteration_num", 10);
+    this->create_publisher<autoware_internal_debug_msgs::msg::Int32Stamped>("iteration_num", 10);
   initial_to_result_relative_pose_pub_ =
     this->create_publisher<geometry_msgs::msg::PoseStamped>("initial_to_result_relative_pose", 10);
   initial_to_result_distance_pub_ =
-    this->create_publisher<tier4_debug_msgs::msg::Float32Stamped>("initial_to_result_distance", 10);
+    this->create_publisher<autoware_internal_debug_msgs::msg::Float32Stamped>(
+      "initial_to_result_distance", 10);
   initial_to_result_distance_old_pub_ =
-    this->create_publisher<tier4_debug_msgs::msg::Float32Stamped>(
+    this->create_publisher<autoware_internal_debug_msgs::msg::Float32Stamped>(
       "initial_to_result_distance_old", 10);
   initial_to_result_distance_new_pub_ =
-    this->create_publisher<tier4_debug_msgs::msg::Float32Stamped>(
+    this->create_publisher<autoware_internal_debug_msgs::msg::Float32Stamped>(
       "initial_to_result_distance_new", 10);
   ndt_marker_pub_ = this->create_publisher<visualization_msgs::msg::MarkerArray>("ndt_marker", 10);
   ndt_monte_carlo_initial_pose_marker_pub_ =
@@ -209,13 +212,13 @@ NDTScanMatcher::NDTScanMatcher(const rclcpp::NodeOptions & options)
   map_update_module_ =
     std::make_unique<MapUpdateModule>(this, &ndt_ptr_mtx_, ndt_ptr_, param_.dynamic_map_loading);
 
-  diagnostics_scan_points_ = std::make_unique<DiagnosticsModule>(this, "scan_matching_status");
+  diagnostics_scan_points_ = std::make_unique<DiagnosticsInterface>(this, "scan_matching_status");
   diagnostics_initial_pose_ =
-    std::make_unique<DiagnosticsModule>(this, "initial_pose_subscriber_status");
-  diagnostics_map_update_ = std::make_unique<DiagnosticsModule>(this, "map_update_status");
-  diagnostics_ndt_align_ = std::make_unique<DiagnosticsModule>(this, "ndt_align_service_status");
+    std::make_unique<DiagnosticsInterface>(this, "initial_pose_subscriber_status");
+  diagnostics_map_update_ = std::make_unique<DiagnosticsInterface>(this, "map_update_status");
+  diagnostics_ndt_align_ = std::make_unique<DiagnosticsInterface>(this, "ndt_align_service_status");
   diagnostics_trigger_node_ =
-    std::make_unique<DiagnosticsModule>(this, "trigger_node_service_status");
+    std::make_unique<DiagnosticsInterface>(this, "trigger_node_service_status");
 
   logger_configure_ = std::make_unique<autoware::universe_utils::LoggerLevelConfigure>(this);
 }

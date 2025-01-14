@@ -107,13 +107,12 @@ void ImageTransportDecompressor::onCompressedImage(
       }
     } else {
       std::string image_encoding;
-      if (encoding_ == std::string("default")) {
-        image_encoding = input_compressed_image_msg->format.substr(0, split_pos);
-      } else if (encoding_ == std::string("rgb8")) {
+      if (encoding_ == std::string("rgb8")) {
         image_encoding = "rgb8";
       } else if (encoding_ == std::string("bgr8")) {
         image_encoding = "bgr8";
       } else {
+        // default encoding
         image_encoding = input_compressed_image_msg->format.substr(0, split_pos);
       }
 

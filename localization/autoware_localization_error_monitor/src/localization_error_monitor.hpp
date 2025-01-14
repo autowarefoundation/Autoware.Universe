@@ -16,7 +16,7 @@
 #define LOCALIZATION_ERROR_MONITOR_HPP_
 
 #include "autoware/localization_util/covariance_ellipse.hpp"
-#include "autoware/localization_util/diagnostics_module.hpp"
+#include "autoware/universe_utils/ros/diagnostics_interface.hpp"
 
 #include <Eigen/Dense>
 #include <autoware/universe_utils/ros/logger_level_configure.hpp>
@@ -39,7 +39,7 @@ private:
 
   std::unique_ptr<autoware::universe_utils::LoggerLevelConfigure> logger_configure_;
 
-  std::unique_ptr<autoware::localization_util::DiagnosticsModule> diagnostics_error_monitor_;
+  std::unique_ptr<autoware::universe_utils::DiagnosticsInterface> diagnostics_error_monitor_;
 
   double scale_;
   double error_ellipse_size_;

@@ -16,11 +16,12 @@
 #define AUTOWARE__LIDAR_CENTERPOINT__CENTERPOINT_TRT_HPP_
 
 #include "autoware/lidar_centerpoint/cuda_utils.hpp"
-#include "autoware/lidar_centerpoint/network/network_trt.hpp"
 #include "autoware/lidar_centerpoint/postprocess/postprocess_kernel.hpp"
 #include "autoware/lidar_centerpoint/preprocess/voxel_generator.hpp"
 #include "pcl/point_cloud.h"
 #include "pcl/point_types.h"
+
+#include <autoware/tensorrt_common/tensorrt_common.hpp>
 
 #include "sensor_msgs/msg/point_cloud2.hpp"
 
@@ -31,41 +32,25 @@
 
 namespace autoware::lidar_centerpoint
 {
-class NetworkParam
-{
-public:
-  NetworkParam(std::string onnx_path, std::string engine_path, std::string trt_precision)
-  : onnx_path_(std::move(onnx_path)),
-    engine_path_(std::move(engine_path)),
-    trt_precision_(std::move(trt_precision))
-  {
-  }
-
-  std::string onnx_path() const { return onnx_path_; }
-  std::string engine_path() const { return engine_path_; }
-  std::string trt_precision() const { return trt_precision_; }
-
-private:
-  std::string onnx_path_;
-  std::string engine_path_;
-  std::string trt_precision_;
-};
+using autoware::tensorrt_common::ProfileDims;
+using autoware::tensorrt_common::TrtCommonConfig;
 
 class CenterPointTRT
 {
 public:
   explicit CenterPointTRT(
-    const NetworkParam & encoder_param, const NetworkParam & head_param,
+    const TrtCommonConfig & encoder_param, const TrtCommonConfig & head_param,
     const DensificationParam & densification_param, const CenterPointConfig & config);
 
   virtual ~CenterPointTRT();
 
   bool detect(
     const sensor_msgs::msg::PointCloud2 & input_pointcloud_msg, const tf2_ros::Buffer & tf_buffer,
-    std::vector<Box3D> & det_boxes3d);
+    std::vector<Box3D> & det_boxes3d, bool & is_num_pillars_within_range);
 
 protected:
   void initPtr();
+  void initTrt(const TrtCommonConfig & encoder_param, const TrtCommonConfig & head_param);
 
   virtual bool preprocess(
     const sensor_msgs::msg::PointCloud2 & input_pointcloud_msg, const tf2_ros::Buffer & tf_buffer);
@@ -75,8 +60,8 @@ protected:
   void postProcess(std::vector<Box3D> & det_boxes3d);
 
   std::unique_ptr<VoxelGeneratorTemplate> vg_ptr_{nullptr};
-  std::unique_ptr<VoxelEncoderTRT> encoder_trt_ptr_{nullptr};
-  std::unique_ptr<HeadTRT> head_trt_ptr_{nullptr};
+  std::unique_ptr<tensorrt_common::TrtCommon> encoder_trt_ptr_{nullptr};
+  std::unique_ptr<tensorrt_common::TrtCommon> head_trt_ptr_{nullptr};
   std::unique_ptr<PostProcessCUDA> post_proc_ptr_{nullptr};
   cudaStream_t stream_{nullptr};
 

@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_behavior_velocity_planner</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>The autoware_behavior_velocity_planner package</description>
 
   <maintainer email="mamoru.sobue@tier4.jp">Mamoru Sobue</maintainer>
@@ -32,9 +32,8 @@
   <buildtool_depend>autoware_cmake</buildtool_depend>
   <buildtool_depend>eigen3_cmake_module</buildtool_depend>
 
-  <build_depend>rosidl_default_generators</build_depend>
-
   <depend>autoware_behavior_velocity_planner_common</depend>
+  <depend>autoware_internal_debug_msgs</depend>
   <depend>autoware_lanelet2_extension</depend>
   <depend>autoware_map_msgs</depend>
   <depend>autoware_motion_utils</depend>
@@ -56,32 +55,13 @@
   <depend>tf2_eigen</depend>
   <depend>tf2_geometry_msgs</depend>
   <depend>tf2_ros</depend>
-  <depend>tier4_api_msgs</depend>
   <depend>tier4_planning_msgs</depend>
-  <depend>tier4_v2x_msgs</depend>
   <depend>visualization_msgs</depend>
-
-  <exec_depend>rosidl_default_runtime</exec_depend>
 
   <test_depend>ament_cmake_ros</test_depend>
   <test_depend>ament_lint_auto</test_depend>
-  <test_depend>autoware_behavior_velocity_blind_spot_module</test_depend>
-  <test_depend>autoware_behavior_velocity_crosswalk_module</test_depend>
-  <test_depend>autoware_behavior_velocity_detection_area_module</test_depend>
-  <test_depend>autoware_behavior_velocity_intersection_module</test_depend>
-  <test_depend>autoware_behavior_velocity_no_drivable_lane_module</test_depend>
-  <test_depend>autoware_behavior_velocity_no_stopping_area_module</test_depend>
-  <test_depend>autoware_behavior_velocity_occlusion_spot_module</test_depend>
-  <test_depend>autoware_behavior_velocity_run_out_module</test_depend>
-  <test_depend>autoware_behavior_velocity_speed_bump_module</test_depend>
-  <test_depend>autoware_behavior_velocity_stop_line_module</test_depend>
-  <test_depend>autoware_behavior_velocity_traffic_light_module</test_depend>
-  <test_depend>autoware_behavior_velocity_virtual_traffic_light_module</test_depend>
-  <test_depend>autoware_behavior_velocity_walkway_module</test_depend>
   <test_depend>autoware_lint_common</test_depend>
   <!--<test_depend>autoware_behavior_velocity_template_module</test_depend>-->
-
-  <member_of_group>rosidl_interface_packages</member_of_group>
 
   <export>
     <build_type>ament_cmake</build_type>

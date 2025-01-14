@@ -68,6 +68,7 @@ RoutingNode::RoutingNode(const rclcpp::NodeOptions & options) : Node("routing", 
   adaptor.init_cli(cli_operation_mode_, group_cli_);
   adaptor.init_sub(sub_operation_mode_, this, &RoutingNode::on_operation_mode);
 
+  is_autoware_control_ = false;
   is_auto_mode_ = false;
   state_.state = State::Message::UNKNOWN;
 }
@@ -85,6 +86,7 @@ void RoutingNode::change_stop_mode()
 
 void RoutingNode::on_operation_mode(const OperationModeState::Message::ConstSharedPtr msg)
 {
+  is_autoware_control_ = msg->is_autoware_control_enabled;
   is_auto_mode_ = msg->mode == OperationModeState::Message::AUTONOMOUS;
 }
 
@@ -119,7 +121,14 @@ void RoutingNode::on_clear_route(
   const autoware::adapi_specs::routing::ClearRoute::Service::Request::SharedPtr req,
   const autoware::adapi_specs::routing::ClearRoute::Service::Response::SharedPtr res)
 {
-  change_stop_mode();
+  // For safety, do not clear the route while it is in use.
+  // https://autowarefoundation.github.io/autoware-documentation/main/design/autoware-interfaces/ad-api/list/api/routing/clear_route/
+  if (is_auto_mode_ && is_autoware_control_) {
+    res->status.success = false;
+    res->status.code = ResponseStatus::UNKNOWN;
+    res->status.message = "The route cannot be cleared while it is in use.";
+    return;
+  }
   res->status = conversion::convert_call(cli_clear_route_, req);
 }
 

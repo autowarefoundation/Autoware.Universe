@@ -15,7 +15,7 @@
 #ifndef GYRO_ODOMETER_CORE_HPP_
 #define GYRO_ODOMETER_CORE_HPP_
 
-#include "autoware/localization_util/diagnostics_module.hpp"
+#include "autoware/universe_utils/ros/diagnostics_interface.hpp"
 #include "autoware/universe_utils/ros/logger_level_configure.hpp"
 #include "autoware/universe_utils/ros/msg_covariance.hpp"
 #include "autoware/universe_utils/ros/transform_listener.hpp"
@@ -80,7 +80,7 @@ private:
   std::deque<geometry_msgs::msg::TwistWithCovarianceStamped> vehicle_twist_queue_;
   std::deque<sensor_msgs::msg::Imu> gyro_queue_;
 
-  std::unique_ptr<autoware::localization_util::DiagnosticsModule> diagnostics_;
+  std::unique_ptr<autoware::universe_utils::DiagnosticsInterface> diagnostics_;
 };
 
 }  // namespace autoware::gyro_odometer

@@ -24,11 +24,11 @@
 #include <autoware/trajectory_follower_base/control_horizon.hpp>
 
 #include "autoware_control_msgs/msg/lateral.hpp"
+#include "autoware_internal_debug_msgs/msg/float32_multi_array_stamped.hpp"
 #include "autoware_planning_msgs/msg/trajectory.hpp"
 #include "autoware_planning_msgs/msg/trajectory_point.hpp"
 #include "autoware_vehicle_msgs/msg/steering_report.hpp"
 #include "geometry_msgs/msg/pose.hpp"
-#include "tier4_debug_msgs/msg/float32_multi_array_stamped.hpp"
 
 #ifdef ROS_DISTRO_GALACTIC
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
@@ -45,12 +45,12 @@ namespace autoware::motion::control::mpc_lateral_controller
 
 using autoware::motion::control::trajectory_follower::LateralHorizon;
 using autoware_control_msgs::msg::Lateral;
+using autoware_internal_debug_msgs::msg::Float32MultiArrayStamped;
 using autoware_planning_msgs::msg::Trajectory;
 using autoware_planning_msgs::msg::TrajectoryPoint;
 using autoware_vehicle_msgs::msg::SteeringReport;
 using geometry_msgs::msg::Pose;
 using geometry_msgs::msg::PoseStamped;
-using tier4_debug_msgs::msg::Float32MultiArrayStamped;
 
 TrajectoryPoint makePoint(const double x, const double y, const float vx)
 {
@@ -96,8 +96,6 @@ protected:
   double error_deriv_lpf_cutoff_hz = 5.0;
 
   // Test Parameters
-  double admissible_position_error = 5.0;
-  double admissible_yaw_error_rad = M_PI_2;
   double steer_lim = 0.610865;      // 35 degrees
   double steer_rate_lim = 2.61799;  // 150 degrees
   double ctrl_period = 0.03;
@@ -162,8 +160,6 @@ protected:
   void initializeMPC(mpc_lateral_controller::MPC & mpc)
   {
     mpc.m_param = param;
-    mpc.m_admissible_position_error = admissible_position_error;
-    mpc.m_admissible_yaw_error_rad = admissible_yaw_error_rad;
     mpc.m_steer_lim = steer_lim;
     mpc.m_steer_rate_lim_map_by_curvature.emplace_back(0.0, steer_rate_lim);
     mpc.m_steer_rate_lim_map_by_velocity.emplace_back(0.0, steer_rate_lim);
@@ -479,38 +475,5 @@ TEST_F(MPCTest, MultiSolveWithBuffer)
   EXPECT_EQ(ctrl_cmd_horizon.controls.size(), param.prediction_horizon);
   EXPECT_EQ(ctrl_cmd_horizon.controls.front().steering_tire_angle, 0.0f);
   EXPECT_EQ(ctrl_cmd_horizon.controls.front().steering_tire_rotation_rate, 0.0f);
-}
-
-TEST_F(MPCTest, FailureCases)
-{
-  auto node = rclcpp::Node("mpc_test_node", rclcpp::NodeOptions{});
-  auto mpc = std::make_unique<MPC>(node);
-  std::shared_ptr<VehicleModelInterface> vehicle_model_ptr =
-    std::make_shared<KinematicsBicycleModel>(wheelbase, steer_limit, steer_tau);
-  mpc->setVehicleModel(vehicle_model_ptr);
-  std::shared_ptr<QPSolverInterface> qpsolver_ptr = std::make_shared<QPSolverEigenLeastSquareLLT>();
-  mpc->setQPSolver(qpsolver_ptr);
-
-  // Init parameters and reference trajectory
-  initializeMPC(*mpc);
-
-  // Calculate MPC with a pose too far from the trajectory
-  Pose pose_far;
-  pose_far.position.x = pose_zero.position.x - admissible_position_error - 1.0;
-  pose_far.position.y = pose_zero.position.y - admissible_position_error - 1.0;
-  Lateral ctrl_cmd;
-  Trajectory pred_traj;
-  Float32MultiArrayStamped diag;
-  LateralHorizon ctrl_cmd_horizon;
-  const auto odom = makeOdometry(pose_far, default_velocity);
-  EXPECT_FALSE(
-    mpc->calculateMPC(neutral_steer, odom, ctrl_cmd, pred_traj, diag, ctrl_cmd_horizon).result);
-
-  // Calculate MPC with a fast velocity to make the prediction go further than the reference path
-  EXPECT_FALSE(mpc
-                 ->calculateMPC(
-                   neutral_steer, makeOdometry(pose_far, default_velocity + 10.0), ctrl_cmd,
-                   pred_traj, diag, ctrl_cmd_horizon)
-                 .result);
 }
 }  // namespace autoware::motion::control::mpc_lateral_controller

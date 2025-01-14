@@ -320,8 +320,11 @@ std::vector<TrajectoryPoint> PIDBasedPlanner::planCruise(
       const size_t wall_idx = obstacle_cruise_utils::getIndexWithLongitudinalOffset(
         stop_traj_points, dist_to_rss_wall, ego_idx);
 
+      const std::string wall_reason_string = cruise_obstacle_info->obstacle.is_yield_obstacle
+                                               ? "obstacle cruise (yield)"
+                                               : "obstacle cruise";
       auto markers = autoware::motion_utils::createSlowDownVirtualWallMarker(
-        stop_traj_points.at(wall_idx).pose, "obstacle cruise", planner_data.current_time, 0);
+        stop_traj_points.at(wall_idx).pose, wall_reason_string, planner_data.current_time, 0);
       // NOTE: use a different color from slow down one to visualize cruise and slow down
       // separately.
       markers.markers.front().color =

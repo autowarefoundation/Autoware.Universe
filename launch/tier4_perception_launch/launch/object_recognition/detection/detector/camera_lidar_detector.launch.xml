@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <launch>
+  <!-- Current namespace -->
+  <arg name="ns" description="current namespace"/>
+
   <!-- Lidar + Camera detector parameters -->
   <arg name="lidar_detection_model_type" description="options: `transfusion`, `centerpoint`, `pointpainting`, `apollo`, `clustering`"/>
   <arg name="lidar_detection_model_name" description="options: `transfusion`, `centerpoint`, `centerpoint_tiny`, `centerpoint_sigma`, `pointpainting`"/>
@@ -41,6 +44,35 @@
 
   <arg name="output/ml_detector/objects"/>
   <arg name="output/rule_detector/objects"/>
+  <arg name="output/clustering/cluster_objects"/>
+
+  <!-- Internal interfaces -->
+  <let name="pointpainting/input/pointcloud" value="$(var input/pointcloud)"/>
+  <let name="pointpainting/output/objects" value="$(var output/ml_detector/objects)"/>
+
+  <let name="segmentation_based_filtered/input/pointcloud" value="$(var input/pointcloud_map/pointcloud)"/>
+  <let name="segmentation_based_filtered/output/pointcloud" value="$(var ns)/segmentation_based_filtered/pointcloud"/>
+
+  <let name="euclidean_cluster/input/pointcloud" value="$(var segmentation_based_filtered/output/pointcloud)" if="$(var use_image_segmentation_based_filter)"/>
+  <let name="euclidean_cluster/input/pointcloud" value="$(var input/pointcloud_map/pointcloud)" unless="$(var use_image_segmentation_based_filter)"/>
+  <let name="clustering/clusters" value="$(var ns)/clustering/clusters"/>
+  <let name="euclidean_cluster/output/clusters" value="$(var ns)/clustering/euclidean_cluster/clusters" if="$(var use_roi_based_cluster)"/>
+  <let name="euclidean_cluster/output/clusters" value="$(var clustering/clusters)" unless="$(var use_roi_based_cluster)"/>
+  <let name="roi_cluster/input/pointcloud" value="$(var input/pointcloud_map/pointcloud)"/>
+  <let name="roi_cluster/output/clusters" value="$(var ns)/clustering/roi_cluster/clusters"/>
+  <let name="roi_merged_cluster/output/clusters" value="$(var clustering/clusters)"/>
+  <let name="shape_estimation1/input/clusters" value="$(var clustering/clusters)"/>
+  <let name="shape_estimation1/output/objects" value="$(var output/clustering/cluster_objects)"/>
+
+  <let name="roi_cluster_fusion/input/clusters" value="$(var ns)/clustering/clusters"/>
+  <let name="roi_cluster_fusion/output/clusters" value="$(var ns)/clustering/camera_lidar_fusion/clusters"/>
+  <let name="low_intensity_cluster_filter/input/clusters" value="$(var roi_cluster_fusion/output/clusters)"/>
+  <let name="low_intensity_cluster_filter/output/clusters" value="$(var ns)/clustering/camera_lidar_fusion/filtered/clusters"/>
+  <let name="shape_estimation2/input/clusters" value="$(var low_intensity_cluster_filter/output/clusters)" if="$(var use_low_intensity_cluster_filter)"/>
+  <let name="shape_estimation2/input/clusters" value="$(var roi_cluster_fusion/output/clusters)" unless="$(var use_low_intensity_cluster_filter)"/>
+  <let name="shape_estimation2/output/objects" value="$(var ns)/clustering/camera_lidar_fusion/objects_with_feature"/>
+  <let name="detected_object_feature_remover/input/objects_with_feature" value="$(var shape_estimation2/output/objects)"/>
+  <let name="detected_object_feature_remover/output/objects" value="$(var output/rule_detector/objects)"/>
 
   <!-- Jetson AGX -->
   <!-- <include file="$(find-pkg-share autoware_tensorrt_yolox)/launch/multiple_yolox.launch.xml">
@@ -85,8 +117,8 @@
       <arg name="input/image5" value="$(var input/camera5/image)"/>
       <arg name="input/image6" value="$(var input/camera6/image)"/>
       <arg name="input/image7" value="$(var input/camera7/image)"/>
-      <arg name="input/pointcloud" value="$(var input/pointcloud)"/>
-      <arg name="output/objects" value="$(var output/ml_detector/objects)"/>
+      <arg name="input/pointcloud" value="$(var pointpainting/input/pointcloud)"/>
+      <arg name="output/objects" value="$(var pointpainting/output/objects)"/>
 
       <arg name="model_name" value="$(var lidar_detection_model_name)"/>
       <arg name="model_path" value="$(var pointpainting_model_path)"/>
@@ -101,8 +133,8 @@
   <!-- Image_segmentation based filter, apply for camera0 only-->
   <group>
     <include file="$(find-pkg-share autoware_image_projection_based_fusion)/launch/segmentation_pointcloud_fusion.launch.xml" if="$(var use_image_segmentation_based_filter)">
-      <arg name="input/pointcloud" value="$(var input/pointcloud_map/pointcloud)"/>
-      <arg name="output/pointcloud" value="/perception/object_recognition/detection/segmentation_based_filtered/pointcloud"/>
+      <arg name="input/pointcloud" value="$(var segmentation_based_filtered/input/pointcloud)"/>
+      <arg name="output/pointcloud" value="$(var segmentation_based_filtered/output/pointcloud)"/>
     </include>
   </group>
 
@@ -110,14 +142,11 @@
   <group>
     <push-ros-namespace namespace="clustering"/>
     <group>
-      <let name="euclidean_cluster_input" value="$(var input/pointcloud_map/pointcloud)" unless="$(var use_image_segmentation_based_filter)"/>
-      <let name="euclidean_cluster_input" value="/perception/object_recognition/detection/segmentation_based_filtered/pointcloud" if="$(var use_image_segmentation_based_filter)"/>
-      <let name="euclidean_cluster_output" value="euclidean_cluster/clusters" if="$(var use_roi_based_cluster)"/>
-      <let name="euclidean_cluster_output" value="clusters" unless="$(var use_roi_based_cluster)"/>
       <include file="$(find-pkg-share autoware_euclidean_cluster)/launch/voxel_grid_based_euclidean_cluster.launch.xml">
-        <arg name="input_pointcloud" value="$(var euclidean_cluster_input)"/>
-        <arg name="output_clusters" value="$(var euclidean_cluster_output)"/>
+        <arg name="input_pointcloud" value="$(var euclidean_cluster/input/pointcloud)"/>
+        <arg name="output_clusters" value="$(var euclidean_cluster/output/clusters)"/>
         <arg name="use_low_height_cropbox" value="$(var use_low_height_cropbox)"/>
+        <arg name="use_pointcloud_container" value="false"/>
       </include>
     </group>
 
@@ -151,8 +180,8 @@
           <arg name="input/image5" value="$(var input/camera5/image)"/>
           <arg name="input/image6" value="$(var input/camera6/image)"/>
           <arg name="input/image7" value="$(var input/camera7/image)"/>
-          <arg name="input/pointcloud" value="$(var input/pointcloud_map/pointcloud)"/>
-          <arg name="output_clusters" value="clusters"/>
+          <arg name="input/pointcloud" value="$(var roi_cluster/input/pointcloud)"/>
+          <arg name="output_clusters" value="$(var roi_cluster/output/clusters)"/>
           <arg name="param_path" value="$(var roi_pointcloud_fusion_param_path)"/>
         </include>
       </group>
@@ -161,21 +190,21 @@
     <!-- simple_cluster_merger -->
     <group>
       <include file="$(find-pkg-share autoware_cluster_merger)/launch/cluster_merger.launch.xml" if="$(var use_roi_based_cluster)">
-        <arg name="input/cluster0" value="euclidean_cluster/clusters"/>
-        <arg name="input/cluster1" value="roi_cluster/clusters"/>
-        <arg name="output/clusters" value="clusters"/>
+        <arg name="input/cluster0" value="$(var euclidean_cluster/output/clusters)"/>
+        <arg name="input/cluster1" value="$(var roi_cluster/output/clusters)"/>
+        <arg name="output/clusters" value="$(var roi_merged_cluster/output/clusters)"/>
       </include>
     </group>
 
+    <!-- shape_estimation 1 -->
     <group>
       <include file="$(find-pkg-share autoware_shape_estimation)/launch/shape_estimation.launch.xml">
-        <arg name="input/objects" value="clusters"/>
-        <arg name="output/objects" value="objects_with_feature"/>
+        <arg name="input/objects" value="$(var shape_estimation1/input/clusters)"/>
+        <arg name="output/objects" value="$(var shape_estimation1/output/objects)"/>
       </include>
     </group>
 
     <group>
-      <let name="input/clustering" value="/perception/object_recognition/detection/clustering/clusters"/>
       <push-ros-namespace namespace="camera_lidar_fusion"/>
       <!-- Fusion camera-lidar to classify -->
 
@@ -207,8 +236,8 @@
           <arg name="input/image5" value="$(var input/camera5/image)"/>
           <arg name="input/image6" value="$(var input/camera6/image)"/>
           <arg name="input/image7" value="$(var input/camera7/image)"/>
-          <arg name="input/clusters" value="$(var input/clustering)"/>
-          <arg name="output/clusters" value="clusters"/>
+          <arg name="input/clusters" value="$(var roi_cluster_fusion/input/clusters)"/>
+          <arg name="output/clusters" value="$(var roi_cluster_fusion/output/clusters)"/>
           <arg name="param_path" value="$(var roi_cluster_fusion_param_path)"/>
         </include>
       </group>
@@ -216,24 +245,22 @@
       <!-- low_intensity_cluster_filter -->
       <group>
         <include file="$(find-pkg-share autoware_raindrop_cluster_filter)/launch/low_intensity_cluster_filter.launch.xml" if="$(var use_low_intensity_cluster_filter)">
-          <arg name="input/objects" value="clusters"/>
-          <arg name="output/objects" value="filtered/clusters"/>
+          <arg name="input/objects" value="$(var low_intensity_cluster_filter/input/clusters)"/>
+          <arg name="output/objects" value="$(var low_intensity_cluster_filter/output/clusters)"/>
         </include>
       </group>
 
       <group>
-        <let name="shape_estimation/input" value="filtered/clusters" if="$(var use_low_intensity_cluster_filter)"/>
-        <let name="shape_estimation/input" value="clusters" unless="$(var use_low_intensity_cluster_filter)"/>
         <include file="$(find-pkg-share autoware_shape_estimation)/launch/shape_estimation.launch.xml">
-          <arg name="input/objects" value="$(var shape_estimation/input)"/>
-          <arg name="output/objects" value="objects_with_feature"/>
+          <arg name="input/objects" value="$(var shape_estimation2/input/clusters)"/>
+          <arg name="output/objects" value="$(var shape_estimation2/output/objects)"/>
         </include>
       </group>
       <!-- convert DynamicObjectsWithFeatureArray to DynamicObjects -->
       <group>
         <include file="$(find-pkg-share autoware_detected_object_feature_remover)/launch/detected_object_feature_remover.launch.xml">
-          <arg name="input" value="objects_with_feature"/>
-          <arg name="output" value="$(var output/rule_detector/objects)"/>
+          <arg name="input" value="$(var detected_object_feature_remover/input/objects_with_feature)"/>
+          <arg name="output" value="$(var detected_object_feature_remover/output/objects)"/>
         </include>
       </group>
     </group>

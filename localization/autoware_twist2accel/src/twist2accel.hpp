@@ -23,7 +23,6 @@
 #include <geometry_msgs/msg/twist_stamped.hpp>
 #include <geometry_msgs/msg/twist_with_covariance_stamped.hpp>
 #include <nav_msgs/msg/odometry.hpp>
-#include <tier4_debug_msgs/msg/bool_stamped.hpp>
 
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/utils.h>

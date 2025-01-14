@@ -25,6 +25,7 @@
 #include <tf2/utils.h>
 
 #include <algorithm>
+#include <vector>
 
 namespace autoware::motion_velocity_planner::obstacle_velocity_limiter
 {
@@ -58,17 +59,18 @@ polygon_t createObjectPolygon(
 }
 
 multi_polygon_t createObjectPolygons(
-  const autoware_perception_msgs::msg::PredictedObjects & objects, const double buffer,
-  const double min_velocity)
+  const std::vector<PlannerData::Object> & objects, const double buffer, const double min_velocity)
 {
   multi_polygon_t polygons;
-  for (const auto & object : objects.objects) {
+  for (const auto & object : objects) {
+    const auto & predicted_object = object.predicted_object;
     const double obj_vel_norm = std::hypot(
-      object.kinematics.initial_twist_with_covariance.twist.linear.x,
-      object.kinematics.initial_twist_with_covariance.twist.linear.y);
+      predicted_object.kinematics.initial_twist_with_covariance.twist.linear.x,
+      predicted_object.kinematics.initial_twist_with_covariance.twist.linear.y);
     if (min_velocity <= obj_vel_norm) {
       polygons.push_back(createObjectPolygon(
-        object.kinematics.initial_pose_with_covariance.pose, object.shape.dimensions, buffer));
+        predicted_object.kinematics.initial_pose_with_covariance.pose,
+        predicted_object.shape.dimensions, buffer));
     }
   }
   return polygons;

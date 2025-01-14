@@ -34,6 +34,7 @@
             "lateral_deviation",
             "yaw_deviation",
             "velocity_deviation",
+            "lateral_trajectory_displacement",
             "stability",
             "stability_frechet",
             "obstacle_distance",

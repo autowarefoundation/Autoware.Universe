@@ -44,17 +44,17 @@ This package includes the following features:
 
 ### Published Topics
 
-| Name                              | Type                                             | Description                                           |
-| --------------------------------- | ------------------------------------------------ | ----------------------------------------------------- |
-| `ekf_odom`                        | `nav_msgs::msg::Odometry`                        | Estimated odometry.                                   |
-| `ekf_pose`                        | `geometry_msgs::msg::PoseStamped`                | Estimated pose.                                       |
-| `ekf_pose_with_covariance`        | `geometry_msgs::msg::PoseWithCovarianceStamped`  | Estimated pose with covariance.                       |
-| `ekf_biased_pose`                 | `geometry_msgs::msg::PoseStamped`                | Estimated pose including the yaw bias                 |
-| `ekf_biased_pose_with_covariance` | `geometry_msgs::msg::PoseWithCovarianceStamped`  | Estimated pose with covariance including the yaw bias |
-| `ekf_twist`                       | `geometry_msgs::msg::TwistStamped`               | Estimated twist.                                      |
-| `ekf_twist_with_covariance`       | `geometry_msgs::msg::TwistWithCovarianceStamped` | The estimated twist with covariance.                  |
-| `diagnostics`                     | `diagnostics_msgs::msg::DiagnosticArray`         | The diagnostic information.                           |
-| `debug/processing_time_ms`        | `tier4_debug_msgs::msg::Float64Stamped`          | The processing time [ms].                             |
+| Name                              | Type                                                | Description                                           |
+| --------------------------------- | --------------------------------------------------- | ----------------------------------------------------- |
+| `ekf_odom`                        | `nav_msgs::msg::Odometry`                           | Estimated odometry.                                   |
+| `ekf_pose`                        | `geometry_msgs::msg::PoseStamped`                   | Estimated pose.                                       |
+| `ekf_pose_with_covariance`        | `geometry_msgs::msg::PoseWithCovarianceStamped`     | Estimated pose with covariance.                       |
+| `ekf_biased_pose`                 | `geometry_msgs::msg::PoseStamped`                   | Estimated pose including the yaw bias                 |
+| `ekf_biased_pose_with_covariance` | `geometry_msgs::msg::PoseWithCovarianceStamped`     | Estimated pose with covariance including the yaw bias |
+| `ekf_twist`                       | `geometry_msgs::msg::TwistStamped`                  | Estimated twist.                                      |
+| `ekf_twist_with_covariance`       | `geometry_msgs::msg::TwistWithCovarianceStamped`    | The estimated twist with covariance.                  |
+| `diagnostics`                     | `diagnostics_msgs::msg::DiagnosticArray`            | The diagnostic information.                           |
+| `debug/processing_time_ms`        | `autoware_internal_debug_msgs::msg::Float64Stamped` | The processing time [ms].                             |
 
 ### Published TF
 
@@ -191,6 +191,7 @@ Note that, although the dimension gets larger since the analytical expansion can
 ### The conditions that result in a WARN state
 
 - The node is not in the activate state.
+- The initial pose is not set.
 - The number of consecutive no measurement update via the Pose/Twist topic exceeds the `pose_no_update_count_threshold_warn`/`twist_no_update_count_threshold_warn`.
 - The timestamp of the Pose/Twist topic is beyond the delay compensation range.
 - The Pose/Twist topic is beyond the range of Mahalanobis distance for covariance estimation.

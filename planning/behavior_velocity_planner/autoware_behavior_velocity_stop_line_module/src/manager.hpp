@@ -33,7 +33,7 @@ namespace autoware::behavior_velocity_planner
 {
 using StopLineWithLaneId = std::pair<lanelet::ConstLineString3d, int64_t>;
 
-class StopLineModuleManager : public SceneModuleManagerInterface
+class StopLineModuleManager : public SceneModuleManagerInterface<>
 {
 public:
   explicit StopLineModuleManager(rclcpp::Node & node);

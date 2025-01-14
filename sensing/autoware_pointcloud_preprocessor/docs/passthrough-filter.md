@@ -25,8 +25,7 @@ The `passthrough_filter` is a node that removes points on the outside of a range
 
 ### Core Parameters
 
-{{ json_to_markdown("sensing/autoware_pointcloud_preprocessor/schema/passthrough_filter_uint16_node.schema.json
-") }}
+{{ json_to_markdown("sensing/autoware_pointcloud_preprocessor/schema/passthrough_filter_uint16_node.schema.json") }}
 
 ## Assumptions / Known limits
 

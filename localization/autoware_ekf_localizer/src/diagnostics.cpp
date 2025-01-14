@@ -41,6 +41,25 @@ diagnostic_msgs::msg::DiagnosticStatus check_process_activated(const bool is_act
   return stat;
 }
 
+diagnostic_msgs::msg::DiagnosticStatus check_set_initialpose(const bool is_set_initialpose)
+{
+  diagnostic_msgs::msg::DiagnosticStatus stat;
+
+  diagnostic_msgs::msg::KeyValue key_value;
+  key_value.key = "is_set_initialpose";
+  key_value.value = is_set_initialpose ? "True" : "False";
+  stat.values.push_back(key_value);
+
+  stat.level = diagnostic_msgs::msg::DiagnosticStatus::OK;
+  stat.message = "OK";
+  if (!is_set_initialpose) {
+    stat.level = diagnostic_msgs::msg::DiagnosticStatus::WARN;
+    stat.message = "[WARN]initial pose is not set";
+  }
+
+  return stat;
+}
+
 diagnostic_msgs::msg::DiagnosticStatus check_measurement_updated(
   const std::string & measurement_type, const size_t no_update_count,
   const size_t no_update_count_threshold_warn, const size_t no_update_count_threshold_error)

@@ -27,8 +27,8 @@
 namespace autoware::image_projection_based_fusion
 {
 PointPaintingTRT::PointPaintingTRT(
-  const autoware::lidar_centerpoint::NetworkParam & encoder_param,
-  const autoware::lidar_centerpoint::NetworkParam & head_param,
+  const autoware::tensorrt_common::TrtCommonConfig & encoder_param,
+  const autoware::tensorrt_common::TrtCommonConfig & head_param,
   const autoware::lidar_centerpoint::DensificationParam & densification_param,
   const autoware::lidar_centerpoint::CenterPointConfig & config)
 : autoware::lidar_centerpoint::CenterPointTRT(

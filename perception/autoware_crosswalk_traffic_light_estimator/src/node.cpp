@@ -298,6 +298,14 @@ void CrosswalkTrafficLightEstimatorNode::setCrosswalkTrafficSignal(
     if (valid_id2idx_map.count(id)) {
       size_t idx = valid_id2idx_map[id];
       auto signal = msg.traffic_light_groups[idx];
+      if (isInvalidDetectionStatus(signal)) {
+        TrafficSignalElement output_traffic_signal_element;
+        output_traffic_signal_element.color = color;
+        output_traffic_signal_element.shape = TrafficSignalElement::CIRCLE;
+        output_traffic_signal_element.confidence = 1.0;
+        output.traffic_light_groups[idx].elements[0] = output_traffic_signal_element;
+        continue;
+      }
       updateFlashingState(signal);  // check if it is flashing
       // update output msg according to flashing and current state
       output.traffic_light_groups[idx].elements[0].color = updateAndGetColorState(signal);
@@ -312,6 +320,19 @@ void CrosswalkTrafficLightEstimatorNode::setCrosswalkTrafficSignal(
       output.traffic_light_groups.push_back(output_traffic_signal);
     }
   }
+}
+
+bool CrosswalkTrafficLightEstimatorNode::isInvalidDetectionStatus(
+  const TrafficSignal & signal) const
+{
+  // check occlusion, backlight(shape is unknown) and no detection(shape is circle)
+  if (
+    signal.elements.front().color == TrafficSignalElement::UNKNOWN &&
+    signal.elements.front().confidence == 0.0) {
+    return true;
+  }
+
+  return false;
 }
 
 void CrosswalkTrafficLightEstimatorNode::updateFlashingState(const TrafficSignal & signal)

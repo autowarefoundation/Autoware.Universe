@@ -12,5 +12,7 @@
     #UNKNOWN,  CAR,    TRUCK,     BUS,    TRAILER, MOTORBIKE, BICYCLE,      PEDESTRIAN
       [800.0,  800.0,  800.0,    800.0,   800.0,      800.0,    800.0,         800.0]
 
+    validate_max_distance_m: 70.0 # [m]
+
     using_2d_validator: false
     enable_debugger: false

@@ -14,7 +14,7 @@
 #ifndef AUTOWARE__BEHAVIOR_PATH_LANE_CHANGE_MODULE__UTILS__CALCULATION_HPP_
 #define AUTOWARE__BEHAVIOR_PATH_LANE_CHANGE_MODULE__UTILS__CALCULATION_HPP_
 
-#include "autoware/behavior_path_lane_change_module/utils/data_structs.hpp"
+#include "autoware/behavior_path_lane_change_module/structs/data.hpp"
 
 #include <autoware/route_handler/route_handler.hpp>
 
@@ -66,6 +66,9 @@ double calc_stopping_distance(const LCParamPtr & lc_param_ptr);
 double calc_dist_to_last_fit_width(
   const lanelet::ConstLanelets & lanelets, const Pose & src_pose,
   const BehaviorPathPlannerParameters & bpp_param, const double margin = 0.1);
+
+double calc_dist_to_last_fit_width(
+  const CommonDataPtr & common_data_ptr, const PathWithLaneId & path, const double margin = 0.1);
 
 /**
  * @brief Calculates the maximum preparation longitudinal distance for lane change.

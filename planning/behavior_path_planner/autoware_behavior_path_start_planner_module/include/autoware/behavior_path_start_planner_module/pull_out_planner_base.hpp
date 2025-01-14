@@ -40,19 +40,15 @@ class PullOutPlannerBase
 public:
   explicit PullOutPlannerBase(
     rclcpp::Node & node, const StartPlannerParameters & parameters,
-    std::shared_ptr<universe_utils::TimeKeeper> time_keeper)
-  : time_keeper_(time_keeper)
+    std::shared_ptr<universe_utils::TimeKeeper> time_keeper =
+      std::make_shared<universe_utils::TimeKeeper>())
+  : parameters_{parameters},
+    vehicle_info_{autoware::vehicle_info_utils::VehicleInfoUtils(node).getVehicleInfo()},
+    vehicle_footprint_{vehicle_info_.createFootprint()},
+    time_keeper_(time_keeper)
   {
-    vehicle_info_ = autoware::vehicle_info_utils::VehicleInfoUtils(node).getVehicleInfo();
-    vehicle_footprint_ = vehicle_info_.createFootprint();
-    parameters_ = parameters;
   }
   virtual ~PullOutPlannerBase() = default;
-
-  void setPlannerData(const std::shared_ptr<const PlannerData> & planner_data)
-  {
-    planner_data_ = planner_data;
-  }
 
   void setCollisionCheckMargin(const double collision_check_margin)
   {
@@ -60,17 +56,19 @@ public:
   };
   virtual PlannerType getPlannerType() const = 0;
   virtual std::optional<PullOutPath> plan(
-    const Pose & start_pose, const Pose & goal_pose, PlannerDebugData & planner_debug_data) = 0;
+    const Pose & start_pose, const Pose & goal_pose,
+    const std::shared_ptr<const PlannerData> & planner_data,
+    PlannerDebugData & planner_debug_data) = 0;
 
 protected:
   bool isPullOutPathCollided(
     autoware::behavior_path_planner::PullOutPath & pull_out_path,
+    const std::shared_ptr<const PlannerData> & planner_data,
     double collision_check_distance_from_end) const;
 
-  std::shared_ptr<const PlannerData> planner_data_;
+  StartPlannerParameters parameters_;
   autoware::vehicle_info_utils::VehicleInfo vehicle_info_;
   LinearRing2d vehicle_footprint_;
-  StartPlannerParameters parameters_;
   double collision_check_margin_;
 
   mutable std::shared_ptr<universe_utils::TimeKeeper> time_keeper_;

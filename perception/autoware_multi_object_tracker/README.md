@@ -69,7 +69,12 @@ Multiple inputs are pre-defined in the input channel parameters (described below
 
 ### Core Parameters
 
+- Node
+
 {{ json_to_markdown("perception/autoware_multi_object_tracker/schema/multi_object_tracker_node.schema.json") }}
+
+- Association
+
 {{ json_to_markdown("perception/autoware_multi_object_tracker/schema/data_association_matrix.schema.json") }}
 
 #### Simulation parameters

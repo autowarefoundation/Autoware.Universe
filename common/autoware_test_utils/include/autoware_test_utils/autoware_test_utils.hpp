@@ -213,15 +213,21 @@ LaneletMapBin make_map_bin_msg(
   const std::string & absolute_path, const double center_line_resolution = 5.0);
 
 /**
- * @brief Creates a LaneletMapBin message using a predefined Lanelet2 map file.
+ * @brief Creates a LaneletMapBin message using a Lanelet2 map file.
  *
- * This function loads a lanelet2_map.osm from the test_map folder in the
- * autoware_test_utils package, overwrites the centerline with a resolution of 5.0,
+ * This function loads a specified map file from the test_map folder in the
+ * specified package (or autoware_test_utils if no package is specified),
+ * overwrites the centerline with a resolution of 5.0,
  * and converts the map to a LaneletMapBin message.
  *
+ * @param package_name The name of the package containing the map file. If empty, defaults to
+ * "autoware_test_utils".
+ * @param map_filename The name of the map file (e.g. "lanelet2_map.osm")
  * @return A LaneletMapBin message containing the map data.
  */
-LaneletMapBin makeMapBinMsg();
+LaneletMapBin makeMapBinMsg(
+  const std::string & package_name = "autoware_test_utils",
+  const std::string & map_filename = "lanelet2_map.osm");
 
 /**
  * @brief Creates an Odometry message with a specified shift.

@@ -24,7 +24,6 @@
     <remap from="~/input/dynamic_objects" to="/perception/object_recognition/objects"/>
     <remap from="~/input/no_ground_pointcloud" to="/perception/obstacle_segmentation/pointcloud"/>
     <remap from="~/input/traffic_signals" to="/perception/traffic_light_recognition/traffic_signals"/>
-    <remap from="~/input/virtual_traffic_light_states" to="/perception/virtual_traffic_light_states"/>
     <remap from="~/input/occupancy_grid" to="/perception/occupancy_grid_map/map"/>
     <remap from="~/output/trajectory" to="trajectory"/>
     <!-- params -->

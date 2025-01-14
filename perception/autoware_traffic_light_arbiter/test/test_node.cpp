@@ -196,6 +196,9 @@ TEST(TrafficLightArbiterTest, testTrafficSignalOnlyPerceptionMsg)
   };
   test_manager->set_subscriber<TrafficSignalArray>(output_topic, callback);
 
+  // stamp preparation
+  perception_msg.stamp = test_target_node->now();
+
   test_manager->test_pub_msg<LaneletMapBin>(
     test_target_node, input_map_topic, vector_map_msg, rclcpp::QoS(1).transient_local());
   test_manager->test_pub_msg<TrafficSignalArray>(
@@ -228,6 +231,9 @@ TEST(TrafficLightArbiterTest, testTrafficSignalOnlyExternalMsg)
     latest_msg = *msg;
   };
   test_manager->set_subscriber<TrafficSignalArray>(output_topic, callback);
+
+  // stamp preparation
+  external_msg.stamp = test_target_node->now();
 
   test_manager->test_pub_msg<LaneletMapBin>(
     test_target_node, input_map_topic, vector_map_msg, rclcpp::QoS(1).transient_local());
@@ -267,6 +273,10 @@ TEST(TrafficLightArbiterTest, testTrafficSignalBothMsg)
     latest_msg = *msg;
   };
   test_manager->set_subscriber<TrafficSignalArray>(output_topic, callback);
+
+  // stamp preparation
+  external_msg.stamp = test_target_node->now();
+  perception_msg.stamp = test_target_node->now();
 
   test_manager->test_pub_msg<LaneletMapBin>(
     test_target_node, input_map_topic, vector_map_msg, rclcpp::QoS(1).transient_local());

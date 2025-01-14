@@ -88,6 +88,27 @@ std::optional<InterpolatedPathInfo> generateInterpolatedPathInfo(
   return interpolated_path_info;
 }
 
+std::optional<size_t> getFirstPointIntersectsLineByFootprint(
+  const lanelet::ConstLineString2d & line, const InterpolatedPathInfo & interpolated_path_info,
+  const autoware::universe_utils::LinearRing2d & footprint, const double vehicle_length)
+{
+  const auto & path_ip = interpolated_path_info.path;
+  const auto [lane_start, lane_end] = interpolated_path_info.lane_id_interval.value();
+  const size_t vehicle_length_idx = static_cast<size_t>(vehicle_length / interpolated_path_info.ds);
+  const size_t start =
+    static_cast<size_t>(std::max<int>(0, static_cast<int>(lane_start) - vehicle_length_idx));
+  const auto line2d = line.basicLineString();
+  for (auto i = start; i <= lane_end; ++i) {
+    const auto & base_pose = path_ip.points.at(i).point.pose;
+    const auto path_footprint = autoware::universe_utils::transformVector(
+      footprint, autoware::universe_utils::pose2transform(base_pose));
+    if (boost::geometry::intersects(path_footprint, line2d)) {
+      return std::make_optional<size_t>(i);
+    }
+  }
+  return std::nullopt;
+}
+
 std::optional<lanelet::ConstLanelet> getSiblingStraightLanelet(
   const lanelet::Lanelet assigned_lane,
   const lanelet::routing::RoutingGraphConstPtr routing_graph_ptr)
@@ -200,15 +221,9 @@ static lanelet::LineString3d removeConst(lanelet::ConstLineString3d line)
   return lanelet::LineString3d(lanelet::InvalId, pts);
 }
 
-lanelet::ConstLanelets generateBlindSpotLanelets(
-  const std::shared_ptr<autoware::route_handler::RouteHandler> route_handler,
-  const TurnDirection turn_direction, const lanelet::Id lane_id,
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const double ignore_width_from_centerline,
-  const double adjacent_extend_width, const double opposite_adjacent_extend_width)
+std::vector<lanelet::Id> find_lane_ids_upto(
+  const tier4_planning_msgs::msg::PathWithLaneId & path, const lanelet::Id lane_id)
 {
-  const auto lanelet_map_ptr = route_handler->getLaneletMapPtr();
-  const auto routing_graph_ptr = route_handler->getRoutingGraphPtr();
-
   std::vector<int64_t> lane_ids;
   /* get lane ids until intersection */
   for (const auto & point : path.points) {
@@ -216,19 +231,29 @@ lanelet::ConstLanelets generateBlindSpotLanelets(
     for (const auto id : point.lane_ids) {
       if (id == lane_id) {
         found_intersection_lane = true;
-        lane_ids.push_back(lane_id);
         break;
       }
       // make lane_ids unique
-      if (std::find(lane_ids.begin(), lane_ids.end(), lane_id) == lane_ids.end()) {
-        lane_ids.push_back(lane_id);
+      if (std::find(lane_ids.begin(), lane_ids.end(), id) == lane_ids.end()) {
+        lane_ids.push_back(id);
       }
     }
     if (found_intersection_lane) break;
   }
+  return lane_ids;
+}
+
+lanelet::ConstLanelets generateBlindSpotLanelets(
+  const std::shared_ptr<autoware::route_handler::RouteHandler> route_handler,
+  const TurnDirection turn_direction, const std::vector<lanelet::Id> & lane_ids_upto_intersection,
+  const double ignore_width_from_centerline, const double adjacent_extend_width,
+  const double opposite_adjacent_extend_width)
+{
+  const auto lanelet_map_ptr = route_handler->getLaneletMapPtr();
+  const auto routing_graph_ptr = route_handler->getRoutingGraphPtr();
 
   lanelet::ConstLanelets blind_spot_lanelets;
-  for (const auto i : lane_ids) {
+  for (const auto i : lane_ids_upto_intersection) {
     const auto lane = lanelet_map_ptr->laneletLayer.get(i);
     const auto ego_half_lanelet =
       generateHalfLanelet(lane, turn_direction, ignore_width_from_centerline);

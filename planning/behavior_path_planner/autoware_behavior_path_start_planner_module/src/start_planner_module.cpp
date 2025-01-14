@@ -68,30 +68,19 @@ StartPlannerModule::StartPlannerModule(
   vehicle_info_{autoware::vehicle_info_utils::VehicleInfoUtils(node).getVehicleInfo()},
   is_freespace_planner_cb_running_{false}
 {
-  lane_departure_checker_ = std::make_shared<LaneDepartureChecker>(time_keeper_);
-  lane_departure_checker_->setVehicleInfo(vehicle_info_);
-  autoware::lane_departure_checker::Param lane_departure_checker_params{};
-  lane_departure_checker_params.footprint_extra_margin =
-    parameters->lane_departure_check_expansion_margin;
-
-  lane_departure_checker_->setParam(lane_departure_checker_params);
-
   // set enabled planner
   if (parameters_->enable_shift_pull_out) {
-    start_planners_.push_back(
-      std::make_shared<ShiftPullOut>(node, *parameters, lane_departure_checker_, time_keeper_));
+    start_planners_.push_back(std::make_shared<ShiftPullOut>(node, *parameters, time_keeper_));
   }
   if (parameters_->enable_geometric_pull_out) {
-    start_planners_.push_back(
-      std::make_shared<GeometricPullOut>(node, *parameters, lane_departure_checker_, time_keeper_));
+    start_planners_.push_back(std::make_shared<GeometricPullOut>(node, *parameters, time_keeper_));
   }
   if (start_planners_.empty()) {
     RCLCPP_ERROR(getLogger(), "Not found enabled planner");
   }
 
   if (parameters_->enable_freespace_planner) {
-    freespace_planner_ =
-      std::make_unique<FreespacePullOut>(node, *parameters, vehicle_info_, time_keeper_);
+    freespace_planner_ = std::make_unique<FreespacePullOut>(node, *parameters);
     const auto freespace_planner_period_ns = rclcpp::Rate(1.0).period();
     freespace_planner_timer_cb_group_ =
       node.create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
@@ -634,7 +623,7 @@ bool StartPlannerModule::isExecutionReady() const
   }();
 
   if (!is_safe) {
-    stop_pose_ = planner_data_->self_odometry->pose.pose;
+    stop_pose_ = PoseWithDetail(planner_data_->self_odometry->pose.pose);
   }
 
   return is_safe;
@@ -986,17 +975,16 @@ bool StartPlannerModule::findPullOutPath(
   const bool backward_is_unnecessary = backwards_distance < epsilon;
 
   planner->setCollisionCheckMargin(collision_check_margin);
-  planner->setPlannerData(planner_data_);
   PlannerDebugData debug_data{
     planner->getPlannerType(), {}, collision_check_margin, backwards_distance};
 
-  const auto pull_out_path = planner->plan(start_pose_candidate, goal_pose, debug_data);
+  const auto pull_out_path =
+    planner->plan(start_pose_candidate, goal_pose, planner_data_, debug_data);
   debug_data_vector.push_back(debug_data);
   // If no path is found, return false
   if (!pull_out_path) {
     return false;
   }
-
   if (backward_is_unnecessary) {
     updateStatusWithCurrentPath(*pull_out_path, start_pose_candidate, planner->getPlannerType());
     return true;
@@ -1595,9 +1583,9 @@ std::optional<PullOutStatus> StartPlannerModule::planFreespacePath(
 
   for (const auto & p : center_line_path.points) {
     const Pose end_pose = p.point.pose;
-    freespace_planner_->setPlannerData(planner_data);
     PlannerDebugData debug_data{freespace_planner_->getPlannerType(), {}, 0.0, 0.0};
-    auto freespace_path = freespace_planner_->plan(current_pose, end_pose, debug_data);
+    auto freespace_path =
+      freespace_planner_->plan(current_pose, end_pose, planner_data, debug_data);
     DEBUG_PRINT(
       "\nFreespace Pull out path search results\n%s%s", debug_data.header_str().c_str(),
       debug_data.str().c_str());

@@ -89,6 +89,9 @@
             <arg name="object_recognition_tracking_object_merger_data_association_matrix_param_path" value="$(var object_recognition_tracking_object_merger_data_association_matrix_param_path)"/>
             <arg name="object_recognition_tracking_object_merger_node_param_path" value="$(var object_recognition_tracking_object_merger_node_param_path)"/>
             <arg name="use_multi_channel_tracker_merger" value="false"/>
+            <arg name="use_radar_tracking_fusion" value="true"/>
+            <arg name="use_detection_by_tracker" value="true"/>
+            <arg name="use_validator" value="true"/>
           </include>
         </group>
         <!-- prediction module -->

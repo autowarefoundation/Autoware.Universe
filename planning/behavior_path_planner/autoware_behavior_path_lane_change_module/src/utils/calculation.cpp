@@ -58,6 +58,58 @@ double calc_stopping_distance(const LCParamPtr & lc_param_ptr)
 }
 
 double calc_dist_to_last_fit_width(
+  const lanelet::ConstLanelets & lanelets, const lanelet::BasicPolygon2d & lanelet_polygon,
+  const universe_utils::LineString2d & line_string, const Pose & src_pose,
+  const BehaviorPathPlannerParameters & bpp_param, const double margin)
+{
+  const double buffer_distance = 0.5 * bpp_param.vehicle_width + margin;
+  universe_utils::MultiPolygon2d center_line_polygon;
+  namespace strategy = boost::geometry::strategy::buffer;
+  boost::geometry::buffer(
+    line_string, center_line_polygon, strategy::distance_symmetric<double>(buffer_distance),
+    strategy::side_straight(), strategy::join_miter(), strategy::end_flat(),
+    strategy::point_square());
+
+  if (center_line_polygon.empty()) return 0.0;
+
+  std::vector<universe_utils::Point2d> intersection_points;
+  boost::geometry::intersection(lanelet_polygon, center_line_polygon, intersection_points);
+
+  if (intersection_points.empty()) {
+    return utils::getDistanceToEndOfLane(src_pose, lanelets);
+  }
+
+  Pose pose;
+  double distance = std::numeric_limits<double>::max();
+  for (const auto & point : intersection_points) {
+    pose.position.x = boost::geometry::get<0>(point);
+    pose.position.y = boost::geometry::get<1>(point);
+    distance = std::min(distance, utils::getSignedDistance(src_pose, pose, lanelets));
+  }
+
+  return std::max(distance - (bpp_param.base_link2front + margin), 0.0);
+}
+
+double calc_dist_to_last_fit_width(
+  const CommonDataPtr & common_data_ptr, const PathWithLaneId & path, const double margin)
+{
+  const auto & current_lanes = common_data_ptr->lanes_ptr->current;
+  const auto & current_lanes_polygon = common_data_ptr->lanes_polygon_ptr->current;
+  const auto & bpp_param = *common_data_ptr->bpp_param_ptr;
+
+  universe_utils::LineString2d line_string;
+  line_string.reserve(path.points.size() - 1);
+  std::for_each(path.points.begin() + 1, path.points.end(), [&line_string](const auto & point) {
+    const auto & position = point.point.pose.position;
+    boost::geometry::append(line_string, universe_utils::Point2d(position.x, position.y));
+  });
+
+  const auto & src_pose = path.points.front().point.pose;
+  return calc_dist_to_last_fit_width(
+    current_lanes, current_lanes_polygon, line_string, src_pose, bpp_param, margin);
+}
+
+double calc_dist_to_last_fit_width(
   const lanelet::ConstLanelets & lanelets, const Pose & src_pose,
   const BehaviorPathPlannerParameters & bpp_param, const double margin)
 {
@@ -74,32 +126,8 @@ double calc_dist_to_last_fit_width(
     boost::geometry::append(line_string, universe_utils::Point2d(point.x(), point.y()));
   });
 
-  const double buffer_distance = 0.5 * bpp_param.vehicle_width + margin;
-  universe_utils::MultiPolygon2d center_line_polygon;
-  namespace strategy = boost::geometry::strategy::buffer;
-  boost::geometry::buffer(
-    line_string, center_line_polygon, strategy::distance_symmetric<double>(buffer_distance),
-    strategy::side_straight(), strategy::join_miter(), strategy::end_flat(),
-    strategy::point_square());
-
-  if (center_line_polygon.empty()) return 0.0;
-
-  std::vector<universe_utils::Point2d> intersection_points;
-  boost::geometry::intersection(lane_polygon, center_line_polygon, intersection_points);
-
-  if (intersection_points.empty()) {
-    return utils::getDistanceToEndOfLane(src_pose, lanelets);
-  }
-
-  Pose pose;
-  double distance = std::numeric_limits<double>::max();
-  for (const auto & point : intersection_points) {
-    pose.position.x = boost::geometry::get<0>(point);
-    pose.position.y = boost::geometry::get<1>(point);
-    distance = std::min(distance, utils::getSignedDistance(src_pose, pose, lanelets));
-  }
-
-  return std::max(distance - (bpp_param.base_link2front + margin), 0.0);
+  return calc_dist_to_last_fit_width(
+    lanelets, lane_polygon, line_string, src_pose, bpp_param, margin);
 }
 
 double calc_maximum_prepare_length(const CommonDataPtr & common_data_ptr)
@@ -417,7 +445,7 @@ double calc_actual_prepare_duration(
     if (max_acc < eps) {
       return params.max_prepare_duration;
     }
-    return (min_lc_velocity - current_velocity) / max_acc;
+    return std::max((min_lc_velocity - current_velocity) / max_acc, params.min_prepare_duration);
   });
 
   return std::max(params.max_prepare_duration - active_signal_duration, min_prepare_duration);

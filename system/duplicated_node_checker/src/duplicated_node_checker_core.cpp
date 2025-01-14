@@ -67,6 +67,8 @@ void DuplicatedNodeChecker::produceDiagnostics(diagnostic_updater::DiagnosticSta
     }
     for (auto name : identical_names) {
       stat.add("Duplicated Node Name", name);
+      RCLCPP_WARN_THROTTLE(
+        get_logger(), *get_clock(), 5000, "%s node is duplicated.", name.c_str());
     }
   } else {
     msg = "OK";

@@ -24,15 +24,13 @@ namespace autoware::multi_object_tracker
 using Label = autoware_perception_msgs::msg::ObjectClassification;
 
 PedestrianAndBicycleTracker::PedestrianAndBicycleTracker(
-  const rclcpp::Time & time, const autoware_perception_msgs::msg::DetectedObject & object,
-  const geometry_msgs::msg::Transform & self_transform, const size_t channel_size,
-  const uint & channel_index)
+  const rclcpp::Time & time, const types::DynamicObject & object, const size_t channel_size)
 : Tracker(time, object.classification, channel_size),
-  pedestrian_tracker_(time, object, self_transform, channel_size, channel_index),
-  bicycle_tracker_(time, object, self_transform, channel_size, channel_index)
+  pedestrian_tracker_(time, object, channel_size),
+  bicycle_tracker_(time, object, channel_size)
 {
   // initialize existence probability
-  initializeExistenceProbabilities(channel_index, object.existence_probability);
+  initializeExistenceProbabilities(object.channel_index, object.existence_probability);
 }
 
 bool PedestrianAndBicycleTracker::predict(const rclcpp::Time & time)
@@ -43,7 +41,7 @@ bool PedestrianAndBicycleTracker::predict(const rclcpp::Time & time)
 }
 
 bool PedestrianAndBicycleTracker::measure(
-  const autoware_perception_msgs::msg::DetectedObject & object, const rclcpp::Time & time,
+  const types::DynamicObject & object, const rclcpp::Time & time,
   const geometry_msgs::msg::Transform & self_transform)
 {
   pedestrian_tracker_.measure(object, time, self_transform);
@@ -56,7 +54,7 @@ bool PedestrianAndBicycleTracker::measure(
 }
 
 bool PedestrianAndBicycleTracker::getTrackedObject(
-  const rclcpp::Time & time, autoware_perception_msgs::msg::TrackedObject & object) const
+  const rclcpp::Time & time, types::DynamicObject & object) const
 {
   using Label = autoware_perception_msgs::msg::ObjectClassification;
   const uint8_t label = getHighestProbLabel();

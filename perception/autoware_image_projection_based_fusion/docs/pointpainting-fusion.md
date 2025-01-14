@@ -43,7 +43,6 @@ The lidar points are projected onto the output of an image-only 2d object detect
 | `trt_precision`                                  | string       | `fp16`                    | TensorRT inference precision: `fp32` or `fp16`              |
 | `post_process_params.score_threshold`            | double       | `0.4`                     | detected objects with score less than threshold are ignored |
 | `post_process_params.yaw_norm_thresholds`        | list[double] | [0.3, 0.3, 0.3, 0.3, 0.0] | An array of distance threshold values of norm of yaw [rad]. |
-| `post_process_params.iou_nms_target_class_names` | list[string] | ["CAR"]                   | An array of class names to be target in NMS.                |
 | `post_process_params.iou_nms_search_distance_2d` | double       | 10.0                      | A maximum distance value to search the nearest objects.     |
 | `post_process_params.iou_nms_threshold`          | double       | 0.1                       | A threshold value of NMS using IoU score.                   |
 | `post_process_params.has_twist`                  | boolean      | false                     | Indicates whether the model outputs twist value.            |

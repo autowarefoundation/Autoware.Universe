@@ -97,6 +97,8 @@ private:
 
   void removeDuplicateIds(TrafficSignalArray & signal_array) const;
 
+  bool isInvalidDetectionStatus(const TrafficSignal & signal) const;
+
   // Node param
   bool use_last_detect_color_;
   double last_detect_color_hold_time_;

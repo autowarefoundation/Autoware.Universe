@@ -3,8 +3,6 @@
     # -- system --
     traj_resample_dist: 0.1         # path resampling interval [m]
     use_steer_prediction: false     # flag for using steer prediction (do not use steer measurement)
-    admissible_position_error: 5.0  # stop mpc calculation when error is larger than the following value
-    admissible_yaw_error_rad: 1.57  # stop mpc calculation when error is larger than the following value
     use_delayed_initial_state: true # flag to use x0_delayed as initial state for predicted trajectory
 
     # -- path smoothing --

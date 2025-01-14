@@ -79,8 +79,7 @@ void InterconnectedModel::addSubmodel(
   std::tuple<std::string, std::string, std::string> submodel_desc)
 {
   const auto [lib_path, param_path, class_name] = submodel_desc;
-  auto new_model = new SimplePyModel(lib_path, param_path, class_name);
-  submodels.push_back(std::unique_ptr<SimplePyModel>(new_model));
+  submodels.emplace_back(std::make_unique<SimplePyModel>(lib_path, param_path, class_name));
 }
 
 void InterconnectedModel::initState(std::vector<double> new_state)

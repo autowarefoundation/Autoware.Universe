@@ -81,6 +81,93 @@ struct CrcErrors
   unsigned int last_rx_crc_errors{0};  //!< @brief rx_crc_error at the time of the last monitoring
 };
 
+/**
+ * @brief /proc/net/snmp information
+ */
+class NetSnmp
+{
+public:
+  enum class Result {
+    OK,
+    CHECK_WARNING,
+    READ_ERROR,
+  };
+
+  /**
+   * @brief Constructor
+   * @param [in] node node using this class.
+   */
+  explicit NetSnmp(rclcpp::Node * node);
+
+  /**
+   * @brief Constructor
+   */
+  NetSnmp() = delete;
+
+  /**
+   * @brief Copy constructor
+   */
+  NetSnmp(const NetSnmp &) = delete;
+
+  /**
+   * @brief Copy assignment operator
+   */
+  NetSnmp & operator=(const NetSnmp &) = delete;
+
+  /**
+   * @brief Move constructor
+   */
+  NetSnmp(const NetSnmp &&) = delete;
+
+  /**
+   * @brief Move assignment operator
+   */
+  NetSnmp & operator=(const NetSnmp &&) = delete;
+
+  /**
+   * @brief Set parameters for check
+   * @param [in] check_duration the value for check_duration
+   * @param [in] check_count the value for check_count
+   */
+  void set_check_parameters(unsigned int check_duration, unsigned int check_count);
+
+  /**
+   * @brief Find index in `/proc/net/snmp`
+   * @param [in] protocol Protocol name (the first column string). e.g. "Ip:" or "Udp:"
+   * @param [in] metrics Metrics name. e.g. "ReasmFails"
+   */
+  void find_index(const std::string & protocol, const std::string & metrics);
+
+  /**
+   * @brief Check metrics
+   * @param [out] current_value the value read from snmp
+   * @param [out] value_per_unit_time the increase of the value during the duration
+   * @return the result of check
+   */
+  Result check_metrics(uint64_t & current_value, uint64_t & value_per_unit_time);
+
+private:
+  /**
+   * @brief Read value from `/proc/net/snmp`
+   * @param [in] index_row row in `/proc/net/snmp`
+   * @param [in] index_col col in `/proc/net/snmp`
+   * @param [out] output_value retrieved value
+   * @return execution result
+   */
+  bool read_value_from_proc(
+    unsigned int index_row, unsigned int index_col, uint64_t & output_value);
+
+  rclcpp::Logger logger_;           //!< @brief logger gotten from user node
+  unsigned int check_duration_;     //!< @brief check duration
+  unsigned int check_count_;        //!< @brief check count threshold
+  unsigned int index_row_;          //!< @brief index for the target metrics in /proc/net/snmp
+  unsigned int index_col_;          //!< @brief index for the target metrics in /proc/net/snmp
+  uint64_t current_value_;          //!< @brief the value read from snmp
+  uint64_t last_value_;             //!< @brief the value read from snmp at the last monitoring
+  uint64_t value_per_unit_time_;    //!< @brief the increase of the value during the duration
+  std::deque<unsigned int> queue_;  //!< @brief queue that holds the delta of the value
+};
+
 namespace local = boost::asio::local;
 
 class NetMonitor : public rclcpp::Node
@@ -149,6 +236,12 @@ protected:
    * @param [out] status diagnostic message passed directly to diagnostic publish calls
    */
   void check_reassembles_failed(diagnostic_updater::DiagnosticStatusWrapper & status);
+
+  /**
+   * @brief Check UDP buf errors
+   * @param [out] status diagnostic message passed directly to diagnostic publish calls
+   */
+  void check_udp_buf_errors(diagnostic_updater::DiagnosticStatusWrapper & status);
 
   /**
    * @brief Timer callback
@@ -273,18 +366,6 @@ protected:
    */
   void close_connection();
 
-  /**
-   * @brief Get column index of IP packet reassembles failed from `/proc/net/snmp`
-   */
-  void get_reassembles_failed_column_index();
-
-  /**
-   * @brief get IP packet reassembles failed
-   * @param [out] reassembles_failed IP packet reassembles failed
-   * @return execution result
-   */
-  bool get_reassembles_failed(uint64_t & reassembles_failed);
-
   diagnostic_updater::Updater updater_;  //!< @brief Updater class which advertises to /diagnostics
   rclcpp::TimerBase::SharedPtr timer_;   //!< @brief timer to get Network information
 
@@ -307,16 +388,9 @@ protected:
   unsigned int crc_error_check_duration_;        //!< @brief CRC error check duration
   unsigned int crc_error_count_threshold_;       //!< @brief CRC error count threshold
 
-  std::deque<unsigned int>
-    reassembles_failed_queue_;  //!< @brief queue that holds count of IP packet reassembles failed
-  uint64_t last_reassembles_failed_;  //!< @brief IP packet reassembles failed at the time of the
-                                      //!< last monitoring
-  unsigned int
-    reassembles_failed_check_duration_;  //!< @brief IP packet reassembles failed check duration
-  unsigned int
-    reassembles_failed_check_count_;  //!< @brief IP packet reassembles failed check count threshold
-  unsigned int reassembles_failed_column_index_;  //!< @brief column index of IP Reassembles failed
-                                                  //!< in /proc/net/snmp
+  NetSnmp reassembles_failed_info_;  //!< @brief information of IP packet reassembles failed
+  NetSnmp udp_rcvbuf_errors_info_;   //!< @brief information of UDP rcv buf errors
+  NetSnmp udp_sndbuf_errors_info_;   //!< @brief information of UDP snd buf errors
 
   /**
    * @brief Network connection status messages

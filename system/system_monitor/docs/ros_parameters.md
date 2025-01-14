@@ -69,6 +69,8 @@ net_monitor:
 | crc_error_count_threshold         |     int      | n/a  |     1      | Generates warning when count of CRC errors during CRC error check duration reaches a specified value or higher.                                      |
 | reassembles_failed_check_duration |     int      | sec  |     1      | IP packet reassembles failed check duration.                                                                                                         |
 | reassembles_failed_check_count    |     int      | n/a  |     1      | Generates warning when count of IP packet reassembles failed during IP packet reassembles failed check duration reaches a specified value or higher. |
+| udp_buf_errors_check_duration     |     int      | sec  |     1      | UDP buf errors check duration.                                                                                                                       |
+| udp_buf_errors_check_count        |     int      | n/a  |     1      | Generates warning when count of UDP buf errors during udp_buf_errors_check_duration reaches a specified value or higher.                             |
 
 ## <u>NTP Monitor</u>
 

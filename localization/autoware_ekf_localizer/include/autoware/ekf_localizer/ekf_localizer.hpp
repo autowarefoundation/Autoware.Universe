@@ -25,6 +25,8 @@
 #include <autoware/universe_utils/system/stop_watch.hpp>
 #include <rclcpp/rclcpp.hpp>
 
+#include <autoware_internal_debug_msgs/msg/float64_multi_array_stamped.hpp>
+#include <autoware_internal_debug_msgs/msg/float64_stamped.hpp>
 #include <diagnostic_msgs/msg/diagnostic_array.hpp>
 #include <geometry_msgs/msg/pose_array.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
@@ -34,8 +36,6 @@
 #include <geometry_msgs/msg/twist_with_covariance_stamped.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <std_srvs/srv/set_bool.hpp>
-#include <tier4_debug_msgs/msg/float64_multi_array_stamped.hpp>
-#include <tier4_debug_msgs/msg/float64_stamped.hpp>
 
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/utils.h>
@@ -78,7 +78,7 @@ private:
   //!< @brief ekf estimated twist with covariance publisher
   rclcpp::Publisher<geometry_msgs::msg::TwistWithCovarianceStamped>::SharedPtr pub_twist_cov_;
   //!< @brief ekf estimated yaw bias publisher
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float64Stamped>::SharedPtr pub_yaw_bias_;
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float64Stamped>::SharedPtr pub_yaw_bias_;
   //!< @brief ekf estimated yaw bias publisher
   rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub_biased_pose_;
   //!< @brief ekf estimated yaw bias publisher
@@ -86,7 +86,8 @@ private:
   //!< @brief diagnostics publisher
   rclcpp::Publisher<diagnostic_msgs::msg::DiagnosticArray>::SharedPtr pub_diag_;
   //!< @brief processing_time publisher
-  rclcpp::Publisher<tier4_debug_msgs::msg::Float64Stamped>::SharedPtr pub_processing_time_;
+  rclcpp::Publisher<autoware_internal_debug_msgs::msg::Float64Stamped>::SharedPtr
+    pub_processing_time_;
   //!< @brief initial pose subscriber
   rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr sub_initialpose_;
   //!< @brief measurement pose with covariance subscriber
@@ -119,6 +120,7 @@ private:
   double ekf_dt_;
 
   bool is_activated_;
+  bool is_set_initialpose_;
 
   EKFDiagnosticInfo pose_diag_info_;
   EKFDiagnosticInfo twist_diag_info_;

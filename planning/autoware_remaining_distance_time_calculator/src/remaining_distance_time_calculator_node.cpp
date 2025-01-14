@@ -37,6 +37,7 @@ RemainingDistanceTimeCalculatorNode::RemainingDistanceTimeCalculatorNode(
 : Node("remaining_distance_time_calculator", options),
   is_graph_ready_{false},
   has_received_route_{false},
+  has_received_scenario_{false},
   velocity_limit_{99.99},
   remaining_distance_{0.0},
   remaining_time_{0.0}
@@ -57,6 +58,8 @@ RemainingDistanceTimeCalculatorNode::RemainingDistanceTimeCalculatorNode(
   sub_planning_velocity_ = create_subscription<tier4_planning_msgs::msg::VelocityLimit>(
     "/planning/scenario_planning/current_max_velocity", qos_transient_local,
     std::bind(&RemainingDistanceTimeCalculatorNode::on_velocity_limit, this, _1));
+  sub_scenario_ = this->create_subscription<tier4_planning_msgs::msg::Scenario>(
+    "~/input/scenario", 1, std::bind(&RemainingDistanceTimeCalculatorNode::on_scenario, this, _1));
 
   pub_mission_remaining_distance_time_ = create_publisher<MissionRemainingDistanceTime>(
     "~/output/mission_remaining_distance_time",
@@ -100,9 +103,25 @@ void RemainingDistanceTimeCalculatorNode::on_velocity_limit(
   }
 }
 
+void RemainingDistanceTimeCalculatorNode::on_scenario(
+  const tier4_planning_msgs::msg::Scenario::ConstSharedPtr & msg)
+{
+  scenario_ = msg;
+  has_received_scenario_ = true;
+}
+
 void RemainingDistanceTimeCalculatorNode::on_timer()
 {
-  if (is_graph_ready_ && has_received_route_) {
+  if (!has_received_scenario_) {
+    return;
+  }
+
+  // check if the scenario is parking or not
+  if (scenario_->current_scenario == tier4_planning_msgs::msg::Scenario::PARKING) {
+    remaining_distance_ = 0.0;
+    remaining_time_ = 0.0;
+    publish_mission_remaining_distance_time();
+  } else if (is_graph_ready_ && has_received_route_) {
     calculate_remaining_distance();
     calculate_remaining_time();
     publish_mission_remaining_distance_time();

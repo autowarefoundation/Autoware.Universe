@@ -43,8 +43,7 @@ LaneChangeInterface::LaneChangeInterface(
   std::unique_ptr<LaneChangeBase> && module_type)
 : SceneModuleInterface{name, node, rtc_interface_ptr_map, objects_of_interest_marker_interface_ptr_map},  // NOLINT
   parameters_{std::move(parameters)},
-  module_type_{std::move(module_type)},
-  prev_approved_path_{std::make_unique<PathWithLaneId>()}
+  module_type_{std::move(module_type)}
 {
   module_type_->setTimeKeeper(getTimeKeeper());
   logger_ = utils::lane_change::getLogger(module_type_->getModuleTypeStr());
@@ -109,7 +108,6 @@ BehaviorModuleOutput LaneChangeInterface::plan()
 
   auto output = module_type_->generateOutput();
   path_reference_ = std::make_shared<PathWithLaneId>(output.reference_path);
-  *prev_approved_path_ = getPreviousModuleOutput().path;
 
   stop_pose_ = module_type_->getStopPose();
 
@@ -141,9 +139,8 @@ BehaviorModuleOutput LaneChangeInterface::plan()
       const auto force_activated = std::any_of(
         rtc_interface_ptr_map_.begin(), rtc_interface_ptr_map_.end(),
         [&](const auto & rtc) { return rtc.second->isForceActivated(uuid_map_.at(rtc.first)); });
-      const bool safe = force_activated ? false : true;
       updateRTCStatus(
-        path.start_distance_to_path_change, path.finish_distance_to_path_change, safe,
+        path.start_distance_to_path_change, path.finish_distance_to_path_change, !force_activated,
         State::RUNNING);
     }
   }
@@ -155,11 +152,9 @@ BehaviorModuleOutput LaneChangeInterface::plan()
 
 BehaviorModuleOutput LaneChangeInterface::planWaitingApproval()
 {
-  BehaviorModuleOutput out = getPreviousModuleOutput();
+  BehaviorModuleOutput out = module_type_->getTerminalLaneChangePath();
 
-  *prev_approved_path_ = out.path;
-
-  module_type_->insert_stop_point(module_type_->get_current_lanes(), out.path);
+  module_type_->insert_stop_point(module_type_->get_current_lanes(), out.path, true);
   out.turn_signal_info = module_type_->get_current_turn_signal_info();
 
   const auto & lane_change_debug = module_type_->getDebugData();
@@ -224,9 +219,7 @@ bool LaneChangeInterface::canTransitSuccessState()
 
   if (module_type_->specialExpiredCheck() && isWaitingApproval()) {
     log_debug_throttled("Run specialExpiredCheck.");
-    if (isWaitingApproval()) {
-      return true;
-    }
+    return true;
   }
 
   if (module_type_->hasFinishedLaneChange()) {
@@ -241,13 +234,6 @@ bool LaneChangeInterface::canTransitSuccessState()
 
 bool LaneChangeInterface::canTransitFailureState()
 {
-  auto log_debug_throttled = [&](std::string_view message) -> void {
-    RCLCPP_DEBUG(getLogger(), "%s", message.data());
-  };
-
-  updateDebugMarker();
-  log_debug_throttled(__func__);
-
   const auto force_activated = std::any_of(
     rtc_interface_ptr_map_.begin(), rtc_interface_ptr_map_.end(),
     [&](const auto & rtc) { return rtc.second->isForceActivated(uuid_map_.at(rtc.first)); });
@@ -257,121 +243,106 @@ bool LaneChangeInterface::canTransitFailureState()
     return false;
   }
 
-  if (module_type_->isAbortState() && !module_type_->hasFinishedAbort()) {
-    log_debug_throttled("Abort process has on going.");
+  const auto [state, reason] = check_transit_failure();
+
+  interface_debug_.failing_reason = reason;
+  interface_debug_.lc_state = state;
+
+  updateDebugMarker();
+
+  if (state == LaneChangeStates::Cancel) {
+    updateRTCStatus(
+      std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), true,
+      State::FAILED);
+    module_type_->toCancelState();
+    return true;
+  }
+
+  if (state == LaneChangeStates::Abort) {
+    module_type_->toAbortState();
     return false;
+  }
+
+  // Note: Ideally, if it is unsafe, but for some reason, we can't abort or cancel, then we should
+  // stop. Note: This feature is not working properly for now.
+  const auto [is_safe, unsafe_trailing_obj] = post_process_safety_status_;
+  if (!is_safe && module_type_->isRequiredStop(unsafe_trailing_obj)) {
+    module_type_->toStopState();
+    return false;
+  }
+
+  module_type_->toNormalState();
+  return false;
+}
+
+std::pair<LaneChangeStates, std::string_view> LaneChangeInterface::check_transit_failure()
+{
+  if (module_type_->isAbortState()) {
+    if (module_type_->hasFinishedAbort()) {
+      return {LaneChangeStates::Cancel, "Aborted"};
+    }
+    return {LaneChangeStates::Abort, "Aborting"};
   }
 
   if (isWaitingApproval()) {
     if (module_type_->is_near_regulatory_element()) {
-      log_debug_throttled("Ego is close to regulatory element. Cancel lane change");
-      updateRTCStatus(
-        std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), true,
-        State::FAILED);
-      return true;
+      return {LaneChangeStates::Cancel, "CloseToRegElement"};
     }
-    log_debug_throttled("Can't transit to failure state. Module is WAITING_FOR_APPROVAL");
-    return false;
+    return {LaneChangeStates::Normal, "WaitingForApproval"};
   }
 
   if (!module_type_->isValidPath()) {
-    log_debug_throttled("Transit to failure state due not to find valid path");
-    updateRTCStatus(
-      std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), true,
-      State::FAILED);
-    return true;
+    return {LaneChangeStates::Cancel, "InvalidPath"};
   }
 
-  if (module_type_->isAbortState() && module_type_->hasFinishedAbort()) {
-    log_debug_throttled("Abort process has completed.");
-    updateRTCStatus(
-      std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), true,
-      State::FAILED);
-    return true;
-  }
+  const auto is_preparing = module_type_->isEgoOnPreparePhase();
+  const auto can_return_to_current = module_type_->isAbleToReturnCurrentLane();
 
-  if (module_type_->is_near_terminal()) {
-    log_debug_throttled("Unsafe, but ego is approaching terminal. Continue lane change");
-
-    if (module_type_->isRequiredStop(post_process_safety_status_.is_trailing_object)) {
-      log_debug_throttled("Module require stopping");
-    }
-    return false;
-  }
-
-  if (module_type_->isCancelEnabled() && module_type_->isEgoOnPreparePhase()) {
-    if (module_type_->isStoppedAtRedTrafficLight()) {
-      log_debug_throttled("Stopping at traffic light while in prepare phase. Cancel lane change");
-      module_type_->toCancelState();
-      updateRTCStatus(
-        std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), true,
-        State::FAILED);
-      return true;
-    }
-
+  // regardless of safe and unsafe, we want to cancel lane change.
+  if (is_preparing) {
     const auto force_deactivated = std::any_of(
       rtc_interface_ptr_map_.begin(), rtc_interface_ptr_map_.end(),
       [&](const auto & rtc) { return rtc.second->isForceDeactivated(uuid_map_.at(rtc.first)); });
 
-    if (force_deactivated && module_type_->isAbleToReturnCurrentLane()) {
-      log_debug_throttled("Cancel lane change due to force deactivation");
-      module_type_->toCancelState();
-      updateRTCStatus(
-        std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), true,
-        State::FAILED);
-      return true;
-    }
-
-    if (post_process_safety_status_.is_safe) {
-      log_debug_throttled("Can't transit to failure state. Ego is on prepare, and it's safe.");
-      return false;
-    }
-
-    if (module_type_->isAbleToReturnCurrentLane()) {
-      log_debug_throttled("It's possible to return to current lane. Cancel lane change.");
-      updateRTCStatus(
-        std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), true,
-        State::FAILED);
-      return true;
+    if (force_deactivated && can_return_to_current) {
+      return {LaneChangeStates::Cancel, "ForceDeactivation"};
     }
   }
 
   if (post_process_safety_status_.is_safe) {
-    log_debug_throttled("Can't transit to failure state. Ego is lane changing, and it's safe.");
-    return false;
-  }
-
-  if (module_type_->isRequiredStop(post_process_safety_status_.is_trailing_object)) {
-    log_debug_throttled("Module require stopping");
+    return {LaneChangeStates::Normal, "SafeToLaneChange"};
   }
 
   if (!module_type_->isCancelEnabled()) {
-    log_debug_throttled(
-      "Lane change path is unsafe but cancel was not enabled. Continue lane change.");
-    return false;
+    return {LaneChangeStates::Warning, "CancelDisabled"};
+  }
+
+  // We also check if the ego can return to the current lane, as prepare segment might be out of the
+  // lane, for example, during an evasive maneuver around a static object.
+  if (is_preparing && can_return_to_current) {
+    return {LaneChangeStates::Cancel, "SafeToCancel"};
+  }
+
+  if (module_type_->is_near_terminal()) {
+    return {LaneChangeStates::Warning, "TooNearTerminal"};
   }
 
   if (!module_type_->isAbortEnabled()) {
-    log_debug_throttled(
-      "Lane change path is unsafe but abort was not enabled. Continue lane change.");
-    return false;
+    return {LaneChangeStates::Warning, "AbortDisabled"};
   }
 
-  if (!module_type_->isAbleToReturnCurrentLane()) {
-    log_debug_throttled("It's is not possible to return to original lane. Continue lane change.");
-    return false;
+  // To prevent the lane module from having to check rear objects in the current lane, we limit the
+  // abort maneuver to cases where the ego vehicle is still in the current lane.
+  if (!can_return_to_current) {
+    return {LaneChangeStates::Warning, "TooLateToAbort"};
   }
 
   const auto found_abort_path = module_type_->calcAbortPath();
   if (!found_abort_path) {
-    log_debug_throttled(
-      "Lane change path is unsafe but abort path not found. Continue lane change.");
-    return false;
+    return {LaneChangeStates::Warning, "AbortPathNotFound"};
   }
 
-  log_debug_throttled("Lane change path is unsafe. Abort lane change.");
-  module_type_->toAbortState();
-  return false;
+  return {LaneChangeStates::Abort, "SafeToAbort"};
 }
 
 void LaneChangeInterface::updateDebugMarker() const
@@ -381,7 +352,8 @@ void LaneChangeInterface::updateDebugMarker() const
     return;
   }
   using marker_utils::lane_change_markers::createDebugMarkerArray;
-  debug_marker_ = createDebugMarkerArray(module_type_->getDebugData(), module_type_->getEgoPose());
+  debug_marker_ = createDebugMarkerArray(
+    interface_debug_, module_type_->getDebugData(), module_type_->getEgoPose());
 }
 
 MarkerArray LaneChangeInterface::getModuleVirtualWall()

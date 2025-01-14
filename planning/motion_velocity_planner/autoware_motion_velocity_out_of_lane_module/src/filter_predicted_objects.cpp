@@ -106,23 +106,26 @@ autoware_perception_msgs::msg::PredictedObjects filter_predicted_objects(
   const PlannerData & planner_data, const EgoData & ego_data, const PlannerParam & params)
 {
   autoware_perception_msgs::msg::PredictedObjects filtered_objects;
-  filtered_objects.header = planner_data.predicted_objects.header;
-  for (const auto & object : planner_data.predicted_objects.objects) {
+  filtered_objects.header = planner_data.predicted_objects_header;
+  for (const auto & object : planner_data.objects) {
+    const auto & predicted_object = object.predicted_object;
     const auto is_pedestrian =
-      std::find_if(object.classification.begin(), object.classification.end(), [](const auto & c) {
-        return c.label == autoware_perception_msgs::msg::ObjectClassification::PEDESTRIAN;
-      }) != object.classification.end();
+      std::find_if(
+        predicted_object.classification.begin(), predicted_object.classification.end(),
+        [](const auto & c) {
+          return c.label == autoware_perception_msgs::msg::ObjectClassification::PEDESTRIAN;
+        }) != predicted_object.classification.end();
     if (is_pedestrian) continue;
 
     const auto is_coming_from_behind =
       motion_utils::calcSignedArcLength(
         ego_data.trajectory_points, 0UL,
-        object.kinematics.initial_pose_with_covariance.pose.position) < 0.0;
+        predicted_object.kinematics.initial_pose_with_covariance.pose.position) < 0.0;
     if (params.objects_ignore_behind_ego && is_coming_from_behind) {
       continue;
     }
 
-    auto filtered_object = object;
+    auto filtered_object = predicted_object;
     const auto is_invalid_predicted_path = [&](const auto & predicted_path) {
       const auto is_low_confidence = predicted_path.confidence < params.objects_min_confidence;
       const auto no_overlap_path = motion_utils::removeOverlapPoints(predicted_path.path);
@@ -130,10 +133,10 @@ autoware_perception_msgs::msg::PredictedObjects filter_predicted_objects(
       const auto lat_offset_to_current_ego =
         std::abs(motion_utils::calcLateralOffset(no_overlap_path, ego_data.pose.position));
       const auto is_crossing_ego =
-        lat_offset_to_current_ego <=
-        object.shape.dimensions.y / 2.0 + std::max(
-                                            params.left_offset + params.extra_left_offset,
-                                            params.right_offset + params.extra_right_offset);
+        lat_offset_to_current_ego <= predicted_object.shape.dimensions.y / 2.0 +
+                                       std::max(
+                                         params.left_offset + params.extra_left_offset,
+                                         params.right_offset + params.extra_right_offset);
       return is_low_confidence || is_crossing_ego;
     };
     auto & predicted_paths = filtered_object.kinematics.predicted_paths;

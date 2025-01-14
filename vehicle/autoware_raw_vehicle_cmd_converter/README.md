@@ -45,6 +45,12 @@ vgr_coef_c: 0.042
 When `convert_steer_cmd_method: "vgr"` is selected, the node receives the control command from the controller as the desired tire angle and calculates the desired steering angle to output.
 Also, when `convert_actuation_to_steering_status: true`, this node receives the `actuation_status` topic and calculates the steer tire angle from the `steer_wheel_angle` and publishes it.
 
+### Vehicle Adaptor
+
+**Under development**
+A feature that compensates for control commands according to the dynamic characteristics of the vehicle.
+This feature works when `use_vehicle_adaptor: true` is set and requires `control_horizon` to be enabled, so you need to set `enable_control_cmd_horizon_pub: true` in the trajectory_follower node.
+
 ## Input topics
 
 | Name                       | Type                                       | Description                                                                                                                                                                                                                                                                                       |
@@ -53,6 +59,14 @@ Also, when `convert_actuation_to_steering_status: true`, this node receives the 
 | `~/input/steering"`        | autoware_vehicle_msgs::msg::SteeringReport | subscribe only when `convert_actuation_to_steering_status: false`. current status of steering used for steering feed back control                                                                                                                                                                 |
 | `~/input/odometry`         | navigation_msgs::Odometry                  | twist topic in odometry is used.                                                                                                                                                                                                                                                                  |
 | `~/input/actuation_status` | tier4_vehicle_msgs::msg::ActuationStatus   | actuation status is assumed to receive the same type of status as sent to the vehicle side. For example, if throttle/brake pedal/steer_wheel_angle is sent, the same type of status is received. In the case of steer_wheel_angle, it is used to calculate steer_tire_angle and VGR in this node. |
+
+Input topics when vehicle_adaptor is enabled
+
+| Name                           | Type                                            | Description             |
+| ------------------------------ | ----------------------------------------------- | ----------------------- |
+| `~/input/accel`                | geometry_msgs::msg::AccelWithCovarianceStamped; | acceleration status     |
+| `~/input/operation_mode_state` | autoware_adapi_v1_msgs::msg::OperationModeState | operation mode status   |
+| `~/input/control_horizon`      | autoware_control_msgs::msg::ControlHorizon      | control horizon command |
 
 ## Output topics
 

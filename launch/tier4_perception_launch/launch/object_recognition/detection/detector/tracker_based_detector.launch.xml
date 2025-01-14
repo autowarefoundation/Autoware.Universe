@@ -1,11 +1,17 @@
 <?xml version="1.0"?>
 <launch>
+  <!-- External interfaces -->
+  <arg name="input/clusters"/>
+  <arg name="input/tracked_objects"/>
   <arg name="output/objects"/>
+
   <!-- DetectionByTracker -->
   <group>
     <push-ros-namespace namespace="detection_by_tracker"/>
     <include file="$(find-pkg-share autoware_detection_by_tracker)/launch/detection_by_tracker.launch.xml">
       <arg name="detection_by_tracker_param_path" value="$(var object_recognition_detection_detection_by_tracker_param)"/>
+      <arg name="input/initial_objects" value="$(var input/clusters)"/>
+      <arg name="input/tracked_objects" value="$(var input/tracked_objects)"/>
       <arg name="output" value="$(var output/objects)"/>
     </include>
   </group>

@@ -36,7 +36,7 @@
 // turn on only when debugging.
 #define DEBUG_PRINT(enable, n, x)                                  \
   if (enable) {                                                    \
-    const std::string time_msg = n + std::to_string(x);            \
+    const std::string time_msg = (n) + std::to_string(x);          \
     RCLCPP_INFO_STREAM_THROTTLE(logger_, *clock_, 3000, time_msg); \
   }
 

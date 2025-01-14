@@ -2,6 +2,56 @@
 Changelog for package autoware_behavior_velocity_run_out_module
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.40.0 (2024-12-12)
+-------------------
+* Merge branch 'main' into release-0.40.0
+* Revert "chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)"
+  This reverts commit c9f0f2688c57b0f657f5c1f28f036a970682e7f5.
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)
+  * chore(package.xml): bump version to 0.39.0
+  * fix: fix ticket links in CHANGELOG.rst
+  * fix: remove unnecessary diff
+  ---------
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* fix(cpplint): include what you use - planning (`#9570 <https://github.com/autowarefoundation/autoware.universe/issues/9570>`_)
+* feat(behavior_velocity_planner)!: remove stop_reason (`#9452 <https://github.com/autowarefoundation/autoware.universe/issues/9452>`_)
+* 0.39.0
+* update changelog
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* feat(behavior_velocity_planner): update velocity factor initialization for run out module (`#9352 <https://github.com/autowarefoundation/autoware.universe/issues/9352>`_)
+  feat(behavior_velocity_planner): update velocity factor initialization
+  Update the initialization of the velocity factor in the RunOutModule of the behavior_velocity_planner. The velocity factor is now initialized for the RUN_OUT behavior instead of the ROUTE_OBSTACLE behavior.
+* fix(autoware_behavior_velocity_run_out_module): fix clang-diagnostic-unused-lambda-capture (`#9416 <https://github.com/autowarefoundation/autoware.universe/issues/9416>`_)
+  fix: clang-diagnostic-unused-lambda-capture
+* feat(run_out_module): add tests to run out (`#9222 <https://github.com/autowarefoundation/autoware.universe/issues/9222>`_)
+  * WIP add tests for utils and path_utils
+  * add tests for utils and fix test path utils
+  * dynamic obstacles
+  * new tests and add function declarations
+  * add points for test of extractObstaclePointsWithinPolygon
+  * add state machine tests and other tests for dynamic obstacle
+  * remove unused test checks
+  * remove unused tests
+  * remove unwanted semicolons
+  * test
+  * add comments
+  * solve cpp-check limitation issue by removing namespaces
+  ---------
+* fix(run_out): output velocity factor (`#9319 <https://github.com/autowarefoundation/autoware.universe/issues/9319>`_)
+  * fix(run_out): output velocity factor
+  * fix(adapi): subscribe run out velocity factor
+  ---------
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* Contributors: Esteve Fernandez, Fumiya Watanabe, Kyoichi Sugahara, M. Fatih Cırıt, Mamoru Sobue, Ryohsuke Mitsudome, Satoshi OTA, Yutaka Kondo, danielsanchezaran, kobayu858
+
 0.39.0 (2024-11-25)
 -------------------
 * fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)

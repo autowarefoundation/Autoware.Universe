@@ -48,8 +48,8 @@ ControlValidator::ControlValidator(const rclcpp::NodeOptions & options)
 
   pub_markers_ = create_publisher<visualization_msgs::msg::MarkerArray>("~/output/markers", 1);
 
-  pub_processing_time_ =
-    this->create_publisher<tier4_debug_msgs::msg::Float64Stamped>("~/debug/processing_time_ms", 1);
+  pub_processing_time_ = this->create_publisher<autoware_internal_debug_msgs::msg::Float64Stamped>(
+    "~/debug/processing_time_ms", 1);
 
   debug_pose_publisher_ = std::make_shared<ControlValidatorDebugMarkerPublisher>(this);
 
@@ -181,7 +181,7 @@ void ControlValidator::publish_debug_info()
   debug_pose_publisher_->publish();
 
   // Publish ProcessingTime
-  tier4_debug_msgs::msg::Float64Stamped processing_time_msg;
+  autoware_internal_debug_msgs::msg::Float64Stamped processing_time_msg;
   processing_time_msg.stamp = get_clock()->now();
   processing_time_msg.data = stop_watch.toc();
   pub_processing_time_->publish(processing_time_msg);

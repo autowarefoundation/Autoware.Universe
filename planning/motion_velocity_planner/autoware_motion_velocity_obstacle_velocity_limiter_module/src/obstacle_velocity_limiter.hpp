@@ -56,7 +56,7 @@ void calculateSteeringAngles(TrajectoryPoints & trajectory, const double wheel_b
 /// @param[in] min_vel minimum velocity for an object to be masked
 /// @return polygon masks around dynamic objects
 multi_polygon_t createPolygonMasks(
-  const autoware_perception_msgs::msg::PredictedObjects & dynamic_obstacles, const double buffer,
+  const std::vector<PlannerData::Object> & dynamic_obstacles, const double buffer,
   const double min_vel);
 
 /// @brief create footprint polygons from projection lines

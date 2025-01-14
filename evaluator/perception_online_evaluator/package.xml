@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>perception_online_evaluator</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>ROS 2 node for evaluating perception</description>
   <maintainer email="fumiya.watanabe@tier4.jp">Fumiya Watanabe</maintainer>
   <maintainer email="kosuke.takeuchi@tier4.jp">Kosuke Takeuchi</maintainer>

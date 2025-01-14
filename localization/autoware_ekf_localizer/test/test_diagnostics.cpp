@@ -35,6 +35,19 @@ TEST(TestEkfDiagnostics, check_process_activated)
   EXPECT_EQ(stat.level, diagnostic_msgs::msg::DiagnosticStatus::WARN);
 }
 
+TEST(TestEkfDiagnostics, check_set_initialpose)
+{
+  diagnostic_msgs::msg::DiagnosticStatus stat;
+
+  bool is_set_initialpose = true;
+  stat = check_set_initialpose(is_set_initialpose);
+  EXPECT_EQ(stat.level, diagnostic_msgs::msg::DiagnosticStatus::OK);
+
+  is_set_initialpose = false;
+  stat = check_set_initialpose(is_set_initialpose);
+  EXPECT_EQ(stat.level, diagnostic_msgs::msg::DiagnosticStatus::WARN);
+}
+
 TEST(TestEkfDiagnostics, check_measurement_updated)
 {
   diagnostic_msgs::msg::DiagnosticStatus stat;

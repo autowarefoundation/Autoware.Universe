@@ -123,7 +123,7 @@ void TrafficLightModuleManager::launchNewModules(
   }
 }
 
-std::function<bool(const std::shared_ptr<SceneModuleInterface> &)>
+std::function<bool(const std::shared_ptr<SceneModuleInterfaceWithRTC> &)>
 TrafficLightModuleManager::getModuleExpiredFunction(
   const tier4_planning_msgs::msg::PathWithLaneId & path)
 {
@@ -131,7 +131,7 @@ TrafficLightModuleManager::getModuleExpiredFunction(
     path, planner_data_->route_handler_->getLaneletMapPtr(), planner_data_->current_odometry->pose);
 
   return [this, lanelet_id_set](
-           [[maybe_unused]] const std::shared_ptr<SceneModuleInterface> & scene_module) {
+           [[maybe_unused]] const std::shared_ptr<SceneModuleInterfaceWithRTC> & scene_module) {
     for (const auto & id : lanelet_id_set) {
       if (isModuleRegisteredFromExistingAssociatedModule(id)) {
         return false;

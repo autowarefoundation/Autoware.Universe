@@ -34,6 +34,7 @@ if(BUILD_TESTING)
   ament_add_ros_isolated_gtest(${PROJECT_NAME}-test
     test/src/test_freespace_planning_algorithms.cpp
   )
+  set_tests_properties(${PROJECT_NAME}-test PROPERTIES TIMEOUT 120)
   target_link_libraries(${PROJECT_NAME}-test
     ${PROJECT_NAME}
   )

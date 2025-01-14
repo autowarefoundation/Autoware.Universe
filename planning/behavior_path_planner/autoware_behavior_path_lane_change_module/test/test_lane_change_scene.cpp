@@ -14,7 +14,7 @@
 
 #include "autoware/behavior_path_lane_change_module/manager.hpp"
 #include "autoware/behavior_path_lane_change_module/scene.hpp"
-#include "autoware/behavior_path_lane_change_module/utils/data_structs.hpp"
+#include "autoware/behavior_path_lane_change_module/structs/data.hpp"
 #include "autoware/behavior_path_planner_common/data_manager.hpp"
 #include "autoware_test_utils/autoware_test_utils.hpp"
 #include "autoware_test_utils/mock_data_parser.hpp"
@@ -242,15 +242,14 @@ TEST_F(TestNormalLaneChange, testFilteredObjects)
 
   const auto & filtered_objects = get_filtered_objects();
 
-  // Note: There's 1 stopping object in current lanes, however, it was filtered out.
   const auto filtered_size =
     filtered_objects.current_lane.size() + filtered_objects.target_lane_leading.size() +
     filtered_objects.target_lane_trailing.size() + filtered_objects.others.size();
   EXPECT_EQ(filtered_size, planner_data_->dynamic_object->objects.size());
-  EXPECT_EQ(filtered_objects.current_lane.size(), 0);
+  EXPECT_EQ(filtered_objects.current_lane.size(), 1);
   EXPECT_EQ(filtered_objects.target_lane_leading.size(), 2);
   EXPECT_EQ(filtered_objects.target_lane_trailing.size(), 0);
-  EXPECT_EQ(filtered_objects.others.size(), 2);
+  EXPECT_EQ(filtered_objects.others.size(), 1);
 }
 
 TEST_F(TestNormalLaneChange, testGetPathWhenValid)
@@ -258,6 +257,7 @@ TEST_F(TestNormalLaneChange, testGetPathWhenValid)
   constexpr auto is_approved = true;
   ego_pose_ = autoware::test_utils::createPose(1.0, 1.75, 0.0, 0.0, 0.0, 0.0);
   planner_data_->self_odometry = set_odometry(ego_pose_);
+  normal_lane_change_->setData(planner_data_);
   set_previous_approved_path();
   normal_lane_change_->update_lanes(!is_approved);
   normal_lane_change_->update_filtered_objects();

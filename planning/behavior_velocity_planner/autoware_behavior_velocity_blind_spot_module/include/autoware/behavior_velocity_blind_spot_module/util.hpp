@@ -16,6 +16,7 @@
 #define AUTOWARE__BEHAVIOR_VELOCITY_BLIND_SPOT_MODULE__UTIL_HPP_
 
 #include <autoware/route_handler/route_handler.hpp>
+#include <autoware/universe_utils/geometry/geometry.hpp>
 
 #include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
@@ -25,6 +26,7 @@
 #include <memory>
 #include <optional>
 #include <utility>
+#include <vector>
 
 namespace autoware::behavior_velocity_planner
 {
@@ -50,31 +52,49 @@ std::optional<InterpolatedPathInfo> generateInterpolatedPathInfo(
   const lanelet::Id lane_id, const tier4_planning_msgs::msg::PathWithLaneId & input_path,
   rclcpp::Logger logger);
 
+std::optional<size_t> getFirstPointIntersectsLineByFootprint(
+  const lanelet::ConstLineString2d & line, const InterpolatedPathInfo & interpolated_path_info,
+  const autoware::universe_utils::LinearRing2d & footprint, const double vehicle_length);
+
 std::optional<lanelet::ConstLanelet> getSiblingStraightLanelet(
   const lanelet::Lanelet assigned_lane,
   const lanelet::routing::RoutingGraphConstPtr routing_graph_ptr);
 
 /**
- * @brief Create half lanelet
- * @param lanelet input lanelet
- * @return Half lanelet
+ * @brief generate a new lanelet object on the `turn_direction` side of `lanelet` which is offset
+ * from `ignore_width_from_centerline` from the centerline of `lanelet`
+ * @return new lanelet object
  */
 lanelet::ConstLanelet generateHalfLanelet(
   const lanelet::ConstLanelet lanelet, const TurnDirection & turn_direction,
   const double ignore_width_from_centerline);
 
+/**
+ * @brief generate a new lanelet object from the `turn_direction` side neighboring lanelet of the
+ * input `lanelet` by the width of `adjacent_extend_width`
+ * @param new lanelet object
+ */
 lanelet::ConstLanelet generateExtendedAdjacentLanelet(
   const lanelet::ConstLanelet lanelet, const TurnDirection direction,
   const double adjacent_extend_width);
+
+/**
+ * @brief generate a new lanelet object from the `turn_direction` side neighboring opposite lanelet
+ * of the input `lanelet` by the width of `opposite_adjacent_extend_width`
+ * @param new lanelet object
+ */
 lanelet::ConstLanelet generateExtendedOppositeAdjacentLanelet(
   const lanelet::ConstLanelet lanelet, const TurnDirection direction,
   const double opposite_adjacent_extend_width);
 
+std::vector<lanelet::Id> find_lane_ids_upto(
+  const tier4_planning_msgs::msg::PathWithLaneId & path, const lanelet::Id lane_id);
+
 lanelet::ConstLanelets generateBlindSpotLanelets(
   const std::shared_ptr<autoware::route_handler::RouteHandler> route_handler,
-  const TurnDirection turn_direction, const lanelet::Id lane_id,
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const double ignore_width_from_centerline,
-  const double adjacent_extend_width, const double opposite_adjacent_extend_width);
+  const TurnDirection turn_direction, const std::vector<lanelet::Id> & lane_ids_upto_intersection,
+  const double ignore_width_from_centerline, const double adjacent_extend_width,
+  const double opposite_adjacent_extend_width);
 
 /**
  * @brief Make blind spot areas. Narrow area is made from closest path point to stop line index.

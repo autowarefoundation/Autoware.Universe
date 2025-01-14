@@ -19,37 +19,35 @@
 
 #include <autoware/image_projection_based_fusion/utils/utils.hpp>
 
+#include <memory>
 #include <string>
 #include <vector>
+
 namespace autoware::image_projection_based_fusion
 {
-class RoiPointCloudFusionNode
-: public FusionNode<PointCloud2, DetectedObjectWithFeature, DetectedObjectsWithFeature>
+class RoiPointCloudFusionNode : public FusionNode<PointCloudMsgType, RoiMsgType, ClusterMsgType>
 {
+public:
+  explicit RoiPointCloudFusionNode(const rclcpp::NodeOptions & options);
+
 private:
+  rclcpp::Publisher<PointCloudMsgType>::SharedPtr point_pub_ptr_;
+  rclcpp::Publisher<PointCloudMsgType>::SharedPtr cluster_debug_pub_;
+
+  void fuseOnSingleImage(
+    const PointCloudMsgType & input_pointcloud_msg, const Det2dStatus<RoiMsgType> & det2d,
+    const RoiMsgType & input_roi_msg, PointCloudMsgType & output_pointcloud_msg) override;
+
+  void postprocess(const PointCloudMsgType & pointcloud_msg, ClusterMsgType & output_msg) override;
+
+  void publish(const ClusterMsgType & output_msg) override;
+
   int min_cluster_size_{1};
   int max_cluster_size_{20};
   bool fuse_unknown_only_{true};
   double cluster_2d_tolerance_;
 
-  rclcpp::Publisher<DetectedObjectsWithFeature>::SharedPtr pub_objects_ptr_;
-  std::vector<DetectedObjectWithFeature> output_fused_objects_;
-  rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr cluster_debug_pub_;
-
-  /* data */
-public:
-  explicit RoiPointCloudFusionNode(const rclcpp::NodeOptions & options);
-
-protected:
-  void preprocess(sensor_msgs::msg::PointCloud2 & pointcloud_msg) override;
-
-  void postprocess(sensor_msgs::msg::PointCloud2 & pointcloud_msg) override;
-
-  void fuseOnSingleImage(
-    const PointCloud2 & input_pointcloud_msg, const std::size_t image_id,
-    const DetectedObjectsWithFeature & input_roi_msg,
-    const sensor_msgs::msg::CameraInfo & camera_info, PointCloud2 & output_pointcloud_msg) override;
-  bool out_of_scope(const DetectedObjectWithFeature & obj) override;
+  std::vector<ClusterObjType> output_fused_objects_;
 };
 
 }  // namespace autoware::image_projection_based_fusion

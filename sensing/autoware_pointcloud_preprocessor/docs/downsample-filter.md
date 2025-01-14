@@ -48,7 +48,7 @@ These implementations inherit `autoware::pointcloud_preprocessor::Filter` class,
 
 ### Pickup Based Voxel Grid Downsample Filter
 
-{{ json_to_markdown("sensing/autoware_pointcloud_preprocessor/schema/pickup_based_voxel_grid_downsample_filter.schema.json") }}
+{{ json_to_markdown("sensing/autoware_pointcloud_preprocessor/schema/pickup_based_voxel_grid_downsample_filter_node.schema.json") }}
 
 ## Assumptions / Known limits
 

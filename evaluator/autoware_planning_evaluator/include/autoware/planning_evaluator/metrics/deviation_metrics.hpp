@@ -39,6 +39,16 @@ using geometry_msgs::msg::Pose;
 Accumulator<double> calcLateralDeviation(const Trajectory & ref, const Trajectory & traj);
 
 /**
+ * @brief calculate lateral trajectory displacement from the previous trajectory and the trajectory
+ * @param [in] prev previous trajectory
+ * @param [in] traj input trajectory
+ * @param [in] base_pose base pose
+ * @return calculated statistics
+ */
+Accumulator<double> calcLocalLateralTrajectoryDisplacement(
+  const Trajectory & prev, const Trajectory & traj, const Pose & base_pose);
+
+/**
  * @brief calculate yaw deviation of the given trajectory from the reference trajectory
  * @param [in] ref reference trajectory
  * @param [in] traj input trajectory

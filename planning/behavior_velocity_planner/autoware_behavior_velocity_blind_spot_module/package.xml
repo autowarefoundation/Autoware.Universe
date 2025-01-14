@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_behavior_velocity_blind_spot_module</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>The autoware_behavior_velocity_blind_spot_module package</description>
 
   <maintainer email="mamoru.sobue@tier4.jp">Mamoru Sobue</maintainer>
@@ -17,12 +17,15 @@
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
   <buildtool_depend>autoware_cmake</buildtool_depend>
 
+  <depend>autoware_behavior_velocity_planner</depend>
   <depend>autoware_behavior_velocity_planner_common</depend>
+  <depend>autoware_behavior_velocity_rtc_interface</depend>
   <depend>autoware_lanelet2_extension</depend>
   <depend>autoware_motion_utils</depend>
   <depend>autoware_perception_msgs</depend>
   <depend>autoware_planning_msgs</depend>
   <depend>autoware_route_handler</depend>
+  <depend>autoware_test_utils</depend>
   <depend>autoware_universe_utils</depend>
   <depend>geometry_msgs</depend>
   <depend>pluginlib</depend>
@@ -31,6 +34,7 @@
   <depend>tier4_planning_msgs</depend>
   <depend>visualization_msgs</depend>
 
+  <test_depend>ament_cmake_ros</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>autoware_lint_common</test_depend>
 

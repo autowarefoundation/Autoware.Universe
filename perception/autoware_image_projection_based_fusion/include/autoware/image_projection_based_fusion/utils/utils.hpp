@@ -56,7 +56,7 @@ namespace autoware::image_projection_based_fusion
 {
 
 using PointCloud = pcl::PointCloud<pcl::PointXYZ>;
-using PointCloud2 = sensor_msgs::msg::PointCloud2;
+
 struct PointData
 {
   float distance;
@@ -65,10 +65,6 @@ struct PointData
 
 bool checkCameraInfo(const sensor_msgs::msg::CameraInfo & camera_info);
 
-Eigen::Vector2d calcRawImageProjectedPoint(
-  const image_geometry::PinholeCameraModel & pinhole_camera_model, const cv::Point3d & point3d,
-  const bool & unrectify = false);
-
 std::optional<geometry_msgs::msg::TransformStamped> getTransformStamped(
   const tf2_ros::Buffer & tf_buffer, const std::string & target_frame_id,
   const std::string & source_frame_id, const rclcpp::Time & time);
@@ -76,17 +72,17 @@ std::optional<geometry_msgs::msg::TransformStamped> getTransformStamped(
 Eigen::Affine3d transformToEigen(const geometry_msgs::msg::Transform & t);
 
 void closest_cluster(
-  const PointCloud2 & cluster, const double cluster_2d_tolerance, const int min_cluster_size,
-  const pcl::PointXYZ & center, PointCloud2 & out_cluster);
+  const PointCloudMsgType & cluster, const double cluster_2d_tolerance, const int min_cluster_size,
+  const pcl::PointXYZ & center, PointCloudMsgType & out_cluster);
 
 void updateOutputFusedObjects(
-  std::vector<DetectedObjectWithFeature> & output_objs, std::vector<PointCloud2> & clusters,
-  const std::vector<size_t> & clusters_data_size, const PointCloud2 & in_cloud,
+  std::vector<DetectedObjectWithFeature> & output_objs, std::vector<PointCloudMsgType> & clusters,
+  const std::vector<size_t> & clusters_data_size, const PointCloudMsgType & in_cloud,
   const std_msgs::msg::Header & in_roi_header, const tf2_ros::Buffer & tf_buffer,
   const int min_cluster_size, const int max_cluster_size, const float cluster_2d_tolerance,
   std::vector<DetectedObjectWithFeature> & output_fused_objects);
 
-geometry_msgs::msg::Point getCentroid(const sensor_msgs::msg::PointCloud2 & pointcloud);
+geometry_msgs::msg::Point getCentroid(const PointCloudMsgType & pointcloud);
 
 }  // namespace autoware::image_projection_based_fusion
 

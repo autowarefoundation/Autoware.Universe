@@ -18,6 +18,8 @@
 #include <autoware/cuda_utils/cuda_unique_ptr.hpp>
 #include <autoware/cuda_utils/stream_unique_ptr.hpp>
 #include <autoware/tensorrt_common/tensorrt_common.hpp>
+#include <autoware/tensorrt_common/tensorrt_conv_calib.hpp>
+#include <autoware/tensorrt_common/utils.hpp>
 #include <autoware/tensorrt_yolox/preprocess.hpp>
 #include <opencv2/opencv.hpp>
 
@@ -44,6 +46,13 @@ struct Object
 
 using ObjectArray = std::vector<Object>;
 using ObjectArrays = std::vector<ObjectArray>;
+using autoware::tensorrt_common::CalibrationConfig;
+using autoware::tensorrt_common::NetworkIOPtr;
+using autoware::tensorrt_common::ProfileDimsPtr;
+using autoware::tensorrt_common::Profiler;
+using autoware::tensorrt_common::TrtCommon;
+using autoware::tensorrt_common::TrtCommonConfig;
+using autoware::tensorrt_common::TrtConvCalib;
 
 struct GridAndStride
 {
@@ -70,31 +79,26 @@ class TrtYoloX
 public:
   /**
    * @brief Construct TrtYoloX.
-   * @param[in] mode_path ONNX model_path
-   * @param[in] precision precision for inference
+   * @param[in] trt_config base trt common configuration
    * @param[in] num_class classifier-ed num
    * @param[in] score_threshold threshold for detection
    * @param[in] nms_threshold threshold for NMS
-   * @param[in] build_config configuration including precision, calibration method, DLA, remaining
-   * fp16 for first layer,  remaining fp16 for last layer and profiler for builder
    * @param[in] use_gpu_preprocess whether use cuda gpu for preprocessing
-   * @param[in] calibration_image_list_file path for calibration files (only require for
+   * @param[in] gpu_id GPU id for inference
+   * @param[in] calibration_image_list_path path for calibration files (only require for
    * quantization)
    * @param[in] norm_factor scaling factor for preprocess
    * @param[in] cache_dir unused variable
-   * @param[in] batch_config configuration for batched execution
-   * @param[in] max_workspace_size maximum workspace for building TensorRT engine
+   * @param[in] color_map_path path for colormap for masks
+   * @param[in] calib_config calibration configuration
    */
   TrtYoloX(
-    const std::string & model_path, const std::string & precision, const int num_class = 8,
-    const float score_threshold = 0.3, const float nms_threshold = 0.7,
-    const autoware::tensorrt_common::BuildConfig build_config =
-      autoware::tensorrt_common::BuildConfig(),
-    const bool use_gpu_preprocess = false, const uint8_t gpu_id = 0,
-    std::string calibration_image_list_file = std::string(), const double norm_factor = 1.0,
-    [[maybe_unused]] const std::string & cache_dir = "",
-    const autoware::tensorrt_common::BatchConfig & batch_config = {1, 1, 1},
-    const size_t max_workspace_size = (1 << 30), const std::string & color_map_path = "");
+    TrtCommonConfig & trt_config, const int num_class = 8, const float score_threshold = 0.3,
+    const float nms_threshold = 0.7, const bool use_gpu_preprocess = false,
+    const uint8_t gpu_id = 0, std::string calibration_image_list_path = std::string(),
+    const double norm_factor = 1.0, [[maybe_unused]] const std::string & cache_dir = "",
+    const std::string & color_map_path = "",
+    const CalibrationConfig & calib_config = CalibrationConfig());
   /**
    * @brief Deconstruct TrtYoloX
    */
@@ -167,6 +171,12 @@ public:
     const std::vector<tensorrt_yolox::Colormap> & colormap, const cv::Mat & mask,
     cv::Mat & colorized_mask);
   inline std::vector<Colormap> getColorMap() { return sematic_color_map_; }
+
+  /**
+   * @brief get batch size
+   * @return batch size
+   */
+  [[nodiscard]] int getBatchSize() const;
 
 private:
   /**
@@ -266,7 +276,7 @@ private:
    */
   cv::Mat getMaskImageGpu(float * d_prob, nvinfer1::Dims dims, int out_w, int out_h, int b);
 
-  std::unique_ptr<autoware::tensorrt_common::TrtCommon> trt_common_;
+  std::unique_ptr<TrtConvCalib> trt_common_;
 
   std::vector<float> input_h_;
   CudaUniquePtr<float[]> input_d_;
@@ -288,7 +298,7 @@ private:
   int num_class_;
   float score_threshold_;
   float nms_threshold_;
-  int batch_size_;
+  int32_t batch_size_;
   CudaUniquePtrHost<float[]> out_prob_h_;
 
   // flag whether preprocess are performed on GPU

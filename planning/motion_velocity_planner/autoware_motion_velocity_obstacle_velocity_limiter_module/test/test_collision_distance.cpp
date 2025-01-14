@@ -15,6 +15,7 @@
 #include "../src/distance.hpp"
 #include "../src/obstacles.hpp"
 #include "../src/types.hpp"
+#include "autoware/motion_velocity_planner_common/planner_data.hpp"
 #include "autoware/universe_utils/geometry/geometry.hpp"
 
 #include <autoware_perception_msgs/msg/predicted_object.hpp>
@@ -27,6 +28,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <vector>
 
 const auto point_in_polygon = [](const auto x, const auto y, const auto & polygon) {
   return std::find_if(polygon.outer().begin(), polygon.outer().end(), [=](const auto & pt) {
@@ -387,11 +389,12 @@ TEST(TestCollisionDistance, arcDistance)
 
 TEST(TestCollisionDistance, createObjPolygons)
 {
+  using autoware::motion_velocity_planner::PlannerData;
   using autoware::motion_velocity_planner::obstacle_velocity_limiter::createObjectPolygons;
   using autoware_perception_msgs::msg::PredictedObject;
   using autoware_perception_msgs::msg::PredictedObjects;
 
-  PredictedObjects objects;
+  std::vector<PlannerData::Object> objects;
 
   auto polygons = createObjectPolygons(objects, 0.0, 0.0);
   EXPECT_TRUE(polygons.empty());
@@ -404,7 +407,7 @@ TEST(TestCollisionDistance, createObjPolygons)
   object1.kinematics.initial_twist_with_covariance.twist.linear.x = 0.0;
   object1.shape.dimensions.x = 1.0;
   object1.shape.dimensions.y = 1.0;
-  objects.objects.push_back(object1);
+  objects.push_back(PlannerData::Object(object1));
 
   polygons = createObjectPolygons(objects, 0.0, 1.0);
   EXPECT_TRUE(polygons.empty());
@@ -431,7 +434,7 @@ TEST(TestCollisionDistance, createObjPolygons)
   object2.kinematics.initial_twist_with_covariance.twist.linear.x = 2.0;
   object2.shape.dimensions.x = 2.0;
   object2.shape.dimensions.y = 1.0;
-  objects.objects.push_back(object2);
+  objects.push_back(PlannerData::Object(object2));
 
   polygons = createObjectPolygons(objects, 0.0, 2.0);
   ASSERT_EQ(polygons.size(), 1ul);

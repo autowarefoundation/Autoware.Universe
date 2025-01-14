@@ -21,6 +21,7 @@
 
 TEST(TestSmoothStop, calculate_stopping_acceleration)
 {
+  using ::autoware::motion::control::pid_longitudinal_controller::DebugValues;
   using ::autoware::motion::control::pid_longitudinal_controller::SmoothStop;
   using rclcpp::Duration;
   using rclcpp::Time;
@@ -40,9 +41,10 @@ TEST(TestSmoothStop, calculate_stopping_acceleration)
   const double delay_time = 0.17;
 
   SmoothStop ss;
+  DebugValues debug_values;
 
   // Cannot calculate before setting parameters
-  EXPECT_THROW(ss.calculate(0.0, 0.0, 0.0, {}, delay_time), std::runtime_error);
+  EXPECT_THROW(ss.calculate(0.0, 0.0, 0.0, {}, delay_time, debug_values), std::runtime_error);
 
   ss.setParams(
     max_strong_acc, min_strong_acc, weak_acc, weak_stop_acc, strong_stop_acc, max_fast_vel,
@@ -62,34 +64,45 @@ TEST(TestSmoothStop, calculate_stopping_acceleration)
   stop_dist = strong_stop_dist - 0.1;
   current_vel = 2.0;
   ss.init(vel_in_target, stop_dist);
-  accel = ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time);
+  accel =
+    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time, debug_values);
   EXPECT_EQ(accel, strong_stop_acc);
+  EXPECT_EQ(debug_values.getValue(DebugValues::TYPE::SMOOTH_STOP_MODE), 3);
 
   // weak stop when the stop distance is below the threshold (but not bellow the strong_stop_dist)
   stop_dist = weak_stop_dist - 0.1;
   current_vel = 2.0;
   ss.init(vel_in_target, stop_dist);
-  accel = ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time);
+  accel =
+    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time, debug_values);
   EXPECT_EQ(accel, weak_stop_acc);
+  EXPECT_EQ(debug_values.getValue(DebugValues::TYPE::SMOOTH_STOP_MODE), 2);
 
   // if not running, weak accel for 0.5 seconds after the previous init or previous weak_acc
   rclcpp::Rate rate_quart(1.0 / 0.25);
   rclcpp::Rate rate_half(1.0 / 0.5);
   stop_dist = 0.0;
   current_vel = 0.0;
-  EXPECT_EQ(
-    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time), weak_acc);
+  accel =
+    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time, debug_values);
+  EXPECT_EQ(accel, weak_acc);
+  EXPECT_EQ(debug_values.getValue(DebugValues::TYPE::SMOOTH_STOP_MODE), 1);
   rate_quart.sleep();
-  EXPECT_EQ(
-    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time), weak_acc);
+  accel =
+    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time, debug_values);
+  EXPECT_EQ(accel, weak_acc);
+  EXPECT_EQ(debug_values.getValue(DebugValues::TYPE::SMOOTH_STOP_MODE), 1);
   rate_half.sleep();
-  EXPECT_NE(
-    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time), weak_acc);
+  accel =
+    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time, debug_values);
+  EXPECT_NE(accel, weak_acc);
+  EXPECT_NE(debug_values.getValue(DebugValues::TYPE::SMOOTH_STOP_MODE), 1);
 
   // strong stop when the car is not running (and is at least 0.5seconds after initialization)
-  EXPECT_EQ(
-    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time),
-    strong_stop_acc);
+  accel =
+    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time, debug_values);
+  EXPECT_EQ(accel, strong_stop_acc);
+  EXPECT_EQ(debug_values.getValue(DebugValues::TYPE::SMOOTH_STOP_MODE), 3);
 
   // accel between min/max_strong_acc when the car is running:
   // not predicted to exceed the stop line and is predicted to stop after weak_stop_time + delay
@@ -97,19 +110,22 @@ TEST(TestSmoothStop, calculate_stopping_acceleration)
   current_vel = 1.0;
   vel_in_target = 1.0;
   ss.init(vel_in_target, stop_dist);
-  EXPECT_EQ(
-    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time),
-    max_strong_acc);
+  accel =
+    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time, debug_values);
+  EXPECT_EQ(accel, max_strong_acc);
+  EXPECT_EQ(debug_values.getValue(DebugValues::TYPE::SMOOTH_STOP_MODE), 0);
 
   vel_in_target = std::sqrt(2.0);
   ss.init(vel_in_target, stop_dist);
-  EXPECT_EQ(
-    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time),
-    min_strong_acc);
+  accel =
+    ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time, debug_values);
+  EXPECT_EQ(accel, min_strong_acc);
+  EXPECT_EQ(debug_values.getValue(DebugValues::TYPE::SMOOTH_STOP_MODE), 0);
 
   for (double vel_in_target = 1.1; vel_in_target < std::sqrt(2.0); vel_in_target += 0.1) {
     ss.init(vel_in_target, stop_dist);
-    accel = ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time);
+    accel =
+      ss.calculate(stop_dist, current_vel, current_acc, velocity_history, delay_time, debug_values);
     EXPECT_GT(accel, min_strong_acc);
     EXPECT_LT(accel, max_strong_acc);
   }

@@ -12,6 +12,7 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
   src/utils/calculation.cpp
   src/utils/markers.cpp
   src/utils/utils.cpp
+  src/utils/path.cpp
 )
 
 if(BUILD_TESTING)

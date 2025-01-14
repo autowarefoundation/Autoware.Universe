@@ -121,8 +121,7 @@ std::pair<double, double> getPairsTerminalVelocityAndAccel(
 
 std::optional<PathWithLaneId> generateFeasibleStopPath(
   PathWithLaneId & current_path, std::shared_ptr<const PlannerData> planner_data,
-  std::optional<geometry_msgs::msg::Pose> & stop_pose, const double maximum_deceleration,
-  const double maximum_jerk)
+  PoseWithDetailOpt & stop_pose, const double maximum_deceleration, const double maximum_jerk)
 {
   if (current_path.points.empty()) {
     return {};
@@ -146,7 +145,7 @@ std::optional<PathWithLaneId> generateFeasibleStopPath(
     return {};
   }
 
-  stop_pose = current_path.points.at(*stop_idx).point.pose;
+  stop_pose = PoseWithDetail(current_path.points.at(*stop_idx).point.pose);
 
   return current_path;
 }

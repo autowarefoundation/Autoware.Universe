@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#include "autoware/behavior_path_lane_change_module/utils/data_structs.hpp"
+#include "autoware/behavior_path_lane_change_module/structs/data.hpp"
 
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware/universe_utils/math/unit_conversion.hpp>

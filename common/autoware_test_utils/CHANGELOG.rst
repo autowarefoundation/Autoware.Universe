@@ -2,6 +2,58 @@
 Changelog for package autoware_test_utils
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.40.0 (2024-12-12)
+-------------------
+* Merge branch 'main' into release-0.40.0
+* Revert "chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)"
+  This reverts commit c9f0f2688c57b0f657f5c1f28f036a970682e7f5.
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* chore(package.xml): bump version to 0.39.0 (`#9587 <https://github.com/autowarefoundation/autoware.universe/issues/9587>`_)
+  * chore(package.xml): bump version to 0.39.0
+  * fix: fix ticket links in CHANGELOG.rst
+  * fix: remove unnecessary diff
+  ---------
+  Co-authored-by: Yutaka Kondo <yutaka.kondo@youtalk.jp>
+* fix: fix ticket links in CHANGELOG.rst (`#9588 <https://github.com/autowarefoundation/autoware.universe/issues/9588>`_)
+* ci(pre-commit): update cpplint to 2.0.0 (`#9557 <https://github.com/autowarefoundation/autoware.universe/issues/9557>`_)
+* fix(cpplint): include what you use - common (`#9564 <https://github.com/autowarefoundation/autoware.universe/issues/9564>`_)
+* refactor(test_utils): return parser as optional (`#9391 <https://github.com/autowarefoundation/autoware.universe/issues/9391>`_)
+  Co-authored-by: Mamoru Sobue <hilo.soblin@gmail.com>
+* 0.39.0
+* update changelog
+* Merge commit '6a1ddbd08bd' into release-0.39.0
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* feat(autoware_test_utils): add parser for LaneletRoute, TrackedObject (`#9317 <https://github.com/autowarefoundation/autoware.universe/issues/9317>`_)
+* test(autoware_test_utils): add TrafficLight to map, fix launcher (`#9318 <https://github.com/autowarefoundation/autoware.universe/issues/9318>`_)
+* test(bpp_common): add tests for the static drivable area (`#9324 <https://github.com/autowarefoundation/autoware.universe/issues/9324>`_)
+* test(costmap_generator): unit test implementation for costmap generator (`#9149 <https://github.com/autowarefoundation/autoware.universe/issues/9149>`_)
+  * modify costmap generator directory structure
+  * rename class CostmapGenerator to CostmapGeneratorNode
+  * unit test for object_map_utils
+  * catch error from lookupTransform
+  * use polling subscriber in costmap generator node
+  * add test for costmap generator node
+  * add test for isActive()
+  * revert unnecessary changes
+  * remove commented out line
+  * minor fix
+  * Update planning/autoware_costmap_generator/src/costmap_generator.cpp
+  Co-authored-by: Kosuke Takeuchi <kosuke.tnp@gmail.com>
+  ---------
+  Co-authored-by: Kosuke Takeuchi <kosuke.tnp@gmail.com>
+* fix: fix ticket links to point to https://github.com/autowarefoundation/autoware.universe (`#9304 <https://github.com/autowarefoundation/autoware.universe/issues/9304>`_)
+* feat(autoware_test_utils): use sample_vehicle/sample_sensor_kit (`#9290 <https://github.com/autowarefoundation/autoware.universe/issues/9290>`_)
+* chore(package.xml): bump version to 0.38.0 (`#9266 <https://github.com/autowarefoundation/autoware.universe/issues/9266>`_) (`#9284 <https://github.com/autowarefoundation/autoware.universe/issues/9284>`_)
+  * unify package.xml version to 0.37.0
+  * remove system_monitor/CHANGELOG.rst
+  * add changelog
+  * 0.38.0
+  ---------
+* feat(autoware_test_utils): add general topic dumper (`#9207 <https://github.com/autowarefoundation/autoware.universe/issues/9207>`_)
+* refactor(component_interface_utils): prefix package and namespace with autoware (`#9092 <https://github.com/autowarefoundation/autoware.universe/issues/9092>`_)
+* feat(autoware_test_utils): add traffic light msgs parser (`#9177 <https://github.com/autowarefoundation/autoware.universe/issues/9177>`_)
+* Contributors: Esteve Fernandez, Fumiya Watanabe, M. Fatih Cırıt, Mamoru Sobue, Maxime CLEMENT, Ryohsuke Mitsudome, Yutaka Kondo, Zulfaqar Azmi, awf-autoware-bot[bot], mkquda
+
 0.39.0 (2024-11-25)
 -------------------
 * Merge commit '6a1ddbd08bd' into release-0.39.0

@@ -29,7 +29,7 @@
 
 namespace autoware::behavior_velocity_planner
 {
-class NoDrivableLaneModuleManager : public SceneModuleManagerInterface
+class NoDrivableLaneModuleManager : public SceneModuleManagerInterface<>
 {
 public:
   explicit NoDrivableLaneModuleManager(rclcpp::Node & node);

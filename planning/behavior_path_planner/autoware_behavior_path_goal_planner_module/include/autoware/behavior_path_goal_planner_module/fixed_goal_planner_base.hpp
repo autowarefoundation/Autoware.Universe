@@ -38,15 +38,15 @@ public:
   virtual BehaviorModuleOutput plan(
     const std::shared_ptr<const PlannerData> & planner_data) const = 0;
 
-  void setPreviousModuleOutput(const BehaviorModuleOutput & previous_module_output)
+  void setPreviousModuleOutput(const BehaviorModuleOutput & upstream_module_output)
   {
-    previous_module_output_ = previous_module_output;
+    upstream_module_output_ = upstream_module_output;
   }
 
-  BehaviorModuleOutput getPreviousModuleOutput() const { return previous_module_output_; }
+  BehaviorModuleOutput getPreviousModuleOutput() const { return upstream_module_output_; }
 
 protected:
-  BehaviorModuleOutput previous_module_output_;
+  BehaviorModuleOutput upstream_module_output_;
 };
 }  // namespace autoware::behavior_path_planner
 

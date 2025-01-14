@@ -115,7 +115,7 @@ void AbstractPlanningAlgorithm::setMap(const nav_msgs::msg::OccupancyGrid & cost
   std::vector<bool> is_obstacle_table;
   is_obstacle_table.resize(nb_of_cells);
   for (uint32_t i = 0; i < nb_of_cells; ++i) {
-    const int cost = costmap_.data[i];
+    const int cost = costmap_.data[i];  // NOLINT
     if (cost < 0 || planner_common_param_.obstacle_threshold <= cost) {
       is_obstacle_table[i] = true;
     }

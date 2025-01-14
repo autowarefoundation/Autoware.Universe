@@ -75,6 +75,10 @@ The obstacles not in front of the ego will be ignored.
 
 ![determine_cruise_stop_slow_down](./media/determine_cruise_stop_slow_down.drawio.svg)
 
+The behavior determination flowchart is shown below.
+
+![behavior_determination_flowchart](./media/behavior_determination_flowchart.drawio.svg)
+
 #### Determine cruise vehicles
 
 The obstacles meeting the following condition are determined as obstacles for cruising.
@@ -240,6 +244,10 @@ $$
 | `w_{acc}`         | `output_ratio_during_accel`             |
 | `lpf(val)`        | apply low-pass filter to `val`          |
 | `pid(val)`        | apply pid to `val`                      |
+
+#### Block diagram
+
+![cruise_planning_block_diagram](./media/cruise_planning_block_diagram.drawio.svg)
 
 ### Slow down planning
 

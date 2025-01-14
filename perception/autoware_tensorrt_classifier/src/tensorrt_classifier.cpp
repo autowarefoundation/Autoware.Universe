@@ -100,11 +100,9 @@ std::vector<std::string> loadImageList(const std::string & filename, const std::
 namespace autoware::tensorrt_classifier
 {
 TrtClassifier::TrtClassifier(
-  const std::string & model_path, const std::string & precision,
-  const autoware::tensorrt_common::BatchConfig & batch_config, const std::vector<float> & mean,
-  const std::vector<float> & std, const size_t max_workspace_size,
-  const std::string & calibration_image_list_path,
-  autoware::tensorrt_common::BuildConfig build_config, const bool cuda)
+  const std::string & model_path, const std::string & precision, const std::vector<float> & mean,
+  const std::vector<float> & std, const std::string & calibration_image_list_path,
+  const tensorrt_common::CalibrationConfig & calib_config, const bool cuda)
 {
   src_width_ = -1;
   src_height_ = -1;
@@ -114,22 +112,36 @@ TrtClassifier::TrtClassifier(
   for (size_t i = 0; i < inv_std_.size(); i++) {
     inv_std_[i] = 1.0 / inv_std_[i];
   }
-  batch_size_ = batch_config[2];
+  trt_common_ = std::make_unique<tensorrt_common::TrtConvCalib>(
+    tensorrt_common::TrtCommonConfig(model_path, precision));
+
+  const auto network_input_dims = trt_common_->getTensorShape(0);
+  batch_size_ = network_input_dims.d[0];
+  const auto input_channel = network_input_dims.d[1];
+  const auto input_height = network_input_dims.d[2];
+  const auto input_width = network_input_dims.d[3];
+
+  std::vector<autoware::tensorrt_common::ProfileDims> profile_dims{
+    autoware::tensorrt_common::ProfileDims(
+      0, {4, {batch_size_, input_channel, input_height, input_width}},
+      {4, {batch_size_, input_channel, input_height, input_width}},
+      {4, {batch_size_, input_channel, input_height, input_width}})};
+  auto profile_dims_ptr =
+    std::make_unique<std::vector<autoware::tensorrt_common::ProfileDims>>(profile_dims);
+
   if (precision == "int8") {
-    int max_batch_size = batch_config[2];
-    nvinfer1::Dims input_dims = autoware::tensorrt_common::get_input_dims(model_path);
     std::vector<std::string> calibration_images;
     if (calibration_image_list_path != "") {
       calibration_images = loadImageList(calibration_image_list_path, "");
     }
     autoware::tensorrt_classifier::ImageStream stream(
-      max_batch_size, input_dims, calibration_images);
+      batch_size_, network_input_dims, calibration_images);
     fs::path calibration_table{model_path};
     std::string ext = "";
-    if (build_config.calib_type_str == "Entropy") {
+    if (calib_config.calib_type_str == "Entropy") {
       ext = "EntropyV2-";
     } else if (
-      build_config.calib_type_str == "Legacy" || build_config.calib_type_str == "Percentile") {
+      calib_config.calib_type_str == "Legacy" || calib_config.calib_type_str == "Percentile") {
       ext = "Legacy-";
     } else {
       ext = "MinMax-";
@@ -141,11 +153,11 @@ TrtClassifier::TrtClassifier(
     histogram_table.replace_extension(ext);
 
     std::unique_ptr<nvinfer1::IInt8Calibrator> calibrator;
-    if (build_config.calib_type_str == "Entropy") {
+    if (calib_config.calib_type_str == "Entropy") {
       calibrator.reset(new autoware::tensorrt_classifier::Int8EntropyCalibrator(
         stream, calibration_table, mean_, std_));
     } else if (
-      build_config.calib_type_str == "Legacy" || build_config.calib_type_str == "Percentile") {
+      calib_config.calib_type_str == "Legacy" || calib_config.calib_type_str == "Percentile") {
       double quantile = 0.999999;
       double cutoff = 0.999999;
       calibrator.reset(new autoware::tensorrt_classifier::Int8LegacyCalibrator(
@@ -154,29 +166,27 @@ TrtClassifier::TrtClassifier(
       calibrator.reset(new autoware::tensorrt_classifier::Int8MinMaxCalibrator(
         stream, calibration_table, mean_, std_));
     }
-    trt_common_ = std::make_unique<autoware::tensorrt_common::TrtCommon>(
-      model_path, precision, std::move(calibrator), batch_config, max_workspace_size, build_config);
+    if (!trt_common_->setupWithCalibrator(
+          std::move(calibrator), calib_config, std::move((profile_dims_ptr)))) {
+      throw std::runtime_error("Failed to setup TensorRT engine with calibrator");
+    }
   } else {
-    trt_common_ = std::make_unique<autoware::tensorrt_common::TrtCommon>(
-      model_path, precision, nullptr, batch_config, max_workspace_size, build_config);
-  }
-  trt_common_->setup();
-
-  if (!trt_common_->isInitialized()) {
-    return;
+    if (!trt_common_->setup(std::move(profile_dims_ptr))) {
+      throw std::runtime_error("Failed to setup TensorRT engine");
+    }
   }
 
   // GPU memory allocation
-  const auto input_dims = trt_common_->getBindingDimensions(0);
+  const auto input_dims = trt_common_->getTensorShape(0);
   const auto input_size =
     std::accumulate(input_dims.d + 1, input_dims.d + input_dims.nbDims, 1, std::multiplies<int>());
 
-  const auto output_dims = trt_common_->getBindingDimensions(1);
-  input_d_ = autoware::cuda_utils::make_unique<float[]>(batch_config[2] * input_size);
+  const auto output_dims = trt_common_->getTensorShape(1);
+  input_d_ = autoware::cuda_utils::make_unique<float[]>(batch_size_ * input_size);
   out_elem_num_ = std::accumulate(
     output_dims.d + 1, output_dims.d + output_dims.nbDims, 1, std::multiplies<int>());
-  out_elem_num_ = out_elem_num_ * batch_config[2];
-  out_elem_num_per_batch_ = static_cast<int>(out_elem_num_ / batch_config[2]);
+  out_elem_num_ = out_elem_num_ * batch_size_;
+  out_elem_num_per_batch_ = static_cast<int>(out_elem_num_ / batch_size_);
   out_prob_d_ = autoware::cuda_utils::make_unique<float[]>(out_elem_num_);
   out_prob_h_ =
     autoware::cuda_utils::make_unique_host<float[]>(out_elem_num_, cudaHostAllocPortable);
@@ -193,9 +203,15 @@ TrtClassifier::TrtClassifier(
 
 TrtClassifier::~TrtClassifier()
 {
-  if (m_cuda) {
-    if (h_img_) CHECK_CUDA_ERROR(cudaFreeHost(h_img_));
-    if (d_img_) CHECK_CUDA_ERROR(cudaFree(d_img_));
+  try {
+    if (m_cuda) {
+      if (h_img_) CHECK_CUDA_ERROR(cudaFreeHost(h_img_));
+      if (d_img_) CHECK_CUDA_ERROR(cudaFree(d_img_));
+    }
+  } catch (const std::exception & e) {
+    std::cerr << "Exception in TrtClassifier destructor: " << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unknown exception in TrtClassifier destructor" << std::endl;
   }
 }
 
@@ -218,7 +234,7 @@ void TrtClassifier::initPreprocessBuffer(int width, int height)
   src_width_ = width;
   src_height_ = height;
   if (m_cuda) {
-    auto input_dims = trt_common_->getBindingDimensions(0);
+    auto input_dims = trt_common_->getTensorShape(0);
     bool const hasRuntimeDim = std::any_of(
       input_dims.d, input_dims.d + input_dims.nbDims,
       [](int32_t input_dim) { return input_dim == -1; });
@@ -226,7 +242,9 @@ void TrtClassifier::initPreprocessBuffer(int width, int height)
       input_dims.d[0] = batch_size_;
     }
     if (!h_img_) {
-      trt_common_->setBindingDimensions(0, input_dims);
+      if (!trt_common_->setInputShape(0, input_dims)) {
+        return;
+      }
     }
     if (!h_img_) {
       CHECK_CUDA_ERROR(cudaMallocHost(
@@ -239,10 +257,15 @@ void TrtClassifier::initPreprocessBuffer(int width, int height)
   }
 }
 
+int TrtClassifier::getBatchSize() const
+{
+  return batch_size_;
+}
+
 void TrtClassifier::preprocessGpu(const std::vector<cv::Mat> & images)
 {
   const auto batch_size = images.size();
-  auto input_dims = trt_common_->getBindingDimensions(0);
+  auto input_dims = trt_common_->getTensorShape(0);
 
   input_dims.d[0] = batch_size;
   for (const auto & image : images) {
@@ -266,7 +289,9 @@ void TrtClassifier::preprocessGpu(const std::vector<cv::Mat> & images)
     src_height_ = height;
   }
   if (!h_img_) {
-    trt_common_->setBindingDimensions(0, input_dims);
+    if (!trt_common_->setInputShape(0, input_dims)) {
+      return;
+    }
   }
   const float input_height = static_cast<float>(input_dims.d[2]);
   const float input_width = static_cast<float>(input_dims.d[3]);
@@ -299,9 +324,11 @@ void TrtClassifier::preprocessGpu(const std::vector<cv::Mat> & images)
 void TrtClassifier::preprocess_opt(const std::vector<cv::Mat> & images)
 {
   int batch_size = static_cast<int>(images.size());
-  auto input_dims = trt_common_->getBindingDimensions(0);
+  auto input_dims = trt_common_->getTensorShape(0);
   input_dims.d[0] = batch_size;
-  trt_common_->setBindingDimensions(0, input_dims);
+  if (!trt_common_->setInputShape(0, input_dims)) {
+    return;
+  }
   const float input_chan = static_cast<float>(input_dims.d[1]);
   const float input_height = static_cast<float>(input_dims.d[2]);
   const float input_width = static_cast<float>(input_dims.d[3]);
@@ -348,9 +375,6 @@ bool TrtClassifier::doInference(
   const std::vector<cv::Mat> & images, std::vector<int> & results,
   std::vector<float> & probabilities)
 {
-  if (!trt_common_->isInitialized()) {
-    return false;
-  }
   preprocess_opt(images);
 
   return feedforwardAndDecode(images, results, probabilities);
@@ -363,7 +387,10 @@ bool TrtClassifier::feedforwardAndDecode(
   results.clear();
   probabilities.clear();
   std::vector<void *> buffers = {input_d_.get(), out_prob_d_.get()};
-  trt_common_->enqueueV2(buffers.data(), *stream_, nullptr);
+  if (!trt_common_->setTensorsAddresses(buffers)) {
+    return false;
+  }
+  trt_common_->enqueueV3(*stream_);
 
   int batch_size = static_cast<int>(images.size());
 

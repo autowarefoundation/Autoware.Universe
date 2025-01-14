@@ -19,6 +19,7 @@
 #include <autoware/cuda_utils/cuda_unique_ptr.hpp>
 #include <autoware/cuda_utils/stream_unique_ptr.hpp>
 #include <autoware/tensorrt_common/tensorrt_common.hpp>
+#include <autoware/tensorrt_common/tensorrt_conv_calib.hpp>
 #include <opencv2/opencv.hpp>
 
 #include <memory>
@@ -44,22 +45,18 @@ public:
    * @param[in] mode_path ONNX model_path
    * @param[in] precision precision for inference
    * @param[in] calibration_images path for calibration files (only require for quantization)
-   * @param[in] batch_config configuration for batched execution
-   * @param[in] max_workspace_size maximum workspace for building TensorRT engine
    * @param[in] mean mean for preprocess
    * @param[in] std std for preprocess
-   * @param[in] buildConfig configuration including precision, calibration method, dla, remaining
-   * fp16 for first layer,  remaining fp16 for last layer and profiler for builder
+   * @param[in] calib_config calibration configuration
    * @param[in] cuda whether use cuda gpu for preprocessing
    */
   TrtClassifier(
     const std::string & model_path, const std::string & precision,
-    const autoware::tensorrt_common::BatchConfig & batch_config = {1, 1, 1},
     const std::vector<float> & mean = {123.675, 116.28, 103.53},
     const std::vector<float> & std = {58.395, 57.12, 57.375},
-    const size_t max_workspace_size = (1 << 30), const std::string & calibration_images = "",
-    const autoware::tensorrt_common::BuildConfig build_config =
-      autoware::tensorrt_common::BuildConfig("MinMax", -1, false, false, false, 0.0),
+    const std::string & calibration_images = "",
+    const tensorrt_common::CalibrationConfig & calibration_config =
+      tensorrt_common::CalibrationConfig("MinMax", false, false, 0.0),
     const bool cuda = false);
   /**
    * @brief Deconstruct TrtClassifier
@@ -84,6 +81,12 @@ public:
    */
   void initPreprocessBuffer(int width, int height);
 
+  /**
+   * @brief get batch size
+   * @return batch size
+   */
+  [[nodiscard]] int getBatchSize() const;
+
 private:
   /**
    * @brief run preprocess including resizing, letterbox, BGR2RGB, NHWC2NCHW and toFloat on CPU
@@ -102,7 +105,7 @@ private:
     const std::vector<cv::Mat> & images, std::vector<int> & results,
     std::vector<float> & probabilities);
 
-  std::unique_ptr<autoware::tensorrt_common::TrtCommon> trt_common_;
+  std::unique_ptr<tensorrt_common::TrtConvCalib> trt_common_;
 
   std::vector<float> input_h_;
   CudaUniquePtr<float[]> input_d_;

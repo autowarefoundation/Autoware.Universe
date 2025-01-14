@@ -126,52 +126,24 @@ LaneDepartureCheckerNode::LaneDepartureCheckerNode(const rclcpp::NodeOptions & o
 : Node("lane_departure_checker_node", options)
 {
   using std::placeholders::_1;
-
-  // Enable feature
-  node_param_.will_out_of_lane_checker = declare_parameter<bool>("will_out_of_lane_checker");
-  node_param_.out_of_lane_checker = declare_parameter<bool>("out_of_lane_checker");
-  node_param_.boundary_departure_checker = declare_parameter<bool>("boundary_departure_checker");
-
-  // Node Parameter
-  node_param_.update_rate = declare_parameter<double>("update_rate");
-  node_param_.visualize_lanelet = declare_parameter<bool>("visualize_lanelet");
-  node_param_.include_right_lanes = declare_parameter<bool>("include_right_lanes");
-  node_param_.include_left_lanes = declare_parameter<bool>("include_left_lanes");
-  node_param_.include_opposite_lanes = declare_parameter<bool>("include_opposite_lanes");
-  node_param_.include_conflicting_lanes = declare_parameter<bool>("include_conflicting_lanes");
-
-  // Boundary_departure_checker
-  node_param_.boundary_types_to_detect =
-    declare_parameter<std::vector<std::string>>("boundary_types_to_detect");
+  node_param_ = NodeParam::init(*this);
+  param_ = Param::init(*this);
 
   // Vehicle Info
   const auto vehicle_info = autoware::vehicle_info_utils::VehicleInfoUtils(*this).getVehicleInfo();
   vehicle_length_m_ = vehicle_info.vehicle_length_m;
-
-  // Core Parameter
-  param_.footprint_margin_scale = declare_parameter<double>("footprint_margin_scale");
-  param_.footprint_extra_margin = declare_parameter<double>("footprint_extra_margin");
-  param_.resample_interval = declare_parameter<double>("resample_interval");
-  param_.max_deceleration = declare_parameter<double>("max_deceleration");
-  param_.delay_time = declare_parameter<double>("delay_time");
-  param_.max_lateral_deviation = declare_parameter<double>("max_lateral_deviation");
-  param_.max_longitudinal_deviation = declare_parameter<double>("max_longitudinal_deviation");
-  param_.max_yaw_deviation_deg = declare_parameter<double>("max_yaw_deviation_deg");
-  param_.ego_nearest_dist_threshold = declare_parameter<double>("ego_nearest_dist_threshold");
-  param_.ego_nearest_yaw_threshold = declare_parameter<double>("ego_nearest_yaw_threshold");
-  param_.min_braking_distance = declare_parameter<double>("min_braking_distance");
 
   // Parameter Callback
   set_param_res_ =
     add_on_set_parameters_callback(std::bind(&LaneDepartureCheckerNode::onParameter, this, _1));
 
   // Core
-  lane_departure_checker_ = std::make_unique<LaneDepartureChecker>();
-  lane_departure_checker_->setParam(param_, vehicle_info);
+  lane_departure_checker_ = std::make_unique<LaneDepartureChecker>(param_, vehicle_info);
 
   // Publisher
   processing_time_publisher_ =
-    this->create_publisher<tier4_debug_msgs::msg::Float64Stamped>("~/debug/processing_time_ms", 1);
+    this->create_publisher<autoware_internal_debug_msgs::msg::Float64Stamped>(
+      "~/debug/processing_time_ms", 1);
   // Nothing
 
   // Diagnostic Updater
@@ -342,10 +314,11 @@ void LaneDepartureCheckerNode::onTimer()
 
   {
     const auto & deviation = output_.trajectory_deviation;
-    debug_publisher_.publish<tier4_debug_msgs::msg::Float64Stamped>(
+    debug_publisher_.publish<autoware_internal_debug_msgs::msg::Float64Stamped>(
       "deviation/lateral", deviation.lateral);
-    debug_publisher_.publish<tier4_debug_msgs::msg::Float64Stamped>("deviation/yaw", deviation.yaw);
-    debug_publisher_.publish<tier4_debug_msgs::msg::Float64Stamped>(
+    debug_publisher_.publish<autoware_internal_debug_msgs::msg::Float64Stamped>(
+      "deviation/yaw", deviation.yaw);
+    debug_publisher_.publish<autoware_internal_debug_msgs::msg::Float64Stamped>(
       "deviation/yaw_deg", rad2deg(deviation.yaw));
   }
   processing_time_map["Node: publishTrajectoryDeviation"] = stop_watch.toc(true);
@@ -361,7 +334,7 @@ void LaneDepartureCheckerNode::onTimer()
 
   processing_time_map["Total"] = stop_watch.toc("Total");
   processing_diag_publisher_.publish(processing_time_map);
-  tier4_debug_msgs::msg::Float64Stamped processing_time_msg;
+  autoware_internal_debug_msgs::msg::Float64Stamped processing_time_msg;
   processing_time_msg.stamp = get_clock()->now();
   processing_time_msg.data = processing_time_map["Total"];
   processing_time_publisher_->publish(processing_time_msg);

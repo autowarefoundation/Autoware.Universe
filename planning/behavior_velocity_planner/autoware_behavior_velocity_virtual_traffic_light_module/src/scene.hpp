@@ -17,12 +17,16 @@
 
 #include <autoware/behavior_velocity_planner_common/scene_module_interface.hpp>
 #include <autoware/universe_utils/geometry/boost_geometry.hpp>
+#include <autoware/universe_utils/ros/polling_subscriber.hpp>
 #include <autoware_lanelet2_extension/regulatory_elements/virtual_traffic_light.hpp>
 #include <autoware_lanelet2_extension/utility/query.hpp>
 #include <autoware_vehicle_info_utils/vehicle_info.hpp>
 #include <nlohmann/json.hpp>
 #include <rclcpp/clock.hpp>
 #include <rclcpp/logger.hpp>
+
+#include <tier4_v2x_msgs/msg/infrastructure_command_array.hpp>
+#include <tier4_v2x_msgs/msg/virtual_traffic_light_state_array.hpp>
 
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_routing/RoutingGraph.h>
@@ -84,13 +88,23 @@ public:
   visualization_msgs::msg::MarkerArray createDebugMarkerArray() override;
   autoware::motion_utils::VirtualWalls createVirtualWalls() override;
 
+  std::optional<tier4_v2x_msgs::msg::InfrastructureCommand> getInfrastructureCommand() const;
+  void setInfrastructureCommand(
+    const std::optional<tier4_v2x_msgs::msg::InfrastructureCommand> & command);
+
+  void setVirtualTrafficLightStates(
+    const tier4_v2x_msgs::msg::VirtualTrafficLightStateArray::ConstSharedPtr
+      virtual_traffic_light_states);
+
 private:
   const int64_t lane_id_;
   const lanelet::autoware::VirtualTrafficLight & reg_elem_;
   const lanelet::ConstLanelet lane_;
   const PlannerParam planner_param_;
+  tier4_v2x_msgs::msg::VirtualTrafficLightStateArray::ConstSharedPtr virtual_traffic_light_states_;
   State state_{State::NONE};
   tier4_v2x_msgs::msg::InfrastructureCommand command_;
+  std::optional<tier4_v2x_msgs::msg::InfrastructureCommand> infrastructure_command_;
   MapData map_data_;
   ModuleData module_data_;
 

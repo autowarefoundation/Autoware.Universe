@@ -35,7 +35,7 @@ namespace autoware::behavior_velocity_planner
 {
 using tier4_planning_msgs::msg::PathWithLaneId;
 
-class WalkwayModuleManager : public SceneModuleManagerInterface
+class WalkwayModuleManager : public SceneModuleManagerInterface<>
 {
 public:
   explicit WalkwayModuleManager(rclcpp::Node & node);

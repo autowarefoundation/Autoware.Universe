@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_trajectory_follower_base</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>Library for generating lateral and longitudinal controls following a trajectory</description>
 
   <!-- mpc longitudinal controller -->
@@ -21,6 +21,7 @@
 
   <depend>autoware_adapi_v1_msgs</depend>
   <depend>autoware_control_msgs</depend>
+  <depend>autoware_internal_debug_msgs</depend>
   <depend>autoware_interpolation</depend>
   <depend>autoware_motion_utils</depend>
   <depend>autoware_osqp_interface</depend>
@@ -37,7 +38,6 @@
   <depend>std_msgs</depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
-  <depend>tier4_debug_msgs</depend>
 
   <test_depend>ament_cmake_ros</test_depend>
   <test_depend>ament_lint_auto</test_depend>

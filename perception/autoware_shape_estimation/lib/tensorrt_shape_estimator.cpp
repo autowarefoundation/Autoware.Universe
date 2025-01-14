@@ -29,47 +29,41 @@
 namespace autoware::shape_estimation
 {
 TrtShapeEstimator::TrtShapeEstimator(
-  const std::string & model_path, const std::string & precision,
-  const autoware::tensorrt_common::BatchConfig & batch_config, const size_t max_workspace_size,
-  const autoware::tensorrt_common::BuildConfig build_config)
+  const std::string & model_path, const std::string & precision, const int batch_size)
 {
   trt_common_ = std::make_unique<autoware::tensorrt_common::TrtCommon>(
-    model_path, precision, nullptr, batch_config, max_workspace_size, build_config);
+    tensorrt_common::TrtCommonConfig(model_path, precision));
+  batch_size_ = batch_size;
 
-  trt_common_->setup();
-
-  if (!trt_common_->isInitialized()) {
-    std::cerr << "Failed to initialize TensorRT" << std::endl;
-    return;
+  if (!trt_common_->setup()) {
+    throw std::runtime_error("Failed to setup TensorRT");
   }
 
-  const auto pc_input_dims = trt_common_->getBindingDimensions(0);
+  const auto pc_input_dims = trt_common_->getTensorShape(0);
   const auto pc_input_size = std::accumulate(
     pc_input_dims.d + 1, pc_input_dims.d + pc_input_dims.nbDims, 1, std::multiplies<int>());
-  input_pc_d_ = autoware::cuda_utils::make_unique<float[]>(pc_input_size * batch_config[2]);
-  batch_size_ = batch_config[2];
-  const auto one_hot_input_dims = trt_common_->getBindingDimensions(1);
+  input_pc_d_ = autoware::cuda_utils::make_unique<float[]>(pc_input_size * batch_size_);
+  const auto one_hot_input_dims = trt_common_->getTensorShape(1);
   const auto one_hot_input_size = std::accumulate(
     one_hot_input_dims.d + 1, one_hot_input_dims.d + one_hot_input_dims.nbDims, 1,
     std::multiplies<int>());
-  input_one_hot_d_ =
-    autoware::cuda_utils::make_unique<float[]>(one_hot_input_size * batch_config[2]);
+  input_one_hot_d_ = autoware::cuda_utils::make_unique<float[]>(one_hot_input_size * batch_size_);
 
-  const auto stage1_center_out_dims = trt_common_->getBindingDimensions(2);
+  const auto stage1_center_out_dims = trt_common_->getTensorShape(2);
   out_s1center_elem_num_ = std::accumulate(
     stage1_center_out_dims.d + 1, stage1_center_out_dims.d + stage1_center_out_dims.nbDims, 1,
     std::multiplies<int>());
-  out_s1center_elem_num_ = out_s1center_elem_num_ * batch_config[2];
-  out_s1center_elem_num_per_batch_ = static_cast<size_t>(out_s1center_elem_num_ / batch_config[2]);
+  out_s1center_elem_num_ = out_s1center_elem_num_ * batch_size_;
+  out_s1center_elem_num_per_batch_ = static_cast<size_t>(out_s1center_elem_num_ / batch_size_);
   out_s1center_prob_d_ = autoware::cuda_utils::make_unique<float[]>(out_s1center_elem_num_);
   out_s1center_prob_h_ =
     autoware::cuda_utils::make_unique_host<float[]>(out_s1center_elem_num_, cudaHostAllocPortable);
 
-  const auto pred_out_dims = trt_common_->getBindingDimensions(3);
+  const auto pred_out_dims = trt_common_->getTensorShape(3);
   out_pred_elem_num_ = std::accumulate(
     pred_out_dims.d + 1, pred_out_dims.d + pred_out_dims.nbDims, 1, std::multiplies<int>());
-  out_pred_elem_num_ = out_pred_elem_num_ * batch_config[2];
-  out_pred_elem_num_per_batch_ = static_cast<size_t>(out_pred_elem_num_ / batch_config[2]);
+  out_pred_elem_num_ = out_pred_elem_num_ * batch_size_;
+  out_pred_elem_num_per_batch_ = static_cast<size_t>(out_pred_elem_num_ / batch_size_);
   out_pred_prob_d_ = autoware::cuda_utils::make_unique<float[]>(out_pred_elem_num_);
   out_pred_prob_h_ =
     autoware::cuda_utils::make_unique_host<float[]>(out_pred_elem_num_, cudaHostAllocPortable);
@@ -83,10 +77,6 @@ TrtShapeEstimator::TrtShapeEstimator(
 bool TrtShapeEstimator::inference(
   const DetectedObjectsWithFeature & input, DetectedObjectsWithFeature & output)
 {
-  if (!trt_common_->isInitialized()) {
-    return false;
-  }
-
   bool result = false;
 
   for (size_t i = 0; i < input.feature_objects.size(); i += batch_size_) {
@@ -111,13 +101,13 @@ bool TrtShapeEstimator::inference(
 
 void TrtShapeEstimator::preprocess(const DetectedObjectsWithFeature & input)
 {
-  auto input_dims_pc = trt_common_->getBindingDimensions(0);
+  auto input_dims_pc = trt_common_->getTensorShape(0);
   int batch_size = static_cast<int>(input.feature_objects.size());
 
   const auto input_chan = static_cast<float>(input_dims_pc.d[1]);
   const auto input_pc_size = static_cast<float>(input_dims_pc.d[2]);
 
-  auto input_dims_one_hot = trt_common_->getBindingDimensions(1);
+  auto input_dims_one_hot = trt_common_->getTensorShape(1);
   const auto input_one_hot_size = static_cast<float>(input_dims_one_hot.d[1]);
 
   int volume_pc = batch_size * input_chan * input_pc_size;
@@ -229,7 +219,10 @@ bool TrtShapeEstimator::feed_forward_and_decode(
   int batch_size = static_cast<int>(input.feature_objects.size());
   std::vector<void *> buffers = {
     input_pc_d_.get(), input_one_hot_d_.get(), out_s1center_prob_d_.get(), out_pred_prob_d_.get()};
-  trt_common_->enqueueV2(buffers.data(), *stream_, nullptr);
+  if (!trt_common_->setTensorsAddresses(buffers)) {
+    return false;
+  }
+  trt_common_->enqueueV3(*stream_);
 
   CHECK_CUDA_ERROR(cudaMemcpyAsync(
     out_s1center_prob_h_.get(), out_s1center_prob_d_.get(), out_s1center_elem_num_ * sizeof(float),

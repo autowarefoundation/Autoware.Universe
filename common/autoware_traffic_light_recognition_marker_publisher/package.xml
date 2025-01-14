@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>autoware_traffic_light_recognition_marker_publisher</name>
-  <version>0.39.0</version>
+  <version>0.40.0</version>
   <description>The autoware_traffic_light_recognition_marker_publisher package</description>
   <maintainer email="tomoya.kimura@tier4.jp">Tomoya Kimura</maintainer>
   <maintainer email="takeshi.miura@tier4.jp">Takeshi Miura</maintainer>

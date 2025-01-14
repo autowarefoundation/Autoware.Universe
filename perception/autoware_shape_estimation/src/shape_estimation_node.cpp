@@ -63,9 +63,8 @@ ShapeEstimationNode::ShapeEstimationNode(const rclcpp::NodeOptions & node_option
     min_points_ = declare_parameter<int>("model_params.minimum_points");
     std::string precision = declare_parameter<std::string>("model_params.precision");
     int batch_size = declare_parameter<int>("model_params.batch_size");
-    autoware::tensorrt_common::BatchConfig batch_config{batch_size, batch_size, batch_size};
     tensorrt_shape_estimator_ =
-      std::make_unique<TrtShapeEstimator>(model_path, precision, batch_config);
+      std::make_unique<TrtShapeEstimator>(model_path, precision, batch_size);
     if (this->declare_parameter("model_params.build_only", false)) {
       RCLCPP_INFO(this->get_logger(), "TensorRT engine is built and shutdown node.");
       rclcpp::shutdown();

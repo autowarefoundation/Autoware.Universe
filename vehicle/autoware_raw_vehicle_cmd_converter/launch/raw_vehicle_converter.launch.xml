@@ -2,8 +2,11 @@
 <launch>
   <arg name="input_control_cmd" default="/control/command/control_cmd"/>
   <arg name="input_odometry" default="/localization/kinematic_state"/>
+  <arg name="input_accel" default="/localization/acceleration"/>
   <arg name="input_steering" default="/vehicle/status/steering_status"/>
   <arg name="input_actuation_status" default="/vehicle/status/actuation_status"/>
+  <arg name="input_operation_mode_state" default="/system/operation_mode/state"/>
+  <arg name="input_control_horizon" default="/control/trajectory_follower/controller_node_exe/debug/control_cmd_horizon"/>
   <arg name="output_actuation_cmd" default="/control/command/actuation_cmd"/>
   <arg name="output_steering_status" default="/vehicle/status/steering_status"/>
   <!-- Parameter -->
@@ -13,8 +16,11 @@
     <param from="$(var config_file)" allow_substs="true"/>
     <remap from="~/input/control_cmd" to="$(var input_control_cmd)"/>
     <remap from="~/input/odometry" to="$(var input_odometry)"/>
+    <remap from="~/input/accel" to="$(var input_accel)"/>
     <remap from="~/input/steering" to="$(var input_steering)"/>
     <remap from="~/input/actuation_status" to="$(var input_actuation_status)"/>
+    <remap from="~/input/operation_mode_state" to="$(var input_operation_mode_state)"/>
+    <remap from="~/input/control_horizon" to="$(var input_control_horizon)"/>
     <remap from="~/output/actuation_cmd" to="$(var output_actuation_cmd)"/>
     <remap from="~/output/steering_status" to="$(var output_steering_status)"/>
   </node>

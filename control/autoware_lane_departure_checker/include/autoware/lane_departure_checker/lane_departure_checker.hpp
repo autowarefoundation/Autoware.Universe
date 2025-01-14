@@ -15,15 +15,12 @@
 #ifndef AUTOWARE__LANE_DEPARTURE_CHECKER__LANE_DEPARTURE_CHECKER_HPP_
 #define AUTOWARE__LANE_DEPARTURE_CHECKER__LANE_DEPARTURE_CHECKER_HPP_
 
-#include <autoware/universe_utils/geometry/boost_geometry.hpp>
-#include <autoware/universe_utils/geometry/pose_deviation.hpp>
+#include "autoware/lane_departure_checker/parameters.hpp"
+
 #include <autoware/universe_utils/system/time_keeper.hpp>
 #include <autoware_vehicle_info_utils/vehicle_info_utils.hpp>
 #include <rosidl_runtime_cpp/message_initialization.hpp>
 
-#include <autoware_planning_msgs/msg/lanelet_route.hpp>
-#include <autoware_planning_msgs/msg/trajectory.hpp>
-#include <autoware_planning_msgs/msg/trajectory_point.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>
@@ -48,80 +45,32 @@
 
 namespace autoware::lane_departure_checker
 {
-using autoware::universe_utils::LinearRing2d;
-using autoware::universe_utils::PoseDeviation;
 using autoware::universe_utils::Segment2d;
-using autoware_planning_msgs::msg::LaneletRoute;
-using autoware_planning_msgs::msg::Trajectory;
-using autoware_planning_msgs::msg::TrajectoryPoint;
 using tier4_planning_msgs::msg::PathWithLaneId;
-using TrajectoryPoints = std::vector<TrajectoryPoint>;
 typedef boost::geometry::index::rtree<Segment2d, boost::geometry::index::rstar<16>> SegmentRtree;
-
-struct Param
-{
-  double footprint_margin_scale{0.0};
-  double footprint_extra_margin{0.0};
-  double resample_interval{0.0};
-  double max_deceleration{0.0};
-  double delay_time{0.0};
-  double max_lateral_deviation{0.0};
-  double max_longitudinal_deviation{0.0};
-  double max_yaw_deviation_deg{0.0};
-  double min_braking_distance{0.0};
-  // nearest search to ego
-  double ego_nearest_dist_threshold{0.0};
-  double ego_nearest_yaw_threshold{0.0};
-};
-
-struct Input
-{
-  nav_msgs::msg::Odometry::ConstSharedPtr current_odom{};
-  lanelet::LaneletMapPtr lanelet_map{};
-  LaneletRoute::ConstSharedPtr route{};
-  lanelet::ConstLanelets route_lanelets{};
-  lanelet::ConstLanelets shoulder_lanelets{};
-  Trajectory::ConstSharedPtr reference_trajectory{};
-  Trajectory::ConstSharedPtr predicted_trajectory{};
-  std::vector<std::string> boundary_types_to_detect{};
-};
-
-struct Output
-{
-  std::map<std::string, double> processing_time_map{};
-  bool will_leave_lane{};
-  bool is_out_of_lane{};
-  bool will_cross_boundary{};
-  PoseDeviation trajectory_deviation{};
-  lanelet::ConstLanelets candidate_lanelets{};
-  TrajectoryPoints resampled_trajectory{};
-  std::vector<LinearRing2d> vehicle_footprints{};
-  std::vector<LinearRing2d> vehicle_passing_areas{};
-};
 
 class LaneDepartureChecker
 {
 public:
-  LaneDepartureChecker(
+  explicit LaneDepartureChecker(
     std::shared_ptr<universe_utils::TimeKeeper> time_keeper =
       std::make_shared<universe_utils::TimeKeeper>())
   : time_keeper_(time_keeper)
   {
   }
+
+  LaneDepartureChecker(
+    const Param & param, const autoware::vehicle_info_utils::VehicleInfo & vehicle_info,
+    std::shared_ptr<universe_utils::TimeKeeper> time_keeper =
+      std::make_shared<universe_utils::TimeKeeper>())
+  : param_(param),
+    vehicle_info_ptr_(std::make_shared<autoware::vehicle_info_utils::VehicleInfo>(vehicle_info)),
+    time_keeper_(time_keeper)
+  {
+  }
   Output update(const Input & input);
 
-  void setParam(const Param & param, const autoware::vehicle_info_utils::VehicleInfo vehicle_info)
-  {
-    param_ = param;
-    vehicle_info_ptr_ = std::make_shared<autoware::vehicle_info_utils::VehicleInfo>(vehicle_info);
-  }
-
   void setParam(const Param & param) { param_ = param; }
-
-  void setVehicleInfo(const autoware::vehicle_info_utils::VehicleInfo vehicle_info)
-  {
-    vehicle_info_ptr_ = std::make_shared<autoware::vehicle_info_utils::VehicleInfo>(vehicle_info);
-  }
 
   bool checkPathWillLeaveLane(
     const lanelet::ConstLanelets & lanelets, const PathWithLaneId & path) const;

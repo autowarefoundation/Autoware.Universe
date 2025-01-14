@@ -110,10 +110,9 @@ void DetectionCounter::initializeDetectionMap()
        ++i) {
     for (const auto & range : getRanges()) {
       std::string range_str = range.toString();
-      if (time_series_counts_.find(i) == time_series_counts_.end()) {
-        time_series_counts_[i][range_str] = std::vector<rclcpp::Time>();
-        seen_uuids_[i][range_str] = std::set<std::string>();
-      } else if (time_series_counts_[i].find(range_str) == time_series_counts_[i].end()) {
+      if (
+        time_series_counts_[i].find(range_str) == time_series_counts_[i].end() ||
+        time_series_counts_.find(i) == time_series_counts_.end()) {
         time_series_counts_[i][range_str] = std::vector<rclcpp::Time>();
         seen_uuids_[i][range_str] = std::set<std::string>();
       }

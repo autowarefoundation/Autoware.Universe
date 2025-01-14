@@ -26,15 +26,6 @@
 namespace autoware::behavior_velocity_planner
 {
 
-geometry_msgs::msg::Point getCenterOfStopLine(const lanelet::ConstLineString3d & stop_line)
-{
-  geometry_msgs::msg::Point center_point;
-  center_point.x = (stop_line[0].x() + stop_line[1].x()) / 2.0;
-  center_point.y = (stop_line[0].y() + stop_line[1].y()) / 2.0;
-  center_point.z = (stop_line[0].z() + stop_line[1].z()) / 2.0;
-  return center_point;
-}
-
 StopLineModule::StopLineModule(
   const int64_t module_id, lanelet::ConstLineString3d stop_line, const PlannerParam & planner_param,
   const rclcpp::Logger & logger, const rclcpp::Clock::SharedPtr clock)

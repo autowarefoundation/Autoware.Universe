@@ -99,7 +99,8 @@
             "type": "number",
             "minimum": 0.0,
             "maximum": 360.0
-          }
+          },
+          "default": [0.0, 360.0]
         },
         "vertical_bins": {
           "type": "integer",

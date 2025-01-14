@@ -43,6 +43,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 #include <regex>
 #include <string>
 #include <utility>
@@ -655,48 +656,56 @@ void run(int port)
 
 int main(int argc, char ** argv)
 {
-  static struct option long_options[] = {
-    {"help", no_argument, nullptr, 'h'},
-    {"port", required_argument, nullptr, 'p'},
-    {nullptr, 0, nullptr, 0}};
+  try {
+    static struct option long_options[] = {
+      {"help", no_argument, nullptr, 'h'},
+      {"port", required_argument, nullptr, 'p'},
+      {nullptr, 0, nullptr, 0}};
 
-  // Parse command-line options
-  int c = 0;
-  int option_index = 0;
-  int port = PORT;
-  while ((c = getopt_long(argc, argv, "hp:", long_options, &option_index)) != -1) {
-    switch (c) {
-      case 'h':
-        usage();
-        return EXIT_SUCCESS;
+    // Parse command-line options
+    int c = 0;
+    int option_index = 0;
+    int port = PORT;
+    while ((c = getopt_long(argc, argv, "hp:", long_options, &option_index)) != -1) {
+      switch (c) {
+        case 'h':
+          usage();
+          return EXIT_SUCCESS;
 
-      case 'p':
-        try {
-          port = boost::lexical_cast<int>(optarg);
-        } catch (const boost::bad_lexical_cast & e) {
-          printf("Error: %s\n", e.what());
-          return EXIT_FAILURE;
-        }
-        break;
+        case 'p':
+          try {
+            port = boost::lexical_cast<int>(optarg);
+          } catch (const boost::bad_lexical_cast & e) {
+            printf("Error: %s\n", e.what());
+            return EXIT_FAILURE;
+          }
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
     }
+
+    // Put the program in the background
+    if (daemon(0, 0) < 0) {
+      printf("Failed to put the program in the background. %s\n", strerror(errno));
+      return errno;
+    }
+
+    // Open connection to system logger
+    openlog(nullptr, LOG_PID, LOG_DAEMON);
+
+    run(port);
+
+    // Close descriptor used to write to system logger
+    closelog();
+  } catch (const std::exception & e) {
+    std::cerr << "Exception in main(): " << e.what() << std::endl;
+    return EXIT_FAILURE;
+  } catch (...) {
+    std::cerr << "Unknown exception in main()" << std::endl;
+    return EXIT_FAILURE;
   }
-
-  // Put the program in the background
-  if (daemon(0, 0) < 0) {
-    printf("Failed to put the program in the background. %s\n", strerror(errno));
-    return errno;
-  }
-
-  // Open connection to system logger
-  openlog(nullptr, LOG_PID, LOG_DAEMON);
-
-  run(port);
-
-  // Close descriptor used to write to system logger
-  closelog();
 
   return EXIT_SUCCESS;
 }

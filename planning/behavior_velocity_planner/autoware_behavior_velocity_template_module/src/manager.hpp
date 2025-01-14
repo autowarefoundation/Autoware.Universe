@@ -38,7 +38,7 @@ namespace autoware::behavior_velocity_planner
  * @param node A reference to the ROS node.
  */
 class TemplateModuleManager
-: public autoware::behavior_velocity_planner::SceneModuleManagerInterface
+: public autoware::behavior_velocity_planner::SceneModuleManagerInterface<>
 {
 public:
   explicit TemplateModuleManager(rclcpp::Node & node);
