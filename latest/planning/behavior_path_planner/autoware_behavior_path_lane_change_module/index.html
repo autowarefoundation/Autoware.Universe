@@ -14254,6 +14254,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#generating-path-using-frenet-planner" class="md-nav__link">
+    Generating Path Using Frenet Planner
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#aborting-a-previously-approved-lane-change" class="md-nav__link">
     Aborting a Previously Approved Lane Change
   </a>
@@ -14354,6 +14361,13 @@
           <li class="md-nav__item">
   <a href="#terminal-lane-change-path_1" class="md-nav__link">
     Terminal Lane Change Path
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-lane-changing-path-using-frenet-planner" class="md-nav__link">
+    Generating Lane Changing Path using Frenet Planner
   </a>
   
 </li>
@@ -14643,6 +14657,47 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <p><img alt="no terminal path" src="images/lane_change-no_terminal_path.png"></p>
 <p><img alt="terminal path" src="images/lane_change-terminal_path.png"></p>
 <p>Additionally if terminal path feature is enabled and path is computed, stop point placement can be configured to be at the edge of the current lane instead of at the <code>terminal_start</code> position, as indicated by the dashed red line in the image above.</p>
+<h2 id="generating-path-using-frenet-planner">Generating Path Using Frenet Planner<a class="headerlink" href="#generating-path-using-frenet-planner" title="Permanent link">#</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Generating path using Frenet planner applies only when ego is near terminal start</p>
+</div>
+<p>If the ego vehicle is far from the terminal, the lane change module defaults to using the <a href="https://autowarefoundation.github.io/autoware.universe/main/planning/behavior_path_planner/autoware_behavior_path_planner_common/docs/behavior_path_planner_path_generation_design/">path shifter</a>. This ensures that the lane change is completed while the target lane remains a neighbor of the current lane. However, this approach may result in high curvature paths near the terminal, potentially causing long vehicles to deviate from the lane.</p>
+<p>To address this, the lane change module provides an option to choose between the path shifter and the <a href="https://autowarefoundation.github.io/autoware.universe/main/planning/sampling_based_planner/autoware_frenet_planner/">Frenet planner</a>. The Frenet planner allows for some flexibility in the lane change endpoint, extending the lane changing end point slightly beyond the current lane's neighbors.</p>
+<p>The following table provides comparisons between the planners</p>
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">With Path Shifter</td>
+      <td align="center">With Frenet Planner</td>
+    </tr>
+    <tr>
+      <td><img src="./images/terminal_straight_path_shifter.png" alt="Path shifter result at straight lanelets" width="450"></td>
+      <td><img src="./images/terminal_straight_frenet.png" alt="Frenet planner result at straight lanelets" width="450"></td>
+    </tr>
+    <tr>
+      <td><img src="./images/terminal_branched_path_shifter.png" alt="Path shifter result at branching lanelets" width="450"></td>
+      <td><img src="./images/terminal_branched_frenet.png" alt="Frenet planner result at branching lanelets" width="450"></td>
+    </tr>
+    <tr>
+      <td><img src="./images/terminal_curved_path_shifter.png" alt="Path shifter result at curved lanelets" width="450"></td>
+      <td><img src="./images/terminal_curved_frenet.png" alt="Frenet planner result at curved lanelets" width="450"></td>
+    </tr>
+  </table>
+</div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The planner can be enabled or disabled using the <code>frenet.enable</code> flag.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since only a segment of the target lane is used as input to generate the lane change path, the end pose of the lane change segment may not smoothly connect to the target lane centerline. To address this, increase the value of <code>frenet.th_curvature_smoothing</code> to improve the smoothness.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The yaw difference threshold (<code>frenet.th_yaw_diff</code>) limits the maximum curvature difference between the end of the prepare segment and the lane change segment. This threshold might prevent the generation of a lane change path when the lane curvature is high. In such cases, you can increase the frenet.th_yaw_diff value. However, note that if the prepare path was initially shifted by other modules, the resultant steering may not be continuous.</p>
+</div>
 <h2 id="aborting-a-previously-approved-lane-change">Aborting a Previously Approved Lane Change<a class="headerlink" href="#aborting-a-previously-approved-lane-change" title="Permanent link">#</a></h2>
 <p>Once the lane change path is approved, there are several situations where we may need to abort the maneuver. The abort process is triggered when any of the following conditions is met</p>
 <ol>
@@ -14869,6 +14924,13 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <td>0.5</td>
 </tr>
 <tr>
+<td align="left"><code>trajectory.th_prepare_curvature</code></td>
+<td>[-]</td>
+<td>double</td>
+<td>If the maximum curvature of the prepare segment exceeds the threshold, the prepare segment is invalid.</td>
+<td>0.03</td>
+</tr>
+<tr>
 <td align="left"><code>min_length_for_turn_signal_activation</code></td>
 <td>[m]</td>
 <td>double</td>
@@ -15072,6 +15134,45 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <td>bool</td>
 <td>If true, ego will stop at current lane boundary instead of middle of lane</td>
 <td>false</td>
+</tr>
+</tbody>
+</table>
+<h3 id="generating-lane-changing-path-using-frenet-planner">Generating Lane Changing Path using Frenet Planner<a class="headerlink" href="#generating-lane-changing-path-using-frenet-planner" title="Permanent link">#</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Only applicable when ego is near terminal start</p>
+</div>
+<table>
+<thead>
+<tr>
+<th align="left">Name</th>
+<th>Unit</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>frenet.enable</code></td>
+<td>[-]</td>
+<td>bool</td>
+<td>Flag to enable/disable frenet planner when ego is near terminal start.</td>
+<td>true</td>
+</tr>
+<tr>
+<td align="left"><code>frenet.th_yaw_diff</code></td>
+<td>[deg]</td>
+<td>double</td>
+<td>If the yaw diff between of the prepare segment's end and lane changing segment's start exceed the threshold , the lane changing segment is invalid.</td>
+<td>10.0</td>
+</tr>
+<tr>
+<td align="left"><code>frenet.th_curvature_smoothing</code></td>
+<td>[-]</td>
+<td>double</td>
+<td>Filters and appends target path points with curvature below the threshold to candidate path.</td>
+<td>0.1</td>
 </tr>
 </tbody>
 </table>
@@ -15613,7 +15714,7 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <h2 id="limitation">Limitation<a class="headerlink" href="#limitation" title="Permanent link">#</a></h2>
 <ol>
 <li>When a lane change is canceled, the lane change module returns <code>ModuleStatus::FAILURE</code>. As the module is removed from the approved module stack (see <a href="https://autowarefoundation.github.io/autoware.universe/main/planning/behavior_path_planner/autoware_behavior_path_planner/docs/behavior_path_planner_manager_design/#failure-modules">Failure modules</a>), a new instance of the lane change module is initiated. Due to this, any information stored prior to the reset is lost. For example, the <code>lane_change_prepare_duration</code> in the <code>TransientData</code> is reset to its maximum value.</li>
-<li>The lane change module has no knowledge of any velocity modifications introduced to the path after it is approved. This is because other modules may add deceleration points after subscribing to the behavior path planner output, and the final velocity is managed by the <a href="https://autowarefoundation.github.io/autoware.universe/pr-9845/planning/autoware_velocity_smoother/">velocity smoother</a>. Since this limitation affects <strong>CANCEL</strong>, the lane change module mitigates it by <a href="#checking-approved-path-safety">sampling accelerations along the approved lane change path</a>. These sampled accelerations are used during safety checks to estimate the velocity that might occur if the ego vehicle decelerates.</li>
+<li>The lane change module has no knowledge of any velocity modifications introduced to the path after it is approved. This is because other modules may add deceleration points after subscribing to the behavior path planner output, and the final velocity is managed by the <a href="https://autowarefoundation.github.io/autoware.universe/main/planning/autoware_velocity_smoother/">velocity smoother</a>. Since this limitation affects <strong>CANCEL</strong>, the lane change module mitigates it by <a href="#checking-approved-path-safety">sampling accelerations along the approved lane change path</a>. These sampled accelerations are used during safety checks to estimate the velocity that might occur if the ego vehicle decelerates.</li>
 <li>Ideally, the abort path should account for whether its execution would affect trailing vehicles in the current lane. However, the lane change module does not evaluate such interactions or assess whether the abort path is safe. As a result, <strong>the abort path is not guaranteed to be safe</strong>. To minimize the risk of unsafe situations, the abort maneuver is only permitted if the ego vehicle has not yet diverged from the current lane.</li>
 <li>Due to limited resources, the abort path logic is not fully optimized. The generated path may overshoot, causing the return trajectory to slightly shift toward the opposite lane. This can be dangerous, especially if the opposite lane has traffic moving in the opposite direction. Furthermore, the logic does not account for different vehicle types, which can lead to varying effects. For instance, the behavior might differ significantly between a bus and a small passenger car.</li>
 </ol></div>
