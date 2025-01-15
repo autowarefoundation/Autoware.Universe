@@ -121,11 +121,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/common/autoware_qp_interface/design/qp_interface-design/</loc>
-         <lastmod>2025-01-15</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/common/autoware_signal_processing/</loc>
          <lastmod>2025-01-15</lastmod>
          <changefreq>daily</changefreq>
