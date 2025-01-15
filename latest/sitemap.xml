@@ -81,11 +81,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/common/autoware_kalman_filter/</loc>
-         <lastmod>2025-01-15</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/common/autoware_motion_utils/</loc>
          <lastmod>2025-01-15</lastmod>
          <changefreq>daily</changefreq>
