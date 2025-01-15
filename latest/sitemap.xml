@@ -101,11 +101,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/common/autoware_osqp_interface/design/osqp_interface-design/</loc>
-         <lastmod>2025-01-15</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/common/autoware_path_distance_calculator/Readme/</loc>
          <lastmod>2025-01-15</lastmod>
          <changefreq>daily</changefreq>
