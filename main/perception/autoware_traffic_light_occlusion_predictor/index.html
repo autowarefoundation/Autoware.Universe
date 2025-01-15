@@ -21,7 +21,7 @@
     
     
       
-        <title>The `autoware_traffic_light_occlusion_predictor` Package - Autoware Universe Documentation</title>
+        <title>autoware_traffic_light_occlusion_predictor - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#the-autoware_traffic_light_occlusion_predictor-package" class="md-skip">
+        <a href="#autoware_traffic_light_occlusion_predictor" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              The `autoware_traffic_light_occlusion_predictor` Package
+              autoware_traffic_light_occlusion_predictor
             
           </span>
         </div>
@@ -14180,9 +14180,11 @@
   
 
 
-<div><h1 id="the-autoware_traffic_light_occlusion_predictor-package">The <code>autoware_traffic_light_occlusion_predictor</code> Package<a class="headerlink" href="#the-autoware_traffic_light_occlusion_predictor-package" title="Permanent link">#</a></h1>
+<div><h1 id="autoware_traffic_light_occlusion_predictor">autoware_traffic_light_occlusion_predictor<a class="headerlink" href="#autoware_traffic_light_occlusion_predictor" title="Permanent link">#</a></h1>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">#</a></h2>
-<p><code>autoware_traffic_light_occlusion_predictor</code> receives the detected traffic lights rois and calculates the occlusion ratios of each roi with point cloud.</p>
+<p><code>autoware_traffic_light_occlusion_predictor</code> receives the detected traffic lights rois and calculates the occlusion ratios of each roi with point cloud.
+If that rois is judged as occlusion, color, shape, and confidence of <code>~/output/traffic_signals</code> become <code>UNKNOWN</code>, <code>UNKNOWN</code>, and <code>0.0</code>.
+This node publishes when each car and pedestrian <code>traffic_signals</code> is arrived and processed.</p>
 <p>For each traffic light roi, hundreds of pixels would be selected and projected into the 3D space. Then from the camera point of view, the number of projected pixels that are occluded by the point cloud is counted and used for calculating the occlusion ratio for the roi. As shown in follow image, the red pixels are occluded and the occlusion ratio is the number of red pixels divided by the total pixel numbers.</p>
 <p><img alt="image" src="images/occlusion.png"></p>
 <p>If no point cloud is received or all point clouds have very large stamp difference with the camera image, the occlusion ratio of each roi would be set as 0.</p>
@@ -14197,23 +14199,33 @@
 </thead>
 <tbody>
 <tr>
-<td><code>~input/vector_map</code></td>
+<td><code>~/input/vector_map</code></td>
 <td>autoware_map_msgs::msg::LaneletMapBin</td>
 <td>vector map</td>
 </tr>
 <tr>
+<td><code>~/input/car/traffic_signals</code></td>
+<td>tier4_perception_msgs::msg::TrafficLightArray</td>
+<td>vehicular traffic light signals</td>
+</tr>
+<tr>
+<td><code>~/input/pedestrian/traffic_signals</code></td>
+<td>tier4_perception_msgs::msg::TrafficLightArray</td>
+<td>pedestrian traffic light signals</td>
+</tr>
+<tr>
 <td><code>~/input/rois</code></td>
-<td>autoware_perception_msgs::TrafficLightRoiArray</td>
+<td>tier4_perception_msgs::msg::TrafficLightRoiArray</td>
 <td>traffic light detections</td>
 </tr>
 <tr>
-<td><code>~input/camera_info</code></td>
-<td>sensor_msgs::CameraInfo</td>
+<td><code>~/input/camera_info</code></td>
+<td>sensor_msgs::msg::CameraInfo</td>
 <td>target camera parameter</td>
 </tr>
 <tr>
 <td><code>~/input/cloud</code></td>
-<td>sensor_msgs::PointCloud2</td>
+<td>sensor_msgs::msg::PointCloud2</td>
 <td>LiDAR point cloud</td>
 </tr>
 </tbody>
@@ -14229,9 +14241,9 @@
 </thead>
 <tbody>
 <tr>
-<td><code>~/output/occlusion</code></td>
-<td>autoware_perception_msgs::TrafficLightOcclusionArray</td>
-<td>occlusion ratios of each roi</td>
+<td><code>~/output/traffic_signals</code></td>
+<td>tier4_perception_msgs::msg::TrafficLightArray</td>
+<td>traffic light signals which occluded image results overwritten</td>
 </tr>
 </tbody>
 </table>
@@ -14269,6 +14281,11 @@
 <td><code>max_wait_t</code></td>
 <td>double</td>
 <td>The maximum time waiting for the LiDAR point cloud</td>
+</tr>
+<tr>
+<td><code>max_occlusion_ratio</code></td>
+<td>int</td>
+<td>The maximum occlusion ratio for setting signal as unknown</td>
 </tr>
 </tbody>
 </table></div>
