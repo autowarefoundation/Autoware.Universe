@@ -15297,8 +15297,15 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <td align="left"><code>collision_check.yaw_diff_threshold</code></td>
 <td>[rad]</td>
 <td>double</td>
-<td>Maximum yaw difference between ego and object when executing rss-based collision checking</td>
+<td>Maximum yaw difference between predicted ego pose and predicted object pose when executing rss-based collision checking</td>
 <td>3.1416</td>
+</tr>
+<tr>
+<td align="left"><code>collision_check.th_incoming_object_yaw</code></td>
+<td>[rad]</td>
+<td>double</td>
+<td>Maximum yaw difference between current ego pose and current object pose. Objects with a yaw difference exceeding this value are excluded from the safety check.</td>
+<td>2.3562</td>
 </tr>
 </tbody>
 </table>
@@ -15363,6 +15370,13 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <td>The time multiplier that is used to compute the actual gap between vehicle at each predicted points (not RSS distance)</td>
 <td>0.8</td>
 </tr>
+<tr>
+<td align="left"><code>safety_check.execution.extended_polygon_policy</code></td>
+<td>[-]</td>
+<td>string</td>
+<td>Policy used to determine the polygon shape for the safety check. Available options are: <code>rectangle</code> or <code>along-path</code>.</td>
+<td><code>rectangle</code></td>
+</tr>
 </tbody>
 </table>
 <h4 id="safety-constraints-specifically-for-stopped-or-parked-vehicles">safety constraints specifically for stopped or parked vehicles<a class="headerlink" href="#safety-constraints-specifically-for-stopped-or-parked-vehicles" title="Permanent link">#</a></h4>
@@ -15425,6 +15439,13 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <td>double</td>
 <td>The time multiplier that is used to compute the actual gap between vehicle at each predicted points (not RSS distance)</td>
 <td>0.8</td>
+</tr>
+<tr>
+<td align="left"><code>safety_check.parked.extended_polygon_policy</code></td>
+<td>[-]</td>
+<td>string</td>
+<td>Policy used to determine the polygon shape for the safety check. Available options are: <code>rectangle</code> or <code>along-path</code>.</td>
+<td><code>rectangle</code></td>
 </tr>
 </tbody>
 </table>
@@ -15489,6 +15510,13 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <td>The time multiplier that is used to compute the actual gap between vehicle at each predicted points (not RSS distance)</td>
 <td>0.6</td>
 </tr>
+<tr>
+<td align="left"><code>safety_check.cancel.extended_polygon_policy</code></td>
+<td>[-]</td>
+<td>string</td>
+<td>Policy used to determine the polygon shape for the safety check. Available options are: <code>rectangle</code> or <code>along-path</code>.</td>
+<td><code>rectangle</code></td>
+</tr>
 </tbody>
 </table>
 <h5 id="safety-constraints-used-during-lane-change-path-is-computed-when-ego-is-stuck">safety constraints used during lane change path is computed when ego is stuck<a class="headerlink" href="#safety-constraints-used-during-lane-change-path-is-computed-when-ego-is-stuck" title="Permanent link">#</a></h5>
@@ -15551,6 +15579,13 @@ If the ego vehicle velocity is smaller than <code>stuck_detection.velocity</code
 <td>double</td>
 <td>The time multiplier that is used to compute the actual gap between vehicle at each predicted points (not RSS distance)</td>
 <td>0.8</td>
+</tr>
+<tr>
+<td align="left"><code>safety_check.stuck.extended_polygon_policy</code></td>
+<td>[-]</td>
+<td>string</td>
+<td>Policy used to determine the polygon shape for the safety check. Available options are: <code>rectangle</code> or <code>along-path</code>.</td>
+<td><code>rectangle</code></td>
 </tr>
 </tbody>
 </table>
