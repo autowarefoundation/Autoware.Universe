@@ -21,7 +21,7 @@
     
     
       
-        <title>traffic_light_classifier - Autoware Universe Documentation</title>
+        <title>autoware_traffic_light_classifier - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#traffic_light_classifier" class="md-skip">
+        <a href="#autoware_traffic_light_classifier" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              traffic_light_classifier
+              autoware_traffic_light_classifier
             
           </span>
         </div>
@@ -14330,14 +14330,16 @@
   
 
 
-<div><h1 id="traffic_light_classifier">traffic_light_classifier<a class="headerlink" href="#traffic_light_classifier" title="Permanent link">#</a></h1>
+<div><h1 id="autoware_traffic_light_classifier">autoware_traffic_light_classifier<a class="headerlink" href="#autoware_traffic_light_classifier" title="Permanent link">#</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
-<p>traffic_light_classifier is a package for classifying traffic light labels using cropped image around a traffic light. This package has two classifier models: <code>cnn_classifier</code> and <code>hsv_classifier</code>.</p>
+<p><code>autoware_traffic_light_classifier</code> is a package for classifying traffic light labels using cropped image around a traffic light. This package has two classifier models: <code>cnn_classifier</code> and <code>hsv_classifier</code>.</p>
 <h2 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
+<p>If height and width of <code>~/input/rois</code> is <code>0</code>, color, shape, and confidence of <code>~/output/traffic_signals</code> become <code>UNKNOWN</code>, <code>CIRCLE</code>, and <code>0.0</code>.
+If <code>~/input/rois</code> is judged as backlight, color, shape, and confidence of <code>~/output/traffic_signals</code> become <code>UNKNOWN</code>, <code>UNKNOWN</code>, and <code>0.0</code>.</p>
 <h3 id="cnn_classifier">cnn_classifier<a class="headerlink" href="#cnn_classifier" title="Permanent link">#</a></h3>
-<p>Traffic light labels are classified by EfficientNet-b1 or MobileNet-v2.
-Totally 83400 (58600 for training, 14800 for evaluation and 10000 for test) TIER IV internal images of Japanese traffic lights were used for fine-tuning.
-The information of the models is listed here:</p>
+<p>Traffic light labels are classified by EfficientNet-b1 or MobileNet-v2.<br>
+We trained classifiers for vehicular signals and pedestrian signals separately.
+For vehicular signals, a total of 83400 (58600 for training, 14800 for evaluation and 10000 for test) TIER IV internal images of Japanese traffic lights were used for fine-tuning.</p>
 <table>
 <thead>
 <tr>
@@ -14356,6 +14358,29 @@ The information of the models is listed here:</p>
 <td>MobileNet-v2</td>
 <td>224 x 224</td>
 <td>99.81%</td>
+</tr>
+</tbody>
+</table>
+<p>For pedestrian signals, a total of 21199 (17860 for training, 2114 for evaluation and 1225 for test) TIER IV internal images of Japanese traffic lights were used for fine-tuning.<br>
+The information of the models is listed here:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Input Size</th>
+<th>Test Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EfficientNet-b1</td>
+<td>128 x 128</td>
+<td>97.89%</td>
+</tr>
+<tr>
+<td>MobileNet-v2</td>
+<td>224 x 224</td>
+<td>99.10%</td>
 </tr>
 </tbody>
 </table>
@@ -14426,17 +14451,22 @@ The information of the models is listed here:</p>
 <tr>
 <td><code>classifier_type</code></td>
 <td>int</td>
-<td>if the value is <code>1</code>, cnn_classifier is used</td>
+<td>If the value is <code>1</code>, cnn_classifier is used</td>
 </tr>
 <tr>
 <td><code>data_path</code></td>
 <td>str</td>
-<td>packages data and artifacts directory path</td>
+<td>Packages data and artifacts directory path</td>
 </tr>
 <tr>
 <td><code>backlight_threshold</code></td>
-<td>float</td>
-<td>If the intensity get grater than this overwrite with UNKNOWN in corresponding RoI. Note that, if the value is much higher, the node only overwrites in the harsher backlight situations. Therefore, If you wouldn't like to use this feature set this value to <code>1.0</code>. The value can be <code>[0.0, 1.0]</code>. The confidence of overwritten signal is set to <code>0.0</code>.</td>
+<td>double</td>
+<td>If the intensity of light is grater than this threshold, the color and shape of the corresponding ROI will be overwritten with UNKNOWN, and the confidence of the overwritten signal will be set to <code>0.0</code>. The value should be set in the range of <code>[0.0, 1.0]</code>. If you wouldn't like to use this feature, please set it to <code>1.0</code>.</td>
+</tr>
+<tr>
+<td><code>classify_traffic_light_type</code></td>
+<td>int</td>
+<td>If the value is <code>0</code>, vehicular signals are classified. If the value is <code>1</code>, pedestrian signals are classified.</td>
 </tr>
 </tbody>
 </table>
