@@ -81,11 +81,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-8300/common/autoware_kalman_filter/</loc>
-         <lastmod>2025-01-16</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-8300/common/autoware_motion_utils/</loc>
          <lastmod>2025-01-16</lastmod>
          <changefreq>daily</changefreq>
@@ -101,11 +96,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-8300/common/autoware_osqp_interface/design/osqp_interface-design/</loc>
-         <lastmod>2025-01-16</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-8300/common/autoware_path_distance_calculator/Readme/</loc>
          <lastmod>2025-01-16</lastmod>
          <changefreq>daily</changefreq>
@@ -117,11 +107,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-8300/common/autoware_pyplot/</loc>
-         <lastmod>2025-01-16</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-8300/common/autoware_qp_interface/design/qp_interface-design/</loc>
          <lastmod>2025-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -392,11 +377,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-8300/localization/autoware_localization_error_monitor/</loc>
-         <lastmod>2025-01-16</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-8300/localization/autoware_localization_util/</loc>
          <lastmod>2025-01-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
