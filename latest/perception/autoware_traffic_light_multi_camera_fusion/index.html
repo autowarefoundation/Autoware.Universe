@@ -21,7 +21,7 @@
     
     
       
-        <title>The `traffic_light_multi_camera_fusion` Package - Autoware Universe Documentation</title>
+        <title>autoware_traffic_light_multi_camera_fusion - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#the-traffic_light_multi_camera_fusion-package" class="md-skip">
+        <a href="#autoware_traffic_light_multi_camera_fusion" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              The `traffic_light_multi_camera_fusion` Package
+              autoware_traffic_light_multi_camera_fusion
             
           </span>
         </div>
@@ -14180,12 +14180,19 @@
   
 
 
-<div><h1 id="the-traffic_light_multi_camera_fusion-package">The <code>traffic_light_multi_camera_fusion</code> Package<a class="headerlink" href="#the-traffic_light_multi_camera_fusion-package" title="Permanent link">#</a></h1>
+<div><h1 id="autoware_traffic_light_multi_camera_fusion">autoware_traffic_light_multi_camera_fusion<a class="headerlink" href="#autoware_traffic_light_multi_camera_fusion" title="Permanent link">#</a></h1>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">#</a></h2>
-<p><code>traffic_light_multi_camera_fusion</code> performs traffic light signal fusion which can be summarized as the following two tasks:</p>
+<p><code>autoware_traffic_light_multi_camera_fusion</code> performs traffic light signal fusion which can be summarized as the following two tasks:</p>
 <ol>
-<li>Multi-Camera-Fusion: performed on single traffic light signal detected by different cameras.</li>
-<li>Group-Fusion: performed on traffic light signals within the same group, which means traffic lights sharing the same regulatory element id defined in lanelet2 map.</li>
+<li>Multi-Camera-Fusion: fusion each traffic light signal detected by different cameras.</li>
+<li>Group-Fusion: Fusion each traffic light signal within the same group, which means traffic lights share the same regulatory element ID defined in lanelet2 map.</li>
+</ol>
+<p>The fusion method is below.</p>
+<ol>
+<li>Use the results of the new timestamp if the results are from the same sensor</li>
+<li>Use the results that are not <code>elements.size() == 1 &amp;&amp; color == UNKNOWN &amp;&amp; shape == UNKNOWN</code></li>
+<li>Use the results that each vertex of ROI is not at the edge of the image</li>
+<li>Use the results of high confidence</li>
 </ol>
 <h2 id="input-topics">Input topics<a class="headerlink" href="#input-topics" title="Permanent link">#</a></h2>
 <p>For every camera, the following three topics are subscribed:</p>
@@ -14200,18 +14207,18 @@
 <tbody>
 <tr>
 <td><code>~/&lt;camera_namespace&gt;/camera_info</code></td>
-<td>sensor_msgs::CameraInfo</td>
-<td>camera info from traffic_light_map_based_detector</td>
+<td>sensor_msgs::msg::CameraInfo</td>
+<td>camera info from map_based_detector</td>
 </tr>
 <tr>
-<td><code>~/&lt;camera_namespace&gt;/rois</code></td>
-<td>tier4_perception_msgs::TrafficLightRoiArray</td>
-<td>detection roi from traffic_light_fine_detector</td>
+<td><code>~/&lt;camera_namespace&gt;/detection/rois</code></td>
+<td>tier4_perception_msgs::msg::TrafficLightRoiArray</td>
+<td>detection roi from fine_detector</td>
 </tr>
 <tr>
-<td><code>~/&lt;camera_namespace&gt;/traffic_signals</code></td>
-<td>tier4_perception_msgs::TrafficLightSignalArray</td>
-<td>classification result from traffic_light_classifier</td>
+<td><code>~/&lt;camera_namespace&gt;/classification/traffic_signals</code></td>
+<td>tier4_perception_msgs::msg::TrafficLightArray</td>
+<td>classification result from classifier</td>
 </tr>
 </tbody>
 </table>
@@ -14228,7 +14235,7 @@
 <tbody>
 <tr>
 <td><code>~/output/traffic_signals</code></td>
-<td>autoware_perception_msgs::TrafficLightSignalArray</td>
+<td>autoware_perception_msgs::msg::TrafficLightGroupArray</td>
 <td>traffic light signal fusion result</td>
 </tr>
 </tbody>
