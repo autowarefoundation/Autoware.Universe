@@ -21,7 +21,7 @@
     
     
       
-        <title>traffic_light_fine_detector - Autoware Universe Documentation</title>
+        <title>autoware_traffic_light_fine_detector - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#traffic_light_fine_detector" class="md-skip">
+        <a href="#autoware_traffic_light_fine_detector" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              traffic_light_fine_detector
+              autoware_traffic_light_fine_detector
             
           </span>
         </div>
@@ -14268,9 +14268,9 @@
   
 
 
-<div><h1 id="traffic_light_fine_detector">traffic_light_fine_detector<a class="headerlink" href="#traffic_light_fine_detector" title="Permanent link">#</a></h1>
+<div><h1 id="autoware_traffic_light_fine_detector">autoware_traffic_light_fine_detector<a class="headerlink" href="#autoware_traffic_light_fine_detector" title="Permanent link">#</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
-<p>It is a package for traffic light detection using YoloX-s.</p>
+<p>It is a package for traffic light detection using YOLOX-s.</p>
 <h2 id="training-information">Training Information<a class="headerlink" href="#training-information" title="Permanent link">#</a></h2>
 <h3 id="pretrained-model">Pretrained Model<a class="headerlink" href="#pretrained-model" title="Permanent link">#</a></h3>
 <p>The model is based on <a href="https://github.com/Megvii-BaseDetection/YOLOX">YOLOX</a> and the pretrained model could be downloaded from <a href="https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_s.pth">here</a>.</p>
@@ -14280,7 +14280,8 @@
 <p>You can download the ONNX file using these instructions.<br>
 Please visit <a href="https://github.com/autowarefoundation/autoware-documentation/blob/main/docs/models/index.md">autoware-documentation</a> for more information.</p>
 <h2 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
-<p>Based on the camera image and the global ROI array detected by <code>map_based_detection</code> node, a CNN-based detection method enables highly accurate traffic light detection.</p>
+<p>Based on the camera image and the global ROI array detected by <code>map_based_detector</code> node, a CNN-based detection method enables highly accurate traffic light detection. If can not detect traffic light, x_offset, y_offset, height and width of output ROI become <code>0</code>.
+ROIs detected from YOLOX will be selected by a combination of <code>expect/rois</code>. At this time, evaluate the whole as ROIs, not just the ROI alone.</p>
 <h2 id="inputs-outputs">Inputs / Outputs<a class="headerlink" href="#inputs-outputs" title="Permanent link">#</a></h2>
 <h3 id="input">Input<a class="headerlink" href="#input" title="Permanent link">#</a></h3>
 <table>
@@ -14294,7 +14295,7 @@ Please visit <a href="https://github.com/autowarefoundation/autoware-documentati
 <tbody>
 <tr>
 <td><code>~/input/image</code></td>
-<td><code>sensor_msgs/Image</code></td>
+<td><code>sensor_msgs::msg::Image</code></td>
 <td>The full size camera image</td>
 </tr>
 <tr>
@@ -14305,7 +14306,7 @@ Please visit <a href="https://github.com/autowarefoundation/autoware-documentati
 <tr>
 <td><code>~/expect/rois</code></td>
 <td><code>tier4_perception_msgs::msg::TrafficLightRoiArray</code></td>
-<td>The array of ROIs detected by map_based_detector without any offset</td>
+<td>The array of ROIs detected by map_based_detector without any offset, used to select the best detection results</td>
 </tr>
 </tbody>
 </table>
@@ -14389,7 +14390,7 @@ Please visit <a href="https://github.com/autowarefoundation/autoware-documentati
 <tr>
 <td><code>fine_detector_precision</code></td>
 <td>string</td>
-<td>"fp32"</td>
+<td>"fp16"</td>
 <td>The inference mode: "fp32", "fp16"</td>
 </tr>
 <tr>
