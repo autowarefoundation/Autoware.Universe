@@ -21,7 +21,7 @@
     
     
       
-        <title>The `autoware_traffic_light_map_based_detector` Package - Autoware Universe Documentation</title>
+        <title>autoware_traffic_light_map_based_detector - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#the-autoware_traffic_light_map_based_detector-package" class="md-skip">
+        <a href="#autoware_traffic_light_map_based_detector" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              The `autoware_traffic_light_map_based_detector` Package
+              autoware_traffic_light_map_based_detector
             
           </span>
         </div>
@@ -14180,13 +14180,13 @@
   
 
 
-<div><h1 id="the-autoware_traffic_light_map_based_detector-package">The <code>autoware_traffic_light_map_based_detector</code> Package<a class="headerlink" href="#the-autoware_traffic_light_map_based_detector-package" title="Permanent link">#</a></h1>
+<div><h1 id="autoware_traffic_light_map_based_detector">autoware_traffic_light_map_based_detector<a class="headerlink" href="#autoware_traffic_light_map_based_detector" title="Permanent link">#</a></h1>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">#</a></h2>
 <p><code>autoware_traffic_light_map_based_detector</code> calculates where the traffic lights will appear in the image based on the HD map.</p>
 <p>Calibration and vibration errors can be entered as parameters, and the size of the detected RegionOfInterest will change according to the error.</p>
 <p><img alt="traffic_light_map_based_detector_result" src="docs/traffic_light_map_based_detector_result.svg"></p>
 <p>If the node receives route information, it only looks at traffic lights on that route.
-If the node receives no route information, it looks at a radius of 200 meters and the angle between the traffic light and the camera is less than 40 degrees.</p>
+If the node receives no route information, it looks at them within a radius of <code>max_detection_range</code> and the angle between the traffic light and the camera is less than <code>car_traffic_light_max_angle_range</code> or <code>pedestrian_traffic_light_max_angle_range</code>.</p>
 <h2 id="input-topics">Input topics<a class="headerlink" href="#input-topics" title="Permanent link">#</a></h2>
 <table>
 <thead>
@@ -14198,18 +14198,18 @@ If the node receives no route information, it looks at a radius of 200 meters an
 </thead>
 <tbody>
 <tr>
-<td><code>~input/vector_map</code></td>
+<td><code>~/input/vector_map</code></td>
 <td>autoware_map_msgs::msg::LaneletMapBin</td>
 <td>vector map</td>
 </tr>
 <tr>
-<td><code>~input/camera_info</code></td>
-<td>sensor_msgs::CameraInfo</td>
+<td><code>~/input/camera_info</code></td>
+<td>sensor_msgs::msg::CameraInfo</td>
 <td>target camera parameter</td>
 </tr>
 <tr>
-<td><code>~input/route</code></td>
-<td>autoware_planning_msgs::LaneletRoute</td>
+<td><code>~/input/route</code></td>
+<td>autoware_planning_msgs::msg::LaneletRoute</td>
 <td>optional: route</td>
 </tr>
 </tbody>
@@ -14225,19 +14225,19 @@ If the node receives no route information, it looks at a radius of 200 meters an
 </thead>
 <tbody>
 <tr>
-<td><code>~output/rois</code></td>
-<td>tier4_perception_msgs::TrafficLightRoiArray</td>
+<td><code>~/output/rois</code></td>
+<td>tier4_perception_msgs::msg::TrafficLightRoiArray</td>
 <td>location of traffic lights in image corresponding to the camera info</td>
 </tr>
 <tr>
-<td><code>~expect/rois</code></td>
-<td>tier4_perception_msgs::TrafficLightRoiArray</td>
+<td><code>~/expect/rois</code></td>
+<td>tier4_perception_msgs::msg::TrafficLightRoiArray</td>
 <td>location of traffic lights in image without any offset</td>
 </tr>
 <tr>
-<td><code>~debug/markers</code></td>
-<td>visualization_msgs::MarkerArray</td>
-<td>visualization to debug</td>
+<td><code>~/debug/markers</code></td>
+<td>visualization_msgs::msg::MarkerArray</td>
+<td>markers which show a line that combines from camera to each traffic light</td>
 </tr>
 </tbody>
 </table>
@@ -14279,22 +14279,32 @@ If the node receives no route information, it looks at a radius of 200 meters an
 <tr>
 <td><code>max_detection_range</code></td>
 <td>double</td>
-<td>Maximum detection range in meters. Must be positive</td>
+<td>Maximum detection range in meters. Must be positive.</td>
 </tr>
 <tr>
 <td><code>min_timestamp_offset</code></td>
 <td>double</td>
-<td>Minimum timestamp offset when searching for corresponding tf</td>
+<td>Minimum timestamp offset when searching for corresponding tf.</td>
 </tr>
 <tr>
 <td><code>max_timestamp_offset</code></td>
 <td>double</td>
-<td>Maximum timestamp offset when searching for corresponding tf</td>
+<td>Maximum timestamp offset when searching for corresponding tf.</td>
 </tr>
 <tr>
 <td><code>timestamp_sample_len</code></td>
 <td>double</td>
-<td>sampling length between min_timestamp_offset and max_timestamp_offset</td>
+<td>Sampling length between min_timestamp_offset and max_timestamp_offset.</td>
+</tr>
+<tr>
+<td><code>car_traffic_light_max_angle_range</code></td>
+<td>double</td>
+<td>Maximum angle between the vehicular traffic light and the camera in degrees. Must be positive.</td>
+</tr>
+<tr>
+<td><code>pedestrian_traffic_light_max_angle_range</code></td>
+<td>double</td>
+<td>Maximum angle between the pedestrian traffic light and the camera in degrees. Must be positive.</td>
 </tr>
 </tbody>
 </table></div>
