@@ -14679,7 +14679,7 @@ colcon<span class="w"> </span><span class="nb">test</span><span class="w"> </spa
 <p>Below is an example output when the point clouds are concatenated successfully:</p>
 <ul>
 <li>Each point cloud has a value of <code>True</code>.</li>
-<li>The <code>cloud concatenation success</code> is <code>True</code>.</li>
+<li>The <code>cloud_concatenation_success</code> is <code>True</code>.</li>
 <li>The <code>level</code> value is <code>\0</code>. (diagnostic_msgs::msg::DiagnosticStatus::OK)</li>
 </ul>
 <div class="highlight"><pre><span></span><code>header:
@@ -14693,31 +14693,31 @@ status:
 <span class="w">  </span>message:<span class="w"> </span>Concatenated<span class="w"> </span>pointcloud<span class="w"> </span>is<span class="w"> </span>published<span class="w"> </span>and<span class="w"> </span>include<span class="w"> </span>all<span class="w"> </span>topics
 <span class="w">  </span>hardware_id:<span class="w"> </span>concatenate_data_checker
 <span class="w">  </span>values:
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>concatenated<span class="w"> </span>cloud<span class="w"> </span>timestamp
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>concatenated_cloud_timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.159229994'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>reference<span class="w"> </span>timestamp<span class="w"> </span>min
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>reference_timestamp_min
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.149230003'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>reference<span class="w"> </span>timestamp<span class="w"> </span>max
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>reference_timestamp_max
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.169229984'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync<span class="w"> </span>timestamp
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync/timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.159229994'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync/is_concatenated
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync<span class="w"> </span>timestamp
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync/timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.194104910'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync/is_concatenated
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/top/pointcloud_before_sync<span class="w"> </span>timestamp
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/top/pointcloud_before_sync/timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.234578133'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/top/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/top/pointcloud_before_sync/is_concatenated
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>cloud<span class="w"> </span>concatenation<span class="w"> </span>success
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>cloud_concatenation_success
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
 </code></pre></div>
 <p>Below is an example when point clouds fail to concatenate successfully.</p>
 <ul>
 <li>Some point clouds might have values of <code>False</code>.</li>
-<li>The <code>cloud concatenation success</code> is <code>False</code>.</li>
+<li>The <code>cloud_concatenation_success</code> is <code>False</code>.</li>
 <li>The <code>level</code> value is <code>\x02</code>. (diagnostic_msgs::msg::DiagnosticStatus::ERROR)</li>
 </ul>
 <div class="highlight"><pre><span></span><code>header:
@@ -14731,23 +14731,23 @@ status:
 <span class="w">  </span>message:<span class="w"> </span>Concatenated<span class="w"> </span>pointcloud<span class="w"> </span>is<span class="w"> </span>published<span class="w"> </span>but<span class="w"> </span>miss<span class="w"> </span>some<span class="w"> </span>topics
 <span class="w">  </span>hardware_id:<span class="w"> </span>concatenate_data_checker
 <span class="w">  </span>values:
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>concatenated<span class="w"> </span>cloud<span class="w"> </span>timestamp
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>concatenated_cloud_timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.859827995'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>reference<span class="w"> </span>timestamp<span class="w"> </span>min
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>reference_timestamp_min
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.849828005'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>reference<span class="w"> </span>timestamp<span class="w"> </span>max
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>reference_timestamp_max
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.869827986'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync<span class="w"> </span>timestamp
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync/timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.859827995'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/left/pointcloud_before_sync/is_concatenated
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync<span class="w"> </span>timestamp
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync/timestamp
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'1718260240.895193815'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/right/pointcloud_before_sync/is_concatenated
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'True'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/top/pointcloud_before_sync<span class="w"> </span>is<span class="w"> </span>concatenated
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>/sensing/lidar/top/pointcloud_before_sync/is_concatenated
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'False'</span>
-<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>cloud<span class="w"> </span>concatenation<span class="w"> </span>success
+<span class="w">  </span>-<span class="w"> </span>key:<span class="w"> </span>cloud_concatenation_success
 <span class="w">    </span>value:<span class="w"> </span><span class="s1">'False'</span>
 </code></pre></div>
 <h2 id="node-separation-options">Node separation options<a class="headerlink" href="#node-separation-options" title="Permanent link">#</a></h2>
