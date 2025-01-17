@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Traffic Light Map Based Detector Params",
+  "type": "object",
+  "definitions": {
+    "traffic_light_map_based_detector": {
+      "type": "object",
+      "properties": {
+        "max_vibration_pitch": {
+          "type": "number",
+          "description": "Maximum error in pitch direction. If -5~+5, it will be 10.",
+          "default": 0.0
+        },
+        "max_vibration_yaw": {
+          "type": "number",
+          "description": "Maximum error in yaw direction. If -5~+5, it will be 10.",
+          "default": 0.0
+        },
+        "max_vibration_height": {
+          "type": "number",
+          "description": "Maximum error in height direction. If -5~+5, it will be 10.",
+          "default": 0.0
+        },
+        "max_vibration_width": {
+          "type": "number",
+          "description": "Maximum error in width direction. If -5~+5, it will be 10.",
+          "default": 0.0
+        },
+        "max_vibration_depth": {
+          "type": "number",
+          "description": "Maximum error in depth direction. If -5~+5, it will be 10.",
+          "default": 0.0
+        },
+        "max_detection_range": {
+          "type": "number",
+          "description": "Maximum detection range in meters. Must be positive.",
+          "default": 200.0
+        },
+        "min_timestamp_offset": {
+          "type": "number",
+          "description": "Minimum timestamp offset when searching for corresponding tf.",
+          "default": 0.0
+        },
+        "max_timestamp_offset": {
+          "type": "number",
+          "description": "Maximum timestamp offset when searching for corresponding tf.",
+          "default": 0.0
+        },
+        "timestamp_sample_len": {
+          "type": "number",
+          "description": "Sampling length between min_timestamp_offset and max_timestamp_offset.",
+          "default": 0.01
+        },
+        "car_traffic_light_max_angle_range": {
+          "type": "number",
+          "description": "Car traffic light max angle range.",
+          "default": 40.0
+        },
+        "pedestrian_traffic_light_max_angle_range": {
+          "type": "number",
+          "description": "Pedestrian traffic light max angle range.",
+          "default": 80.0
+        }
+      },
+      "required": [
+        "max_vibration_pitch",
+        "max_vibration_yaw",
+        "max_vibration_height",
+        "max_vibration_width",
+        "max_vibration_depth",
+        "max_detection_range",
+        "min_timestamp_offset",
+        "max_timestamp_offset",
+        "timestamp_sample_len",
+        "car_traffic_light_max_angle_range",
+        "pedestrian_traffic_light_max_angle_range"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/traffic_light_map_based_detector"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

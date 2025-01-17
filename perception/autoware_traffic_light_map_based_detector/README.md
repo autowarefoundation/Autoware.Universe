@@ -29,14 +29,4 @@ If the node receives no route information, it looks at a radius of 200 meters an
 
 ## Node parameters
 
-| Parameter              | Type   | Description                                                           |
-| ---------------------- | ------ | --------------------------------------------------------------------- |
-| `max_vibration_pitch`  | double | Maximum error in pitch direction. If -5~+5, it will be 10.            |
-| `max_vibration_yaw`    | double | Maximum error in yaw direction. If -5~+5, it will be 10.              |
-| `max_vibration_height` | double | Maximum error in height direction. If -5~+5, it will be 10.           |
-| `max_vibration_width`  | double | Maximum error in width direction. If -5~+5, it will be 10.            |
-| `max_vibration_depth`  | double | Maximum error in depth direction. If -5~+5, it will be 10.            |
-| `max_detection_range`  | double | Maximum detection range in meters. Must be positive                   |
-| `min_timestamp_offset` | double | Minimum timestamp offset when searching for corresponding tf          |
-| `max_timestamp_offset` | double | Maximum timestamp offset when searching for corresponding tf          |
-| `timestamp_sample_len` | double | sampling length between min_timestamp_offset and max_timestamp_offset |
+{{ json_to_markdown("perception/autoware_traffic_light_map_based_detector/schema/traffic_light_map_based_detector.schema.json") }}
