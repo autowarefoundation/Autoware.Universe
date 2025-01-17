@@ -14559,11 +14559,17 @@ Lateral acceleration affects the lane changing duration, a lower value results i
 <h4 id="candidate-path-safety">Candidate Path Safety<a class="headerlink" href="#candidate-path-safety" title="Permanent link">#</a></h4>
 <p>A candidate path is considered safe if:</p>
 <ol>
-<li>There is no overtaking turn lane object</li>
-<li>There is no parked vehicle along the target lane ahead of ego (see following section for more details)</li>
-<li>The path does NOT cause ego footpring to exceed the target lane opposite boundary</li>
+<li>There is no overtaking turn lane object (see Overtaking Object Check section below)</li>
+<li>There is no parked vehicle along the target lane ahead of ego (see Delay Lane Change Check section below)</li>
+<li>The path does NOT cause ego footprint to exceed the target lane opposite boundary</li>
 <li>The path passes collision safety check (See <a href="../autoware_behavior_path_planner_common/docs/behavior_path_planner_safety_check/">safety check utils explanation</a>)</li>
 </ol>
+<h4 id="overtaking-object-check">Overtaking Object Check<a class="headerlink" href="#overtaking-object-check" title="Permanent link">#</a></h4>
+<p>When ego is exiting an intersection on a turning lane, there is a possibility that a rear vehicle will attempt to overtake the ego vehicle. Which can be dangerous if ego is also trying to perform a lane change. Therefore lane change module will adopt a more conservative behavior in such situation.</p>
+<p>If the ego vehicle is currently within an intersection on a truning lane, as shown in the figure below, the generated candidate paths will be marked as unsafe.</p>
+<p><img alt="within intersection turn lane" src="images/lane_change-intersection_turn_lane_1.png"></p>
+<p>Additionally, if the ego vehicle has just exited the turn lane of an intersection and its distance from the intersection is within the <code>backward_length_from_intersection</code>, as shown in the figure below, the generated candidate paths will also be marked as unsafe.</p>
+<p><img alt="after intersection turn lane" src="images/lane_change-intersection_turn_lane_2.png"></p>
 <h4 id="delay-lane-change-check">Delay Lane Change Check<a class="headerlink" href="#delay-lane-change-check" title="Permanent link">#</a></h4>
 <p>In certain situations, when there are stopped vehicles along the target lane ahead of Ego vehicle, to avoid getting stuck, it is desired to perform the lane change maneuver after the stopped vehicle.
 To do so, all static objects ahead of ego along the target lane are checked in order from closest to furthest, if any object satisfies the following conditions, lane change will be delayed and candidate path will be rejected.</p>
