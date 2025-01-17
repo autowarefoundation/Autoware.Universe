@@ -8,20 +8,20 @@
       
       
       
-        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/main/planning/autoware_planning_test_manager/">
+        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/main/planning/autoware_planning_factor_interface/">
       
       
-        <link rel="prev" href="../autoware_planning_factor_interface/">
+        <link rel="prev" href="../autoware_path_smoother/docs/eb/">
       
       
-        <link rel="next" href="../autoware_planning_topic_converter/">
+        <link rel="next" href="../autoware_planning_test_manager/">
       
       <link rel="icon" href="../../docs/assets/images/autoware-foundation.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.20">
     
     
       
-        <title>Autoware Planning Test Manager - Autoware Universe Documentation</title>
+        <title>planning factor interface - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#autoware-planning-test-manager" class="md-skip">
+        <a href="#planning-factor-interface" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Autoware Planning Test Manager
+              planning factor interface
             
           </span>
         </div>
@@ -9539,7 +9539,7 @@
   
   
     <li class="md-nav__item">
-      <a href="." class="md-nav__link">
+      <a href="../autoware_planning_test_manager" class="md-nav__link">
         Planning Test Manager
       </a>
     </li>
@@ -14128,83 +14128,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#background" class="md-nav__link">
-    Background
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#purpose" class="md-nav__link">
-    Purpose
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    Features
-  </a>
-  
-    <nav class="md-nav" aria-label="Features">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#confirmation-of-normal-operation" class="md-nav__link">
-    Confirmation of normal operation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#robustness-confirmation-for-special-inputs" class="md-nav__link">
-    Robustness confirmation for special inputs
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#implemented-tests" class="md-nav__link">
-    Implemented tests
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#important-notes" class="md-nav__link">
-    Important Notes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#future-extensions-unimplemented-parts" class="md-nav__link">
-    Future extensions / Unimplemented parts
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -14221,149 +14144,7 @@
   
 
 
-<div><h1 id="autoware-planning-test-manager">Autoware Planning Test Manager<a class="headerlink" href="#autoware-planning-test-manager" title="Permanent link">#</a></h1>
-<h2 id="background">Background<a class="headerlink" href="#background" title="Permanent link">#</a></h2>
-<p>In each node of the planning module, when exceptional input, such as unusual routes or significantly deviated ego-position, is given, the node may not be prepared for such input and could crash. As a result, debugging node crashes can be time-consuming. For example, if an empty trajectory is given as input and it was not anticipated during implementation, the node might crash due to the unaddressed exceptional input when changes are merged, during scenario testing or while the system is running on an actual vehicle.</p>
-<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
-<p>The purpose is to provide a utility for implementing tests to ensure that node operates correctly when receiving exceptional input. By utilizing this utility and implementing tests for exceptional input, the purpose is to reduce bugs that are only discovered when actually running the system, by requiring measures for exceptional input before merging PRs.</p>
-<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">#</a></h2>
-<h3 id="confirmation-of-normal-operation">Confirmation of normal operation<a class="headerlink" href="#confirmation-of-normal-operation" title="Permanent link">#</a></h3>
-<p>For the test target node, confirm that the node operates correctly and publishes the required messages for subsequent nodes. To do this, test_node publish the necessary messages and confirm that the node's output is being published.</p>
-<h3 id="robustness-confirmation-for-special-inputs">Robustness confirmation for special inputs<a class="headerlink" href="#robustness-confirmation-for-special-inputs" title="Permanent link">#</a></h3>
-<p>After confirming normal operation, ensure that the test target node does not crash when given exceptional input. To do this, provide exceptional input from the test_node and confirm that the node does not crash.</p>
-<p>(WIP)</p>
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="n">TEST</span><span class="p">(</span><span class="n">PlanningModuleInterfaceTest</span><span class="p">,</span><span class="w"> </span><span class="n">NodeTestWithExceptionTrajectory</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">  </span><span class="n">rclcpp</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">);</span>
-
-<span class="w">  </span><span class="c1">// instantiate test_manager with PlanningInterfaceTestManager type</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">test_manager</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">autoware</span><span class="o">::</span><span class="n">planning_test_manager</span><span class="o">::</span><span class="n">PlanningInterfaceTestManager</span><span class="o">&gt;</span><span class="p">();</span>
-
-<span class="w">  </span><span class="c1">// get package directories for necessary configuration files</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">autoware_test_utils_dir</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="n">ament_index_cpp</span><span class="o">::</span><span class="n">get_package_share_directory</span><span class="p">(</span><span class="s">"autoware_test_utils"</span><span class="p">);</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">target_node_dir</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="n">ament_index_cpp</span><span class="o">::</span><span class="n">get_package_share_directory</span><span class="p">(</span><span class="s">"target_node"</span><span class="p">);</span>
-
-<span class="w">  </span><span class="c1">// set arguments to get the config file</span>
-<span class="w">  </span><span class="n">node_options</span><span class="p">.</span><span class="n">arguments</span><span class="p">(</span>
-<span class="w">    </span><span class="p">{</span><span class="s">"--ros-args"</span><span class="p">,</span><span class="w"> </span><span class="s">"--params-file"</span><span class="p">,</span>
-<span class="w">     </span><span class="n">autoware_test_utils_dir</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"/config/test_vehicle_info.param.yaml"</span><span class="p">,</span><span class="w"> </span><span class="s">"--params-file"</span><span class="p">,</span>
-<span class="w">     </span><span class="n">autoware_planning_validator_dir</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"/config/planning_validator.param.yaml"</span><span class="p">});</span>
-
-<span class="w">  </span><span class="c1">// instantiate the TargetNode with node_options</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">test_target_node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">TargetNode</span><span class="o">&gt;</span><span class="p">(</span><span class="n">node_options</span><span class="p">);</span>
-
-<span class="w">  </span><span class="c1">// publish the necessary topics from test_manager second argument is topic name</span>
-<span class="w">  </span><span class="n">test_manager</span><span class="o">-&gt;</span><span class="n">publishOdometry</span><span class="p">(</span><span class="n">test_target_node</span><span class="p">,</span><span class="w"> </span><span class="s">"/localization/kinematic_state"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">test_manager</span><span class="o">-&gt;</span><span class="n">publishMaxVelocity</span><span class="p">(</span>
-<span class="w">    </span><span class="n">test_target_node</span><span class="p">,</span><span class="w"> </span><span class="s">"velocity_smoother/input/external_velocity_limit_mps"</span><span class="p">);</span>
-
-<span class="w">  </span><span class="c1">// set scenario_selector's input topic name(this topic is changed to test node)</span>
-<span class="w">  </span><span class="n">test_manager</span><span class="o">-&gt;</span><span class="n">setTrajectoryInputTopicName</span><span class="p">(</span><span class="s">"input/parking/trajectory"</span><span class="p">);</span>
-
-<span class="w">  </span><span class="c1">// test with normal trajectory</span>
-<span class="w">  </span><span class="n">ASSERT_NO_THROW</span><span class="p">(</span><span class="n">test_manager</span><span class="o">-&gt;</span><span class="n">testWithNominalTrajectory</span><span class="p">(</span><span class="n">test_target_node</span><span class="p">));</span>
-
-<span class="w">  </span><span class="c1">// make sure target_node is running</span>
-<span class="w">  </span><span class="n">EXPECT_GE</span><span class="p">(</span><span class="n">test_manager</span><span class="o">-&gt;</span><span class="n">getReceivedTopicNum</span><span class="p">(),</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
-
-<span class="w">  </span><span class="c1">// test with trajectory input with empty/one point/overlapping point</span>
-<span class="w">  </span><span class="n">ASSERT_NO_THROW</span><span class="p">(</span><span class="n">test_manager</span><span class="o">-&gt;</span><span class="n">testWithAbnormalTrajectory</span><span class="p">(</span><span class="n">test_target_node</span><span class="p">));</span>
-
-<span class="w">  </span><span class="c1">// shutdown ROS context</span>
-<span class="w">  </span><span class="n">rclcpp</span><span class="o">::</span><span class="n">shutdown</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div>
-<h2 id="implemented-tests">Implemented tests<a class="headerlink" href="#implemented-tests" title="Permanent link">#</a></h2>
-<table>
-<thead>
-<tr>
-<th>Node</th>
-<th>Test name</th>
-<th>exceptional input</th>
-<th>output</th>
-<th>Exceptional input pattern</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>autoware_planning_validator</td>
-<td>NodeTestWithExceptionTrajectory</td>
-<td>trajectory</td>
-<td>trajectory</td>
-<td>Empty, single point, path with duplicate points</td>
-</tr>
-<tr>
-<td>velocity_smoother</td>
-<td>NodeTestWithExceptionTrajectory</td>
-<td>trajectory</td>
-<td>trajectory</td>
-<td>Empty, single point, path with duplicate points</td>
-</tr>
-<tr>
-<td>obstacle_cruise_planner</td>
-<td>NodeTestWithExceptionTrajectory</td>
-<td>trajectory</td>
-<td>trajectory</td>
-<td>Empty, single point, path with duplicate points</td>
-</tr>
-<tr>
-<td>obstacle_stop_planner</td>
-<td>NodeTestWithExceptionTrajectory</td>
-<td>trajectory</td>
-<td>trajectory</td>
-<td>Empty, single point, path with duplicate points</td>
-</tr>
-<tr>
-<td>obstacle_velocity_limiter</td>
-<td>NodeTestWithExceptionTrajectory</td>
-<td>trajectory</td>
-<td>trajectory</td>
-<td>Empty, single point, path with duplicate points</td>
-</tr>
-<tr>
-<td>path_optimizer</td>
-<td>NodeTestWithExceptionTrajectory</td>
-<td>trajectory</td>
-<td>trajectory</td>
-<td>Empty, single point, path with duplicate points</td>
-</tr>
-<tr>
-<td>scenario_selector</td>
-<td>NodeTestWithExceptionTrajectoryLaneDrivingMode NodeTestWithExceptionTrajectoryParkingMode</td>
-<td>trajectory</td>
-<td>scenario</td>
-<td>Empty, single point, path with duplicate points for scenarios:LANEDRIVING and PARKING</td>
-</tr>
-<tr>
-<td>freespace_planner</td>
-<td>NodeTestWithExceptionRoute</td>
-<td>route</td>
-<td>trajectory</td>
-<td>Empty route</td>
-</tr>
-<tr>
-<td>behavior_path_planner</td>
-<td>NodeTestWithExceptionRoute NodeTestWithOffTrackEgoPose</td>
-<td>route</td>
-<td>route odometry</td>
-<td>Empty route Off-lane ego-position</td>
-</tr>
-<tr>
-<td>behavior_velocity_planner</td>
-<td>NodeTestWithExceptionPathWithLaneID</td>
-<td>path_with_lane_id</td>
-<td>path</td>
-<td>Empty path</td>
-</tr>
-</tbody>
-</table>
-<h2 id="important-notes">Important Notes<a class="headerlink" href="#important-notes" title="Permanent link">#</a></h2>
-<p>During test execution, when launching a node, parameters are loaded from the parameter file within each package. Therefore, when adding parameters, it is necessary to add the required parameters to the parameter file in the target node package. This is to prevent the node from being unable to launch if there are missing parameters when retrieving them from the parameter file during node launch.</p>
-<h2 id="future-extensions-unimplemented-parts">Future extensions / Unimplemented parts<a class="headerlink" href="#future-extensions-unimplemented-parts" title="Permanent link">#</a></h2>
-<p>(WIP)</p></div>
+<h1 id="planning-factor-interface">planning factor interface<a class="headerlink" href="#planning-factor-interface" title="Permanent link">#</a></h1>
 
 
 
@@ -14390,7 +14171,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../autoware_planning_factor_interface/" class="md-footer__link md-footer__link--prev" aria-label="Previous: planning factor interface" rel="prev">
+          <a href="../autoware_path_smoother/docs/eb/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Elastic band" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -14399,20 +14180,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                planning factor interface
+                Elastic band
               </div>
             </div>
           </a>
         
         
           
-          <a href="../autoware_planning_topic_converter/" class="md-footer__link md-footer__link--next" aria-label="Next: Planning Topic Converter" rel="next">
+          <a href="../autoware_planning_test_manager/" class="md-footer__link md-footer__link--next" aria-label="Next: Autoware Planning Test Manager" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Planning Topic Converter
+                Autoware Planning Test Manager
               </div>
             </div>
             <div class="md-footer__button md-icon">
