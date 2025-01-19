@@ -14454,8 +14454,8 @@
 - The length of the prepare phase trajectory is greater than the distance to start of target lane
 - The length of the prepare phase trajectory is less than the distance to terminal start point</p>
 <h3 id="lane-changing-phase">Lane-changing phase<a class="headerlink" href="#lane-changing-phase" title="Permanent link">#</a></h3>
-<p>The lane-changing phase consist of the shifted path that moves ego from current lane to the target lane. Total duration of lane-changing phase is computed from the <code>shift_length</code>, <code>lateral_jerk</code> and <code>lateral_acceleration</code>.</p>
-<p>In principle, positive longitudinal acceleration is considered during lane-changing phase, and is computes as follows.</p>
+<p>The lane-changing phase consists of the shifted path that moves ego from current lane to the target lane. Total duration of lane-changing phase is computed from the <code>shift_length</code>, <code>lateral_jerk</code> and <code>lateral_acceleration</code>.</p>
+<p>In principle, positive longitudinal acceleration is considered during lane-changing phase, and is computed as follows.</p>
 <div class="highlight"><pre><span></span><code><span class="n">lane_changing_acceleration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">clamp</span><span class="p">((</span><span class="n">max_path_velocity</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">initial_lane_changing_velocity</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">lane_changing_time</span><span class="p">,</span>
 <span class="w">  </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">prepare_longitudinal_acc</span><span class="p">);</span>
 </code></pre></div>
@@ -14480,7 +14480,7 @@ For example, when the lane change module first activates and turn signal is acti
 <p>When ego vehicles is close to the terminal start, we need to sample multiple prepare duration values to find a valid and safe path. In this case prepare duration values are sampled starting from <code>max_prepare_duration</code> down to <code>0.0</code> at a fixed time interval of <code>0.5 s</code>.</p>
 <h4 id="multiple-candidate-path-samples-longitudinal-acceleration">Multiple candidate path samples (longitudinal acceleration)<a class="headerlink" href="#multiple-candidate-path-samples-longitudinal-acceleration" title="Permanent link">#</a></h4>
 <p>In principle, maximum longitudinal acceleration is assumed for generating lane change candidate path.
-However is certain situations, we need to sample multiple longitudinal acceleration values to find a valid and safe candidate path.
+However in certain situations, we need to sample multiple longitudinal acceleration values to find a valid and safe candidate path.
 The lower and upper bounds of the longitudinal acceleration sampled are determined from the values specified in the lane change parameters and common planner parameters, as follows</p>
 <div class="highlight"><pre><span></span><code><span class="n">maximum_longitudinal_acceleration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">common_param</span><span class="p">.</span><span class="n">max_acc</span><span class="p">,</span><span class="w"> </span><span class="n">lane_change_param</span><span class="p">.</span><span class="n">max_acc</span><span class="p">)</span>
 <span class="n">minimum_longitudinal_acceleration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">common_param</span><span class="p">.</span><span class="n">min_acc</span><span class="p">,</span><span class="w"> </span><span class="n">lane_change_param</span><span class="p">.</span><span class="n">min_acc</span><span class="p">)</span>
@@ -14566,7 +14566,7 @@ Lateral acceleration affects the lane changing duration, a lower value results i
 </ol>
 <h4 id="overtaking-object-check">Overtaking Object Check<a class="headerlink" href="#overtaking-object-check" title="Permanent link">#</a></h4>
 <p>When ego is exiting an intersection on a turning lane, there is a possibility that a rear vehicle will attempt to overtake the ego vehicle. Which can be dangerous if ego is also trying to perform a lane change. Therefore lane change module will adopt a more conservative behavior in such situation.</p>
-<p>If the ego vehicle is currently within an intersection on a truning lane, as shown in the figure below, the generated candidate paths will be marked as unsafe.</p>
+<p>If the ego vehicle is currently within an intersection on a turning lane, as shown in the figure below, the generated candidate paths will be marked as unsafe.</p>
 <p><img alt="within intersection turn lane" src="images/lane_change-intersection_turn_lane_1.png"></p>
 <p>Additionally, if the ego vehicle has just exited the turn lane of an intersection and its distance from the intersection is within the <code>backward_length_from_intersection</code>, as shown in the figure below, the generated candidate paths will also be marked as unsafe.</p>
 <p><img alt="after intersection turn lane" src="images/lane_change-intersection_turn_lane_2.png"></p>
