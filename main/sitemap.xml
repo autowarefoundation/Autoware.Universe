@@ -346,11 +346,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/main/localization/autoware_ekf_localizer/</loc>
-         <lastmod>2025-01-20</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/main/localization/autoware_geo_pose_projector/</loc>
          <lastmod>2025-01-20</lastmod>
          <changefreq>daily</changefreq>
