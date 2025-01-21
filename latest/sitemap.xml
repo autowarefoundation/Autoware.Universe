@@ -36,7 +36,7 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/common/autoware_component_interface_specs/</loc>
+         <loc>https://autowarefoundation.github.io/autoware.universe/latest/common/autoware_component_interface_specs_universe/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
