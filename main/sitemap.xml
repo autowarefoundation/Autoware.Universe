@@ -1101,7 +1101,7 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/main/planning/motion_velocity_planner/autoware_motion_velocity_planner_node/</loc>
+         <loc>https://autowarefoundation.github.io/autoware.universe/main/planning/motion_velocity_planner/autoware_motion_velocity_planner_node_universe/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
