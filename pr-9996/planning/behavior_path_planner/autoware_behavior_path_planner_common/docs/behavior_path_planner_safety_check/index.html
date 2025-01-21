@@ -14269,9 +14269,11 @@ d_{\text{rss}} = v_{\text{rear}} (t_{\text{reaction}} + t_{\text{margin}}) + \fr
 <p>To provide flexibility, these parameters can vary by module. Each module can define its own set of safety check parameters to accommodate different scenarios or requirements.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Based on <a href="#4-calculate-rss-distance">RSS distance equation</a>, the <span class="arithmatex">\(t_{\text{reaction}}\)</span> and <span class="arithmatex">\(t_{\text{margin}}\)</span> are added together, so increasing either of them will make the RSS polygon longer. However, users should tune these parameters according to the RSS principles as closely as possible. Specifically:
-- <span class="arithmatex">\(t_{\text{reaction}}\)</span> should reflect the driver’s reaction time.
-- <span class="arithmatex">\(t_{\text{margin}}\)</span> should account for uncertainties, such as varying road conditions or unexpected reaction delays.</p>
+<p>Based on <a href="#4-calculate-rss-distance">RSS distance equation</a>, the <span class="arithmatex">\(t_{\text{reaction}}\)</span> and <span class="arithmatex">\(t_{\text{margin}}\)</span> are added together, so increasing either of them will make the RSS polygon longer. However, users should tune these parameters according to the RSS principles as closely as possible. Specifically:</p>
+<ul>
+<li><span class="arithmatex">\(t_{\text{reaction}}\)</span> should reflect the driver’s reaction time.</li>
+<li><span class="arithmatex">\(t_{\text{margin}}\)</span> should account for uncertainties, such as varying road conditions or unexpected reaction delays.</li>
+</ul>
 </div>
 <h3 id="extended-polygon-policy">Extended Polygon Policy<a class="headerlink" href="#extended-polygon-policy" title="Permanent link">#</a></h3>
 <p>The Extended Polygon Policy defines the shape of the extended polygon. It can be configured using the parameter <code>extended_polygon_policy</code>. The value can be set to either <code>rectangle</code> or <code>along-path</code>.</p>
@@ -14284,13 +14286,13 @@ d_{\text{rss}} = v_{\text{rear}} (t_{\text{reaction}} + t_{\text{margin}}) + \fr
     <tr>
       <td>
         <div style="text-align: center;">
-        <div style="color: black; font-size: 20px; margin-bottom: 10px;">`rectangle`</div>
+        <div style="color: black; font-size: 20px; margin-bottom: 10px;">rectangle</div>
         <img src="../images/path_safety_checker/rectangle.png" alt="Rectangle">
         </div>
       </td>
       <td>
         <div style="text-align: center;">
-        <div style="color: black; font-size: 20px; margin-bottom: 10px;">`along_path`</div>
+        <div style="color: black; font-size: 20px; margin-bottom: 10px;">along_path</div>
         <img src="../images/path_safety_checker/along_path.png" alt="Along Path">
         </div>
       </td>
