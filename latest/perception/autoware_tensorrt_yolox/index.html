@@ -14207,6 +14207,7 @@
 <div><h1 id="autoware_tensorrt_yolox">autoware_tensorrt_yolox<a class="headerlink" href="#autoware_tensorrt_yolox" title="Permanent link">#</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">#</a></h2>
 <p>This package detects target objects e.g., cars, trucks, bicycles, and pedestrians and segment target objects such as cars, trucks, buses and pedestrian, building, vegetation, road, sidewalk on a image based on <a href="https://github.com/Megvii-BaseDetection/YOLOX">YOLOX</a> model with multi-header structure.</p>
+<p>Additionally, the package also supports traffic light detection by switching onnx file which target classes listed on respective <code>label_file</code>. Currently 0: <code>unknown</code>, 1: <code>car_traffic_light</code> and 2: <code>pedestrian_traffic_light</code>.</p>
 <h2 id="inner-workings-algorithms">Inner-workings / Algorithms<a class="headerlink" href="#inner-workings-algorithms" title="Permanent link">#</a></h2>
 <h3 id="cite">Cite<a class="headerlink" href="#cite" title="Permanent link">#</a></h3>
 <!-- cspell: ignore Zheng, Songtao, Feng, Zeming, Jian, semseg -->
@@ -14243,7 +14244,7 @@
 <tr>
 <td><code>out/objects</code></td>
 <td><code>tier4_perception_msgs/DetectedObjectsWithFeature</code></td>
-<td>The detected objects with 2D bounding boxes</td>
+<td>The detected objects or traffic light with 2D bounding boxes</td>
 </tr>
 <tr>
 <td><code>out/image</code></td>
@@ -14253,12 +14254,12 @@
 <tr>
 <td><code>out/mask</code></td>
 <td><code>sensor_msgs/Image</code></td>
-<td>The semantic segmentation mask</td>
+<td>The semantic segmentation mask (only effective for semseg model)</td>
 </tr>
 <tr>
 <td><code>out/color_mask</code></td>
 <td><code>sensor_msgs/Image</code></td>
-<td>The colorized image of semantic segmentation mask for visualization</td>
+<td>The colorized image of semantic segmentation mask for visualization (only effective for semseg model)</td>
 </tr>
 </tbody>
 </table>
@@ -14496,6 +14497,13 @@
 <li>BICYCLE</li>
 <li>MOTORCYCLE</li>
 </ul>
+<p>or</p>
+<ul>
+<li>UNKNOWN</li>
+<li>CAR_TRAFFIC_LIGHT</li>
+<li>PEDESTRIAN_TRAFFIC_LIGHT</li>
+</ul>
+<p>for traffic light detector onnx model.</p>
 <p>If other labels (case insensitive) are contained in the file specified via the <code>label_file</code> parameter,
 those are labeled as <code>UNKNOWN</code>, while detected rectangles are drawn in the visualization result (<code>out/image</code>).</p>
 <p>The semantic segmentation mask is a gray image whose each pixel is index of one following class:</p>
