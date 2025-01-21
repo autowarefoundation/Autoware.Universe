@@ -14571,8 +14571,8 @@ Lateral acceleration affects the lane changing duration, a lower value results i
 <h4 id="candidate-path-safety">Candidate Path Safety<a class="headerlink" href="#candidate-path-safety" title="Permanent link">#</a></h4>
 <p>A candidate path is considered safe if:</p>
 <ol>
-<li>There is no overtaking turn lane object (see Overtaking Object Check section below)</li>
-<li>There is no parked vehicle along the target lane ahead of ego (see Delay Lane Change Check section below)</li>
+<li>There are no overtaking objects when the ego vehicle exits the turn-direction lane. (see <a href="#overtaking-object-check">Overtaking Object Check</a>)</li>
+<li>There is no parked vehicle along the target lane ahead of ego (see <a href="#delay-lane-change-check">Delay Lane Change Check</a>)</li>
 <li>The path does NOT cause ego footprint to exceed the target lane opposite boundary</li>
 <li>The path passes collision safety check (See <a href="../autoware_behavior_path_planner_common/docs/behavior_path_planner_safety_check/">safety check utils explanation</a>)</li>
 </ol>
