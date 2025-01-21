@@ -14372,9 +14372,13 @@ In case the approved path is deemed to be no longer safe, the lane change module
 For example, when the lane change module first activates and turn signal is activated then prepare duration will be <code>max_prepare_duration</code>, as time passes and a path is still not approved, the prepare duration will decrease gradually down to <code>min_prepare_duration</code>. The formula is as follows.</p>
 <div class="highlight"><pre><span></span><code><span class="n">prepare_duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">max_prepare_duration</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">turn_signal_duration</span><span class="p">,</span><span class="w"> </span><span class="n">min_prepare_duration</span><span class="p">);</span>
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When the current ego velocity is lower than the <code>min_lane_change_velocity</code>, the <code>min_prepare_duration</code> is adjusted to ensure sufficient time for reaching <code>min_lane_change_velocity</code> assuming <code>max_longitudinal_acceleration</code>.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>When the current ego velocity is lower than the <code>min_lane_change_velocity</code>, the <code>min_prepare_duration</code> is adjusted to ensure sufficient time for reaching <code>min_lane_change_velocity</code> assuming <code>max_longitudinal_acceleration</code>.</p>
+<p>The value of the prepare duration impacts lane change cancelling behavior. A shorter prepare duration results in a smaller window in which lane change maneuver can be cancelled. See <a href="#evaluating-ego-vehicles-position-to-prevent-abrupt-maneuvers">Evaluating Ego Vehicle's Position to Prevent Abrupt Maneuvers</a> for more details.</p>
 </div>
 <p>When ego vehicles is close to the terminal start, we need to sample multiple prepare duration values to find a valid and safe path. In this case prepare duration values are sampled starting from <code>max_prepare_duration</code> down to <code>0.0</code> at a fixed time interval of <code>0.5 s</code>.</p>
 <h5 id="longitudinal-acceleration-sampling">Longitudinal Acceleration Sampling<a class="headerlink" href="#longitudinal-acceleration-sampling" title="Permanent link">#</a></h5>
