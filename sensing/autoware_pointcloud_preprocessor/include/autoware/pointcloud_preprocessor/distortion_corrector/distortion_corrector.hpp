@@ -16,7 +16,7 @@
 #define AUTOWARE__POINTCLOUD_PREPROCESSOR__DISTORTION_CORRECTOR__DISTORTION_CORRECTOR_HPP_
 
 #include <Eigen/Core>
-#include <autoware/universe_utils/ros/managed_transform_buffer.hpp>
+#include <managed_transform_buffer/managed_transform_buffer.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <sophus/se3.hpp>
 
@@ -66,7 +66,7 @@ protected:
   bool pointcloud_transform_needed_{false};
   bool pointcloud_transform_exists_{false};
   bool imu_transform_exists_{false};
-  std::unique_ptr<autoware::universe_utils::ManagedTransformBuffer> managed_tf_buffer_{nullptr};
+  std::unique_ptr<managed_transform_buffer::ManagedTransformBuffer> managed_tf_buffer_{nullptr};
 
   std::deque<geometry_msgs::msg::TwistStamped> twist_queue_;
   std::deque<geometry_msgs::msg::Vector3Stamped> angular_velocity_queue_;
@@ -84,11 +84,9 @@ protected:
   static tf2::Transform convert_matrix_to_transform(const Eigen::Matrix4f & matrix);
 
 public:
-  explicit DistortionCorrectorBase(rclcpp::Node & node, const bool & has_static_tf_only)
-  : node_(node)
+  explicit DistortionCorrectorBase(rclcpp::Node & node) : node_(node)
   {
-    managed_tf_buffer_ =
-      std::make_unique<autoware::universe_utils::ManagedTransformBuffer>(&node, has_static_tf_only);
+    managed_tf_buffer_ = std::make_unique<managed_transform_buffer::ManagedTransformBuffer>(&node);
   }
 
   virtual ~DistortionCorrectorBase() = default;
@@ -120,10 +118,7 @@ template <class T>
 class DistortionCorrector : public DistortionCorrectorBase
 {
 public:
-  explicit DistortionCorrector(rclcpp::Node & node, const bool & has_static_tf_only)
-  : DistortionCorrectorBase(node, has_static_tf_only)
-  {
-  }
+  explicit DistortionCorrector(rclcpp::Node & node) : DistortionCorrectorBase(node) {}
 
   void undistort_pointcloud(
     bool use_imu, std::optional<AngleConversion> angle_conversion_opt,
@@ -158,10 +153,7 @@ private:
   tf2::Transform tf2_base_link_to_lidar_;
 
 public:
-  explicit DistortionCorrector2D(rclcpp::Node & node, const bool & has_static_tf_only)
-  : DistortionCorrector(node, has_static_tf_only)
-  {
-  }
+  explicit DistortionCorrector2D(rclcpp::Node & node) : DistortionCorrector(node) {}
   void initialize() override;
   void set_pointcloud_transform(
     const std::string & base_frame, const std::string & lidar_frame) override;
@@ -187,10 +179,7 @@ private:
   Eigen::Matrix4f eigen_base_link_to_lidar_;
 
 public:
-  explicit DistortionCorrector3D(rclcpp::Node & node, const bool & has_static_tf_only)
-  : DistortionCorrector(node, has_static_tf_only)
-  {
-  }
+  explicit DistortionCorrector3D(rclcpp::Node & node) : DistortionCorrector(node) {}
   void initialize() override;
   void set_pointcloud_transform(
     const std::string & base_frame, const std::string & lidar_frame) override;

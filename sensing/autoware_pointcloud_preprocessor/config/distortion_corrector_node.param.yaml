@@ -4,4 +4,3 @@
     use_imu: true
     use_3d_distortion_correction: false
     update_azimuth_and_distance: false
-    has_static_tf_only: true

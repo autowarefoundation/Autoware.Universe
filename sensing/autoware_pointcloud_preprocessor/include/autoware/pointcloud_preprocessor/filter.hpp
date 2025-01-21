@@ -76,9 +76,9 @@
 
 // Include tier4 autoware utils
 #include <autoware/universe_utils/ros/debug_publisher.hpp>
-#include <autoware/universe_utils/ros/managed_transform_buffer.hpp>
 #include <autoware/universe_utils/ros/published_time_publisher.hpp>
 #include <autoware/universe_utils/system/stop_watch.hpp>
+#include <managed_transform_buffer/managed_transform_buffer.hpp>
 
 namespace autoware::pointcloud_preprocessor
 {
@@ -169,9 +169,6 @@ protected:
    * if input.header.frame_id is different. */
   std::string tf_output_frame_;
 
-  /** \brief The flag to indicate if only static TF are used. */
-  bool has_static_tf_only_;
-
   /** \brief Internal mutex. */
   std::mutex mutex_;
 
@@ -238,7 +235,7 @@ protected:
    * versus an exact one (false by default). */
   bool approximate_sync_ = false;
 
-  std::unique_ptr<autoware::universe_utils::ManagedTransformBuffer> managed_tf_buffer_{nullptr};
+  std::unique_ptr<managed_transform_buffer::ManagedTransformBuffer> managed_tf_buffer_{nullptr};
 
   inline bool isValid(
     const PointCloud2ConstPtr & cloud, const std::string & /*topic_name*/ = "input")

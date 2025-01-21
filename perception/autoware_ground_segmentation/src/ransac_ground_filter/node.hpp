@@ -18,7 +18,7 @@
 #include "autoware/pointcloud_preprocessor/filter.hpp"
 #include "autoware/universe_utils/system/time_keeper.hpp"
 
-#include <autoware/universe_utils/ros/managed_transform_buffer.hpp>
+#include <managed_transform_buffer/managed_transform_buffer.hpp>
 
 #include <geometry_msgs/msg/pose_array.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
@@ -84,24 +84,12 @@ private:
   bool debug_ = false;
   bool is_initialized_debug_message_ = false;
   Eigen::Vector3d unit_vec_ = Eigen::Vector3d::UnitZ();
-  std::unique_ptr<autoware::universe_utils::ManagedTransformBuffer> managed_tf_buffer_{nullptr};
+  std::unique_ptr<managed_transform_buffer::ManagedTransformBuffer> managed_tf_buffer_{nullptr};
 
   // time keeper related
   rclcpp::Publisher<autoware::universe_utils::ProcessingTimeDetail>::SharedPtr
     detailed_processing_time_publisher_;
   std::shared_ptr<autoware::universe_utils::TimeKeeper> time_keeper_;
-
-  /*!
-   * Output transformed PointCloud from in_cloud_ptr->header.frame_id to in_target_frame
-   * @param[in] in_target_frame Coordinate system to perform transform
-   * @param[in] in_cloud_ptr PointCloud to perform transform
-   * @param[out] out_cloud_ptr Resulting transformed PointCloud
-   * @retval true transform succeeded
-   * @retval false transform failed
-   */
-  bool transformPointCloud(
-    const std::string & in_target_frame, const PointCloud2ConstPtr & in_cloud_ptr,
-    const PointCloud2::SharedPtr & out_cloud_ptr);
 
   /*!
    * Returns the resulting complementary PointCloud, one with the points kept and the other removed

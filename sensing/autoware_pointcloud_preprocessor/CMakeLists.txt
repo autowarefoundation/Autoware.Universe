@@ -13,6 +13,7 @@ find_package(Sophus REQUIRED)
 find_package(Boost REQUIRED)
 find_package(PCL REQUIRED)
 find_package(CGAL REQUIRED COMPONENTS Core)
+find_package(managed_transform_buffer REQUIRED)
 
 include_directories(
   include
@@ -45,6 +46,7 @@ ament_target_dependencies(pointcloud_preprocessor_filter_base
   autoware_universe_utils
   pcl_ros
   autoware_point_types
+  managed_transform_buffer
 )
 
 add_library(faster_voxel_grid_downsample_filter SHARED
