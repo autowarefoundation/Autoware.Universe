@@ -426,6 +426,8 @@ void PointCloudConcatenateDataSynchronizerComponent::publish()
   // publish concatenated pointcloud
   if (concat_cloud_ptr) {
     auto output = std::make_unique<sensor_msgs::msg::PointCloud2>(*concat_cloud_ptr);
+    std::cout << "publishing concatenated pointcloud"  << std::endl;
+    std::cout << "num points: " << output->width * output->height << std::endl;
     pub_output_->publish(std::move(output));
   } else {
     RCLCPP_WARN(this->get_logger(), "concat_cloud_ptr is nullptr, skipping pointcloud publish.");
@@ -436,6 +438,8 @@ void PointCloudConcatenateDataSynchronizerComponent::publish()
     for (const auto & e : transformed_raw_points) {
       if (e.second) {
         auto output = std::make_unique<sensor_msgs::msg::PointCloud2>(*e.second);
+        std::cout << "publishing " << e.first << std::endl;
+        std::cout << "num points: " << e.second->width * e.second->height << std::endl;
         transformed_raw_pc_publisher_map_[e.first]->publish(std::move(output));
       } else {
         RCLCPP_WARN(
