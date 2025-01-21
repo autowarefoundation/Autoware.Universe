@@ -36,7 +36,7 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/common/autoware_component_interface_specs/</loc>
+         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/common/autoware_component_interface_specs_universe/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -81,11 +81,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/common/autoware_kalman_filter/</loc>
-         <lastmod>2025-01-21</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/common/autoware_motion_utils/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
@@ -101,17 +96,7 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/common/autoware_osqp_interface/design/osqp_interface-design/</loc>
-         <lastmod>2025-01-21</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/common/autoware_path_distance_calculator/Readme/</loc>
-         <lastmod>2025-01-21</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/common/autoware_point_types/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -122,11 +107,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/common/autoware_pyplot/</loc>
-         <lastmod>2025-01-21</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/common/autoware_qp_interface/design/qp_interface-design/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -291,17 +271,17 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/evaluator/autoware_localization_evaluator/</loc>
+         <lastmod>2025-01-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/evaluator/autoware_planning_evaluator/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/evaluator/kinematic_evaluator/</loc>
-         <lastmod>2025-01-21</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/evaluator/localization_evaluator/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -366,11 +346,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/localization/autoware_ekf_localizer/</loc>
-         <lastmod>2025-01-21</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/localization/autoware_geo_pose_projector/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
@@ -397,11 +372,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/localization/autoware_localization_error_monitor/</loc>
-         <lastmod>2025-01-21</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/localization/autoware_localization_util/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -891,6 +861,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/planning/autoware_planning_factor_interface/</loc>
+         <lastmod>2025-01-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/planning/autoware_planning_test_manager/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
@@ -922,11 +897,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/planning/autoware_scenario_selector/</loc>
-         <lastmod>2025-01-21</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/planning/autoware_static_centerline_generator/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -1076,6 +1046,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/planning/behavior_velocity_planner/autoware_behavior_velocity_rtc_interface/</loc>
+         <lastmod>2025-01-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/planning/behavior_velocity_planner/autoware_behavior_velocity_run_out_module/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
@@ -1186,7 +1161,7 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/sensing/autoware_pointcloud_preprocessor/docs/blockage_diag/</loc>
+         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/sensing/autoware_pointcloud_preprocessor/docs/blockage-diag/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -1627,6 +1602,11 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/visualization/autoware_overlay_rviz_plugin/autoware_overlay_rviz_plugin/</loc>
+         <lastmod>2025-01-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/pr-9994/visualization/autoware_overlay_rviz_plugin/autoware_string_stamped_overlay_rviz_plugin/</loc>
          <lastmod>2025-01-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
