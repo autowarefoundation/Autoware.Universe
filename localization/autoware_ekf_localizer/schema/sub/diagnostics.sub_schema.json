@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EKF Localizer Configuration for Diagnostics",
+  "definitions": {
+    "diagnostics": {
+      "type": "object",
+      "properties": {
+        "pose_no_update_count_threshold_warn": {
+          "type": "integer",
+          "description": "The threshold at which a WARN state is triggered due to the Pose Topic update not happening continuously for a certain number of times",
+          "default": 50
+        },
+        "pose_no_update_count_threshold_error": {
+          "type": "integer",
+          "description": "The threshold at which an ERROR state is triggered due to the Pose Topic update not happening continuously for a certain number of times",
+          "default": 100
+        },
+        "twist_no_update_count_threshold_warn": {
+          "type": "integer",
+          "description": "The threshold at which a WARN state is triggered due to the Twist Topic update not happening continuously for a certain number of times",
+          "default": 50
+        },
+        "twist_no_update_count_threshold_error": {
+          "type": "integer",
+          "description": "The threshold at which an ERROR state is triggered due to the Twist Topic update not happening continuously for a certain number of times",
+          "default": 100
+        },
+        "ellipse_scale": {
+          "type": "number",
+          "description": "The scale factor to apply the error ellipse size",
+          "default": 3.0
+        },
+        "error_ellipse_size": {
+          "type": "number",
+          "description": "The long axis size of the error ellipse to trigger a ERROR state",
+          "default": 1.5
+        },
+        "warn_ellipse_size": {
+          "type": "number",
+          "description": "The long axis size of the error ellipse to trigger a WARN state",
+          "default": 1.2
+        },
+        "error_ellipse_size_lateral_direction": {
+          "type": "number",
+          "description": "The lateral direction size of the error ellipse to trigger a ERROR state",
+          "default": 0.3
+        },
+        "warn_ellipse_size_lateral_direction": {
+          "type": "number",
+          "description": "The lateral direction size of the error ellipse to trigger a WARN state",
+          "default": 0.25
+        }
+      },
+      "required": [
+        "pose_no_update_count_threshold_warn",
+        "pose_no_update_count_threshold_error",
+        "twist_no_update_count_threshold_warn",
+        "twist_no_update_count_threshold_error"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -122,6 +122,7 @@ component_management:
     - component_id: localization-tier-iv-maintained-packages
       name: Localization TIER IV Maintained Packages
       paths:
+        - localization/autoware_ekf_localizer/**
         - localization/autoware_gyro_odometer/**
         - localization/autoware_localization_error_monitor/**
         - localization/autoware_localization_util/**
