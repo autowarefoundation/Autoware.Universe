@@ -1306,6 +1306,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/autoware_bluetooth_monitor/</loc>
+         <lastmod>2025-01-22</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/autoware_component_monitor/</loc>
          <lastmod>2025-01-22</lastmod>
          <changefreq>daily</changefreq>
@@ -1357,11 +1362,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/autoware_processing_time_checker/</loc>
-         <lastmod>2025-01-22</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/bluetooth_monitor/</loc>
          <lastmod>2025-01-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
