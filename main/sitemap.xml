@@ -1361,6 +1361,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/main/system/autoware_duplicated_node_checker/</loc>
+         <lastmod>2025-01-22</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/main/system/autoware_processing_time_checker/</loc>
          <lastmod>2025-01-22</lastmod>
          <changefreq>daily</changefreq>
@@ -1462,11 +1467,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/main/system/dummy_infrastructure/</loc>
-         <lastmod>2025-01-22</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/main/system/duplicated_node_checker/</loc>
          <lastmod>2025-01-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
