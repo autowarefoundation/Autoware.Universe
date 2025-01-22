@@ -276,17 +276,17 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/main/evaluator/autoware_perception_online_evaluator/</loc>
+         <lastmod>2025-01-22</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/main/evaluator/autoware_planning_evaluator/</loc>
          <lastmod>2025-01-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/main/evaluator/kinematic_evaluator/</loc>
-         <lastmod>2025-01-22</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/main/evaluator/perception_online_evaluator/</loc>
          <lastmod>2025-01-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
