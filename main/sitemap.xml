@@ -1371,6 +1371,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/main/system/autoware_topic_relay_controller/</loc>
+         <lastmod>2025-01-22</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/main/system/component_state_monitor/</loc>
          <lastmod>2025-01-22</lastmod>
          <changefreq>daily</changefreq>
