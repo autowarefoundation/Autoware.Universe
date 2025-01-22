@@ -1641,6 +1641,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/latest/visualization/tier4_planning_factor_rviz_plugin/</loc>
+         <lastmod>2025-01-22</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/visualization/tier4_planning_rviz_plugin/</loc>
          <lastmod>2025-01-22</lastmod>
          <changefreq>daily</changefreq>
