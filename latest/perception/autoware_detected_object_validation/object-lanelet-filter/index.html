@@ -14474,6 +14474,7 @@ The objects only inside of the vector map will be published.</p>
 </tbody>
 </table>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">#</a></h2>
+<p>Description of the <code>filter_settings</code> in the parameters of the <code>object_lanelet_filter</code> node.</p>
 <table>
 <thead>
 <tr>
@@ -14486,12 +14487,47 @@ The objects only inside of the vector map will be published.</p>
 <tr>
 <td><code>debug</code></td>
 <td><code>bool</code></td>
-<td>if true, publish debug markers</td>
+<td>If <code>true</code>, publishes additional debug information, including visualization markers on the <code>~/debug/marker</code> topic for tools like RViz.</td>
 </tr>
 <tr>
 <td><code>lanelet_extra_margin</code></td>
 <td><code>double</code></td>
-<td><code>if &gt; 0</code> lanelet polygons are expanded by extra margin, <code>if &lt;= 0</code> margin is disabled</td>
+<td>If <code>&gt; 0</code>, expands the lanelet polygons used for overlap checks by this margin (in meters). If <code>&lt;= 0</code>, polygon expansion is disabled.</td>
+</tr>
+<tr>
+<td><code>polygon_overlap_filter.enabled</code></td>
+<td><code>bool</code></td>
+<td>If <code>true</code>, enables filtering of objects based on their overlap with lanelet polygons.</td>
+</tr>
+<tr>
+<td><code>lanelet_direction_filter.enabled</code></td>
+<td><code>bool</code></td>
+<td>If <code>true</code>, enables filtering of objects based on their velocity direction relative to the lanelet.</td>
+</tr>
+<tr>
+<td><code>lanelet_direction_filter.velocity_yaw_threshold</code></td>
+<td><code>double</code></td>
+<td>The yaw angle difference threshold (in radians) between the object’s velocity vector and the lanelet direction.</td>
+</tr>
+<tr>
+<td><code>lanelet_direction_filter.object_speed_threshold</code></td>
+<td><code>double</code></td>
+<td>The minimum speed (in m/s) of an object required for the direction filter to be applied.</td>
+</tr>
+<tr>
+<td><code>use_height_threshold</code></td>
+<td><code>bool</code></td>
+<td>If <code>true</code>, enables filtering of objects based on their height relative to the base_link frame.</td>
+</tr>
+<tr>
+<td><code>max_height_threshold</code></td>
+<td><code>double</code></td>
+<td>The maximum allowable height (in meters) of an object relative to the base_link in the map frame.</td>
+</tr>
+<tr>
+<td><code>min_height_threshold</code></td>
+<td><code>double</code></td>
+<td>The minimum allowable height (in meters) of an object relative to the base_link in the map frame.</td>
 </tr>
 </tbody>
 </table>
