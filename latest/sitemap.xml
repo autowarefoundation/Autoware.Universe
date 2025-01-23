@@ -1381,6 +1381,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/autoware_mrm_emergency_stop_operator/</loc>
+         <lastmod>2025-01-23</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/autoware_mrm_handler/</loc>
          <lastmod>2025-01-23</lastmod>
          <changefreq>daily</changefreq>
@@ -1482,11 +1487,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/mrm_comfortable_stop_operator/</loc>
-         <lastmod>2025-01-23</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/mrm_emergency_stop_operator/</loc>
          <lastmod>2025-01-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
