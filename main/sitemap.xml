@@ -1356,6 +1356,16 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/main/system/autoware_default_adapi_helpers/autoware_adapi_adaptors/</loc>
+         <lastmod>2025-01-23</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/main/system/autoware_default_adapi_helpers/autoware_automatic_pose_initializer/</loc>
+         <lastmod>2025-01-23</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/main/system/autoware_dummy_diag_publisher/</loc>
          <lastmod>2025-01-23</lastmod>
          <changefreq>daily</changefreq>
@@ -1382,16 +1392,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/main/system/component_state_monitor/</loc>
-         <lastmod>2025-01-23</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/main/system/default_ad_api_helpers/ad_api_adaptors/</loc>
-         <lastmod>2025-01-23</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/main/system/default_ad_api_helpers/automatic_pose_initializer/</loc>
          <lastmod>2025-01-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
