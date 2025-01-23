@@ -1271,12 +1271,12 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/simulator/dummy_perception_publisher/</loc>
+         <loc>https://autowarefoundation.github.io/autoware.universe/latest/simulator/autoware_fault_injection/</loc>
          <lastmod>2025-01-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/simulator/fault_injection/</loc>
+         <loc>https://autowarefoundation.github.io/autoware.universe/latest/simulator/dummy_perception_publisher/</loc>
          <lastmod>2025-01-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
