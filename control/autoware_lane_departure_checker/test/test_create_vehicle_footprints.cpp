@@ -24,8 +24,8 @@
 using autoware::universe_utils::LinearRing2d;
 using autoware_planning_msgs::msg::TrajectoryPoint;
 using geometry_msgs::msg::PoseWithCovariance;
-using tier4_planning_msgs::msg::PathPointWithLaneId;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using TrajectoryPoints = std::vector<TrajectoryPoint>;
 
 namespace

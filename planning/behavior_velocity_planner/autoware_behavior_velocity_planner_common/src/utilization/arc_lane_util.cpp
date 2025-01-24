@@ -15,7 +15,7 @@
 #include <autoware/behavior_velocity_planner_common/utilization/arc_lane_util.hpp>
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #ifdef ROS_DISTRO_GALACTIC
 #include <tf2_eigen/tf2_eigen.h>
@@ -89,7 +89,7 @@ std::optional<geometry_msgs::msg::Point> checkCollision(
 }
 
 std::optional<PathIndexWithOffset> findOffsetSegment(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const size_t index, const double offset)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const size_t index, const double offset)
 {
   if (offset >= 0) {
     return findForwardOffsetSegment(path, index, offset);
@@ -99,7 +99,7 @@ std::optional<PathIndexWithOffset> findOffsetSegment(
 }
 
 std::optional<PathIndexWithPose> createTargetPoint(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const LineString2d & stop_line,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const LineString2d & stop_line,
   const double margin, const double vehicle_offset)
 {
   // Find collision segment

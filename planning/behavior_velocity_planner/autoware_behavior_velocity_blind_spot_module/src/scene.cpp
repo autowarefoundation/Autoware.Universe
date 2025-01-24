@@ -154,7 +154,7 @@ template <class... Ts>
 VisitorSwitch(Ts...) -> VisitorSwitch<Ts...>;
 
 void BlindSpotModule::setRTCStatus(
-  const BlindSpotDecision & decision, const tier4_planning_msgs::msg::PathWithLaneId & path)
+  const BlindSpotDecision & decision, const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
 {
   std::visit(
     VisitorSwitch{[&](const auto & sub_decision) { setRTCStatusByDecision(sub_decision, path); }},
@@ -183,7 +183,7 @@ bool BlindSpotModule::modifyPathVelocity(PathWithLaneId * path)
 }
 
 static std::optional<size_t> getDuplicatedPointIdx(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Point & point)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Point & point)
 {
   for (size_t i = 0; i < path.points.size(); i++) {
     const auto & p = path.points.at(i).point.pose.position;
@@ -198,7 +198,7 @@ static std::optional<size_t> getDuplicatedPointIdx(
 }
 
 static std::optional<size_t> insertPointIndex(
-  const geometry_msgs::msg::Pose & in_pose, tier4_planning_msgs::msg::PathWithLaneId * inout_path,
+  const geometry_msgs::msg::Pose & in_pose, autoware_internal_planning_msgs::msg::PathWithLaneId * inout_path,
   const double ego_nearest_dist_threshold, const double ego_nearest_yaw_threshold)
 {
   const auto duplicate_idx_opt = getDuplicatedPointIdx(*inout_path, in_pose.position);
@@ -211,7 +211,7 @@ static std::optional<size_t> insertPointIndex(
   // vector.insert(i) inserts element on the left side of v[i]
   // the velocity need to be zero order hold(from prior point)
   size_t insert_idx = closest_idx;
-  tier4_planning_msgs::msg::PathPointWithLaneId inserted_point = inout_path->points.at(closest_idx);
+  autoware_internal_planning_msgs::msg::PathPointWithLaneId inserted_point = inout_path->points.at(closest_idx);
   if (planning_utils::isAheadOf(in_pose, inout_path->points.at(closest_idx).point.pose)) {
     ++insert_idx;
   } else {
@@ -230,7 +230,7 @@ static std::optional<size_t> insertPointIndex(
 
 std::optional<std::pair<size_t, size_t>> BlindSpotModule::generateStopLine(
   const InterpolatedPathInfo & interpolated_path_info,
-  tier4_planning_msgs::msg::PathWithLaneId * path) const
+  autoware_internal_planning_msgs::msg::PathWithLaneId * path) const
 {
   // NOTE: this is optionally int for later subtraction
   const int margin_idx_dist =
@@ -317,7 +317,7 @@ autoware_perception_msgs::msg::PredictedObject BlindSpotModule::cutPredictPathWi
 }
 
 std::optional<OverPassJudge> BlindSpotModule::isOverPassJudge(
-  const tier4_planning_msgs::msg::PathWithLaneId & input_path,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path,
   const geometry_msgs::msg::Pose & stop_point_pose) const
 {
   const auto & current_pose = planner_data_->current_odometry->pose;

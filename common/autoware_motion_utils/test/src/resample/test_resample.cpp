@@ -35,8 +35,8 @@ using autoware_planning_msgs::msg::Path;
 using autoware_planning_msgs::msg::PathPoint;
 using autoware_planning_msgs::msg::Trajectory;
 using autoware_planning_msgs::msg::TrajectoryPoint;
-using tier4_planning_msgs::msg::PathPointWithLaneId;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 constexpr double epsilon = 1e-6;
 
@@ -316,7 +316,7 @@ TEST(resample_path_with_lane_id, resample_path_by_vector)
 
   // Output key is not same as input
   {
-    tier4_planning_msgs::msg::PathWithLaneId path;
+    autoware_internal_planning_msgs::msg::PathWithLaneId path;
     path.points.resize(10);
     for (size_t i = 0; i < 10; ++i) {
       path.points.at(i) = generateTestPathPointWithLaneId(
@@ -422,7 +422,7 @@ TEST(resample_path_with_lane_id, resample_path_by_vector)
 
   // Duplicated points in the original path
   {
-    tier4_planning_msgs::msg::PathWithLaneId path;
+    autoware_internal_planning_msgs::msg::PathWithLaneId path;
     path.points.resize(11);
     for (size_t i = 0; i < 10; ++i) {
       path.points.at(i) = generateTestPathPointWithLaneId(
@@ -456,7 +456,7 @@ TEST(resample_path_with_lane_id, resample_path_by_vector)
   {
     // Input path size is not enough for interpolation
     {
-      tier4_planning_msgs::msg::PathWithLaneId path;
+      autoware_internal_planning_msgs::msg::PathWithLaneId path;
       path.points.resize(1);
       for (size_t i = 0; i < 1; ++i) {
         path.points.at(i) = generateTestPathPointWithLaneId(
@@ -489,7 +489,7 @@ TEST(resample_path_with_lane_id, resample_path_by_vector)
 
     // Resampled Arclength size is not enough for interpolation
     {
-      tier4_planning_msgs::msg::PathWithLaneId path;
+      autoware_internal_planning_msgs::msg::PathWithLaneId path;
       path.points.resize(10);
       for (size_t i = 0; i < 10; ++i) {
         path.points.at(i) = generateTestPathPointWithLaneId(
@@ -523,7 +523,7 @@ TEST(resample_path_with_lane_id, resample_path_by_vector)
 
     // Resampled Arclength is longer than input path
     {
-      tier4_planning_msgs::msg::PathWithLaneId path;
+      autoware_internal_planning_msgs::msg::PathWithLaneId path;
       path.points.resize(10);
       for (size_t i = 0; i < 10; ++i) {
         path.points.at(i) = generateTestPathPointWithLaneId(
@@ -562,7 +562,7 @@ TEST(resample_path_with_lane_id, resample_path_by_vector_backward)
   using autoware::motion_utils::resamplePath;
 
   {
-    tier4_planning_msgs::msg::PathWithLaneId path;
+    autoware_internal_planning_msgs::msg::PathWithLaneId path;
     path.points.resize(10);
     for (size_t i = 0; i < 10; ++i) {
       path.points.at(i) = generateTestPathPointWithLaneId(
@@ -670,7 +670,7 @@ TEST(resample_path_with_lane_id, resample_path_by_vector_backward)
 
   // change initial orientation
   {
-    tier4_planning_msgs::msg::PathWithLaneId path;
+    autoware_internal_planning_msgs::msg::PathWithLaneId path;
     path.points.resize(10);
     for (size_t i = 0; i < 10; ++i) {
       path.points.at(i) = generateTestPathPointWithLaneId(
@@ -794,7 +794,7 @@ TEST(resample_path_with_lane_id, resample_path_by_vector_non_default)
 
   // Lerp x, y
   {
-    tier4_planning_msgs::msg::PathWithLaneId path;
+    autoware_internal_planning_msgs::msg::PathWithLaneId path;
     path.points.resize(10);
     for (size_t i = 0; i < 10; ++i) {
       path.points.at(i) = generateTestPathPointWithLaneId(
@@ -871,7 +871,7 @@ TEST(resample_path_with_lane_id, resample_path_by_vector_non_default)
 
   // Slerp z
   {
-    tier4_planning_msgs::msg::PathWithLaneId path;
+    autoware_internal_planning_msgs::msg::PathWithLaneId path;
     path.points.resize(10);
     for (size_t i = 0; i < 10; ++i) {
       path.points.at(i) = generateTestPathPointWithLaneId(
@@ -950,7 +950,7 @@ TEST(resample_path_with_lane_id, resample_path_by_vector_non_default)
 
   // Lerp v
   {
-    tier4_planning_msgs::msg::PathWithLaneId path;
+    autoware_internal_planning_msgs::msg::PathWithLaneId path;
     path.points.resize(10);
     for (size_t i = 0; i < 10; ++i) {
       path.points.at(i) = generateTestPathPointWithLaneId(

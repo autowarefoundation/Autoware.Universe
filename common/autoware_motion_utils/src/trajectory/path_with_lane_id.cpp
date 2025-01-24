@@ -25,7 +25,7 @@ namespace autoware::motion_utils
 {
 
 std::optional<std::pair<size_t, size_t>> getPathIndexRangeWithLaneId(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const int64_t target_lane_id)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const int64_t target_lane_id)
 {
   size_t start_idx = 0;  // NOTE: to prevent from maybe-uninitialized error
   size_t end_idx = 0;    // NOTE: to prevent from maybe-uninitialized error
@@ -56,7 +56,7 @@ std::optional<std::pair<size_t, size_t>> getPathIndexRangeWithLaneId(
 }
 
 size_t findNearestIndexFromLaneId(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Point & pos,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Point & pos,
   const int64_t lane_id)
 {
   const auto opt_range = getPathIndexRangeWithLaneId(path, lane_id);
@@ -66,7 +66,7 @@ size_t findNearestIndexFromLaneId(
 
     validateNonEmpty(path.points);
 
-    const auto sub_points = std::vector<tier4_planning_msgs::msg::PathPointWithLaneId>{
+    const auto sub_points = std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId>{
       path.points.begin() + start_idx, path.points.begin() + end_idx + 1};
     validateNonEmpty(sub_points);
 
@@ -77,7 +77,7 @@ size_t findNearestIndexFromLaneId(
 }
 
 size_t findNearestSegmentIndexFromLaneId(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Point & pos,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Point & pos,
   const int64_t lane_id)
 {
   const size_t nearest_idx = findNearestIndexFromLaneId(path, pos, lane_id);
@@ -99,8 +99,8 @@ size_t findNearestSegmentIndexFromLaneId(
 }
 
 // NOTE: rear_to_cog is supposed to be positive
-tier4_planning_msgs::msg::PathWithLaneId convertToRearWheelCenter(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const double rear_to_cog,
+autoware_internal_planning_msgs::msg::PathWithLaneId convertToRearWheelCenter(
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const double rear_to_cog,
   const bool enable_last_point_compensation)
 {
   auto cog_path = path;

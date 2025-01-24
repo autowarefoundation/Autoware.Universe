@@ -23,7 +23,7 @@
 #include <autoware/behavior_velocity_rtc_interface/scene_module_interface_with_rtc.hpp>
 #include <rclcpp/rclcpp.hpp>
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <functional>
 #include <memory>
@@ -41,10 +41,10 @@ public:
 private:
   PlannerParam planner_param_;
 
-  void launchNewModules(const tier4_planning_msgs::msg::PathWithLaneId & path) override;
+  void launchNewModules(const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
 
   std::function<bool(const std::shared_ptr<SceneModuleInterfaceWithRTC> &)>
-  getModuleExpiredFunction(const tier4_planning_msgs::msg::PathWithLaneId & path) override;
+  getModuleExpiredFunction(const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
 };
 
 class BlindSpotModulePlugin : public PluginWrapper<BlindSpotModuleManager>

@@ -24,7 +24,7 @@
 #include <autoware_planning_msgs/msg/detail/lanelet_route__struct.hpp>
 #include <geometry_msgs/msg/detail/pose__struct.hpp>
 #include <geometry_msgs/msg/detail/twist__struct.hpp>
-#include <tier4_planning_msgs/msg/detail/path_with_lane_id__struct.hpp>
+#include <autoware_internal_planning_msgs/msg/detail/path_with_lane_id__struct.hpp>
 
 #include <gtest/gtest.h>
 #include <lanelet2_core/Forward.h>
@@ -127,7 +127,7 @@ TEST_F(TrafficLightTest, calcDistanceToRedTrafficLight)
   using autoware::behavior_path_planner::utils::traffic_light::calcDistanceToRedTrafficLight;
 
   {
-    const tier4_planning_msgs::msg::PathWithLaneId path;
+    const autoware_internal_planning_msgs::msg::PathWithLaneId path;
     const lanelet::ConstLanelets empty_lanelets;
     EXPECT_FALSE(calcDistanceToRedTrafficLight(empty_lanelets, path, planner_data_).has_value());
   }

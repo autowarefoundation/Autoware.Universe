@@ -25,7 +25,7 @@
 #include <geometry_msgs/msg/accel_with_covariance_stamped.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <std_srvs/srv/empty.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <yaml-cpp/yaml.h>
 
@@ -48,7 +48,7 @@ using MessageType = std::variant<
   autoware_planning_msgs::msg::LaneletRoute,              // 4
   autoware_perception_msgs::msg::TrafficLightGroupArray,  // 5
   autoware_perception_msgs::msg::TrackedObjects,          // 6
-  tier4_planning_msgs::msg::PathWithLaneId                // 7
+  autoware_internal_planning_msgs::msg::PathWithLaneId                // 7
   >;
 
 std::optional<size_t> get_topic_index(const std::string & name)

@@ -25,7 +25,7 @@
 #include <autoware_vehicle_msgs/msg/turn_indicators_command.hpp>
 #include <tier4_planning_msgs/msg/avoidance_debug_msg.hpp>
 #include <tier4_planning_msgs/msg/avoidance_debug_msg_array.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <algorithm>
 #include <iostream>
@@ -59,7 +59,7 @@ namespace autoware::behavior_path_planner
 {
 using autoware::universe_utils::Polygon2d;
 using autoware_perception_msgs::msg::PredictedPath;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 struct MinMaxValue
 {

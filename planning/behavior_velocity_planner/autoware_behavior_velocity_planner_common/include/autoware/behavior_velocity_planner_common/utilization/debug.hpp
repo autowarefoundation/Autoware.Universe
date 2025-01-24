@@ -20,7 +20,7 @@
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/polygon.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
 #include <string>
@@ -33,7 +33,7 @@ visualization_msgs::msg::MarkerArray createPolygonMarkerArray(
   const rclcpp::Time & now, const double x, const double y, const double z, const double r,
   const double g, const double b);
 visualization_msgs::msg::MarkerArray createPathMarkerArray(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const std::string & ns,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const std::string & ns,
   const int64_t lane_id, const rclcpp::Time & now, const double x, const double y, const double z,
   const double r, const double g, const double b);
 visualization_msgs::msg::MarkerArray createObjectsMarkerArray(

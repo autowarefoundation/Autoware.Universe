@@ -15,7 +15,7 @@
 #ifndef INTERPOLATED_PATH_INFO_HPP_
 #define INTERPOLATED_PATH_INFO_HPP_
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/Forward.h>
 
@@ -32,7 +32,7 @@ namespace autoware::behavior_velocity_planner
 struct InterpolatedPathInfo
 {
   /** the interpolated path */
-  tier4_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
   /** discretization interval of interpolation */
   double ds{0.0};
   /** the intersection lanelet id */

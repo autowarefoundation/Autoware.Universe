@@ -77,9 +77,9 @@ using autoware_perception_msgs::msg::ObjectClassification;
 using autoware_perception_msgs::msg::PredictedObjects;
 using behavior_path_planner::lane_change::PathType;
 using geometry_msgs::msg::Pose;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
-using tier4_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 
 rclcpp::Logger get_logger()
 {

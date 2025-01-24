@@ -19,7 +19,7 @@
 
 #include <geometry_msgs/msg/pose_array.hpp>
 #include <nav_msgs/msg/occupancy_grid.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <vector>
 
@@ -121,7 +121,7 @@ public:
    * @return true if a collision is detected, false if no collision is detected.
    */
   [[nodiscard]] bool hasObstacleOnPath(
-    const tier4_planning_msgs::msg::PathWithLaneId & path, const bool check_out_of_range) const;
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const bool check_out_of_range) const;
 
   /**
    * @brief Detects if a collision occurs at the specified base index in the occupancy grid map.

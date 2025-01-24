@@ -31,7 +31,7 @@ using DynamicObjects = autoware_perception_msgs::msg::PredictedObjects;
 using DynamicObject = autoware_perception_msgs::msg::PredictedObject;
 using autoware_planning_msgs::msg::Path;
 using autoware_planning_msgs::msg::PathPoint;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 TEST(calcSlowDownPointsForPossibleCollision, TooManyPossibleCollisions)
 {
@@ -45,7 +45,7 @@ TEST(calcSlowDownPointsForPossibleCollision, TooManyPossibleCollisions)
   std::vector<PossibleCollisionInfo> possible_collisions;
   size_t num = 2000;
   // make a path with 2000 points from x=0 to x=4
-  tier4_planning_msgs::msg::PathWithLaneId path = test::generatePath(0.0, 3.0, 4.0, 3.0, num);
+  autoware_internal_planning_msgs::msg::PathWithLaneId path = test::generatePath(0.0, 3.0, 4.0, 3.0, num);
   // make 2000 possible collision from x=0 to x=10
   test::generatePossibleCollisions(possible_collisions, 0.0, 3.0, 4.0, 3.0, num);
 

@@ -30,7 +30,7 @@ So for example, in order to stop at a stop line with the vehicles' front on the 
 
 | Name                                      | Type                                                  | Description                                                                                                                     |
 | ----------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `~input/path_with_lane_id`                | tier4_planning_msgs::msg::PathWithLaneId              | path with lane_id                                                                                                               |
+| `~input/path_with_lane_id`                | autoware_internal_planning_msgs::msg::PathWithLaneId              | path with lane_id                                                                                                               |
 | `~input/vector_map`                       | autoware_map_msgs::msg::LaneletMapBin                 | vector map                                                                                                                      |
 | `~input/vehicle_odometry`                 | nav_msgs::msg::Odometry                               | vehicle velocity                                                                                                                |
 | `~input/dynamic_objects`                  | autoware_perception_msgs::msg::PredictedObjects       | dynamic objects                                                                                                                 |

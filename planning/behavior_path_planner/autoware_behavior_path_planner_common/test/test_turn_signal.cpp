@@ -33,7 +33,7 @@ using autoware_vehicle_msgs::msg::HazardLightsCommand;
 using autoware_vehicle_msgs::msg::TurnIndicatorsCommand;
 using geometry_msgs::msg::Point;
 using geometry_msgs::msg::Twist;
-using tier4_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 
 constexpr double nearest_dist_threshold = 5.0;
 constexpr double nearest_yaw_threshold = M_PI / 3.0;

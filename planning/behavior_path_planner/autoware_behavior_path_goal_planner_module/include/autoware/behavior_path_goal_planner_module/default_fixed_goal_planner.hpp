@@ -17,7 +17,7 @@
 
 #include "autoware/behavior_path_goal_planner_module/fixed_goal_planner_base.hpp"
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <memory>
 

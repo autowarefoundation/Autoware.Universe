@@ -44,8 +44,8 @@ using autoware_perception_msgs::msg::ObjectClassification;
 using autoware_perception_msgs::msg::PredictedObjects;
 using autoware_perception_msgs::msg::Shape;
 using autoware_planning_msgs::msg::PathPoint;
-using tier4_planning_msgs::msg::PathWithLaneId;
-using PathPointsWithLaneId = std::vector<tier4_planning_msgs::msg::PathPointWithLaneId>;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using PathPointsWithLaneId = std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId>;
 struct CommonParam
 {
   double normal_min_jerk;  // min jerk limit for mild stop [m/sss]

@@ -20,7 +20,7 @@
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <autoware_perception_msgs/msg/traffic_light_group.hpp>
 #include <geometry_msgs/msg/point.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/LaneletMap.h>
@@ -68,13 +68,13 @@ using Polygon2d = autoware::universe_utils::Polygon2d;
 using BasicPolygons2d = std::vector<lanelet::BasicPolygon2d>;
 using Polygons2d = std::vector<Polygon2d>;
 using autoware_perception_msgs::msg::PredictedObjects;
-using tier4_planning_msgs::msg::PathPointWithLaneId;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 namespace planning_utils
 {
 size_t calcSegmentIndexFromPointIndex(
-  const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points,
+  const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points,
   const geometry_msgs::msg::Point & point, const size_t idx);
 
 bool createDetectionAreaPolygons(
@@ -105,7 +105,7 @@ inline int64_t bitShift(int64_t original_id)
 bool isAheadOf(const geometry_msgs::msg::Pose & target, const geometry_msgs::msg::Pose & origin);
 geometry_msgs::msg::Pose getAheadPose(
   const size_t start_idx, const double ahead_dist,
-  const tier4_planning_msgs::msg::PathWithLaneId & path);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path);
 Polygon2d generatePathPolygon(
   const PathWithLaneId & path, const size_t start_idx, const size_t end_idx, const double width);
 
@@ -218,7 +218,7 @@ std::set<int64_t> getLaneIdSetOnPath(
   const geometry_msgs::msg::Pose & current_pose);
 
 bool isOverLine(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Pose & self_pose,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Pose & self_pose,
   const geometry_msgs::msg::Pose & line_pose, const double offset = 0.0);
 
 std::optional<geometry_msgs::msg::Pose> insertStopPoint(

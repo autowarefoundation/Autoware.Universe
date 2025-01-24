@@ -53,9 +53,9 @@ using run_out_utils::DynamicObstacleData;
 using run_out_utils::DynamicObstacleParam;
 using run_out_utils::PlannerParam;
 using run_out_utils::PredictedPath;
-using tier4_planning_msgs::msg::PathPointWithLaneId;
-using tier4_planning_msgs::msg::PathWithLaneId;
-using PathPointsWithLaneId = std::vector<tier4_planning_msgs::msg::PathPointWithLaneId>;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using PathPointsWithLaneId = std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId>;
 
 /**
  * @brief base class for creating dynamic obstacles from multiple types of input

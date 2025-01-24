@@ -25,7 +25,7 @@
 #include <rclcpp/time.hpp>
 
 #include <autoware_perception_msgs/msg/detail/object_classification__struct.hpp>
-#include <tier4_planning_msgs/msg/detail/path_point_with_lane_id__struct.hpp>
+#include <autoware_internal_planning_msgs/msg/detail/path_point_with_lane_id__struct.hpp>
 
 #include <gtest/gtest.h>
 
@@ -57,8 +57,8 @@ using autoware::behavior_velocity_planner::run_out_utils::trimPathFromSelfPose;
 
 using autoware_perception_msgs::msg::ObjectClassification;
 using geometry_msgs::msg::Point;
-using tier4_planning_msgs::msg::PathPointWithLaneId;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 class TestRunOutUtils : public ::testing::Test
 {

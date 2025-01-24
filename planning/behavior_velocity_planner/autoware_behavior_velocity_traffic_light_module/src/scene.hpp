@@ -91,8 +91,8 @@ public:
 private:
   bool isStopSignal();
 
-  tier4_planning_msgs::msg::PathWithLaneId insertStopPose(
-    const tier4_planning_msgs::msg::PathWithLaneId & input, const size_t & insert_target_point_idx,
+  autoware_internal_planning_msgs::msg::PathWithLaneId insertStopPose(
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & input, const size_t & insert_target_point_idx,
     const Eigen::Vector2d & target_point);
 
   bool isPassthrough(const double & signed_arc_length) const;

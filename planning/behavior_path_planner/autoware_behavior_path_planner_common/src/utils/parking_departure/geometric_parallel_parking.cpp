@@ -42,7 +42,7 @@ using autoware::universe_utils::transformPose;
 using geometry_msgs::msg::Point;
 using geometry_msgs::msg::Pose;
 using lanelet::utils::getArcCoordinates;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 namespace autoware::behavior_path_planner
 {

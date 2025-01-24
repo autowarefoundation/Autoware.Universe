@@ -22,7 +22,7 @@
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/polygon.hpp>
 #include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
-#include <tier4_planning_msgs/msg/path_point_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_point_with_lane_id.hpp>
 
 #include <boost/geometry/core/cs.hpp>
 #include <boost/geometry/geometries/geometries.hpp>
@@ -40,7 +40,7 @@ BOOST_GEOMETRY_REGISTER_POINT_3D(
   autoware_planning_msgs::msg::PathPoint, double, cs::cartesian, pose.position.x, pose.position.y,
   pose.position.z)
 BOOST_GEOMETRY_REGISTER_POINT_3D(
-  tier4_planning_msgs::msg::PathPointWithLaneId, double, cs::cartesian, point.pose.position.x,
+  autoware_internal_planning_msgs::msg::PathPointWithLaneId, double, cs::cartesian, point.pose.position.x,
   point.pose.position.y, point.pose.position.z)
 BOOST_GEOMETRY_REGISTER_POINT_3D(
   autoware_planning_msgs::msg::TrajectoryPoint, double, cs::cartesian, pose.position.x,

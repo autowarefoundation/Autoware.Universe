@@ -55,7 +55,7 @@ AutowarePathWithLaneIdDisplay::~AutowarePathWithLaneIdDisplay()
 }
 
 void AutowarePathWithLaneIdDisplay::preVisualizePathFootprintDetail(
-  const tier4_planning_msgs::msg::PathWithLaneId::ConstSharedPtr msg_ptr)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId::ConstSharedPtr msg_ptr)
 {
   const size_t size = msg_ptr->points.size();
   // clear previous text
@@ -77,7 +77,7 @@ void AutowarePathWithLaneIdDisplay::preVisualizePathFootprintDetail(
 }
 
 void AutowarePathWithLaneIdDisplay::visualizePathFootprintDetail(
-  const tier4_planning_msgs::msg::PathWithLaneId::ConstSharedPtr msg_ptr, const size_t p_idx)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId::ConstSharedPtr msg_ptr, const size_t p_idx)
 {
   const auto & point = msg_ptr->points.at(p_idx);
 

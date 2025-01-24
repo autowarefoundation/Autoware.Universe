@@ -73,11 +73,11 @@ void BehaviorVelocityPlannerManager::removeScenePlugin(
   }
 }
 
-tier4_planning_msgs::msg::PathWithLaneId BehaviorVelocityPlannerManager::planPathVelocity(
+autoware_internal_planning_msgs::msg::PathWithLaneId BehaviorVelocityPlannerManager::planPathVelocity(
   const std::shared_ptr<const PlannerData> & planner_data,
-  const tier4_planning_msgs::msg::PathWithLaneId & input_path_msg)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path_msg)
 {
-  tier4_planning_msgs::msg::PathWithLaneId output_path_msg = input_path_msg;
+  autoware_internal_planning_msgs::msg::PathWithLaneId output_path_msg = input_path_msg;
 
   for (const auto & plugin : scene_manager_plugins_) {
     plugin->updateSceneModuleInstances(planner_data, input_path_msg);

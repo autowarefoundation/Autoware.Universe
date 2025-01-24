@@ -25,7 +25,7 @@
 #include <autoware_planning_msgs/msg/path.hpp>
 #include <diagnostic_msgs/msg/diagnostic_status.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_routing/RoutingGraph.h>
@@ -47,9 +47,9 @@ public:
   void removeScenePlugin(rclcpp::Node & node, const std::string & name);
 
   // cppcheck-suppress functionConst
-  tier4_planning_msgs::msg::PathWithLaneId planPathVelocity(
+  autoware_internal_planning_msgs::msg::PathWithLaneId planPathVelocity(
     const std::shared_ptr<const PlannerData> & planner_data,
-    const tier4_planning_msgs::msg::PathWithLaneId & input_path_msg);
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path_msg);
 
 private:
   pluginlib::ClassLoader<PluginInterface> plugin_loader_;

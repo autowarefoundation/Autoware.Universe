@@ -59,7 +59,7 @@ auto findNearestCollisionPoint(
 }
 
 auto createTargetPoint(
-  const tier4_planning_msgs::msg::PathWithLaneId & input, const LineString2d & stop_line,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input, const LineString2d & stop_line,
   const double offset) -> std::optional<std::pair<size_t, Eigen::Vector2d>>
 {
   if (input.points.size() < 2) {
@@ -124,7 +124,7 @@ auto createTargetPoint(
 }
 
 auto calcStopPointAndInsertIndex(
-  const tier4_planning_msgs::msg::PathWithLaneId & input_path,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path,
   const lanelet::ConstLineString3d & lanelet_stop_lines, const double & offset,
   const double & stop_line_extend_length) -> std::optional<std::pair<size_t, Eigen::Vector2d>>
 {

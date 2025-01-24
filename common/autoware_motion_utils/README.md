@@ -47,7 +47,7 @@ The second function finds the nearest index in the lane whose id is `lane_id`.
 
 ```cpp
 size_t findNearestIndexFromLaneId(
-  const tier4_planning_msgs::msg::PathWithLaneId & path,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
   const geometry_msgs::msg::Point & pos, const int64_t lane_id);
 ```
 

@@ -18,12 +18,12 @@
 #include <iostream>
 #include <vector>
 
-using Trajectory = autoware::trajectory::Trajectory<tier4_planning_msgs::msg::PathPointWithLaneId>;
+using Trajectory = autoware::trajectory::Trajectory<autoware_internal_planning_msgs::msg::PathPointWithLaneId>;
 
-tier4_planning_msgs::msg::PathPointWithLaneId path_point_with_lane_id(
+autoware_internal_planning_msgs::msg::PathPointWithLaneId path_point_with_lane_id(
   double x, double y, uint8_t lane_id)
 {
-  tier4_planning_msgs::msg::PathPointWithLaneId point;
+  autoware_internal_planning_msgs::msg::PathPointWithLaneId point;
   point.point.pose.position.x = x;
   point.point.pose.position.y = y;
   point.lane_ids.emplace_back(lane_id);
@@ -33,13 +33,13 @@ tier4_planning_msgs::msg::PathPointWithLaneId path_point_with_lane_id(
 TEST(TrajectoryCreatorTest, create)
 {
   {
-    std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> points{
+    std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> points{
       path_point_with_lane_id(0.00, 0.00, 0)};
     auto trajectory = Trajectory::Builder{}.build(points);
     ASSERT_TRUE(!trajectory);
   }
   {
-    std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> points{
+    std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> points{
       path_point_with_lane_id(0.00, 0.00, 0), path_point_with_lane_id(0.81, 1.68, 0),
       path_point_with_lane_id(1.65, 2.98, 0), path_point_with_lane_id(3.30, 4.01, 1)};
     auto trajectory = Trajectory::Builder{}.build(points);
@@ -54,7 +54,7 @@ public:
 
   void SetUp() override
   {
-    std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> points{
+    std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> points{
       path_point_with_lane_id(0.00, 0.00, 0), path_point_with_lane_id(0.81, 1.68, 0),
       path_point_with_lane_id(1.65, 2.98, 0), path_point_with_lane_id(3.30, 4.01, 1),
       path_point_with_lane_id(4.70, 4.52, 1), path_point_with_lane_id(6.49, 5.20, 1),

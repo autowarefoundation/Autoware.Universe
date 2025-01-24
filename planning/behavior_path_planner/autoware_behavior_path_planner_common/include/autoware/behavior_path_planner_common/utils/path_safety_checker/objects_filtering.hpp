@@ -20,7 +20,7 @@
 
 #include <autoware_perception_msgs/msg/predicted_object.hpp>
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
-#include <tier4_planning_msgs/msg/path_point_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_point_with_lane_id.hpp>
 
 #include <lanelet2_core/geometry/Lanelet.h>
 
@@ -32,7 +32,7 @@ namespace autoware::behavior_path_planner::utils::path_safety_checker::filter
 {
 
 using autoware_perception_msgs::msg::PredictedObject;
-using tier4_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 
 /**
  * @brief Filters object based on velocity.
@@ -88,7 +88,7 @@ namespace autoware::behavior_path_planner::utils::path_safety_checker
 
 using autoware_perception_msgs::msg::PredictedObject;
 using autoware_perception_msgs::msg::PredictedObjects;
-using tier4_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 
 /**
  * @brief Filters objects based on object centroid position.

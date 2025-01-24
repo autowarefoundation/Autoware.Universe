@@ -24,7 +24,7 @@
 namespace autoware::behavior_path_planner
 {
 using Point2d = autoware::universe_utils::Point2d;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 BehaviorModuleOutput DefaultFixedGoalPlanner::plan(
   const std::shared_ptr<const PlannerData> & planner_data) const
 {
@@ -91,7 +91,7 @@ PathWithLaneId DefaultFixedGoalPlanner::modifyPathForSmoothGoalConnection(
   constexpr double range_reduce_by{1.0};  // set a reasonable value, 10% - 20% of the
                                           // refine_goal_search_radius_range is recommended
   bool is_valid_path{false};
-  tier4_planning_msgs::msg::PathWithLaneId refined_path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId refined_path;
   while (goal_search_radius >= 0 && !is_valid_path) {
     refined_path =
       utils::refinePathForGoal(goal_search_radius, M_PI * 0.5, path, refined_goal, goal_lane_id);

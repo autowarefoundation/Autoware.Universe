@@ -23,7 +23,7 @@
 #include <autoware/universe_utils/ros/polling_subscriber.hpp>
 #include <rclcpp/rclcpp.hpp>
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <tier4_v2x_msgs/msg/infrastructure_command_array.hpp>
 #include <tier4_v2x_msgs/msg/virtual_traffic_light_state_array.hpp>
 
@@ -43,12 +43,12 @@ public:
 private:
   VirtualTrafficLightModule::PlannerParam planner_param_;
 
-  void modifyPathVelocity(tier4_planning_msgs::msg::PathWithLaneId * path) override;
+  void modifyPathVelocity(autoware_internal_planning_msgs::msg::PathWithLaneId * path) override;
 
-  void launchNewModules(const tier4_planning_msgs::msg::PathWithLaneId & path) override;
+  void launchNewModules(const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
 
   std::function<bool(const std::shared_ptr<VirtualTrafficLightModule> &)> getModuleExpiredFunction(
-    const tier4_planning_msgs::msg::PathWithLaneId & path) override;
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
 
   autoware::universe_utils::InterProcessPollingSubscriber<
     tier4_v2x_msgs::msg::VirtualTrafficLightStateArray>::SharedPtr

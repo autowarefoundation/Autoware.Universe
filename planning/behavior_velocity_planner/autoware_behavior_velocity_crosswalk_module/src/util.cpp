@@ -56,7 +56,7 @@ using autoware::universe_utils::Point2d;
 
 std::vector<std::pair<int64_t, lanelet::ConstLanelet>> getCrosswalksOnPath(
   const geometry_msgs::msg::Pose & current_pose,
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const lanelet::LaneletMapPtr lanelet_map,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const lanelet::LaneletMapPtr lanelet_map,
   const std::shared_ptr<const lanelet::routing::RoutingGraphContainer> & overall_graphs)
 {
   std::vector<std::pair<lanelet::Id, lanelet::ConstLanelet>> crosswalks;
@@ -93,7 +93,7 @@ std::vector<std::pair<int64_t, lanelet::ConstLanelet>> getCrosswalksOnPath(
 
 std::set<lanelet::Id> getCrosswalkIdSetOnPath(
   const geometry_msgs::msg::Pose & current_pose,
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const lanelet::LaneletMapPtr lanelet_map,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const lanelet::LaneletMapPtr lanelet_map,
   const std::shared_ptr<const lanelet::routing::RoutingGraphContainer> & overall_graphs)
 {
   std::set<lanelet::Id> crosswalk_id_set;

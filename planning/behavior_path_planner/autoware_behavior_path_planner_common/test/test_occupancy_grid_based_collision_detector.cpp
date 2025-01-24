@@ -125,7 +125,7 @@ TEST_F(OccupancyGridBasedCollisionDetectorTest, detectCollision)
 
 TEST_F(OccupancyGridBasedCollisionDetectorTest, hasObstacleOnPath)
 {
-  tier4_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
   detector_.setMap(costmap_);
 
   // Condition: empty path
@@ -135,7 +135,7 @@ TEST_F(OccupancyGridBasedCollisionDetectorTest, hasObstacleOnPath)
   size_t path_length = 10;
   path.points.reserve(path_length);
   for (size_t i = 0; i < path_length; i++) {
-    tier4_planning_msgs::msg::PathPointWithLaneId path_point;
+    autoware_internal_planning_msgs::msg::PathPointWithLaneId path_point;
     path_point.point.pose = createPose(static_cast<double>(i), 0.0, 0.0, 0.0, 0.0, 0.0);
     path.points.push_back(path_point);
   }

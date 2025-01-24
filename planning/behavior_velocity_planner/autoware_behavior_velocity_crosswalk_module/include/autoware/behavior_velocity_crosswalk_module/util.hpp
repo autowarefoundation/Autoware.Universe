@@ -34,14 +34,14 @@
 #include <Eigen/Geometry>
 #include <autoware/behavior_velocity_planner_common/planner_data.hpp>
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <tier4_planning_msgs/msg/stop_factor.hpp>
 
 namespace autoware::behavior_velocity_planner
 {
 
-using tier4_planning_msgs::msg::PathPointWithLaneId;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using tier4_planning_msgs::msg::StopFactor;
 
 enum class CollisionState { YIELD, EGO_PASS_FIRST, EGO_PASS_LATER, IGNORE };
@@ -91,12 +91,12 @@ struct DebugData
 
 std::vector<std::pair<int64_t, lanelet::ConstLanelet>> getCrosswalksOnPath(
   const geometry_msgs::msg::Pose & current_pose,
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const lanelet::LaneletMapPtr lanelet_map,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const lanelet::LaneletMapPtr lanelet_map,
   const std::shared_ptr<const lanelet::routing::RoutingGraphContainer> & overall_graphs);
 
 std::set<int64_t> getCrosswalkIdSetOnPath(
   const geometry_msgs::msg::Pose & current_pose,
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const lanelet::LaneletMapPtr lanelet_map,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const lanelet::LaneletMapPtr lanelet_map,
   const std::shared_ptr<const lanelet::routing::RoutingGraphContainer> & overall_graphs);
 
 std::optional<std::pair<geometry_msgs::msg::Point, geometry_msgs::msg::Point>>

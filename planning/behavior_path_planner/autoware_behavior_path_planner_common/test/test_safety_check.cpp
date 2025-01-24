@@ -23,7 +23,7 @@
 #include <autoware_perception_msgs/msg/detail/shape__struct.hpp>
 #include <geometry_msgs/msg/detail/pose__struct.hpp>
 #include <geometry_msgs/msg/pose.hpp>
-#include <tier4_planning_msgs/msg/detail/path_with_lane_id__struct.hpp>
+#include <autoware_internal_planning_msgs/msg/detail/path_with_lane_id__struct.hpp>
 
 #include <boost/geometry.hpp>
 
@@ -49,7 +49,7 @@ using autoware::test_utils::generateTrajectory;
 using autoware::universe_utils::Polygon2d;
 using autoware_perception_msgs::msg::Shape;
 using geometry_msgs::msg::Pose;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 std::vector<PoseWithVelocityStamped> create_test_path()
 {

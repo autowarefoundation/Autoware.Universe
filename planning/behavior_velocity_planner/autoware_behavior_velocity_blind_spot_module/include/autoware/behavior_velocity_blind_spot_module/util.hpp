@@ -18,7 +18,7 @@
 #include <autoware/route_handler/route_handler.hpp>
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/LaneletMap.h>
 #include <lanelet2_routing/RoutingGraph.h>
@@ -39,7 +39,7 @@ enum class TurnDirection { LEFT, RIGHT };
 struct InterpolatedPathInfo
 {
   /** the interpolated path */
-  tier4_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
   /** discretization interval of interpolation */
   double ds{0.0};
   /** the intersection lanelet id */
@@ -49,7 +49,7 @@ struct InterpolatedPathInfo
 };
 
 std::optional<InterpolatedPathInfo> generateInterpolatedPathInfo(
-  const lanelet::Id lane_id, const tier4_planning_msgs::msg::PathWithLaneId & input_path,
+  const lanelet::Id lane_id, const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path,
   rclcpp::Logger logger);
 
 std::optional<size_t> getFirstPointIntersectsLineByFootprint(
@@ -88,7 +88,7 @@ lanelet::ConstLanelet generateExtendedOppositeAdjacentLanelet(
   const double opposite_adjacent_extend_width);
 
 std::vector<lanelet::Id> find_lane_ids_upto(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const lanelet::Id lane_id);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const lanelet::Id lane_id);
 
 lanelet::ConstLanelets generateBlindSpotLanelets(
   const std::shared_ptr<autoware::route_handler::RouteHandler> route_handler,
@@ -104,7 +104,7 @@ lanelet::ConstLanelets generateBlindSpotLanelets(
  * @return Blind spot polygons
  */
 std::optional<lanelet::CompoundPolygon3d> generateBlindSpotPolygons(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const size_t closest_idx,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const size_t closest_idx,
   const lanelet::ConstLanelets & blind_spot_lanelets,
   const geometry_msgs::msg::Pose & stop_line_pose, const double backward_detection_length);
 

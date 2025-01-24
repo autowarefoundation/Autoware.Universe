@@ -18,7 +18,7 @@
 #include "autoware/trajectory/path_point.hpp"
 #include "autoware/trajectory/point.hpp"
 
-#include <tier4_planning_msgs/msg/path_point_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_point_with_lane_id.hpp>
 
 #include <memory>
 #include <utility>
@@ -27,11 +27,11 @@
 namespace autoware::trajectory
 {
 template <>
-class Trajectory<tier4_planning_msgs::msg::PathPointWithLaneId>
+class Trajectory<autoware_internal_planning_msgs::msg::PathPointWithLaneId>
 : public Trajectory<autoware_planning_msgs::msg::PathPoint>
 {
   using BaseClass = Trajectory<autoware_planning_msgs::msg::PathPoint>;
-  using PointType = tier4_planning_msgs::msg::PathPointWithLaneId;
+  using PointType = autoware_internal_planning_msgs::msg::PathPointWithLaneId;
   using LaneIdType = std::vector<int64_t>;
 
 public:

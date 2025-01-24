@@ -33,11 +33,11 @@ using autoware::behavior_velocity_planner::virtual_traffic_light::insertStopVelo
 using autoware::behavior_velocity_planner::virtual_traffic_light::SegmentIndexWithPoint;
 using autoware::behavior_velocity_planner::virtual_traffic_light::toAutowarePoints;
 
-tier4_planning_msgs::msg::PathWithLaneId generateStraightPath()
+autoware_internal_planning_msgs::msg::PathWithLaneId generateStraightPath()
 {
-  tier4_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
   for (size_t i = 0; i < 10; ++i) {
-    tier4_planning_msgs::msg::PathPointWithLaneId point;
+    autoware_internal_planning_msgs::msg::PathPointWithLaneId point;
     point.point.pose.position.x = static_cast<double>(i);
     point.point.pose.position.y = 0;
     point.point.pose.position.z = 0;
@@ -168,8 +168,8 @@ TEST(VirtualTrafficLightTest, ConvertToGeomPoint)
 
 TEST(VirtualTrafficLightTest, InsertStopVelocityFromStart)
 {
-  tier4_planning_msgs::msg::PathWithLaneId path;
-  tier4_planning_msgs::msg::PathPointWithLaneId point;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathPointWithLaneId point;
   point.point.longitudinal_velocity_mps = 10.0;
   path.points.push_back(point);
 

@@ -21,7 +21,7 @@
 namespace autoware::trajectory
 {
 
-using PointType = tier4_planning_msgs::msg::PathPointWithLaneId;
+using PointType = autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 
 bool Trajectory<PointType>::build(const std::vector<PointType> & points)
 {

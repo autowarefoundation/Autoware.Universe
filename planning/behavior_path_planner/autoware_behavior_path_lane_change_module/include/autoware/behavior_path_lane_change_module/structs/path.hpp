@@ -21,7 +21,7 @@
 
 #include <autoware_frenet_planner/structures.hpp>
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <utility>
 #include <vector>
@@ -31,7 +31,7 @@ namespace autoware::behavior_path_planner::lane_change
 enum class PathType { ConstantJerk = 0, FrenetPlanner };
 
 using autoware::behavior_path_planner::TurnSignalInfo;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 struct TrajectoryGroup
 {
   PathWithLaneId prepare;

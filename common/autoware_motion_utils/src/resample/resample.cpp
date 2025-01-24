@@ -186,8 +186,8 @@ std::vector<geometry_msgs::msg::Pose> resamplePoseVector(
   return resamplePoseVector(points, resampling_arclength, use_akima_spline_for_xy, use_lerp_for_z);
 }
 
-tier4_planning_msgs::msg::PathWithLaneId resamplePath(
-  const tier4_planning_msgs::msg::PathWithLaneId & input_path,
+autoware_internal_planning_msgs::msg::PathWithLaneId resamplePath(
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path,
   const std::vector<double> & resampled_arclength, const bool use_akima_spline_for_xy,
   const bool use_lerp_for_z, const bool use_zero_order_hold_for_v)
 {
@@ -340,7 +340,7 @@ tier4_planning_msgs::msg::PathWithLaneId resamplePath(
     return input_path;
   }
 
-  tier4_planning_msgs::msg::PathWithLaneId resampled_path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId resampled_path;
   resampled_path.header = input_path.header;
   resampled_path.left_bound = input_path.left_bound;
   resampled_path.right_bound = input_path.right_bound;
@@ -359,8 +359,8 @@ tier4_planning_msgs::msg::PathWithLaneId resamplePath(
   return resampled_path;
 }
 
-tier4_planning_msgs::msg::PathWithLaneId resamplePath(
-  const tier4_planning_msgs::msg::PathWithLaneId & input_path, const double resample_interval,
+autoware_internal_planning_msgs::msg::PathWithLaneId resamplePath(
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path, const double resample_interval,
   const bool use_akima_spline_for_xy, const bool use_lerp_for_z,
   const bool use_zero_order_hold_for_v, const bool resample_input_path_stop_point)
 {

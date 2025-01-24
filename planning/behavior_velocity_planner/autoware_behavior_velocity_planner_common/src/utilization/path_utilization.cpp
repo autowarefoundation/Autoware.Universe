@@ -23,8 +23,8 @@
 namespace autoware::behavior_velocity_planner
 {
 bool splineInterpolate(
-  const tier4_planning_msgs::msg::PathWithLaneId & input, const double interval,
-  tier4_planning_msgs::msg::PathWithLaneId & output, const rclcpp::Logger & logger)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input, const double interval,
+  autoware_internal_planning_msgs::msg::PathWithLaneId & output, const rclcpp::Logger & logger)
 {
   if (input.points.size() < 2) {
     RCLCPP_DEBUG(logger, "Do not interpolate because path size is 1.");

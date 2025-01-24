@@ -22,7 +22,7 @@
 #include <rclcpp/logger.hpp>
 
 #include <autoware_perception_msgs/msg/predicted_object.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/Forward.h>
 
@@ -85,7 +85,7 @@ bool is_vehicle_type(const autoware_perception_msgs::msg::PredictedObject & obje
  * @param stop_point    stop line point on the lane
  */
 void insert_stop_point(
-  tier4_planning_msgs::msg::PathWithLaneId & path, const PathIndexWithPose & stop_point);
+  autoware_internal_planning_msgs::msg::PathWithLaneId & path, const PathIndexWithPose & stop_point);
 
 /**
  * @brief generate stop line from no stopping area polygons
@@ -99,7 +99,7 @@ void insert_stop_point(
  * @param stop_line_margin [m] margin to keep between the stop line and the no stopping areas
  **/
 std::optional<universe_utils::LineString2d> generate_stop_line(
-  const tier4_planning_msgs::msg::PathWithLaneId & path,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
   const lanelet::ConstPolygons3d & no_stopping_areas, const double ego_width,
   const double stop_line_margin);
 
@@ -128,7 +128,7 @@ bool is_stoppable(
  * @return generated polygon
  */
 Polygon2d generate_ego_no_stopping_area_lane_polygon(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Pose & ego_pose,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Pose & ego_pose,
   const lanelet::autoware::NoStoppingArea & no_stopping_area_reg_elem, const double margin,
   const double max_polygon_length, const double path_expand_width, const rclcpp::Logger & logger,
   rclcpp::Clock & clock);
@@ -141,7 +141,7 @@ Polygon2d generate_ego_no_stopping_area_lane_polygon(
  * @return true if exists
  */
 bool check_stop_lines_in_no_stopping_area(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const Polygon2d & poly,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const Polygon2d & poly,
   DebugData & debug_data);
 
 /**
@@ -156,7 +156,7 @@ bool check_stop_lines_in_no_stopping_area(
  * @return generated stop line
  */
 std::optional<universe_utils::LineString2d> get_stop_line_geometry2d(
-  const tier4_planning_msgs::msg::PathWithLaneId & path,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
   const lanelet::autoware::NoStoppingArea & no_stopping_area_reg_elem,
   const double stop_line_margin, const double stop_line_extend_length, const double vehicle_width);
 
