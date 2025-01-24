@@ -8,20 +8,20 @@
       
       
       
-        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/latest/system/system_monitor/docs/ros_parameters/">
+        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/latest/system/autoware_system_monitor/docs/topics_process_monitor/">
       
       
-        <link rel="prev" href="../msr_reader/">
+        <link rel="prev" href="../topics_ntp_monitor/">
       
       
-        <link rel="next" href="../seq_diagrams/">
+        <link rel="next" href="../topics_voltage_monitor/">
       
       <link rel="icon" href="../../../../docs/assets/images/autoware-foundation.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.20">
     
     
       
-        <title>ROS parameters - Autoware Universe Documentation</title>
+        <title>ROS topics: Process Monitor - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ros-parameters" class="md-skip">
+        <a href="#ros-topics-process-monitor" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              ROS parameters
+              ROS topics: Process Monitor
             
           </span>
         </div>
@@ -11881,18 +11881,18 @@
               
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
       
       
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_12" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_12" checked>
       
       
         
@@ -11900,22 +11900,345 @@
             
           
         
+          
+        
       
       
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../autoware_topic_relay_controller/">Autoware topic relay controller</a>
+          <a href="../../">Autoware system monitor</a>
+          
+            <label for="__nav_11_12">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_12_label" aria-expanded="false">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_12_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_11_12">
           <span class="md-nav__icon md-icon"></span>
-          Autoware topic relay controller
+          Autoware system monitor
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_12_2" checked>
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_11_12_2" id="__nav_11_12_2_label" tabindex="0">
+          Docs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_12_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_11_12_2">
+          <span class="md-nav__icon md-icon"></span>
+          Docs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_diagrams/" class="md-nav__link">
+        Class diagrams
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hdd_reader/" class="md-nav__link">
+        hdd_reader
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../msr_reader/" class="md-nav__link">
+        msr_reader
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ros_parameters/" class="md-nav__link">
+        ROS parameters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../seq_diagrams/" class="md-nav__link">
+        Sequence diagrams
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_cpu_monitor/" class="md-nav__link">
+        ROS topics: CPU Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_gpu_monitor/" class="md-nav__link">
+        ROS topics: GPU Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_hdd_monitor/" class="md-nav__link">
+        ROS topics: HDD Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_mem_monitor/" class="md-nav__link">
+        ROS topics: Memory Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_net_monitor/" class="md-nav__link">
+        ROS topics: Net Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_ntp_monitor/" class="md-nav__link">
+        ROS topics: NTP Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          ROS topics: Process Monitor
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        ROS topics: Process Monitor
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tasks-summary" class="md-nav__link">
+    Tasks Summary
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#high-load-proc0-9" class="md-nav__link">
+    High-load Proc[0-9]
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#high-mem-proc0-9" class="md-nav__link">
+    High-mem Proc[0-9]
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_voltage_monitor/" class="md-nav__link">
+        ROS topics: Voltage Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../traffic_reader/" class="md-nav__link">
+        traffic_reader
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
             
           
         </ul>
@@ -11953,14 +12276,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../component_state_monitor/">Component state monitor</a>
+          <a href="../../../autoware_topic_relay_controller/">Autoware topic relay controller</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_13_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_11_13">
           <span class="md-nav__icon md-icon"></span>
-          Component state monitor
+          Autoware topic relay controller
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -11996,6 +12319,54 @@
             
           
         
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../../component_state_monitor/">Component state monitor</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_14">
+          <span class="md-nav__icon md-icon"></span>
+          Component state monitor
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15" >
+      
+      
+        
+          
+            
+          
+        
           
         
       
@@ -12005,14 +12376,14 @@
         <div class="md-nav__link md-nav__link--index ">
           <a href="../../../diagnostic_graph_aggregator/">Diagnostic graph aggregator</a>
           
-            <label for="__nav_11_14">
+            <label for="__nav_11_15">
               <span class="md-nav__icon md-icon"></span>
             </label>
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_14_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15">
           <span class="md-nav__icon md-icon"></span>
           Diagnostic graph aggregator
         </label>
@@ -12033,7 +12404,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2" >
       
       
         
@@ -12043,13 +12414,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_14_2" id="__nav_11_14_2_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_15_2" id="__nav_11_15_2_label" tabindex="0">
           Doc
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_14_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_15_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2">
           <span class="md-nav__icon md-icon"></span>
           Doc
         </label>
@@ -12068,7 +12439,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_1" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1" >
       
       
         
@@ -12086,13 +12457,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_14_2_1" id="__nav_11_14_2_1_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_15_2_1" id="__nav_11_15_2_1_label" tabindex="0">
           Format
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_14_2_1_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_1">
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_15_2_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_1">
           <span class="md-nav__icon md-icon"></span>
           Format
         </label>
@@ -12167,7 +12538,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_1_5" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1_5" >
       
       
         
@@ -12175,13 +12546,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_14_2_1_5" id="__nav_11_14_2_1_5_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_15_2_1_5" id="__nav_11_15_2_1_5_label" tabindex="0">
           Edit
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_14_2_1_5_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_1_5">
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_15_2_1_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_1_5">
           <span class="md-nav__icon md-icon"></span>
           Edit
         </label>
@@ -12221,7 +12592,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_1_6" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1_6" >
       
       
         
@@ -12239,13 +12610,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_14_2_1_6" id="__nav_11_14_2_1_6_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_15_2_1_6" id="__nav_11_15_2_1_6_label" tabindex="0">
           Unit
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_14_2_1_6_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_1_6">
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_15_2_1_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_1_6">
           <span class="md-nav__icon md-icon"></span>
           Unit
         </label>
@@ -12362,7 +12733,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_2" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_2" >
       
       
         
@@ -12370,13 +12741,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_14_2_2" id="__nav_11_14_2_2_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_15_2_2" id="__nav_11_15_2_2_label" tabindex="0">
           Tool
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_14_2_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_2">
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_15_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_2">
           <span class="md-nav__icon md-icon"></span>
           Tool
         </label>
@@ -12432,7 +12803,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16" >
       
       
         
@@ -12449,14 +12820,14 @@
         <div class="md-nav__link md-nav__link--index ">
           <a href="../../../diagnostic_graph_utils/">Diagnostic graph utils</a>
           
-            <label for="__nav_11_15">
+            <label for="__nav_11_16">
               <span class="md-nav__icon md-icon"></span>
             </label>
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_15_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_15">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_16">
           <span class="md-nav__icon md-icon"></span>
           Diagnostic graph utils
         </label>
@@ -12477,7 +12848,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16_2" >
       
       
         
@@ -12485,13 +12856,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_15_2" id="__nav_11_15_2_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_16_2" id="__nav_11_16_2_label" tabindex="0">
           Doc
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_15_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_15_2">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_16_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_16_2">
           <span class="md-nav__icon md-icon"></span>
           Doc
         </label>
@@ -12510,7 +12881,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16_2_1" >
       
       
         
@@ -12520,13 +12891,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_15_2_1" id="__nav_11_15_2_1_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_16_2_1" id="__nav_11_16_2_1_label" tabindex="0">
           Node
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_15_2_1_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_15_2_1">
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_16_2_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_16_2_1">
           <span class="md-nav__icon md-icon"></span>
           Node
         </label>
@@ -12596,7 +12967,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_17" >
       
       
         
@@ -12613,419 +12984,13 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_16_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_16">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_17_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_17">
           <span class="md-nav__icon md-icon"></span>
           System diagnostic monitor
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-    
-  
-  
-    
-      
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_17" checked>
-      
-      
-        
-          
-            
-          
-        
-          
-        
-      
-      
-        
-        
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../../">System monitor</a>
-          
-            <label for="__nav_11_17">
-              <span class="md-nav__icon md-icon"></span>
-            </label>
-          
-        </div>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_17_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_11_17">
-          <span class="md-nav__icon md-icon"></span>
-          System monitor
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-          
-            
-              
-  
-  
-    
-  
-  
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_17_2" checked>
-      
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
-      
-        <label class="md-nav__link" for="__nav_11_17_2" id="__nav_11_17_2_label" tabindex="0">
-          Docs
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_17_2_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_11_17_2">
-          <span class="md-nav__icon md-icon"></span>
-          Docs
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../class_diagrams/" class="md-nav__link">
-        Class diagrams
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../hdd_reader/" class="md-nav__link">
-        hdd_reader
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../msr_reader/" class="md-nav__link">
-        msr_reader
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          ROS parameters
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        ROS parameters
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#cpu-monitor" class="md-nav__link">
-    CPU Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#hdd-monitor" class="md-nav__link">
-    HDD Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#memory-monitor" class="md-nav__link">
-    Memory Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#net-monitor" class="md-nav__link">
-    Net Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ntp-monitor" class="md-nav__link">
-    NTP Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#process-monitor" class="md-nav__link">
-    Process Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#gpu-monitor" class="md-nav__link">
-    GPU Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#voltage-monitor" class="md-nav__link">
-    Voltage Monitor
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../seq_diagrams/" class="md-nav__link">
-        Sequence diagrams
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_cpu_monitor/" class="md-nav__link">
-        ROS topics: CPU Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_gpu_monitor/" class="md-nav__link">
-        ROS topics: GPU Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_hdd_monitor/" class="md-nav__link">
-        ROS topics: HDD Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_mem_monitor/" class="md-nav__link">
-        ROS topics: Memory Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_net_monitor/" class="md-nav__link">
-        ROS topics: Net Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_ntp_monitor/" class="md-nav__link">
-        ROS topics: NTP Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_process_monitor/" class="md-nav__link">
-        ROS topics: Process Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_voltage_monitor/" class="md-nav__link">
-        ROS topics: Voltage Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../traffic_reader/" class="md-nav__link">
-        traffic_reader
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
             
           
         </ul>
@@ -14325,57 +14290,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#cpu-monitor" class="md-nav__link">
-    CPU Monitor
+  <a href="#tasks-summary" class="md-nav__link">
+    Tasks Summary
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#hdd-monitor" class="md-nav__link">
-    HDD Monitor
+  <a href="#high-load-proc0-9" class="md-nav__link">
+    High-load Proc[0-9]
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#memory-monitor" class="md-nav__link">
-    Memory Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#net-monitor" class="md-nav__link">
-    Net Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ntp-monitor" class="md-nav__link">
-    NTP Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#process-monitor" class="md-nav__link">
-    Process Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#gpu-monitor" class="md-nav__link">
-    GPU Monitor
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#voltage-monitor" class="md-nav__link">
-    Voltage Monitor
+  <a href="#high-mem-proc0-9" class="md-nav__link">
+    High-mem Proc[0-9]
   </a>
   
 </li>
@@ -14398,489 +14328,204 @@
   
 
 
-<div><h1 id="ros-parameters">ROS parameters<a class="headerlink" href="#ros-parameters" title="Permanent link">#</a></h1>
-<h2 id="cpu-monitor"><u>CPU Monitor</u><a class="headerlink" href="#cpu-monitor" title="Permanent link">#</a></h2>
-<p>cpu_monitor:</p>
+<div><h1 id="ros-topics-process-monitor">ROS topics: Process Monitor<a class="headerlink" href="#ros-topics-process-monitor" title="Permanent link">#</a></h1>
+<h2 id="tasks-summary"><u>Tasks Summary</u><a class="headerlink" href="#tasks-summary" title="Permanent link">#</a></h2>
+<p>/diagnostics/process_monitor: Tasks Summary</p>
+<p><b>[summary]</b></p>
 <table>
 <thead>
 <tr>
-<th align="left">Name</th>
-<th align="center">Type</th>
-<th align="center">Unit</th>
-<th align="center">Default</th>
-<th align="left">Notes</th>
+<th>level</th>
+<th>message</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">temp_warn</td>
-<td align="center">float</td>
-<td align="center">DegC</td>
-<td align="center">90.0</td>
-<td align="left">Generates warning when CPU temperature reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">temp_error</td>
-<td align="center">float</td>
-<td align="center">DegC</td>
-<td align="center">95.0</td>
-<td align="left">Generates error when CPU temperature reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">usage_warn</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">0.90</td>
-<td align="left">Generates warning when CPU usage reaches a specified value or higher and last for usage_warn_count counts.</td>
-</tr>
-<tr>
-<td align="left">usage_error</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">1.00</td>
-<td align="left">Generates error when CPU usage reaches a specified value or higher and last for usage_error_count counts.</td>
-</tr>
-<tr>
-<td align="left">usage_warn_count</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">2</td>
-<td align="left">Generates warning when CPU usage reaches usage_warn value or higher and last for a specified counts.</td>
-</tr>
-<tr>
-<td align="left">usage_error_count</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">2</td>
-<td align="left">Generates error when CPU usage reaches usage_error value or higher and last for a specified counts.</td>
-</tr>
-<tr>
-<td align="left">load1_warn</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">0.90</td>
-<td align="left">Generates warning when load average 1min reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">load5_warn</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">0.80</td>
-<td align="left">Generates warning when load average 5min reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">msr_reader_port</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">7634</td>
-<td align="left">Port number to connect to msr_reader.</td>
+<td>OK</td>
+<td>OK</td>
 </tr>
 </tbody>
 </table>
-<h2 id="hdd-monitor"><u>HDD Monitor</u><a class="headerlink" href="#hdd-monitor" title="Permanent link">#</a></h2>
-<p>hdd_monitor:</p>
-<p>  disks:</p>
+<p><b>[values]</b></p>
 <table>
 <thead>
 <tr>
-<th align="left">Name</th>
-<th align="center">Type</th>
-<th align="center">Unit</th>
-<th align="center">Default</th>
-<th align="left">Notes</th>
+<th>key</th>
+<th>value (example)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">name</td>
-<td align="center">string</td>
-<td align="center">n/a</td>
-<td align="center">none</td>
-<td align="left">The disk name to monitor temperature. (e.g. /dev/sda)</td>
+<td>total</td>
+<td>409</td>
 </tr>
 <tr>
-<td align="left">temp_attribute_id</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">0xC2</td>
-<td align="left">S.M.A.R.T attribute ID of temperature.</td>
+<td>running</td>
+<td>2</td>
 </tr>
 <tr>
-<td align="left">temp_warn</td>
-<td align="center">float</td>
-<td align="center">DegC</td>
-<td align="center">55.0</td>
-<td align="left">Generates warning when HDD temperature reaches a specified value or higher.</td>
+<td>sleeping</td>
+<td>321</td>
 </tr>
 <tr>
-<td align="left">temp_error</td>
-<td align="center">float</td>
-<td align="center">DegC</td>
-<td align="center">70.0</td>
-<td align="left">Generates error when HDD temperature reaches a specified value or higher.</td>
+<td>stopped</td>
+<td>0</td>
 </tr>
 <tr>
-<td align="left">power_on_hours_attribute_id</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">0x09</td>
-<td align="left">S.M.A.R.T attribute ID of power-on hours.</td>
-</tr>
-<tr>
-<td align="left">power_on_hours_warn</td>
-<td align="center">int</td>
-<td align="center">Hour</td>
-<td align="center">3000000</td>
-<td align="left">Generates warning when HDD power-on hours reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">total_data_written_attribute_id</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">0xF1</td>
-<td align="left">S.M.A.R.T attribute ID of total data written.</td>
-</tr>
-<tr>
-<td align="left">total_data_written_warn</td>
-<td align="center">int</td>
-<td align="center">depends on device</td>
-<td align="center">4915200</td>
-<td align="left">Generates warning when HDD total data written reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">total_data_written_safety_factor</td>
-<td align="center">int</td>
-<td align="center">%(1e-2)</td>
-<td align="center">0.05</td>
-<td align="left">Safety factor of HDD total data written.</td>
-</tr>
-<tr>
-<td align="left">recovered_error_attribute_id</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">0xC3</td>
-<td align="left">S.M.A.R.T attribute ID of recovered error.</td>
-</tr>
-<tr>
-<td align="left">recovered_error_warn</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">1</td>
-<td align="left">Generates warning when HDD recovered error reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">read_data_rate_warn</td>
-<td align="center">float</td>
-<td align="center">MB/s</td>
-<td align="center">360.0</td>
-<td align="left">Generates warning when HDD read data rate reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">write_data_rate_warn</td>
-<td align="center">float</td>
-<td align="center">MB/s</td>
-<td align="center">103.5</td>
-<td align="left">Generates warning when HDD write data rate reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">read_iops_warn</td>
-<td align="center">float</td>
-<td align="center">IOPS</td>
-<td align="center">63360.0</td>
-<td align="left">Generates warning when HDD read IOPS reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">write_iops_warn</td>
-<td align="center">float</td>
-<td align="center">IOPS</td>
-<td align="center">24120.0</td>
-<td align="left">Generates warning when HDD write IOPS reaches a specified value or higher.</td>
+<td>zombie</td>
+<td>0</td>
 </tr>
 </tbody>
 </table>
-<p>hdd_monitor:</p>
+<h2 id="high-load-proc0-9"><u>High-load Proc[0-9]</u><a class="headerlink" href="#high-load-proc0-9" title="Permanent link">#</a></h2>
+<p>/diagnostics/process_monitor: High-load Proc[0-9]</p>
+<p><b>[summary]</b></p>
 <table>
 <thead>
 <tr>
-<th align="left">Name</th>
-<th align="center">Type</th>
-<th align="center">Unit</th>
-<th align="center">Default</th>
-<th align="left">Notes</th>
+<th>level</th>
+<th>message</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">hdd_reader_port</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">7635</td>
-<td align="left">Port number to connect to hdd_reader.</td>
-</tr>
-<tr>
-<td align="left">usage_warn</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">0.95</td>
-<td align="left">Generates warning when disk usage reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">usage_error</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">0.99</td>
-<td align="left">Generates error when disk usage reaches a specified value or higher.</td>
+<td>OK</td>
+<td>OK</td>
 </tr>
 </tbody>
 </table>
-<h2 id="memory-monitor"><u>Memory Monitor</u><a class="headerlink" href="#memory-monitor" title="Permanent link">#</a></h2>
-<p>mem_monitor:</p>
+<p><b>[values]</b></p>
 <table>
 <thead>
 <tr>
-<th align="left">Name</th>
-<th align="center">Type</th>
-<th align="center">Unit</th>
-<th align="center">Default</th>
-<th align="left">Notes</th>
+<th>key</th>
+<th>value (example)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">usage_warn</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">0.95</td>
-<td align="left">Generates warning when physical memory usage reaches a specified value or higher.</td>
+<td>COMMAND</td>
+<td>/usr/lib/firefox/firefox</td>
 </tr>
 <tr>
-<td align="left">usage_error</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">0.99</td>
-<td align="left">Generates error when physical memory usage reaches a specified value or higher.</td>
+<td>%CPU</td>
+<td>37.5</td>
+</tr>
+<tr>
+<td>%MEM</td>
+<td>2.1</td>
+</tr>
+<tr>
+<td>PID</td>
+<td>14062</td>
+</tr>
+<tr>
+<td>USER</td>
+<td>autoware</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>20</td>
+</tr>
+<tr>
+<td>NI</td>
+<td>0</td>
+</tr>
+<tr>
+<td>VIRT</td>
+<td>3461152</td>
+</tr>
+<tr>
+<td>RES</td>
+<td>669052</td>
+</tr>
+<tr>
+<td>SHR</td>
+<td>481208</td>
+</tr>
+<tr>
+<td>S</td>
+<td>S</td>
+</tr>
+<tr>
+<td>TIME+</td>
+<td>23:57.49</td>
 </tr>
 </tbody>
 </table>
-<h2 id="net-monitor"><u>Net Monitor</u><a class="headerlink" href="#net-monitor" title="Permanent link">#</a></h2>
-<p>net_monitor:</p>
+<h2 id="high-mem-proc0-9"><u>High-mem Proc[0-9]</u><a class="headerlink" href="#high-mem-proc0-9" title="Permanent link">#</a></h2>
+<p>/diagnostics/process_monitor: High-mem Proc[0-9]</p>
+<p><b>[summary]</b></p>
 <table>
 <thead>
 <tr>
-<th align="left">Name</th>
-<th align="center">Type</th>
-<th align="center">Unit</th>
-<th align="center">Default</th>
-<th align="left">Notes</th>
+<th>level</th>
+<th>message</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">devices</td>
-<td align="center">list[string]</td>
-<td align="center">n/a</td>
-<td align="center">none</td>
-<td align="left">The name of network interface to monitor. (e.g. eth0, * for all network interfaces)</td>
-</tr>
-<tr>
-<td align="left">monitor_program</td>
-<td align="center">string</td>
-<td align="center">n/a</td>
-<td align="center">greengrass</td>
-<td align="left">program name to be monitored by nethogs name.</td>
-</tr>
-<tr>
-<td align="left">crc_error_check_duration</td>
-<td align="center">int</td>
-<td align="center">sec</td>
-<td align="center">1</td>
-<td align="left">CRC error check duration.</td>
-</tr>
-<tr>
-<td align="left">crc_error_count_threshold</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">1</td>
-<td align="left">Generates warning when count of CRC errors during CRC error check duration reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">reassembles_failed_check_duration</td>
-<td align="center">int</td>
-<td align="center">sec</td>
-<td align="center">1</td>
-<td align="left">IP packet reassembles failed check duration.</td>
-</tr>
-<tr>
-<td align="left">reassembles_failed_check_count</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">1</td>
-<td align="left">Generates warning when count of IP packet reassembles failed during IP packet reassembles failed check duration reaches a specified value or higher.</td>
-</tr>
-<tr>
-<td align="left">udp_buf_errors_check_duration</td>
-<td align="center">int</td>
-<td align="center">sec</td>
-<td align="center">1</td>
-<td align="left">UDP buf errors check duration.</td>
-</tr>
-<tr>
-<td align="left">udp_buf_errors_check_count</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">1</td>
-<td align="left">Generates warning when count of UDP buf errors during udp_buf_errors_check_duration reaches a specified value or higher.</td>
+<td>OK</td>
+<td>OK</td>
 </tr>
 </tbody>
 </table>
-<h2 id="ntp-monitor"><u>NTP Monitor</u><a class="headerlink" href="#ntp-monitor" title="Permanent link">#</a></h2>
-<p>ntp_monitor:</p>
+<p><b>[values]</b></p>
 <table>
 <thead>
 <tr>
-<th align="left">Name</th>
-<th align="center">Type</th>
-<th align="center">Unit</th>
-<th align="center">Default</th>
-<th align="left">Notes</th>
+<th>key</th>
+<th>value (example)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">server</td>
-<td align="center">string</td>
-<td align="center">n/a</td>
-<td align="center">ntp.ubuntu.com</td>
-<td align="left">The name of NTP server to synchronize date and time. (e.g. ntp.nict.jp for Japan)</td>
+<td>COMMAND</td>
+<td>/snap/multipass/1784/usr/bin/qemu-system-x86_64</td>
 </tr>
 <tr>
-<td align="left">offset_warn</td>
-<td align="center">float</td>
-<td align="center">sec</td>
-<td align="center">0.1</td>
-<td align="left">Generates warning when NTP offset reaches a specified value or higher. (default is 100ms)</td>
+<td>%CPU</td>
+<td>0</td>
 </tr>
 <tr>
-<td align="left">offset_error</td>
-<td align="center">float</td>
-<td align="center">sec</td>
-<td align="center">5.0</td>
-<td align="left">Generates warning when NTP offset reaches a specified value or higher. (default is 5sec)</td>
-</tr>
-</tbody>
-</table>
-<h2 id="process-monitor"><u>Process Monitor</u><a class="headerlink" href="#process-monitor" title="Permanent link">#</a></h2>
-<p>process_monitor:</p>
-<table>
-<thead>
-<tr>
-<th align="left">Name</th>
-<th align="center">Type</th>
-<th align="center">Unit</th>
-<th align="center">Default</th>
-<th align="left">Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">num_of_procs</td>
-<td align="center">int</td>
-<td align="center">n/a</td>
-<td align="center">5</td>
-<td align="left">The number of processes to generate High-load Proc[0-9] and High-mem Proc[0-9].</td>
-</tr>
-</tbody>
-</table>
-<h2 id="gpu-monitor"><u>GPU Monitor</u><a class="headerlink" href="#gpu-monitor" title="Permanent link">#</a></h2>
-<p>gpu_monitor:</p>
-<table>
-<thead>
-<tr>
-<th align="left">Name</th>
-<th align="center">Type</th>
-<th align="center">Unit</th>
-<th align="center">Default</th>
-<th align="left">Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">temp_warn</td>
-<td align="center">float</td>
-<td align="center">DegC</td>
-<td align="center">90.0</td>
-<td align="left">Generates warning when GPU temperature reaches a specified value or higher.</td>
+<td>%MEM</td>
+<td>2.5</td>
 </tr>
 <tr>
-<td align="left">temp_error</td>
-<td align="center">float</td>
-<td align="center">DegC</td>
-<td align="center">95.0</td>
-<td align="left">Generates error when GPU temperature reaches a specified value or higher.</td>
+<td>PID</td>
+<td>1565</td>
 </tr>
 <tr>
-<td align="left">gpu_usage_warn</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">0.90</td>
-<td align="left">Generates warning when GPU usage reaches a specified value or higher.</td>
+<td>USER</td>
+<td>root</td>
 </tr>
 <tr>
-<td align="left">gpu_usage_error</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">1.00</td>
-<td align="left">Generates error when GPU usage reaches a specified value or higher.</td>
+<td>PR</td>
+<td>20</td>
 </tr>
 <tr>
-<td align="left">memory_usage_warn</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">0.90</td>
-<td align="left">Generates warning when GPU memory usage reaches a specified value or higher.</td>
+<td>NI</td>
+<td>0</td>
 </tr>
 <tr>
-<td align="left">memory_usage_error</td>
-<td align="center">float</td>
-<td align="center">%(1e-2)</td>
-<td align="center">1.00</td>
-<td align="left">Generates error when GPU memory usage reaches a specified value or higher.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="voltage-monitor"><u>Voltage Monitor</u><a class="headerlink" href="#voltage-monitor" title="Permanent link">#</a></h2>
-<p>voltage_monitor:</p>
-<table>
-<thead>
-<tr>
-<th align="left">Name</th>
-<th align="center">Type</th>
-<th align="center">Unit</th>
-<th align="center">Default</th>
-<th align="left">Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">cmos_battery_warn</td>
-<td align="center">float</td>
-<td align="center">volt</td>
-<td align="center">2.9</td>
-<td align="left">Generates warning when voltage of CMOS Battery is lower.</td>
+<td>VIRT</td>
+<td>3722320</td>
 </tr>
 <tr>
-<td align="left">cmos_battery_error</td>
-<td align="center">float</td>
-<td align="center">volt</td>
-<td align="center">2.7</td>
-<td align="left">Generates error when voltage of CMOS Battery is lower.</td>
+<td>RES</td>
+<td>812432</td>
 </tr>
 <tr>
-<td align="left">cmos_battery_label</td>
-<td align="center">string</td>
-<td align="center">n/a</td>
-<td align="center">""</td>
-<td align="left">voltage string in sensors command outputs. if empty no voltage will be checked.</td>
+<td>SHR</td>
+<td>20340</td>
+</tr>
+<tr>
+<td>S</td>
+<td>S</td>
+</tr>
+<tr>
+<td>TIME+</td>
+<td>0:22.84</td>
 </tr>
 </tbody>
 </table></div>
@@ -14910,7 +14555,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../msr_reader/" class="md-footer__link md-footer__link--prev" aria-label="Previous: msr_reader" rel="prev">
+          <a href="../topics_ntp_monitor/" class="md-footer__link md-footer__link--prev" aria-label="Previous: ROS topics: NTP Monitor" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -14919,20 +14564,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                msr_reader
+                ROS topics: NTP Monitor
               </div>
             </div>
           </a>
         
         
           
-          <a href="../seq_diagrams/" class="md-footer__link md-footer__link--next" aria-label="Next: Sequence diagrams" rel="next">
+          <a href="../topics_voltage_monitor/" class="md-footer__link md-footer__link--next" aria-label="Next: ROS topics: Voltage Monitor" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Sequence diagrams
+                ROS topics: Voltage Monitor
               </div>
             </div>
             <div class="md-footer__button md-icon">

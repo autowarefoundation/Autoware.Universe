@@ -8,20 +8,20 @@
       
       
       
-        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/latest/system/system_monitor/docs/hdd_reader/">
+        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/latest/system/autoware_system_monitor/docs/seq_diagrams/">
       
       
-        <link rel="prev" href="../class_diagrams/">
+        <link rel="prev" href="../ros_parameters/">
       
       
-        <link rel="next" href="../msr_reader/">
+        <link rel="next" href="../topics_cpu_monitor/">
       
       <link rel="icon" href="../../../../docs/assets/images/autoware-foundation.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.20">
     
     
       
-        <title>hdd_reader - Autoware Universe Documentation</title>
+        <title>Sequence diagrams - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#hdd_reader" class="md-skip">
+        <a href="#sequence-diagrams" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              hdd_reader
+              Sequence diagrams
             
           </span>
         </div>
@@ -11881,758 +11881,6 @@
               
   
   
-  
-    
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_12" >
-      
-      
-        
-          
-            
-          
-        
-      
-      
-        
-        
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../autoware_topic_relay_controller/">Autoware topic relay controller</a>
-          
-        </div>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_12_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_12">
-          <span class="md-nav__icon md-icon"></span>
-          Autoware topic relay controller
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_13" >
-      
-      
-        
-          
-            
-          
-        
-      
-      
-        
-        
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../component_state_monitor/">Component state monitor</a>
-          
-        </div>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_13_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_13">
-          <span class="md-nav__icon md-icon"></span>
-          Component state monitor
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14" >
-      
-      
-        
-          
-            
-          
-        
-          
-        
-      
-      
-        
-        
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../diagnostic_graph_aggregator/">Diagnostic graph aggregator</a>
-          
-            <label for="__nav_11_14">
-              <span class="md-nav__icon md-icon"></span>
-            </label>
-          
-        </div>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_14_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14">
-          <span class="md-nav__icon md-icon"></span>
-          Diagnostic graph aggregator
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2" >
-      
-      
-        
-          
-        
-          
-        
-      
-      
-        <label class="md-nav__link" for="__nav_11_14_2" id="__nav_11_14_2_label" tabindex="0">
-          Doc
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_14_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2">
-          <span class="md-nav__icon md-icon"></span>
-          Doc
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_1" >
-      
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
-      
-        <label class="md-nav__link" for="__nav_11_14_2_1" id="__nav_11_14_2_1_label" tabindex="0">
-          Format
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_14_2_1_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_1">
-          <span class="md-nav__icon md-icon"></span>
-          Format
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/format/edit/" class="md-nav__link">
-        Edit
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/format/graph/" class="md-nav__link">
-        Graph
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/format/path/" class="md-nav__link">
-        Path
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/" class="md-nav__link">
-        Unit
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_1_5" >
-      
-      
-        
-          
-        
-      
-      
-        <label class="md-nav__link" for="__nav_11_14_2_1_5" id="__nav_11_14_2_1_5_label" tabindex="0">
-          Edit
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_14_2_1_5_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_1_5">
-          <span class="md-nav__icon md-icon"></span>
-          Edit
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/format/edit/remove/" class="md-nav__link">
-        Remove
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_1_6" >
-      
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
-      
-        <label class="md-nav__link" for="__nav_11_14_2_1_6" id="__nav_11_14_2_1_6_label" tabindex="0">
-          Unit
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_14_2_1_6_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_1_6">
-          <span class="md-nav__icon md-icon"></span>
-          Unit
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/and/" class="md-nav__link">
-        And
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/const/" class="md-nav__link">
-        Constant
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/diag/" class="md-nav__link">
-        Diag
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/link/" class="md-nav__link">
-        Link
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/or/" class="md-nav__link">
-        Or
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/remap/" class="md-nav__link">
-        Constant
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_2" >
-      
-      
-        
-          
-        
-      
-      
-        <label class="md-nav__link" for="__nav_11_14_2_2" id="__nav_11_14_2_2_label" tabindex="0">
-          Tool
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_14_2_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_2">
-          <span class="md-nav__icon md-icon"></span>
-          Tool
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_aggregator/doc/tool/tree/" class="md-nav__link">
-        Tree tool
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15" >
-      
-      
-        
-          
-            
-          
-        
-          
-        
-      
-      
-        
-        
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../diagnostic_graph_utils/">Diagnostic graph utils</a>
-          
-            <label for="__nav_11_15">
-              <span class="md-nav__icon md-icon"></span>
-            </label>
-          
-        </div>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_15_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_15">
-          <span class="md-nav__icon md-icon"></span>
-          Diagnostic graph utils
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2" >
-      
-      
-        
-          
-        
-      
-      
-        <label class="md-nav__link" for="__nav_11_15_2" id="__nav_11_15_2_label" tabindex="0">
-          Doc
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_15_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_15_2">
-          <span class="md-nav__icon md-icon"></span>
-          Doc
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1" >
-      
-      
-        
-          
-        
-          
-        
-      
-      
-        <label class="md-nav__link" for="__nav_11_15_2_1" id="__nav_11_15_2_1_label" tabindex="0">
-          Node
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_15_2_1_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_15_2_1">
-          <span class="md-nav__icon md-icon"></span>
-          Node
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_utils/doc/node/converter/" class="md-nav__link">
-        Converter tool
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../diagnostic_graph_utils/doc/node/dump/" class="md-nav__link">
-        Dump tool
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-      
-      
-      
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16" >
-      
-      
-        
-          
-            
-          
-        
-      
-      
-        
-        
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../system_diagnostic_monitor/">System diagnostic monitor</a>
-          
-        </div>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_16_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_16">
-          <span class="md-nav__icon md-icon"></span>
-          System diagnostic monitor
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
     
   
   
@@ -12644,7 +11892,7 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_17" checked>
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_12" checked>
       
       
         
@@ -12659,18 +11907,18 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../">System monitor</a>
+          <a href="../../">Autoware system monitor</a>
           
-            <label for="__nav_11_17">
+            <label for="__nav_11_12">
               <span class="md-nav__icon md-icon"></span>
             </label>
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_17_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_11_17">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_12_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_11_12">
           <span class="md-nav__icon md-icon"></span>
-          System monitor
+          Autoware system monitor
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -12689,7 +11937,7 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_17_2" checked>
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_12_2" checked>
       
       
         
@@ -12723,13 +11971,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_17_2" id="__nav_11_17_2_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_12_2" id="__nav_11_12_2_label" tabindex="0">
           Docs
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_17_2_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_11_17_2">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_12_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_11_12_2">
           <span class="md-nav__icon md-icon"></span>
           Docs
         </label>
@@ -12753,100 +12001,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          hdd_reader
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../hdd_reader/" class="md-nav__link">
         hdd_reader
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#name" class="md-nav__link">
-    Name
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#synopsis" class="md-nav__link">
-    Synopsis
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    Description
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    Notes
-  </a>
-  
-    <nav class="md-nav" aria-label="Notes">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ata" class="md-nav__link">
-    [ATA]
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nvme" class="md-nav__link">
-    [NVMe]
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#operation-confirmed-drives" class="md-nav__link">
-    Operation confirmed drives
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -12884,11 +12043,94 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../seq_diagrams/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Sequence diagrams
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Sequence diagrams
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cpu-monitor" class="md-nav__link">
+    CPU Monitor
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hdd-monitor" class="md-nav__link">
+    HDD Monitor
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-monitor" class="md-nav__link">
+    Memory Monitor
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#net-monitor" class="md-nav__link">
+    Net Monitor
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ntp-monitor" class="md-nav__link">
+    NTP Monitor
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#process-monitor" class="md-nav__link">
+    Process Monitor
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpu-monitor" class="md-nav__link">
+    GPU Monitor
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -13025,6 +12267,758 @@
     </li>
   
 
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_13" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../../autoware_topic_relay_controller/">Autoware topic relay controller</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_13">
+          <span class="md-nav__icon md-icon"></span>
+          Autoware topic relay controller
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../../component_state_monitor/">Component state monitor</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_14">
+          <span class="md-nav__icon md-icon"></span>
+          Component state monitor
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../../diagnostic_graph_aggregator/">Diagnostic graph aggregator</a>
+          
+            <label for="__nav_11_15">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15">
+          <span class="md-nav__icon md-icon"></span>
+          Diagnostic graph aggregator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_11_15_2" id="__nav_11_15_2_label" tabindex="0">
+          Doc
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_15_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2">
+          <span class="md-nav__icon md-icon"></span>
+          Doc
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_11_15_2_1" id="__nav_11_15_2_1_label" tabindex="0">
+          Format
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_15_2_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Format
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/format/edit/" class="md-nav__link">
+        Edit
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/format/graph/" class="md-nav__link">
+        Graph
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/format/path/" class="md-nav__link">
+        Path
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/" class="md-nav__link">
+        Unit
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1_5" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_11_15_2_1_5" id="__nav_11_15_2_1_5_label" tabindex="0">
+          Edit
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_15_2_1_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          Edit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/format/edit/remove/" class="md-nav__link">
+        Remove
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1_6" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_11_15_2_1_6" id="__nav_11_15_2_1_6_label" tabindex="0">
+          Unit
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_15_2_1_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_1_6">
+          <span class="md-nav__icon md-icon"></span>
+          Unit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/and/" class="md-nav__link">
+        And
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/const/" class="md-nav__link">
+        Constant
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/diag/" class="md-nav__link">
+        Diag
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/link/" class="md-nav__link">
+        Link
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/or/" class="md-nav__link">
+        Or
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/format/unit/remap/" class="md-nav__link">
+        Constant
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_2" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_11_15_2_2" id="__nav_11_15_2_2_label" tabindex="0">
+          Tool
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_15_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tool
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_aggregator/doc/tool/tree/" class="md-nav__link">
+        Tree tool
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../../diagnostic_graph_utils/">Diagnostic graph utils</a>
+          
+            <label for="__nav_11_16">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_16">
+          <span class="md-nav__icon md-icon"></span>
+          Diagnostic graph utils
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16_2" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_11_16_2" id="__nav_11_16_2_label" tabindex="0">
+          Doc
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_16_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_16_2">
+          <span class="md-nav__icon md-icon"></span>
+          Doc
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16_2_1" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_11_16_2_1" id="__nav_11_16_2_1_label" tabindex="0">
+          Node
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_16_2_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_16_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Node
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_utils/doc/node/converter/" class="md-nav__link">
+        Converter tool
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../diagnostic_graph_utils/doc/node/dump/" class="md-nav__link">
+        Dump tool
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_17" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../../system_diagnostic_monitor/">System diagnostic monitor</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_17_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_17">
+          <span class="md-nav__icon md-icon"></span>
+          System diagnostic monitor
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
             
           
         </ul>
@@ -14324,56 +14318,50 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#name" class="md-nav__link">
-    Name
+  <a href="#cpu-monitor" class="md-nav__link">
+    CPU Monitor
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#synopsis" class="md-nav__link">
-    Synopsis
+  <a href="#hdd-monitor" class="md-nav__link">
+    HDD Monitor
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    Description
+  <a href="#memory-monitor" class="md-nav__link">
+    Memory Monitor
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    Notes
+  <a href="#net-monitor" class="md-nav__link">
+    Net Monitor
   </a>
-  
-    <nav class="md-nav" aria-label="Notes">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ata" class="md-nav__link">
-    [ATA]
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nvme" class="md-nav__link">
-    [NVMe]
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#operation-confirmed-drives" class="md-nav__link">
-    Operation confirmed drives
+  <a href="#ntp-monitor" class="md-nav__link">
+    NTP Monitor
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#process-monitor" class="md-nav__link">
+    Process Monitor
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpu-monitor" class="md-nav__link">
+    GPU Monitor
   </a>
   
 </li>
@@ -14396,86 +14384,21 @@
   
 
 
-<div><h1 id="hdd_reader">hdd_reader<a class="headerlink" href="#hdd_reader" title="Permanent link">#</a></h1>
-<h2 id="name">Name<a class="headerlink" href="#name" title="Permanent link">#</a></h2>
-<p>hdd_reader - Read S.M.A.R.T. information for monitoring HDD temperature and life of HDD</p>
-<h2 id="synopsis">Synopsis<a class="headerlink" href="#synopsis" title="Permanent link">#</a></h2>
-<p>hdd_reader [OPTION]</p>
-<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">#</a></h2>
-<p>Read S.M.A.R.T. information for monitoring HDD temperature and life of HDD.<br>
-This runs as a daemon process and listens to a TCP/IP port (7635 by default).</p>
-<p><strong>Options:</strong><br>
-<em>-h, --help</em><br>
-    Display help<br>
-<em>-p, --port #</em><br>
-    Port number to listen to</p>
-<p><strong>Exit status:</strong><br>
-Returns 0 if OK; non-zero otherwise.</p>
-<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">#</a></h2>
-<p>The 'hdd_reader' accesses minimal data enough to get Model number, Serial number, HDD temperature, and life of HDD.<br>
-This is an approach to limit its functionality, however, the functionality can be expanded for further improvements and considerations in the future.<br><br></p>
-<h3 id="ata">[ATA]<a class="headerlink" href="#ata" title="Permanent link">#</a></h3>
-<table>
-<thead>
-<tr>
-<th>Purpose</th>
-<th>Name</th>
-<th>Length</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Model number, Serial number</td>
-<td>IDENTIFY DEVICE data</td>
-<td>256 words(512 bytes)</td>
-</tr>
-<tr>
-<td>HDD temperature, life of HDD</td>
-<td>SMART READ DATA</td>
-<td>256 words(512 bytes)</td>
-</tr>
-</tbody>
-</table>
-<p>For details please see the documents below.<br></p>
-<ul>
-<li><a href="https://www.t13.org/system/files/Project%20Drafts/2017/di529r20-ATA/ATAPI%20Command%20Set%20-%204_2.pdf">ATA Command Set - 4 (ACS-4)</a></li>
-<li><a href="https://www.t13.org/system/files/Standards/2013/d2161r5-ATA/ATAPI%20Command%20Set%20-%203.pdf">ATA/ATAPI Command Set - 3 (ACS-3)</a></li>
-<li><a href="https://www.t13.org/system/files/Documents/2005/e05171r0-SMART%20Attributes%20Overview_1.pdf">SMART Attribute Overview</a></li>
-<li><a href="https://www.t13.org/system/files/Documents/2005/e05148r0-ACS-SMART%20Attributes%20Annex_1.pdf">SMART Attribute Annex</a></li>
-</ul>
-<h3 id="nvme">[NVMe]<a class="headerlink" href="#nvme" title="Permanent link">#</a></h3>
-<table>
-<thead>
-<tr>
-<th>Purpose</th>
-<th>Name</th>
-<th>Length</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Model number, Serial number</td>
-<td>Identify Controller data structure</td>
-<td>4096 bytes</td>
-</tr>
-<tr>
-<td>HDD temperature, life of HDD</td>
-<td>SMART / Health Information</td>
-<td>36 Dword(144 bytes)</td>
-</tr>
-</tbody>
-</table>
-<p>For details please see the documents below.<br></p>
-<ul>
-<li><a href="https://www.nvmexpress.org/wp-content/uploads/NVM_Express_1_2b_Gold_20160603.pdf">NVM Express 1.2b</a></li>
-</ul>
-<h2 id="operation-confirmed-drives">Operation confirmed drives<a class="headerlink" href="#operation-confirmed-drives" title="Permanent link">#</a></h2>
-<!-- cspell: ignore MZVLB1T0HALR -->
-
-<ul>
-<li>SAMSUNG MZVLB1T0HALR (SSD)</li>
-<li>Western Digital My Passport (Portable HDD)</li>
-</ul></div>
+<div><h1 id="sequence-diagrams">Sequence diagrams<a class="headerlink" href="#sequence-diagrams" title="Permanent link">#</a></h1>
+<h2 id="cpu-monitor"><u>CPU Monitor</u><a class="headerlink" href="#cpu-monitor" title="Permanent link">#</a></h2>
+<p><img alt="CPU Monitor" src="../images/seq_cpu_monitor.png"></p>
+<h2 id="hdd-monitor"><u>HDD Monitor</u><a class="headerlink" href="#hdd-monitor" title="Permanent link">#</a></h2>
+<p><img alt="HDD Monitor" src="../images/seq_hdd_monitor.png"></p>
+<h2 id="memory-monitor"><u>Memory Monitor</u><a class="headerlink" href="#memory-monitor" title="Permanent link">#</a></h2>
+<p><img alt="Memory Monitor" src="../images/seq_mem_monitor.png"></p>
+<h2 id="net-monitor"><u>Net Monitor</u><a class="headerlink" href="#net-monitor" title="Permanent link">#</a></h2>
+<p><img alt="Net Monitor" src="../images/seq_net_monitor.png"></p>
+<h2 id="ntp-monitor"><u>NTP Monitor</u><a class="headerlink" href="#ntp-monitor" title="Permanent link">#</a></h2>
+<p><img alt="NTP Monitor" src="../images/seq_ntp_monitor.png"></p>
+<h2 id="process-monitor"><u>Process Monitor</u><a class="headerlink" href="#process-monitor" title="Permanent link">#</a></h2>
+<p><img alt="Process Monitor" src="../images/seq_process_monitor.png"></p>
+<h2 id="gpu-monitor"><u>GPU Monitor</u><a class="headerlink" href="#gpu-monitor" title="Permanent link">#</a></h2>
+<p><img alt="GPU Monitor" src="../images/seq_gpu_monitor.png"></p></div>
 
 
 
@@ -14502,7 +14425,7 @@ This is an approach to limit its functionality, however, the functionality can b
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../class_diagrams/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Class diagrams" rel="prev">
+          <a href="../ros_parameters/" class="md-footer__link md-footer__link--prev" aria-label="Previous: ROS parameters" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -14511,20 +14434,20 @@ This is an approach to limit its functionality, however, the functionality can b
                 Previous
               </span>
               <div class="md-ellipsis">
-                Class diagrams
+                ROS parameters
               </div>
             </div>
           </a>
         
         
           
-          <a href="../msr_reader/" class="md-footer__link md-footer__link--next" aria-label="Next: msr_reader" rel="next">
+          <a href="../topics_cpu_monitor/" class="md-footer__link md-footer__link--next" aria-label="Next: ROS topics: CPU Monitor" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                msr_reader
+                ROS topics: CPU Monitor
               </div>
             </div>
             <div class="md-footer__button md-icon">

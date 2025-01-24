@@ -8,20 +8,20 @@
       
       
       
-        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/latest/system/system_monitor/docs/topics_net_monitor/">
+        <link rel="canonical" href="https://autowarefoundation.github.io/autoware.universe/latest/system/autoware_system_monitor/docs/hdd_reader/">
       
       
-        <link rel="prev" href="../topics_mem_monitor/">
+        <link rel="prev" href="../class_diagrams/">
       
       
-        <link rel="next" href="../topics_ntp_monitor/">
+        <link rel="next" href="../msr_reader/">
       
       <link rel="icon" href="../../../../docs/assets/images/autoware-foundation.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.20">
     
     
       
-        <title>ROS topics: Net Monitor - Autoware Universe Documentation</title>
+        <title>hdd_reader - Autoware Universe Documentation</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ros-topics-net-monitor" class="md-skip">
+        <a href="#hdd_reader" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              ROS topics: Net Monitor
+              hdd_reader
             
           </span>
         </div>
@@ -11881,18 +11881,18 @@
               
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
       
       
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_12" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_12" checked>
       
       
         
@@ -11900,22 +11900,379 @@
             
           
         
+          
+        
       
       
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../autoware_topic_relay_controller/">Autoware topic relay controller</a>
+          <a href="../../">Autoware system monitor</a>
+          
+            <label for="__nav_11_12">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_12_label" aria-expanded="false">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_12_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_11_12">
           <span class="md-nav__icon md-icon"></span>
-          Autoware topic relay controller
+          Autoware system monitor
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_12_2" checked>
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_11_12_2" id="__nav_11_12_2_label" tabindex="0">
+          Docs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_12_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_11_12_2">
+          <span class="md-nav__icon md-icon"></span>
+          Docs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_diagrams/" class="md-nav__link">
+        Class diagrams
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          hdd_reader
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        hdd_reader
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#name" class="md-nav__link">
+    Name
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#synopsis" class="md-nav__link">
+    Synopsis
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    Notes
+  </a>
+  
+    <nav class="md-nav" aria-label="Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ata" class="md-nav__link">
+    [ATA]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvme" class="md-nav__link">
+    [NVMe]
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operation-confirmed-drives" class="md-nav__link">
+    Operation confirmed drives
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../msr_reader/" class="md-nav__link">
+        msr_reader
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ros_parameters/" class="md-nav__link">
+        ROS parameters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../seq_diagrams/" class="md-nav__link">
+        Sequence diagrams
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_cpu_monitor/" class="md-nav__link">
+        ROS topics: CPU Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_gpu_monitor/" class="md-nav__link">
+        ROS topics: GPU Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_hdd_monitor/" class="md-nav__link">
+        ROS topics: HDD Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_mem_monitor/" class="md-nav__link">
+        ROS topics: Memory Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_net_monitor/" class="md-nav__link">
+        ROS topics: Net Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_ntp_monitor/" class="md-nav__link">
+        ROS topics: NTP Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_process_monitor/" class="md-nav__link">
+        ROS topics: Process Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics_voltage_monitor/" class="md-nav__link">
+        ROS topics: Voltage Monitor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../traffic_reader/" class="md-nav__link">
+        traffic_reader
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
             
           
         </ul>
@@ -11953,14 +12310,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../component_state_monitor/">Component state monitor</a>
+          <a href="../../../autoware_topic_relay_controller/">Autoware topic relay controller</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_13_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_11_13">
           <span class="md-nav__icon md-icon"></span>
-          Component state monitor
+          Autoware topic relay controller
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -11996,6 +12353,54 @@
             
           
         
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../../component_state_monitor/">Component state monitor</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_14">
+          <span class="md-nav__icon md-icon"></span>
+          Component state monitor
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15" >
+      
+      
+        
+          
+            
+          
+        
           
         
       
@@ -12005,14 +12410,14 @@
         <div class="md-nav__link md-nav__link--index ">
           <a href="../../../diagnostic_graph_aggregator/">Diagnostic graph aggregator</a>
           
-            <label for="__nav_11_14">
+            <label for="__nav_11_15">
               <span class="md-nav__icon md-icon"></span>
             </label>
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_14_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15">
           <span class="md-nav__icon md-icon"></span>
           Diagnostic graph aggregator
         </label>
@@ -12033,7 +12438,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2" >
       
       
         
@@ -12043,13 +12448,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_14_2" id="__nav_11_14_2_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_15_2" id="__nav_11_15_2_label" tabindex="0">
           Doc
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_14_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_15_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2">
           <span class="md-nav__icon md-icon"></span>
           Doc
         </label>
@@ -12068,7 +12473,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_1" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1" >
       
       
         
@@ -12086,13 +12491,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_14_2_1" id="__nav_11_14_2_1_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_15_2_1" id="__nav_11_15_2_1_label" tabindex="0">
           Format
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_14_2_1_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_1">
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_15_2_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_1">
           <span class="md-nav__icon md-icon"></span>
           Format
         </label>
@@ -12167,7 +12572,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_1_5" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1_5" >
       
       
         
@@ -12175,13 +12580,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_14_2_1_5" id="__nav_11_14_2_1_5_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_15_2_1_5" id="__nav_11_15_2_1_5_label" tabindex="0">
           Edit
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_14_2_1_5_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_1_5">
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_15_2_1_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_1_5">
           <span class="md-nav__icon md-icon"></span>
           Edit
         </label>
@@ -12221,7 +12626,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_1_6" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1_6" >
       
       
         
@@ -12239,13 +12644,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_14_2_1_6" id="__nav_11_14_2_1_6_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_15_2_1_6" id="__nav_11_15_2_1_6_label" tabindex="0">
           Unit
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_14_2_1_6_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_1_6">
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_11_15_2_1_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_1_6">
           <span class="md-nav__icon md-icon"></span>
           Unit
         </label>
@@ -12362,7 +12767,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_14_2_2" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_2" >
       
       
         
@@ -12370,13 +12775,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_14_2_2" id="__nav_11_14_2_2_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_15_2_2" id="__nav_11_15_2_2_label" tabindex="0">
           Tool
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_14_2_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_14_2_2">
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_15_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_15_2_2">
           <span class="md-nav__icon md-icon"></span>
           Tool
         </label>
@@ -12432,7 +12837,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16" >
       
       
         
@@ -12449,14 +12854,14 @@
         <div class="md-nav__link md-nav__link--index ">
           <a href="../../../diagnostic_graph_utils/">Diagnostic graph utils</a>
           
-            <label for="__nav_11_15">
+            <label for="__nav_11_16">
               <span class="md-nav__icon md-icon"></span>
             </label>
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_15_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_15">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_16">
           <span class="md-nav__icon md-icon"></span>
           Diagnostic graph utils
         </label>
@@ -12477,7 +12882,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16_2" >
       
       
         
@@ -12485,13 +12890,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_15_2" id="__nav_11_15_2_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_16_2" id="__nav_11_16_2_label" tabindex="0">
           Doc
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_15_2_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_15_2">
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_16_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_16_2">
           <span class="md-nav__icon md-icon"></span>
           Doc
         </label>
@@ -12510,7 +12915,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_15_2_1" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16_2_1" >
       
       
         
@@ -12520,13 +12925,13 @@
         
       
       
-        <label class="md-nav__link" for="__nav_11_15_2_1" id="__nav_11_15_2_1_label" tabindex="0">
+        <label class="md-nav__link" for="__nav_11_16_2_1" id="__nav_11_16_2_1_label" tabindex="0">
           Node
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_15_2_1_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_15_2_1">
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_11_16_2_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_16_2_1">
           <span class="md-nav__icon md-icon"></span>
           Node
         </label>
@@ -12596,7 +13001,7 @@
       
         
       
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_16" >
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11_17" >
       
       
         
@@ -12613,405 +13018,13 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_16_label" aria-expanded="false">
-        <label class="md-nav__title" for="__nav_11_16">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_17_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_17">
           <span class="md-nav__icon md-icon"></span>
           System diagnostic monitor
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-    
-  
-  
-    
-      
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_17" checked>
-      
-      
-        
-          
-            
-          
-        
-          
-        
-      
-      
-        
-        
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../../">System monitor</a>
-          
-            <label for="__nav_11_17">
-              <span class="md-nav__icon md-icon"></span>
-            </label>
-          
-        </div>
-      
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_17_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_11_17">
-          <span class="md-nav__icon md-icon"></span>
-          System monitor
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-          
-            
-              
-  
-  
-    
-  
-  
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-      
-      
-      
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_17_2" checked>
-      
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
-      
-        <label class="md-nav__link" for="__nav_11_17_2" id="__nav_11_17_2_label" tabindex="0">
-          Docs
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_11_17_2_label" aria-expanded="true">
-        <label class="md-nav__title" for="__nav_11_17_2">
-          <span class="md-nav__icon md-icon"></span>
-          Docs
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../class_diagrams/" class="md-nav__link">
-        Class diagrams
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../hdd_reader/" class="md-nav__link">
-        hdd_reader
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../msr_reader/" class="md-nav__link">
-        msr_reader
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../ros_parameters/" class="md-nav__link">
-        ROS parameters
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../seq_diagrams/" class="md-nav__link">
-        Sequence diagrams
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_cpu_monitor/" class="md-nav__link">
-        ROS topics: CPU Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_gpu_monitor/" class="md-nav__link">
-        ROS topics: GPU Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_hdd_monitor/" class="md-nav__link">
-        ROS topics: HDD Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_mem_monitor/" class="md-nav__link">
-        ROS topics: Memory Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          ROS topics: Net Monitor
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        ROS topics: Net Monitor
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#network-connection" class="md-nav__link">
-    Network Connection
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#network-usage" class="md-nav__link">
-    Network Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#network-traffic" class="md-nav__link">
-    Network Traffic
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#network-crc-error" class="md-nav__link">
-    Network CRC Error
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ip-packet-reassembles-failed" class="md-nav__link">
-    IP Packet Reassembles Failed
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#udp-buf-errors" class="md-nav__link">
-    UDP Buf Errors
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_ntp_monitor/" class="md-nav__link">
-        ROS topics: NTP Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_process_monitor/" class="md-nav__link">
-        ROS topics: Process Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../topics_voltage_monitor/" class="md-nav__link">
-        ROS topics: Voltage Monitor
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../traffic_reader/" class="md-nav__link">
-        traffic_reader
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
             
           
         </ul>
@@ -14311,43 +14324,56 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#network-connection" class="md-nav__link">
-    Network Connection
+  <a href="#name" class="md-nav__link">
+    Name
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#network-usage" class="md-nav__link">
-    Network Usage
+  <a href="#synopsis" class="md-nav__link">
+    Synopsis
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#network-traffic" class="md-nav__link">
-    Network Traffic
+  <a href="#description" class="md-nav__link">
+    Description
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#network-crc-error" class="md-nav__link">
-    Network CRC Error
+  <a href="#notes" class="md-nav__link">
+    Notes
   </a>
+  
+    <nav class="md-nav" aria-label="Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ata" class="md-nav__link">
+    [ATA]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvme" class="md-nav__link">
+    [NVMe]
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#ip-packet-reassembles-failed" class="md-nav__link">
-    IP Packet Reassembles Failed
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#udp-buf-errors" class="md-nav__link">
-    UDP Buf Errors
+  <a href="#operation-confirmed-drives" class="md-nav__link">
+    Operation confirmed drives
   </a>
   
 </li>
@@ -14370,314 +14396,86 @@
   
 
 
-<div><h1 id="ros-topics-net-monitor">ROS topics: Net Monitor<a class="headerlink" href="#ros-topics-net-monitor" title="Permanent link">#</a></h1>
-<h2 id="network-connection"><u>Network Connection</u><a class="headerlink" href="#network-connection" title="Permanent link">#</a></h2>
-<p>/diagnostics/net_monitor: Network Connection</p>
-<p><b>[summary]</b></p>
+<div><h1 id="hdd_reader">hdd_reader<a class="headerlink" href="#hdd_reader" title="Permanent link">#</a></h1>
+<h2 id="name">Name<a class="headerlink" href="#name" title="Permanent link">#</a></h2>
+<p>hdd_reader - Read S.M.A.R.T. information for monitoring HDD temperature and life of HDD</p>
+<h2 id="synopsis">Synopsis<a class="headerlink" href="#synopsis" title="Permanent link">#</a></h2>
+<p>hdd_reader [OPTION]</p>
+<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">#</a></h2>
+<p>Read S.M.A.R.T. information for monitoring HDD temperature and life of HDD.<br>
+This runs as a daemon process and listens to a TCP/IP port (7635 by default).</p>
+<p><strong>Options:</strong><br>
+<em>-h, --help</em><br>
+    Display help<br>
+<em>-p, --port #</em><br>
+    Port number to listen to</p>
+<p><strong>Exit status:</strong><br>
+Returns 0 if OK; non-zero otherwise.</p>
+<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">#</a></h2>
+<p>The 'hdd_reader' accesses minimal data enough to get Model number, Serial number, HDD temperature, and life of HDD.<br>
+This is an approach to limit its functionality, however, the functionality can be expanded for further improvements and considerations in the future.<br><br></p>
+<h3 id="ata">[ATA]<a class="headerlink" href="#ata" title="Permanent link">#</a></h3>
 <table>
 <thead>
 <tr>
-<th>level</th>
-<th>message</th>
+<th>Purpose</th>
+<th>Name</th>
+<th>Length</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>OK</td>
-<td>OK</td>
+<td>Model number, Serial number</td>
+<td>IDENTIFY DEVICE data</td>
+<td>256 words(512 bytes)</td>
 </tr>
 <tr>
-<td>WARN</td>
-<td>no such device</td>
+<td>HDD temperature, life of HDD</td>
+<td>SMART READ DATA</td>
+<td>256 words(512 bytes)</td>
 </tr>
 </tbody>
 </table>
-<p><b>[values]</b></p>
+<p>For details please see the documents below.<br></p>
+<ul>
+<li><a href="https://www.t13.org/system/files/Project%20Drafts/2017/di529r20-ATA/ATAPI%20Command%20Set%20-%204_2.pdf">ATA Command Set - 4 (ACS-4)</a></li>
+<li><a href="https://www.t13.org/system/files/Standards/2013/d2161r5-ATA/ATAPI%20Command%20Set%20-%203.pdf">ATA/ATAPI Command Set - 3 (ACS-3)</a></li>
+<li><a href="https://www.t13.org/system/files/Documents/2005/e05171r0-SMART%20Attributes%20Overview_1.pdf">SMART Attribute Overview</a></li>
+<li><a href="https://www.t13.org/system/files/Documents/2005/e05148r0-ACS-SMART%20Attributes%20Annex_1.pdf">SMART Attribute Annex</a></li>
+</ul>
+<h3 id="nvme">[NVMe]<a class="headerlink" href="#nvme" title="Permanent link">#</a></h3>
 <table>
 <thead>
 <tr>
-<th>key</th>
-<th>value (example)</th>
+<th>Purpose</th>
+<th>Name</th>
+<th>Length</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Network [0-9]: status</td>
-<td>OK / no such device</td>
+<td>Model number, Serial number</td>
+<td>Identify Controller data structure</td>
+<td>4096 bytes</td>
 </tr>
 <tr>
-<td>HDD [0-9]: name</td>
-<td>wlp82s0</td>
+<td>HDD temperature, life of HDD</td>
+<td>SMART / Health Information</td>
+<td>36 Dword(144 bytes)</td>
 </tr>
 </tbody>
 </table>
-<h2 id="network-usage"><u>Network Usage</u><a class="headerlink" href="#network-usage" title="Permanent link">#</a></h2>
-<p>/diagnostics/net_monitor: Network Usage</p>
-<p><b>[summary]</b></p>
-<table>
-<thead>
-<tr>
-<th>level</th>
-<th>message</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OK</td>
-<td>OK</td>
-</tr>
-</tbody>
-</table>
-<p><b>[values]</b></p>
-<table>
-<thead>
-<tr>
-<th>key</th>
-<th>value (example)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Network [0-9]: status</td>
-<td>OK</td>
-</tr>
-<tr>
-<td>Network [0-9]: interface name</td>
-<td>wlp82s0</td>
-</tr>
-<tr>
-<td>Network [0-9]: rx_usage</td>
-<td>0.00%</td>
-</tr>
-<tr>
-<td>Network [0-9]: tx_usage</td>
-<td>0.00%</td>
-</tr>
-<tr>
-<td>Network [0-9]: rx_traffic</td>
-<td>0.00 MB/s</td>
-</tr>
-<tr>
-<td>Network [0-9]: tx_traffic</td>
-<td>0.00 MB/s</td>
-</tr>
-<tr>
-<td>Network [0-9]: capacity</td>
-<td>400.0 MB/s</td>
-</tr>
-<tr>
-<td>Network [0-9]: mtu</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>Network [0-9]: rx_bytes</td>
-<td>58455228</td>
-</tr>
-<tr>
-<td>Network [0-9]: rx_errors</td>
-<td>0</td>
-</tr>
-<tr>
-<td>Network [0-9]: tx_bytes</td>
-<td>11069136</td>
-</tr>
-<tr>
-<td>Network [0-9]: tx_errors</td>
-<td>0</td>
-</tr>
-<tr>
-<td>Network [0-9]: collisions</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<h2 id="network-traffic"><u>Network Traffic</u><a class="headerlink" href="#network-traffic" title="Permanent link">#</a></h2>
-<p>/diagnostics/net_monitor: Network Traffic</p>
-<p><b>[summary]</b></p>
-<table>
-<thead>
-<tr>
-<th>level</th>
-<th>message</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OK</td>
-<td>OK</td>
-</tr>
-</tbody>
-</table>
-<p><b>[values when specified program is detected]</b></p>
-<table>
-<thead>
-<tr>
-<th>key</th>
-<th>value (example)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>nethogs [0-9]: program</td>
-<td>/lambda/greengrassSystemComponents/1384/999</td>
-</tr>
-<tr>
-<td>nethogs [0-9]: sent (KB/Sec)</td>
-<td>1.13574</td>
-</tr>
-<tr>
-<td>nethogs [0-9]: received (KB/Sec)</td>
-<td>0.261914</td>
-</tr>
-</tbody>
-</table>
-<p><b>[values when error is occurring]</b></p>
-<table>
-<thead>
-<tr>
-<th>key</th>
-<th>value (example)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>error</td>
-<td>execve failed: No such file or directory</td>
-</tr>
-</tbody>
-</table>
-<h2 id="network-crc-error"><u>Network CRC Error</u><a class="headerlink" href="#network-crc-error" title="Permanent link">#</a></h2>
-<p>/diagnostics/net_monitor: Network CRC Error</p>
-<p><b>[summary]</b></p>
-<table>
-<thead>
-<tr>
-<th>level</th>
-<th>message</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OK</td>
-<td>OK</td>
-</tr>
-<tr>
-<td>WARN</td>
-<td>CRC error</td>
-</tr>
-</tbody>
-</table>
-<p><b>[values]</b></p>
-<table>
-<thead>
-<tr>
-<th>key</th>
-<th>value (example)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Network [0-9]: interface name</td>
-<td>wlp82s0</td>
-</tr>
-<tr>
-<td>Network [0-9]: total rx_crc_errors</td>
-<td>0</td>
-</tr>
-<tr>
-<td>Network [0-9]: rx_crc_errors per unit time</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<h2 id="ip-packet-reassembles-failed"><u>IP Packet Reassembles Failed</u><a class="headerlink" href="#ip-packet-reassembles-failed" title="Permanent link">#</a></h2>
-<p>/diagnostics/net_monitor: IP Packet Reassembles Failed</p>
-<p><b>[summary]</b></p>
-<table>
-<thead>
-<tr>
-<th>level</th>
-<th>message</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OK</td>
-<td>OK</td>
-</tr>
-<tr>
-<td>WARN</td>
-<td>reassembles failed</td>
-</tr>
-</tbody>
-</table>
-<p><b>[values]</b></p>
-<table>
-<thead>
-<tr>
-<th>key</th>
-<th>value (example)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>total packet reassembles failed</td>
-<td>0</td>
-</tr>
-<tr>
-<td>packet reassembles failed per unit time</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<h2 id="udp-buf-errors"><u>UDP Buf Errors</u><a class="headerlink" href="#udp-buf-errors" title="Permanent link">#</a></h2>
-<p>/diagnostics/net_monitor: UDP Buf Errors</p>
-<p><b>[summary]</b></p>
-<table>
-<thead>
-<tr>
-<th>level</th>
-<th>message</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OK</td>
-<td>OK</td>
-</tr>
-<tr>
-<td>WARN</td>
-<td>UDP buf errors</td>
-</tr>
-</tbody>
-</table>
-<p><b>[values]</b></p>
-<table>
-<thead>
-<tr>
-<th>key</th>
-<th>value (example)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>total UDP rcv buf errors</td>
-<td>0</td>
-</tr>
-<tr>
-<td>UDP rcv buf errors per unit time</td>
-<td>0</td>
-</tr>
-<tr>
-<td>total UDP snd buf errors</td>
-<td>0</td>
-</tr>
-<tr>
-<td>UDP snd buf errors per unit time</td>
-<td>0</td>
-</tr>
-</tbody>
-</table></div>
+<p>For details please see the documents below.<br></p>
+<ul>
+<li><a href="https://www.nvmexpress.org/wp-content/uploads/NVM_Express_1_2b_Gold_20160603.pdf">NVM Express 1.2b</a></li>
+</ul>
+<h2 id="operation-confirmed-drives">Operation confirmed drives<a class="headerlink" href="#operation-confirmed-drives" title="Permanent link">#</a></h2>
+<!-- cspell: ignore MZVLB1T0HALR -->
+
+<ul>
+<li>SAMSUNG MZVLB1T0HALR (SSD)</li>
+<li>Western Digital My Passport (Portable HDD)</li>
+</ul></div>
 
 
 
@@ -14704,7 +14502,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../topics_mem_monitor/" class="md-footer__link md-footer__link--prev" aria-label="Previous: ROS topics: Memory Monitor" rel="prev">
+          <a href="../class_diagrams/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Class diagrams" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -14713,20 +14511,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                ROS topics: Memory Monitor
+                Class diagrams
               </div>
             </div>
           </a>
         
         
           
-          <a href="../topics_ntp_monitor/" class="md-footer__link md-footer__link--next" aria-label="Next: ROS topics: NTP Monitor" rel="next">
+          <a href="../msr_reader/" class="md-footer__link md-footer__link--next" aria-label="Next: msr_reader" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                ROS topics: NTP Monitor
+                msr_reader
               </div>
             </div>
             <div class="md-footer__button md-icon">
