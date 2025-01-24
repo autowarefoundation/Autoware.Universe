@@ -1271,6 +1271,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/latest/simulator/autoware_dummy_perception_publisher/</loc>
+         <lastmod>2025-01-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/simulator/autoware_fault_injection/</loc>
          <lastmod>2025-01-24</lastmod>
          <changefreq>daily</changefreq>
@@ -1287,11 +1292,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/simulator/autoware_vehicle_door_simulator/</loc>
-         <lastmod>2025-01-24</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/simulator/dummy_perception_publisher/</loc>
          <lastmod>2025-01-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
