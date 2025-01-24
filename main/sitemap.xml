@@ -271,6 +271,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/main/evaluator/autoware_kinematic_evaluator/</loc>
+         <lastmod>2025-01-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/main/evaluator/autoware_localization_evaluator/</loc>
          <lastmod>2025-01-24</lastmod>
          <changefreq>daily</changefreq>
@@ -287,11 +292,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/main/evaluator/autoware_scenario_simulator_v2_adapter/</loc>
-         <lastmod>2025-01-24</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/main/evaluator/kinematic_evaluator/</loc>
          <lastmod>2025-01-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
