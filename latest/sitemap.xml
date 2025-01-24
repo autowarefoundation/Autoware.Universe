@@ -1496,6 +1496,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/autoware_velodyne_monitor/</loc>
+         <lastmod>2025-01-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/component_state_monitor/</loc>
          <lastmod>2025-01-24</lastmod>
          <changefreq>daily</changefreq>
@@ -1572,11 +1577,6 @@
     </url>
     <url>
          <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/topic_state_monitor/</loc>
-         <lastmod>2025-01-24</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://autowarefoundation.github.io/autoware.universe/latest/system/velodyne_monitor/</loc>
          <lastmod>2025-01-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
