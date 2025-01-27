@@ -20,10 +20,10 @@
 #include <rclcpp/clock.hpp>
 #include <rclcpp/logger.hpp>
 
-#include <autoware_perception_msgs/msg/predicted_object.hpp>
-#include <geometry_msgs/msg/pose.hpp>
 #include <autoware_internal_planning_msgs/msg/path_point_with_lane_id.hpp>
 #include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_perception_msgs/msg/predicted_object.hpp>
+#include <geometry_msgs/msg/pose.hpp>
 
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/io/wkt/write.hpp>
@@ -123,7 +123,8 @@ TEST(NoStoppingAreaTest, generateStopLine)
 {
   using autoware::behavior_velocity_planner::no_stopping_area::generate_stop_line;
   constexpr auto nb_points = 10;
-  const autoware_internal_planning_msgs::msg::PathWithLaneId path = generate_straight_path(nb_points);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId path =
+    generate_straight_path(nb_points);
   lanelet::ConstPolygons3d no_stopping_areas;
   double ego_width = 0.0;
   double stop_line_margin = 0.0;

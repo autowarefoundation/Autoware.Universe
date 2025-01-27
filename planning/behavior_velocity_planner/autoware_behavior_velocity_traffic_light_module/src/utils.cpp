@@ -59,8 +59,9 @@ auto findNearestCollisionPoint(
 }
 
 auto createTargetPoint(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & input, const LineString2d & stop_line,
-  const double offset) -> std::optional<std::pair<size_t, Eigen::Vector2d>>
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input,
+  const LineString2d & stop_line, const double offset)
+  -> std::optional<std::pair<size_t, Eigen::Vector2d>>
 {
   if (input.points.size() < 2) {
     return std::nullopt;

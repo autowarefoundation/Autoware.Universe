@@ -35,8 +35,8 @@
 #include <magic_enum.hpp>
 #include <rclcpp/rclcpp.hpp>
 
-#include <tier4_planning_msgs/msg/avoidance_debug_msg_array.hpp>
 #include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
+#include <tier4_planning_msgs/msg/avoidance_debug_msg_array.hpp>
 #include <tier4_rtc_msgs/msg/state.hpp>
 #include <unique_identifier_msgs/msg/uuid.hpp>
 #include <visualization_msgs/msg/detail/marker_array__struct.hpp>
@@ -58,8 +58,8 @@ using autoware::planning_factor_interface::PlanningFactorInterface;
 using autoware::rtc_interface::RTCInterface;
 using autoware::universe_utils::calcOffsetPose;
 using autoware::universe_utils::generateUUID;
-using tier4_planning_msgs::msg::AvoidanceDebugMsgArray;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using tier4_planning_msgs::msg::AvoidanceDebugMsgArray;
 using tier4_planning_msgs::msg::PlanningFactor;
 using tier4_planning_msgs::msg::SafetyFactorArray;
 using tier4_rtc_msgs::msg::State;

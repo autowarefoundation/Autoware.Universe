@@ -24,13 +24,13 @@
 #include <rclcpp/rclcpp.hpp>
 
 #include <autoware_internal_debug_msgs/srv/string.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_map_msgs/msg/lanelet_map_bin.hpp>
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <autoware_planning_msgs/msg/path.hpp>
 #include <nav_msgs/msg/occupancy_grid.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
-#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <tier4_planning_msgs/msg/velocity_limit.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
@@ -92,7 +92,8 @@ private:
     sub_external_velocity_limit_{
       this, "~/input/external_velocity_limit_mps", rclcpp::QoS{1}.transient_local()};
 
-  void onTrigger(const autoware_internal_planning_msgs::msg::PathWithLaneId::ConstSharedPtr input_path_msg);
+  void onTrigger(
+    const autoware_internal_planning_msgs::msg::PathWithLaneId::ConstSharedPtr input_path_msg);
 
   void onParam();
 

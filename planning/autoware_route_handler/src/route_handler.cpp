@@ -23,9 +23,9 @@
 #include <autoware_utils/math/normalization.hpp>
 #include <rclcpp/rclcpp.hpp>
 
+#include <autoware_internal_planning_msgs/msg/path_point_with_lane_id.hpp>
 #include <autoware_planning_msgs/msg/lanelet_primitive.hpp>
 #include <autoware_planning_msgs/msg/path.hpp>
-#include <autoware_internal_planning_msgs/msg/path_point_with_lane_id.hpp>
 
 #include <lanelet2_core/geometry/Lanelet.h>
 #include <lanelet2_core/primitives/LaneletSequence.h>
@@ -52,12 +52,12 @@ namespace
 {
 using autoware::universe_utils::createPoint;
 using autoware::universe_utils::createQuaternionFromYaw;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using autoware_planning_msgs::msg::LaneletPrimitive;
 using autoware_planning_msgs::msg::Path;
 using geometry_msgs::msg::Pose;
 using lanelet::utils::to2D;
-using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
-using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 bool exists(const std::vector<LaneletPrimitive> & primitives, const int64_t & id)
 {

@@ -16,11 +16,11 @@
 #include "autoware/behavior_velocity_planner_common/utilization/util.hpp"
 #include "autoware_test_utils/autoware_test_utils.hpp"
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_planning_msgs/msg/path_point.hpp>
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
-#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <gtest/gtest.h>
 

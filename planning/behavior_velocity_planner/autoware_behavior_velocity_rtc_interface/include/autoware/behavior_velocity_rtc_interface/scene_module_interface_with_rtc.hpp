@@ -21,8 +21,8 @@
 #include <autoware/universe_utils/ros/parameter.hpp>
 #include <builtin_interfaces/msg/time.hpp>
 
-#include <autoware_planning_msgs/msg/path.hpp>
 #include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_planning_msgs/msg/path.hpp>
 #include <tier4_rtc_msgs/msg/state.hpp>
 #include <unique_identifier_msgs/msg/uuid.hpp>
 
@@ -42,8 +42,8 @@ namespace autoware::behavior_velocity_planner
 
 using autoware::rtc_interface::RTCInterface;
 using autoware::universe_utils::getOrDeclareParameter;
-using builtin_interfaces::msg::Time;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using builtin_interfaces::msg::Time;
 using tier4_rtc_msgs::msg::Module;
 using tier4_rtc_msgs::msg::State;
 using unique_identifier_msgs::msg::UUID;
@@ -123,7 +123,8 @@ protected:
 
   void publishObjectsOfInterestMarker();
 
-  void deleteExpiredModules(const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
+  void deleteExpiredModules(
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
 
   static bool getEnableRTC(rclcpp::Node & node, const std::string & param_name)
   {

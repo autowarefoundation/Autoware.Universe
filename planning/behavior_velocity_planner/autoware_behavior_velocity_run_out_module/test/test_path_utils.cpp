@@ -31,9 +31,9 @@
 #include <vector>
 
 using autoware::behavior_velocity_planner::run_out_utils::findLongitudinalNearestPoint;
-using geometry_msgs::msg::Point;
 using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using geometry_msgs::msg::Point;
 
 class TestPathUtils : public ::testing::Test
 {

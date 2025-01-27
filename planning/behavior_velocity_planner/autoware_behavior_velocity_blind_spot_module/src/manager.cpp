@@ -37,7 +37,8 @@ BlindSpotModuleManager::BlindSpotModuleManager(rclcpp::Node & node)
   planner_param_ = PlannerParam::init(node, ns);
 }
 
-void BlindSpotModuleManager::launchNewModules(const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
+void BlindSpotModuleManager::launchNewModules(
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
 {
   for (const auto & ll : planning_utils::getLaneletsOnPath(
          path, planner_data_->route_handler_->getLaneletMapPtr(),

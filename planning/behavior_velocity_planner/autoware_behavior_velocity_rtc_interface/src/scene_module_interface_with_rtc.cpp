@@ -46,7 +46,8 @@ SceneModuleManagerInterfaceWithRTC::SceneModuleManagerInterfaceWithRTC(
 {
 }
 
-void SceneModuleManagerInterfaceWithRTC::plan(autoware_internal_planning_msgs::msg::PathWithLaneId * path)
+void SceneModuleManagerInterfaceWithRTC::plan(
+  autoware_internal_planning_msgs::msg::PathWithLaneId * path)
 {
   setActivation();
   modifyPathVelocity(path);

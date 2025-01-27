@@ -360,8 +360,8 @@ autoware_internal_planning_msgs::msg::PathWithLaneId resamplePath(
 }
 
 autoware_internal_planning_msgs::msg::PathWithLaneId resamplePath(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path, const double resample_interval,
-  const bool use_akima_spline_for_xy, const bool use_lerp_for_z,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path,
+  const double resample_interval, const bool use_akima_spline_for_xy, const bool use_lerp_for_z,
   const bool use_zero_order_hold_for_v, const bool resample_input_path_stop_point)
 {
   // validate arguments

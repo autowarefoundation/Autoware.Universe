@@ -19,8 +19,8 @@
 #include <rclcpp/clock.hpp>
 #include <rclcpp/logging.hpp>
 
-#include <geometry_msgs/msg/point.hpp>
 #include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
+#include <geometry_msgs/msg/point.hpp>
 #include <unique_identifier_msgs/msg/uuid.hpp>
 
 #include <optional>
@@ -30,10 +30,10 @@
 namespace autoware::behavior_path_planner
 {
 using autoware::universe_utils::generateUUID;
-using geometry_msgs::msg::Point;
-using geometry_msgs::msg::Pose;
 using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using geometry_msgs::msg::Point;
+using geometry_msgs::msg::Pose;
 using unique_identifier_msgs::msg::UUID;
 
 struct ShiftLine

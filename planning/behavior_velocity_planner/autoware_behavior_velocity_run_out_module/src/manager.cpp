@@ -146,7 +146,8 @@ RunOutModuleManager::RunOutModuleManager(rclcpp::Node & node)
   setDynamicObstacleCreator(node, debug_ptr_);
 }
 
-void RunOutModuleManager::launchNewModules(const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
+void RunOutModuleManager::launchNewModules(
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
 {
   if (path.points.empty()) {
     return;

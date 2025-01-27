@@ -31,9 +31,9 @@
 constexpr double epsilon = 1e-6;
 
 using autoware::behavior_path_planner::PlannerData;
-using autoware_planning_msgs::msg::Trajectory;
 using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using autoware_planning_msgs::msg::Trajectory;
 
 using autoware::test_utils::generateTrajectory;
 

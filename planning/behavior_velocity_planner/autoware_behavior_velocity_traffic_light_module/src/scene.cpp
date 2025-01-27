@@ -275,8 +275,8 @@ bool TrafficLightModule::isTrafficSignalTimedOut() const
 }
 
 autoware_internal_planning_msgs::msg::PathWithLaneId TrafficLightModule::insertStopPose(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & input, const size_t & insert_target_point_idx,
-  const Eigen::Vector2d & target_point)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input,
+  const size_t & insert_target_point_idx, const Eigen::Vector2d & target_point)
 {
   autoware_internal_planning_msgs::msg::PathWithLaneId modified_path;
   modified_path = input;

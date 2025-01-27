@@ -37,9 +37,9 @@ using autoware::behavior_velocity_planner::DynamicObstacle;
 using autoware::behavior_velocity_planner::run_out_utils::StateMachine;
 using autoware::behavior_velocity_planner::run_out_utils::StateParam;
 
-using geometry_msgs::msg::Point;
 using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using geometry_msgs::msg::Point;
 
 class TestStateMachine : public ::testing::Test
 {

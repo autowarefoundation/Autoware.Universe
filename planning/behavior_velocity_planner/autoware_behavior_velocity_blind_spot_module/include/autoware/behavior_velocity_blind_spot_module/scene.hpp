@@ -105,7 +105,8 @@ private:
   BlindSpotDecision modifyPathVelocityDetail(PathWithLaneId * path);
   // setSafe(), setDistance()
   void setRTCStatus(
-    const BlindSpotDecision & decision, const autoware_internal_planning_msgs::msg::PathWithLaneId & path);
+    const BlindSpotDecision & decision,
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path);
   template <typename Decision>
   void setRTCStatusByDecision(
     const Decision & decision, const autoware_internal_planning_msgs::msg::PathWithLaneId & path);

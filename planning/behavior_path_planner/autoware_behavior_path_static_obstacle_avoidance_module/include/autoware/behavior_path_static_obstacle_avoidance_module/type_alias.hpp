@@ -23,22 +23,22 @@
 #include <autoware/universe_utils/ros/marker_helper.hpp>
 #include <autoware/universe_utils/ros/uuid_helper.hpp>
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_perception_msgs/msg/predicted_object.hpp>
 #include <autoware_vehicle_msgs/msg/turn_indicators_command.hpp>
 #include <tier4_planning_msgs/msg/avoidance_debug_msg.hpp>
 #include <tier4_planning_msgs/msg/avoidance_debug_msg_array.hpp>
-#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <tier4_rtc_msgs/msg/state.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
 namespace autoware::behavior_path_planner
 {
 // auto msgs
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using autoware_perception_msgs::msg::ObjectClassification;
 using autoware_perception_msgs::msg::PredictedObject;
 using autoware_perception_msgs::msg::PredictedPath;
 using autoware_perception_msgs::msg::Shape;
-using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 // ROS 2 general msgs
 using geometry_msgs::msg::Point;

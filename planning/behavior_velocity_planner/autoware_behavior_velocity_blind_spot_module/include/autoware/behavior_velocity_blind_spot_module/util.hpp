@@ -49,8 +49,8 @@ struct InterpolatedPathInfo
 };
 
 std::optional<InterpolatedPathInfo> generateInterpolatedPathInfo(
-  const lanelet::Id lane_id, const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path,
-  rclcpp::Logger logger);
+  const lanelet::Id lane_id,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path, rclcpp::Logger logger);
 
 std::optional<size_t> getFirstPointIntersectsLineByFootprint(
   const lanelet::ConstLineString2d & line, const InterpolatedPathInfo & interpolated_path_info,

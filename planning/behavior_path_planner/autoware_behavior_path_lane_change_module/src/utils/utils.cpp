@@ -73,11 +73,11 @@ using autoware::route_handler::RouteHandler;
 using autoware::universe_utils::LineString2d;
 using autoware::universe_utils::Point2d;
 using autoware::universe_utils::Polygon2d;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using autoware_perception_msgs::msg::ObjectClassification;
 using autoware_perception_msgs::msg::PredictedObjects;
 using behavior_path_planner::lane_change::PathType;
 using geometry_msgs::msg::Pose;
-using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 

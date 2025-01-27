@@ -38,14 +38,16 @@ namespace autoware::behavior_velocity_planner::util
  * @return if insertion was successful return the inserted point index
  */
 std::optional<size_t> insertPointIndex(
-  const geometry_msgs::msg::Pose & in_pose, autoware_internal_planning_msgs::msg::PathWithLaneId * inout_path,
+  const geometry_msgs::msg::Pose & in_pose,
+  autoware_internal_planning_msgs::msg::PathWithLaneId * inout_path,
   const double ego_nearest_dist_threshold, const double ego_nearest_yaw_threshold);
 
 /**
  * @brief check if a PathPointWithLaneId contains any of the given lane ids
  */
 bool hasLaneIds(
-  const autoware_internal_planning_msgs::msg::PathPointWithLaneId & p, const std::set<lanelet::Id> & ids);
+  const autoware_internal_planning_msgs::msg::PathPointWithLaneId & p,
+  const std::set<lanelet::Id> & ids);
 
 /**
  * @brief find the first contiguous interval of the path points that contains the specified lane ids
@@ -53,7 +55,8 @@ bool hasLaneIds(
  * found, returns the pair (start-1, end)
  */
 std::optional<std::pair<size_t, size_t>> findLaneIdsInterval(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & p, const std::set<lanelet::Id> & ids);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & p,
+  const std::set<lanelet::Id> & ids);
 
 /**
  * @brief return the index of the first point which is inside the given polygon

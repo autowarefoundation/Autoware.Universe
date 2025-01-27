@@ -593,8 +593,9 @@ std::vector<int64_t> getSubsequentLaneIdsSetOnPath(
 
 // TODO(murooka) remove calcSignedArcLength using findNearestSegmentIndex
 bool isOverLine(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Pose & self_pose,
-  const geometry_msgs::msg::Pose & line_pose, const double offset)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
+  const geometry_msgs::msg::Pose & self_pose, const geometry_msgs::msg::Pose & line_pose,
+  const double offset)
 {
   return autoware::motion_utils::calcSignedArcLength(
            path.points, self_pose.position, line_pose.position) +

@@ -46,7 +46,8 @@ TrafficLightModuleManager::TrafficLightModuleManager(rclcpp::Node & node)
     "~/output/traffic_signal", 1);
 }
 
-void TrafficLightModuleManager::modifyPathVelocity(autoware_internal_planning_msgs::msg::PathWithLaneId * path)
+void TrafficLightModuleManager::modifyPathVelocity(
+  autoware_internal_planning_msgs::msg::PathWithLaneId * path)
 {
   visualization_msgs::msg::MarkerArray debug_marker_array;
   visualization_msgs::msg::MarkerArray virtual_wall_marker_array;

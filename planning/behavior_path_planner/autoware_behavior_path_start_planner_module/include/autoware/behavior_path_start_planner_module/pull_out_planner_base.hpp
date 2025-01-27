@@ -22,8 +22,8 @@
 #include "autoware/behavior_path_start_planner_module/util.hpp"
 #include "autoware/universe_utils/system/time_keeper.hpp"
 
-#include <geometry_msgs/msg/pose_stamped.hpp>
 #include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
 
 #include <memory>
 #include <string>
@@ -32,8 +32,8 @@
 namespace autoware::behavior_path_planner
 {
 using autoware::universe_utils::LinearRing2d;
-using geometry_msgs::msg::Pose;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using geometry_msgs::msg::Pose;
 
 class PullOutPlannerBase
 {

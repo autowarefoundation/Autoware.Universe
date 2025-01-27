@@ -28,8 +28,8 @@
 #include <builtin_interfaces/msg/time.hpp>
 
 #include <autoware_internal_debug_msgs/msg/float64_stamped.hpp>
-#include <autoware_planning_msgs/msg/path.hpp>
 #include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_planning_msgs/msg/path.hpp>
 #include <unique_identifier_msgs/msg/uuid.hpp>
 
 #include <memory>
@@ -54,8 +54,8 @@ using autoware::universe_utils::DebugPublisher;
 using autoware::universe_utils::getOrDeclareParameter;
 using autoware::universe_utils::StopWatch;
 using autoware_internal_debug_msgs::msg::Float64Stamped;
-using builtin_interfaces::msg::Time;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using builtin_interfaces::msg::Time;
 using unique_identifier_msgs::msg::UUID;
 
 struct ObjectOfInterest
@@ -161,7 +161,10 @@ public:
     deleteExpiredModules(path);
   }
 
-  virtual void plan(autoware_internal_planning_msgs::msg::PathWithLaneId * path) { modifyPathVelocity(path); }
+  virtual void plan(autoware_internal_planning_msgs::msg::PathWithLaneId * path)
+  {
+    modifyPathVelocity(path);
+  }
 
 protected:
   virtual void modifyPathVelocity(autoware_internal_planning_msgs::msg::PathWithLaneId * path)
@@ -198,12 +201,14 @@ protected:
       std::string(getModuleName()) + "/processing_time_ms", stop_watch.toc("Total"));
   }
 
-  virtual void launchNewModules(const autoware_internal_planning_msgs::msg::PathWithLaneId & path) = 0;
+  virtual void launchNewModules(
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path) = 0;
 
   virtual std::function<bool(const std::shared_ptr<T> &)> getModuleExpiredFunction(
     const autoware_internal_planning_msgs::msg::PathWithLaneId & path) = 0;
 
-  virtual void deleteExpiredModules(const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
+  virtual void deleteExpiredModules(
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
   {
     const auto isModuleExpired = getModuleExpiredFunction(path);
 
@@ -254,7 +259,8 @@ protected:
   rclcpp::Logger logger_;
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr pub_virtual_wall_;
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr pub_debug_;
-  rclcpp::Publisher<autoware_internal_planning_msgs::msg::PathWithLaneId>::SharedPtr pub_debug_path_;
+  rclcpp::Publisher<autoware_internal_planning_msgs::msg::PathWithLaneId>::SharedPtr
+    pub_debug_path_;
 
   std::shared_ptr<DebugPublisher> processing_time_publisher_;
 

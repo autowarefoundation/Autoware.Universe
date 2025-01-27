@@ -45,6 +45,8 @@
 
 namespace autoware::behavior_velocity_planner
 {
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using autoware_perception_msgs::msg::ObjectClassification;
 using autoware_perception_msgs::msg::PredictedObjects;
 using autoware_perception_msgs::msg::Shape;
@@ -53,8 +55,6 @@ using run_out_utils::DynamicObstacleData;
 using run_out_utils::DynamicObstacleParam;
 using run_out_utils::PlannerParam;
 using run_out_utils::PredictedPath;
-using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
-using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using PathPointsWithLaneId = std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId>;
 
 /**

@@ -60,8 +60,9 @@ auto findNearestCollisionPoint(
  * point, return std::nullopt.
  */
 auto createTargetPoint(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & input, const LineString2d & stop_line,
-  const double offset) -> std::optional<std::pair<size_t, Eigen::Vector2d>>;
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input,
+  const LineString2d & stop_line, const double offset)
+  -> std::optional<std::pair<size_t, Eigen::Vector2d>>;
 
 /**
  * @brief find intersection point between path and stop line and return the point.

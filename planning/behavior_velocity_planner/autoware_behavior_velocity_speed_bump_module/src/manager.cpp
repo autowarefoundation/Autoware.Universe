@@ -53,7 +53,8 @@ SpeedBumpModuleManager::SpeedBumpModuleManager(rclcpp::Node & node)
     static_cast<float>(getOrDeclareParameter<double>(node, ns + ".max_speed"));
 }
 
-void SpeedBumpModuleManager::launchNewModules(const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
+void SpeedBumpModuleManager::launchNewModules(
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
 {
   for (const auto & speed_bump_with_lane_id : planning_utils::getRegElemMapOnPath<SpeedBump>(
          path, planner_data_->route_handler_->getLaneletMapPtr(),

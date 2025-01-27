@@ -30,10 +30,10 @@ namespace
 using autoware::universe_utils::createPoint;
 using autoware::universe_utils::createQuaternionFromRPY;
 using autoware::universe_utils::transformPoint;
-using autoware_planning_msgs::msg::Trajectory;
-using autoware_planning_msgs::msg::TrajectoryPoint;
 using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using autoware_planning_msgs::msg::Trajectory;
+using autoware_planning_msgs::msg::TrajectoryPoint;
 
 constexpr double epsilon = 1e-6;
 

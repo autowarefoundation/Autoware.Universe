@@ -156,7 +156,8 @@ std::optional<PathIndexWithOffset> findOffsetSegment(
 }
 
 std::optional<PathIndexWithOffset> findOffsetSegment(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const size_t index, const double offset);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const size_t index,
+  const double offset);
 
 template <class T>
 geometry_msgs::msg::Pose calcTargetPose(const T & path, const PathIndexWithOffset & offset_segment)

@@ -91,12 +91,14 @@ struct DebugData
 
 std::vector<std::pair<int64_t, lanelet::ConstLanelet>> getCrosswalksOnPath(
   const geometry_msgs::msg::Pose & current_pose,
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const lanelet::LaneletMapPtr lanelet_map,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
+  const lanelet::LaneletMapPtr lanelet_map,
   const std::shared_ptr<const lanelet::routing::RoutingGraphContainer> & overall_graphs);
 
 std::set<int64_t> getCrosswalkIdSetOnPath(
   const geometry_msgs::msg::Pose & current_pose,
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const lanelet::LaneletMapPtr lanelet_map,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
+  const lanelet::LaneletMapPtr lanelet_map,
   const std::shared_ptr<const lanelet::routing::RoutingGraphContainer> & overall_graphs);
 
 std::optional<std::pair<geometry_msgs::msg::Point, geometry_msgs::msg::Point>>

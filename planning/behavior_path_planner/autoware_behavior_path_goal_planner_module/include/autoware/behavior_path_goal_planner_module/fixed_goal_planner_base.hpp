@@ -17,14 +17,14 @@
 
 #include "autoware/behavior_path_planner_common/data_manager.hpp"
 
-#include <geometry_msgs/msg/pose_stamped.hpp>
 #include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
 
 #include <memory>
 
 using autoware::universe_utils::LinearRing2d;
-using geometry_msgs::msg::Pose;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using geometry_msgs::msg::Pose;
 
 namespace autoware::behavior_path_planner
 {

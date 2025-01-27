@@ -34,8 +34,8 @@
 #include <vector>
 namespace autoware::behavior_path_planner
 {
-using geometry_msgs::msg::Pose;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using geometry_msgs::msg::Pose;
 using PlanResult = PathWithLaneId::SharedPtr;
 
 struct SoftConstraintsInputs

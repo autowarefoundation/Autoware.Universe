@@ -44,8 +44,8 @@ StopLineModule::StopLineModule(
 bool StopLineModule::modifyPathVelocity(PathWithLaneId * path)
 {
   auto trajectory =
-    trajectory::Trajectory<autoware_internal_planning_msgs::msg::PathPointWithLaneId>::Builder{}.build(
-      path->points);
+    trajectory::Trajectory<autoware_internal_planning_msgs::msg::PathPointWithLaneId>::Builder{}
+      .build(path->points);
 
   if (!trajectory) {
     return true;

@@ -56,8 +56,8 @@ std::optional<std::pair<size_t, size_t>> getPathIndexRangeWithLaneId(
 }
 
 size_t findNearestIndexFromLaneId(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Point & pos,
-  const int64_t lane_id)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
+  const geometry_msgs::msg::Point & pos, const int64_t lane_id)
 {
   const auto opt_range = getPathIndexRangeWithLaneId(path, lane_id);
   if (opt_range) {
@@ -77,8 +77,8 @@ size_t findNearestIndexFromLaneId(
 }
 
 size_t findNearestSegmentIndexFromLaneId(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Point & pos,
-  const int64_t lane_id)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
+  const geometry_msgs::msg::Point & pos, const int64_t lane_id)
 {
   const size_t nearest_idx = findNearestIndexFromLaneId(path, pos, lane_id);
 

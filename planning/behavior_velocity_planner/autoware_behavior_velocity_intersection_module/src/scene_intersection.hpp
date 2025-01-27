@@ -520,7 +520,8 @@ private:
    * @brief act based on current RTC approval
    */
   void reactRTCApproval(
-    const DecisionResult & decision_result, autoware_internal_planning_msgs::msg::PathWithLaneId * path);
+    const DecisionResult & decision_result,
+    autoware_internal_planning_msgs::msg::PathWithLaneId * path);
   /** @}*/
 
 private:
@@ -723,8 +724,8 @@ private:
    * intersection_stoplines.occlusion_stopline
    */
   PassJudgeStatus isOverPassJudgeLinesStatus(
-    const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const bool is_occlusion_state,
-    const IntersectionStopLines & intersection_stoplines);
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
+    const bool is_occlusion_state, const IntersectionStopLines & intersection_stoplines);
   /** @} */
 
 private:

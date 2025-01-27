@@ -28,9 +28,9 @@
 #include <magic_enum.hpp>
 #include <rclcpp/rclcpp.hpp>
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 #include <geometry_msgs/msg/twist.hpp>
-#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <memory>
 #include <string>
@@ -42,11 +42,11 @@ namespace autoware::behavior_path_planner
 using autoware::behavior_path_planner::PoseWithDetailOpt;
 using autoware::route_handler::Direction;
 using autoware::universe_utils::StopWatch;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using geometry_msgs::msg::Point;
 using geometry_msgs::msg::Pose;
 using geometry_msgs::msg::Twist;
 using lane_change::PathSafetyStatus;
-using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 class LaneChangeBase
 {

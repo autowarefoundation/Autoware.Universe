@@ -204,8 +204,9 @@ double calcLongitudinalDistanceFromEgoToObjects(
 }
 
 std::optional<size_t> findIndexOutOfGoalSearchRange(
-  const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points, const Pose & goal,
-  const int64_t goal_lane_id, const double max_dist = std::numeric_limits<double>::max())
+  const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points,
+  const Pose & goal, const int64_t goal_lane_id,
+  const double max_dist = std::numeric_limits<double>::max())
 {
   if (points.empty()) {
     return std::nullopt;

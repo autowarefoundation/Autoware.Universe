@@ -127,7 +127,8 @@ bool is_stoppable(
 }
 
 Polygon2d generate_ego_no_stopping_area_lane_polygon(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Pose & ego_pose,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
+  const geometry_msgs::msg::Pose & ego_pose,
   const lanelet::autoware::NoStoppingArea & no_stopping_area_reg_elem, const double margin,
   const double max_polygon_length, const double path_expand_width, const rclcpp::Logger & logger,
   rclcpp::Clock & clock)

@@ -17,8 +17,8 @@
 
 #include "autoware/universe_utils/geometry/geometry.hpp"
 
-#include "autoware_planning_msgs/msg/trajectory.hpp"
 #include "autoware_internal_planning_msgs/msg/path_with_lane_id.hpp"
+#include "autoware_planning_msgs/msg/trajectory.hpp"
 
 #include <boost/optional.hpp>
 

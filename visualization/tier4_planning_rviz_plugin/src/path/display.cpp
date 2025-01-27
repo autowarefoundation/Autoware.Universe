@@ -77,7 +77,8 @@ void AutowarePathWithLaneIdDisplay::preVisualizePathFootprintDetail(
 }
 
 void AutowarePathWithLaneIdDisplay::visualizePathFootprintDetail(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId::ConstSharedPtr msg_ptr, const size_t p_idx)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId::ConstSharedPtr msg_ptr,
+  const size_t p_idx)
 {
   const auto & point = msg_ptr->points.at(p_idx);
 

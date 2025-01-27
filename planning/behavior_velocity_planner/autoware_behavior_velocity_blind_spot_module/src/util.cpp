@@ -73,8 +73,8 @@ static std::optional<std::pair<size_t, size_t>> findLaneIdInterval(
 }  // namespace
 
 std::optional<InterpolatedPathInfo> generateInterpolatedPathInfo(
-  const lanelet::Id lane_id, const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path,
-  rclcpp::Logger logger)
+  const lanelet::Id lane_id,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path, rclcpp::Logger logger)
 {
   constexpr double ds = 0.2;
   InterpolatedPathInfo interpolated_path_info;

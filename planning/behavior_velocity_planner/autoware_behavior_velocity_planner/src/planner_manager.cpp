@@ -73,7 +73,8 @@ void BehaviorVelocityPlannerManager::removeScenePlugin(
   }
 }
 
-autoware_internal_planning_msgs::msg::PathWithLaneId BehaviorVelocityPlannerManager::planPathVelocity(
+autoware_internal_planning_msgs::msg::PathWithLaneId
+BehaviorVelocityPlannerManager::planPathVelocity(
   const std::shared_ptr<const PlannerData> & planner_data,
   const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path_msg)
 {

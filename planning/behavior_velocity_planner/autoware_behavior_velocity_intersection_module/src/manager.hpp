@@ -24,8 +24,8 @@
 #include <autoware/behavior_velocity_rtc_interface/scene_module_interface_with_rtc.hpp>
 #include <rclcpp/rclcpp.hpp>
 
-#include <std_msgs/msg/string.hpp>
 #include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
+#include <std_msgs/msg/string.hpp>
 
 #include <functional>
 #include <memory>
@@ -49,7 +49,8 @@ private:
   void launchNewModules(const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
 
   std::function<bool(const std::shared_ptr<SceneModuleInterfaceWithRTC> &)>
-  getModuleExpiredFunction(const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
+  getModuleExpiredFunction(
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
 
   bool hasSameParentLaneletAndTurnDirectionWithRegistered(const lanelet::ConstLanelet & lane) const;
 
@@ -57,7 +58,8 @@ private:
   void sendRTC(const Time & stamp) override;
   void setActivation() override;
   /* called from SceneModuleInterface::updateSceneModuleInstances */
-  void deleteExpiredModules(const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
+  void deleteExpiredModules(
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
 
   rclcpp::Publisher<std_msgs::msg::String>::SharedPtr decision_state_pub_;
   rclcpp::Publisher<autoware_perception_msgs::msg::TrafficLightGroup>::SharedPtr

@@ -15,8 +15,8 @@
 #ifndef PATH_UTILS_HPP_
 #define PATH_UTILS_HPP_
 
-#include <geometry_msgs/msg/point.hpp>
 #include <autoware_internal_planning_msgs/msg/path_point_with_lane_id.hpp>
+#include <geometry_msgs/msg/point.hpp>
 
 #include <algorithm>
 #include <limits>

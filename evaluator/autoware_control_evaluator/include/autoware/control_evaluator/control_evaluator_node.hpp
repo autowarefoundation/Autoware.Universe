@@ -28,11 +28,11 @@
 #include "autoware_vehicle_msgs/msg/steering_report.hpp"
 #include "geometry_msgs/msg/accel_with_covariance_stamped.hpp"
 #include <autoware_internal_debug_msgs/msg/float64_stamped.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_planning_msgs/msg/lanelet_route.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <tier4_metric_msgs/msg/metric.hpp>
 #include <tier4_metric_msgs/msg/metric_array.hpp>
-#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <deque>
 #include <optional>

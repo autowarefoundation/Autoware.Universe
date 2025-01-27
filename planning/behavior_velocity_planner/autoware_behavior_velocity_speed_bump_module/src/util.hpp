@@ -30,8 +30,8 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
-#include <geometry_msgs/msg/point32.hpp>
 #include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
+#include <geometry_msgs/msg/point32.hpp>
 
 #include <lanelet2_core/primitives/Polygon.h>
 
@@ -40,9 +40,9 @@ namespace autoware::behavior_velocity_planner
 
 namespace bg = boost::geometry;
 
-using geometry_msgs::msg::Point32;
 using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using geometry_msgs::msg::Point32;
 
 // the status of intersection between path and speed bump
 struct PathPolygonIntersectionStatus

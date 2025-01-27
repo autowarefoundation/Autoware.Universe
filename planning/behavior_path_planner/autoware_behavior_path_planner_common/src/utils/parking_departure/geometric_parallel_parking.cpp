@@ -39,10 +39,10 @@ using autoware::universe_utils::calcOffsetPose;
 using autoware::universe_utils::inverseTransformPoint;
 using autoware::universe_utils::normalizeRadian;
 using autoware::universe_utils::transformPose;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using geometry_msgs::msg::Point;
 using geometry_msgs::msg::Pose;
 using lanelet::utils::getArcCoordinates;
-using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 namespace autoware::behavior_path_planner
 {

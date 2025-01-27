@@ -21,8 +21,8 @@
 #include <autoware_lanelet2_extension/regulatory_elements/no_stopping_area.hpp>
 #include <rclcpp/logger.hpp>
 
-#include <autoware_perception_msgs/msg/predicted_object.hpp>
 #include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_perception_msgs/msg/predicted_object.hpp>
 
 #include <lanelet2_core/Forward.h>
 
@@ -85,7 +85,8 @@ bool is_vehicle_type(const autoware_perception_msgs::msg::PredictedObject & obje
  * @param stop_point    stop line point on the lane
  */
 void insert_stop_point(
-  autoware_internal_planning_msgs::msg::PathWithLaneId & path, const PathIndexWithPose & stop_point);
+  autoware_internal_planning_msgs::msg::PathWithLaneId & path,
+  const PathIndexWithPose & stop_point);
 
 /**
  * @brief generate stop line from no stopping area polygons
@@ -128,7 +129,8 @@ bool is_stoppable(
  * @return generated polygon
  */
 Polygon2d generate_ego_no_stopping_area_lane_polygon(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Pose & ego_pose,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
+  const geometry_msgs::msg::Pose & ego_pose,
   const lanelet::autoware::NoStoppingArea & no_stopping_area_reg_elem, const double margin,
   const double max_polygon_length, const double path_expand_width, const rclcpp::Logger & logger,
   rclcpp::Clock & clock);

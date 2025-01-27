@@ -18,8 +18,8 @@
 #include <autoware/route_handler/route_handler.hpp>
 #include <autoware_test_utils/autoware_test_utils.hpp>
 
-#include <nav_msgs/msg/detail/odometry__struct.hpp>
 #include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
+#include <nav_msgs/msg/detail/odometry__struct.hpp>
 
 #include <boost/geometry/algorithms/detail/disjoint/interface.hpp>
 #include <boost/geometry/algorithms/detail/intersects/interface.hpp>

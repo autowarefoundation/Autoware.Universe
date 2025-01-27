@@ -17,10 +17,10 @@
 
 #include "autoware/universe_utils/geometry/boost_geometry.hpp"
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <autoware_perception_msgs/msg/traffic_light_group.hpp>
 #include <geometry_msgs/msg/point.hpp>
-#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/Forward.h>
 #include <lanelet2_core/LaneletMap.h>
@@ -67,9 +67,9 @@ using LineString2d = autoware::universe_utils::LineString2d;
 using Polygon2d = autoware::universe_utils::Polygon2d;
 using BasicPolygons2d = std::vector<lanelet::BasicPolygon2d>;
 using Polygons2d = std::vector<Polygon2d>;
-using autoware_perception_msgs::msg::PredictedObjects;
 using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 using autoware_internal_planning_msgs::msg::PathWithLaneId;
+using autoware_perception_msgs::msg::PredictedObjects;
 
 namespace planning_utils
 {
@@ -218,8 +218,9 @@ std::set<int64_t> getLaneIdSetOnPath(
   const geometry_msgs::msg::Pose & current_pose);
 
 bool isOverLine(
-  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Pose & self_pose,
-  const geometry_msgs::msg::Pose & line_pose, const double offset = 0.0);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
+  const geometry_msgs::msg::Pose & self_pose, const geometry_msgs::msg::Pose & line_pose,
+  const double offset = 0.0);
 
 std::optional<geometry_msgs::msg::Pose> insertStopPoint(
   const geometry_msgs::msg::Point & stop_point, PathWithLaneId & output);

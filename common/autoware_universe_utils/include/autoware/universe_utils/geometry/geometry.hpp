@@ -27,6 +27,7 @@
 #define EIGEN_MPL2_ONLY
 #include <Eigen/Core>
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_planning_msgs/msg/path.hpp>
 #include <autoware_planning_msgs/msg/trajectory.hpp>
 #include <geometry_msgs/msg/point32.hpp>
@@ -38,7 +39,6 @@
 #include <geometry_msgs/msg/twist_with_covariance.hpp>
 #include <geometry_msgs/msg/vector3.hpp>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
-#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <tf2/utils.h>
 
@@ -135,7 +135,8 @@ inline geometry_msgs::msg::Point getPoint(const autoware_planning_msgs::msg::Pat
 }
 
 template <>
-inline geometry_msgs::msg::Point getPoint(const autoware_internal_planning_msgs::msg::PathPointWithLaneId & p)
+inline geometry_msgs::msg::Point getPoint(
+  const autoware_internal_planning_msgs::msg::PathPointWithLaneId & p)
 {
   return p.point.pose.position;
 }
@@ -172,7 +173,8 @@ inline geometry_msgs::msg::Pose getPose(const autoware_planning_msgs::msg::PathP
 }
 
 template <>
-inline geometry_msgs::msg::Pose getPose(const autoware_internal_planning_msgs::msg::PathPointWithLaneId & p)
+inline geometry_msgs::msg::Pose getPose(
+  const autoware_internal_planning_msgs::msg::PathPointWithLaneId & p)
 {
   return p.point.pose;
 }
@@ -197,7 +199,8 @@ inline double getLongitudinalVelocity(const autoware_planning_msgs::msg::PathPoi
 }
 
 template <>
-inline double getLongitudinalVelocity(const autoware_internal_planning_msgs::msg::PathPointWithLaneId & p)
+inline double getLongitudinalVelocity(
+  const autoware_internal_planning_msgs::msg::PathPointWithLaneId & p)
 {
   return p.point.longitudinal_velocity_mps;
 }
@@ -236,7 +239,8 @@ inline void setPose(
 
 template <>
 inline void setPose(
-  const geometry_msgs::msg::Pose & pose, autoware_internal_planning_msgs::msg::PathPointWithLaneId & p)
+  const geometry_msgs::msg::Pose & pose,
+  autoware_internal_planning_msgs::msg::PathPointWithLaneId & p)
 {
   p.point.pose = pose;
 }

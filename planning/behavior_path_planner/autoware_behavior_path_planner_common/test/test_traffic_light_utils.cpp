@@ -20,11 +20,11 @@
 
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
+#include <autoware_internal_planning_msgs/msg/detail/path_with_lane_id__struct.hpp>
 #include <autoware_perception_msgs/msg/detail/traffic_light_group__struct.hpp>
 #include <autoware_planning_msgs/msg/detail/lanelet_route__struct.hpp>
 #include <geometry_msgs/msg/detail/pose__struct.hpp>
 #include <geometry_msgs/msg/detail/twist__struct.hpp>
-#include <autoware_internal_planning_msgs/msg/detail/path_with_lane_id__struct.hpp>
 
 #include <gtest/gtest.h>
 #include <lanelet2_core/Forward.h>

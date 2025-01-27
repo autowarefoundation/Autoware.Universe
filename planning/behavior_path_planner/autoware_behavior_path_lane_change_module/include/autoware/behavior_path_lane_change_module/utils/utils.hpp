@@ -27,10 +27,10 @@
 #include <autoware_frenet_planner/structures.hpp>
 #include <autoware_sampler_common/transform/spline_transform.hpp>
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>
-#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/Forward.h>
 
@@ -49,6 +49,7 @@ using autoware::route_handler::Direction;
 using autoware::universe_utils::LineString2d;
 using autoware::universe_utils::Polygon2d;
 using autoware::vehicle_info_utils::VehicleInfo;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using autoware_perception_msgs::msg::PredictedObject;
 using autoware_perception_msgs::msg::PredictedObjects;
 using autoware_perception_msgs::msg::PredictedPath;
@@ -63,7 +64,6 @@ using geometry_msgs::msg::Point;
 using geometry_msgs::msg::Pose;
 using geometry_msgs::msg::Twist;
 using path_safety_checker::CollisionCheckDebugMap;
-using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 rclcpp::Logger get_logger();
 
