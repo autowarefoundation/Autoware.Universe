@@ -14510,7 +14510,7 @@ The decision is based on the following variables, along with the calculation of 
 </ul>
 <p>We classify ego behavior at crosswalks into three categories according to the relative relationship between TTC and TTV [1].</p>
 <ul>
-<li>A. <strong>TTC &gt;&gt; TTV</strong>: The object has enough time to cross before the ego.<ul>
+<li>A. <strong>TTC &gt;&gt; TTV</strong>: The object will pass early enough than the ego reach the collision point.<ul>
 <li>No stop planning.</li>
 </ul>
 </li>
@@ -14518,24 +14518,21 @@ The decision is based on the following variables, along with the calculation of 
 <li><strong>Stop point is inserted in the ego's path</strong>.</li>
 </ul>
 </li>
-<li>C. <strong>TTC &lt;&lt; TTV</strong>: Ego has enough time to cross before the object.<ul>
+<li>C. <strong>TTC &lt;&lt; TTV</strong>: The ego will pass early enough than the object reach the collision point.<ul>
 <li>No stop planning.</li>
 </ul>
 </li>
 </ul>
+<p>The following figure shows the decision result for each TTC and TTV with the parameters, <code>ego_pass_first_margin_x</code> is <code>{0}</code>, <code>ego_pass_first_margin_y</code> is <code>{4}</code>, <code>ego_pass_later_margin_x</code> is <code>{0}</code>, and <code>ego_pass_later_margin_y</code> is <code>{13}</code>.</p>
 <div align="center">
     <table>
         <tr>
             <td><img src="./docs/virtual_collision_point.svg" width="600"></td>
-            <td><img src="./docs/ttc_vs_ttv.drawio.svg" width="350"></td>
+            <td><img src="./docs/ttc_vs_ttv.svg" width="350"></td>
         </tr>
     </table>
 </div>
 
-<p>The boundary of A and B is interpolated from <code>ego_pass_later_margin_x</code> and <code>ego_pass_later_margin_y</code>.
-In the case of the upper figure, <code>ego_pass_later_margin_x</code> is <code>{0, 1, 2}</code> and <code>ego_pass_later_margin_y</code> is <code>{1, 4, 6}</code>.
-In the same way, the boundary of B and C is calculated from <code>ego_pass_first_margin_x</code> and <code>ego_pass_first_margin_y</code>.
-In the case of the upper figure, <code>ego_pass_first_margin_x</code> is <code>{3, 5}</code> and <code>ego_pass_first_margin_y</code> is <code>{0, 1}</code>.</p>
 <p>If the red signal is indicating to the corresponding crosswalk, the ego do not yield against the pedestrians.</p>
 <div align="center">
     <table>
