@@ -26,6 +26,7 @@
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <autoware_perception_msgs/msg/traffic_light_group.hpp>
 #include <autoware_perception_msgs/msg/traffic_light_group_array.hpp>
+#include <autoware_planning_msgs/msg/trajectory_point.hpp>
 #include <geometry_msgs/msg/accel_with_covariance_stamped.hpp>
 #include <nav_msgs/msg/occupancy_grid.hpp>
 #include <nav_msgs/msg/odometry.hpp>
@@ -47,6 +48,14 @@ struct TrafficSignalStamped
 {
   builtin_interfaces::msg::Time stamp;
   autoware_perception_msgs::msg::TrafficLightGroup signal;
+};
+
+struct StopPoint
+{
+  double ego_trajectory_arc_length{};  // [m] arc length along the ego trajectory
+  geometry_msgs::msg::Pose
+    ego_stop_pose;                       // intersection between the trajectory and a map stop line
+  lanelet::BasicLineString2d stop_line;  // stop line from the map
 };
 struct PlannerData
 {
@@ -139,30 +148,23 @@ struct PlannerData
   // parameters
   autoware::vehicle_info_utils::VehicleInfo vehicle_info_;
 
-  /**
-   *@fn
-   *@brief queries the traffic signal information of given Id. if keep_last_observation = true,
-   *recent UNKNOWN observation is overwritten as the last non-UNKNOWN observation
-   */
+  /// @brief queries the traffic signal information of given Id. if keep_last_observation = true,
+  /// recent UNKNOWN observation is overwritten as the last non-UNKNOWN observation
   [[nodiscard]] std::optional<TrafficSignalStamped> get_traffic_signal(
-    const lanelet::Id id, const bool keep_last_observation = false) const
-  {
-    const auto & traffic_light_id_map =
-      keep_last_observation ? traffic_light_id_map_last_observed_ : traffic_light_id_map_raw_;
-    if (traffic_light_id_map.count(id) == 0) {
-      return std::nullopt;
-    }
-    return std::make_optional<TrafficSignalStamped>(traffic_light_id_map.at(id));
-  }
+    const lanelet::Id id, const bool keep_last_observation = false) const;
 
+  /// @brief calculate the minimum distance needed by ego to decelerate to the given velocity
+  /// @param [in] target_velocity [m/s] target velocity
+  /// @return [m] distance needed to reach the target velocity
   [[nodiscard]] std::optional<double> calculate_min_deceleration_distance(
-    const double target_velocity) const
-  {
-    return motion_utils::calcDecelDistWithJerkAndAccConstraints(
-      current_odometry.twist.twist.linear.x, target_velocity,
-      current_acceleration.accel.accel.linear.x, velocity_smoother_->getMinDecel(),
-      std::abs(velocity_smoother_->getMinJerk()), velocity_smoother_->getMinJerk());
-  }
+    const double target_velocity) const;
+
+  /// @brief calculate possible stop points along the current trajectory where it intersects with
+  /// stop lines
+  /// @param [in] trajectory ego trajectory
+  /// @return stop points taken from the map
+  [[nodiscard]] std::vector<StopPoint> calculate_map_stop_points(
+    const std::vector<autoware_planning_msgs::msg::TrajectoryPoint> & trajectory) const;
 };
 }  // namespace autoware::motion_velocity_planner
 

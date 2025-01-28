@@ -15,6 +15,7 @@
 #ifndef TYPES_HPP_
 #define TYPES_HPP_
 
+#include <autoware/motion_velocity_planner_common_universe/planner_data.hpp>
 #include <autoware/route_handler/route_handler.hpp>
 #include <autoware/universe_utils/geometry/boost_geometry.hpp>
 
@@ -66,6 +67,7 @@ struct PlannerParam
   double precision;            // [m] precision when inserting a stop pose in the trajectory
   double
     min_decision_duration;  // [s] duration needed before a stop or slowdown point can be removed
+  bool use_map_stop_lines;  // if true, try to stop at stop lines defined in the map
 
   // ego dimensions used to create its polygon footprint
   double front_offset;        // [m]  front offset (from vehicle info)
@@ -97,6 +99,7 @@ struct EgoData
   std::vector<autoware_planning_msgs::msg::TrajectoryPoint>
     trajectory_points;  // filtered trajectory starting from the 1st point behind ego
   geometry_msgs::msg::Pose pose;
+  double velocity{};              // [m/s] current longitudinal velocity of the ego vehicle
   size_t first_trajectory_idx{};  // segment index closest to ego on the original trajectory
   double
     longitudinal_offset_to_first_trajectory_index{};  // longitudinal offset of ego along the
@@ -112,7 +115,9 @@ struct EgoData
   std::vector<lanelet::BasicPolygon2d>
     trajectory_footprints;  // ego footprints along the filtered trajectory
 
-  StopLinesRtree stop_lines_rtree;
+  StopLinesRtree stop_lines_rtree;  // rtree with the stop lines for other vehicles
+  std::vector<StopPoint>
+    map_stop_points;  // ego stop points (and their corresponding stop lines) taken from the map
 };
 
 /// @brief data related to an out of lane trajectory point

@@ -18,6 +18,7 @@
         ignore_behind_ego: false # if true, objects behind the ego vehicle are ignored
 
       action:  # action to insert in the trajectory if an object causes a conflict at an overlap
+        use_map_stop_lines: true  # if true, try to stop at stop lines defined in the vector map
         precision: 0.1  # [m] precision when inserting a stop pose in the trajectory
         longitudinal_distance_buffer: 1.5  # [m] safety distance buffer to keep in front of the ego vehicle
         lateral_distance_buffer: 1.0  # [m] safety distance buffer to keep on the side of the ego vehicle

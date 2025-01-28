@@ -26,17 +26,6 @@
 
 namespace autoware::motion_velocity_planner::out_of_lane
 {
-/// @brief calculate the last pose along the trajectory where ego does not go out of lane
-/// @param [in] ego_data ego data
-/// @param [in] footprint the ego footprint
-/// @param [in] min_arc_length minimum arc length for the search
-/// @param [in] max_arc_length maximum arc length for the search
-/// @param [in] precision [m] search precision
-/// @return the last pose that is not out of lane (if found)
-std::optional<geometry_msgs::msg::Pose> calculate_last_in_lane_pose(
-  const EgoData & ego_data, const autoware::universe_utils::Polygon2d & footprint,
-  const double min_arc_length, const double max_arc_length, const double precision);
-
 /// @brief calculate the slowdown pose just ahead of a point to avoid
 /// @param ego_data ego data (trajectory, velocity, etc)
 /// @param point_to_avoid the point to avoid
@@ -47,13 +36,22 @@ std::optional<geometry_msgs::msg::Pose> calculate_pose_ahead_of_collision(
   const EgoData & ego_data, const OutOfLanePoint & point_to_avoid,
   const universe_utils::Polygon2d & footprint, const double precision);
 
+/// @brief calculate the last pose staying inside the lane and before the given point
+/// @details if no pose staying inside the lane can be found, return a pose before the given point
+/// @param [in] ego_data ego data (trajectory)
+/// @param [in] point_to_avoid the out of lane point to avoid
+/// @param [in] params parameters (ego footprint offsets, precision)
+/// @return optional slowdown pose
+std::optional<geometry_msgs::msg::Pose> calculate_last_in_lane_pose(
+  const EgoData & ego_data, const OutOfLanePoint & point_to_avoid, PlannerParam params);
+
 /// @brief calculate the slowdown point to insert in the trajectory
 /// @param ego_data ego data (trajectory, velocity, etc)
 /// @param out_of_lane_data data about out of lane areas
 /// @param params parameters
-/// @return optional slowdown point to insert in the trajectory
-std::optional<geometry_msgs::msg::Pose> calculate_slowdown_point(
-  const EgoData & ego_data, const OutOfLaneData & out_of_lane_data, PlannerParam params);
+/// @return optional slowdown pose to insert in the trajectory
+std::optional<geometry_msgs::msg::Pose> calculate_slowdown_pose(
+  const EgoData & ego_data, const OutOfLaneData & out_of_lane_data, const PlannerParam & params);
 
 /// @brief calculate the minimum stop and slowdown distances of ego
 /// @param [inout] ego_data ego data where minimum stop and slowdown distances are set
