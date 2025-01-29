@@ -16,11 +16,11 @@
 #include "autoware/behavior_velocity_planner_common/utilization/util.hpp"
 #include "autoware_test_utils/autoware_test_utils.hpp"
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_planning_msgs/msg/path_point.hpp>
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <gtest/gtest.h>
 
@@ -63,7 +63,7 @@ TEST(PlanningUtilsTest, createDetectionAreaPolygons)
 
   // Input parameters
   Polygons2d da_polys;
-  tier4_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
   geometry_msgs::msg::Pose target_pose;
   size_t target_seg_idx = 0;
   autoware::behavior_velocity_planner::DetectionRange da_range;
@@ -83,7 +83,7 @@ TEST(PlanningUtilsTest, createDetectionAreaPolygons)
 
   // Path with some points
   for (double i = 0.0; i < 3.0; ++i) {
-    tier4_planning_msgs::msg::PathPointWithLaneId point;
+    autoware_internal_planning_msgs::msg::PathPointWithLaneId point;
     point.point.pose.position.x = i * 5.0;
     point.point.pose.position.y = 0.0;
     point.point.longitudinal_velocity_mps = 1.0;
@@ -175,7 +175,7 @@ TEST(PlanningUtilsTest, insertDecelPoint)
 TEST(PlanningUtilsTest, insertVelocity)
 {
   auto path = test::generatePath(0.0, 0.0, 10.0, 0.0, 10);
-  tier4_planning_msgs::msg::PathPointWithLaneId path_point;
+  autoware_internal_planning_msgs::msg::PathPointWithLaneId path_point;
   path_point.point.pose.position.x = 5.0;
   path_point.point.pose.position.y = 0.0;
   path_point.point.longitudinal_velocity_mps = 10.0;
@@ -215,10 +215,10 @@ TEST(PlanningUtilsTest, insertStopPoint)
 // Test for getAheadPose
 TEST(PlanningUtilsTest, getAheadPose)
 {
-  tier4_planning_msgs::msg::PathWithLaneId path;
-  tier4_planning_msgs::msg::PathPointWithLaneId point1;
-  tier4_planning_msgs::msg::PathPointWithLaneId point2;
-  tier4_planning_msgs::msg::PathPointWithLaneId point3;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathPointWithLaneId point1;
+  autoware_internal_planning_msgs::msg::PathPointWithLaneId point2;
+  autoware_internal_planning_msgs::msg::PathPointWithLaneId point3;
   point1.point.pose.position.x = 0.0;
   point2.point.pose.position.x = 5.0;
   point3.point.pose.position.x = 10.0;

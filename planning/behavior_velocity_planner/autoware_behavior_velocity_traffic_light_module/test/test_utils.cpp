@@ -20,8 +20,8 @@
 namespace autoware::behavior_velocity_planner
 {
 
-using tier4_planning_msgs::msg::PathPointWithLaneId;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 using autoware::universe_utils::createPoint;
 using autoware::universe_utils::createQuaternion;

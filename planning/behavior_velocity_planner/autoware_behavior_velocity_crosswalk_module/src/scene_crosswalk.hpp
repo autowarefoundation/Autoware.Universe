@@ -52,12 +52,12 @@ namespace autoware::behavior_velocity_planner
 namespace bg = boost::geometry;
 using autoware::universe_utils::Polygon2d;
 using autoware::universe_utils::StopWatch;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using autoware_perception_msgs::msg::ObjectClassification;
 using autoware_perception_msgs::msg::PredictedObject;
 using autoware_perception_msgs::msg::PredictedObjects;
 using autoware_perception_msgs::msg::TrafficLightElement;
 using lanelet::autoware::Crosswalk;
-using tier4_planning_msgs::msg::PathWithLaneId;
 
 namespace
 {

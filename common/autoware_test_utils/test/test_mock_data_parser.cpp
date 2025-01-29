@@ -18,13 +18,13 @@
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "autoware_test_utils/mock_data_parser.hpp"
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <string>
 
 namespace autoware::test_utils
 {
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 // Example YAML structure as a string for testing
 const char g_complete_yaml[] = R"(

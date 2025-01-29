@@ -36,9 +36,9 @@ using PredictedObjects = autoware_perception_msgs::msg::PredictedObjects;
 using ObjectClassification = autoware_perception_msgs::msg::ObjectClassification;
 using PoseWithCovariance = geometry_msgs::msg::PoseWithCovariance;
 using TwistWithCovariance = geometry_msgs::msg::TwistWithCovariance;
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
 using autoware_perception_msgs::msg::PredictedPath;
 using autoware_planning_msgs::msg::Trajectory;
-using tier4_planning_msgs::msg::PathPointWithLaneId;
 
 using autoware::test_utils::createPose;
 using autoware::test_utils::generateTrajectory;

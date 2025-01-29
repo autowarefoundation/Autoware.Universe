@@ -21,10 +21,10 @@
 #include <autoware/behavior_path_planner_common/parameters.hpp>
 #include <autoware/freespace_planning_algorithms/abstract_algorithm.hpp>
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_planning_msgs/msg/path.hpp>
 #include <autoware_vehicle_msgs/msg/turn_indicators_command.hpp>
 #include <geometry_msgs/msg/point.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/Forward.h>
 
@@ -35,11 +35,11 @@
 
 namespace autoware::behavior_path_planner::utils
 {
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using autoware_planning_msgs::msg::Path;
 using autoware_vehicle_msgs::msg::TurnIndicatorsCommand;
 using geometry_msgs::msg::Point;
 using geometry_msgs::msg::Pose;
-using tier4_planning_msgs::msg::PathWithLaneId;
 
 std::vector<double> calcPathArcLengthArray(
   const PathWithLaneId & path, const size_t start = 0,

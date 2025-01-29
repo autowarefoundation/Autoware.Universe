@@ -28,8 +28,8 @@
 TEST(smoothPath, nominal)
 {
   using autoware::behavior_velocity_planner::smoothPath;
-  using tier4_planning_msgs::msg::PathPointWithLaneId;
-  using tier4_planning_msgs::msg::PathWithLaneId;
+  using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
+  using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
   rclcpp::init(0, nullptr);
   rclcpp::NodeOptions options;

@@ -23,7 +23,7 @@
 #include <vector>
 namespace autoware::behavior_velocity_planner
 {
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 class TemplateModule : public SceneModuleInterface
 {

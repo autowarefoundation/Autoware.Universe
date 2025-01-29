@@ -40,7 +40,7 @@ class StopLineModule : public SceneModuleInterface
 public:
   using StopLineWithLaneId = std::pair<lanelet::ConstLineString3d, int64_t>;
   using Trajectory =
-    autoware::trajectory::Trajectory<tier4_planning_msgs::msg::PathPointWithLaneId>;
+    autoware::trajectory::Trajectory<autoware_internal_planning_msgs::msg::PathPointWithLaneId>;
   enum class State { APPROACH, STOPPED, START };
 
   struct DebugData

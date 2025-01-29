@@ -15,11 +15,11 @@
 #ifndef AUTOWARE__MOTION_UTILS__TRAJECTORY__CONVERSION_HPP_
 #define AUTOWARE__MOTION_UTILS__TRAJECTORY__CONVERSION_HPP_
 
+#include "autoware_internal_planning_msgs/msg/detail/path_with_lane_id__struct.hpp"
 #include "autoware_planning_msgs/msg/detail/path__struct.hpp"
 #include "autoware_planning_msgs/msg/detail/trajectory__struct.hpp"
 #include "autoware_planning_msgs/msg/detail/trajectory_point__struct.hpp"
 #include "std_msgs/msg/header.hpp"
-#include "tier4_planning_msgs/msg/detail/path_with_lane_id__struct.hpp"
 
 #include <vector>
 
@@ -58,7 +58,7 @@ autoware_planning_msgs::msg::Path convertToPath([[maybe_unused]] const T & input
 
 template <>
 inline autoware_planning_msgs::msg::Path convertToPath(
-  const tier4_planning_msgs::msg::PathWithLaneId & input)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input)
 {
   autoware_planning_msgs::msg::Path output{};
   output.header = input.header;
@@ -80,7 +80,7 @@ TrajectoryPoints convertToTrajectoryPoints([[maybe_unused]] const T & input)
 
 template <>
 inline TrajectoryPoints convertToTrajectoryPoints(
-  const tier4_planning_msgs::msg::PathWithLaneId & input)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input)
 {
   TrajectoryPoints output{};
   for (const auto & p : input.points) {
@@ -95,19 +95,20 @@ inline TrajectoryPoints convertToTrajectoryPoints(
 }
 
 template <class T>
-tier4_planning_msgs::msg::PathWithLaneId convertToPathWithLaneId([[maybe_unused]] const T & input)
+autoware_internal_planning_msgs::msg::PathWithLaneId convertToPathWithLaneId(
+  [[maybe_unused]] const T & input)
 {
   static_assert(sizeof(T) == 0, "Only specializations of convertToPathWithLaneId can be used.");
   throw std::logic_error("Only specializations of convertToPathWithLaneId can be used.");
 }
 
 template <>
-inline tier4_planning_msgs::msg::PathWithLaneId convertToPathWithLaneId(
+inline autoware_internal_planning_msgs::msg::PathWithLaneId convertToPathWithLaneId(
   const TrajectoryPoints & input)
 {
-  tier4_planning_msgs::msg::PathWithLaneId output{};
+  autoware_internal_planning_msgs::msg::PathWithLaneId output{};
   for (const auto & p : input) {
-    tier4_planning_msgs::msg::PathPointWithLaneId pp;
+    autoware_internal_planning_msgs::msg::PathPointWithLaneId pp;
     pp.point.pose = p.pose;
     pp.point.longitudinal_velocity_mps = p.longitudinal_velocity_mps;
     output.points.emplace_back(pp);

@@ -19,7 +19,7 @@
 
 #include <autoware/freespace_planning_algorithms/abstract_algorithm.hpp>
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <memory>
 

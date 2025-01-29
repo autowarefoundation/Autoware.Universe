@@ -17,9 +17,9 @@
 
 #include "tier4_planning_rviz_plugin/path/display_base.hpp"
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_planning_msgs/msg/path.hpp>
 #include <autoware_planning_msgs/msg/trajectory.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <memory>
 #include <utility>
@@ -188,7 +188,7 @@ private:
 };
 
 class AutowarePathWithLaneIdDisplay
-: public AutowarePathWithDrivableAreaDisplay<tier4_planning_msgs::msg::PathWithLaneId>
+: public AutowarePathWithDrivableAreaDisplay<autoware_internal_planning_msgs::msg::PathWithLaneId>
 {
   Q_OBJECT
 public:
@@ -198,9 +198,9 @@ public:
 private:
   void preProcessMessageDetail() override;
   void preVisualizePathFootprintDetail(
-    const tier4_planning_msgs::msg::PathWithLaneId::ConstSharedPtr msg_ptr) override;
+    const autoware_internal_planning_msgs::msg::PathWithLaneId::ConstSharedPtr msg_ptr) override;
   void visualizePathFootprintDetail(
-    const tier4_planning_msgs::msg::PathWithLaneId::ConstSharedPtr msg_ptr,
+    const autoware_internal_planning_msgs::msg::PathWithLaneId::ConstSharedPtr msg_ptr,
     const size_t p_idx) override;
 
   rviz_common::properties::BoolProperty property_lane_id_view_;

@@ -17,14 +17,14 @@
 
 #include <autoware_test_utils/autoware_test_utils.hpp>
 
-#include <tier4_planning_msgs/msg/detail/path_with_lane_id__struct.hpp>
+#include <autoware_internal_planning_msgs/msg/detail/path_with_lane_id__struct.hpp>
 
 #include <gtest/gtest.h>
 
 #include <cstddef>
 #include <vector>
 
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 
 using autoware::test_utils::createPose;
 using autoware::test_utils::generateTrajectory;
@@ -67,7 +67,7 @@ TEST(BehaviorPathPlanningPathUtilTest, getIdxByArclength)
 {
   using autoware::behavior_path_planner::utils::getIdxByArclength;
 
-  tier4_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
 
   // Condition: empty points
   EXPECT_ANY_THROW(getIdxByArclength(path, 5, 1.0));

@@ -603,7 +603,7 @@ std::string IntersectionModule::generateDetectionBlameDiagnosis(
 }
 
 std::string IntersectionModule::generateEgoRiskEvasiveDiagnosis(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const size_t closest_idx,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const size_t closest_idx,
   const IntersectionModule::TimeDistanceArray & ego_time_distance_array,
   const std::vector<
     std::pair<IntersectionModule::CollisionStatus::BlameType, std::shared_ptr<ObjectInfo>>> &
@@ -813,7 +813,7 @@ std::optional<size_t> IntersectionModule::checkAngleForTargetLanelets(
 }
 
 IntersectionModule::TimeDistanceArray IntersectionModule::calcIntersectionPassingTime(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const bool is_prioritized,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const bool is_prioritized,
   const IntersectionStopLines & intersection_stoplines,
   autoware_internal_debug_msgs::msg::Float64MultiArrayStamped * ego_ttc_array) const
 {

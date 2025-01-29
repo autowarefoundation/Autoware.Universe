@@ -19,10 +19,10 @@
 #include <autoware/universe_utils/geometry/pose_deviation.hpp>
 #include <autoware_vehicle_info_utils/vehicle_info.hpp>
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_planning_msgs/msg/trajectory.hpp>
 #include <autoware_planning_msgs/msg/trajectory_point.hpp>
 #include <geometry_msgs/msg/pose_with_covariance.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/primitives/CompoundPolygon.h>
 #include <lanelet2_core/primitives/Lanelet.h>
@@ -35,9 +35,9 @@ namespace autoware::lane_departure_checker::utils
 using autoware::universe_utils::LinearRing2d;
 using autoware::universe_utils::MultiPoint2d;
 using autoware::universe_utils::PoseDeviation;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using autoware_planning_msgs::msg::Trajectory;
 using autoware_planning_msgs::msg::TrajectoryPoint;
-using tier4_planning_msgs::msg::PathWithLaneId;
 using TrajectoryPoints = std::vector<TrajectoryPoint>;
 
 /**

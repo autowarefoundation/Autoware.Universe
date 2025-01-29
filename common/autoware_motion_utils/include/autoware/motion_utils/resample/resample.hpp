@@ -15,9 +15,9 @@
 #ifndef AUTOWARE__MOTION_UTILS__RESAMPLE__RESAMPLE_HPP_
 #define AUTOWARE__MOTION_UTILS__RESAMPLE__RESAMPLE_HPP_
 
+#include "autoware_internal_planning_msgs/msg/path_with_lane_id.hpp"
 #include "autoware_planning_msgs/msg/path.hpp"
 #include "autoware_planning_msgs/msg/trajectory.hpp"
-#include "tier4_planning_msgs/msg/path_with_lane_id.hpp"
 
 #include <vector>
 
@@ -113,8 +113,8 @@ std::vector<geometry_msgs::msg::Pose> resamplePoseVector(
  *        longitudinal and lateral velocity. Otherwise, it uses linear interpolation
  * @return resampled path
  */
-tier4_planning_msgs::msg::PathWithLaneId resamplePath(
-  const tier4_planning_msgs::msg::PathWithLaneId & input_path,
+autoware_internal_planning_msgs::msg::PathWithLaneId resamplePath(
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path,
   const std::vector<double> & resampled_arclength, const bool use_akima_spline_for_xy = false,
   const bool use_lerp_for_z = true, const bool use_zero_order_hold_for_v = true);
 
@@ -136,10 +136,11 @@ tier4_planning_msgs::msg::PathWithLaneId resamplePath(
  * @param resample_input_path_stop_point If true, resample closest stop point in input path
  * @return resampled path
  */
-tier4_planning_msgs::msg::PathWithLaneId resamplePath(
-  const tier4_planning_msgs::msg::PathWithLaneId & input_path, const double resample_interval,
-  const bool use_akima_spline_for_xy = false, const bool use_lerp_for_z = true,
-  const bool use_zero_order_hold_for_v = true, const bool resample_input_path_stop_point = true);
+autoware_internal_planning_msgs::msg::PathWithLaneId resamplePath(
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path,
+  const double resample_interval, const bool use_akima_spline_for_xy = false,
+  const bool use_lerp_for_z = true, const bool use_zero_order_hold_for_v = true,
+  const bool resample_input_path_stop_point = true);
 
 /**
  * @brief A resampling function for a path. Note that in a default setting, position xy are

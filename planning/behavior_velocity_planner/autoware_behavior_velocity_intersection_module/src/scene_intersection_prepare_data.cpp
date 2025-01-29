@@ -72,7 +72,7 @@ lanelet::ConstLanelets getPrevLanelets(
 
 // end inclusive
 lanelet::ConstLanelet generatePathLanelet(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const size_t start_idx,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const size_t start_idx,
   const size_t end_idx, const double width, const double interval)
 {
   lanelet::Points3d lefts;
@@ -103,7 +103,7 @@ lanelet::ConstLanelet generatePathLanelet(
 }
 
 std::optional<std::pair<size_t, const lanelet::CompoundPolygon3d &>> getFirstPointInsidePolygons(
-  const tier4_planning_msgs::msg::PathWithLaneId & path,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
   const std::pair<size_t, size_t> lane_interval,
   const std::vector<lanelet::CompoundPolygon3d> & polygons, const bool search_forward = true)
 {
@@ -355,7 +355,7 @@ std::optional<IntersectionStopLines> IntersectionModule::generateIntersectionSto
   const lanelet::ConstLanelet & first_attention_lane,
   const std::optional<lanelet::CompoundPolygon3d> & second_attention_area_opt,
   const InterpolatedPathInfo & interpolated_path_info,
-  tier4_planning_msgs::msg::PathWithLaneId * original_path) const
+  autoware_internal_planning_msgs::msg::PathWithLaneId * original_path) const
 {
   const bool use_stuck_stopline = planner_param_.stuck_vehicle.use_stuck_stopline;
   const double stopline_margin = planner_param_.common.default_stopline_margin;

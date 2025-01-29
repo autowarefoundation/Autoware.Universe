@@ -27,7 +27,7 @@
 
 #include <autoware_internal_debug_msgs/msg/float64_stamped.hpp>
 #include <autoware_internal_debug_msgs/msg/string_stamped.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/primitives/Lanelet.h>
 
@@ -42,7 +42,7 @@ namespace autoware::behavior_path_planner
 {
 
 using autoware::universe_utils::StopWatch;
-using tier4_planning_msgs::msg::PathWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using SceneModulePtr = std::shared_ptr<SceneModuleInterface>;
 using SceneModuleManagerPtr = std::shared_ptr<SceneModuleManagerInterface>;
 using DebugPublisher = autoware::universe_utils::DebugPublisher;

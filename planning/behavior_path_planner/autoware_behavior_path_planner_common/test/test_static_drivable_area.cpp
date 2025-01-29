@@ -18,8 +18,8 @@
 #include <autoware/route_handler/route_handler.hpp>
 #include <autoware_test_utils/autoware_test_utils.hpp>
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <nav_msgs/msg/detail/odometry__struct.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <boost/geometry/algorithms/detail/disjoint/interface.hpp>
 #include <boost/geometry/algorithms/detail/intersects/interface.hpp>
@@ -128,7 +128,7 @@ TEST(StaticDrivableArea, getOverlappedLaneletId)
 TEST(StaticDrivableArea, cutOverlappedLanes)
 {
   using autoware::behavior_path_planner::utils::cutOverlappedLanes;
-  tier4_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
   std::vector<DrivableLanes> lanes;
   {  // empty inputs
     const auto result = cutOverlappedLanes(path, lanes);
@@ -258,8 +258,8 @@ TEST(StaticDrivableArea, generateDrivableLanes)
 TEST(StaticDrivableArea, generateDrivableArea_subfunction)
 {
   using autoware::behavior_path_planner::utils::generateDrivableArea;
-  tier4_planning_msgs::msg::PathWithLaneId path;
-  tier4_planning_msgs::msg::PathPointWithLaneId p;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathPointWithLaneId p;
   generateDrivableArea(path, 0.0, 0.0, true);
   EXPECT_TRUE(path.left_bound.empty());
   EXPECT_TRUE(path.right_bound.empty());
@@ -450,7 +450,7 @@ TEST(DISABLED_StaticDrivableArea, generateDrivableArea)
 {
   using autoware::behavior_path_planner::PlannerData;
   using autoware::behavior_path_planner::utils::generateDrivableArea;
-  tier4_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
   std::vector<DrivableLanes> lanes;
   bool enable_expanding_hatched_road_markings = true;
   bool enable_expanding_intersection_areas = true;
@@ -474,7 +474,7 @@ TEST(DISABLED_StaticDrivableArea, generateDrivableArea)
   lanes = autoware::behavior_path_planner::utils::generateDrivableLanes({ll, shoulder_ll});
   lanelet::BasicLineString2d path_ls;
   for (const auto & p : ll.centerline().basicLineString()) {
-    tier4_planning_msgs::msg::PathPointWithLaneId pp;
+    autoware_internal_planning_msgs::msg::PathPointWithLaneId pp;
     pp.point.pose.position.x = p.x();
     pp.point.pose.position.y = p.y();
     pp.point.pose.position.z = p.z();

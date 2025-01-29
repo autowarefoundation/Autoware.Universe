@@ -18,7 +18,7 @@
 #include <autoware/behavior_velocity_planner_common/utilization/arc_lane_util.hpp>
 #include <autoware_lanelet2_extension/regulatory_elements/virtual_traffic_light.hpp>
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <tier4_v2x_msgs/msg/key_value.hpp>
 
 #include <optional>
@@ -58,11 +58,11 @@ geometry_msgs::msg::Pose calcHeadPose(
 
 geometry_msgs::msg::Point convertToGeomPoint(const autoware::universe_utils::Point3d & p);
 
-void insertStopVelocityFromStart(tier4_planning_msgs::msg::PathWithLaneId * path);
+void insertStopVelocityFromStart(autoware_internal_planning_msgs::msg::PathWithLaneId * path);
 
 std::optional<size_t> insertStopVelocityAtCollision(
   const SegmentIndexWithPoint & collision, const double offset,
-  tier4_planning_msgs::msg::PathWithLaneId * path);
+  autoware_internal_planning_msgs::msg::PathWithLaneId * path);
 
 template <class T>
 std::optional<SegmentIndexWithPoint> findLastCollisionBeforeEndLine(

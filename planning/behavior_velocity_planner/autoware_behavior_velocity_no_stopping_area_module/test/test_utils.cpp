@@ -20,10 +20,10 @@
 #include <rclcpp/clock.hpp>
 #include <rclcpp/logger.hpp>
 
+#include <autoware_internal_planning_msgs/msg/path_point_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_perception_msgs/msg/predicted_object.hpp>
 #include <geometry_msgs/msg/pose.hpp>
-#include <tier4_planning_msgs/msg/path_point_with_lane_id.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/io/wkt/write.hpp>
@@ -44,12 +44,12 @@ bool point_in_polygon(const Point & p, const Polygon & poly)
          }) != poly.outer().end();
 }
 
-tier4_planning_msgs::msg::PathWithLaneId generate_straight_path(
+autoware_internal_planning_msgs::msg::PathWithLaneId generate_straight_path(
   const size_t nb_points, const float velocity = 0.0, const double resolution = 1.0)
 {
-  tier4_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
   for (auto x = 0UL; x < nb_points; ++x) {
-    tier4_planning_msgs::msg::PathPointWithLaneId p;
+    autoware_internal_planning_msgs::msg::PathPointWithLaneId p;
     p.point.pose.position.x = resolution * static_cast<double>(x);
     p.point.pose.position.y = 0.0;
     p.point.longitudinal_velocity_mps = velocity;
@@ -82,7 +82,7 @@ TEST(NoStoppingAreaTest, insertStopPoint)
   using autoware::behavior_velocity_planner::no_stopping_area::insert_stop_point;
   constexpr auto nb_points = 10;
   constexpr auto default_velocity = 5.0;
-  const tier4_planning_msgs::msg::PathWithLaneId base_path =
+  const autoware_internal_planning_msgs::msg::PathWithLaneId base_path =
     generate_straight_path(nb_points, default_velocity);
   autoware::behavior_velocity_planner::no_stopping_area::PathIndexWithPose stop_point;
   // stop exactly at a point, expect no new points but a 0 velocity at the stop point and after
@@ -123,7 +123,8 @@ TEST(NoStoppingAreaTest, generateStopLine)
 {
   using autoware::behavior_velocity_planner::no_stopping_area::generate_stop_line;
   constexpr auto nb_points = 10;
-  const tier4_planning_msgs::msg::PathWithLaneId path = generate_straight_path(nb_points);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId path =
+    generate_straight_path(nb_points);
   lanelet::ConstPolygons3d no_stopping_areas;
   double ego_width = 0.0;
   double stop_line_margin = 0.0;
@@ -228,7 +229,7 @@ TEST(NoStoppingAreaTest, generateEgoNoStoppingAreaLanePolygon)
   geometry_msgs::msg::Pose ego_pose;  // ego at (0,0)
   ego_pose.position.x = 0.0;
   ego_pose.position.y = 0.0;
-  const tier4_planning_msgs::msg::PathWithLaneId path =
+  const autoware_internal_planning_msgs::msg::PathWithLaneId path =
     generate_straight_path(8);  // ego path at x = 0, 1,..., 7 and y=0
   double margin = 1.0;          // desired margin added to the polygon after the end of the area
   double max_polygon_length = 10.0;  // maximum length of the generated polygon
@@ -307,7 +308,7 @@ TEST(NoStoppingAreaTest, generateEgoNoStoppingAreaLanePolygon)
   // cases where the polygon returned is empty
   // path is empty
   {
-    tier4_planning_msgs::msg::PathWithLaneId empty_path;
+    autoware_internal_planning_msgs::msg::PathWithLaneId empty_path;
     const auto lane_poly = generate_ego_no_stopping_area_lane_polygon(
       empty_path, ego_pose, *no_stopping_area_reg_elem, margin, max_polygon_length,
       path_expand_width, logger, clock);
@@ -356,7 +357,7 @@ TEST(NoStoppingAreaTest, generateEgoNoStoppingAreaLanePolygon)
 TEST(NoStoppingAreaTest, checkStopLinesInNoStoppingArea)
 {
   using autoware::behavior_velocity_planner::no_stopping_area::check_stop_lines_in_no_stopping_area;
-  tier4_planning_msgs::msg::PathWithLaneId path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path;
   autoware::universe_utils::Polygon2d poly;
   autoware::behavior_velocity_planner::no_stopping_area::DebugData debug_data;
 
@@ -365,7 +366,7 @@ TEST(NoStoppingAreaTest, checkStopLinesInNoStoppingArea)
 
   constexpr auto nb_points = 10;
   constexpr auto non_stopped_velocity = 5.0;
-  const tier4_planning_msgs::msg::PathWithLaneId non_stopping_path =
+  const autoware_internal_planning_msgs::msg::PathWithLaneId non_stopping_path =
     generate_straight_path(nb_points, non_stopped_velocity);
   path = non_stopping_path;
   // set x=4 and x=5 to be stopping points
@@ -396,7 +397,7 @@ TEST(NoStoppingAreaTest, getStopLineGeometry2d)
 {
   using autoware::behavior_velocity_planner::no_stopping_area::generate_stop_line;
   using autoware::behavior_velocity_planner::no_stopping_area::get_stop_line_geometry2d;
-  const tier4_planning_msgs::msg::PathWithLaneId path = generate_straight_path(10);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId path = generate_straight_path(10);
   lanelet::Polygon3d no_stopping_area;
   no_stopping_area.push_back(lanelet::Point3d(lanelet::InvalId, 3.0, -1.0));
   no_stopping_area.push_back(lanelet::Point3d(lanelet::InvalId, 3.0, 1.0));

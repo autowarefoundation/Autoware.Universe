@@ -19,10 +19,10 @@
 
 #include <Eigen/Core>
 
+#include <autoware_internal_planning_msgs/msg/path_point_with_lane_id.hpp>
 #include <autoware_planning_msgs/msg/path_point.hpp>
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/pose.hpp>
-#include <tier4_planning_msgs/msg/path_point_with_lane_id.hpp>
 
 #include <set>
 #include <vector>
@@ -38,7 +38,8 @@ geometry_msgs::msg::Point to_point(const geometry_msgs::msg::Point & p);
 geometry_msgs::msg::Point to_point(const geometry_msgs::msg::Pose & p);
 geometry_msgs::msg::Point to_point(const Eigen::Vector2d & p);
 geometry_msgs::msg::Point to_point(const autoware_planning_msgs::msg::PathPoint & p);
-geometry_msgs::msg::Point to_point(const tier4_planning_msgs::msg::PathPointWithLaneId & p);
+geometry_msgs::msg::Point to_point(
+  const autoware_internal_planning_msgs::msg::PathPointWithLaneId & p);
 geometry_msgs::msg::Point to_point(const lanelet::BasicPoint2d & p);
 geometry_msgs::msg::Point to_point(const lanelet::ConstPoint3d & p);
 

@@ -28,8 +28,8 @@
 #include <builtin_interfaces/msg/time.hpp>
 
 #include <autoware_internal_debug_msgs/msg/float64_stamped.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_planning_msgs/msg/path.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 #include <unique_identifier_msgs/msg/uuid.hpp>
 
 #include <memory>
@@ -54,8 +54,8 @@ using autoware::universe_utils::DebugPublisher;
 using autoware::universe_utils::getOrDeclareParameter;
 using autoware::universe_utils::StopWatch;
 using autoware_internal_debug_msgs::msg::Float64Stamped;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using builtin_interfaces::msg::Time;
-using tier4_planning_msgs::msg::PathWithLaneId;
 using unique_identifier_msgs::msg::UUID;
 
 struct ObjectOfInterest
@@ -113,7 +113,7 @@ protected:
   }
 
   size_t findEgoSegmentIndex(
-    const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points) const;
+    const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points) const;
 };
 
 template <class T = SceneModuleInterface>
@@ -131,7 +131,7 @@ public:
       is_publish_debug_path_ = node.get_parameter("is_publish_debug_path").as_bool();
     }
     if (is_publish_debug_path_) {
-      pub_debug_path_ = node.create_publisher<tier4_planning_msgs::msg::PathWithLaneId>(
+      pub_debug_path_ = node.create_publisher<autoware_internal_planning_msgs::msg::PathWithLaneId>(
         std::string("~/debug/path_with_lane_id/") + module_name, 1);
     }
     pub_virtual_wall_ = node.create_publisher<visualization_msgs::msg::MarkerArray>(
@@ -153,7 +153,7 @@ public:
 
   void updateSceneModuleInstances(
     const std::shared_ptr<const PlannerData> & planner_data,
-    const tier4_planning_msgs::msg::PathWithLaneId & path)
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
   {
     planner_data_ = planner_data;
 
@@ -161,10 +161,13 @@ public:
     deleteExpiredModules(path);
   }
 
-  virtual void plan(tier4_planning_msgs::msg::PathWithLaneId * path) { modifyPathVelocity(path); }
+  virtual void plan(autoware_internal_planning_msgs::msg::PathWithLaneId * path)
+  {
+    modifyPathVelocity(path);
+  }
 
 protected:
-  virtual void modifyPathVelocity(tier4_planning_msgs::msg::PathWithLaneId * path)
+  virtual void modifyPathVelocity(autoware_internal_planning_msgs::msg::PathWithLaneId * path)
   {
     universe_utils::ScopedTimeTrack st(
       "SceneModuleManagerInterface::modifyPathVelocity", *time_keeper_);
@@ -188,7 +191,7 @@ protected:
     planning_factor_interface_->publish();
     pub_debug_->publish(debug_marker_array);
     if (is_publish_debug_path_) {
-      tier4_planning_msgs::msg::PathWithLaneId debug_path;
+      autoware_internal_planning_msgs::msg::PathWithLaneId debug_path;
       debug_path.header = path->header;
       debug_path.points = path->points;
       pub_debug_path_->publish(debug_path);
@@ -198,12 +201,14 @@ protected:
       std::string(getModuleName()) + "/processing_time_ms", stop_watch.toc("Total"));
   }
 
-  virtual void launchNewModules(const tier4_planning_msgs::msg::PathWithLaneId & path) = 0;
+  virtual void launchNewModules(
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path) = 0;
 
   virtual std::function<bool(const std::shared_ptr<T> &)> getModuleExpiredFunction(
-    const tier4_planning_msgs::msg::PathWithLaneId & path) = 0;
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path) = 0;
 
-  virtual void deleteExpiredModules(const tier4_planning_msgs::msg::PathWithLaneId & path)
+  virtual void deleteExpiredModules(
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
   {
     const auto isModuleExpired = getModuleExpiredFunction(path);
 
@@ -233,7 +238,7 @@ protected:
   }
 
   size_t findEgoSegmentIndex(
-    const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points) const
+    const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points) const
   {
     const auto & p = planner_data_;
     return autoware::motion_utils::findFirstNearestSegmentIndexWithSoftConstraints(
@@ -254,7 +259,8 @@ protected:
   rclcpp::Logger logger_;
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr pub_virtual_wall_;
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr pub_debug_;
-  rclcpp::Publisher<tier4_planning_msgs::msg::PathWithLaneId>::SharedPtr pub_debug_path_;
+  rclcpp::Publisher<autoware_internal_planning_msgs::msg::PathWithLaneId>::SharedPtr
+    pub_debug_path_;
 
   std::shared_ptr<DebugPublisher> processing_time_publisher_;
 
@@ -267,14 +273,14 @@ protected:
 extern template SceneModuleManagerInterface<SceneModuleInterface>::SceneModuleManagerInterface(
   rclcpp::Node & node, [[maybe_unused]] const char * module_name);
 extern template size_t SceneModuleManagerInterface<SceneModuleInterface>::findEgoSegmentIndex(
-  const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points) const;
+  const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points) const;
 extern template void SceneModuleManagerInterface<SceneModuleInterface>::updateSceneModuleInstances(
   const std::shared_ptr<const PlannerData> & planner_data,
-  const tier4_planning_msgs::msg::PathWithLaneId & path);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path);
 extern template void SceneModuleManagerInterface<SceneModuleInterface>::modifyPathVelocity(
-  tier4_planning_msgs::msg::PathWithLaneId * path);
+  autoware_internal_planning_msgs::msg::PathWithLaneId * path);
 extern template void SceneModuleManagerInterface<SceneModuleInterface>::deleteExpiredModules(
-  const tier4_planning_msgs::msg::PathWithLaneId & path);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path);
 extern template void SceneModuleManagerInterface<SceneModuleInterface>::registerModule(
   const std::shared_ptr<SceneModuleInterface> & scene_module);
 }  // namespace autoware::behavior_velocity_planner

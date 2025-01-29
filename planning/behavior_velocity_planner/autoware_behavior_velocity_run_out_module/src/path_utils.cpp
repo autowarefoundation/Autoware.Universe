@@ -24,7 +24,7 @@ namespace autoware::behavior_velocity_planner::run_out_utils
  * This function returns the point with the smallest (signed) longitudinal distance
  */
 geometry_msgs::msg::Point findLongitudinalNearestPoint(
-  const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points,
+  const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points,
   const geometry_msgs::msg::Point & src_point,
   const std::vector<geometry_msgs::msg::Point> & target_points)
 {

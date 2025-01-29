@@ -38,7 +38,7 @@ SceneModuleInterface::SceneModuleInterface(
 }
 
 size_t SceneModuleInterface::findEgoSegmentIndex(
-  const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points) const
+  const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points) const
 {
   const auto & p = planner_data_;
   return autoware::motion_utils::findFirstNearestSegmentIndexWithSoftConstraints(
@@ -48,14 +48,14 @@ size_t SceneModuleInterface::findEgoSegmentIndex(
 template SceneModuleManagerInterface<SceneModuleInterface>::SceneModuleManagerInterface(
   rclcpp::Node & node, [[maybe_unused]] const char * module_name);
 template size_t SceneModuleManagerInterface<SceneModuleInterface>::findEgoSegmentIndex(
-  const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points) const;
+  const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points) const;
 template void SceneModuleManagerInterface<SceneModuleInterface>::updateSceneModuleInstances(
   const std::shared_ptr<const PlannerData> & planner_data,
-  const tier4_planning_msgs::msg::PathWithLaneId & path);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path);
 template void SceneModuleManagerInterface<SceneModuleInterface>::modifyPathVelocity(
-  tier4_planning_msgs::msg::PathWithLaneId * path);
+  autoware_internal_planning_msgs::msg::PathWithLaneId * path);
 template void SceneModuleManagerInterface<SceneModuleInterface>::deleteExpiredModules(
-  const tier4_planning_msgs::msg::PathWithLaneId & path);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path);
 template void SceneModuleManagerInterface<SceneModuleInterface>::registerModule(
   const std::shared_ptr<SceneModuleInterface> & scene_module);
 }  // namespace autoware::behavior_velocity_planner

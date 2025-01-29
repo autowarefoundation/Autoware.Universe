@@ -21,8 +21,8 @@
 #include <autoware/universe_utils/ros/parameter.hpp>
 #include <builtin_interfaces/msg/time.hpp>
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_planning_msgs/msg/path.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 #include <tier4_rtc_msgs/msg/state.hpp>
 #include <unique_identifier_msgs/msg/uuid.hpp>
 
@@ -42,8 +42,8 @@ namespace autoware::behavior_velocity_planner
 
 using autoware::rtc_interface::RTCInterface;
 using autoware::universe_utils::getOrDeclareParameter;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using builtin_interfaces::msg::Time;
-using tier4_planning_msgs::msg::PathWithLaneId;
 using tier4_rtc_msgs::msg::Module;
 using tier4_rtc_msgs::msg::State;
 using unique_identifier_msgs::msg::UUID;
@@ -88,7 +88,7 @@ public:
   SceneModuleManagerInterfaceWithRTC(
     rclcpp::Node & node, const char * module_name, const bool enable_rtc = true);
 
-  void plan(tier4_planning_msgs::msg::PathWithLaneId * path) override;
+  void plan(autoware_internal_planning_msgs::msg::PathWithLaneId * path) override;
 
 protected:
   RTCInterface rtc_interface_;
@@ -123,7 +123,8 @@ protected:
 
   void publishObjectsOfInterestMarker();
 
-  void deleteExpiredModules(const tier4_planning_msgs::msg::PathWithLaneId & path) override;
+  void deleteExpiredModules(
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
 
   static bool getEnableRTC(rclcpp::Node & node, const std::string & param_name)
   {
@@ -143,13 +144,13 @@ protected:
 
 extern template size_t
 SceneModuleManagerInterface<SceneModuleInterfaceWithRTC>::findEgoSegmentIndex(
-  const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points) const;
+  const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points) const;
 extern template void
 SceneModuleManagerInterface<SceneModuleInterfaceWithRTC>::updateSceneModuleInstances(
   const std::shared_ptr<const PlannerData> & planner_data,
-  const tier4_planning_msgs::msg::PathWithLaneId & path);
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path);
 extern template void SceneModuleManagerInterface<SceneModuleInterfaceWithRTC>::modifyPathVelocity(
-  tier4_planning_msgs::msg::PathWithLaneId * path);
+  autoware_internal_planning_msgs::msg::PathWithLaneId * path);
 extern template void SceneModuleManagerInterface<SceneModuleInterfaceWithRTC>::registerModule(
   const std::shared_ptr<SceneModuleInterfaceWithRTC> & scene_module);
 }  // namespace autoware::behavior_velocity_planner

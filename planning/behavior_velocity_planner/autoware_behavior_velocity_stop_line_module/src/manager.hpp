@@ -21,7 +21,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <functional>
 #include <memory>
@@ -44,17 +44,17 @@ private:
   StopLineModule::PlannerParam planner_param_;
 
   std::vector<StopLineWithLaneId> getStopLinesWithLaneIdOnPath(
-    const tier4_planning_msgs::msg::PathWithLaneId & path,
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
     const lanelet::LaneletMapPtr lanelet_map);
 
   std::set<int64_t> getStopLineIdSetOnPath(
-    const tier4_planning_msgs::msg::PathWithLaneId & path,
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
     const lanelet::LaneletMapPtr lanelet_map);
 
-  void launchNewModules(const tier4_planning_msgs::msg::PathWithLaneId & path) override;
+  void launchNewModules(const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
 
   std::function<bool(const std::shared_ptr<SceneModuleInterface> &)> getModuleExpiredFunction(
-    const tier4_planning_msgs::msg::PathWithLaneId & path) override;
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path) override;
 };
 
 class StopLineModulePlugin : public PluginWrapper<StopLineModuleManager>

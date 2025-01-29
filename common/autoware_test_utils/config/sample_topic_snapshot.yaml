@@ -28,5 +28,5 @@ fields:
   #    type: TrackedObjects # autoware_perception_msgs::msg::TrackedObjects
   #    topic: /perception/object_recognition/tracking/objects
   #  - name: path_with_lane_id
-  #    type: PathWithLaneId # tier4_planning_msgs::msg::PathWithLaneId
+  #    type: PathWithLaneId # autoware_internal_planning_msgs::msg::PathWithLaneId
   #    topic: /planning/scenario_planning/lane_driving/behavior_planning/path_with_lane_id

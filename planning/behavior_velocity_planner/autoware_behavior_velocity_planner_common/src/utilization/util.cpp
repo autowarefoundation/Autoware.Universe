@@ -42,7 +42,7 @@
 namespace
 {
 size_t calcPointIndexFromSegmentIndex(
-  const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points,
+  const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points,
   const geometry_msgs::msg::Point & point, const size_t seg_idx)
 {
   const size_t prev_point_idx = seg_idx;
@@ -102,7 +102,7 @@ using autoware::universe_utils::calcOffsetPose;
 using autoware_planning_msgs::msg::PathPoint;
 
 size_t calcSegmentIndexFromPointIndex(
-  const std::vector<tier4_planning_msgs::msg::PathPointWithLaneId> & points,
+  const std::vector<autoware_internal_planning_msgs::msg::PathPointWithLaneId> & points,
   const geometry_msgs::msg::Point & point, const size_t idx)
 {
   if (idx == 0) {
@@ -300,7 +300,7 @@ bool isAheadOf(const geometry_msgs::msg::Pose & target, const geometry_msgs::msg
 
 geometry_msgs::msg::Pose getAheadPose(
   const size_t start_idx, const double ahead_dist,
-  const tier4_planning_msgs::msg::PathWithLaneId & path)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path)
 {
   if (path.points.empty()) {
     return geometry_msgs::msg::Pose{};
@@ -593,8 +593,9 @@ std::vector<int64_t> getSubsequentLaneIdsSetOnPath(
 
 // TODO(murooka) remove calcSignedArcLength using findNearestSegmentIndex
 bool isOverLine(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const geometry_msgs::msg::Pose & self_pose,
-  const geometry_msgs::msg::Pose & line_pose, const double offset)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
+  const geometry_msgs::msg::Pose & self_pose, const geometry_msgs::msg::Pose & line_pose,
+  const double offset)
 {
   return autoware::motion_utils::calcSignedArcLength(
            path.points, self_pose.position, line_pose.position) +

@@ -54,7 +54,7 @@ visualization_msgs::msg::MarkerArray createPolygonMarkerArray(
 }
 
 visualization_msgs::msg::MarkerArray createPathMarkerArray(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const std::string & ns,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const std::string & ns,
   const int64_t lane_id, const rclcpp::Time & now, const double x, const double y, const double z,
   const double r, const double g, const double b)
 {

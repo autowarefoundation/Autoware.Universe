@@ -66,7 +66,7 @@ protected:
     dynamic_object = autoware::test_utils::create_const_shared_ptr(
       parse<autoware_perception_msgs::msg::PredictedObjects>(config["dynamic_object"]));
     path_with_lane_id =
-      parse<tier4_planning_msgs::msg::PathWithLaneId>(config["path_with_lane_id"]);
+      parse<autoware_internal_planning_msgs::msg::PathWithLaneId>(config["path_with_lane_id"]);
 
     // parameter
     auto node_options = rclcpp::NodeOptions{};
@@ -85,7 +85,7 @@ protected:
   std::shared_ptr<const nav_msgs::msg::Odometry> self_odometry{};
   std::shared_ptr<const autoware_perception_msgs::msg::PredictedObjects> dynamic_object{};
   const lanelet::Id lane_id_{2200};
-  tier4_planning_msgs::msg::PathWithLaneId path_with_lane_id;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path_with_lane_id;
   autoware::behavior_velocity_planner::PlannerParam param;
 };
 
@@ -318,7 +318,7 @@ TEST_F(TestWithAdjLaneData, generateInterpolatedPathInfo)
   const auto & interpolated_path_info = interpolated_path_info_opt.value();
   EXPECT_EQ(interpolated_path_info.lane_id_interval.has_value(), true);
   const auto [start, end] = interpolated_path_info.lane_id_interval.value();
-  tier4_planning_msgs::msg::PathWithLaneId interpolated_path;
+  autoware_internal_planning_msgs::msg::PathWithLaneId interpolated_path;
   for (auto i = start; i <= end; ++i) {
     interpolated_path.points.push_back(interpolated_path_info.path.points.at(i));
   }
@@ -377,7 +377,7 @@ protected:
     dynamic_object = autoware::test_utils::create_const_shared_ptr(
       parse<autoware_perception_msgs::msg::PredictedObjects>(config["dynamic_object"]));
     path_with_lane_id =
-      parse<tier4_planning_msgs::msg::PathWithLaneId>(config["path_with_lane_id"]);
+      parse<autoware_internal_planning_msgs::msg::PathWithLaneId>(config["path_with_lane_id"]);
 
     // parameter
     auto node_options = rclcpp::NodeOptions{};
@@ -396,7 +396,7 @@ protected:
   std::shared_ptr<const nav_msgs::msg::Odometry> self_odometry{};
   std::shared_ptr<const autoware_perception_msgs::msg::PredictedObjects> dynamic_object{};
   const lanelet::Id lane_id_{1010};
-  tier4_planning_msgs::msg::PathWithLaneId path_with_lane_id;
+  autoware_internal_planning_msgs::msg::PathWithLaneId path_with_lane_id;
   autoware::behavior_velocity_planner::PlannerParam param;
 };
 

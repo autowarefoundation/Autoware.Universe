@@ -105,15 +105,16 @@ private:
   BlindSpotDecision modifyPathVelocityDetail(PathWithLaneId * path);
   // setSafe(), setDistance()
   void setRTCStatus(
-    const BlindSpotDecision & decision, const tier4_planning_msgs::msg::PathWithLaneId & path);
+    const BlindSpotDecision & decision,
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & path);
   template <typename Decision>
   void setRTCStatusByDecision(
-    const Decision & decision, const tier4_planning_msgs::msg::PathWithLaneId & path);
+    const Decision & decision, const autoware_internal_planning_msgs::msg::PathWithLaneId & path);
   // stop/GO
   void reactRTCApproval(const BlindSpotDecision & decision, PathWithLaneId * path);
   template <typename Decision>
   void reactRTCApprovalByDecision(
-    const Decision & decision, tier4_planning_msgs::msg::PathWithLaneId * path);
+    const Decision & decision, autoware_internal_planning_msgs::msg::PathWithLaneId * path);
 
   /**
    * @brief Generate a stop line and insert it into the path.
@@ -126,10 +127,10 @@ private:
    */
   std::optional<std::pair<size_t, size_t>> generateStopLine(
     const InterpolatedPathInfo & interpolated_path_info,
-    tier4_planning_msgs::msg::PathWithLaneId * path) const;
+    autoware_internal_planning_msgs::msg::PathWithLaneId * path) const;
 
   std::optional<OverPassJudge> isOverPassJudge(
-    const tier4_planning_msgs::msg::PathWithLaneId & input_path,
+    const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path,
     const geometry_msgs::msg::Pose & stop_point_pose) const;
 
   double computeTimeToPassStopLine(

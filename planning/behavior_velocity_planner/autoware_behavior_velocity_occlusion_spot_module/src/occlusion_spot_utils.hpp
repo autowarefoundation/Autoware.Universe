@@ -23,11 +23,11 @@
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
 #include <autoware_lanelet2_extension/visualization/visualization.hpp>
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_perception_msgs/msg/object_classification.hpp>
 #include <autoware_perception_msgs/msg/predicted_object.hpp>
 #include <autoware_perception_msgs/msg/predicted_objects.hpp>
 #include <autoware_planning_msgs/msg/path.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 #include <visualization_msgs/msg/marker.hpp>
 
 #include <lanelet2_core/LaneletMap.h>
@@ -48,6 +48,8 @@
 
 namespace autoware::behavior_velocity_planner
 {
+using autoware_internal_planning_msgs::msg::PathPointWithLaneId;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using autoware_perception_msgs::msg::ObjectClassification;
 using autoware_perception_msgs::msg::PredictedObject;
 using autoware_perception_msgs::msg::PredictedObjects;
@@ -59,8 +61,6 @@ using lanelet::BasicLineString2d;
 using lanelet::BasicPoint2d;
 using lanelet::BasicPolygon2d;
 using lanelet::LaneletMapPtr;
-using tier4_planning_msgs::msg::PathPointWithLaneId;
-using tier4_planning_msgs::msg::PathWithLaneId;
 using DetectionAreaIdx = std::optional<std::pair<double, double>>;
 using BasicPolygons2d = std::vector<lanelet::BasicPolygon2d>;
 

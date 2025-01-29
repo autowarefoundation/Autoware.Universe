@@ -21,7 +21,7 @@
 #include <autoware/pyplot/pyplot.hpp>
 #include <autoware/universe_utils/geometry/geometry.hpp>
 
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_core/primitives/Lanelet.h>
 #include <lanelet2_core/primitives/LineString.h>
@@ -244,7 +244,7 @@ struct PathWithLaneIdConfig
  * @param [in] config_opt if null, only the path points & quiver are plotted with "k" color.
  */
 inline void plot_autoware_object(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, autoware::pyplot::Axes & axes,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, autoware::pyplot::Axes & axes,
   const std::optional<PathWithLaneIdConfig> & config_opt = std::nullopt)
 {
   py::dict kwargs{};

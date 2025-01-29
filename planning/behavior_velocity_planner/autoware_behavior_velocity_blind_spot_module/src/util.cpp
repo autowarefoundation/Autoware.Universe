@@ -34,7 +34,7 @@ namespace autoware::behavior_velocity_planner
 namespace
 {
 static bool hasLaneIds(
-  const tier4_planning_msgs::msg::PathPointWithLaneId & p, const lanelet::Id id)
+  const autoware_internal_planning_msgs::msg::PathPointWithLaneId & p, const lanelet::Id id)
 {
   for (const auto & pid : p.lane_ids) {
     if (pid == id) {
@@ -45,7 +45,7 @@ static bool hasLaneIds(
 }
 
 static std::optional<std::pair<size_t, size_t>> findLaneIdInterval(
-  const tier4_planning_msgs::msg::PathWithLaneId & p, const lanelet::Id id)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & p, const lanelet::Id id)
 {
   bool found = false;
   size_t start = 0;
@@ -73,8 +73,8 @@ static std::optional<std::pair<size_t, size_t>> findLaneIdInterval(
 }  // namespace
 
 std::optional<InterpolatedPathInfo> generateInterpolatedPathInfo(
-  const lanelet::Id lane_id, const tier4_planning_msgs::msg::PathWithLaneId & input_path,
-  rclcpp::Logger logger)
+  const lanelet::Id lane_id,
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & input_path, rclcpp::Logger logger)
 {
   constexpr double ds = 0.2;
   InterpolatedPathInfo interpolated_path_info;
@@ -222,7 +222,7 @@ static lanelet::LineString3d removeConst(lanelet::ConstLineString3d line)
 }
 
 std::vector<lanelet::Id> find_lane_ids_upto(
-  const tier4_planning_msgs::msg::PathWithLaneId & path, const lanelet::Id lane_id)
+  const autoware_internal_planning_msgs::msg::PathWithLaneId & path, const lanelet::Id lane_id)
 {
   std::vector<int64_t> lane_ids;
   /* get lane ids until intersection */
@@ -330,7 +330,7 @@ lanelet::ConstLanelets generateBlindSpotLanelets(
 }
 
 std::optional<lanelet::CompoundPolygon3d> generateBlindSpotPolygons(
-  [[maybe_unused]] const tier4_planning_msgs::msg::PathWithLaneId & path,
+  [[maybe_unused]] const autoware_internal_planning_msgs::msg::PathWithLaneId & path,
   [[maybe_unused]] const size_t closest_idx, const lanelet::ConstLanelets & blind_spot_lanelets,
   const geometry_msgs::msg::Pose & stop_line_pose, const double backward_detection_length)
 {

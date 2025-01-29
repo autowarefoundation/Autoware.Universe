@@ -31,6 +31,7 @@
 #include <autoware_lanelet2_extension/utility/message_conversion.hpp>
 #include <autoware_test_utils/mock_data_parser.hpp>
 
+#include <autoware_internal_planning_msgs/msg/path_with_lane_id.hpp>
 #include <autoware_map_msgs/msg/lanelet_map_bin.hpp>
 #include <autoware_planning_msgs/msg/lanelet_primitive.hpp>
 #include <autoware_planning_msgs/msg/lanelet_route.hpp>
@@ -38,7 +39,6 @@
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 #include <geometry_msgs/msg/quaternion.hpp>
-#include <tier4_planning_msgs/msg/path_with_lane_id.hpp>
 
 #include <lanelet2_io/Io.h>
 #include <matplotlibcpp17/pyplot.h>
@@ -65,8 +65,8 @@ using autoware::behavior_path_planner::GoalPlannerParameters;
 using autoware::behavior_path_planner::PlannerData;
 using autoware::behavior_path_planner::PullOverPath;
 using autoware::behavior_path_planner::utils::parking_departure::calcFeasibleDecelDistance;
+using autoware_internal_planning_msgs::msg::PathWithLaneId;
 using autoware_planning_msgs::msg::LaneletRoute;
-using tier4_planning_msgs::msg::PathWithLaneId;
 
 std::vector<std::string> g_colors = {
   "#F0F8FF", "#FAEBD7", "#00FFFF", "#7FFFD4", "#F0FFFF", "#F5F5DC", "#FFE4C4", "#000000", "#FFEBCD",

@@ -46,7 +46,8 @@ geometry_msgs::msg::Point to_point(const autoware_planning_msgs::msg::PathPoint 
   return point;
 }
 
-geometry_msgs::msg::Point to_point(const tier4_planning_msgs::msg::PathPointWithLaneId & p)
+geometry_msgs::msg::Point to_point(
+  const autoware_internal_planning_msgs::msg::PathPointWithLaneId & p)
 {
   geometry_msgs::msg::Point point;
   point.x = p.point.pose.position.x;
