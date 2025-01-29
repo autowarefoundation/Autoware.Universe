@@ -1,66 +1,65 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "autoware_radar_object_tracker parameter",
-    "type": "object",
-    "definitions": {
-      "autoware_radar_object_tracker ": {
-        "type": "object",
-        "properties": {
-          "car_tracker": {
-            "type": "string",
-            "description": "The tracker type used for cars.",
-            "default": "pass_through_tracker"
-          },
-          "truck_tracker": {
-            "type": "string",
-            "description": "The tracker type used for trucks.",
-            "default": "pass_through_tracker"
-          },
-          "bus_tracker": {
-            "type": "string",
-            "description": "The tracker type used for buses.",
-            "default": "pass_through_tracker"
-          },
-          "pedestrian_tracker": {
-            "type": "string",
-            "description": "The tracker type used for pedestrians.",
-            "default": "pass_through_tracker"
-          },
-          "bicycle_tracker": {
-            "type": "string",
-            "description": "The tracker type used for bicycles.",
-            "default": "pass_through_tracker"
-          },
-          "motorcycle_tracker": {
-            "type": "string",
-            "description": "The tracker type used for motorcycles.",
-            "default": "pass_through_tracker"
-          }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "autoware_radar_object_tracker parameter",
+  "type": "object",
+  "definitions": {
+    "autoware_radar_object_tracker ": {
+      "type": "object",
+      "properties": {
+        "car_tracker": {
+          "type": "string",
+          "description": "The tracker type used for cars.",
+          "default": "pass_through_tracker"
         },
-        "required": [
-          "car_tracker",
-          "truck_tracker",
-          "bus_tracker",
-          "pedestrian_tracker",
-          "bicycle_tracker",
-          "motorcycle_tracker"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "properties": {
-      "/**": {
-        "type": "object",
-        "properties": {
-          "ros__parameters": {
-            "$ref": "#/definitions/autoware_radar_object_tracker "
-          }
+        "truck_tracker": {
+          "type": "string",
+          "description": "The tracker type used for trucks.",
+          "default": "pass_through_tracker"
         },
-        "required": ["ros__parameters"],
-        "additionalProperties": false
-      }
-    },
-    "required": ["/**"],
-    "additionalProperties": false
-  }
-  
+        "bus_tracker": {
+          "type": "string",
+          "description": "The tracker type used for buses.",
+          "default": "pass_through_tracker"
+        },
+        "pedestrian_tracker": {
+          "type": "string",
+          "description": "The tracker type used for pedestrians.",
+          "default": "pass_through_tracker"
+        },
+        "bicycle_tracker": {
+          "type": "string",
+          "description": "The tracker type used for bicycles.",
+          "default": "pass_through_tracker"
+        },
+        "motorcycle_tracker": {
+          "type": "string",
+          "description": "The tracker type used for motorcycles.",
+          "default": "pass_through_tracker"
+        }
+      },
+      "required": [
+        "car_tracker",
+        "truck_tracker",
+        "bus_tracker",
+        "pedestrian_tracker",
+        "bicycle_tracker",
+        "motorcycle_tracker"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/autoware_radar_object_tracker "
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

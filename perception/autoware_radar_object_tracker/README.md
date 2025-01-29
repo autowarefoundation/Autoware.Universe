@@ -74,8 +74,6 @@ Currently, this package supports the following trackers:
 
 Default settings for each tracker are defined in the [./config/tracking/](./config/tracking/), and described in [models.md](models.md).
 
-
-
 {{ json_to_markdown("perception/autoware_radar_object_tracker/schema/data-association_matrix.schema.json") }}
 
 {{ json_to_markdown("perception/autoware_radar_object_tracker/schema/default_tracker.schema.json") }}
@@ -83,20 +81,6 @@ Default settings for each tracker are defined in the [./config/tracking/](./conf
 {{ json_to_markdown("perception/autoware_radar_object_tracker/schema/radar_object_tracker.schema.json") }}
 
 {{ json_to_markdown("perception/autoware_radar_object_tracker/schema/simulation_tracker.schema.json") }}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## Assumptions / Known limits
 
