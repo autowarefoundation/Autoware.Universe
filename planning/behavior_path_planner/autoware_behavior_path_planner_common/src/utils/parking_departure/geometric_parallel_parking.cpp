@@ -119,9 +119,8 @@ std::vector<PathWithLaneId> GeometricParallelParking::generatePullOverPaths(
   const double arc_path_interval = is_forward ? parameters_.forward_parking_path_interval
                                               : parameters_.backward_parking_path_interval;
   std::vector<PathWithLaneId> arc_paths;
-  if (
-    is_forward ? parameters_.forward_parking_use_clothoid
-               : parameters_.backward_parking_use_clothoid) {
+  if (is_forward && parameters_.forward_parking_use_clothoid) {  // clothoid parking only supports
+                                                                 // forward for now
     const double L_min =
       is_forward
         ? std::abs(

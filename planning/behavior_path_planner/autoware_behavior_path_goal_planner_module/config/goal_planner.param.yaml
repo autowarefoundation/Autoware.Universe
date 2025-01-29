@@ -92,7 +92,7 @@
             backward_parking_path_interval: 1.0
             backward_parking_max_steer_angle: 0.4  # 22.9deg
             backward_parking_steer_rate_lim: 0.35
-            backward_parking_use_clothoid: true
+            backward_parking_use_clothoid: false # Not supported yet
 
         # freespace parking
         freespace_parking:
