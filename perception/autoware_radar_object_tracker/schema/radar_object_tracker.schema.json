@@ -1,0 +1,114 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "autoware_radar_object_tracker parameter",
+    "type": "object",
+    "definitions": {
+      "autoware_radar_object_tracker ": {
+        "type": "object",
+        "properties": {
+          "world_frame_id": {
+            "type": "string",
+            "description": "The frame ID of the world coordinate.",
+            "default": "map"
+          },
+          "tracker_lifetime": {
+            "type": "number",
+            "description": "The lifetime of the tracker in seconds.",
+            "default": 1.0
+          },
+          "measurement_count_threshold": {
+            "type": "integer",
+            "description": "The number of measurements required to publish an object.",
+            "default": 3
+          },
+          "publish_rate": {
+            "type": "number",
+            "description": "The rate at which to publish the output.",
+            "default": 10.0
+          },
+          "enable_delay_compensation": {
+            "type": "boolean",
+            "description": "Whether to enable delay compensation.",
+            "default": true
+          },
+          "enable_logging": {
+            "type": "boolean",
+            "description": "Whether to enable logging.",
+            "default": false
+          },
+          "logging_file_path": {
+            "type": "string",
+            "description": "The path to the file where logs should be written.",
+            "default": "/tmp/association_log.json"
+          },
+          "use_distance_based_noise_filtering": {
+            "type": "boolean",
+            "description": "Whether to enable distance-based noise filtering.",
+            "default": true
+          },
+          "minimum_range_threshold": {
+            "type": "number",
+            "description": "Minimum distance threshold for filtering in meters.",
+            "default": 60.0
+          },
+          "use_map_based_noise_filtering": {
+            "type": "boolean",
+            "description": "Whether to enable map-based noise filtering.",
+            "default": true
+          },
+          "max_distance_from_lane": {
+            "type": "number",
+            "description": "The maximum allowable distance from a lane for filtering, in meters.",
+            "default": 5.0
+          },
+          "max_angle_diff_from_lane": {
+            "type": "number",
+            "description": "The maximum angle difference from a lane for filtering, in radians.",
+            "default": 0.785398
+          },
+          "max_lateral_velocity": {
+            "type": "number",
+            "description": "The maximum lateral velocity for filtering, in meters per second.",
+            "default": 7.0
+          },
+          "tracking_config_directory": {
+            "type": "string",
+            "description": "The directory containing the tracking configuration.",
+            "default": "$(find-pkg-share radar_object_tracker)/config/tracking/"
+          }
+        },
+        "required": [
+          "world_frame_id",
+          "tracker_lifetime",
+          "measurement_count_threshold",
+          "publish_rate",
+          "enable_delay_compensation",
+          "enable_logging",
+          "logging_file_path",
+          "use_distance_based_noise_filtering",
+          "minimum_range_threshold",
+          "use_map_based_noise_filtering",
+          "max_distance_from_lane",
+          "max_angle_diff_from_lane",
+          "max_lateral_velocity",
+          "tracking_config_directory"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "properties": {
+      "/**": {
+        "type": "object",
+        "properties": {
+          "ros__parameters": {
+            "$ref": "#/definitions/autoware_radar_object_tracker "
+          }
+        },
+        "required": ["ros__parameters"],
+        "additionalProperties": false
+      }
+    },
+    "required": ["/**"],
+    "additionalProperties": false
+  }
+  
