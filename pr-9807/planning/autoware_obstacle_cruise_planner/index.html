@@ -14324,6 +14324,27 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#stop-planning" class="md-nav__link">
+    Stop planning
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cruise-planning" class="md-nav__link">
+    Cruise planning
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slow-down-planning" class="md-nav__link">
+    Slow down planning
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -14340,6 +14361,54 @@
           <li class="md-nav__item">
   <a href="#flowchart" class="md-nav__link">
     Flowchart
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#algorithm-selection-for-cruise-planner" class="md-nav__link">
+    Algorithm selection for cruise planner
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pid-based-planner" class="md-nav__link">
+    PID-based planner
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimization-based-planner" class="md-nav__link">
+    Optimization-based planner
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minor-functions" class="md-nav__link">
+    Minor functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Minor functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prioritization-of-behavior-modules-stop-point" class="md-nav__link">
+    Prioritization of behavior module's stop point
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-function-to-keep-the-closest-stop-obstacle-in-target-obstacles" class="md-nav__link">
+    A function to keep the closest stop obstacle in target obstacles
   </a>
   
 </li>
@@ -14489,17 +14558,637 @@ This planner data is created first, and then sent to the planning algorithm.</p>
 <h3 id="behavior-determination-against-obstacles">Behavior determination against obstacles<a class="headerlink" href="#behavior-determination-against-obstacles" title="Permanent link">#</a></h3>
 <p>Obstacles for cruising, stopping and slowing down are selected in this order based on their pose and velocity.
 The obstacles not in front of the ego will be ignored.</p>
-<p><img alt="determine_cruise_stop_slow_down" src="./docs/determine_cruise_stop_slow_down.drawio.svg"></p>
+<p><img alt="determine_cruise_stop_slow_down" src="media/determine_cruise_stop_slow_down.drawio.svg"></p>
 <p>The behavior determination flowchart is shown below.</p>
-<p><img alt="behavior_determination_flowchart" src="./docs/behavior_determination_flowchart.drawio.svg"></p>
+<p><img alt="behavior_determination_flowchart" src="media/behavior_determination_flowchart.drawio.svg"></p>
+<h4 id="determine-cruise-vehicles">Determine cruise vehicles<a class="headerlink" href="#determine-cruise-vehicles" title="Permanent link">#</a></h4>
+<p>The obstacles meeting the following condition are determined as obstacles for cruising.</p>
+<ul>
+<li>The lateral distance from the object to the ego's trajectory is smaller than <code>behavior_determination.cruise.max_lat_margin</code>.</li>
+</ul>
+<ul>
+<li>The object type is for cruising according to <code>common.cruise_obstacle_type.*</code>.</li>
+<li>The object is not crossing the ego's trajectory (*1).</li>
+<li>If the object is inside the trajectory.<ul>
+<li>The object type is for inside cruising according to <code>common.cruise_obstacle_type.inside.*</code>.</li>
+<li>The object velocity is larger than <code>behavior_determination.obstacle_velocity_threshold_from_cruise_to_stop</code>.</li>
+</ul>
+</li>
+<li>If the object is outside the trajectory.<ul>
+<li>The object type is for outside cruising according to <code>common.cruise_obstacle_type.outside.*</code>.</li>
+<li>The object velocity is larger than <code>behavior_determination.cruise.outside_obstacle.obstacle_velocity_threshold</code>.</li>
+<li>The highest confident predicted path collides with the ego's trajectory.</li>
+<li>Its collision's period is larger than <code>behavior_determination.cruise.outside_obstacle.ego_obstacle_overlap_time_threshold</code>.</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>common.cruise_obstacle_type.inside.unknown</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for cruising</td>
+</tr>
+<tr>
+<td><code>common.cruise_obstacle_type.inside.car</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for cruising</td>
+</tr>
+<tr>
+<td><code>common.cruise_obstacle_type.inside.truck</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for cruising</td>
+</tr>
+<tr>
+<td>...</td>
+<td>bool</td>
+<td>...</td>
+</tr>
+<tr>
+<td><code>common.cruise_obstacle_type.outside.unknown</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for cruising</td>
+</tr>
+<tr>
+<td><code>common.cruise_obstacle_type.outside.car</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for cruising</td>
+</tr>
+<tr>
+<td><code>common.cruise_obstacle_type.outside.truck</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for cruising</td>
+</tr>
+<tr>
+<td>...</td>
+<td>bool</td>
+<td>...</td>
+</tr>
+<tr>
+<td><code>behavior_determination.cruise.max_lat_margin</code></td>
+<td>double</td>
+<td>maximum lateral margin for cruise obstacles</td>
+</tr>
+<tr>
+<td><code>behavior_determination.obstacle_velocity_threshold_from_cruise_to_stop</code></td>
+<td>double</td>
+<td>maximum obstacle velocity for cruise obstacle inside the trajectory</td>
+</tr>
+<tr>
+<td><code>behavior_determination.cruise.outside_obstacle.obstacle_velocity_threshold</code></td>
+<td>double</td>
+<td>maximum obstacle velocity for cruise obstacle outside the trajectory</td>
+</tr>
+<tr>
+<td><code>behavior_determination.cruise.outside_obstacle.ego_obstacle_overlap_time_threshold</code></td>
+<td>double</td>
+<td>maximum overlap time of the collision between the ego and obstacle</td>
+</tr>
+</tbody>
+</table>
+<h5 id="yield-for-vehicles-that-might-cut-in-into-the-egos-lane">Yield for vehicles that might cut in into the ego's lane<a class="headerlink" href="#yield-for-vehicles-that-might-cut-in-into-the-egos-lane" title="Permanent link">#</a></h5>
+<p>It is also possible to yield (cruise) behind vehicles in neighbor lanes if said vehicles might cut in the ego vehicle's current lane.</p>
+<p>The obstacles meeting the following condition are determined as obstacles for yielding (cruising).</p>
+<ul>
+<li>The object type is for cruising according to <code>common.cruise_obstacle_type.*</code> and it is moving with a speed greater than <code>behavior_determination.cruise.yield.stopped_obstacle_velocity_threshold</code>.</li>
+<li>The object is not crossing the ego's trajectory (*1).</li>
+<li>There is another object of type <code>common.cruise_obstacle_type.*</code> stopped in front of the moving obstacle.</li>
+<li>The lateral distance (using the ego's trajectory as reference) between both obstacles is less than <code>behavior_determination.cruise.yield.max_lat_dist_between_obstacles</code></li>
+<li>Both obstacles, moving and stopped, are within <code>behavior_determination.cruise.yield.lat_distance_threshold</code> and <code>behavior_determination.cruise.yield.lat_distance_threshold</code> + <code>behavior_determination.cruise.yield.max_lat_dist_between_obstacles</code> lateral distance from the ego's trajectory respectively.</li>
+</ul>
+<p>If the above conditions are met, the ego vehicle will cruise behind the moving obstacle, yielding to it so it can cut in into the ego's lane to avoid the stopped obstacle.</p>
+<h4 id="determine-stop-vehicles">Determine stop vehicles<a class="headerlink" href="#determine-stop-vehicles" title="Permanent link">#</a></h4>
+<p>Among obstacles which are not for cruising, the obstacles meeting the following condition are determined as obstacles for stopping.</p>
+<ul>
+<li>The object type is for stopping according to <code>common.stop_obstacle_type.*</code>.</li>
+<li>The lateral distance from the object to the ego's trajectory is smaller than <code>behavior_determination.stop.max_lat_margin</code>.</li>
+<li>The object velocity along the ego's trajectory is smaller than <code>behavior_determination.obstacle_velocity_threshold_from_stop_to_cruise</code>.</li>
+<li>The object<ul>
+<li>does not cross the ego's trajectory (*1)</li>
+<li>with the velocity smaller than <code>behavior_determination.crossing_obstacle.obstacle_velocity_threshold</code></li>
+<li>and its collision time margin is large enough (*2).</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>common.stop_obstacle_type.unknown</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for stopping</td>
+</tr>
+<tr>
+<td><code>common.stop_obstacle_type.car</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for stopping</td>
+</tr>
+<tr>
+<td><code>common.stop_obstacle_type.truck</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for stopping</td>
+</tr>
+<tr>
+<td>...</td>
+<td>bool</td>
+<td>...</td>
+</tr>
+<tr>
+<td><code>behavior_determination.stop.max_lat_margin</code></td>
+<td>double</td>
+<td>maximum lateral margin for stop obstacles</td>
+</tr>
+<tr>
+<td><code>behavior_determination.crossing_obstacle.obstacle_velocity_threshold</code></td>
+<td>double</td>
+<td>maximum crossing obstacle velocity to ignore</td>
+</tr>
+<tr>
+<td><code>behavior_determination.obstacle_velocity_threshold_from_stop_to_cruise</code></td>
+<td>double</td>
+<td>maximum obstacle velocity for stop</td>
+</tr>
+</tbody>
+</table>
+<h4 id="determine-slow-down-vehicles">Determine slow down vehicles<a class="headerlink" href="#determine-slow-down-vehicles" title="Permanent link">#</a></h4>
+<p>Among obstacles which are not for cruising and stopping, the obstacles meeting the following condition are determined as obstacles for slowing down.</p>
+<ul>
+<li>The object type is for slowing down according to <code>common.slow_down_obstacle_type.*</code>.</li>
+<li>The lateral distance from the object to the ego's trajectory is smaller than <code>behavior_determination.slow_down.max_lat_margin</code>.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>common.slow_down_obstacle_type.unknown</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for slowing down</td>
+</tr>
+<tr>
+<td><code>common.slow_down_obstacle_type.car</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for slowing down</td>
+</tr>
+<tr>
+<td><code>common.slow_down_obstacle_type.truck</code></td>
+<td>bool</td>
+<td>flag to consider unknown objects for slowing down</td>
+</tr>
+<tr>
+<td>...</td>
+<td>bool</td>
+<td>...</td>
+</tr>
+<tr>
+<td><code>behavior_determination.slow_down.max_lat_margin</code></td>
+<td>double</td>
+<td>maximum lateral margin for slow down obstacles</td>
+</tr>
+</tbody>
+</table>
+<h4 id="note">NOTE<a class="headerlink" href="#note" title="Permanent link">#</a></h4>
+<h5 id="1-crossing-obstacles">*1: Crossing obstacles<a class="headerlink" href="#1-crossing-obstacles" title="Permanent link">#</a></h5>
+<p>Crossing obstacle is the object whose orientation's yaw angle against the ego's trajectory is smaller than <code>behavior_determination.crossing_obstacle.obstacle_traj_angle_threshold</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>behavior_determination.crossing_obstacle.obstacle_traj_angle_threshold</code></td>
+<td>double</td>
+<td>maximum angle against the ego's trajectory to judge the obstacle is crossing the trajectory [rad]</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2-enough-collision-time-margin">*2: Enough collision time margin<a class="headerlink" href="#2-enough-collision-time-margin" title="Permanent link">#</a></h5>
+<p>We predict the collision area and its time by the ego with a constant velocity motion and the obstacle with its predicted path.
+Then, we calculate a collision time margin which is the difference of the time when the ego will be inside the collision area and the obstacle will be inside the collision area.
+When this time margin is smaller than <code>behavior_determination.stop.crossing_obstacle.collision_time_margin</code>, the margin is not enough.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>behavior_determination.stop.crossing_obstacle.collision_time_margin</code></td>
+<td>double</td>
+<td>maximum collision time margin of the ego and obstacle</td>
+</tr>
+</tbody>
+</table>
+<h3 id="stop-planning">Stop planning<a class="headerlink" href="#stop-planning" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>common.min_strong_accel</code></td>
+<td>double</td>
+<td>ego's minimum acceleration to stop [m/ss]</td>
+</tr>
+<tr>
+<td><code>common.safe_distance_margin</code></td>
+<td>double</td>
+<td>distance with obstacles for stop [m]</td>
+</tr>
+<tr>
+<td><code>common.terminal_safe_distance_margin</code></td>
+<td>double</td>
+<td>terminal_distance with obstacles for stop, which cannot be exceed safe distance margin [m]</td>
+</tr>
+</tbody>
+</table>
+<p>The role of the stop planning is keeping a safe distance with static vehicle objects or dynamic/static non vehicle objects.</p>
+<p>The stop planning just inserts the stop point in the trajectory to keep a distance with obstacles.
+The safe distance is parameterized as <code>common.safe_distance_margin</code>.
+When it stops at the end of the trajectory, and obstacle is on the same point, the safe distance becomes <code>terminal_safe_distance_margin</code>.</p>
+<p>When inserting the stop point, the required acceleration for the ego to stop in front of the stop point is calculated.
+If the acceleration is less than <code>common.min_strong_accel</code>, the stop planning will be cancelled since this package does not assume a strong sudden brake for emergency.</p>
+<h3 id="cruise-planning">Cruise planning<a class="headerlink" href="#cruise-planning" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>common.safe_distance_margin</code></td>
+<td>double</td>
+<td>minimum distance with obstacles for cruise [m]</td>
+</tr>
+</tbody>
+</table>
+<p>The role of the cruise planning is keeping a safe distance with dynamic vehicle objects with smoothed velocity transition.
+This includes not only cruising a front vehicle, but also reacting a cut-in and cut-out vehicle.</p>
+<p>The safe distance is calculated dynamically based on the Responsibility-Sensitive Safety (RSS) by the following equation.</p>
+<div class="arithmatex">\[
+d_{rss} = v_{ego} t_{idling} + \frac{1}{2} a_{ego} t_{idling}^2 + \frac{v_{ego}^2}{2 a_{ego}} - \frac{v_{obstacle}^2}{2 a_{obstacle}},
+\]</div>
+<p>assuming that <span class="arithmatex">\(d_{rss}\)</span> is the calculated safe distance, <span class="arithmatex">\(t_{idling}\)</span> is the idling time for the ego to detect the front vehicle's deceleration, <span class="arithmatex">\(v_{ego}\)</span> is the ego's current velocity, <span class="arithmatex">\(v_{obstacle}\)</span> is the front obstacle's current velocity, <span class="arithmatex">\(a_{ego}\)</span> is the ego's acceleration, and <span class="arithmatex">\(a_{obstacle}\)</span> is the obstacle's acceleration.
+These values are parameterized as follows. Other common values such as ego's minimum acceleration is defined in <code>common.param.yaml</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>common.idling_time</code></td>
+<td>double</td>
+<td>idling time for the ego to detect the front vehicle starting deceleration [s]</td>
+</tr>
+<tr>
+<td><code>common.min_ego_accel_for_rss</code></td>
+<td>double</td>
+<td>ego's acceleration for RSS [m/ss]</td>
+</tr>
+<tr>
+<td><code>common.min_object_accel_for_rss</code></td>
+<td>double</td>
+<td>front obstacle's acceleration for RSS [m/ss]</td>
+</tr>
+</tbody>
+</table>
+<p>The detailed formulation is as follows.</p>
+<div class="arithmatex">\[
+\begin{align}
+d_{error} &amp; = d - d_{rss} \\
+d_{normalized} &amp; = lpf(d_{error} / d_{obstacle}) \\
+d_{quad, normalized} &amp; = sign(d_{normalized}) *d_{normalized}*d_{normalized} \\
+v_{pid} &amp; = pid(d_{quad, normalized}) \\
+v_{add} &amp; = v_{pid} &gt; 0 ? v_{pid}* w_{acc} : v_{pid} \\
+v_{target} &amp; = max(v_{ego} + v_{add}, v_{min, cruise})
+\end{align}
+\]</div>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>d</code></td>
+<td>actual distance to obstacle</td>
+</tr>
+<tr>
+<td><code>d_{rss}</code></td>
+<td>ideal distance to obstacle based on RSS</td>
+</tr>
+<tr>
+<td><code>v_{min, cruise}</code></td>
+<td><code>min_cruise_target_vel</code></td>
+</tr>
+<tr>
+<td><code>w_{acc}</code></td>
+<td><code>output_ratio_during_accel</code></td>
+</tr>
+<tr>
+<td><code>lpf(val)</code></td>
+<td>apply low-pass filter to <code>val</code></td>
+</tr>
+<tr>
+<td><code>pid(val)</code></td>
+<td>apply pid to <code>val</code></td>
+</tr>
+</tbody>
+</table>
 <h4 id="block-diagram">Block diagram<a class="headerlink" href="#block-diagram" title="Permanent link">#</a></h4>
-<p><img alt="cruise_planning_block_diagram" src="./docs/cruise_planning_block_diagram.drawio.svg"></p>
+<p><img alt="cruise_planning_block_diagram" src="media/cruise_planning_block_diagram.drawio.svg"></p>
+<h3 id="slow-down-planning">Slow down planning<a class="headerlink" href="#slow-down-planning" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>slow_down.labels</code></td>
+<td>vector(string)</td>
+<td>A vector of labels for customizing obstacle-label-based slow down behavior. Each label represents an obstacle type that will be treated differently when applying slow down. The possible labels are ("default" (Mandatory), "unknown","car","truck","bus","trailer","motorcycle","bicycle" or "pedestrian")</td>
+</tr>
+<tr>
+<td><code>slow_down.default.static.min_lat_velocity</code></td>
+<td>double</td>
+<td>minimum velocity to linearly calculate slow down velocity [m]. Note: This default value will be used when the detected obstacle label does not match any of the slow_down.labels and the obstacle is considered to be static, or not moving</td>
+</tr>
+<tr>
+<td><code>slow_down.default.static.max_lat_velocity</code></td>
+<td>double</td>
+<td>maximum velocity to linearly calculate slow down velocity [m]. Note: This default value will be used when the detected obstacle label does not match any of the slow_down.labels and the obstacle is considered to be static, or not moving</td>
+</tr>
+<tr>
+<td><code>slow_down.default.static.min_lat_margin</code></td>
+<td>double</td>
+<td>minimum lateral margin to linearly calculate slow down velocity [m]. Note: This default value will be used when the detected obstacle label does not match any of the slow_down.labels and the obstacle is considered to be static, or not moving</td>
+</tr>
+<tr>
+<td><code>slow_down.default.static.max_lat_margin</code></td>
+<td>double</td>
+<td>maximum lateral margin to linearly calculate slow down velocity [m]. Note: This default value will be used when the detected obstacle label does not match any of the slow_down.labels and the obstacle is considered to be static, or not moving</td>
+</tr>
+<tr>
+<td><code>slow_down.default.moving.min_lat_velocity</code></td>
+<td>double</td>
+<td>minimum velocity to linearly calculate slow down velocity [m]. Note: This default value will be used when the detected obstacle label does not match any of the slow_down.labels and the obstacle is considered to be moving</td>
+</tr>
+<tr>
+<td><code>slow_down.default.moving.max_lat_velocity</code></td>
+<td>double</td>
+<td>maximum velocity to linearly calculate slow down velocity [m]. Note: This default value will be used when the detected obstacle label does not match any of the slow_down.labels and the obstacle is considered to be moving</td>
+</tr>
+<tr>
+<td><code>slow_down.default.moving.min_lat_margin</code></td>
+<td>double</td>
+<td>minimum lateral margin to linearly calculate slow down velocity [m]. Note: This default value will be used when the detected obstacle label does not match any of the slow_down.labels and the obstacle is considered to be moving</td>
+</tr>
+<tr>
+<td><code>slow_down.default.moving.max_lat_margin</code></td>
+<td>double</td>
+<td>maximum lateral margin to linearly calculate slow down velocity [m]. Note: This default value will be used when the detected obstacle label does not match any of the slow_down.labels and the obstacle is considered to be moving</td>
+</tr>
+<tr>
+<td><code>(optional) slow_down."label".(static &amp; moving).min_lat_velocity</code></td>
+<td>double</td>
+<td>minimum velocity to linearly calculate slow down velocity [m]. Note: only for obstacles specified in <code>slow_down.labels</code>. Requires a <code>static</code> and a <code>moving</code> value</td>
+</tr>
+<tr>
+<td><code>(optional) slow_down."label".(static &amp; moving).max_lat_velocity</code></td>
+<td>double</td>
+<td>maximum velocity to linearly calculate slow down velocity [m]. Note: only for obstacles specified in <code>slow_down.labels</code>. Requires a <code>static</code> and a <code>moving</code> value</td>
+</tr>
+<tr>
+<td><code>(optional) slow_down."label".(static &amp; moving).min_lat_margin</code></td>
+<td>double</td>
+<td>minimum lateral margin to linearly calculate slow down velocity [m]. Note: only for obstacles specified in <code>slow_down.labels</code>. Requires a <code>static</code> and a <code>moving</code> value</td>
+</tr>
+<tr>
+<td><code>(optional) slow_down."label".(static &amp; moving).max_lat_margin</code></td>
+<td>double</td>
+<td>maximum lateral margin to linearly calculate slow down velocity [m]. Note: only for obstacles specified in <code>slow_down.labels</code>. Requires a <code>static</code> and a <code>moving</code> value</td>
+</tr>
+</tbody>
+</table>
+<p>The role of the slow down planning is inserting slow down velocity in the trajectory where the trajectory points are close to the obstacles. The parameters can be customized depending on the obstacle type (see <code>slow_down.labels</code>), making it possible to adjust the slow down behavior depending if the obstacle is a pedestrian, bicycle, car, etc. Each obstacle type has a <code>static</code> and a <code>moving</code> parameter set, so it is possible to customize the slow down response of the ego vehicle according to the obstacle type and if it is moving or not. If an obstacle is determined to be moving, the corresponding <code>moving</code> set of parameters will be used to compute the vehicle slow down, otherwise, the <code>static</code> parameters will be used. The <code>static</code> and <code>moving</code> separation is useful for customizing the ego vehicle slow down behavior to, for example, slow down more significantly when passing stopped vehicles that might cause occlusion or that might suddenly open its doors.</p>
+<p>An obstacle is classified as <code>static</code> if its total speed is less than the <code>moving_object_speed_threshold</code> parameter. Furthermore, a hysteresis based approach is used to avoid chattering, it uses the <code>moving_object_hysteresis_range</code> parameter range and the obstacle's previous state (<code>moving</code> or <code>static</code>) to determine if the obstacle is moving or not. In other words, if an obstacle was previously classified as <code>static</code>, it will not change its classification to <code>moving</code> unless its total speed is greater than <code>moving_object_speed_threshold</code> + <code>moving_object_hysteresis_range</code>. Likewise, an obstacle previously classified as <code>moving</code>, will only change to <code>static</code> if its speed is lower than <code>moving_object_speed_threshold</code> - <code>moving_object_hysteresis_range</code>.</p>
+<p>The closest point on the obstacle to the ego's trajectory is calculated.
+Then, the slow down velocity is calculated by linear interpolation with the distance between the point and trajectory as follows.</p>
+<p><img alt="slow_down_velocity_calculation" src="media/slow_down_velocity_calculation.svg"></p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v_{out}</code></td>
+<td>calculated velocity for slow down</td>
+</tr>
+<tr>
+<td><code>v_{min}</code></td>
+<td><code>slow_down.min_lat_velocity</code></td>
+</tr>
+<tr>
+<td><code>v_{max}</code></td>
+<td><code>slow_down.max_lat_velocity</code></td>
+</tr>
+<tr>
+<td><code>l_{min}</code></td>
+<td><code>slow_down.min_lat_margin</code></td>
+</tr>
+<tr>
+<td><code>l_{max}</code></td>
+<td><code>slow_down.max_lat_margin</code></td>
+</tr>
+<tr>
+<td><code>l'_{max}</code></td>
+<td><code>behavior_determination.slow_down.max_lat_margin</code></td>
+</tr>
+</tbody>
+</table>
+<p>The calculated velocity is inserted in the trajectory where the obstacle is inside the area with <code>behavior_determination.slow_down.max_lat_margin</code>.</p>
+<p><img alt="slow_down_planning" src="media/slow_down_planning.drawio.svg"></p>
 <h2 id="implementation">Implementation<a class="headerlink" href="#implementation" title="Permanent link">#</a></h2>
 <h3 id="flowchart">Flowchart<a class="headerlink" href="#flowchart" title="Permanent link">#</a></h3>
 <p>Successive functions consist of <code>autoware_obstacle_cruise_planner</code> as follows.</p>
 <p>Various algorithms for stop and cruise planning will be implemented, and one of them is designated depending on the use cases.
 The core algorithm implementation <code>generateTrajectory</code> depends on the designated algorithm.</p>
 <p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U3R5bGVUeXBlPSJ0ZXh0L2NzcyIgZGF0YS1kaWFncmFtLXR5cGU9IkFDVElWSVRZIiBoZWlnaHQ9IjEwOTlweCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgc3R5bGU9IndpZHRoOjM0MHB4O2hlaWdodDoxMDk5cHg7YmFja2dyb3VuZDojRkZGRkZGOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMzQwIDEwOTkiIHdpZHRoPSIzNDBweCIgem9vbUFuZFBhbj0ibWFnbmlmeSI+PHRpdGxlPm9uVHJhamVjdG9yeTwvdGl0bGU+PGRlZnMvPjxnPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iYm9sZCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxMDAuNDE5OSIgeD0iMTE4Ljc2MzciIHk9IjMyLjk5NTEiPm9uVHJhamVjdG9yeTwvdGV4dD48ZWxsaXBzZSBjeD0iMTcwLjQ3MzYiIGN5PSI1Ny4yOTY5IiBmaWxsPSIjMjIyMjIyIiByeD0iMTAiIHJ5PSIxMCIgc3R5bGU9InN0cm9rZTojMjIyMjIyO3N0cm9rZS13aWR0aDoxOyIvPjxyZWN0IGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMC4wMDAwMCIgaGVpZ2h0PSIyNDQuMTcxOSIgc3R5bGU9InN0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7IiB3aWR0aD0iMzE4Ljk0NzMiIHg9IjExIiB5PSI3Ny4yOTY5Ii8+PHBhdGggZD0iTTE2MC4xNTkyLDc3LjI5NjkgTDE2MC4xNTkyLDg2LjU5MzggTDE1MC4xNTkyLDk2LjU5MzggTDExLDk2LjU5MzggIiBmaWxsPSIjRkZGRkZGIiBmaWxsLW9wYWNpdHk9IjAuMDAwMDAiIHN0eWxlPSJzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS41OyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjEzOS4xNTkyIiB4PSIxNCIgeT0iOTEuMjkyIj5jb252ZXJ0VG9PYnN0YWNsZXM8L3RleHQ+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjE1MS45MTgiIHg9Ijk0LjUxNDYiIHk9IjExMy41OTM4Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTMxLjkxOCIgeD0iMTA0LjUxNDYiIHk9IjEzNC43MzI0Ij5jaGVjayBvYnN0YWNsZSdzIGxhYmVsPC90ZXh0PjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIyMTEuODQ3NyIgeD0iNjQuNTQ5OCIgeT0iMTY3LjU2MjUiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxOTEuODQ3NyIgeD0iNzQuNTQ5OCIgeT0iMTg4LjcwMTIiPmNoZWNrIG9ic3RhY2xlIGlzIGluIGZyb250IG9mIGVnbzwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMjk4Ljk0NzMiIHg9IjIxIiB5PSIyMjEuNTMxMyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjI3OC45NDczIiB4PSIzMSIgeT0iMjQyLjY2OTkiPmNoZWNrIG9ic3RhY2xlJ3MgbGF0ZXJhbCBkZXZpYXRpb24gdG8gdHJhamVjdG9yeTwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMTY3LjQwNDMiIHg9Ijg2Ljc3MTUiIHk9IjI3NS41Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTQ3LjQwNDMiIHg9Ijk2Ljc3MTUiIHk9IjI5Ni42Mzg3Ij5jcmVhdGUgb2JzdGFjbGUgaW5zdGFuY2U8L3RleHQ+PHJlY3QgZmlsbD0iI0ZGRkZGRiIgZmlsbC1vcGFjaXR5PSIwLjAwMDAwIiBoZWlnaHQ9IjMzNi40Mzc1IiBzdHlsZT0ic3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuNTsiIHdpZHRoPSIzMDIuMTg3NSIgeD0iMTkuMzc5OSIgeT0iMzMyLjI3MDUiLz48cGF0aCBkPSJNMzExLjU2NzQsMzMyLjI3MDUgTDMxMS41Njc0LDM0MS41Njc0IEwzMDEuNTY3NCwzNTEuNTY3NCBMMTkuMzc5OSwzNTEuNTY3NCAiIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMC4wMDAwMCIgc3R5bGU9InN0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjgyLjE4NzUiIHg9IjIyLjM3OTkiIHk9IjM0Ni4yNjU2Ij5kZXRlcm1pbmVFZ29CZWhhdmlvckFnYWluc3RPYnN0YWNsZXM8L3RleHQ+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjE5My45NTMxIiB4PSI3My40OTcxIiB5PSIzNjguNTY3NCIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjE3My45NTMxIiB4PSI4My40OTcxIiB5PSIzODkuNzA2MSI+cmVzYW1wbGVFeHRlbmRlZFRyYWplY3Rvcnk8L3RleHQ+PHJlY3QgZmlsbD0iI0ZGRkZGRiIgZmlsbC1vcGFjaXR5PSIwLjAwMDAwIiBoZWlnaHQ9IjE5MC4yMDMxIiBzdHlsZT0ic3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuNTsiIHdpZHRoPSIxOTMuMTUyMyIgeD0iNzMuODk3NSIgeT0iNDEyLjUzNjEiLz48cGF0aCBkPSJNMjA0LjgyNTIsNDEyLjUzNjEgTDIwNC44MjUyLDQyMS44MzMgTDE5NC44MjUyLDQzMS44MzMgTDczLjg5NzUsNDMxLjgzMyAiIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMC4wMDAwMCIgc3R5bGU9InN0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTIwLjkyNzciIHg9Ijc2Ljg5NzUiIHk9IjQyNi41MzEzIj5mb3IgZWFjaCBvYnN0YWNsZTwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMTQ4LjkyOTciIHg9Ijk2LjAwODgiIHk9IjQ0OC44MzMiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxMjguOTI5NyIgeD0iMTA2LjAwODgiIHk9IjQ2OS45NzE3Ij5jcmVhdGVDcnVpc2VPYnN0YWNsZTwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMTM4LjMyNDIiIHg9IjEwMS4zMTE1IiB5PSI1MDIuODAxOCIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjExOC4zMjQyIiB4PSIxMTEuMzExNSIgeT0iNTIzLjk0MDQiPmNyZWF0ZVN0b3BPYnN0YWNsZTwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMTczLjE1MjMiIHg9IjgzLjg5NzUiIHk9IjU1Ni43NzA1Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTUzLjE1MjMiIHg9IjkzLjg5NzUiIHk9IjU3Ny45MDkyIj5jcmVhdGVTbG93RG93bk9ic3RhY2xlPC90ZXh0PjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxNzguMzE0NSIgeD0iODEuMzE2NCIgeT0iNjIyLjczOTMiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxNTguMzE0NSIgeD0iOTEuMzE2NCIgeT0iNjQzLjg3NzkiPnVwZGF0ZSBwcmV2aW91cyBvYnN0YWNsZXM8L3RleHQ+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjEzMi40NTkiIHg9IjEwNC4yNDQxIiB5PSI2ODguNzA4Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTEyLjQ1OSIgeD0iMTE0LjI0NDEiIHk9IjcwOS44NDY3Ij5jcmVhdGVQbGFubmVyRGF0YTwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMTYyLjY1ODIiIHg9Ijg5LjE0NDUiIHk9Ijc0Mi42NzY4Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTQyLjY1ODIiIHg9Ijk5LjE0NDUiIHk9Ijc2My44MTU0Ij5nZW5lcmF0ZVN0b3BUcmFqZWN0b3J5PC90ZXh0PjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxNzMuMjYzNyIgeD0iODMuODQxOCIgeT0iNzk2LjY0NTUiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxNTMuMjYzNyIgeD0iOTMuODQxOCIgeT0iODE3Ljc4NDIiPmdlbmVyYXRlQ3J1aXNlVHJhamVjdG9yeTwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMTk3LjQ4NjMiIHg9IjcxLjczMDUiIHk9Ijg1MC42MTQzIi8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTc3LjQ4NjMiIHg9IjgxLjczMDUiIHk9Ijg3MS43NTI5Ij5nZW5lcmF0ZVNsb3dEb3duVHJhamVjdG9yeTwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMTI1LjU2ODQiIHg9IjEwNy42ODk1IiB5PSI5MDQuNTgzIi8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTA1LjU2ODQiIHg9IjExNy42ODk1IiB5PSI5MjUuNzIxNyI+cHVibGlzaCB0cmFqZWN0b3J5PC90ZXh0PjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxMzEuNDgwNSIgeD0iMTA0LjczMzQiIHk9Ijk1OC41NTE4Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTExLjQ4MDUiIHg9IjExNC43MzM0IiB5PSI5NzkuNjkwNCI+cHVibGlzaERlYnVnRGF0YTwvdGV4dD48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iMjIxLjY2OCIgeD0iNTkuNjM5NiIgeT0iMTAxMi41MjA1Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjAxLjY2OCIgeD0iNjkuNjM5NiIgeT0iMTAzMy42NTkyIj5wdWJsaXNoIGFuZCBwcmludCBjYWxjdWxhdGlvbiB0aW1lPC90ZXh0PjxlbGxpcHNlIGN4PSIxNzAuNDczNiIgY3k9IjEwNzcuNDg5MyIgZmlsbD0iI0ZGRkZGRiIgZmlsbC1vcGFjaXR5PSIwLjAwMDAwIiByeD0iMTEiIHJ5PSIxMSIgc3R5bGU9InN0cm9rZTojMjIyMjIyO3N0cm9rZS13aWR0aDoxOyIvPjxlbGxpcHNlIGN4PSIxNzAuNDczNiIgY3k9IjEwNzcuNDg5MyIgZmlsbD0iIzIyMjIyMiIgcng9IjYiIHJ5PSI2IiBzdHlsZT0ic3Ryb2tlOiMyMjIyMjI7c3Ryb2tlLXdpZHRoOjE7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIgeDE9IjE3MC40NzM2IiB4Mj0iMTcwLjQ3MzYiIHkxPSIxNDcuNTYyNSIgeTI9IjE2Ny41NjI1Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIxNjYuNDczNiwxNTcuNTYyNSwxNzAuNDczNiwxNjcuNTYyNSwxNzQuNDczNiwxNTcuNTYyNSwxNzAuNDczNiwxNjEuNTYyNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiIHgxPSIxNzAuNDczNiIgeDI9IjE3MC40NzM2IiB5MT0iMjAxLjUzMTMiIHkyPSIyMjEuNTMxMyIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTY2LjQ3MzYsMjExLjUzMTMsMTcwLjQ3MzYsMjIxLjUzMTMsMTc0LjQ3MzYsMjExLjUzMTMsMTcwLjQ3MzYsMjE1LjUzMTMiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7IiB4MT0iMTcwLjQ3MzYiIHgyPSIxNzAuNDczNiIgeTE9IjI1NS41IiB5Mj0iMjc1LjUiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE2Ni40NzM2LDI2NS41LDE3MC40NzM2LDI3NS41LDE3NC40NzM2LDI2NS41LDE3MC40NzM2LDI2OS41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIgeDE9IjE3MC40NzM2IiB4Mj0iMTcwLjQ3MzYiIHkxPSI2Ny4yOTY5IiB5Mj0iMTEzLjU5MzgiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE2Ni40NzM2LDEwMy41OTM4LDE3MC40NzM2LDExMy41OTM4LDE3NC40NzM2LDEwMy41OTM4LDE3MC40NzM2LDEwNy41OTM4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIgeDE9IjE3MC40NzM2IiB4Mj0iMTcwLjQ3MzYiIHkxPSI0ODIuODAxOCIgeTI9IjUwMi44MDE4Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIxNjYuNDczNiw0OTIuODAxOCwxNzAuNDczNiw1MDIuODAxOCwxNzQuNDczNiw0OTIuODAxOCwxNzAuNDczNiw0OTYuODAxOCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiIHgxPSIxNzAuNDczNiIgeDI9IjE3MC40NzM2IiB5MT0iNTM2Ljc3MDUiIHkyPSI1NTYuNzcwNSIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTY2LjQ3MzYsNTQ2Ljc3MDUsMTcwLjQ3MzYsNTU2Ljc3MDUsMTc0LjQ3MzYsNTQ2Ljc3MDUsMTcwLjQ3MzYsNTUwLjc3MDUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7IiB4MT0iMTcwLjQ3MzYiIHgyPSIxNzAuNDczNiIgeTE9IjQwMi41MzYxIiB5Mj0iNDQ4LjgzMyIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTY2LjQ3MzYsNDM4LjgzMywxNzAuNDczNiw0NDguODMzLDE3NC40NzM2LDQzOC44MzMsMTcwLjQ3MzYsNDQyLjgzMyIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiIHgxPSIxNzAuNDczNiIgeDI9IjE3MC40NzM2IiB5MT0iNTkwLjczOTMiIHkyPSI2MjIuNzM5MyIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTY2LjQ3MzYsNjEyLjczOTMsMTcwLjQ3MzYsNjIyLjczOTMsMTc0LjQ3MzYsNjEyLjczOTMsMTcwLjQ3MzYsNjE2LjczOTMiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7IiB4MT0iMTcwLjQ3MzYiIHgyPSIxNzAuNDczNiIgeTE9IjMwOS40Njg4IiB5Mj0iMzY4LjU2NzQiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE2Ni40NzM2LDM1OC41Njc0LDE3MC40NzM2LDM2OC41Njc0LDE3NC40NzM2LDM1OC41Njc0LDE3MC40NzM2LDM2Mi41Njc0IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIgeDE9IjE3MC40NzM2IiB4Mj0iMTcwLjQ3MzYiIHkxPSI2NTYuNzA4IiB5Mj0iNjg4LjcwOCIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTY2LjQ3MzYsNjc4LjcwOCwxNzAuNDczNiw2ODguNzA4LDE3NC40NzM2LDY3OC43MDgsMTcwLjQ3MzYsNjgyLjcwOCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiIHgxPSIxNzAuNDczNiIgeDI9IjE3MC40NzM2IiB5MT0iNzIyLjY3NjgiIHkyPSI3NDIuNjc2OCIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTY2LjQ3MzYsNzMyLjY3NjgsMTcwLjQ3MzYsNzQyLjY3NjgsMTc0LjQ3MzYsNzMyLjY3NjgsMTcwLjQ3MzYsNzM2LjY3NjgiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7IiB4MT0iMTcwLjQ3MzYiIHgyPSIxNzAuNDczNiIgeTE9Ijc3Ni42NDU1IiB5Mj0iNzk2LjY0NTUiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE2Ni40NzM2LDc4Ni42NDU1LDE3MC40NzM2LDc5Ni42NDU1LDE3NC40NzM2LDc4Ni42NDU1LDE3MC40NzM2LDc5MC42NDU1IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIgeDE9IjE3MC40NzM2IiB4Mj0iMTcwLjQ3MzYiIHkxPSI4MzAuNjE0MyIgeTI9Ijg1MC42MTQzIi8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIxNjYuNDczNiw4NDAuNjE0MywxNzAuNDczNiw4NTAuNjE0MywxNzQuNDczNiw4NDAuNjE0MywxNzAuNDczNiw4NDQuNjE0MyIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiIHgxPSIxNzAuNDczNiIgeDI9IjE3MC40NzM2IiB5MT0iODg0LjU4MyIgeTI9IjkwNC41ODMiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE2Ni40NzM2LDg5NC41ODMsMTcwLjQ3MzYsOTA0LjU4MywxNzQuNDczNiw4OTQuNTgzLDE3MC40NzM2LDg5OC41ODMiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MTsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7IiB4MT0iMTcwLjQ3MzYiIHgyPSIxNzAuNDczNiIgeTE9IjkzOC41NTE4IiB5Mj0iOTU4LjU1MTgiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE2Ni40NzM2LDk0OC41NTE4LDE3MC40NzM2LDk1OC41NTE4LDE3NC40NzM2LDk0OC41NTE4LDE3MC40NzM2LDk1Mi41NTE4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIgeDE9IjE3MC40NzM2IiB4Mj0iMTcwLjQ3MzYiIHkxPSI5OTIuNTIwNSIgeTI9IjEwMTIuNTIwNSIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTY2LjQ3MzYsMTAwMi41MjA1LDE3MC40NzM2LDEwMTIuNTIwNSwxNzQuNDczNiwxMDAyLjUyMDUsMTcwLjQ3MzYsMTAwNi41MjA1IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjE7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIgeDE9IjE3MC40NzM2IiB4Mj0iMTcwLjQ3MzYiIHkxPSIxMDQ2LjQ4OTMiIHkyPSIxMDY2LjQ4OTMiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE2Ni40NzM2LDEwNTYuNDg5MywxNzAuNDczNiwxMDY2LjQ4OTMsMTc0LjQ3MzYsMTA1Ni40ODkzLDE3MC40NzM2LDEwNjAuNDg5MyIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxOyIvPjwhLS1TUkM9W1JQOURUZUNtMzhKdGQ0QXh0WTZpc2Yxci1ydnAwTTQ0azNNTWRvb0p6bE9yM1J6alRaMVpaUngxZzVMN21GdWctNDU2TVJ3QmcyWFE1OXJtMmMzT1pvSHd2VFN3d3lQSEI0d2M5X0M5RjBqRjRIcE12Q2dfMWpXOHJhQ2h4MU11MVVndVYzWWk5RVlXZVQ2WU1sUVczQmhZSjJEMi1TbWtyLVM3UndXaW8zVm1veGRXRGZKMzFrbGZxbDRCekpYUWJrU0VmdWJUMFE2OEd0MXEtVEFTR0Nycmotc1VxeDgwZVVkTmZHbDVNUEFEajZJalNFX0F1Ul9lLTVSbnBNXzZuZGpBZVBiQTFTY3JFU0xyS0pvcWNmRlU3N2ZGS2c1WWNTTUV5aWt5VFMtIC1FTlZDbnp3MlROSDNnZnNEX1U3QmhzZjVUVWdNeFNqOXA5WDFSQnZTV3l1YURyLVU3TkJIXzFEbi0wNDBdLS0+PC9nPjwvc3ZnPg==" class="uml" alt="uml diagram" title=""></p>
+<h3 id="algorithm-selection-for-cruise-planner">Algorithm selection for cruise planner<a class="headerlink" href="#algorithm-selection-for-cruise-planner" title="Permanent link">#</a></h3>
+<p>Currently, only a PID-based planner is supported.
+Each planner will be explained in the following.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>common.planning_method</code></td>
+<td>string</td>
+<td>cruise and stop planning algorithm, selected from "pid_base"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pid-based-planner">PID-based planner<a class="headerlink" href="#pid-based-planner" title="Permanent link">#</a></h3>
+<h4 id="stop-planning_1">Stop planning<a class="headerlink" href="#stop-planning_1" title="Permanent link">#</a></h4>
+<p>In the <code>pid_based_planner</code> namespace,</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obstacle_velocity_threshold_from_cruise_to_stop</code></td>
+<td>double</td>
+<td>obstacle velocity threshold to be stopped from cruised [m/s]</td>
+</tr>
+</tbody>
+</table>
+<p>Only one obstacle is targeted for the stop planning.
+It is the obstacle among obstacle candidates whose velocity is less than <code>obstacle_velocity_threshold_from_cruise_to_stop</code>, and which is the nearest to the ego along the trajectory. A stop point is inserted keeping<code>common.safe_distance_margin</code> distance between the ego and obstacle.</p>
+<p>Note that, as explained in the stop planning design, a stop planning which requires a strong acceleration (less than <code>common.min_strong_accel</code>) will be canceled.</p>
+<h4 id="cruise-planning_1">Cruise planning<a class="headerlink" href="#cruise-planning_1" title="Permanent link">#</a></h4>
+<p>In the <code>pid_based_planner</code> namespace,</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kp</code></td>
+<td>double</td>
+<td>p gain for pid control [-]</td>
+</tr>
+<tr>
+<td><code>ki</code></td>
+<td>double</td>
+<td>i gain for pid control [-]</td>
+</tr>
+<tr>
+<td><code>kd</code></td>
+<td>double</td>
+<td>d gain for pid control [-]</td>
+</tr>
+<tr>
+<td><code>output_ratio_during_accel</code></td>
+<td>double</td>
+<td>The output velocity will be multiplied by the ratio during acceleration to follow the front vehicle. [-]</td>
+</tr>
+<tr>
+<td><code>vel_to_acc_weight</code></td>
+<td>double</td>
+<td>target acceleration is target velocity * <code>vel_to_acc_weight</code> [-]</td>
+</tr>
+<tr>
+<td><code>min_cruise_target_vel</code></td>
+<td>double</td>
+<td>minimum target velocity during cruise [m/s]</td>
+</tr>
+</tbody>
+</table>
+<p>In order to keep the safe distance, the target velocity and acceleration is calculated and sent as an external velocity limit to the velocity smoothing package (<code>motion_velocity_smoother</code> by default).
+The target velocity and acceleration is respectively calculated with the PID controller according to the error between the reference safe distance and the actual distance.</p>
+<h3 id="optimization-based-planner">Optimization-based planner<a class="headerlink" href="#optimization-based-planner" title="Permanent link">#</a></h3>
+<p>under construction</p>
+<h2 id="minor-functions">Minor functions<a class="headerlink" href="#minor-functions" title="Permanent link">#</a></h2>
+<h3 id="prioritization-of-behavior-modules-stop-point">Prioritization of behavior module's stop point<a class="headerlink" href="#prioritization-of-behavior-modules-stop-point" title="Permanent link">#</a></h3>
+<p>When stopping for a pedestrian walking on the crosswalk, the behavior module inserts the zero velocity in the trajectory in front of the crosswalk.
+Also <code>autoware_obstacle_cruise_planner</code>'s stop planning also works, and the ego may not reach the behavior module's stop point since the safe distance defined in <code>autoware_obstacle_cruise_planner</code> may be longer than the behavior module's safe distance.
+To resolve this non-alignment of the stop point between the behavior module and <code>autoware_obstacle_cruise_planner</code>, <code>common.min_behavior_stop_margin</code> is defined.
+In the case of the crosswalk described above, <code>autoware_obstacle_cruise_planner</code> inserts the stop point with a distance <code>common.min_behavior_stop_margin</code> at minimum between the ego and obstacle.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>common.min_behavior_stop_margin</code></td>
+<td>double</td>
+<td>minimum stop margin when stopping with the behavior module enabled [m]</td>
+</tr>
+</tbody>
+</table>
+<h3 id="a-function-to-keep-the-closest-stop-obstacle-in-target-obstacles">A function to keep the closest stop obstacle in target obstacles<a class="headerlink" href="#a-function-to-keep-the-closest-stop-obstacle-in-target-obstacles" title="Permanent link">#</a></h3>
+<p>In order to keep the closest stop obstacle in the target obstacles, we check whether it is disappeared or not from the target obstacles in the <code>checkConsistency</code> function.
+If the previous closest stop obstacle is remove from the lists, we keep it in the lists for <code>stop_obstacle_hold_time_threshold</code> seconds.
+Note that if a new stop obstacle appears and the previous closest obstacle removes from the lists, we do not add it to the target obstacles again.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>behavior_determination.stop_obstacle_hold_time_threshold</code></td>
+<td>double</td>
+<td>maximum time for holding closest stop obstacle [s]</td>
+</tr>
+</tbody>
+</table>
 <h2 id="how-to-debug">How To Debug<a class="headerlink" href="#how-to-debug" title="Permanent link">#</a></h2>
 <p>How to debug can be seen <a href="docs/debug/">here</a>.</p>
 <h2 id="known-limits">Known Limits<a class="headerlink" href="#known-limits" title="Permanent link">#</a></h2>
