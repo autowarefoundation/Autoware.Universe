@@ -19,6 +19,13 @@
 
 namespace autoware::time_utils
 {
+
+class Hoge
+{
+private:
+  int a_;
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 std::chrono::nanoseconds interpolate(
   std::chrono::nanoseconds a, std::chrono::nanoseconds b, float t) noexcept

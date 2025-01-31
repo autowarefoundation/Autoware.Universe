@@ -62,6 +62,8 @@ jobs:
       codecov-token: ${{ secrets.CODECOV_TOKEN }}
 
   clang-tidy-differential:
+    permissions:
+      pull-requests: write
     if: ${{ always() }} # always run to provide report for status check
     needs:
       - check-if-cuda-job-is-needed
@@ -72,6 +74,8 @@ jobs:
       run-condition: ${{ needs.check-if-cuda-job-is-needed.outputs.cuda_job_is_needed == 'false' && needs.build-and-test-differential.result == 'success' }}
 
   clang-tidy-differential-cuda:
+    permissions:
+      pull-requests: write
     if: ${{ always() }} # always run to provide report for status check
     needs:
       - check-if-cuda-job-is-needed

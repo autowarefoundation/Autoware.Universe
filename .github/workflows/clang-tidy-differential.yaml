@@ -21,6 +21,8 @@ on:
 
 jobs:
   clang-tidy-differential:
+    permissions:
+      pull-requests: write
     if: ${{ inputs.run-condition }}
     runs-on: ${{ inputs.runner }}
     container: ${{ inputs.container }}${{ inputs.container-suffix }}
@@ -67,7 +69,7 @@ jobs:
 
       - name: Run clang-tidy
         if: ${{ steps.get-changed-files.outputs.changed-files != '' }}
-        uses: autowarefoundation/autoware-github-actions/clang-tidy@v1
+        uses: autowarefoundation/autoware-github-actions/clang-tidy@clang-tidy-pr-comments
         with:
           rosdistro: humble
           target-packages: ${{ steps.get-modified-packages.outputs.modified-packages }}
