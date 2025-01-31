@@ -1,0 +1,5 @@
+/**:
+  ros__parameters:
+    output_file: ""
+    # trajectory_history_limit: ""
+    ego_frame: base_link # reference frame of ego
