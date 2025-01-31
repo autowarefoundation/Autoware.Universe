@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MPC Lateral Controller Params",
+  "type": "object",
+  "definitions": {
+    "dynamics_model": {
+      "type": "object",
+      "properties": {
+        "cg_to_front_m": {
+          "type": "number",
+          "description": "distance from baselink to the front axle [m]",
+          "default": 1.228
+        },
+        "cg_to_rear_m": {
+          "type": "number",
+          "description": "distance from baselink to the rear axle [m]",
+          "default": 1.5618
+        },
+        "mass_fl": {
+          "type": "number",
+          "description": "mass applied to front left tire [kg]",
+          "default": 600
+        },
+        "mass_fr": {
+          "type": "number",
+          "description": "mass applied to front right tire [kg]",
+          "default": 600
+        },
+        "mass_rl": {
+          "type": "number",
+          "description": "mass applied to rear left tire [kg]",
+          "default": 600
+        },
+        "mass_rr": {
+          "type": "number",
+          "description": "mass applied to rear right tire [kg]",
+          "default": 600
+        },
+        "cf": {
+          "type": "number",
+          "description": "front cornering power [N/rad]",
+          "default": 155494.663
+        },
+        "cr": {
+          "type": "number",
+          "description": "rear cornering power [N/rad]",
+          "default": 155494.663
+        }
+      },
+      "required": [
+        "cg_to_front_m",
+        "cg_to_rear_m",
+        "mass_fl",
+        "mass_fr",
+        "mass_rl",
+        "mass_rr",
+        "cf",
+        "cr"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "dynamics_model": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/dynamics_model"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

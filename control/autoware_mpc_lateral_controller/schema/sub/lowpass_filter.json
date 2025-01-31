@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MPC Lateral Controller Params",
+  "type": "object",
+  "definitions": {
+    "lowpass_filter": {
+      "type": "object",
+      "properties": {
+        "steering_lpf_cutoff_hz": {
+          "type": "number",
+          "description": "cutoff frequency of lowpass filter for steering output command [hz]",
+          "default": 3.0
+        },
+        "error_deriv_lpf_cutoff_hz": {
+          "type": "number",
+          "description": "cutoff frequency of lowpass filter for error derivative [Hz]",
+          "default": 5.0
+        }
+      },
+      "required": ["steering_lpf_cutoff_hz", "error_deriv_lpf_cutoff_hz"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/lowpass_filter"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

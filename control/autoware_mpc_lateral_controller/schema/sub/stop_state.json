@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MPC Lateral Controller Params",
+  "type": "object",
+  "definitions": {
+    "stop_state": {
+      "type": "object",
+      "properties": {
+        "stop_state_entry_ego_speed": {
+          "type": "number",
+          "description": "threshold value of the ego vehicle speed used to the stop state entry condition",
+          "default": 0.001
+        },
+        "stop_state_entry_target_speed": {
+          "type": "number",
+          "description": "threshold value of the target speed used to the stop state entry condition",
+          "default": 0.001
+        },
+        "converged_steer_rad": {
+          "type": "number",
+          "description": "threshold value of the steer convergence",
+          "default": 0.1
+        },
+        "keep_steer_control_until_converged": {
+          "type": "boolean",
+          "description": "keep steer control until steer is converged",
+          "default": true
+        },
+        "new_traj_duration_time": {
+          "type": "number",
+          "description": "threshold value of the time to be considered as new trajectory",
+          "default": 1.0
+        },
+        "new_traj_end_dist": {
+          "type": "number",
+          "description": "threshold value of the distance between trajectory ends to be considered as new trajectory",
+          "default": 0.3
+        },
+        "mpc_converged_threshold_rps": {
+          "type": "number",
+          "description": "threshold value to be sure output of the optimization is converged, it is used in stopped state",
+          "default": 0.01
+        }
+      },
+      "required": [
+        "stop_state_entry_ego_speed",
+        "stop_state_entry_target_speed",
+        "converged_steer_rad",
+        "keep_steer_control_until_converged",
+        "new_traj_duration_time",
+        "new_traj_end_dist",
+        "mpc_converged_threshold_rps"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/stop_state"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

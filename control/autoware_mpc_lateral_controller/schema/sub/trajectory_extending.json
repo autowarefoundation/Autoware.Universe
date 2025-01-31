@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MPC Lateral Controller Params",
+  "type": "object",
+  "definitions": {
+    "trajectory_extending": {
+      "type": "object",
+      "properties": {
+        "extend_trajectory_for_end_yaw_control": {
+          "type": "boolean",
+          "description": "trajectory extending flag for end yaw control",
+          "default": true
+        }
+      },
+      "required": ["extend_trajectory_for_end_yaw_control"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/trajectory_extending"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

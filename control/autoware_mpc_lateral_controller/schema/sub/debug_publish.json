@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MPC Lateral Controller Params",
+  "type": "object",
+  "definitions": {
+    "debug_publish": {
+      "type": "object",
+      "properties": {
+        "debug_publish_predicted_trajectory": {
+          "type": "boolean",
+          "description": "publish debug predicted trajectory in Frenet coordinate",
+          "default": false
+        }
+      },
+      "required": ["debug_publish_predicted_trajectory"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/debug_publish"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

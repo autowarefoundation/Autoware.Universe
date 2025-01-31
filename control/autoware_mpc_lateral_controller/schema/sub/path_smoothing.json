@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MPC Lateral Controller Params",
+  "type": "object",
+  "definitions": {
+    "path_smoothing": {
+      "type": "object",
+      "properties": {
+        "enable_path_smoothing": {
+          "type": "boolean",
+          "description": "path smoothing flag. This should be true when uses path resampling to reduce resampling noise.",
+          "default": false
+        },
+        "path_filter_moving_ave_num": {
+          "type": "integer",
+          "description": "number of data points moving average filter for path smoothing",
+          "default": 25
+        },
+        "curvature_smoothing_num_traj": {
+          "type": "integer",
+          "description": "index distance of points used in curvature calculation for trajectory: p(i-num), p(i), p(i+num). Larger num makes less noisy values.",
+          "default": 15
+        },
+        "curvature_smoothing_num_ref_steer": {
+          "type": "integer",
+          "description": "index distance of points used in curvature calculation for reference steering command: p(i-num), p(i), p(i+num). Larger num makes less noisy values.",
+          "default": 15
+        }
+      },
+      "required": [
+        "enable_path_smoothing",
+        "path_filter_moving_ave_num",
+        "curvature_smoothing_num_traj",
+        "curvature_smoothing_num_ref_steer"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/path_smoothing"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

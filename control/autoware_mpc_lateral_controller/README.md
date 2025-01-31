@@ -95,117 +95,47 @@ AutonomouStuff Lexus RX 450h for under 40 km/h driving.
 
 #### System
 
-| Name                      | Type    | Description                                                      | Default value |
-| :------------------------ | :------ | :--------------------------------------------------------------- | :------------ |
-| traj_resample_dist        | double  | distance of waypoints in resampling [m]                          | 0.1           |
-| use_steer_prediction      | boolean | flag for using steer prediction (do not use steer measurement)   | false         |
-| use_delayed_initial_state | boolean | flag to use x0_delayed as initial state for predicted trajectory | true          |
+{{ json_to_markdown("control/autoware_mpc_lateral_controller/schema/sub/system.json") }}
 
 #### Path Smoothing
 
-| Name                              | Type    | Description                                                                                                                                          | Default value |
-| :-------------------------------- | :------ | :--------------------------------------------------------------------------------------------------------------------------------------------------- | :------------ |
-| enable_path_smoothing             | boolean | path smoothing flag. This should be true when uses path resampling to reduce resampling noise.                                                       | false         |
-| path_filter_moving_ave_num        | int     | number of data points moving average filter for path smoothing                                                                                       | 25            |
-| curvature_smoothing_num_traj      | int     | index distance of points used in curvature calculation for trajectory: p(i-num), p(i), p(i+num). larger num makes less noisy values.                 | 15            |
-| curvature_smoothing_num_ref_steer | int     | index distance of points used in curvature calculation for reference steering command: p(i-num), p(i), p(i+num). larger num makes less noisy values. | 15            |
+{{ json_to_markdown("control/autoware_mpc_lateral_controller/schema/sub/path_smoothing.json") }}
 
 #### Trajectory Extending
 
-| Name                                  | Type    | Description                                   | Default value |
-| :------------------------------------ | :------ | :-------------------------------------------- | :------------ |
-| extend_trajectory_for_end_yaw_control | boolean | trajectory extending flag for end yaw control | true          |
+{{ json_to_markdown("control/autoware_mpc_lateral_controller/schema/sub/trajectory_extending.json") }}
 
 #### MPC Optimization
 
-| Name                                                | Type   | Description                                                                                                  | Default value |
-| :-------------------------------------------------- | :----- | :----------------------------------------------------------------------------------------------------------- | :------------ |
-| qp_solver_type                                      | string | QP solver option. described below in detail.                                                                 | "osqp"        |
-| mpc_prediction_horizon                              | int    | total prediction step for MPC                                                                                | 50            |
-| mpc_prediction_dt                                   | double | prediction period for one step [s]                                                                           | 0.1           |
-| mpc_weight_lat_error                                | double | weight for lateral error                                                                                     | 1.0           |
-| mpc_weight_heading_error                            | double | weight for heading error                                                                                     | 0.0           |
-| mpc_weight_heading_error_squared_vel                | double | weight for heading error \* velocity                                                                         | 0.3           |
-| mpc_weight_steering_input                           | double | weight for steering error (steer command - reference steer)                                                  | 1.0           |
-| mpc_weight_steering_input_squared_vel               | double | weight for steering error (steer command - reference steer) \* velocity                                      | 0.25          |
-| mpc_weight_lat_jerk                                 | double | weight for lateral jerk (steer(i) - steer(i-1)) \* velocity                                                  | 0.1           |
-| mpc_weight_steer_rate                               | double | weight for steering rate [rad/s]                                                                             | 0.0           |
-| mpc_weight_steer_acc                                | double | weight for derivatives of the steering rate [rad/ss]                                                         | 0.000001      |
-| mpc_low_curvature_weight_lat_error                  | double | [used in a low curvature trajectory] weight for lateral error                                                | 0.1           |
-| mpc_low_curvature_weight_heading_error              | double | [used in a low curvature trajectory] weight for heading error                                                | 0.0           |
-| mpc_low_curvature_weight_heading_error_squared_vel  | double | [used in a low curvature trajectory] weight for heading error \* velocity                                    | 0.3           |
-| mpc_low_curvature_weight_steering_input             | double | [used in a low curvature trajectory] weight for steering error (steer command - reference steer)             | 1.0           |
-| mpc_low_curvature_weight_steering_input_squared_vel | double | [used in a low curvature trajectory] weight for steering error (steer command - reference steer) \* velocity | 0.25          |
-| mpc_low_curvature_weight_lat_jerk                   | double | [used in a low curvature trajectory] weight for lateral jerk (steer(i) - steer(i-1)) \* velocity             | 0.0           |
-| mpc_low_curvature_weight_steer_rate                 | double | [used in a low curvature trajectory] weight for steering rate [rad/s]                                        | 0.0           |
-| mpc_low_curvature_weight_steer_acc                  | double | [used in a low curvature trajectory] weight for derivatives of the steering rate [rad/ss]                    | 0.000001      |
-| mpc_low_curvature_thresh_curvature                  | double | threshold of curvature to use "low_curvature" parameter                                                      | 0.0           |
-| mpc_weight_terminal_lat_error                       | double | terminal lateral error weight in matrix Q to improve mpc stability                                           | 1.0           |
-| mpc_weight_terminal_heading_error                   | double | terminal heading error weight in matrix Q to improve mpc stability                                           | 0.1           |
-| mpc_zero_ff_steer_deg                               | double | threshold that feed-forward angle becomes zero                                                               | 0.5           |
-| mpc_acceleration_limit                              | double | limit on the vehicle's acceleration                                                                          | 2.0           |
-| mpc_velocity_time_constant                          | double | time constant used for velocity smoothing                                                                    | 0.3           |
-| mpc_min_prediction_length                           | double | minimum prediction length                                                                                    | 5.0           |
+{{ json_to_markdown("control/autoware_mpc_lateral_controller/schema/sub/mpc_optimization.json") }}
 
 #### Vehicle Model
 
-| Name                                 | Type     | Description                                                                        | Default value        |
-| :----------------------------------- | :------- | :--------------------------------------------------------------------------------- | :------------------- |
-| vehicle_model_type                   | string   | vehicle model type for mpc prediction                                              | "kinematics"         |
-| input_delay                          | double   | steering input delay time for delay compensation                                   | 0.24                 |
-| vehicle_model_steer_tau              | double   | steering dynamics time constant (1d approximation) [s]                             | 0.3                  |
-| steer_rate_lim_dps_list_by_curvature | [double] | steering angle rate limit list depending on curvature [deg/s]                      | [40.0, 50.0, 60.0]   |
-| curvature_list_for_steer_rate_lim    | [double] | curvature list for steering angle rate limit interpolation in ascending order [/m] | [0.001, 0.002, 0.01] |
-| steer_rate_lim_dps_list_by_velocity  | [double] | steering angle rate limit list depending on velocity [deg/s]                       | [60.0, 50.0, 40.0]   |
-| velocity_list_for_steer_rate_lim     | [double] | velocity list for steering angle rate limit interpolation in ascending order [m/s] | [10.0, 15.0, 20.0]   |
-| acceleration_limit                   | double   | acceleration limit for trajectory velocity modification [m/ss]                     | 2.0                  |
-| velocity_time_constant               | double   | velocity dynamics time constant for trajectory velocity modification [s]           | 0.3                  |
+{{ json_to_markdown("control/autoware_mpc_lateral_controller/schema/sub/vehicle_model.json") }}
 
 #### Lowpass Filter for Noise Reduction
 
-| Name                      | Type   | Description                                                         | Default value |
-| :------------------------ | :----- | :------------------------------------------------------------------ | :------------ |
-| steering_lpf_cutoff_hz    | double | cutoff frequency of lowpass filter for steering output command [hz] | 3.0           |
-| error_deriv_lpf_cutoff_hz | double | cutoff frequency of lowpass filter for error derivative [Hz]        | 5.0           |
+{{ json_to_markdown("control/autoware_mpc_lateral_controller/schema/sub/lowpass_filter.json") }}
 
 #### Stop State
 
-| Name                                         | Type    | Description                                                                                     | Default value |
-| :------------------------------------------- | :------ | :---------------------------------------------------------------------------------------------- | :------------ |
-| stop_state_entry_ego_speed <sup>\*1</sup>    | double  | threshold value of the ego vehicle speed used to the stop state entry condition                 | 0.001         |
-| stop_state_entry_target_speed <sup>\*1</sup> | double  | threshold value of the target speed used to the stop state entry condition                      | 0.001         |
-| converged_steer_rad                          | double  | threshold value of the steer convergence                                                        | 0.1           |
-| keep_steer_control_until_converged           | boolean | keep steer control until steer is converged                                                     | true          |
-| new_traj_duration_time                       | double  | threshold value of the time to be considered as new trajectory                                  | 1.0           |
-| new_traj_end_dist                            | double  | threshold value of the distance between trajectory ends to be considered as new trajectory      | 0.3           |
-| mpc_converged_threshold_rps                  | double  | threshold value to be sure output of the optimization is converged, it is used in stopped state | 0.01          |
+{{ json_to_markdown("control/autoware_mpc_lateral_controller/schema/sub/stop_state.json") }}
 
-(\*1) To prevent unnecessary steering movement, the steering command is fixed to the previous value in the stop state.
+(stop_state_entry_ego_speed and stop_state_entry_target_speed) To prevent unnecessary steering movement, the steering command is fixed to the previous value in the stop state.
 
 #### Steer Offset
 
 Defined in the `steering_offset` namespace. This logic is designed as simple as possible, with minimum design parameters.
 
-| Name                                | Type    | Description                                                                                      | Default value |
-| :---------------------------------- | :------ | :----------------------------------------------------------------------------------------------- | :------------ |
-| enable_auto_steering_offset_removal | boolean | Estimate the steering offset and apply compensation                                              | true          |
-| update_vel_threshold                | double  | If the velocity is smaller than this value, the data is not used for the offset estimation       | 5.56          |
-| update_steer_threshold              | double  | If the steering angle is larger than this value, the data is not used for the offset estimation. | 0.035         |
-| average_num                         | int     | The average of this number of data is used as a steering offset.                                 | 1000          |
-| steering_offset_limit               | double  | The angle limit to be applied to the offset compensation.                                        | 0.02          |
+{{ json_to_markdown("control/autoware_mpc_lateral_controller/schema/sub/steering_offset.json") }}
 
 ##### For dynamics model (WIP)
 
-| Name          | Type   | Description                                 | Default value |
-| :------------ | :----- | :------------------------------------------ | :------------ |
-| cg_to_front_m | double | distance from baselink to the front axle[m] | 1.228         |
-| cg_to_rear_m  | double | distance from baselink to the rear axle [m] | 1.5618        |
-| mass_fl       | double | mass applied to front left tire [kg]        | 600           |
-| mass_fr       | double | mass applied to front right tire [kg]       | 600           |
-| mass_rl       | double | mass applied to rear left tire [kg]         | 600           |
-| mass_rr       | double | mass applied to rear right tire [kg]        | 600           |
-| cf            | double | front cornering power [N/rad]               | 155494.663    |
-| cr            | double | rear cornering power [N/rad]                | 155494.663    |
+{{ json_to_markdown("control/autoware_mpc_lateral_controller/schema/sub/dynamics_model.json") }}
+
+##### publish debug predicted trajectory in Frenet coordinate
+
+{{ json_to_markdown("control/autoware_mpc_lateral_controller/schema/sub/debug_publish.json") }}
 
 #### Debug
 

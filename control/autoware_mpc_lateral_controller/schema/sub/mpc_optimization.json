@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MPC Lateral Controller Params",
+  "type": "object",
+  "definitions": {
+    "mpc_optimization": {
+      "type": "object",
+      "properties": {
+        "qp_solver_type": {
+          "type": "string",
+          "description": "QP solver option. described below in detail.",
+          "default": "osqp"
+        },
+        "mpc_prediction_horizon": {
+          "type": "integer",
+          "description": "total prediction step for MPC",
+          "default": 50
+        },
+        "mpc_prediction_dt": {
+          "type": "number",
+          "description": "prediction period for one step [s]",
+          "default": 0.1
+        },
+        "mpc_weight_lat_error": {
+          "type": "number",
+          "description": "weight for lateral error",
+          "default": 1.0
+        },
+        "mpc_weight_heading_error": {
+          "type": "number",
+          "description": "weight for heading error",
+          "default": 0.0
+        },
+        "mpc_weight_heading_error_squared_vel": {
+          "type": "number",
+          "description": "weight for heading error * velocity",
+          "default": 0.3
+        },
+        "mpc_weight_steering_input": {
+          "type": "number",
+          "description": "weight for steering error (steer command - reference steer)",
+          "default": 1.0
+        },
+        "mpc_weight_steering_input_squared_vel": {
+          "type": "number",
+          "description": "weight for steering error (steer command - reference steer) * velocity",
+          "default": 0.25
+        },
+        "mpc_weight_lat_jerk": {
+          "type": "number",
+          "description": "weight for lateral jerk (steer(i) - steer(i-1)) * velocity",
+          "default": 0.1
+        },
+        "mpc_weight_steer_rate": {
+          "type": "number",
+          "description": "weight for steering rate [rad/s]",
+          "default": 0.0
+        },
+        "mpc_weight_steer_acc": {
+          "type": "number",
+          "description": "weight for derivatives of the steering rate [rad/ss]",
+          "default": 0.000001
+        },
+        "mpc_low_curvature_weight_lat_error": {
+          "type": "number",
+          "description": "[used in a low curvature trajectory] weight for lateral error",
+          "default": 0.1
+        },
+        "mpc_low_curvature_weight_heading_error": {
+          "type": "number",
+          "description": "[used in a low curvature trajectory] weight for heading error",
+          "default": 0.0
+        },
+        "mpc_low_curvature_weight_heading_error_squared_vel": {
+          "type": "number",
+          "description": "[used in a low curvature trajectory] weight for heading error * velocity",
+          "default": 0.3
+        },
+        "mpc_low_curvature_weight_steering_input": {
+          "type": "number",
+          "description": "[used in a low curvature trajectory] weight for steering error (steer command - reference steer)",
+          "default": 1.0
+        },
+        "mpc_low_curvature_weight_steering_input_squared_vel": {
+          "type": "number",
+          "description": "[used in a low curvature trajectory] weight for steering error (steer command - reference steer) * velocity",
+          "default": 0.25
+        },
+        "mpc_low_curvature_weight_lat_jerk": {
+          "type": "number",
+          "description": "[used in a low curvature trajectory] weight for lateral jerk (steer(i) - steer(i-1)) * velocity",
+          "default": 0.0
+        },
+        "mpc_low_curvature_weight_steer_rate": {
+          "type": "number",
+          "description": "[used in a low curvature trajectory] weight for steering rate [rad/s]",
+          "default": 0.0
+        },
+        "mpc_low_curvature_weight_steer_acc": {
+          "type": "number",
+          "description": "[used in a low curvature trajectory] weight for derivatives of the steering rate [rad/ss]",
+          "default": 0.000001
+        },
+        "mpc_low_curvature_thresh_curvature": {
+          "type": "number",
+          "description": "threshold of curvature to use 'low_curvature' parameter",
+          "default": 0.0
+        },
+        "mpc_weight_terminal_lat_error": {
+          "type": "number",
+          "description": "terminal lateral error weight in matrix Q to improve mpc stability",
+          "default": 1.0
+        },
+        "mpc_weight_terminal_heading_error": {
+          "type": "number",
+          "description": "terminal heading error weight in matrix Q to improve mpc stability",
+          "default": 0.1
+        },
+        "mpc_zero_ff_steer_deg": {
+          "type": "number",
+          "description": "threshold that feed-forward angle becomes zero",
+          "default": 0.5
+        },
+        "mpc_acceleration_limit": {
+          "type": "number",
+          "description": "limit on the vehicle's acceleration",
+          "default": 2.0
+        },
+        "mpc_velocity_time_constant": {
+          "type": "number",
+          "description": "time constant used for velocity smoothing",
+          "default": 0.3
+        },
+        "mpc_min_prediction_length": {
+          "type": "number",
+          "description": "minimum prediction length",
+          "default": 5.0
+        }
+      },
+      "required": [
+        "qp_solver_type",
+        "mpc_prediction_horizon",
+        "mpc_prediction_dt",
+        "mpc_weight_lat_error",
+        "mpc_weight_heading_error",
+        "mpc_weight_heading_error_squared_vel",
+        "mpc_weight_steering_input",
+        "mpc_weight_steering_input_squared_vel",
+        "mpc_weight_lat_jerk",
+        "mpc_weight_steer_rate",
+        "mpc_weight_steer_acc",
+        "mpc_low_curvature_weight_lat_error",
+        "mpc_low_curvature_weight_heading_error",
+        "mpc_low_curvature_weight_heading_error_squared_vel",
+        "mpc_low_curvature_weight_steering_input",
+        "mpc_low_curvature_weight_steering_input_squared_vel",
+        "mpc_low_curvature_weight_lat_jerk",
+        "mpc_low_curvature_weight_steer_rate",
+        "mpc_low_curvature_weight_steer_acc",
+        "mpc_low_curvature_thresh_curvature",
+        "mpc_weight_terminal_lat_error",
+        "mpc_weight_terminal_heading_error",
+        "mpc_zero_ff_steer_deg",
+        "mpc_acceleration_limit",
+        "mpc_velocity_time_constant",
+        "mpc_min_prediction_length"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/mpc_optimization"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}
