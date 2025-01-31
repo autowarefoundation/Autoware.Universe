@@ -338,12 +338,13 @@ std::vector<BoxAndLanelet> ObjectLaneletFilterNode::getIntersectedLanelets(
 
   const lanelet::Lanelets candidate_lanelets = lanelet_map_ptr_->laneletLayer.search(bbox2d);
   for (const auto & lanelet : candidate_lanelets) {
-    // only check the road lanelets and road shoulder lanelets
+    // check the road lanelets, road shoulder lanelets and crosswalks lanelets
     if (
       lanelet.hasAttribute(lanelet::AttributeName::Subtype) &&
       (lanelet.attribute(lanelet::AttributeName::Subtype).value() ==
          lanelet::AttributeValueString::Road ||
-       lanelet.attribute(lanelet::AttributeName::Subtype).value() == "road_shoulder")) {
+       lanelet.attribute(lanelet::AttributeName::Subtype).value() == "road_shoulder" ||
+       lanelet.attribute(lanelet::AttributeName::Subtype).value() == "crosswalk")) {
       if (bg::intersects(convex_hull, lanelet.polygon2d().basicPolygon())) {
         // create bbox using boost for making the R-tree in later phase
         auto polygon = getPolygon(lanelet);
