@@ -20,7 +20,7 @@ target_link_libraries(${PROJECT_NAME}
 rclcpp_components_register_node(${PROJECT_NAME}
   PLUGIN "autoware::lidar_marker_localizer::LidarMarkerLocalizer"
   EXECUTABLE ${PROJECT_NAME}_node
-  EXECUTOR SingleThreadedExecutor
+  EXECUTOR MultiThreadedExecutor
 )
 
 
