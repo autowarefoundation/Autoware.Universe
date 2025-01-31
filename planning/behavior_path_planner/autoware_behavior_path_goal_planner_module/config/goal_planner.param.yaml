@@ -59,7 +59,7 @@
         maximum_deceleration: 1.0
         maximum_jerk: 1.0
         path_priority: "efficient_path" # "efficient_path" or "close_goal"
-        efficient_path_order: ["SHIFT", "ARC_FORWARD", "ARC_BACKWARD"] # only lane based pull over(exclude freespace parking)
+        efficient_path_order: ["SHIFT", "ARC_FORWARD", "CLOTHOID_FORWARD", "ARC_BACKWARD", "CLOTHOID_BACKWARD"] # only lane based pull over(exclude freespace parking)
         lane_departure_check_expansion_margin: 0.2
 
         # shift parking
@@ -77,22 +77,22 @@
           max_steer_angle: 0.4 #22.9deg
           forward:
             enable_arc_forward_parking: true
+            enable_clothoid_forward_parking: true
             after_forward_parking_straight_distance: 2.0
             forward_parking_velocity: 1.38
             forward_parking_lane_departure_margin: 0.0
             forward_parking_path_interval: 1.0
             forward_parking_max_steer_angle: 0.4  # 22.9deg
             forward_parking_steer_rate_lim: 0.35
-            forward_parking_use_clothoid: true
           backward:
             enable_arc_backward_parking: true
+            enable_clothoid_backward_parking: false # Not supported yet
             after_backward_parking_straight_distance: 2.0
             backward_parking_velocity: -1.38
             backward_parking_lane_departure_margin: 0.0
             backward_parking_path_interval: 1.0
             backward_parking_max_steer_angle: 0.4  # 22.9deg
             backward_parking_steer_rate_lim: 0.35
-            backward_parking_use_clothoid: false # Not supported yet
 
         # freespace parking
         freespace_parking:

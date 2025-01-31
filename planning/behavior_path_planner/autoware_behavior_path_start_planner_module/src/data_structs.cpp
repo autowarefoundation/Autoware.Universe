@@ -72,6 +72,7 @@ StartPlannerParameters StartPlannerParameters::init(rclcpp::Node & node)
     // geometric pull out
     p.enable_geometric_pull_out =
       getOrDeclareParameter<bool>(node, ns + "enable_geometric_pull_out");
+    p.enable_clothoid_pull_out = getOrDeclareParameter<bool>(node, ns + "enable_clothoid_pull_out");
     p.geometric_collision_check_distance_from_end =
       getOrDeclareParameter<double>(node, ns + "geometric_collision_check_distance_from_end");
     p.divide_pull_out_path = getOrDeclareParameter<bool>(node, ns + "divide_pull_out_path");

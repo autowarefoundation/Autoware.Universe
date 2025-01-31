@@ -36,6 +36,7 @@
       end_pose_curvature_threshold: 0.1
       # geometric pull out
       enable_geometric_pull_out: true
+      enable_clothoid_pull_out: true
       geometric_collision_check_distance_from_end: 0.0
       arc_path_interval: 1.0
       divide_pull_out_path: true
@@ -45,7 +46,6 @@
       backward_velocity: -1.0
       pull_out_max_steer_angle: 0.26  # 15deg
       pull_out_steer_rate_lim: 0.35
-      pull_out_use_clothoid: true
       # search start pose backward
       enable_back: true
       search_priority: "efficient_path"  # "efficient_path" or "short_back_distance"

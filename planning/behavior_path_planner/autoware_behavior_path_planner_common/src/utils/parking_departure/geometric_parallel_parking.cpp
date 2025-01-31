@@ -110,8 +110,8 @@ void GeometricParallelParking::setVelocityToArcPaths(
 std::vector<PathWithLaneId> GeometricParallelParking::generatePullOverPaths(
   const Pose & start_pose, const Pose & goal_pose, const double R_E_far,
   const lanelet::ConstLanelets & road_lanes, const lanelet::ConstLanelets & pull_over_lanes,
-  const bool is_forward, const bool left_side_parking, const double end_pose_offset,
-  const double velocity)
+  const bool is_forward, const bool left_side_parking, const bool use_clothoid,
+  const double end_pose_offset, const double velocity)
 {
   const double lane_departure_margin = is_forward
                                          ? parameters_.forward_parking_lane_departure_margin
@@ -119,8 +119,8 @@ std::vector<PathWithLaneId> GeometricParallelParking::generatePullOverPaths(
   const double arc_path_interval = is_forward ? parameters_.forward_parking_path_interval
                                               : parameters_.backward_parking_path_interval;
   std::vector<PathWithLaneId> arc_paths;
-  if (is_forward && parameters_.forward_parking_use_clothoid) {  // clothoid parking only supports
-                                                                 // forward for now
+  if (is_forward && use_clothoid) {  // clothoid parking only supports
+                                     // forward for now
     const double L_min =
       is_forward
         ? std::abs(
@@ -148,7 +148,7 @@ std::vector<PathWithLaneId> GeometricParallelParking::generatePullOverPaths(
   setVelocityToArcPaths(arc_paths, velocity, set_stop_end);
 
   // straight path from current to parking start
-  const bool set_stop_straight_end = !(is_forward && parameters_.forward_parking_use_clothoid);
+  const bool set_stop_straight_end = !(is_forward && use_clothoid);
   const auto straight_path = generateStraightPath(start_pose, road_lanes, set_stop_straight_end);
 
   // check the continuity of straight path and arc path
@@ -163,7 +163,7 @@ std::vector<PathWithLaneId> GeometricParallelParking::generatePullOverPaths(
 
   // combine straight_path -> arc_path*2
   std::vector<PathWithLaneId> paths;
-  if (is_forward && parameters_.forward_parking_use_clothoid) {
+  if (is_forward && use_clothoid) {
     paths.push_back(straight_path);
     for (const auto & path : arc_paths) {
       for (const auto & path_point : path.points) {
@@ -190,7 +190,7 @@ void GeometricParallelParking::clearPaths()
 bool GeometricParallelParking::planPullOver(
   const Pose & goal_pose, const lanelet::ConstLanelets & road_lanes,
   const lanelet::ConstLanelets & pull_over_lanes, const bool is_forward,
-  const bool left_side_parking)
+  const bool left_side_parking, const bool use_clothoid)
 {
   const auto & common_params = planner_data_->parameters;
   const double end_pose_offset = is_forward ? -parameters_.after_forward_parking_straight_distance
@@ -220,7 +220,7 @@ bool GeometricParallelParking::planPullOver(
 
       const auto paths = generatePullOverPaths(
         *start_pose, goal_pose, R_E_far, road_lanes, pull_over_lanes, is_forward, left_side_parking,
-        end_pose_offset, parameters_.forward_parking_velocity);
+        use_clothoid, end_pose_offset, parameters_.forward_parking_velocity);
       if (!paths.empty()) {
         paths_ = paths;
         return true;
@@ -242,7 +242,7 @@ bool GeometricParallelParking::planPullOver(
 
       const auto paths = generatePullOverPaths(
         *start_pose, goal_pose, R_E_min_, road_lanes, pull_over_lanes, is_forward,
-        left_side_parking, end_pose_offset, parameters_.backward_parking_velocity);
+        left_side_parking, use_clothoid, end_pose_offset, parameters_.backward_parking_velocity);
       if (!paths.empty()) {
         paths_ = paths;
         return true;
@@ -256,6 +256,7 @@ bool GeometricParallelParking::planPullOver(
 bool GeometricParallelParking::planPullOut(
   const Pose & start_pose, const Pose & goal_pose, const lanelet::ConstLanelets & road_lanes,
   const lanelet::ConstLanelets & pull_over_lanes, const bool left_side_start,
+  const bool use_clothoid,
   const std::shared_ptr<autoware::lane_departure_checker::LaneDepartureChecker>
     lane_departure_checker)
 {
@@ -275,7 +276,7 @@ bool GeometricParallelParking::planPullOut(
 
     // plan reverse path of parking. end_pose <-> start_pose
     std::vector<PathWithLaneId> arc_paths;
-    if (parameters_.pull_out_use_clothoid) {
+    if (use_clothoid) {
       const double L_min = std::abs(
         parameters_.pull_out_velocity *
         (parameters_.pull_out_max_steer_angle / parameters_.pull_out_steer_rate_lim));
@@ -982,7 +983,7 @@ std::vector<PathWithLaneId> GeometricParallelParking::generateClothoidalSequence
     std::reverse(p.lane_ids.begin(), p.lane_ids.end());
   }
 
-  if (theta != 0) {
+  if (std::abs(theta) > 1e-6) {
     // generate arc path which connect two clothoid paths
     const auto end_of_prev_path = clothoid_path_first.points.back().point.pose;
     const auto start_of_next_path = clothoid_path_second.points.front().point.pose;

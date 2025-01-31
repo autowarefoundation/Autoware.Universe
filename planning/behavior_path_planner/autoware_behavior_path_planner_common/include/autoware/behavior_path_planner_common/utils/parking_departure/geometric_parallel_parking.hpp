@@ -50,7 +50,6 @@ struct ParallelParkingParameters
   double forward_parking_path_interval{0.0};
   double forward_parking_max_steer_angle{0.0};
   double forward_parking_steer_rate_lim{0.0};
-  bool forward_parking_use_clothoid{false};
 
   // backward parking
   double after_backward_parking_straight_distance{0.0};
@@ -59,7 +58,6 @@ struct ParallelParkingParameters
   double backward_parking_path_interval{0.0};
   double backward_parking_max_steer_angle{0.0};
   double backward_parking_steer_rate_lim{0.0};
-  bool backward_parking_use_clothoid{false};
 
   // pull_out
   double pull_out_velocity{0.0};
@@ -67,7 +65,6 @@ struct ParallelParkingParameters
   double pull_out_arc_path_interval{0.0};
   double pull_out_max_steer_angle{0.0};
   double pull_out_steer_rate_lim{0.0};
-  bool pull_out_use_clothoid{false};
 };
 
 class GeometricParallelParking
@@ -77,10 +74,11 @@ public:
   bool planPullOver(
     const Pose & goal_pose, const lanelet::ConstLanelets & road_lanes,
     const lanelet::ConstLanelets & pull_over_lanes, const bool is_forward,
-    const bool left_side_parking);
+    const bool left_side_parking, const bool use_clothoid);
   bool planPullOut(
     const Pose & start_pose, const Pose & goal_pose, const lanelet::ConstLanelets & road_lanes,
     const lanelet::ConstLanelets & pull_over_lanes, const bool left_side_start,
+    const bool use_clothoid,
     const std::shared_ptr<autoware::lane_departure_checker::LaneDepartureChecker>
       autoware_lane_departure_checker);
   void setParameters(const ParallelParkingParameters & parameters) { parameters_ = parameters; }
@@ -149,8 +147,8 @@ private:
   std::vector<PathWithLaneId> generatePullOverPaths(
     const Pose & start_pose, const Pose & goal_pose, const double R_E_far,
     const lanelet::ConstLanelets & road_lanes, const lanelet::ConstLanelets & pull_over_lanes,
-    const bool is_forward, const bool left_side_parking, const double end_pose_offset,
-    const double velocity);
+    const bool is_forward, const bool left_side_parking, const bool use_clothoid,
+    const double end_pose_offset, const double velocity);
   PathWithLaneId generateStraightPath(
     const Pose & start_pose, const lanelet::ConstLanelets & road_lanes, const bool set_stop_end);
   void setVelocityToArcPaths(
