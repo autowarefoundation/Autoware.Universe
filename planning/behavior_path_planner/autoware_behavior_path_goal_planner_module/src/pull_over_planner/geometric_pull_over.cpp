@@ -16,6 +16,7 @@
 
 #include "autoware/behavior_path_goal_planner_module/util.hpp"
 #include "autoware/behavior_path_planner_common/utils/drivable_area_expansion/static_drivable_area.hpp"
+#include "autoware/behavior_path_planner_common/utils/path_utils.hpp"
 
 #include <autoware_lanelet2_extension/utility/query.hpp>
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
@@ -77,6 +78,10 @@ std::optional<PullOverPath> GeometricPullOver::plan(
   const auto arc_path = planner_.getArcPath();
 
   // check lane departure with road and shoulder lanes
+  // To improve the accuracy of lane departure detection, make the sampling interval finer
+  // todo: Implement lane departure detection that does not depend on the footprint
+  const auto resampled_arc_path =
+    utils::resamplePathWithSpline(arc_path, parameters_.center_line_path_interval / 2);
   if (lane_departure_checker_.checkPathWillLeaveLane({departure_check_lane}, arc_path)) return {};
 
   auto pull_over_path_opt = PullOverPath::create(

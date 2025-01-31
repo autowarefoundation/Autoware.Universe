@@ -299,8 +299,12 @@ std::optional<PullOverPath> ShiftPullOver::generatePullOverPath(
 
   const auto departure_check_lane = goal_planner_utils::createDepartureCheckLanelet(
     pull_over_lanes, *planner_data->route_handler, left_side_parking_);
-  const bool is_in_lanes = !lane_departure_checker_.checkPathWillLeaveLane(
-    {departure_check_lane}, pull_over_path.parking_path());
+  // To improve the accuracy of lane departure detection, make the sampling interval finer
+  // todo: Implement lane departure detection that does not depend on the footprint
+  const auto resampled_parking_path = utils::resamplePathWithSpline(
+    pull_over_path.parking_path(), parameters_.center_line_path_interval / 2);
+  const bool is_in_lanes =
+    !lane_departure_checker_.checkPathWillLeaveLane({departure_check_lane}, resampled_parking_path);
 
   if (!is_in_parking_lots && !is_in_lanes) {
     return {};
