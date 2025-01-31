@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>learning_based_vehicle_calibration</name>
+  <version>2.0.0</version>
+  <description>E2E vehicle dynamics calibration using neural network</description>
+  <maintainer email="gariboldicristian@gmail.com">Cristian Gariboldi</maintainer>
+
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake_auto</buildtool_depend>
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+
+  <exec_depend>tier4_vehicle_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>can_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>ros2launch</exec_depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
