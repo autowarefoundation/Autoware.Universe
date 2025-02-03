@@ -38,6 +38,24 @@ PointPaintingTRT::PointPaintingTRT(
     std::make_unique<image_projection_based_fusion::VoxelGenerator>(densification_param, config_);
 }
 
+bool PointPaintingTRT::detect(
+  const sensor_msgs::msg::PointCloud2 & input_pointcloud_msg, const tf2_ros::Buffer & tf_buffer,
+  std::vector<autoware::lidar_centerpoint::Box3D> & det_boxes3d)
+{
+  CHECK_CUDA_ERROR(cudaMemsetAsync(
+    encoder_in_features_d_.get(), 0, encoder_in_feature_size_ * sizeof(float), stream_));
+  CHECK_CUDA_ERROR(
+    cudaMemsetAsync(spatial_features_d_.get(), 0, spatial_features_size_ * sizeof(float), stream_));
+  if (!preprocess(input_pointcloud_msg, tf_buffer)) {
+    RCLCPP_WARN_STREAM(
+      rclcpp::get_logger("lidar_centerpoint"), "Fail to preprocess and skip to detect.");
+    return false;
+  }
+  inference();
+  postProcess(det_boxes3d);
+  return true;
+}
+
 bool PointPaintingTRT::preprocess(
   const sensor_msgs::msg::PointCloud2 & input_pointcloud_msg, const tf2_ros::Buffer & tf_buffer)
 {

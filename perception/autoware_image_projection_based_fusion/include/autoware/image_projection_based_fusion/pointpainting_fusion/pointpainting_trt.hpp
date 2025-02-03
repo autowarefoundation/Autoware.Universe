@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace autoware::image_projection_based_fusion
 {
@@ -35,10 +36,13 @@ public:
     const autoware::lidar_centerpoint::DensificationParam & densification_param,
     const autoware::lidar_centerpoint::CenterPointConfig & config);
 
+  bool detect(
+    const sensor_msgs::msg::PointCloud2 & input_pointcloud_msg, const tf2_ros::Buffer & tf_buffer,
+    std::vector<autoware::lidar_centerpoint::Box3D> & det_boxes3d);
+
 protected:
   bool preprocess(
-    const sensor_msgs::msg::PointCloud2 & input_pointcloud_msg,
-    const tf2_ros::Buffer & tf_buffer) override;
+    const sensor_msgs::msg::PointCloud2 & input_pointcloud_msg, const tf2_ros::Buffer & tf_buffer);
 
   std::unique_ptr<image_projection_based_fusion::VoxelGenerator> vg_ptr_pp_{nullptr};
 };

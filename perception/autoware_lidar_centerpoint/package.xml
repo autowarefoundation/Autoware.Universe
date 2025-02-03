@@ -16,6 +16,7 @@
   <depend>autoware_perception_msgs</depend>
   <depend>autoware_tensorrt_common</depend>
   <depend>autoware_universe_utils</depend>
+  <depend>cuda_blackboard</depend>
   <depend>pcl_ros</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
