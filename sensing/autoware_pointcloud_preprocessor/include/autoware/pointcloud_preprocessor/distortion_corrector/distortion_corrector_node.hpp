@@ -18,6 +18,7 @@
 #include "autoware/pointcloud_preprocessor/distortion_corrector/distortion_corrector.hpp"
 
 #include <autoware/universe_utils/ros/debug_publisher.hpp>
+#include <autoware/universe_utils/ros/polling_subscriber.hpp>
 #include <autoware/universe_utils/system/stop_watch.hpp>
 #include <rclcpp/rclcpp.hpp>
 
@@ -40,8 +41,11 @@ public:
   explicit DistortionCorrectorComponent(const rclcpp::NodeOptions & options);
 
 private:
-  rclcpp::Subscription<geometry_msgs::msg::TwistWithCovarianceStamped>::SharedPtr twist_sub_;
-  rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr imu_sub_;
+  autoware::universe_utils::InterProcessPollingSubscriber<
+    geometry_msgs::msg::TwistWithCovarianceStamped,
+    autoware::universe_utils::polling_policy::All>::SharedPtr twist_sub_;
+  autoware::universe_utils::InterProcessPollingSubscriber<
+    sensor_msgs::msg::Imu, autoware::universe_utils::polling_policy::All>::SharedPtr imu_sub_;
   rclcpp::Subscription<PointCloud2>::SharedPtr pointcloud_sub_;
 
   rclcpp::Publisher<PointCloud2>::SharedPtr undistorted_pointcloud_pub_;
@@ -59,9 +63,6 @@ private:
   std::unique_ptr<DistortionCorrectorBase> distortion_corrector_;
 
   void pointcloud_callback(PointCloud2::UniquePtr pointcloud_msg);
-  void twist_callback(
-    const geometry_msgs::msg::TwistWithCovarianceStamped::ConstSharedPtr twist_msg);
-  void imu_callback(const sensor_msgs::msg::Imu::ConstSharedPtr imu_msg);
 };
 
 }  // namespace autoware::pointcloud_preprocessor

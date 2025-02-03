@@ -19,6 +19,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace autoware::pointcloud_preprocessor
 {
@@ -28,8 +29,8 @@ DistortionCorrectorComponent::DistortionCorrectorComponent(const rclcpp::NodeOpt
 {
   // initialize debug tool
 
-  using autoware::universe_utils::DebugPublisher;
-  using autoware::universe_utils::StopWatch;
+  using universe_utils::DebugPublisher;
+  using universe_utils::StopWatch;
   stop_watch_ptr_ = std::make_unique<StopWatch<std::chrono::milliseconds>>();
   debug_publisher_ = std::make_unique<DebugPublisher>(this, "distortion_corrector");
   stop_watch_ptr_->tic("cyclic_time");
@@ -52,13 +53,18 @@ DistortionCorrectorComponent::DistortionCorrectorComponent(const rclcpp::NodeOpt
       "~/output/pointcloud", rclcpp::SensorDataQoS(), pub_options);
   }
 
+  // Twist queue size needs to be larger than 'twist frequency' / 'pointcloud frequency'.
+  // To avoid individual tuning, a sufficiently large value is hard-coded.
+  // With 100, it can handle twist updates up to 1000Hz if the pointcloud is 10Hz.
+  const uint16_t TWIST_QUEUE_SIZE = 100;
+
   // Subscriber
-  twist_sub_ = this->create_subscription<geometry_msgs::msg::TwistWithCovarianceStamped>(
-    "~/input/twist", 10,
-    std::bind(&DistortionCorrectorComponent::twist_callback, this, std::placeholders::_1));
-  imu_sub_ = this->create_subscription<sensor_msgs::msg::Imu>(
-    "~/input/imu", 10,
-    std::bind(&DistortionCorrectorComponent::imu_callback, this, std::placeholders::_1));
+  twist_sub_ = universe_utils::InterProcessPollingSubscriber<
+    geometry_msgs::msg::TwistWithCovarianceStamped, universe_utils::polling_policy::All>::
+    create_subscription(this, "~/input/twist", rclcpp::QoS(TWIST_QUEUE_SIZE));
+  imu_sub_ = universe_utils::InterProcessPollingSubscriber<
+    sensor_msgs::msg::Imu, universe_utils::polling_policy::All>::
+    create_subscription(this, "~/input/imu", rclcpp::QoS(TWIST_QUEUE_SIZE));
   pointcloud_sub_ = this->create_subscription<PointCloud2>(
     "~/input/pointcloud", rclcpp::SensorDataQoS(),
     std::bind(&DistortionCorrectorComponent::pointcloud_callback, this, std::placeholders::_1));
@@ -72,21 +78,6 @@ DistortionCorrectorComponent::DistortionCorrectorComponent(const rclcpp::NodeOpt
   }
 }
 
-void DistortionCorrectorComponent::twist_callback(
-  const geometry_msgs::msg::TwistWithCovarianceStamped::ConstSharedPtr twist_msg)
-{
-  distortion_corrector_->process_twist_message(twist_msg);
-}
-
-void DistortionCorrectorComponent::imu_callback(const sensor_msgs::msg::Imu::ConstSharedPtr imu_msg)
-{
-  if (!use_imu_) {
-    return;
-  }
-
-  distortion_corrector_->process_imu_message(base_frame_, imu_msg);
-}
-
 void DistortionCorrectorComponent::pointcloud_callback(PointCloud2::UniquePtr pointcloud_msg)
 {
   stop_watch_ptr_->toc("processing_time", true);
@@ -95,6 +86,19 @@ void DistortionCorrectorComponent::pointcloud_callback(PointCloud2::UniquePtr po
 
   if (points_sub_count < 1) {
     return;
+  }
+
+  std::vector<geometry_msgs::msg::TwistWithCovarianceStamped::ConstSharedPtr> twist_msgs =
+    twist_sub_->takeData();
+  for (const auto & msg : twist_msgs) {
+    distortion_corrector_->process_twist_message(msg);
+  }
+
+  if (use_imu_) {
+    std::vector<sensor_msgs::msg::Imu::ConstSharedPtr> imu_msgs = imu_sub_->takeData();
+    for (const auto & msg : imu_msgs) {
+      distortion_corrector_->process_imu_message(base_frame_, msg);
+    }
   }
 
   distortion_corrector_->set_pointcloud_transform(base_frame_, pointcloud_msg->header.frame_id);
