@@ -9,7 +9,8 @@
 
     # ---- curve parameters  ----
     # - common parameters -
-    curvature_calculation_distance: 5.0         # distance of points while curvature is calculating for the steer rate and lateral acceleration limit [m]
+    curvature_calculation_distance: 5.0   # distance of points while curvature is calculating for the steer rate and lateral acceleration limit [m]
+    algorithm_type: $(var velocity_smoother_type)       # algorithm type for velocity smoother. "JerkFiltered" or "L2" or "Linf" or "Analytical"
     # - lateral acceleration limit parameters -
     enable_lateral_acc_limit: true     # To toggle the lateral acc filter on and off. You can switch it dynamically at runtime.
     max_lateral_accel: 0.8             # max lateral acceleration limit [m/ss]
@@ -61,3 +62,6 @@
     over_stop_velocity_warn_thr: 1.389  # used to check if the optimization exceeds the input velocity on the stop point
 
     plan_from_ego_speed_on_manual_mode: true  # planning is done from ego velocity/acceleration on MANUAL mode. This should be true for smooth transition from MANUAL to AUTONOMOUS, but could be false for debugging.
+
+    # debug
+    publish_debug_trajs: false  # publish debug trajectories

@@ -119,6 +119,18 @@ After the optimization, a resampling called `post resampling` is performed befor
 
 ## Parameters
 
+{{json_to_markdown("planning/autoware_velocity_smoother/schema/Analytical.schema.json")}}
+
+{{json_to_markdown("planning/autoware_velocity_smoother/schema/default_common.schema.json")}}
+
+{{json_to_markdown("planning/autoware_velocity_smoother/schema/default_velocity_smoother.schema.json")}}
+
+{{json_to_markdown("planning/autoware_velocity_smoother/schema/JerkFiltered.schema.json")}}
+
+{{json_to_markdown("planning/autoware_velocity_smoother/schema/L2.schema.json")}}
+
+{{json_to_markdown("planning/autoware_velocity_smoother/schema/Linf.schema.json")}}
+
 ### Constraint parameters
 
 | Name           | Type     | Description                                    | Default value |

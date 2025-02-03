@@ -1,0 +1,4 @@
+/**:
+  ros__parameters:
+    ego_nearest_dist_threshold: 0.3       # threshold to find the nearest point on the trajectory [m]
+    ego_nearest_yaw_threshold: 1.046      # threshold to find the nearest point on the trajectory [rad]

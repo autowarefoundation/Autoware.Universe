@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for default_common",
+  "type": "object",
+  "definitions": {
+    "default_common_params": {
+      "type": "object",
+      "properties": {
+        "max_vel": {
+          "type": "number",
+          "default": 11.1,
+          "description": "Max velocity limit [m/s]"
+        },
+        "normal": {
+          "type": "object",
+          "properties": {
+            "min_acc": {
+              "type": "number",
+              "default": -0.5,
+              "description": "Min deceleration [m/ss]"
+            },
+            "max_acc": {
+              "type": "number",
+              "default": 1.0,
+              "description": "Max acceleration [m/ss]"
+            },
+            "min_jerk": {
+              "type": "number",
+              "default": -0.5,
+              "description": "Min jerk [m/sss]"
+            },
+            "max_jerk": {
+              "type": "number",
+              "default": 1.0,
+              "description": "Max jerk [m/sss]"
+            }
+          },
+          "required": ["min_acc", "max_acc", "min_jerk", "max_jerk"],
+          "additionalProperties": false
+        },
+        "limit": {
+          "type": "object",
+          "properties": {
+            "min_acc": {
+              "type": "number",
+              "default": -2.5,
+              "description": "Min deceleration limit [m/ss]"
+            },
+            "max_acc": {
+              "type": "number",
+              "default": 1.0,
+              "description": "Max acceleration limit [m/ss]"
+            },
+            "min_jerk": {
+              "type": "number",
+              "default": -1.5,
+              "description": "Min jerk limit [m/sss]"
+            },
+            "max_jerk": {
+              "type": "number",
+              "default": 1.5,
+              "description": "Max jerk limit [m/sss]"
+            }
+          },
+          "required": ["min_acc", "max_acc", "min_jerk", "max_jerk"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["max_vel", "normal", "limit"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/default_common_params"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

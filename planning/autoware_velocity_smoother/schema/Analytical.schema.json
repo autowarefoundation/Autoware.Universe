@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for analytical",
+  "type": "object",
+  "definitions": {
+    "analytical_params": {
+      "type": "object",
+      "properties": {
+        "resample": {
+          "type": "object",
+          "properties": {
+            "ds_resample": {
+              "type": "number",
+              "default": 0.1,
+              "description": "Enable resampling"
+            },
+            "num_resample": {
+              "type": "number",
+              "default": 1,
+              "description": "Resample interval"
+            },
+            "delta_yaw_threshold": {
+              "type": "number",
+              "default": 0.785,
+              "description": "Threshold for yaw change"
+            }
+          },
+          "required": ["ds_resample", "num_resample", "delta_yaw_threshold"],
+          "additionalProperties": false
+        },
+        "latacc": {
+          "type": "object",
+          "properties": {
+            "enable_constant_velocity_while_turning": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable constant velocity while turning"
+            },
+            "constant_velocity_dist_threshold": {
+              "type": "number",
+              "default": 2.0,
+              "description": "Threshold for constant velocity"
+            }
+          },
+          "required": [
+            "enable_constant_velocity_while_turning",
+            "constant_velocity_dist_threshold"
+          ],
+          "additionalProperties": false
+        },
+        "forward": {
+          "type": "object",
+          "properties": {
+            "max_acc": {
+              "type": "number",
+              "default": 1.0,
+              "description": "Maximum forward acceleration"
+            },
+            "min_acc": {
+              "type": "number",
+              "default": -1.0,
+              "description": "Minimum forward acceleration"
+            },
+            "max_jerk": {
+              "type": "number",
+              "default": 0.3,
+              "description": "Maximum forward jerk"
+            },
+            "min_jerk": {
+              "type": "number",
+              "default": -0.3,
+              "description": "Minimum forward jerk"
+            },
+            "kp": {
+              "type": "number",
+              "default": 0.3,
+              "description": "Proportional gain for forward control"
+            }
+          },
+          "required": ["max_acc", "min_acc", "max_jerk", "min_jerk", "kp"],
+          "additionalProperties": false
+        },
+        "backward": {
+          "type": "object",
+          "properties": {
+            "start_jerk": {
+              "type": "number",
+              "default": -0.1,
+              "description": "Jerk at the start of backward motion"
+            },
+            "min_jerk_mild_stop": {
+              "type": "number",
+              "default": -0.3,
+              "description": "Minimum jerk for mild stopping"
+            },
+            "min_jerk": {
+              "type": "number",
+              "default": -1.5,
+              "description": "Minimum backward jerk"
+            },
+            "min_acc_mild_stop": {
+              "type": "number",
+              "default": -1.0,
+              "description": "Minimum acceleration for mild stopping"
+            },
+            "min_acc": {
+              "type": "number",
+              "default": -2.5,
+              "description": "Minimum backward acceleration"
+            },
+            "span_jerk": {
+              "type": "number",
+              "default": -0.01,
+              "description": "Span jerk value for backward motion"
+            }
+          },
+          "required": [
+            "start_jerk",
+            "min_jerk_mild_stop",
+            "min_jerk",
+            "min_acc_mild_stop",
+            "min_acc",
+            "span_jerk"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": ["resample", "latacc", "forward", "backward"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/analytical_params"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

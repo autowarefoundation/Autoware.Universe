@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for JerkFiltered",
+  "type": "object",
+  "definitions": {
+    "jerk_filtered_params": {
+      "type": "object",
+      "properties": {
+        "jerk_weight": {
+          "type": "number",
+          "default": 10.0,
+          "description": "Weight for 'smoothness' cost for jerk"
+        },
+        "over_v_weight": {
+          "type": "number",
+          "default": 100000.0,
+          "description": "Weight for 'over speed limit' cost"
+        },
+        "over_a_weight": {
+          "type": "number",
+          "default": 5000.0,
+          "description": "Weight for 'over accel limit' cost"
+        },
+        "over_j_weight": {
+          "type": "number",
+          "default": 2000.0,
+          "description": "Weight for 'over jerk limit' cost"
+        },
+        "jerk_filter_ds": {
+          "type": "number",
+          "default": 0.1,
+          "description": "Resampling ds for jerk filter"
+        }
+      },
+      "required": [
+        "jerk_weight",
+        "over_v_weight",
+        "over_a_weight",
+        "over_j_weight",
+        "jerk_filter_ds"
+      ]
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/jerk_filtered_params"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

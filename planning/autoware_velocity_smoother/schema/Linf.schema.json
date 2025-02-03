@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for Linf",
+  "type": "object",
+  "definitions": {
+    "linf_params": {
+      "type": "object",
+      "properties": {
+        "pseudo_jerk_weight": {
+          "type": "number",
+          "default": 200.0,
+          "description": "Weight for 'smoothness' cost"
+        },
+        "over_v_weight": {
+          "type": "number",
+          "default": 100000.0,
+          "description": "Weight for 'over speed limit' cost"
+        },
+        "over_a_weight": {
+          "type": "number",
+          "default": 5000.0,
+          "description": "Weight for 'over accel limit' cost"
+        }
+      },
+      "required": ["pseudo_jerk_weight", "over_v_weight", "over_a_weight"]
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/linf_params"
+        }
+      },
+      "required": ["ros__parameters"]
+    }
+  },
+  "required": ["/**"]
+}

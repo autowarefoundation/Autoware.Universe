@@ -1,0 +1,281 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for default_velocity_smoother",
+  "type": "object",
+  "definitions": {
+    "velocity_smoother_params": {
+      "type": "object",
+      "properties": {
+        "max_velocity": {
+          "type": "number",
+          "default": 20.0,
+          "description": "Max velocity limit [m/s]"
+        },
+        "stop_decel": {
+          "type": "number",
+          "default": 0.0,
+          "description": "Deceleration at a stop point [m/ss]"
+        },
+        "margin_to_insert_external_velocity_limit": {
+          "type": "number",
+          "default": 0.3,
+          "description": "Margin distance to insert external velocity limit [m]"
+        },
+        "curvature_calculation_distance": {
+          "type": "number",
+          "default": 5.0,
+          "description": "Distance of points while curvature is calculating for the steer rate and lateral acceleration limit [m]"
+        },
+        "algorithm_type": {
+          "type": "string",
+          "enum": ["JerkFiltered", "L2", "Linf", "Analytical"],
+          "default": "JerkFiltered",
+          "description": "Algorithm type for velocity smoother."
+        },
+        "enable_lateral_acc_limit": {
+          "type": "boolean",
+          "default": true,
+          "description": "To toggle the lateral acc filter on and off."
+        },
+        "max_lateral_accel": {
+          "type": "number",
+          "default": 0.8,
+          "description": "Max lateral acceleration limit [m/ss]"
+        },
+        "min_curve_velocity": {
+          "type": "number",
+          "default": 2.74,
+          "description": "Min velocity at lateral acceleration limit and steering angle rate limit [m/s]"
+        },
+        "decel_distance_before_curve": {
+          "type": "number",
+          "default": 3.5,
+          "description": "Slow speed distance before a curve for lateral acceleration limit [m]"
+        },
+        "decel_distance_after_curve": {
+          "type": "number",
+          "default": 2.0,
+          "description": "Slow speed distance after a curve for lateral acceleration limit [m]"
+        },
+        "min_decel_for_lateral_acc_lim_filter": {
+          "type": "number",
+          "default": -2.5,
+          "description": "Deceleration limit applied in the lateral acceleration filter to avoid sudden braking [m/ss]"
+        },
+        "enable_steering_rate_limit": {
+          "type": "boolean",
+          "default": true,
+          "description": "To toggle the steer rate filter on and off."
+        },
+        "max_steering_angle_rate": {
+          "type": "number",
+          "default": 40.0,
+          "description": "Maximum steering angle rate [degree/s]"
+        },
+        "resample_ds": {
+          "type": "number",
+          "default": 0.1,
+          "description": "Distance between trajectory points [m]"
+        },
+        "curvature_threshold": {
+          "type": "number",
+          "default": 0.02,
+          "description": "If curvature > curvature_threshold, steeringRateLimit is triggered [1/m]"
+        },
+        "replan_vel_deviation": {
+          "type": "number",
+          "default": 5.53,
+          "description": "Velocity deviation to replan initial velocity [m/s]"
+        },
+        "engage_velocity": {
+          "type": "number",
+          "default": 0.25,
+          "description": "Engage velocity threshold [m/s]"
+        },
+        "engage_acceleration": {
+          "type": "number",
+          "default": 0.1,
+          "description": "Engage acceleration [m/ss]"
+        },
+        "engage_exit_ratio": {
+          "type": "number",
+          "default": 0.5,
+          "description": "Exit engage sequence to normal velocity planning when the velocity exceeds engage_exit_ratio x engage_velocity."
+        },
+        "stop_dist_to_prohibit_engage": {
+          "type": "number",
+          "default": 0.5,
+          "description": "If the stop point is in this distance, the speed is set to 0 not to move the vehicle [m]"
+        },
+        "stopping_velocity": {
+          "type": "number",
+          "default": 2.778,
+          "description": "Change target velocity to this value before v=0 point [m/s]"
+        },
+        "stopping_distance": {
+          "type": "number",
+          "default": 0.0,
+          "description": "Distance for the stopping_velocity [m]. 0 means the stopping velocity is not applied."
+        },
+        "extract_ahead_dist": {
+          "type": "number",
+          "default": 200.0,
+          "description": "Forward trajectory distance used for planning [m]"
+        },
+        "extract_behind_dist": {
+          "type": "number",
+          "default": 5.0,
+          "description": "Backward trajectory distance used for planning [m]"
+        },
+        "delta_yaw_threshold": {
+          "type": "number",
+          "default": 1.0472,
+          "description": "Allowed delta yaw between ego pose and trajectory pose [radian]"
+        },
+        "max_trajectory_length": {
+          "type": "number",
+          "default": 200.0,
+          "description": "Max trajectory length for resampling [m]"
+        },
+        "min_trajectory_length": {
+          "type": "number",
+          "default": 150.0,
+          "description": "Min trajectory length for resampling [m]"
+        },
+        "resample_time": {
+          "type": "number",
+          "default": 2.0,
+          "description": "Resample total time for dense sampling [s]"
+        },
+        "dense_resample_dt": {
+          "type": "number",
+          "default": 0.2,
+          "description": "Resample time interval for dense sampling [s]"
+        },
+        "dense_min_interval_distance": {
+          "type": "number",
+          "default": 0.1,
+          "description": "Minimum points-interval length for dense sampling [m]"
+        },
+        "sparse_resample_dt": {
+          "type": "number",
+          "default": 0.5,
+          "description": "Resample time interval for sparse sampling [s]"
+        },
+        "sparse_min_interval_distance": {
+          "type": "number",
+          "default": 4.0,
+          "description": "Minimum points-interval length for sparse sampling [m]"
+        },
+        "post_max_trajectory_length": {
+          "type": "number",
+          "default": 300.0,
+          "description": "Max trajectory length for resampling [m]"
+        },
+        "post_min_trajectory_length": {
+          "type": "number",
+          "default": 30.0,
+          "description": "Min trajectory length for resampling [m]"
+        },
+        "post_resample_time": {
+          "type": "number",
+          "default": 10.0,
+          "description": "Resample total time for dense sampling [s]"
+        },
+        "post_dense_resample_dt": {
+          "type": "number",
+          "default": 0.1,
+          "description": "Resample time interval for dense sampling [s]"
+        },
+        "post_dense_min_interval_distance": {
+          "type": "number",
+          "default": 0.1,
+          "description": "Minimum points-interval length for dense sampling [m]"
+        },
+        "post_sparse_resample_dt": {
+          "type": "number",
+          "default": 0.1,
+          "description": "Resample time interval for sparse sampling [s]"
+        },
+        "post_sparse_min_interval_distance": {
+          "type": "number",
+          "default": 1.0,
+          "description": "Minimum points-interval length for sparse sampling [m]"
+        },
+        "over_stop_velocity_warn_thr": {
+          "type": "number",
+          "default": 1.389,
+          "description": "Used to check if the optimization exceeds the input velocity on the stop point"
+        },
+        "plan_from_ego_speed_on_manual_mode": {
+          "type": "boolean",
+          "default": true,
+          "description": "Planning is done from ego velocity/acceleration on MANUAL mode."
+        },
+        "publish_debug_trajs": {
+          "type": "boolean",
+          "default": false,
+          "description": "Publish debug trajectories"
+        }
+      },
+      "required": [
+        "max_velocity",
+        "stop_decel",
+        "margin_to_insert_external_velocity_limit",
+        "curvature_calculation_distance",
+        "ego_nearest_dist_threshold",
+        "ego_nearest_yaw_threshold",
+        "algorithm_type",
+        "enable_lateral_acc_limit",
+        "max_lateral_accel",
+        "min_curve_velocity",
+        "decel_distance_before_curve",
+        "decel_distance_after_curve",
+        "min_decel_for_lateral_acc_lim_filter",
+        "enable_steering_rate_limit",
+        "max_steering_angle_rate",
+        "resample_ds",
+        "curvature_threshold",
+        "replan_vel_deviation",
+        "engage_velocity",
+        "engage_acceleration",
+        "engage_exit_ratio",
+        "stop_dist_to_prohibit_engage",
+        "stopping_velocity",
+        "stopping_distance",
+        "extract_ahead_dist",
+        "extract_behind_dist",
+        "delta_yaw_threshold",
+        "max_trajectory_length",
+        "min_trajectory_length",
+        "resample_time",
+        "dense_resample_dt",
+        "dense_min_interval_distance",
+        "sparse_resample_dt",
+        "sparse_min_interval_distance",
+        "post_max_trajectory_length",
+        "post_min_trajectory_length",
+        "post_resample_time",
+        "post_dense_resample_dt",
+        "post_dense_min_interval_distance",
+        "post_sparse_resample_dt",
+        "post_sparse_min_interval_distance",
+        "over_stop_velocity_warn_thr",
+        "plan_from_ego_speed_on_manual_mode",
+        "publish_debug_trajs"
+      ]
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/velocity_smoother_params"
+        }
+      },
+      "required": ["ros__parameters"]
+    }
+  },
+  "required": ["/**"]
+}
