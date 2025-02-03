@@ -12,4 +12,4 @@
     pose_estimator_longitudinal_tolerance: 0.11   # [m]
     pose_estimator_lateral_tolerance: 0.11        # [m]
     pose_estimator_vertical_tolerance: 0.11       # [m]
-    pose_estimator_angular_tolerance: 0.0175      # [rad]
+    pose_estimator_angular_tolerance: 0.105      # [rad]

@@ -41,8 +41,8 @@
       ellipse_scale: 3.0
       error_ellipse_size: 1.5
       warn_ellipse_size: 1.2
-      error_ellipse_size_lateral_direction: 0.3
-      warn_ellipse_size_lateral_direction: 0.25
+      error_ellipse_size_lateral_direction: 0.4
+      warn_ellipse_size_lateral_direction: 0.35
 
     misc:
       # for velocity measurement limitation (Set 0.0 if you want to ignore)
