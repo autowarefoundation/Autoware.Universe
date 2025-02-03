@@ -634,6 +634,8 @@ public:
     pub_clock_->publish(clock);
   }
 
+  void spin() { rclcpp::spin_some(test_node_); }
+
 protected:
   // Publisher
   std::unordered_map<std::string, std::shared_ptr<rclcpp::PublisherBase>> publishers_;

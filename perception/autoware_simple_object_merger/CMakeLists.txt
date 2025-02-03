@@ -20,6 +20,10 @@ if(BUILD_TESTING)
   list(APPEND AMENT_LINT_AUTO_EXCLUDE ament_cmake_uncrustify)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
+  # node test
+  ament_auto_add_gtest(simple_object_merger_node_test
+    test/test_simple_object_merger_node.cpp
+  )
 endif()
 
 # Package
