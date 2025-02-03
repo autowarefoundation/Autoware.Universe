@@ -69,13 +69,7 @@ This is an example of a diagnostic graph configuration. The configuration can be
 ros2 launch autoware_diagnostic_graph_aggregator example-main.launch.xml
 ```
 
-You can reuse the graph by making partial edits. For example, disable hardware checks for simulation.
-
-- [edit.yaml](./example/graph/edit.yaml)
-
-```bash
-ros2 launch autoware_diagnostic_graph_aggregator example-edit.launch.xml
-```
+If you want to share the same settings with a configuration that is missing some diagnostics due to differences in variations, we recommend that you unify the diagnostics by using [dummy_diag_publisher](../autoware_dummy_diag_publisher/README.md), etc.
 
 ## Debug tools
 
@@ -87,4 +81,3 @@ ros2 launch autoware_diagnostic_graph_aggregator example-edit.launch.xml
 - [graph](./doc/format/graph.md)
 - [path](./doc/format/path.md)
 - [unit](./doc/format/unit.md)
-- [edit](./doc/format/edit.md)

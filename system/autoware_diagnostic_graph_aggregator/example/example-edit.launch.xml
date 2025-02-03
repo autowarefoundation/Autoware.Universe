@@ -1,6 +1,0 @@
-<launch>
-  <include file="$(find-pkg-share autoware_diagnostic_graph_aggregator)/launch/aggregator.launch.xml">
-    <arg name="graph_file" value="$(find-pkg-share autoware_diagnostic_graph_aggregator)/example/graph/edit.yaml"/>
-  </include>
-  <executable cmd="python3 $(find-pkg-share autoware_diagnostic_graph_aggregator)/example/dummy-diags.py"/>
-</launch>
