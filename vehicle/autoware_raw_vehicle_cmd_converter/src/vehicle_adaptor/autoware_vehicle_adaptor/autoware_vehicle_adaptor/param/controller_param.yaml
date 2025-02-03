@@ -1,0 +1,9 @@
+controller_parameter:
+  vehicle_info:
+    wheel_base: 2.79
+  acceleration:
+    acc_time_delay: 0.1
+    acc_time_constant: 0.1
+  steering:
+    steer_time_delay: 0.27
+    steer_time_constant: 0.24

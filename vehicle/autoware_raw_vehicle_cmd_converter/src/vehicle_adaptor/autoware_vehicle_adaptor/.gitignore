@@ -1,0 +1,7 @@
+.ipynb_checkpoints
+# Files generated when installing
+build/
+*.egg-info/
+.cspell.json
+
+*.so

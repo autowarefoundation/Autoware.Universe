@@ -15,6 +15,8 @@
 #ifndef AUTOWARE_RAW_VEHICLE_CMD_CONVERTER__VEHICLE_ADAPTOR__VEHICLE_ADAPTOR_HPP_
 #define AUTOWARE_RAW_VEHICLE_CMD_CONVERTER__VEHICLE_ADAPTOR__VEHICLE_ADAPTOR_HPP_
 
+#include "vehicle_adaptor_compensator.h"
+
 #include <autoware_adapi_v1_msgs/msg/operation_mode_state.hpp>
 #include <autoware_control_msgs/msg/control.hpp>
 #include <autoware_control_msgs/msg/control_horizon.hpp>
@@ -44,6 +46,9 @@ public:
     [[maybe_unused]] const ControlHorizon & control_horizon);
 
 private:
+  Proxima::VehicleAdaptor proxima_vehicle_adaptor_;
+  double yaw_prev_ = 0.0;
+  bool initialized_ = false;
 };
 }  // namespace autoware::raw_vehicle_cmd_converter
 

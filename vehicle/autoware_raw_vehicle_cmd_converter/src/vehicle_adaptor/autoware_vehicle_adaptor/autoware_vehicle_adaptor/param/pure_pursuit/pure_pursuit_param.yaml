@@ -1,0 +1,14 @@
+pure_pursuit_parameter:
+  pure_pursuit:
+    acc_kp: 1.0
+    acc_ki: 0.01
+    integration_decay: 0.99
+    integration_limit: 0.01
+    lookahead_time: 3.0
+    min_lookahead: 1.5
+    steer_kp_param: 2.0
+    steer_kd_param: 2.0
+    lon_acc_lim: 2.0
+    lon_jerk_lim: 5.0
+    steer_lim: 2.0
+    steer_rate_lim: 2.0

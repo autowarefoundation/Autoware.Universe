@@ -1,0 +1,8 @@
+from autoware_vehicle_adaptor.calibrator.accel_brake_map_calibrator import Calibrator
+from autoware_vehicle_adaptor.data_analyzer import rosbag_to_csv
+from autoware_vehicle_adaptor.training.train_error_prediction_NN import train_error_prediction_NN
+
+train_error_prediction_NN.convert_rosbag_to_csv = staticmethod(rosbag_to_csv.rosbag_to_csv)
+Calibrator.convert_rosbag_to_csv = staticmethod(rosbag_to_csv.rosbag_to_csv)
+
+__all__ = ["train_error_prediction_NN", "Calibrator"]

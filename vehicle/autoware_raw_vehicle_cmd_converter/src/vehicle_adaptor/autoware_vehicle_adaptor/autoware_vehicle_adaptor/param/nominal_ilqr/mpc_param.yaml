@@ -1,0 +1,49 @@
+mpc_parameter:
+  cost_parameters:
+    x_cost: 0.0
+    y_cost: 10.0
+    vel_cost: 0.0
+    yaw_cost: 0.0
+    steer_cost: 0.0
+    acc_cost: 0.0
+    acc_rate_cost: 10.0
+    steer_rate_cost: 1000.0
+    x_terminal_cost: 1e+2
+    y_terminal_cost: 1e+8
+    vel_terminal_cost: 1e+6
+    yaw_terminal_cost: 1e+3
+    acc_terminal_cost: 1.0
+    steer_terminal_cost: 1.0
+    x_intermediate_cost: 1e+2
+    y_intermediate_cost: 1e+8
+    vel_intermediate_cost: 1e+2
+    yaw_intermediate_cost: 1e+7
+    acc_intermediate_cost: 1.0
+    steer_intermediate_cost: 1.0
+    intermediate_cost_index: 25
+    acc_lim_cost: 1.0
+    steer_lim_cost: 1.0
+    acc_rate_lim_cost: 1.0
+    steer_rate_lim_cost: 1.0
+    vel_steer_cost_coef_table: [0.01, 0.01, 0.08, 0.36, 1.0]
+    vel_steer_table: [0.01, 0.1, 0.2, 0.27, 0.33]
+    lateral_cost_coef_table: [0.00001, 0.0005, 0.06, 0.27, 1.0]
+    lateral_error_table: [0.01, 0.1, 0.15, 0.175, 0.2]
+    yaw_cost_coef_table: [0.00001, 1.0]
+    yaw_error_table: [0.00001, 0.1]
+    steer_rate_cost_table: [10.0, 5.0, 1.0]
+    curvature_table: [0.01, 0.03, 0.05]
+    reference_speed_table: [20.0, 30.0]
+    steer_lim_table: [10.0, 10.0]
+    steer_rate_lim_table: [10.0, 10.0]
+    acc_lim_table: [20.0, 20.0]
+    acc_rate_lim_table: [20.0, 20.0]
+    lateral_acc_lim_table: [20.0, 20.0]
+    lateral_acc_rate_lim_table: [20.0, 20.0]
+  setting:
+    control_dt: 0.033
+    predict_step: 3
+    horizon_len: 50
+  sg_filter:
+    sg_deg_for_d_inputs_schedule: 0
+    sg_window_size_for_d_inputs_schedule: 10

@@ -1,0 +1,9 @@
+numba == 0.58.1
+numpy == 1.26.4
+plotly == 5.22.0
+seaborn == 0.13.2
+GPy == 1.13.1
+scipy == 1.11.3
+torch == 2.4.0
+scikit-learn == 1.3.2
+simplejson == 3.17.6
