@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for traffic_light_selector",
+  "type": "object",
+  "definitions": {
+    "traffic_light_selector": {
+      "type": "object",
+      "properties": {
+        "max_iou_threshold": {
+          "type": "number",
+          "description": "Threshold of generalized IOU for detected traffic light selection",
+          "default": -0.5,
+          "minimum": -1.0,
+          "maximum": 1.0
+        }
+      },
+      "required": ["max_iou_threshold"]
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/traffic_light_selector"
+        }
+      },
+      "required": ["ros__parameters"]
+    }
+  },
+  "required": ["/**"]
+}

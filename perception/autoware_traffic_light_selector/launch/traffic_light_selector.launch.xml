@@ -1,0 +1,15 @@
+<launch>
+  <arg name="output/traffic_light_rois" default="output/traffic_light_rois"/>
+  <arg name="input/detected_rois" default="input/detected_rois"/>
+  <arg name="input/rough_rois" default="input/rough_rois"/>
+  <arg name="input/camera_info" default="input/camera_info"/>
+  <arg name="traffic_light_selector_param_path" default="$(find-pkg-share autoware_traffic_light_selector)/config/traffic_light_selector.param.yaml"/>
+
+  <node pkg="autoware_traffic_light_selector" exec="traffic_light_selector_node" name="autoware_traffic_light_selector" output="screen">
+    <remap from="output/traffic_light_rois" to="$(var output/traffic_light_rois)"/>
+    <remap from="input/detected_rois" to="$(var input/detected_rois)"/>
+    <remap from="input/rough_rois" to="$(var input/rough_rois)"/>
+    <remap from="input/camera_info" to="input/camera_info"/>
+    <param from="$(var traffic_light_selector_param_path)"/>
+  </node>
+</launch>
