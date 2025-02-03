@@ -61,8 +61,8 @@ float normalize_angle(double angle)
 
 TEST(trigonometry, opencv_fast_atan2)
 {
-  std::random_device rd;
-  std::mt19937 gen(rd());
+  // Default initialization ensures a constant seed needed for reproducible tests
+  std::mt19937 gen{};
 
   // Generate random x and y between -10.0 and 10.0 as float
   std::uniform_real_distribution<float> dis(-10.0f, 10.0f);
