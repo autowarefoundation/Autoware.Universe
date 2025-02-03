@@ -179,6 +179,54 @@ lanelet::ArcCoordinates calcArcCoordinates(
     to2D(lanelet.centerline()),
     to2D(lanelet::utils::conversion::toLaneletPoint(point)).basicPoint());
 }
+
+// copied from scenario selector
+std::shared_ptr<lanelet::ConstPolygon3d> findNearestParkinglot(
+  const std::shared_ptr<lanelet::LaneletMap> & lanelet_map_ptr,
+  const lanelet::BasicPoint2d & current_position)
+{
+  const auto linked_parking_lot = std::make_shared<lanelet::ConstPolygon3d>();
+  const auto result = lanelet::utils::query::getLinkedParkingLot(
+    current_position, lanelet_map_ptr, linked_parking_lot.get());
+
+  if (result) {
+    return linked_parking_lot;
+  } else {
+    return {};
+  }
+}
+
+bool isInSameParkingLot(
+  const std::shared_ptr<lanelet::LaneletMap> & lanelet_map_ptr,
+  const geometry_msgs::msg::Pose & start_checkpoint,
+  const geometry_msgs::msg::Pose & goal_checkpoint)
+{
+  const auto & start_p = start_checkpoint.position;
+  const auto & goal_p = goal_checkpoint.position;
+
+  const lanelet::Point3d start_search_point(lanelet::InvalId, start_p.x, start_p.y, start_p.z);
+  const lanelet::Point3d goal_search_point(lanelet::InvalId, goal_p.x, goal_p.y, goal_p.z);
+
+  // Find the nearest parking lots to the start and goal points
+  const auto nearest_start_parking_lot =
+    findNearestParkinglot(lanelet_map_ptr, start_search_point.basicPoint2d());
+  const auto nearest_goal_parking_lot =
+    findNearestParkinglot(lanelet_map_ptr, goal_search_point.basicPoint2d());
+
+  // If either parking lot is not found, return false
+  if (!nearest_start_parking_lot || !nearest_goal_parking_lot) {
+    return false;
+  }
+
+  // Check the nearest parking lots are same (using IDs)
+  if (nearest_start_parking_lot->id() != nearest_goal_parking_lot->id()) {
+    return false;
+  }
+
+  return lanelet::geometry::within(start_search_point, nearest_start_parking_lot->basicPolygon()) &&
+         lanelet::geometry::within(goal_search_point, nearest_goal_parking_lot->basicPolygon());
+}
+
 }  // namespace
 
 RouteHandler::RouteHandler(const LaneletMapBin & map_msg)
@@ -1969,6 +2017,15 @@ bool RouteHandler::planPathLaneletsBetweenCheckpoints(
                    << " - goal checkpoint: " << toString(goal_checkpoint) << std::endl
                    << " - start lane id: " << st_llt.id() << std::endl
                    << " - goal lane id: " << goal_lanelet.id() << std::endl);
+
+      // but if the start point and goal point are in the same parking lot,
+      // return the start lanelet as the path
+      if (isInSameParkingLot(lanelet_map_ptr_, start_checkpoint, goal_checkpoint)) {
+        path_lanelets->reserve(1);
+        path_lanelets->push_back(st_llt);
+        RCLCPP_INFO(logger_, "Parking Scenario - Using start lanelet as route!");
+        return true;
+      }
       continue;
     }
     is_route_found = true;
