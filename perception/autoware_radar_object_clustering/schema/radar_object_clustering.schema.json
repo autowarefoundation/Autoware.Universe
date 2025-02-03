@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Radar Object Clustering Parameters",
+  "type": "object",
+  "definitions": {
+    "radar_object_clustering": {
+      "type": "object",
+      "properties": {
+        "angle_threshold": {
+          "type": "number",
+          "description": "Threshold for angle to determine whether radar detections come from one object during clustering. Larger values merge more objects.",
+          "default": 0.174
+        },
+        "distance_threshold": {
+          "type": "number",
+          "description": "Threshold for distance to determine whether radar detections come from one object during clustering. Larger values merge more objects.",
+          "default": 4.0
+        },
+        "velocity_threshold": {
+          "type": "number",
+          "description": "Threshold for velocity to determine whether radar detections come from one object during clustering. Larger values merge more objects.",
+          "default": 2.0
+        },
+        "is_fixed_label": {
+          "type": "boolean",
+          "description": "Flag to use a fixed label. If true, the label of a clustered object is overwritten by the `fixed_label` parameter.",
+          "default": false
+        },
+        "fixed_label": {
+          "type": "string",
+          "description": "The fixed label to use when `is_fixed_label` is true.",
+          "default": "UNKNOWN"
+        },
+        "is_fixed_size": {
+          "type": "boolean",
+          "description": "Flag to use fixed size parameters. If true, the size of a clustered object is overwritten by the `size_x`, `size_y`, and `size_z` parameters.",
+          "default": false
+        },
+        "size_x": {
+          "type": "number",
+          "description": "Size of the clustered object in the x-dimension, used if `is_fixed_size` is true.",
+          "default": 4.0
+        },
+        "size_y": {
+          "type": "number",
+          "description": "Size of the clustered object in the y-dimension, used if `is_fixed_size` is true.",
+          "default": 1.5
+        },
+        "size_z": {
+          "type": "number",
+          "description": "Size of the clustered object in the z-dimension, used if `is_fixed_size` is true.",
+          "default": 1.5
+        }
+      },
+      "required": [
+        "angle_threshold",
+        "distance_threshold",
+        "velocity_threshold",
+        "is_fixed_label",
+        "fixed_label",
+        "is_fixed_size",
+        "size_x",
+        "size_y",
+        "size_z"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/radar_object_clustering"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}
