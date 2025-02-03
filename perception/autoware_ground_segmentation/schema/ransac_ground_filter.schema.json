@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RANSAC Ground Filter Node Params",
+  "type": "object",
+  "definitions": {
+    "ransac_ground_filter": {
+      "type": "object",
+      "properties": {
+        "base_frame": {
+          "type": "string",
+          "description": "base_frame",
+          "default": "base_link"
+        },
+        "unit_axis": {
+          "type": "string",
+          "description": "unit_axis",
+          "default": "z"
+        },
+        "max_iterations": {
+          "type": "integer",
+          "description": "max_iterations",
+          "default": 1000
+        },
+        "min_trial": {
+          "type": "integer",
+          "description": "min_trial",
+          "default": 5000
+        },
+        "min_points": {
+          "type": "integer",
+          "description": "min_points",
+          "default": 1000
+        },
+        "outlier_threshold": {
+          "type": "number",
+          "description": "outlier_threshold",
+          "default": 0.01
+        },
+        "plane_slope_threshold": {
+          "type": "number",
+          "description": "plane_slope_threshold",
+          "default": 10.0
+        },
+        "voxel_size_x": {
+          "type": "number",
+          "description": "voxel_size_x",
+          "default": 0.04
+        },
+        "voxel_size_y": {
+          "type": "number",
+          "description": "voxel_size_y",
+          "default": 0.04
+        },
+        "voxel_size_z": {
+          "type": "number",
+          "description": "voxel_size_z",
+          "default": 0.04
+        },
+        "height_threshold": {
+          "type": "number",
+          "description": "height_threshold",
+          "default": 0.01
+        },
+        "debug": {
+          "type": "boolean",
+          "description": "debug",
+          "default": false
+        },
+        "publish_processing_time_detail": {
+          "type": "boolean",
+          "description": "publish_processing_time_detail",
+          "default": false
+        }
+      },
+      "required": [
+        "base_frame",
+        "unit_axis",
+        "max_iterations",
+        "min_trial",
+        "min_points",
+        "outlier_threshold",
+        "plane_slope_threshold",
+        "voxel_size_x",
+        "voxel_size_y",
+        "voxel_size_z",
+        "height_threshold",
+        "debug",
+        "publish_processing_time_detail"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/ransac_ground_filter"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ground Segmentation Node Params",
+  "type": "object",
+  "definitions": {
+    "ground_segmentation": {
+      "type": "object",
+      "properties": {
+        "global_slope_max_angle_deg": {
+          "type": "number",
+          "description": "global_slope_max_angle_deg",
+          "default": 10.0
+        },
+        "local_slope_max_angle_deg": {
+          "type": "number",
+          "description": "local_slope_max_angle_deg",
+          "default": 13.0
+        },
+        "split_points_distance_tolerance": {
+          "type": "number",
+          "description": "split_points_distance_tolerance",
+          "default": 0.2
+        },
+        "use_virtual_ground_point": {
+          "type": "boolean",
+          "description": "use_virtual_ground_point",
+          "default": true
+        },
+        "split_height_distance": {
+          "type": "number",
+          "description": "split_height_distance",
+          "default": 0.2
+        },
+        "non_ground_height_threshold": {
+          "type": "number",
+          "description": "non_ground_height_threshold",
+          "default": 0.2
+        },
+        "grid_size_m": {
+          "type": "number",
+          "description": "grid_size_m",
+          "default": 0.1
+        },
+        "grid_mode_switch_radius": {
+          "type": "number",
+          "description": "grid_mode_switch_radius",
+          "default": 20.0
+        },
+        "gnd_grid_buffer_size": {
+          "type": "integer",
+          "description": "gnd_grid_buffer_size",
+          "default": 4
+        },
+        "detection_range_z_max": {
+          "type": "number",
+          "description": "detection_range_z_max",
+          "default": 2.5
+        },
+        "elevation_grid_mode": {
+          "type": "boolean",
+          "description": "elevation_grid_mode",
+          "default": true
+        },
+        "low_priority_region_x": {
+          "type": "number",
+          "description": "low_priority_region_x",
+          "default": -20.0
+        },
+        "center_pcl_shift": {
+          "type": "number",
+          "description": "center_pcl_shift",
+          "default": 0.0
+        },
+        "radial_divider_angle_deg": {
+          "type": "number",
+          "description": "radial_divider_angle_deg",
+          "default": 1.0
+        },
+        "use_recheck_ground_cluster": {
+          "type": "boolean",
+          "description": "use_recheck_ground_cluster",
+          "default": true
+        },
+        "use_lowest_point": {
+          "type": "boolean",
+          "description": "use_lowest_point",
+          "default": true
+        },
+        "publish_processing_time_detail": {
+          "type": "boolean",
+          "description": "publish_processing_time_detail",
+          "default": false
+        }
+      },
+      "required": [
+        "global_slope_max_angle_deg",
+        "local_slope_max_angle_deg",
+        "split_points_distance_tolerance",
+        "use_virtual_ground_point",
+        "split_height_distance",
+        "non_ground_height_threshold",
+        "grid_size_m",
+        "grid_mode_switch_radius",
+        "gnd_grid_buffer_size",
+        "detection_range_z_max",
+        "elevation_grid_mode",
+        "low_priority_region_x",
+        "center_pcl_shift",
+        "radial_divider_angle_deg",
+        "use_recheck_ground_cluster",
+        "use_lowest_point",
+        "publish_processing_time_detail"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/ground_segmentation"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}
