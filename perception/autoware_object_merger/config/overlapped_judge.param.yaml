@@ -1,8 +1,15 @@
 /**:
   ros__parameters:
-    distance_threshold_list:
+    unknown_obj_distance_threshold_list:
       #UNKNOWN, CAR, TRUCK, BUS,  TRAILER, MOTORBIKE, BICYCLE,PEDESTRIAN
       [9.0,     9.0, 9.0,   9.0,  9.0,     9.0,       9.0,    9.0]         #UNKNOWN
 
-    generalized_iou_threshold:
+    unknown_obj_generalized_iou_threshold:
+      [-0.1, -0.1, -0.1, -0.6,  -0.6, -0.1, -0.1, -0.1]
+
+    known_obj_distance_threshold_list:
+      #UNKNOWN, CAR, TRUCK, BUS,  TRAILER, MOTORBIKE, BICYCLE,PEDESTRIAN
+      [9.0,     9.0, 9.0,   9.0,  9.0,     9.0,       9.0,    9.0]         #KNOWN
+
+    known_obj_generalized_iou_threshold:
       [-0.1, -0.1, -0.1, -0.6,  -0.6, -0.1, -0.1, -0.1]

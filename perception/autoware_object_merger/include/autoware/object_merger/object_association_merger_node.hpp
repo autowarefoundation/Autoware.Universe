@@ -75,13 +75,16 @@ private:
 
   PriorityMode priority_mode_;
   bool remove_overlapped_unknown_objects_;
-  struct
+  bool remove_overlapped_known_objects_;
+  using OverlappedJudgeParam = struct
   {
     double precision_threshold;
     double recall_threshold;
     std::map<int, double> generalized_iou_threshold;
     std::map<int /*class label*/, double /*distance_threshold*/> distance_threshold_map;
-  } overlapped_judge_param_;
+  };
+
+  OverlappedJudgeParam overlapped_unknown_obj_judge_param_, overlapped_known_obj_judge_param_;
 
   // debug publisher
   std::unique_ptr<autoware::universe_utils::DebugPublisher> processing_time_publisher_;

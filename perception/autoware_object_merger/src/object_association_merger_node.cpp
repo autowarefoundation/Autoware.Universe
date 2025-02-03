@@ -60,6 +60,34 @@ bool isUnknownObjectOverlapped(
   return precision > precision_threshold || recall > recall_threshold ||
          generalized_iou > generalized_iou_threshold;
 }
+
+bool isKnownObjectOverlapped(
+  const autoware_perception_msgs::msg::DetectedObject & object1,
+  const autoware_perception_msgs::msg::DetectedObject & object2, const double precision_threshold,
+  const double recall_threshold, const std::map<int, double> & distance_threshold_map,
+  const std::map<int, double> & generalized_iou_threshold_map)
+{
+  int object1_label = object_recognition_utils::getHighestProbLabel(object1.classification);
+  int object2_label = object_recognition_utils::getHighestProbLabel(object2.classification);
+
+  const double generalized_iou_threshold = std::min(
+    generalized_iou_threshold_map.at(object1_label),
+    generalized_iou_threshold_map.at(object2_label));
+  const double distance_threshold =
+    std::min(distance_threshold_map.at(object1_label), distance_threshold_map.at(object2_label));
+
+  const double sq_distance_threshold = std::pow(distance_threshold, 2.0);
+  const double sq_distance = autoware::universe_utils::calcSquaredDistance2d(
+    object1.kinematics.pose_with_covariance.pose, object2.kinematics.pose_with_covariance.pose);
+  if (sq_distance_threshold < sq_distance) return false;
+
+  const auto precision = object_recognition_utils::get2dPrecision(object1, object2);
+  const auto recall = object_recognition_utils::get2dRecall(object1, object2);
+  const auto generalized_iou = object_recognition_utils::get2dGeneralizedIoU(object1, object2);
+
+  return precision > precision_threshold || recall > recall_threshold ||
+         generalized_iou > generalized_iou_threshold;
+}
 }  // namespace
 
 namespace
@@ -90,20 +118,32 @@ ObjectAssociationMergerNode::ObjectAssociationMergerNode(const rclcpp::NodeOptio
   priority_mode_ = static_cast<PriorityMode>(declare_parameter<int>("priority_mode"));
   sync_queue_size_ = declare_parameter<int>("sync_queue_size");
   remove_overlapped_unknown_objects_ = declare_parameter<bool>("remove_overlapped_unknown_objects");
-  overlapped_judge_param_.precision_threshold =
-    declare_parameter<double>("precision_threshold_to_judge_overlapped");
-  overlapped_judge_param_.recall_threshold =
-    declare_parameter<double>("recall_threshold_to_judge_overlapped");
-  overlapped_judge_param_.generalized_iou_threshold =
-    convertListToClassMap(declare_parameter<std::vector<double>>("generalized_iou_threshold"));
+
+  // unknown obj param
+  overlapped_unknown_obj_judge_param_.precision_threshold =
+    declare_parameter<double>("precision_threshold_to_judge_overlapped_unknown");
+  overlapped_unknown_obj_judge_param_.recall_threshold =
+    declare_parameter<double>("recall_threshold_to_judge_overlapped_unknown", 0.5);
+  overlapped_unknown_obj_judge_param_.generalized_iou_threshold =
+    convertListToClassMap(declare_parameter<std::vector<double>>("unknown_obj_generalized_iou_threshold"));
 
   // get distance_threshold_map from distance_threshold_list
   /** TODO(Shin-kyoto):
    *  this implementation assumes index of vector shows class_label.
    *  if param supports map, refactor this code.
    */
-  overlapped_judge_param_.distance_threshold_map =
-    convertListToClassMap(declare_parameter<std::vector<double>>("distance_threshold_list"));
+  overlapped_unknown_obj_judge_param_.distance_threshold_map =
+    convertListToClassMap(declare_parameter<std::vector<double>>("unknown_obj_distance_threshold_list"));
+
+  // known obj param
+  overlapped_known_obj_judge_param_.precision_threshold =
+    declare_parameter<double>("precision_threshold_to_judge_overlapped_known");
+  overlapped_known_obj_judge_param_.recall_threshold =
+    declare_parameter<double>("recall_threshold_to_judge_overlapped_known", 0.5);
+  overlapped_known_obj_judge_param_.generalized_iou_threshold =
+    convertListToClassMap(declare_parameter<std::vector<double>>("known_obj_generalized_iou_threshold"));
+  overlapped_known_obj_judge_param_.distance_threshold_map =
+    convertListToClassMap(declare_parameter<std::vector<double>>("known_obj_distance_threshold_list"));
 
   const auto tmp = this->declare_parameter<std::vector<int64_t>>("can_assign_matrix");
   const std::vector<int> can_assign_matrix(tmp.begin(), tmp.end());
@@ -217,16 +257,58 @@ void ObjectAssociationMergerNode::objectsCallback(
       bool is_overlapped = false;
       for (const auto & known_object : known_objects) {
         if (isUnknownObjectOverlapped(
-              unknown_object, known_object, overlapped_judge_param_.precision_threshold,
-              overlapped_judge_param_.recall_threshold,
-              overlapped_judge_param_.distance_threshold_map,
-              overlapped_judge_param_.generalized_iou_threshold)) {
+              unknown_object, known_object, overlapped_unknown_obj_judge_param_.precision_threshold,
+              overlapped_unknown_obj_judge_param_.recall_threshold,
+              overlapped_unknown_obj_judge_param_.distance_threshold_map,
+              overlapped_unknown_obj_judge_param_.generalized_iou_threshold)) {
           is_overlapped = true;
           break;
         }
       }
       if (!is_overlapped) {
         output_msg.objects.push_back(unknown_object);
+      }
+    }
+  }
+
+  // Remove overlapped known object
+  if (remove_overlapped_known_objects_) {
+    std::vector<autoware_perception_msgs::msg::DetectedObject> unknown_objects, known_objects;
+    unknown_objects.reserve(output_msg.objects.size());
+    known_objects.reserve(output_msg.objects.size());
+    for (const auto & object : output_msg.objects) {
+      if (object_recognition_utils::getHighestProbLabel(object.classification) == Label::UNKNOWN) {
+        unknown_objects.push_back(object);
+      } else {
+        known_objects.push_back(object);
+      }
+    }
+
+    std::sort(known_objects.begin(), known_objects.end(),
+    [](const auto& a, const auto& b) {
+      return a.kinematics.pose_with_covariance.pose.position.x < b.kinematics.pose_with_covariance.pose.position.x;
+    });
+
+    output_msg.objects.clear();
+    output_msg.objects = unknown_objects;
+    for (size_t i = 0; i < known_objects.size(); ++i) {
+      bool should_keep = true;
+      for (size_t j = i + 1; j < known_objects.size(); ++j) {
+        if (isKnownObjectOverlapped(known_objects[i], known_objects[j],
+                                    overlapped_known_obj_judge_param_.precision_threshold,
+                                    overlapped_known_obj_judge_param_.recall_threshold,
+                                    overlapped_known_obj_judge_param_.distance_threshold_map,
+                                    overlapped_known_obj_judge_param_.generalized_iou_threshold)) {
+          auto label_i = object_recognition_utils::getHighestProbClassification(known_objects[i].classification);
+          auto label_j = object_recognition_utils::getHighestProbClassification(known_objects[j].classification);
+          if (label_i.probability * known_objects[i].existence_probability <= label_j.probability * known_objects[j].existence_probability) {
+            should_keep = false;
+            break;
+          }
+        }
+        if (should_keep) {
+          output_msg.objects.push_back(known_objects[i]);
+        }
       }
     }
   }
