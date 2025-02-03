@@ -52,7 +52,7 @@
 #ifndef NDT_OMP__MULTI_VOXEL_GRID_COVARIANCE_OMP_IMPL_HPP_
 #define NDT_OMP__MULTI_VOXEL_GRID_COVARIANCE_OMP_IMPL_HPP_
 
-// cspell:ignore evecs, evals, covar, eigvalue, futs
+// cspell:ignore evecs, evals, covar, eigvalue, futs, nanoflann, dists
 
 #include "autoware/ndt_scan_matcher/ndt_omp/multi_voxel_grid_covariance_omp.h"
 
@@ -250,9 +250,8 @@ int MultiVoxelGridCovariance<PointT>::radiusSearch(
   k_leaves.clear();
 
   // Search from the kdtree to find neighbors of @point
-  std::vector<float> k_sqr_distances;
-  std::vector<int> k_indices;
-  const int k = kdtree_.radiusSearch(point, radius, k_indices, k_sqr_distances, max_nn);
+  std::vector<nanoflann::ResultItem<size_t, float>> k_indices_dists;
+  const int k = kdtree_.radiusSearch(point, radius, k_indices_dists, max_nn);
 
   if (k <= 0) {
     return 0;
@@ -260,8 +259,8 @@ int MultiVoxelGridCovariance<PointT>::radiusSearch(
 
   k_leaves.reserve(k);
 
-  for (auto & nn_idx : k_indices) {
-    k_leaves.push_back(leaf_ptrs_[nn_idx]);
+  for (auto & nn_idx : k_indices_dists) {
+    k_leaves.push_back(leaf_ptrs_[nn_idx.first]);
   }
 
   return k_leaves.size();
