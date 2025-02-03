@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for the cuda_pointcloud_preprocessor",
+  "type": "object",
+  "definitions": {
+    "cuda_pointcloud_preprocessor": {
+      "type": "object",
+      "properties": {
+        "base_frame": {
+          "type": "string",
+          "description": "The undistortion algorithm is based on a base frame, which must be the same as the twist frame.",
+          "default": "base_link"
+        },
+        "use_imu": {
+          "type": "boolean",
+          "description": "Use IMU angular velocity, otherwise, use twist angular velocity.",
+          "default": "true"
+        },
+        "use_3d_distortion_correction": {
+          "type": "boolean",
+          "description": "Use 3d distortion correction algorithm, otherwise, use 2d distortion correction algorithm.",
+          "default": "false"
+        },
+        "distance_ratio": {
+          "type": "number",
+          "description": "distance ratio between consecutive points to determine is they belong to the same walk",
+          "default": "1.03",
+          "minimum": 0.0
+        },
+        "object_length_threshold": {
+          "type": "number",
+          "description": "minimum object length to be considered a valid cluster in meters",
+          "default": "0.1",
+          "minimum": 0.0
+        },
+        "num_points_threshold": {
+          "type": "integer",
+          "description": "threshold on the number of points in a walk to determine if it corresponds to a cluster",
+          "default": "4",
+          "minimum": 0
+        },
+        "crop_box.min_x": {
+          "type": "array",
+          "description": "An array in which each elemt is the minimum x value in a crop box",
+          "default": [1.0]
+        },
+        "crop_box.min_y": {
+          "type": "array",
+          "description": "An array in which each elemt is the minimum y value in a crop box",
+          "default": [1.0]
+        },
+        "crop_box.min_z": {
+          "type": "array",
+          "description": "An array in which each elemt is the minimum z value in a crop box",
+          "default": [1.0]
+        },
+        "crop_box.max_x": {
+          "type": "array",
+          "description": "An array in which each elemt is the maximum x value in a crop box",
+          "default": [-1.0]
+        },
+        "crop_box.max_y": {
+          "type": "array",
+          "description": "An array in which each elemt is the maximum y value in a crop box",
+          "default": [-1.0]
+        },
+        "crop_box.max_z": {
+          "type": "array",
+          "description": "An array in which each elemt is the maximum z value in a crop box",
+          "default": [-1.0]
+        }
+      },
+      "required": [
+        "base_frame",
+        "use_imu",
+        "use_3d_distortion_correction",
+        "distance_ratio",
+        "object_length_threshold",
+        "num_points_threshold",
+        "self_crop.min_x",
+        "self_crop.min_y",
+        "self_crop.min_z",
+        "self_crop.max_x",
+        "self_crop.max_y",
+        "self_crop.max_z",
+        "mirror_crop.min_x",
+        "mirror_crop.min_y",
+        "mirror_crop.min_z",
+        "mirror_crop.max_x",
+        "mirror_crop.max_y",
+        "mirror_crop.max_z"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/cuda_pointcloud_preprocessor"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}
