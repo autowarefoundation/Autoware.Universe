@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "radar_threshold_filter parameters",
+  "type": "object",
+  "definitions": {
+    "radar_threshold_filter": {
+      "type": "object",
+      "properties": {
+        "is_amplitude_filter": {
+          "type": "boolean",
+          "description": "if this parameter is true, apply amplitude filter (publish amplitude_min < amplitude < amplitude_max)",
+          "default": true
+        },
+        "amplitude_min": {
+          "type": "number",
+          "description": "[dBm^2]",
+          "default": -10.0
+        },
+        "amplitude_max": {
+          "type": "number",
+          "description": "[dBm^2]",
+          "default": 100.0
+        },
+        "is_range_filter": {
+          "type": "boolean",
+          "description": "if this parameter is true, apply range filter (publish range_min < range < range_max) ",
+          "default": false
+        },
+        "range_min": {
+          "type": "number",
+          "description": "[m] ",
+          "default": 20.0
+        },
+        "range_max": {
+          "type": "number",
+          "description": "[m]",
+          "default": 300.0
+        },
+        "is_azimuth_filter": {
+          "type": "boolean",
+          "description": "if this parameter is true, apply angle filter (publish azimuth_min < range < azimuth_max) ",
+          "default": true
+        },
+        "azimuth_min": {
+          "type": "number",
+          "description": "[rad]",
+          "default": -1.2
+        },
+        "azimuth_max": {
+          "type": "number",
+          "description": "[rad]",
+          "default": 1.2
+        },
+        "is_z_filter": {
+          "type": "boolean",
+          "description": "if this parameter is true, apply z position filter (publish z_min < z < z_max) ",
+          "default": false
+        },
+        "z_min": {
+          "type": "number",
+          "description": "[m]",
+          "default": -2.0
+        },
+        "z_max": {
+          "type": "number",
+          "description": "[m]",
+          "default": 5.0
+        }
+      },
+      "required": [
+        "is_amplitude_filter",
+        "amplitude_min",
+        "amplitude_max",
+        "is_range_filter",
+        "range_min",
+        "range_max",
+        "is_azimuth_filter",
+        "azimuth_min",
+        "azimuth_max",
+        "is_z_filter",
+        "z_min",
+        "z_max"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/radar_object_clustering"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}
