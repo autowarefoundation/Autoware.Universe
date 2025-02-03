@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="detection_rect" default="/perception/object_recognition/detection/objects"/>
+  <arg name="tracked_rect" default="/perception/object_recognition/bytetrack3d/objects"/>
+  <arg name="bytetrack_param_path" default="$(find-pkg-share autoware_bytetrack3d)/config/bytetrack3D.param.yaml"/>
+
+  <node pkg="autoware_bytetrack3d" exec="autoware_bytetrack3d_node_exe" output="screen">
+    <remap from="~/in/objects" to="$(var detection_rect)"/>
+    <remap from="~/out/objects" to="$(var tracked_rect)"/>
+    <param from="$(var bytetrack_param_path)"/>
+  </node>
+</launch>
