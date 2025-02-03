@@ -18,8 +18,10 @@
   <build_depend>qtbase5-dev</build_depend>
 
   <depend>autoware_perception_msgs</depend>
+  <depend>pluginlib</depend>
   <depend>rviz_common</depend>
   <depend>rviz_default_plugins</depend>
+  <depend>visualization_msgs</depend>
 
   <exec_depend>libqt5-widgets</exec_depend>
   <exec_depend>rviz2</exec_depend>
