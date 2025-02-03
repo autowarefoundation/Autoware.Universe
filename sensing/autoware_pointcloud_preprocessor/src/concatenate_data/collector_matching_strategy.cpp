@@ -26,17 +26,20 @@
 namespace autoware::pointcloud_preprocessor
 {
 
-NaiveMatchingStrategy::NaiveMatchingStrategy(rclcpp::Node & node)
+template <typename PointCloudMessage>
+NaiveMatchingStrategy<PointCloudMessage>::NaiveMatchingStrategy(rclcpp::Node & node)
 {
   RCLCPP_INFO(node.get_logger(), "Utilize naive matching strategy");
 }
 
-std::optional<std::shared_ptr<CloudCollector>> NaiveMatchingStrategy::match_cloud_to_collector(
-  const std::list<std::shared_ptr<CloudCollector>> & cloud_collectors,
+template <typename PointCloudMessage>
+std::optional<std::shared_ptr<CloudCollector<PointCloudMessage>>>
+NaiveMatchingStrategy<PointCloudMessage>::match_cloud_to_collector(
+  const std::list<std::shared_ptr<CloudCollector<PointCloudMessage>>> & cloud_collectors,
   const MatchingParams & params) const
 {
   std::optional<double> smallest_time_difference = std::nullopt;
-  std::shared_ptr<CloudCollector> closest_collector = nullptr;
+  std::shared_ptr<CloudCollector<PointCloudMessage>> closest_collector = nullptr;
 
   for (const auto & cloud_collector : cloud_collectors) {
     if (!cloud_collector->topic_exists(params.topic_name)) {
@@ -57,14 +60,17 @@ std::optional<std::shared_ptr<CloudCollector>> NaiveMatchingStrategy::match_clou
   return std::nullopt;
 }
 
-void NaiveMatchingStrategy::set_collector_info(
-  std::shared_ptr<CloudCollector> & collector, const MatchingParams & matching_params)
+template <typename PointCloudMessage>
+void NaiveMatchingStrategy<PointCloudMessage>::set_collector_info(
+  std::shared_ptr<CloudCollector<PointCloudMessage>> & collector,
+  const MatchingParams & matching_params)
 {
   auto info = std::make_shared<NaiveCollectorInfo>(matching_params.cloud_arrival_time);
   collector->set_info(info);
 }
 
-AdvancedMatchingStrategy::AdvancedMatchingStrategy(
+template <typename PointCloudMessage>
+AdvancedMatchingStrategy<PointCloudMessage>::AdvancedMatchingStrategy(
   rclcpp::Node & node, std::vector<std::string> input_topics)
 {
   auto lidar_timestamp_offsets =
@@ -89,8 +95,10 @@ AdvancedMatchingStrategy::AdvancedMatchingStrategy(
   RCLCPP_INFO(node.get_logger(), "Utilize advanced matching strategy");
 }
 
-std::optional<std::shared_ptr<CloudCollector>> AdvancedMatchingStrategy::match_cloud_to_collector(
-  const std::list<std::shared_ptr<CloudCollector>> & cloud_collectors,
+template <typename PointCloudMessage>
+std::optional<std::shared_ptr<CloudCollector<PointCloudMessage>>>
+AdvancedMatchingStrategy<PointCloudMessage>::match_cloud_to_collector(
+  const std::list<std::shared_ptr<CloudCollector<PointCloudMessage>>> & cloud_collectors,
   const MatchingParams & params) const
 {
   for (const auto & cloud_collector : cloud_collectors) {
@@ -109,8 +117,10 @@ std::optional<std::shared_ptr<CloudCollector>> AdvancedMatchingStrategy::match_c
   return std::nullopt;
 }
 
-void AdvancedMatchingStrategy::set_collector_info(
-  std::shared_ptr<CloudCollector> & collector, const MatchingParams & matching_params)
+template <typename PointCloudMessage>
+void AdvancedMatchingStrategy<PointCloudMessage>::set_collector_info(
+  std::shared_ptr<CloudCollector<PointCloudMessage>> & collector,
+  const MatchingParams & matching_params)
 {
   auto info = std::make_shared<AdvancedCollectorInfo>(
     matching_params.cloud_timestamp - topic_to_offset_map_.at(matching_params.topic_name),
@@ -119,3 +129,15 @@ void AdvancedMatchingStrategy::set_collector_info(
 }
 
 }  // namespace autoware::pointcloud_preprocessor
+
+template class autoware::pointcloud_preprocessor::NaiveMatchingStrategy<
+  sensor_msgs::msg::PointCloud2>;
+template class autoware::pointcloud_preprocessor::AdvancedMatchingStrategy<
+  sensor_msgs::msg::PointCloud2>;
+
+#ifdef USE_CUDA
+template class autoware::pointcloud_preprocessor::NaiveMatchingStrategy<
+  cuda_blackboard::CudaPointCloud2>;
+template class autoware::pointcloud_preprocessor::AdvancedMatchingStrategy<
+  cuda_blackboard::CudaPointCloud2>;
+#endif

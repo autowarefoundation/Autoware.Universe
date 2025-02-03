@@ -19,18 +19,24 @@
 
 #include <rclcpp/rclcpp.hpp>
 
+#ifdef USE_CUDA
+#include <cuda_blackboard/cuda_pointcloud2.hpp>
+#endif
+
 #include <memory>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <utility>
 
 namespace autoware::pointcloud_preprocessor
 {
 
-CloudCollector::CloudCollector(
+template <typename PointCloudMessage>
+CloudCollector<PointCloudMessage>::CloudCollector(
   std::shared_ptr<PointCloudConcatenateDataSynchronizerComponent> && ros2_parent_node,
-  std::shared_ptr<CombineCloudHandler> & combine_cloud_handler, int num_of_clouds,
-  double timeout_sec, bool debug_mode)
+  std::shared_ptr<CombineCloudHandler<PointCloudMessage>> & combine_cloud_handler,
+  int num_of_clouds, double timeout_sec, bool debug_mode)
 : ros2_parent_node_(std::move(ros2_parent_node)),
   combine_cloud_handler_(combine_cloud_handler),
   num_of_clouds_(num_of_clouds),
@@ -48,23 +54,33 @@ CloudCollector::CloudCollector(
     });
 }
 
-void CloudCollector::set_info(std::shared_ptr<CollectorInfoBase> collector_info)
+template <typename PointCloudMessage>
+void CloudCollector<PointCloudMessage>::set_info(std::shared_ptr<CollectorInfoBase> collector_info)
 {
   collector_info_ = std::move(collector_info);
 }
 
-std::shared_ptr<CollectorInfoBase> CloudCollector::get_info() const
+template <typename PointCloudMessage>
+std::shared_ptr<CollectorInfoBase> CloudCollector<PointCloudMessage>::get_info() const
 {
   return collector_info_;
 }
 
-bool CloudCollector::topic_exists(const std::string & topic_name)
+template <typename PointCloudMessage>
+bool CloudCollector<PointCloudMessage>::topic_exists(const std::string & topic_name)
 {
   return topic_to_cloud_map_.find(topic_name) != topic_to_cloud_map_.end();
 }
 
-bool CloudCollector::process_pointcloud(
-  const std::string & topic_name, sensor_msgs::msg::PointCloud2::SharedPtr cloud)
+template <typename PointCloudMessage>
+bool CloudCollector<PointCloudMessage>::concatenate_finished() const
+{
+  return concatenate_finished_;
+}
+
+template <typename PointCloudMessage>
+bool CloudCollector<PointCloudMessage>::process_pointcloud(
+  const std::string & topic_name, typename PointCloudMessage::ConstSharedPtr cloud)
 {
   std::lock_guard<std::mutex> concatenate_lock(concatenate_mutex_);
   if (concatenate_finished_) return false;
@@ -86,12 +102,8 @@ bool CloudCollector::process_pointcloud(
   return true;
 }
 
-bool CloudCollector::concatenate_finished() const
-{
-  return concatenate_finished_;
-}
-
-void CloudCollector::concatenate_callback()
+template <typename PointCloudMessage>
+void CloudCollector<PointCloudMessage>::concatenate_callback()
 {
   if (debug_mode_) {
     show_debug_message();
@@ -108,19 +120,23 @@ void CloudCollector::concatenate_callback()
   concatenate_finished_ = true;
 }
 
-ConcatenatedCloudResult CloudCollector::concatenate_pointclouds(
-  std::unordered_map<std::string, sensor_msgs::msg::PointCloud2::SharedPtr> topic_to_cloud_map)
+template <typename PointCloudMessage>
+ConcatenatedCloudResult<PointCloudMessage>
+CloudCollector<PointCloudMessage>::concatenate_pointclouds(
+  std::unordered_map<std::string, typename PointCloudMessage::ConstSharedPtr> topic_to_cloud_map)
 {
   return combine_cloud_handler_->combine_pointclouds(topic_to_cloud_map);
 }
 
-std::unordered_map<std::string, sensor_msgs::msg::PointCloud2::SharedPtr>
-CloudCollector::get_topic_to_cloud_map()
+template <typename PointCloudMessage>
+std::unordered_map<std::string, typename PointCloudMessage::ConstSharedPtr>
+CloudCollector<PointCloudMessage>::get_topic_to_cloud_map()
 {
   return topic_to_cloud_map_;
 }
 
-void CloudCollector::show_debug_message()
+template <typename PointCloudMessage>
+void CloudCollector<PointCloudMessage>::show_debug_message()
 {
   auto time_until_trigger = timer_->time_until_trigger();
   std::stringstream log_stream;
@@ -154,3 +170,9 @@ void CloudCollector::show_debug_message()
 }
 
 }  // namespace autoware::pointcloud_preprocessor
+
+template class autoware::pointcloud_preprocessor::CloudCollector<sensor_msgs::msg::PointCloud2>;
+
+#ifdef USE_CUDA
+template class autoware::pointcloud_preprocessor::CloudCollector<cuda_blackboard::CudaPointCloud2>;
+#endif

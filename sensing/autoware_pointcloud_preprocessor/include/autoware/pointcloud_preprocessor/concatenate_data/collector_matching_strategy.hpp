@@ -37,45 +37,56 @@ struct MatchingParams
   double cloud_arrival_time;
 };
 
+template <typename PointCloudMessage>
 class CollectorMatchingStrategy
 {
 public:
   virtual ~CollectorMatchingStrategy() = default;
 
-  [[nodiscard]] virtual std::optional<std::shared_ptr<CloudCollector>> match_cloud_to_collector(
-    const std::list<std::shared_ptr<CloudCollector>> & cloud_collectors,
+  [[nodiscard]] virtual std::optional<std::shared_ptr<CloudCollector<PointCloudMessage>>>
+  match_cloud_to_collector(
+    const std::list<std::shared_ptr<CloudCollector<PointCloudMessage>>> & cloud_collectors,
     const MatchingParams & params) const = 0;
   virtual void set_collector_info(
-    std::shared_ptr<CloudCollector> & collector, const MatchingParams & matching_params) = 0;
+    std::shared_ptr<CloudCollector<PointCloudMessage>> & collector,
+    const MatchingParams & matching_params) = 0;
 };
 
-class NaiveMatchingStrategy : public CollectorMatchingStrategy
+template <typename PointCloudMessage>
+class NaiveMatchingStrategy : public CollectorMatchingStrategy<PointCloudMessage>
 {
 public:
   explicit NaiveMatchingStrategy(rclcpp::Node & node);
-  [[nodiscard]] std::optional<std::shared_ptr<CloudCollector>> match_cloud_to_collector(
-    const std::list<std::shared_ptr<CloudCollector>> & cloud_collectors,
+  [[nodiscard]] std::optional<std::shared_ptr<CloudCollector<PointCloudMessage>>>
+  match_cloud_to_collector(
+    const std::list<std::shared_ptr<CloudCollector<PointCloudMessage>>> & cloud_collectors,
     const MatchingParams & params) const override;
   void set_collector_info(
-    std::shared_ptr<CloudCollector> & collector, const MatchingParams & matching_params) override;
+    std::shared_ptr<CloudCollector<PointCloudMessage>> & collector,
+    const MatchingParams & matching_params) override;
 };
 
-class AdvancedMatchingStrategy : public CollectorMatchingStrategy
+template <typename PointCloudMessage>
+class AdvancedMatchingStrategy : public CollectorMatchingStrategy<PointCloudMessage>
 {
 public:
   explicit AdvancedMatchingStrategy(rclcpp::Node & node, std::vector<std::string> input_topics);
 
-  [[nodiscard]] std::optional<std::shared_ptr<CloudCollector>> match_cloud_to_collector(
-    const std::list<std::shared_ptr<CloudCollector>> & cloud_collectors,
+  [[nodiscard]] std::optional<std::shared_ptr<CloudCollector<PointCloudMessage>>>
+  match_cloud_to_collector(
+    const std::list<std::shared_ptr<CloudCollector<PointCloudMessage>>> & cloud_collectors,
     const MatchingParams & params) const override;
   void set_collector_info(
-    std::shared_ptr<CloudCollector> & collector, const MatchingParams & matching_params) override;
+    std::shared_ptr<CloudCollector<PointCloudMessage>> & collector,
+    const MatchingParams & matching_params) override;
 
 private:
   std::unordered_map<std::string, double> topic_to_offset_map_;
   std::unordered_map<std::string, double> topic_to_noise_window_map_;
 };
 
-std::shared_ptr<CollectorMatchingStrategy> parse_matching_strategy(rclcpp::Node & node);
+template <typename PointCloudMessage>
+std::shared_ptr<CollectorMatchingStrategy<PointCloudMessage>> parse_matching_strategy(
+  rclcpp::Node & node);
 
 }  // namespace autoware::pointcloud_preprocessor

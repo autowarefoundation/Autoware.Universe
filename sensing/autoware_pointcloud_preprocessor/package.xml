@@ -32,6 +32,7 @@
   <depend>autoware_point_types</depend>
   <depend>autoware_universe_utils</depend>
   <depend>cgal</depend>
+  <depend>cuda_blackboard</depend>
   <depend>cv_bridge</depend>
   <depend>diagnostic_updater</depend>
   <depend>image_transport</depend>

@@ -13,11 +13,19 @@ find_package(Sophus REQUIRED)
 find_package(Boost REQUIRED)
 find_package(PCL REQUIRED)
 find_package(CGAL REQUIRED COMPONENTS Core)
+find_package(CUDA)
+
+if(${CUDA_FOUND})
+  add_definitions(-DUSE_CUDA)
+else()
+  message("CUDA wat not found. Disabling CUDA-dependent functionalities")
+endif()
 
 include_directories(
   include
   SYSTEM
   ${Boost_INCLUDE_DIRS}
+  ${CUDA_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS}
   ${Sophus_INCLUDE_DIRS}
@@ -63,6 +71,14 @@ ament_target_dependencies(faster_voxel_grid_downsample_filter
   sensor_msgs
 )
 
+cuda_add_library(pointcloud_preprocessor_filter_cuda SHARED
+  src/concatenate_data/combine_cloud_handler_kernel.cu
+)
+
+target_include_directories(pointcloud_preprocessor_filter_cuda PUBLIC
+  ${cuda_blackboard_INCLUDE_DIRS}
+)
+
 ament_auto_add_library(pointcloud_preprocessor_filter SHARED
   src/concatenate_data/concatenate_and_time_sync_node.cpp
   src/concatenate_data/combine_cloud_handler.cpp
@@ -94,8 +110,10 @@ ament_auto_add_library(pointcloud_preprocessor_filter SHARED
 
 target_link_libraries(pointcloud_preprocessor_filter
   pointcloud_preprocessor_filter_base
+  pointcloud_preprocessor_filter_cuda
   faster_voxel_grid_downsample_filter
   ${Boost_LIBRARIES}
+  ${CUDA_LIBRARIES}
   ${OpenCV_LIBRARIES}
   ${Sophus_LIBRARIES}
   ${PCL_LIBRARIES}
