@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "autoware_lidar_centerpoints parameters",
+  "type": "object",
+  "definitions": {
+    "centerpoint": {
+      "type": "object",
+      "properties": {
+        "encoder_onnx_path": {
+          "type": "string",
+          "description": "Path to the VoxelFeatureEncoder ONNX file.",
+          "default": "$(var model_path)/pts_voxel_encoder_$(var model_name).onnx"
+        },
+        "encoder_engine_path": {
+          "type": "string",
+          "description": "Path to the VoxelFeatureEncoder TensorRT engine file.",
+          "default": "$(var model_path)/pts_voxel_encoder_$(var model_name).engine"
+        },
+        "head_onnx_path": {
+          "type": "string",
+          "description": "Path to the DetectionHead ONNX file.",
+          "default": "$(var model_path)/pts_backbone_neck_head_$(var model_name).onnx"
+        },
+        "head_engine_path": {
+          "type": "string",
+          "description": "Path to the DetectionHead TensorRT engine file.",
+          "default": "$(var model_path)/pts_backbone_neck_head_$(var model_name).engine"
+        },
+        "trt_precision": {
+          "type": "string",
+          "description": "TensorRT inference precision. Supported values: 'fp32' or 'fp16'.",
+          "default": "fp16"
+        },
+        "cloud_capacity": {
+          "type": "integer",
+          "description": "Maximum capacity of the point cloud.",
+          "default": 2000000
+        },
+        "post_process_params": {
+          "type": "object",
+          "description": "Parameters for post-processing.",
+          "properties": {
+            "circle_nms_dist_threshold": {
+              "type": "number",
+              "description": "Circle NMS distance threshold in meters.",
+              "default": 0.5
+            },
+            "iou_nms_search_distance_2d": {
+              "type": "number",
+              "description": "Search distance in 2D for IoU-based Non-Maximum Suppression.",
+              "default": 10.0
+            },
+            "iou_nms_threshold": {
+              "type": "number",
+              "description": "IoU threshold for Non-Maximum Suppression.",
+              "default": 0.1
+            },
+            "score_threshold": {
+              "type": "number",
+              "description": "Score threshold for filtering detections.",
+              "default": 0.35
+            },
+            "yaw_norm_thresholds": {
+              "type": "array",
+              "description": "Array of yaw normalization thresholds for each class, in radians.",
+              "default": [0.3, 0.3, 0.3, 0.3, 0.0],
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "required": [
+            "circle_nms_dist_threshold",
+            "iou_nms_search_distance_2d",
+            "iou_nms_threshold",
+            "score_threshold",
+            "yaw_norm_thresholds"
+          ]
+        },
+        "densification_params": {
+          "type": "object",
+          "description": "Parameters for densifying the point cloud.",
+          "properties": {
+            "world_frame_id": {
+              "type": "string",
+              "description": "The world frame ID for fusing multi-frame point clouds.",
+              "default": "map"
+            },
+            "num_past_frames": {
+              "type": "integer",
+              "description": "Number of past frames to fuse with the current frame.",
+              "default": 1
+            }
+          },
+          "required": ["world_frame_id", "num_past_frames"]
+        }
+      },
+      "required": [
+        "encoder_onnx_path",
+        "encoder_engine_path",
+        "head_onnx_path",
+        "head_engine_path",
+        "trt_precision",
+        "cloud_capacity",
+        "post_process_params",
+        "densification_params"
+      ]
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/centerpoint"
+        }
+      },
+      "required": ["ros__parameters"]
+    }
+  },
+  "required": ["/**"]
+}

@@ -3,7 +3,7 @@
   "title": "autoware_lidar_centerpoints Parameters",
   "type": "object",
   "definitions": {
-    "centerpoint_ml_package ": {
+    "Centerpoint_sigma_ml_package": {
       "type": "object",
       "properties": {
         "model_params": {
@@ -85,7 +85,7 @@
       "type": "object",
       "properties": {
         "ros__parameters": {
-          "$ref": "#/definitions/centerpoint_ml_package"
+          "$ref": "#/definitions/Centerpoint_sigma_ml_package"
         }
       },
       "required": ["ros__parameters"],

@@ -12,42 +12,63 @@
           "properties": {
             "class_names": {
               "type": "array",
-              "description": "An array of class names will be predicted.",
+              "description": "A list of class names that will be predicted.",
               "default": ["CAR", "TRUCK", "BUS", "BICYCLE", "PEDESTRIAN"],
               "uniqueItems": true
             },
             "point_feature_size": {
               "type": "integer",
-              "description": "A number of channels of point feature layer.",
+              "description": "The number of channels in the point feature layer.",
               "default": 4
             },
             "max_voxel_size": {
               "type": "integer",
-              "description": "A maximum size of voxel grid.",
+              "description": "The maximum size of the voxel grid.",
               "default": 40000
             },
             "point_cloud_range": {
               "type": "array",
-              "description": "An array of distance ranges of each class, this must have same length with `class_names`.",
+              "description": "The detection range in the format [min_x, min_y, min_z, max_x, max_y, max_z] in meters.",
               "default": [-76.8, -76.8, -4.0, 76.8, 76.8, 6.0]
             },
             "voxel_size": {
               "type": "array",
-              "description": "An array of voxel grid sizes for PointPainting, this must have same length with `paint_class_names`.",
+              "description": "The size of each voxel in the format [x, y, z] in meters.",
               "default": [0.32, 0.32, 10.0]
             },
-            "down_sample_factor": {
+            "downsample_factor": {
               "type": "integer",
-              "description": "A scale factor of downsampling points",
+              "description": "The scale factor for downsampling points.",
               "default": 2,
               "minimum": 1
             },
             "encoder_in_feature_size": {
               "type": "integer",
-              "description": "A size of encoder input feature channels.",
+              "description": "The number of input feature channels for the encoder.",
               "default": 9
+            },
+            "has_variance": {
+              "type": "boolean",
+              "description": "Indicates whether the model outputs pose variance along with pose for each bounding box.",
+              "default": false
+            },
+            "has_twist": {
+              "type": "boolean",
+              "description": "Indicates whether the model outputs velocity (twist) along with pose for each bounding box.",
+              "default": false
             }
-          }
+          },
+          "required": [
+            "class_names",
+            "point_feature_size",
+            "max_voxel_size",
+            "point_cloud_range",
+            "voxel_size",
+            "downsample_factor",
+            "encoder_in_feature_size",
+            "has_variance",
+            "has_twist"
+          ]
         }
       },
       "required": ["model_params"]

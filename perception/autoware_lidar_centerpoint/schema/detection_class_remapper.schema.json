@@ -1,0 +1,234 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "autoware_lidar_centerpoints parameters",
+  "type": "object",
+  "definitions": {
+    "detection_class_remapper": {
+      "type": "object",
+      "properties": {
+        "allow_remapping_by_area_matrix": {
+          "type": "array",
+          "description": "Flat array indicating remapping of vehicle classes based on area. Rows represent the original class, and columns represent the remapped class.",
+          "default": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0, // UNKNOWN
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0, // CAR
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0, // TRUCK
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0, // BUS
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0, // TRAILER
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0, // MOTORBIKE
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0, // BICYCLE
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0 // PEDESTRIAN
+          ]
+        },
+        "min_area_matrix": {
+          "type": "array",
+          "description": "Flat array specifying minimum area thresholds for remapping objects. Rows represent the original class.",
+          "default": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0, // UNKNOWN
+            0.0,
+            0.0,
+            12.1,
+            0.0,
+            36.0,
+            0.0,
+            0.0,
+            0.0, // CAR
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            36.0,
+            0.0,
+            0.0,
+            0.0, // TRUCK
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            36.0,
+            0.0,
+            0.0,
+            0.0, // BUS
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0, // TRAILER
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0, // MOTORBIKE
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0, // BICYCLE
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0 // PEDESTRIAN
+          ]
+        },
+        "max_area_matrix": {
+          "type": "array",
+          "description": "Flat array specifying maximum area thresholds for remapping objects. Rows represent the original class.",
+          "default": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0, // UNKNOWN
+            0.0,
+            0.0,
+            36.0,
+            0.0,
+            999.999,
+            0.0,
+            0.0,
+            0.0, // CAR
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            999.999,
+            0.0,
+            0.0,
+            0.0, // TRUCK
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            999.999,
+            0.0,
+            0.0,
+            0.0, // BUS
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0, // TRAILER
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0, // MOTORBIKE
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0, // BICYCLE
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0 // PEDESTRIAN
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/detection_class_remapper"
+        }
+      },
+      "required": ["ros__parameters"]
+    }
+  },
+  "required": ["/**"]
+}
