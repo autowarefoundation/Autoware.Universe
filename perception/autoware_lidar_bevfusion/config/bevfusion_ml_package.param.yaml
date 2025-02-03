@@ -1,0 +1,25 @@
+/**:
+  ros__parameters:
+    class_names: ["CAR", "TRUCK", "BUS", "BICYCLE", "PEDESTRIAN"]
+    voxels_num: [1, 128000, 256000] # [min, opt, max]
+    point_cloud_range: [-122.4, -122.4, -3.0, 122.4, 122.4, 5.0] # [x_min, y_min, z_min, x_max, y_max, z_max]
+    voxel_size: [0.17, 0.17, 0.2] # [x, y, z]
+    num_proposals: 500
+    out_size_factor: 8
+    max_points_per_voxel: 10
+
+    dbound: [1.0, 166.2, 1.4]
+    xbound: [-122.4, 122.4, 0.68]
+    ybound: [-122.4, 122.4, 0.68]
+    zbound: [-10.0, 10.0, 20.0]
+    num_cameras: 6
+    raw_image_height: 1080
+    raw_image_width: 1440
+    img_aug_scale_x: 0.489
+    img_aug_scale_y: 0.489
+    img_aug_offset_y: -262.0
+    roi_height: 384
+    roi_width: 704
+    features_height: 48
+    features_width: 88
+    num_depth_features: 118

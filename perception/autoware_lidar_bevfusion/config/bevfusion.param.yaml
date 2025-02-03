@@ -1,0 +1,23 @@
+/**:
+  ros__parameters:
+    # modality
+    sensor_fusion: true
+    # non-network params
+    max_camera_lidar_delay: 0.12
+    # plugins
+    plugins_path: $(find-pkg-share autoware_lidar_bevfusion)/plugins/libautoware_tensorrt_plugins.so
+    # network
+    trt_precision: fp32
+    cloud_capacity: 2000000
+    onnx_path: "$(var model_path)/bevfusion_camera_lidar_v2.onnx"
+    engine_path: "$(var model_path)/bevfusion_camera_lidar_v2.engine"
+    # pre-process params
+    densification_num_past_frames: 0
+    densification_world_frame_id: map
+    # post-process params
+    circle_nms_dist_threshold: 0.5
+    iou_nms_target_class_names: ["CAR"]
+    iou_nms_search_distance_2d: 10.0
+    iou_nms_threshold: 0.1
+    yaw_norm_thresholds: [0.3, 0.3, 0.3, 0.3, 0.0] # refers to the class_names
+    score_threshold: 0.1
