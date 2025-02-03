@@ -898,18 +898,28 @@ std::vector<LaneletPathWithPathInfo> MapBasedPredictionNode::getPredictedReferen
         return *opt;
       }
       if (!consider_only_routable_neighbours_) {
+        // 1. adjacent lanelet
         const auto adjacent = get_left ? routing_graph_ptr_->adjacentLeft(lanelet)
                                        : routing_graph_ptr_->adjacentRight(lanelet);
         if (!!adjacent) {
           return *adjacent;
         }
-        // search for unconnected lanelet
+        // 2. search for unconnected lanelet
         const auto unconnected_lanelets =
           get_left ? getLeftLineSharingLanelets(lanelet, lanelet_map_ptr_)
                    : getRightLineSharingLanelets(lanelet, lanelet_map_ptr_);
         // just return first candidate of unconnected lanelet for now
         if (!unconnected_lanelets.empty()) {
           return unconnected_lanelets.front();
+        }
+        // 3. search side of the next lanelet
+        const lanelet::ConstLanelets next_lanelet = routing_graph_ptr_->following(lanelet);
+        if (!next_lanelet.empty()) {
+          const auto next = get_left ? routing_graph_ptr_->left(next_lanelet.front())
+                                     : routing_graph_ptr_->right(next_lanelet.front());
+          if (!!next) {
+            return *next;
+          }
         }
       }
 
