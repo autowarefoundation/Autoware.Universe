@@ -77,6 +77,9 @@ protected:
 
   void onVelocityFactors(const VelocityFactorArray::ConstSharedPtr msg);
   void onSteeringFactors(const SteeringFactorArray::ConstSharedPtr msg);
+
+  void save(rviz_common::Config config) const override;
+  void load(const rviz_common::Config & config) override;
 };
 }  // namespace rviz_plugins
 

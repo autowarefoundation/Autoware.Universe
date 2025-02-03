@@ -303,6 +303,24 @@ void VelocitySteeringFactorsPanel::onSteeringFactors(const SteeringFactorArray::
   }
   steering_factors_table_->update();
 }
+
+void VelocitySteeringFactorsPanel::save(rviz_common::Config config) const
+{
+  rviz_common::Panel::save(config);
+  config.mapSetValue("jerk", jerk_input_->value());
+  config.mapSetValue("decel_limit", decel_limit_input_->value());
+}
+
+void VelocitySteeringFactorsPanel::load(const rviz_common::Config & config)
+{
+  rviz_common::Panel::load(config);
+  if (float jerk; config.mapGetFloat("jerk", &jerk)) {
+    jerk_input_->setValue(static_cast<double>(jerk));
+  }
+  if (float decel_limit; config.mapGetFloat("decel_limit", &decel_limit)) {
+    decel_limit_input_->setValue(static_cast<double>(decel_limit));
+  }
+}
 }  // namespace rviz_plugins
 
 #include <pluginlib/class_list_macros.hpp>
