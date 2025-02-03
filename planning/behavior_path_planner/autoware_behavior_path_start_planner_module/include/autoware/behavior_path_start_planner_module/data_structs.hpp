@@ -132,6 +132,7 @@ struct StartPlannerParameters
   double maximum_longitudinal_deviation{0.0};
   // geometric pull out
   bool enable_geometric_pull_out{false};
+  bool enable_clothoid_pull_out{false};
   double geometric_collision_check_distance_from_end{0.0};
   bool divide_pull_out_path{false};
   ParallelParkingParameters parallel_parking_parameters{};

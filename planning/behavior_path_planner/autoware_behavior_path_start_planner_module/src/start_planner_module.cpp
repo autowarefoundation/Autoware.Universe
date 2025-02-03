@@ -74,7 +74,12 @@ StartPlannerModule::StartPlannerModule(
     start_planners_.push_back(std::make_shared<ShiftPullOut>(node, *parameters, time_keeper_));
   }
   if (parameters_->enable_geometric_pull_out) {
-    start_planners_.push_back(std::make_shared<GeometricPullOut>(node, *parameters, time_keeper_));
+    start_planners_.push_back(
+      std::make_shared<GeometricPullOut>(node, *parameters, /*use_clothoid*/ false, time_keeper_));
+  }
+  if (parameters_->enable_clothoid_pull_out) {
+    start_planners_.push_back(
+      std::make_shared<GeometricPullOut>(node, *parameters, /*use_clothoid*/ true, time_keeper_));
   }
   if (start_planners_.empty()) {
     RCLCPP_ERROR(getLogger(), "Not found enabled planner");

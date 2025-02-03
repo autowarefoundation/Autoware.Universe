@@ -110,6 +110,10 @@ struct GoalPlannerParameters
   bool enable_arc_backward_parking{false};
   ParallelParkingParameters parallel_parking_parameters;
 
+  // clothoid parking
+  bool enable_clothoid_forward_parking{false};
+  bool enable_clothoid_backward_parking{false};
+
   // freespace parking
   bool enable_freespace_parking{false};
   std::string freespace_parking_algorithm;

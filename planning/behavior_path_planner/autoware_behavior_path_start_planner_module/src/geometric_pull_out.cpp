@@ -35,10 +35,11 @@ namespace autoware::behavior_path_planner
 using start_planner_utils::getPullOutLanes;
 
 GeometricPullOut::GeometricPullOut(
-  rclcpp::Node & node, const StartPlannerParameters & parameters,
+  rclcpp::Node & node, const StartPlannerParameters & parameters, const bool use_clothoid,
   std::shared_ptr<universe_utils::TimeKeeper> time_keeper)
 : PullOutPlannerBase{node, parameters, time_keeper},
-  parallel_parking_parameters_{parameters.parallel_parking_parameters}
+  parallel_parking_parameters_{parameters.parallel_parking_parameters},
+  use_clothoid_{use_clothoid}
 {
   auto lane_departure_checker_params = autoware::lane_departure_checker::Param{};
   lane_departure_checker_params.footprint_extra_margin =
@@ -70,7 +71,8 @@ std::optional<PullOutPath> GeometricPullOut::plan(
     planner_data->parameters, parallel_parking_parameters_.pull_out_max_steer_angle);
   planner_.setPlannerData(planner_data);
   const bool found_valid_path = planner_.planPullOut(
-    start_pose, goal_pose, road_lanes, pull_out_lanes, left_side_start, lane_departure_checker_);
+    start_pose, goal_pose, road_lanes, pull_out_lanes, left_side_start, use_clothoid_,
+    lane_departure_checker_);
   if (!found_valid_path) {
     planner_debug_data.conditions_evaluation.emplace_back("no path found");
     return {};

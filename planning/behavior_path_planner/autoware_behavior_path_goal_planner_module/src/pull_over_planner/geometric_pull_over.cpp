@@ -26,7 +26,8 @@
 namespace autoware::behavior_path_planner
 {
 GeometricPullOver::GeometricPullOver(
-  rclcpp::Node & node, const GoalPlannerParameters & parameters, const bool is_forward)
+  rclcpp::Node & node, const GoalPlannerParameters & parameters, const bool is_forward,
+  const bool use_clothoid)
 : PullOverPlannerBase{node, parameters},
   parallel_parking_parameters_{parameters.parallel_parking_parameters},
   lane_departure_checker_{[&]() {
@@ -36,6 +37,7 @@ GeometricPullOver::GeometricPullOver(
     return LaneDepartureChecker{lane_departure_checker_params, vehicle_info_};
   }()},
   is_forward_{is_forward},
+  use_clothoid_{use_clothoid},
   left_side_parking_{parameters.parking_policy == ParkingPolicy::LEFT_SIDE}
 {
   planner_.setParameters(parallel_parking_parameters_);
@@ -66,8 +68,8 @@ std::optional<PullOverPath> GeometricPullOver::plan(
   planner_.setTurningRadius(planner_data->parameters, max_steer_angle);
   planner_.setPlannerData(planner_data);
 
-  const bool found_valid_path =
-    planner_.planPullOver(goal_pose, road_lanes, pull_over_lanes, is_forward_, left_side_parking_);
+  const bool found_valid_path = planner_.planPullOver(
+    goal_pose, road_lanes, pull_over_lanes, is_forward_, left_side_parking_, use_clothoid_);
   if (!found_valid_path) {
     return {};
   }

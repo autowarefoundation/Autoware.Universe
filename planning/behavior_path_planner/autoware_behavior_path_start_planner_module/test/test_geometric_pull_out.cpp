@@ -70,7 +70,7 @@ private:
   {
     auto parameters = StartPlannerParameters::init(*node_);
 
-    geometric_pull_out_ = std::make_shared<GeometricPullOut>(*node_, parameters);
+    geometric_pull_out_ = std::make_shared<GeometricPullOut>(*node_, parameters, false);
   }
 };
 
