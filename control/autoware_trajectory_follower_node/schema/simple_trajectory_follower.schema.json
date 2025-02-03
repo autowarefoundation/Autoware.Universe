@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "autoware_trajectory_follower_node parameters",
+  "type": "object",
+  "definitions": {
+    "simple_trajectory_follower": {
+      "type": "object",
+      "properties": {
+        "use_external_target_vel": {
+          "type": "boolean",
+          "description": "Indicates whether to use an external target velocity.",
+          "default": false
+        },
+        "external_target_vel": {
+          "type": "number",
+          "description": "The value of the external target velocity in m/s.",
+          "default": 0.0
+        },
+        "lateral_deviation": {
+          "type": "number",
+          "description": "The allowed lateral deviation in meters.",
+          "default": 0.0
+        }
+      },
+      "required": ["use_external_target_vel", "external_target_vel", "lateral_deviation"]
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/simple_trajectory_follower"
+        }
+      },
+      "required": ["ros__parameters"]
+    }
+  },
+  "required": ["/**"]
+}

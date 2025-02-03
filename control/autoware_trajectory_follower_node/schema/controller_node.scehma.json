@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "autoware_trajectory_follower_node parameters",
+  "type": "object",
+  "definitions": {
+    "controller_node": {
+      "type": "object",
+      "properties": {
+        "ctrl_period": {
+          "type": "number",
+          "description": "Control period in seconds.",
+          "default": 0.0
+        },
+        "timeout_thr_sec": {
+          "type": "number",
+          "description": "Timeout threshold in seconds.",
+          "default": 0.0
+        },
+        "enable_control_cmd_horizon_pub": {
+          "type": "boolean",
+          "description": "Indicates whether to enable the publication of the control command horizon.",
+          "default": false
+        },
+        "lateral_controller_mode": {
+          "type": "string",
+          "description": "The mode of the lateral controller, e.g., 'mpc' or 'pure_pursuit'.",
+          "default": ""
+        },
+        "longitudinal_controller_mode": {
+          "type": "string",
+          "description": "The mode of the longitudinal controller, e.g., 'pid'.",
+          "default": ""
+        }
+      },
+      "required": [
+        "ctrl_period",
+        "timeout_thr_sec",
+        "enable_control_cmd_horizon_pub",
+        "lateral_controller_mode",
+        "longitudinal_controller_mode"
+      ]
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/controller_node"
+        }
+      },
+      "required": ["ros__parameters"]
+    }
+  },
+  "required": ["/**"]
+}

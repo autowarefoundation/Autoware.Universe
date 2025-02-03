@@ -1,0 +1,7 @@
+/**:
+  ros__parameters:
+    ctrl_period: $(var ctrl_period)
+    timeout_thr_sec: $(var timeout_thr_sec)
+    enable_control_cmd_horizon_pub: $(var enable_control_cmd_horizon_pub)
+    lateral_controller_mode: $(var lateral_controller_mode)
+    longitudinal_controller_mode: $(var longitudinal_controller_mode)
