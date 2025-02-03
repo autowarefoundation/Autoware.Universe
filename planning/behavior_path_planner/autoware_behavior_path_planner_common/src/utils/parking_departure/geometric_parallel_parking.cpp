@@ -400,10 +400,10 @@ std::vector<PathWithLaneId> GeometricParallelParking::planOneTrial(
   const Point C_far_goal_coords = inverseTransformPoint(C_far.position, arc_end_pose);
   const Point self_point_goal_coords = inverseTransformPoint(start_pose.position, arc_end_pose);
 
-  const double alpha =
-    left_side_parking
-      ? M_PI_2 - psi + std::asin((self_point_goal_coords.y - C_far_goal_coords.y) / d_C_far_Einit)
-      : M_PI_2 + psi - std::asin((self_point_goal_coords.y - C_far_goal_coords.y) / d_C_far_Einit);
+  const double angle_offset =
+    std::asin((self_point_goal_coords.y - C_far_goal_coords.y) / d_C_far_Einit);
+  const double alpha = M_PI_2 + (left_side_parking ? 1.0 : -1.0) *
+                                  (is_forward ? psi + angle_offset : -psi + angle_offset);
 
   const double R_E_near = (std::pow(d_C_far_Einit, 2) - std::pow(R_E_far, 2)) /
                           (2 * (R_E_far + d_C_far_Einit * std::cos(alpha)));
@@ -426,7 +426,7 @@ std::vector<PathWithLaneId> GeometricParallelParking::planOneTrial(
 
   // If start_pose is parallel to goal_pose, we can know lateral deviation of edges of vehicle,
   // and detect lane departure.
-  if (is_forward) {  // Check near bound
+  if (is_forward) {  // Check near front corner
     const double R_front_near =
       std::hypot(R_E_far + common_params.vehicle_width / 2, common_params.base_link2front);
     const double distance_to_near_bound =
@@ -435,13 +435,13 @@ std::vector<PathWithLaneId> GeometricParallelParking::planOneTrial(
     if (std::abs(distance_to_near_bound) - near_deviation < lane_departure_margin) {
       return std::vector<PathWithLaneId>{};
     }
-  } else {  // Check far bound
-    const double R_front_far =
-      std::hypot(R_E_near + common_params.vehicle_width / 2, common_params.base_link2front);
-    const double far_deviation = R_front_far - R_E_near;
-    const double distance_to_far_bound =
-      utils::getSignedDistanceFromBoundary(lanes, start_pose, !left_side_parking);
-    if (std::abs(distance_to_far_bound) - far_deviation < lane_departure_margin) {
+  } else {  // Check near back corner
+    const double R_front_near =
+      std::hypot(R_E_far + common_params.vehicle_width / 2, common_params.base_link2rear);
+    const double distance_to_near_bound =
+      utils::getSignedDistanceFromBoundary(pull_over_lanes, arc_end_pose, left_side_parking);
+    const double near_deviation = R_front_near - R_E_far;
+    if (std::abs(distance_to_near_bound) - near_deviation < lane_departure_margin) {
       return std::vector<PathWithLaneId>{};
     }
   }
