@@ -52,9 +52,12 @@
 #ifndef AUTOWARE__PROBABILISTIC_OCCUPANCY_GRID_MAP__COSTMAP_2D__OCCUPANCY_GRID_MAP_BASE_HPP_
 #define AUTOWARE__PROBABILISTIC_OCCUPANCY_GRID_MAP__COSTMAP_2D__OCCUPANCY_GRID_MAP_BASE_HPP_
 
+#ifdef USE_CUDA
 #include "autoware/probabilistic_occupancy_grid_map/utils/cuda_pointcloud.hpp"
 
 #include <autoware/cuda_utils/cuda_unique_ptr.hpp>
+#endif
+
 #include <autoware/universe_utils/math/unit_conversion.hpp>
 #include <nav2_costmap_2d/costmap_2d.hpp>
 #include <rclcpp/rclcpp.hpp>
@@ -78,10 +81,12 @@ public:
     const bool use_cuda, const unsigned int cells_size_x, const unsigned int cells_size_y,
     const float resolution);
 
+#ifdef USE_CUDA
   virtual void updateWithPointCloud(
     [[maybe_unused]] const CudaPointCloud2 & raw_pointcloud,
     [[maybe_unused]] const CudaPointCloud2 & obstacle_pointcloud,
     [[maybe_unused]] const Pose & robot_pose, [[maybe_unused]] const Pose & scan_origin) {};
+#endif
 
   void updateOrigin(double new_origin_x, double new_origin_y) override;
 
@@ -102,19 +107,24 @@ public:
 
   bool isCudaEnabled() const;
 
+#ifdef USE_CUDA
+  void setCudaStream(const cudaStream_t & stream);
+
   const autoware::cuda_utils::CudaUniquePtr<std::uint8_t[]> & getDeviceCostmap() const;
 
   void copyDeviceCostmapToHost() const;
+#endif
 
 protected:
   rclcpp::Logger logger_{rclcpp::get_logger("pointcloud_based_occupancy_grid_map")};
   rclcpp::Clock clock_{RCL_ROS_TIME};
 
   double resolution_inv_;
+  bool use_cuda_;
 
+#ifdef USE_CUDA
   cudaStream_t stream_;
 
-  bool use_cuda_;
   autoware::cuda_utils::CudaUniquePtr<std::uint8_t[]> device_costmap_;
   autoware::cuda_utils::CudaUniquePtr<std::uint8_t[]> device_costmap_aux_;
 
@@ -122,6 +132,7 @@ protected:
   autoware::cuda_utils::CudaUniquePtr<Eigen::Vector3f> device_translation_map_;
   autoware::cuda_utils::CudaUniquePtr<Eigen::Matrix3f> device_rotation_scan_;
   autoware::cuda_utils::CudaUniquePtr<Eigen::Vector3f> device_translation_scan_;
+#endif
 };
 
 }  // namespace costmap_2d

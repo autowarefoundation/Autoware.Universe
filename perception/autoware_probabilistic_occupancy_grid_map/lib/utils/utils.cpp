@@ -47,6 +47,7 @@ bool transformPointcloud(
   return true;
 }
 
+#ifdef USE_CUDA
 bool transformPointcloudAsync(
   CudaPointCloud2 & input, const tf2_ros::Buffer & tf2, const std::string & target_frame)
 {
@@ -71,6 +72,7 @@ bool transformPointcloudAsync(
   input.header.frame_id = target_frame;
   return true;
 }
+#endif
 
 Eigen::Matrix4f getTransformMatrix(const geometry_msgs::msg::Pose & pose)
 {

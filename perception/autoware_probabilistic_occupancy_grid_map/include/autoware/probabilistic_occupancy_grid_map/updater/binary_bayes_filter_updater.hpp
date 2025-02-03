@@ -15,7 +15,10 @@
 #ifndef AUTOWARE__PROBABILISTIC_OCCUPANCY_GRID_MAP__UPDATER__BINARY_BAYES_FILTER_UPDATER_HPP_
 #define AUTOWARE__PROBABILISTIC_OCCUPANCY_GRID_MAP__UPDATER__BINARY_BAYES_FILTER_UPDATER_HPP_
 
+#ifdef USE_CUDA
 #include "autoware/cuda_utils/cuda_unique_ptr.hpp"
+#endif
+
 #include "autoware/probabilistic_occupancy_grid_map/updater/ogm_updater_interface.hpp"
 
 #include <Eigen/Core>
@@ -40,7 +43,9 @@ private:
   Eigen::Matrix2f probability_matrix_;
   double v_ratio_;
 
+#ifdef USE_CUDA
   autoware::cuda_utils::CudaUniquePtr<float[]> device_probability_matrix_;
+#endif
 };
 
 }  // namespace costmap_2d

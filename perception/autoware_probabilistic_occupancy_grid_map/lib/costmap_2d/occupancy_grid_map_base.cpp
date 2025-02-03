@@ -82,6 +82,7 @@ OccupancyGridMapInterface::OccupancyGridMapInterface(
 : Costmap2D(cells_size_x, cells_size_y, resolution, 0.f, 0.f, cost_value::NO_INFORMATION),
   use_cuda_(use_cuda)
 {
+#ifdef USE_CUDA
   if (use_cuda_) {
     min_height_ = -std::numeric_limits<double>::infinity();
     max_height_ = std::numeric_limits<double>::infinity();
@@ -90,7 +91,6 @@ OccupancyGridMapInterface::OccupancyGridMapInterface(
     const auto num_cells_x = this->getSizeInCellsX();
     const auto num_cells_y = this->getSizeInCellsY();
 
-    cudaStreamCreate(&stream_);
     device_costmap_ = autoware::cuda_utils::make_unique<std::uint8_t[]>(num_cells_x * num_cells_y);
     device_costmap_aux_ =
       autoware::cuda_utils::make_unique<std::uint8_t[]>(num_cells_x * num_cells_y);
@@ -100,12 +100,11 @@ OccupancyGridMapInterface::OccupancyGridMapInterface(
     device_rotation_scan_ = autoware::cuda_utils::make_unique<Eigen::Matrix3f>();
     device_translation_scan_ = autoware::cuda_utils::make_unique<Eigen::Vector3f>();
   }
+#endif
 }
 
 void OccupancyGridMapInterface::updateOrigin(double new_origin_x, double new_origin_y)
 {
-  using autoware::occupancy_grid_map::utils::copyMapRegionLaunch;
-
   // project the new origin into the grid
   int cell_ox{static_cast<int>(std::floor((new_origin_x - origin_x_) / resolution_))};
   int cell_oy{static_cast<int>(std::floor((new_origin_y - origin_y_) / resolution_))};
@@ -131,13 +130,23 @@ void OccupancyGridMapInterface::updateOrigin(double new_origin_x, double new_ori
   // we need a map to store the obstacles in the window temporarily
   unsigned char * local_map{nullptr};
 
+#ifdef USE_CUDA
+  using autoware::occupancy_grid_map::utils::copyMapRegionLaunch;
   if (use_cuda_) {
     copyMapRegionLaunch(
       device_costmap_.get(), lower_left_x, lower_left_y, size_x_, size_y_,
       device_costmap_aux_.get(), 0, 0, cell_size_x, cell_size_y, cell_size_x, cell_size_y, stream_);
 
-    cudaMemset(
-      device_costmap_.get(), cost_value::NO_INFORMATION, size_x_ * size_y_ * sizeof(std::uint8_t));
+    cudaMemsetAsync(
+      device_costmap_.get(), cost_value::NO_INFORMATION, size_x_ * size_y_ * sizeof(std::uint8_t),
+      stream_);
+#else
+  if (use_cuda_) {
+    RCLCPP_ERROR(
+      rclcpp::get_logger("pointcloud_based_occupancy_grid_map"),
+      "The code was compiled without cuda.");
+    return;
+#endif
   } else {
     local_map = new unsigned char[cell_size_x * cell_size_y];
 
@@ -159,6 +168,7 @@ void OccupancyGridMapInterface::updateOrigin(double new_origin_x, double new_ori
   int start_y{lower_left_y - cell_oy};
 
   // now we want to copy the overlapping information back into the map, but in its new location
+#ifdef USE_CUDA
   if (use_cuda_) {
     if (
       start_x < 0 || start_y < 0 || start_x + cell_size_x > size_x_ ||
@@ -174,6 +184,13 @@ void OccupancyGridMapInterface::updateOrigin(double new_origin_x, double new_ori
     copyMapRegionLaunch(
       device_costmap_aux_.get(), 0, 0, cell_size_x, cell_size_y, device_costmap_.get(), start_x,
       start_y, size_x_, size_y_, cell_size_x, cell_size_y, stream_);
+#else
+  if (use_cuda_) {
+    RCLCPP_ERROR(
+      rclcpp::get_logger("pointcloud_based_occupancy_grid_map"),
+      "The code was compiled without cuda.");
+    return;
+#endif
   } else {
     copyMapRegion(
       local_map, 0, 0, cell_size_x, costmap_, start_x, start_y, size_x_, cell_size_x, cell_size_y);
@@ -187,10 +204,18 @@ void OccupancyGridMapInterface::updateOrigin(double new_origin_x, double new_ori
 
 void OccupancyGridMapInterface::resetMaps()
 {
+#ifdef USE_CUDA
   if (use_cuda_) {
     cudaMemsetAsync(
       device_costmap_.get(), cost_value::NO_INFORMATION, getSizeInCellsX() * getSizeInCellsY(),
       stream_);
+#else
+  if (use_cuda_) {
+    RCLCPP_ERROR(
+      rclcpp::get_logger("pointcloud_based_occupancy_grid_map"),
+      "The code was compiled without cuda.");
+    return;
+#endif
   } else {
     nav2_costmap_2d::Costmap2D::resetMaps();
   }
@@ -207,6 +232,14 @@ bool OccupancyGridMapInterface::isCudaEnabled() const
   return use_cuda_;
 }
 
+#ifdef USE_CUDA
+void OccupancyGridMapInterface::setCudaStream(const cudaStream_t & stream)
+{
+  if (isCudaEnabled()) {
+    stream_ = stream;
+  }
+}
+
 const autoware::cuda_utils::CudaUniquePtr<std::uint8_t[]> &
 OccupancyGridMapInterface::getDeviceCostmap() const
 {
@@ -215,10 +248,12 @@ OccupancyGridMapInterface::getDeviceCostmap() const
 
 void OccupancyGridMapInterface::copyDeviceCostmapToHost() const
 {
-  cudaMemcpy(
+  cudaMemcpyAsync(
     costmap_, device_costmap_.get(), getSizeInCellsX() * getSizeInCellsY() * sizeof(std::uint8_t),
-    cudaMemcpyDeviceToHost);
+    cudaMemcpyDeviceToHost, stream_);
+  cudaStreamSynchronize(stream_);
 }
+#endif
 
 }  // namespace costmap_2d
 }  // namespace autoware::occupancy_grid_map

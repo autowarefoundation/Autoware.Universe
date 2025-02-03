@@ -15,7 +15,10 @@
 #include "autoware/probabilistic_occupancy_grid_map/updater/binary_bayes_filter_updater.hpp"
 
 #include "autoware/probabilistic_occupancy_grid_map/cost_value/cost_value.hpp"
+
+#ifdef USE_CUDA
 #include "autoware/probabilistic_occupancy_grid_map/updater/binary_bayes_filter_updater_kernel.hpp"
+#endif
 
 #include <algorithm>
 #include <cmath>
@@ -44,6 +47,7 @@ void OccupancyGridMapBBFUpdater::initRosParam(rclcpp::Node & node)
     node.declare_parameter<double>("probability_matrix.free_to_occupied");
   v_ratio_ = node.declare_parameter<double>("v_ratio");
 
+#ifdef USE_CUDA
   device_probability_matrix_ =
     autoware::cuda_utils::make_unique<float[]>(Index::NUM_STATES * Index::NUM_STATES);
 
@@ -56,9 +60,10 @@ void OccupancyGridMapBBFUpdater::initRosParam(rclcpp::Node & node)
     }
   }
 
-  cudaMemcpy(
+  cudaMemcpyAsync(
     device_probability_matrix_.get(), probability_matrix_vector.data(),
-    sizeof(float) * Index::NUM_STATES * Index::NUM_STATES, cudaMemcpyHostToDevice);
+    sizeof(float) * Index::NUM_STATES * Index::NUM_STATES, cudaMemcpyHostToDevice, stream_);
+#endif
 }
 
 inline unsigned char OccupancyGridMapBBFUpdater::applyBBF(
@@ -97,18 +102,20 @@ bool OccupancyGridMapBBFUpdater::update(
     throw std::runtime_error("The CUDA setting of the updater and the map do not match.");
   }
 
+#ifdef USE_CUDA
   if (use_cuda_) {
     applyBBFLaunch(
       single_frame_occupancy_grid_map.getDeviceCostmap().get(), device_probability_matrix_.get(),
       Index::NUM_STATES, Index::FREE, Index::OCCUPIED, cost_value::FREE_SPACE,
       cost_value::LETHAL_OBSTACLE, cost_value::NO_INFORMATION, v_ratio_,
       getSizeInCellsX() * getSizeInCellsY(), device_costmap_.get(), stream_);
-
-    cudaMemcpy(
-      costmap_, device_costmap_.get(), getSizeInCellsX() * getSizeInCellsY() * sizeof(std::uint8_t),
-      cudaMemcpyDeviceToHost);
-
-    cudaStreamSynchronize(stream_);
+#else
+  if (use_cuda_) {
+    RCLCPP_ERROR(
+      rclcpp::get_logger("pointcloud_based_occupancy_grid_map"),
+      "The code was compiled without cuda.");
+    return false;
+#endif
   } else {
     for (unsigned int x = 0; x < getSizeInCellsX(); x++) {
       for (unsigned int y = 0; y < getSizeInCellsY(); y++) {

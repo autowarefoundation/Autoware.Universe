@@ -71,15 +71,13 @@ PointcloudBasedOccupancyGridMapNode::PointcloudBasedOccupancyGridMapNode(
   const double map_resolution = this->declare_parameter<double>("map_resolution");
 
   /* Subscriber and publisher */
-  obstacle_pointcloud_sub_.subscribe(
-    this, "~/input/obstacle_pointcloud",
-    rclcpp::SensorDataQoS{}.keep_last(1).get_rmw_qos_profile());
-  raw_pointcloud_sub_.subscribe(
-    this, "~/input/raw_pointcloud", rclcpp::SensorDataQoS{}.keep_last(1).get_rmw_qos_profile());
-  sync_ptr_ = std::make_shared<Sync>(SyncPolicy(5), obstacle_pointcloud_sub_, raw_pointcloud_sub_);
+  obstacle_pointcloud_sub_ptr_ = this->create_subscription<PointCloud2>(
+    "~/input/obstacle_pointcloud", rclcpp::SensorDataQoS{}.keep_last(1),
+    std::bind(&PointcloudBasedOccupancyGridMapNode::obstaclePointcloudCallback, this, _1));
+  raw_pointcloud_sub_ptr_ = this->create_subscription<PointCloud2>(
+    "~/input/raw_pointcloud", rclcpp::SensorDataQoS{}.keep_last(1),
+    std::bind(&PointcloudBasedOccupancyGridMapNode::rawPointcloudCallback, this, _1));
 
-  sync_ptr_->registerCallback(
-    std::bind(&PointcloudBasedOccupancyGridMapNode::onPointcloudWithObstacleAndRaw, this, _1, _2));
   occupancy_grid_map_pub_ = create_publisher<OccupancyGrid>("~/output/occupancy_grid_map", 1);
 
   const std::string updater_type = this->declare_parameter<std::string>("updater_type");
@@ -94,7 +92,6 @@ PointcloudBasedOccupancyGridMapNode::PointcloudBasedOccupancyGridMapNode(
     occupancy_grid_map_updater_ptr_ = std::make_unique<OccupancyGridMapBBFUpdater>(
       true, map_length / map_resolution, map_length / map_resolution, map_resolution);
   }
-  occupancy_grid_map_updater_ptr_->initRosParam(*this);
 
   const std::string grid_map_type = this->declare_parameter<std::string>("grid_map_type");
 
@@ -118,7 +115,15 @@ PointcloudBasedOccupancyGridMapNode::PointcloudBasedOccupancyGridMapNode(
       occupancy_grid_map_updater_ptr_->getSizeInCellsY(),
       occupancy_grid_map_updater_ptr_->getResolution());
   }
+
+  cudaStreamCreateWithFlags(&stream_, cudaStreamNonBlocking);
+  raw_pointcloud_.stream = stream_;
+  obstacle_pointcloud_.stream = stream_;
+  occupancy_grid_map_ptr_->setCudaStream(stream_);
+  occupancy_grid_map_updater_ptr_->setCudaStream(stream_);
+
   occupancy_grid_map_ptr_->initRosParam(*this);
+  occupancy_grid_map_updater_ptr_->initRosParam(*this);
 
   // initialize debug tool
   {
@@ -140,14 +145,29 @@ PointcloudBasedOccupancyGridMapNode::PointcloudBasedOccupancyGridMapNode(
       time_keeper_ = std::make_shared<autoware::universe_utils::TimeKeeper>(time_keeper);
     }
   }
-
-  cudaStreamCreate(&raw_pointcloud_.stream);
-  cudaStreamCreate(&obstacle_pointcloud_.stream);
 }
 
-void PointcloudBasedOccupancyGridMapNode::onPointcloudWithObstacleAndRaw(
-  const PointCloud2::ConstSharedPtr & input_obstacle_msg,
+void PointcloudBasedOccupancyGridMapNode::obstaclePointcloudCallback(
+  const PointCloud2::ConstSharedPtr & input_obstacle_msg)
+{
+  obstacle_pointcloud_.fromROSMsgAsync(input_obstacle_msg);
+
+  if (obstacle_pointcloud_.header.stamp == raw_pointcloud_.header.stamp) {
+    onPointcloudWithObstacleAndRaw();
+  }
+}
+
+void PointcloudBasedOccupancyGridMapNode::rawPointcloudCallback(
   const PointCloud2::ConstSharedPtr & input_raw_msg)
+{
+  raw_pointcloud_.fromROSMsgAsync(input_raw_msg);
+
+  if (obstacle_pointcloud_.header.stamp == raw_pointcloud_.header.stamp) {
+    onPointcloudWithObstacleAndRaw();
+  }
+}
+
+void PointcloudBasedOccupancyGridMapNode::onPointcloudWithObstacleAndRaw()
 {
   std::unique_ptr<ScopedTimeTrack> st_ptr;
   if (time_keeper_) st_ptr = std::make_unique<ScopedTimeTrack>(__func__, *time_keeper_);
@@ -155,9 +175,6 @@ void PointcloudBasedOccupancyGridMapNode::onPointcloudWithObstacleAndRaw(
   if (stop_watch_ptr_) {
     stop_watch_ptr_->toc("processing_time", true);
   }
-
-  raw_pointcloud_.fromROSMsgAsync(*input_raw_msg);
-  obstacle_pointcloud_.fromROSMsgAsync(*input_obstacle_msg);
 
   // if scan_origin_frame_ is "", replace it with raw_pointcloud_.header.frame_id
   if (scan_origin_frame_.empty()) {
@@ -172,7 +189,7 @@ void PointcloudBasedOccupancyGridMapNode::onPointcloudWithObstacleAndRaw(
         return;
       }
     }
-    if (input_obstacle_msg->header.frame_id != base_link_frame_) {
+    if (obstacle_pointcloud_.header.frame_id != base_link_frame_) {
       if (!utils::transformPointcloudAsync(obstacle_pointcloud_, *tf2_, base_link_frame_)) {
         return;
       }
@@ -221,7 +238,7 @@ void PointcloudBasedOccupancyGridMapNode::onPointcloudWithObstacleAndRaw(
 
     // publish
     occupancy_grid_map_pub_->publish(OccupancyGridMapToMsgPtr(
-      map_frame_, input_raw_msg->header.stamp, robot_pose.position.z,
+      map_frame_, raw_pointcloud_.header.stamp, robot_pose.position.z,
       *occupancy_grid_map_ptr_));  // (todo) robot_pose may be altered with gridmap_origin
   } else {
     std::unique_ptr<ScopedTimeTrack> inner_st_ptr;
@@ -231,10 +248,11 @@ void PointcloudBasedOccupancyGridMapNode::onPointcloudWithObstacleAndRaw(
 
     // Update with bayes filter
     occupancy_grid_map_updater_ptr_->update(*occupancy_grid_map_ptr_);
+    occupancy_grid_map_updater_ptr_->copyDeviceCostmapToHost();
 
     // publish
     occupancy_grid_map_pub_->publish(OccupancyGridMapToMsgPtr(
-      map_frame_, input_raw_msg->header.stamp, robot_pose.position.z,
+      map_frame_, raw_pointcloud_.header.stamp, robot_pose.position.z,
       *occupancy_grid_map_updater_ptr_));
   }
 
@@ -244,7 +262,7 @@ void PointcloudBasedOccupancyGridMapNode::onPointcloudWithObstacleAndRaw(
     const double pipeline_latency_ms =
       std::chrono::duration<double, std::milli>(
         std::chrono::nanoseconds(
-          (this->get_clock()->now() - input_raw_msg->header.stamp).nanoseconds()))
+          (this->get_clock()->now() - raw_pointcloud_.header.stamp).nanoseconds()))
         .count();
     debug_publisher_ptr_->publish<autoware_internal_debug_msgs::msg::Float64Stamped>(
       "debug/cyclic_time_ms", cyclic_time_ms);

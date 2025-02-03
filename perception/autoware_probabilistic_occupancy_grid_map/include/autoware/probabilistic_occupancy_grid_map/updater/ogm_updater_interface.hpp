@@ -17,7 +17,10 @@
 
 #include "autoware/probabilistic_occupancy_grid_map/cost_value/cost_value.hpp"
 #include "autoware/probabilistic_occupancy_grid_map/costmap_2d/occupancy_grid_map_base.hpp"
+
+#ifdef USE_CUDA
 #include "autoware/probabilistic_occupancy_grid_map/utils/utils_kernel.hpp"
+#endif
 
 #include <rclcpp/node.hpp>
 
