@@ -25,9 +25,7 @@ The clusters of merged topics are simply concatenated from clusters of input top
 
 ## Parameters
 
-| Name              | Type   | Description                          | Default value |
-| :---------------- | :----- | :----------------------------------- | :------------ |
-| `output_frame_id` | string | The header frame_id of output topic. | base_link     |
+{{ json_to_markdown("/perception/autoware_cluster_merger/schema/cluster_merger.schema.json") }}
 
 ## Assumptions / Known limits
 
