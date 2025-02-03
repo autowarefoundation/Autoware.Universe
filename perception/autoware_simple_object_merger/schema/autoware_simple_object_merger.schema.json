@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "autoware_simple_object_merger_parameter",
+  "type": "object",
+  "definitions": {
+    "autoware_simple_object_merger": {
+      "type": "object",
+      "properties": {
+        "update_rate_hz": {
+          "type": "number",
+          "description": "This parameter defines the update rate for the `onTimer` function. This value should match the frame rate of the input topics.",
+          "default": 20.0
+        },
+        "new_frame_id": {
+          "type": "string",
+          "description": "This parameter specifies the header frame_id for the output topic. If the output topics are used for a perception module, this should be set to `base_link`.",
+          "default": "base_link"
+        },
+        "timeout_threshold": {
+          "type": "number",
+          "description": "This parameter sets the threshold for timeout judgment. If the time difference between the first topic in `input_topics` and another input topic exceeds this value, the objects in that topic are not merged into the output objects.",
+          "default": 1.0
+        },
+        "input_topics": {
+          "type": "array",
+          "description": "This parameter lists the names of input topics. For example, when this package is used for radar objects, input topics can be specified here.",
+          "items": {
+            "type": "string"
+          },
+          "default": [""]
+        }
+      },
+      "required": ["update_rate_hz", "new_frame_id", "timeout_threshold", "input_topics"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/autoware_simple_object_merger"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}
