@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>autoware_tensorrt_bevdet</name>
+  <version>0.0.1</version>
+  <description>This package is ported version toward Autoware from bevdet_vendor</description>
+
+  <author email="cynthia.liu@autocore.ai">Cynthia</author>
+  <maintainer email="cynthia.liu@autocore.ai">Cynthia</maintainer>
+  <maintainer email="yliuhb@connect.ust.hk">Yuxuan Liu</maintainer>
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake_auto</buildtool_depend>
+  <buildtool_depend>autoware_cmake</buildtool_depend>
+
+  <depend>autoware_perception_msgs</depend>
+  <depend>bevdet_vendor</depend>
+  <depend>cv_bridge</depend>
+  <depend>geometry_msgs</depend>
+  <depend>libopencv-dev</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tf2_geometry_msgs</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>autoware_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

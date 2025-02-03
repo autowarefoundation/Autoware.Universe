@@ -221,6 +221,28 @@
       <arg name="radar_object_clustering_param_path" value="$(var radar_object_clustering_param_path)"/>
     </include>
   </group>
+  <group if="$(eval '&quot;$(var mode)&quot;==&quot;camera&quot;')">
+    <!-- Camera-based bev detectors-->
+    <include file="$(find-pkg-share tier4_perception_launch)/launch/object_recognition/detection/detector/camera_bev_detector.launch.xml">
+      <arg name="input/camera0/image" value="$(var input/camera0/image)"/>
+      <arg name="input/camera0/info" value="$(var input/camera0/info)"/>
+      <arg name="input/camera1/image" value="$(var input/camera1/image)"/>
+      <arg name="input/camera1/info" value="$(var input/camera1/info)"/>
+      <arg name="input/camera2/image" value="$(var input/camera2/image)"/>
+      <arg name="input/camera2/info" value="$(var input/camera2/info)"/>
+      <arg name="input/camera3/image" value="$(var input/camera3/image)"/>
+      <arg name="input/camera3/info" value="$(var input/camera3/info)"/>
+      <arg name="input/camera4/image" value="$(var input/camera4/image)"/>
+      <arg name="input/camera4/info" value="$(var input/camera4/info)"/>
+      <arg name="input/camera5/image" value="$(var input/camera5/image)"/>
+      <arg name="input/camera5/info" value="$(var input/camera5/info)"/>
+      <arg name="input/camera6/image" value="$(var input/camera6/image)"/>
+      <arg name="input/camera6/info" value="$(var input/camera6/info)"/>
+      <arg name="input/camera7/image" value="$(var input/camera7/image)"/>
+      <arg name="input/camera7/info" value="$(var input/camera7/info)"/>
+      <arg name="number_of_cameras" value="$(var number_of_cameras)"/>
+    </include>
+  </group>
   <!-- DetectionByTracker -->
   <group if="$(var switch/detector/tracker_based)">
     <include file="$(find-pkg-share tier4_perception_launch)/launch/object_recognition/detection/detector/tracker_based_detector.launch.xml">

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- cspell:ignore nuscenes, bevdet, dlongterm -->
+
+  <!-- input topic name -->
+  <arg name="input/img_fl" default="/CAM_FRONT_LEFT/image"/>
+  <arg name="input/img_f" default="/CAM_FRONT/image"/>
+  <arg name="input/img_fr" default="/CAM_FRONT_RIGHT/image"/>
+  <arg name="input/img_bl" default="/CAM_BACK_LEFT/image"/>
+  <arg name="input/img_b" default="/CAM_BACK/image"/>
+  <arg name="input/img_br" default="/CAM_BACK_RIGHT/image"/>
+  <arg name="output/boxes" default="boxes"/>
+
+  <arg name="input/img_fl/camera_info" default="/CAM_FRONT_LEFT/camera_info"/>
+  <arg name="input/img_f/camera_info" default="/CAM_FRONT/camera_info"/>
+  <arg name="input/img_fr/camera_info" default="/CAM_FRONT_RIGHT/camera_info"/>
+  <arg name="input/img_bl/camera_info" default="/CAM_BACK_LEFT/camera_info"/>
+  <arg name="input/img_b/camera_info" default="/CAM_BACK/camera_info"/>
+  <arg name="input/img_br/camera_info" default="/CAM_BACK_RIGHT/camera_info"/>
+
+  <arg name="data_path" default="$(env HOME)/autoware_data"/>
+  <arg name="model_name" default="bevdet_one_lt_d"/>
+  <arg name="model_path" default="$(var data_path)/tensorrt_bevdet"/>
+  <arg name="model_config" default="$(find-pkg-share autoware_tensorrt_bevdet)/config/bevdet_r50_4dlongterm_depth.yaml"/>
+  <arg name="param_file" default="$(find-pkg-share autoware_tensorrt_bevdet)/config/bevdet.param.yaml"/>
+
+  <!-- bevdet node -->
+  <node pkg="autoware_tensorrt_bevdet" exec="autoware_tensorrt_bevdet_node" name="tensorrt_bevdet" output="screen">
+    <!-- ros topic name -->
+    <remap from="~/input/topic_img_fl" to="$(var input/img_fl)"/>
+    <remap from="~/input/topic_img_f" to="$(var input/img_f)"/>
+    <remap from="~/input/topic_img_fr" to="$(var input/img_fr)"/>
+    <remap from="~/input/topic_img_bl" to="$(var input/img_bl)"/>
+    <remap from="~/input/topic_img_b" to="$(var input/img_b)"/>
+    <remap from="~/input/topic_img_br" to="$(var input/img_br)"/>
+
+    <remap from="~/input/topic_img_fl/camera_info" to="$(var input/img_fl/camera_info)"/>
+    <remap from="~/input/topic_img_f/camera_info" to="$(var input/img_f/camera_info)"/>
+    <remap from="~/input/topic_img_fr/camera_info" to="$(var input/img_fr/camera_info)"/>
+    <remap from="~/input/topic_img_bl/camera_info" to="$(var input/img_bl/camera_info)"/>
+    <remap from="~/input/topic_img_b/camera_info" to="$(var input/img_b/camera_info)"/>
+    <remap from="~/input/topic_img_br/camera_info" to="$(var input/img_br/camera_info)"/>
+
+    <remap from="~/output/boxes" to="$(var output/boxes)"/>
+
+    <param name="model_config" value="$(var model_config)"/>
+    <param from="$(var param_file)" allow_substs="true"/>
+  </node>
+</launch>

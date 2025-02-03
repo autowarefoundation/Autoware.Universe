@@ -1,0 +1,12 @@
+/**:
+    ros__parameters:
+      # weight files
+      onnx_path: "$(var model_path)/$(var model_name).onnx"
+      engine_path: "$(var model_path)/$(var model_name).engine"
+      data_params:
+        CAM_NUM: 6
+        cams: ["CAM_FRONT_LEFT", "CAM_FRONT", "CAM_FRONT_RIGHT", "CAM_BACK_LEFT", "CAM_BACK", "CAM_BACK_RIGHT"]
+      post_process_params:
+        # post-process params
+        score_threshold: 0.2
+        class_names: ["car", "truck", "construction_vehicle", "bus", "trailer", "barrier", "motorcycle", "bicycle", "pedestrian", "traffic_cone"]

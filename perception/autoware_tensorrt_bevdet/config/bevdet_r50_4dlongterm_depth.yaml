@@ -1,0 +1,63 @@
+bev_range: [-51.2, -51.2, -5.0, 51.2, 51.2, 3.0]
+mean: [123.675, 116.28, 103.53]
+std: [58.395, 57.12, 57.375]
+use_depth: true
+use_adj: true
+adj_num: 8
+transform_size: 6
+cam_params_size: 27
+sampling: nearest # nearest # or bicubic
+data_config:
+  Ncams: 6
+  cams: [CAM_FRONT_LEFT, CAM_FRONT, CAM_FRONT_RIGHT, CAM_BACK_LEFT, CAM_BACK, CAM_BACK_RIGHT]
+  resize_radio: 0.44
+  crop: [140, 0]
+  flip: true
+  input_size: [256, 704]
+  resize: [-0.06, 0.11]
+  resize_test: 0.0
+  rot: [-5.4, 5.4]
+  src_size: [900, 1600]
+grid_config:
+  depth: [1.0, 60.0, 0.5]
+  x: [-51.2, 51.2, 0.8]
+  y: [-51.2, 51.2, 0.8]
+  z: [-5, 3, 8]
+model:
+  bevpool_channels: 80
+  coder:
+    code_size: 9
+    max_num: 500
+    post_center_range: [-61.2, -61.2, -10.0, 61.2, 61.2, 10.0]
+    score_threshold: 0.1
+  common_head:
+    channels: [2, 1, 3, 2, 2]
+    names: [reg, height, dim, rot, vel]
+  down_sample: 16
+  tasks:
+    - class_names:
+        [
+          car,
+          truck,
+          construction_vehicle,
+          bus,
+          trailer,
+          barrier,
+          motorcycle,
+          bicycle,
+          pedestrian,
+          traffic_cone,
+        ]
+      num_class: 10
+test_cfg:
+  max_per_img: 500
+  max_pool_nms: false
+  min_radius: [4, 12, 10, 1, 0.85, 0.175]
+  nms_rescale_factor:
+    - [1.0, 0.7, 0.7, 0.4, 0.55, 1.1, 1.0, 1.0, 1.5, 3.5]
+  nms_thr: [0.2]
+  nms_type: [rotate]
+  post_center_limit_range: [-61.2, -61.2, -10.0, 61.2, 61.2, 10.0]
+  post_max_size: 500
+  pre_max_size: 1000
+  score_threshold: 0.1

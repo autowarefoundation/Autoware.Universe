@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Camera parameters -->
+  <arg name="input/camera0/image"/>
+  <arg name="input/camera0/info"/>
+  <arg name="input/camera1/image"/>
+  <arg name="input/camera1/info"/>
+  <arg name="input/camera2/image"/>
+  <arg name="input/camera2/info"/>
+  <arg name="input/camera3/image"/>
+  <arg name="input/camera3/info"/>
+  <arg name="input/camera4/image"/>
+  <arg name="input/camera4/info"/>
+  <arg name="input/camera5/image"/>
+  <arg name="input/camera5/info"/>
+  <arg name="input/camera6/image"/>
+  <arg name="input/camera6/info"/>
+  <arg name="input/camera7/image"/>
+  <arg name="input/camera7/info"/>
+  <arg name="number_of_cameras"/>
+
+  <!-- Model parameters -->
+  <arg name="data_path" default="$(env HOME)/autoware_data" description="packages data and artifacts directory path"/>
+  <arg name="bevdet_model_name" default="bevdet_one_lt_d"/>
+  <arg name="bevdet_model_path" default="$(var data_path)/tensorrt_bevdet"/>
+  <!-- BEVDet -->
+  <group>
+    <push-ros-namespace namespace="bevdet"/>
+    <include file="$(find-pkg-share autoware_tensorrt_bevdet)/launch/tensorrt_bevdet.launch.xml">
+      <arg name="input/img_fl" value="$(var input/camera0/image)"/>
+      <arg name="input/img_fl/camera_info" value="$(var input/camera0/info)"/>
+      <arg name="input/img_f" value="$(var input/camera1/image)"/>
+      <arg name="input/img_f/camera_info" value="$(var input/camera1/info)"/>
+      <arg name="input/img_fr" value="$(var input/camera2/image)"/>
+      <arg name="input/img_fr/camera_info" value="$(var input/camera2/info)"/>
+      <arg name="input/img_bl" value="$(var input/camera3/image)"/>
+      <arg name="input/img_bl/camera_info" value="$(var input/camera3/info)"/>
+      <arg name="input/img_b" value="$(var input/camera4/image)"/>
+      <arg name="input/img_b/camera_info" value="$(var input/camera4/info)"/>
+      <arg name="input/img_br" value="$(var input/camera5/image)"/>
+      <arg name="input/img_br/camera_info" value="$(var input/camera5/info)"/>
+      <arg name="output/boxes" value="boxes"/>
+      <arg name="data_path" value="$(var data_path)"/>
+      <arg name="model_name" value="$(var bevdet_model_name)"/>
+      <arg name="model_path" value="$(var bevdet_model_path)"/>
+    </include>
+  </group>
+</launch>
