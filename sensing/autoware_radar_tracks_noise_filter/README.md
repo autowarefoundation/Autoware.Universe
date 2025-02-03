@@ -29,6 +29,4 @@ In y-axis threshold filter, if y-axis velocity of RadarTrack is more than `veloc
 
 ## Parameters
 
-| Name                   | Type   | Description                                                                                                                        | Default value |
-| :--------------------- | :----- | :--------------------------------------------------------------------------------------------------------------------------------- | :------------ |
-| `velocity_y_threshold` | double | Y-axis velocity threshold [m/s]. If y-axis velocity of RadarTrack is more than `velocity_y_threshold`, it treats as noise objects. | 7.0           |
+{{ json_to_markdown("sensing/autoware_radar_tracks_noise_filter/schema/<radar_tracks_noise_filter.schema.json") }}

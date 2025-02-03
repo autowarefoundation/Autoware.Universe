@@ -5,9 +5,9 @@
   <arg name="param_path" default="$(find-pkg-share autoware_radar_tracks_noise_filter)/config/radar_tracks_noise_filter.param.yaml"/>
 
   <node pkg="autoware_radar_tracks_noise_filter" exec="radar_tracks_noise_filter_node" name="radar_tracks_noise_filter" output="screen">
-    <remap from="~/input/tracks" to="$(var input/tracks)"/>
-    <remap from="~/output/noise_tracks" to="$(var output/noise_tracks)"/>
-    <remap from="~/output/filtered_tracks" to="$(var output/filtered_tracks)"/>
-    <param from="$(var param_path)"/>
+    <remap from="~/input/tracks" to="$(arg input/tracks)"/>
+    <remap from="~/output/noise_tracks" to="$(arg output/noise_tracks)"/>
+    <remap from="~/output/filtered_tracks" to="$(arg output/filtered_tracks)"/>
+    <param file="$(arg param_path)"/>
   </node>
 </launch>
