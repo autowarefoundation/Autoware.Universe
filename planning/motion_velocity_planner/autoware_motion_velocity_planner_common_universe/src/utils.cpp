@@ -169,7 +169,7 @@ double calc_possible_min_dist_from_obj_to_traj_poly(
   const double object_possible_max_dist =
     calc_object_possible_max_dist_from_center(object->predicted_object.shape);
   const double possible_min_dist_to_traj_poly =
-    std::abs(object->get_dist_to_traj_lateral(traj_points)) - vehicle_info.vehicle_width_m -
+    std::abs(object->get_dist_to_traj_lateral(traj_points)) - vehicle_info.vehicle_width_m / 2.0 -
     object_possible_max_dist;
   return possible_min_dist_to_traj_poly;
 }
