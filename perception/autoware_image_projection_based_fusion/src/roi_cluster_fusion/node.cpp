@@ -73,7 +73,7 @@ void RoiClusterFusionNode::preprocess(ClusterMsgType & output_cluster_msg)
   }
 }
 
-void RoiClusterFusionNode::fuseOnSingleImage(
+void RoiClusterFusionNode::fuse_on_single_image(
   const ClusterMsgType & input_cluster_msg, const Det2dStatus<RoiMsgType> & det2d,
   const RoiMsgType & input_roi_msg, ClusterMsgType & output_cluster_msg)
 {

@@ -76,6 +76,4 @@ private:
   std::unordered_map<std::string, double> topic_to_noise_window_map_;
 };
 
-std::shared_ptr<CollectorMatchingStrategy> parse_matching_strategy(rclcpp::Node & node);
-
 }  // namespace autoware::pointcloud_preprocessor

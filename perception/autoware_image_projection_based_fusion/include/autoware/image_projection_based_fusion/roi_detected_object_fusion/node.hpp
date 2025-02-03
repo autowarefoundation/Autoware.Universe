@@ -39,7 +39,7 @@ public:
 private:
   void preprocess(DetectedObjects & output_msg) override;
 
-  void fuseOnSingleImage(
+  void fuse_on_single_image(
     const DetectedObjects & input_object_msg, const Det2dStatus<RoiMsgType> & det2d,
     const RoiMsgType & input_roi_msg, DetectedObjects & output_object_msg) override;
 

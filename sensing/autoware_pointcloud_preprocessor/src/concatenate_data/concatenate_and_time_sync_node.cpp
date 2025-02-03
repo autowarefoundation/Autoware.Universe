@@ -143,9 +143,17 @@ PointCloudConcatenateDataSynchronizerComponent::PointCloudConcatenateDataSynchro
     params_.has_static_tf_only);
 
   // Diagnostic Updater
-  diagnostic_updater_.setHardwareID("concatenate_data_checker");
+  std::ostringstream hardware_id_stream;
+  hardware_id_stream << this->get_fully_qualified_name() << "_checker";
+  std::string hardware_id = hardware_id_stream.str();
+
+  std::ostringstream diagnositic_name_stream;
+  diagnositic_name_stream << this->get_fully_qualified_name() << "_status";
+  std::string diagnositic_name = diagnositic_name_stream.str();
+
+  diagnostic_updater_.setHardwareID(hardware_id);
   diagnostic_updater_.add(
-    "concat_status", this, &PointCloudConcatenateDataSynchronizerComponent::check_concat_status);
+    diagnositic_name, this, &PointCloudConcatenateDataSynchronizerComponent::check_concat_status);
 }
 
 std::string PointCloudConcatenateDataSynchronizerComponent::replace_sync_topic_name_postfix(
@@ -293,6 +301,10 @@ void PointCloudConcatenateDataSynchronizerComponent::publish_clouds(
     publish_pointcloud_ = true;
   }
 
+  diagnostic_collector_info_ = std::move(collector_info);
+  diagnostic_topic_to_original_stamp_map_ = concatenated_cloud_result.topic_to_original_stamp_map;
+  diagnostic_updater_.force_update();
+
   if (publish_pointcloud_) {
     latest_concatenate_cloud_timestamp_ = current_concatenate_cloud_timestamp_;
     auto concatenate_pointcloud_output = std::make_unique<sensor_msgs::msg::PointCloud2>(
@@ -321,10 +333,8 @@ void PointCloudConcatenateDataSynchronizerComponent::publish_clouds(
     }
   }
 
-  diagnostic_collector_info_ = collector_info;
-
-  diagnostic_topic_to_original_stamp_map_ = concatenated_cloud_result.topic_to_original_stamp_map;
-  diagnostic_updater_.force_update();
+  publish_pointcloud_ = false;
+  drop_previous_but_late_pointcloud_ = false;
 
   // add processing time for debug
   if (debug_publisher_) {
@@ -429,8 +439,6 @@ void PointCloudConcatenateDataSynchronizerComponent::check_concat_status(
 
     stat.summary(level, message);
 
-    publish_pointcloud_ = false;
-    drop_previous_but_late_pointcloud_ = false;
     is_concatenated_cloud_empty_ = false;
   } else {
     const int8_t level = diagnostic_msgs::msg::DiagnosticStatus::OK;

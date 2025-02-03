@@ -157,7 +157,7 @@ PointPaintingFusionNode::PointPaintingFusionNode(const rclcpp::NodeOptions & opt
 
   // subscriber
   std::function<void(const PointCloudMsgType::ConstSharedPtr msg)> sub_callback =
-    std::bind(&PointPaintingFusionNode::subCallback, this, std::placeholders::_1);
+    std::bind(&PointPaintingFusionNode::sub_callback, this, std::placeholders::_1);
   det3d_sub_ = this->create_subscription<PointCloudMsgType>(
     "~/input/pointcloud", rclcpp::SensorDataQoS().keep_last(3), sub_callback);
 
@@ -256,7 +256,7 @@ void PointPaintingFusionNode::preprocess(PointCloudMsgType & painted_pointcloud_
     static_cast<uint32_t>(painted_pointcloud_msg.data.size() / painted_pointcloud_msg.height);
 }
 
-void PointPaintingFusionNode::fuseOnSingleImage(
+void PointPaintingFusionNode::fuse_on_single_image(
   __attribute__((unused)) const PointCloudMsgType & input_pointcloud_msg,
   const Det2dStatus<RoiMsgType> & det2d, const RoiMsgType & input_roi_msg,
   PointCloudMsgType & painted_pointcloud_msg)

@@ -42,7 +42,7 @@ public:
 private:
   void preprocess(PointCloudMsgType & pointcloud_msg) override;
 
-  void fuseOnSingleImage(
+  void fuse_on_single_image(
     const PointCloudMsgType & input_pointcloud_msg, const Det2dStatus<Image> & det2d,
     const Image & input_mask, PointCloudMsgType & output_pointcloud_msg) override;
 

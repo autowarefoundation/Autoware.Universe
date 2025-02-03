@@ -6,24 +6,22 @@
     "fusion_common": {
       "type": "object",
       "properties": {
-        "input_offset_ms": {
+        "rois_timestamp_offsets": {
           "type": "array",
-          "description": "An array of timestamp offsets for each camera [ms].",
-          "default": [61.67, 111.67, 45.0, 28.33, 78.33, 95.0]
+          "items": {
+            "type": "number",
+            "minimum": 0.0
+          },
+          "description": "An array of timestamp offsets for each camera [s].",
+          "minItems": 2,
+          "default": [0.06167, 0.011167, 0.045, 0.02833, 0.07833, 0.095]
         },
         "timeout_ms": {
           "type": "number",
-          "description": "A timeout value can be assigned within a single frame [ms].",
-          "default": 70.0,
-          "minimum": 1.0,
-          "maximum": 100.0
-        },
-        "match_threshold_ms": {
-          "type": "number",
-          "description": "A maximum threshold value to synchronize RoIs from multiple cameras [ms].",
-          "default": 50.0,
-          "minimum": 0.0,
-          "maximum": 100.0
+          "description": "A timeout value can be assigned within a single frame [s].",
+          "default": 0.07,
+          "minimum": 0.001,
+          "maximum": 0.1
         },
         "image_buffer_size": {
           "type": "integer",
@@ -85,6 +83,61 @@
           "type": "number",
           "description": "The height of grid cell used in approximated projection [pixel].",
           "default": 1.0
+        },
+        "matching_strategy": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["naive", "advanced"],
+              "default": "advanced",
+              "description": "Set it to `advanced` if you want to use more accurate and complicated logic for matching LiDAR and camera; otherwise, set it to `naive`."
+            },
+            "threshold": {
+              "type": "number",
+              "description": "A maximum threshold value to synchronize RoIs from multiple cameras [s].",
+              "default": 0.05,
+              "minimum": 0.0,
+              "maximum": 0.1
+            },
+            "det3d_noise_window": {
+              "type": "number",
+              "description": "det3d noise window in seconds.",
+              "default": 0.001,
+              "minimum": 0.0
+            },
+            "rois_timestamp_noise_window": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0.0
+              },
+              "default": [0.005, 0.005, 0.005, 0.005, 0.005, 0.005],
+              "minItems": 2,
+              "description": "List of camera timestamp noise windows in seconds. The noise values should be specified in the same order as the input_topics."
+            }
+          },
+          "required": ["type"],
+          "dependencies": {
+            "type": {
+              "oneOf": [
+                {
+                  "properties": { "type": { "const": "naive" } },
+                  "required": ["threshold"],
+                  "not": {
+                    "required": ["det3d_noise_window", "rois_timestamp_noise_window"]
+                  }
+                },
+                {
+                  "properties": { "type": { "const": "advanced" } },
+                  "required": ["det3d_noise_window", "rois_timestamp_noise_window"],
+                  "not": {
+                    "required": ["threshold"]
+                  }
+                }
+              ]
+            }
+          }
         }
       }
     }

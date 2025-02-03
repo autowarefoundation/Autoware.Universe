@@ -16,7 +16,7 @@
   <arg name="input/camera_info6" default="/camera_info6"/>
   <arg name="input/rois7" default="rois7"/>
   <arg name="input/camera_info7" default="/camera_info7"/>
-  <arg name="input/pointcloud" default="/perception/object_recognition/detection/pointcloud_map_filtered/pointcloud"/>
+  <arg name="input/pointcloud" default="/sensing/lidar/concatenated/pointcloud"/>
   <arg name="output/clusters" default="output/clusters"/>
   <arg name="debug/clusters" default="roi_pointcloud_fusion/debug/clusters"/>
   <arg name="param_path" default="$(find-pkg-share autoware_image_projection_based_fusion)/config/roi_pointcloud_fusion.param.yaml"/>

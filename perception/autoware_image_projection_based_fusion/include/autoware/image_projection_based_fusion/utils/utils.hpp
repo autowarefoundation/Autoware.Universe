@@ -63,7 +63,7 @@ struct PointData
   size_t orig_index;
 };
 
-bool checkCameraInfo(const sensor_msgs::msg::CameraInfo & camera_info);
+bool check_camera_info(const sensor_msgs::msg::CameraInfo & camera_info);
 
 std::optional<geometry_msgs::msg::TransformStamped> getTransformStamped(
   const tf2_ros::Buffer & tf_buffer, const std::string & target_frame_id,

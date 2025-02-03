@@ -49,7 +49,7 @@ RoiPointCloudFusionNode::RoiPointCloudFusionNode(const rclcpp::NodeOptions & opt
   cluster_debug_pub_ = this->create_publisher<PointCloudMsgType>("debug/clusters", 1);
 }
 
-void RoiPointCloudFusionNode::fuseOnSingleImage(
+void RoiPointCloudFusionNode::fuse_on_single_image(
   const PointCloudMsgType & input_pointcloud_msg, const Det2dStatus<RoiMsgType> & det2d,
   const RoiMsgType & input_roi_msg,
   __attribute__((unused)) PointCloudMsgType & output_pointcloud_msg)

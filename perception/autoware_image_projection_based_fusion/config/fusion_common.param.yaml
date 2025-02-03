@@ -1,8 +1,8 @@
 /**:
   ros__parameters:
-    input_offset_ms: [61.67, 111.67, 45.0, 28.33, 78.33, 95.0]
-    timeout_ms: 70.0
-    match_threshold_ms: 50.0
+    rois_timestamp_offsets: [0.06167, 0.011167, 0.045, 0.02833, 0.07833, 0.095]
+    timeout_sec: 0.070
+    # match_threshold_ms: 50.0
     image_buffer_size: 15
     # projection setting for each ROI whether unrectify image
     point_project_to_unrectified_image: [false, false, false, false, false, false]
@@ -22,3 +22,7 @@
 
     # debug parameters
     publish_processing_time_detail: false
+    matching_strategy:
+      type: advanced
+      det3d_noise_window: 0.01
+      rois_timestamp_noise_window: [0.005, 0.005, 0.005, 0.005, 0.005, 0.005]

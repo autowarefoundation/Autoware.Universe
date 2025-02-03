@@ -34,7 +34,7 @@ private:
   rclcpp::Publisher<PointCloudMsgType>::SharedPtr point_pub_ptr_;
   rclcpp::Publisher<PointCloudMsgType>::SharedPtr cluster_debug_pub_;
 
-  void fuseOnSingleImage(
+  void fuse_on_single_image(
     const PointCloudMsgType & input_pointcloud_msg, const Det2dStatus<RoiMsgType> & det2d,
     const RoiMsgType & input_roi_msg, PointCloudMsgType & output_pointcloud_msg) override;
 

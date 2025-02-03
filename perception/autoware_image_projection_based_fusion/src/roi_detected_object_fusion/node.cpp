@@ -83,7 +83,7 @@ void RoiDetectedObjectFusionNode::preprocess(DetectedObjects & output_msg)
   ignored_object_flags_map_.insert(std::make_pair(timestamp_nsec, ignored_object_flags));
 }
 
-void RoiDetectedObjectFusionNode::fuseOnSingleImage(
+void RoiDetectedObjectFusionNode::fuse_on_single_image(
   const DetectedObjects & input_object_msg, const Det2dStatus<RoiMsgType> & det2d,
   const RoiMsgType & input_roi_msg, DetectedObjects & output_object_msg __attribute__((unused)))
 {
