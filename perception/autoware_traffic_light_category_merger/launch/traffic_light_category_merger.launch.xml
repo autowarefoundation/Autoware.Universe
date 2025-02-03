@@ -1,0 +1,13 @@
+<launch>
+  <!-- Output -->
+  <arg name="input/car_signals" default="classified/car/traffic_signals"/>
+  <arg name="input/pedestrian_signals" default="classified/pedestrian/traffic_signals"/>
+  <arg name="output/traffic_light_signals" default="classification/traffic_signals"/>
+
+  <!-- Node -->
+  <node pkg="autoware_traffic_light_category_merger" exec="traffic_light_category_merger_node" name="traffic_light_category_merger" output="screen">
+    <remap from="input/car_signals" to="$(var input/car_signals)"/>
+    <remap from="input/pedestrian_signals" to="$(var input/pedestrian_signals)"/>
+    <remap from="output/traffic_light_signals" to="$(var output/traffic_light_signals)"/>
+  </node>
+</launch>
