@@ -17,6 +17,8 @@
 
 #include <autoware_vehicle_info_utils/vehicle_info_utils.hpp>
 
+#include <string>
+
 struct ModuleConfigParameters
 {
   bool enable_module{false};
@@ -52,6 +54,8 @@ struct BehaviorPathPlannerParameters
   double turn_signal_shift_length_threshold;
   double turn_signal_remaining_shift_length_threshold;
   bool turn_signal_on_swerving;
+  bool check_bidirectional_lane;
+  std::string traffic_flow{"left_side"};
 
   bool enable_akima_spline_first;
   bool enable_cog_on_centerline;

@@ -88,6 +88,12 @@ struct ModuleNameStamped
   rclcpp::Time stamp{0, 0, RCL_ROS_TIME};
 };
 
+struct LaneletData
+{
+  lanelet::Lanelet lanelet;
+  bool is_bidirectional{false};
+};
+
 struct DrivableLanes
 {
   lanelet::ConstLanelet right_lane;
@@ -251,7 +257,9 @@ struct PlannerData
       node.declare_parameter<double>("ego_nearest_dist_threshold");
     parameters.ego_nearest_yaw_threshold =
       node.declare_parameter<double>("ego_nearest_yaw_threshold");
+    parameters.check_bidirectional_lane = node.declare_parameter<bool>("check_bidirectional_lane");
 
+    parameters.traffic_flow = node.declare_parameter<std::string>("traffic_flow");
     drivable_area_expansion_parameters.init(node);
   }
 

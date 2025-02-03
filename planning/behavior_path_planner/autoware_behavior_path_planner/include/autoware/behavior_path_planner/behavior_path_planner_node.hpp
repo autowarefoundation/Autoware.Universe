@@ -235,6 +235,8 @@ private:
     const std::shared_ptr<PathWithLaneId> & path_candidate_ptr, const bool is_ready,
     const std::shared_ptr<PlannerData> & planner_data);
 
+  PathWithLaneId shiftPath(const PathWithLaneId & ref_paths, const double shift_distance);
+  bool isLaneBidirectional(const lanelet::ConstLanelets & current_lanelets);
   std::unique_ptr<autoware::universe_utils::LoggerLevelConfigure> logger_configure_;
 
   std::unique_ptr<autoware::universe_utils::PublishedTimePublisher> published_time_publisher_;

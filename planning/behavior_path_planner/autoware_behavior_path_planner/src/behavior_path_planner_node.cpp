@@ -388,6 +388,9 @@ void BehaviorPathPlannerNode::run()
   // NOTE: In order to keep backward_path_length at least, resampling interval is added to the
   // backward.
   const auto current_pose = planner_data_->self_odometry->pose.pose;
+
+  const auto current_lanelets = planner_data_->route_handler->getRoadLaneletsAtPose(current_pose);
+  const auto is_bidirectional = isLaneBidirectional(current_lanelets);
   if (!path->points.empty()) {
     const size_t current_seg_idx = planner_data_->findEgoSegmentIndex(path->points);
     path->points = autoware::motion_utils::cropPoints(
@@ -395,7 +398,19 @@ void BehaviorPathPlannerNode::run()
       planner_data_->parameters.forward_path_length,
       planner_data_->parameters.backward_path_length +
         planner_data_->parameters.input_path_interval);
-
+    if (planner_data_->parameters.check_bidirectional_lane && is_bidirectional) {
+      double bound_to_centerline = 0.0;
+      for (const auto & current_lanelet : current_lanelets) {
+        bound_to_centerline = lanelet::geometry::distance2d(
+          lanelet::utils::to2D(current_lanelet.leftBound().basicLineString()),
+          lanelet::utils::to2D(current_lanelet.centerline().basicLineString()));
+      }
+      if (planner_data_->parameters.traffic_flow == "right_side") {
+        path->points = shiftPath(*path, bound_to_centerline * 0.5).points;
+      } else if (planner_data_->parameters.traffic_flow == "left_side") {
+        path->points = shiftPath(*path, -bound_to_centerline * 0.5).points;
+      }
+    }
     if (!path->points.empty()) {
       path_publisher_->publish(*path);
       published_time_publisher_->publish_if_subscribed(path_publisher_, path->header.stamp);
@@ -436,6 +451,55 @@ void BehaviorPathPlannerNode::run()
   lk_manager.unlock();  // release planner_manager_
 
   RCLCPP_DEBUG(get_logger(), "----- behavior path planner end -----\n\n");
+}
+
+PathWithLaneId BehaviorPathPlannerNode::shiftPath(
+  const PathWithLaneId & path, const double shift_distance)
+{
+  PathWithLaneId shifted_path;
+  shifted_path.header.stamp = path.header.stamp;
+  shifted_path.points.reserve(path.points.size());
+  for (const auto & pose : path.points) {
+    tier4_planning_msgs::msg::PathPointWithLaneId shifted_pose{};
+    shifted_pose = pose;
+    // Get yaw from quaternion
+    tf2::Quaternion quat(
+      pose.point.pose.orientation.x, pose.point.pose.orientation.y, pose.point.pose.orientation.z,
+      pose.point.pose.orientation.w);
+    tf2::Matrix3x3 mat(quat);
+    double roll, pitch, yaw;
+    mat.getRPY(roll, pitch, yaw);
+
+    // Calculate the lateral shift
+    double delta_x = shift_distance * cos(yaw + M_PI_2);
+    double delta_y = shift_distance * sin(yaw + M_PI_2);
+
+    // Apply the shift
+    shifted_pose.point.pose.position.x += delta_x;
+    shifted_pose.point.pose.position.y += delta_y;
+
+    shifted_path.points.push_back(shifted_pose);
+  }
+
+  return shifted_path;
+}
+
+bool BehaviorPathPlannerNode::isLaneBidirectional(const lanelet::ConstLanelets & current_lanelets)
+{
+  for (const auto & current_lanelet : current_lanelets) {
+    const auto left_bound_id = current_lanelet.leftBound().id();
+    const auto right_bound_id = current_lanelet.rightBound().id();
+    for (const auto & other_lanelet : current_lanelets) {
+      if (current_lanelet != other_lanelet) {
+        if (
+          left_bound_id == other_lanelet.rightBound().id() ||
+          right_bound_id == other_lanelet.leftBound().id()) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
 }
 
 void BehaviorPathPlannerNode::computeTurnSignal(

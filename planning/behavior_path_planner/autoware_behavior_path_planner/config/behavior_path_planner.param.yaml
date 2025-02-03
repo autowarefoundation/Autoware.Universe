@@ -19,6 +19,8 @@
     turn_signal_shift_length_threshold: 0.3
     turn_signal_remaining_shift_length_threshold: 0.1
     turn_signal_on_swerving: true
+    check_bidirectional_lane: true
+    traffic_flow: "left_side" # right or left
 
     enable_akima_spline_first: false
     enable_cog_on_centerline: false
