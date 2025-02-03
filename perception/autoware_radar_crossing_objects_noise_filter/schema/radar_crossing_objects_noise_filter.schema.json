@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "autoware_radar_crossing_objects_noise_filter parameter",
+  "type": "object",
+  "definitions": {
+    "autoware_radar_crossing_objects_noise_filter": {
+      "type": "object",
+      "properties": {
+        "angle_threshold": {
+          "type": "number",
+          "description": "Angle threshold to filter noise objects. Must satisfy 0 < angle_threshold < pi/2. If the crossing angle is larger than this parameter, it can be a candidate for a noise object. If smaller, it is a filtered object. A smaller value filters more objects as noise.",
+          "default": 1.221,
+          "exclusiveMinimum": 0.0,
+          "exclusiveMaximum": 1.5708
+        },
+        "velocity_threshold": {
+          "type": "number",
+          "description": "Velocity threshold to filter noise objects. If the velocity of an object is larger than this parameter, it can be a candidate for a noise object. If smaller, it is a filtered object. A smaller value filters more objects as noise.",
+          "default": 1.5,
+          "minimum": 0.0
+        }
+      },
+      "required": ["angle_threshold", "velocity_threshold"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/autoware_radar_crossing_objects_noise_filter"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

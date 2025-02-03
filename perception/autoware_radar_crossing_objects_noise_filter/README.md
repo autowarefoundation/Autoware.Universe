@@ -67,14 +67,4 @@ To filter the objects crossing to ego vehicle, this package filter the objects a
 
 ### Parameters
 
-- `angle_threshold` (double) [rad]
-  - Default parameter is 1.0472.
-
-This parameter is the angle threshold to filter. It has condition that 0 < `angle_threshold` < pi / 2. If the crossing angle is larger than this parameter, it can be a candidate for noise object. In other words, if it is smaller than this parameter, it is a filtered object.
-If this parameter is set smaller, more objects are considered noise. In detail, see algorithm chapter.
-
-- `velocity_threshold` (double) [m/s]
-  - Default parameter is 3.0.
-
-This parameter is the velocity threshold to filter. If velocity of an object is larger than this parameter, it can be a candidate for noise object. In other words, if velocity of an object is smaller than this parameter, it is a filtered object.
-If this parameter is set smaller, more objects are considered noise. In detail, see algorithm chapter.
+{{ json_to_markdown("perception/autoware_radar_crossing_objects_noise_filter/schema/radar_crossing_objects_noise_filter.schema.json") }}
