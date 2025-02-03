@@ -16,6 +16,7 @@
 #define AUTOWARE__SHIFT_DECIDER__AUTOWARE_SHIFT_DECIDER_HPP_
 
 #include "autoware/universe_utils/ros/polling_subscriber.hpp"
+#include "shift_decider_parameters.hpp"
 
 #include <rclcpp/rclcpp.hpp>
 
@@ -58,7 +59,8 @@ private:
   autoware_vehicle_msgs::msg::GearReport::ConstSharedPtr current_gear_ptr_;
   uint8_t prev_shift_command = autoware_vehicle_msgs::msg::GearCommand::PARK;
 
-  bool park_on_goal_;
+  std::shared_ptr<::shift_decider::ParamListener> param_listener_;
+  ::shift_decider::Params param_;
 };
 }  // namespace autoware::shift_decider
 

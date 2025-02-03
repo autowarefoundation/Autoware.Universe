@@ -1,0 +1,4 @@
+shift_decider:
+  park_on_goal:
+    type: bool
+    description: Whether to put the gear in park when vehicle reaches the goal.

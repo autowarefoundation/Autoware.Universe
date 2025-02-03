@@ -17,6 +17,7 @@
   <depend>autoware_system_msgs</depend>
   <depend>autoware_universe_utils</depend>
   <depend>autoware_vehicle_msgs</depend>
+  <depend>generate_parameter_library</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
 

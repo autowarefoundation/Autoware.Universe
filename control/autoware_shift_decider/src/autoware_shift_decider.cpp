@@ -31,7 +31,9 @@ ShiftDecider::ShiftDecider(const rclcpp::NodeOptions & node_options)
   rclcpp::QoS durable_qos(queue_size);
   durable_qos.transient_local();
 
-  park_on_goal_ = declare_parameter<bool>("park_on_goal");
+  param_listener_ =
+    std::make_shared<::shift_decider::ParamListener>(this->get_node_parameters_interface());
+  param_ = param_listener_->get_params();
 
   pub_shift_cmd_ =
     create_publisher<autoware_vehicle_msgs::msg::GearCommand>("output/gear_cmd", durable_qos);
@@ -71,7 +73,7 @@ void ShiftDecider::updateCurrentShiftCmd()
     if (
       (autoware_state_->state == AutowareState::ARRIVED_GOAL ||
        autoware_state_->state == AutowareState::WAITING_FOR_ROUTE) &&
-      park_on_goal_) {
+      param_.park_on_goal) {
       shift_cmd_.command = GearCommand::PARK;
     } else {
       shift_cmd_.command = current_gear_ptr_->report;
