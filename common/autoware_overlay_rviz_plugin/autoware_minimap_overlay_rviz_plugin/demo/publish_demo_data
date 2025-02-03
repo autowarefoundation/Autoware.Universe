@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+from argparse import ArgumentParser
+import math
+
+import numpy as np
+import rclpy
+from rclpy.time import CONVERSION_CONSTANT
+from sensor_msgs.msg import NavSatFix
+from sensor_msgs.msg import NavSatStatus
+
+
+class CircularTranslate:
+
+    def update(self, t, fix):
+        r = 0.001
+        circle_period = 10.0
+        t_sec = t.nanoseconds / CONVERSION_CONSTANT
+        phi = math.tau * (t_sec / circle_period)
+        fix.latitude += math.cos(phi) * r
+        fix.longitude += math.sin(phi) * r
+
+
+class ApplyNoise:
+
+    def __init__(self, stddev):
+        self.stddev = stddev
+
+    def update(self, t, fix):
+        noise = np.random.normal(0, self.stddev, 2)
+        fix.latitude += noise[0]
+        fix.longitude += noise[1]
+
+
+class LooseFix:
+
+    def __init__(self, phase, period):
+        self.phase = phase
+        self.period = period
+
+    def update(self, t, fix):
+        t_sec = t.nanoseconds / CONVERSION_CONSTANT
+        phase_0_to_1 = math.fmod(t_sec, self.period) / self.period
+        if phase_0_to_1 < self.phase:
+            fix.status.status = NavSatStatus.STATUS_NO_FIX
+        else:
+            fix.status.status = NavSatStatus.STATUS_FIX
+
+
+def main():
+    parser = ArgumentParser("Periodically create and publish NavSatFix")
+    parser.add_argument("latitude", type=float)
+    parser.add_argument("longitude", type=float)
+    parser.add_argument("--noise", type=float)
+    parser.add_argument("--no-fix-phase", type=float)
+    parser.add_argument("--no-fix-period", default=1.0, type=float)
+    args, unknown = parser.parse_known_args()
+
+    rclpy.init()
+    node = rclpy.create_node("publish_demo_data")
+    publisher = node.create_publisher(NavSatFix, "fix", 1)
+
+    origin = NavSatFix()
+    origin.latitude = args.latitude
+    origin.longitude = args.longitude
+
+    updaters = [CircularTranslate()]
+    if args.noise:
+        print(f"Applying noise with stddev={args.noise}")
+        updaters.append(ApplyNoise(args.noise))
+    if args.no_fix_phase:
+        updaters.append(LooseFix(args.no_fix_phase, args.no_fix_period))
+
+    def timer_callback():
+        fix = NavSatFix()
+        t = node.get_clock().now()
+        fix.header.stamp = t.to_msg()
+        fix.header.frame_id = "gps_sensor"
+        fix.latitude = origin.latitude
+        fix.longitude = origin.longitude
+        for u in updaters:
+            u.update(t, fix)
+        # node.get_logger().info(
+        # f"Publishing NavSatFix at ({fix.latitude:.5f}, {fix.longitude:.5f})"
+        # )
+        publisher.publish(fix)
+
+    node.create_timer(0.1, timer_callback)
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,8 @@
+<library path="autoware_minimap_overlay_rviz_plugin">
+  <class name="autoware_minimap_overlay_rviz_plugin::VehicleMapDisplay" type="autoware_minimap_overlay_rviz_plugin::VehicleMapDisplay" base_class_type="rviz_common::Display">
+    <description>
+      A display panel for vehicle map.
+    </description>
+  </class>
+
+</library>

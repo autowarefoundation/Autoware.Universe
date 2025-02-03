@@ -1,0 +1,10 @@
+<!-- rviz2 -d $(ros2 pkg prefix - -share autoware_minimap_overlay_rviz_plugin)/launch/demo.rviz
+ros2 run autoware_minimap_overlay_rviz_plugin publish_demo_data.py LATITUDE LONGITUDE -->
+<launch>
+  <node pkg="rviz2" exec="rviz2"/>
+
+  <node pkg="autoware_minimap_overlay_rviz_plugin" exec="publish_demo_data" args="40.9908 29.0452"/>
+
+  <!-- Both frames need to be present, so just coupling them https://github.com/nobleo/autoware_minimap_overlay_rviz_plugin/issues/110 -->
+  <node pkg="tf2_ros" exec="static_transform_publisher" args="--frame-id map --child-frame-id gps_sensor"/>
+</launch>
