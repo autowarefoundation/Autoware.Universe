@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="bag_recorder_param_path" default="$(find-pkg-share autoware_bag_recorder)/config/autoware_bag_recorder.param.yaml"/>
+
+  <node pkg="autoware_bag_recorder" exec="autoware_bag_recorder" name="autoware_bag_recorder" output="screen">
+    <param from="$(var bag_recorder_param_path)"/>
+  </node>
+</launch>

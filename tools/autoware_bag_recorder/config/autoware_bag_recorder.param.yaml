@@ -1,0 +1,34 @@
+/**:
+  ros__parameters:
+    common:
+      database_storage: "mcap"                     # sqlite3 or mcap
+      maximum_record_time: 36000                   # seconds
+      maximum_allowed_bag_storage_size: 500.0      # GB
+      maximum_bag_file_size: 20.0                  # GB
+      enable_only_auto_mode_recording: false       # if enabled, recording occurs only "AUTO" mode
+      record_all_topic_in_a_bag: true              # creates single bag file with input and other topics
+      number_of_maximum_bags: 1000                 # limit of stored bag file count
+      path: "bags/"                                # Path to bag file for saving
+      prefix: "logging_ros2bag_"
+      minimum_acceptable_disk_space: 50            # GB
+      disk_space_threshold_action: "shutdown"      # [remove, shutdown] remove files or shutdown node
+    raw_input_topics:                              # for rosbag-replay (logging) simulation
+      record_raw_input: true
+      raw_input_topics:
+        - /sensing/gnss/ublox/fix_velocity
+        - /sensing/gnss/ublox/nav_sat_fix
+        - /sensing/imu/tamagawa/imu_raw
+        - /sensing/lidar/left/velodyne_packets
+        - /sensing/lidar/right/velodyne_packets
+        - /sensing/lidar/top/velodyne_packets
+        - /vehicle/status/control_mode
+        - /vehicle/status/gear_status
+        - /vehicle/status/steering_status
+        - /vehicle/status/velocity_status
+    other_topics:                                  # all other topics
+      record_other: false
+      other_topics:
+        - /perception/obstacle_segmentation/pointcloud
+        - /perception/object_recognition/objects
+        - /planning/scenario_planning/trajectory
+        - /planning/scenario_planning/lane_driving/behavior_planning/path
