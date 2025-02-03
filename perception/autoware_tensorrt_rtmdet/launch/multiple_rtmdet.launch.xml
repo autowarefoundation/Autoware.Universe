@@ -1,0 +1,78 @@
+<launch>
+  <arg name="image_raw0" default="/sensing/camera/camera0/image_raw"/>
+  <arg name="gpu_id_image_raw0" default="0"/>
+
+  <arg name="image_raw1" default="/sensing/camera/camera1/image_raw"/>
+  <arg name="gpu_id_image_raw1" default="0"/>
+
+  <arg name="image_raw2" default="/sensing/camera/camera2/image_raw"/>
+  <arg name="gpu_id_image_raw2" default="0"/>
+
+  <arg name="image_raw3" default="/sensing/camera/camera3/image_raw"/>
+  <arg name="gpu_id_image_raw3" default="0"/>
+
+  <arg name="image_raw4" default="/sensing/camera/camera4/image_raw"/>
+  <arg name="gpu_id_image_raw4" default="0"/>
+
+  <arg name="image_raw5" default="/sensing/camera/camera5/image_raw"/>
+  <arg name="gpu_id_image_raw5" default="0"/>
+
+  <arg name="image_raw6" default="/sensing/camera/camera6/image_raw"/>
+  <arg name="gpu_id_image_raw6" default="0"/>
+
+  <arg name="image_raw7" default="/sensing/camera/camera7/image_raw"/>
+  <arg name="gpu_id_image_raw7" default="0"/>
+
+  <arg name="image_number" default="6"/>
+  <arg name="output_roi_topic" default="/perception/object_recognition/detection/rois"/>
+  <arg name="output_mask_topic" default="/perception/object_recognition/detection/mask"/>
+
+  <include if="$(eval &quot;'$(var image_number)'>='1'&quot;)" file="$(find-pkg-share autoware_tensorrt_rtmdet)/launch/rtmdet.launch.xml">
+    <arg name="input/image" value="$(var image_raw0)"/>
+    <arg name="output/objects" value="$(var output_roi_topic)0"/>
+    <arg name="output/mask" value="$(var output_mask_topic)0"/>
+    <arg name="gpu_id" value="$(var gpu_id_image_raw0)"/>
+  </include>
+  <include if="$(eval &quot;'$(var image_number)'>='2'&quot;)" file="$(find-pkg-share autoware_tensorrt_rtmdet)/launch/rtmdet.launch.xml">
+    <arg name="input/image" value="$(var image_raw1)"/>
+    <arg name="output/objects" value="$(var output_roi_topic)1"/>
+    <arg name="output/mask" value="$(var output_mask_topic)1"/>
+    <arg name="gpu_id" value="$(var gpu_id_image_raw1)"/>
+  </include>
+  <include if="$(eval &quot;'$(var image_number)'>='3'&quot;)" file="$(find-pkg-share autoware_tensorrt_rtmdet)/launch/rtmdet.launch.xml">
+    <arg name="input/image" value="$(var image_raw2)"/>
+    <arg name="output/objects" value="$(var output_roi_topic)2"/>
+    <arg name="output/mask" value="$(var output_mask_topic)2"/>
+    <arg name="gpu_id" value="$(var gpu_id_image_raw2)"/>
+  </include>
+  <include if="$(eval &quot;'$(var image_number)'>='4'&quot;)" file="$(find-pkg-share autoware_tensorrt_rtmdet)/launch/rtmdet.launch.xml">
+    <arg name="input/image" value="$(var image_raw3)"/>
+    <arg name="output/objects" value="$(var output_roi_topic)3"/>
+    <arg name="output/mask" value="$(var output_mask_topic)3"/>
+    <arg name="gpu_id" value="$(var gpu_id_image_raw3)"/>
+  </include>
+  <include if="$(eval &quot;'$(var image_number)'>='5'&quot;)" file="$(find-pkg-share autoware_tensorrt_rtmdet)/launch/rtmdet.launch.xml">
+    <arg name="input/image" value="$(var image_raw4)"/>
+    <arg name="output/objects" value="$(var output_roi_topic)4"/>
+    <arg name="output/mask" value="$(var output_mask_topic)4"/>
+    <arg name="gpu_id" value="$(var gpu_id_image_raw4)"/>
+  </include>
+  <include if="$(eval &quot;'$(var image_number)'>='6'&quot;)" file="$(find-pkg-share autoware_tensorrt_rtmdet)/launch/rtmdet.launch.xml">
+    <arg name="input/image" value="$(var image_raw5)"/>
+    <arg name="output/objects" value="$(var output_roi_topic)5"/>
+    <arg name="output/mask" value="$(var output_mask_topic)5"/>
+    <arg name="gpu_id" value="$(var gpu_id_image_raw5)"/>
+  </include>
+  <include if="$(eval &quot;'$(var image_number)'>='7'&quot;)" file="$(find-pkg-share autoware_tensorrt_rtmdet)/launch/rtmdet.launch.xml">
+    <arg name="input/image" value="$(var image_raw6)"/>
+    <arg name="output/objects" value="$(var output_roi_topic)6"/>
+    <arg name="output/mask" value="$(var output_mask_topic)6"/>
+    <arg name="gpu_id" value="$(var gpu_id_image_raw6)"/>
+  </include>
+  <include if="$(eval &quot;'$(var image_number)'>='8'&quot;)" file="$(find-pkg-share autoware_tensorrt_rtmdet)/launch/rtmdet.launch.xml">
+    <arg name="input/image" value="$(var image_raw7)"/>
+    <arg name="output/objects" value="$(var output_roi_topic)7"/>
+    <arg name="output/mask" value="$(var output_mask_topic)7"/>
+    <arg name="gpu_id" value="$(var gpu_id_image_raw7)"/>
+  </include>
+</launch>

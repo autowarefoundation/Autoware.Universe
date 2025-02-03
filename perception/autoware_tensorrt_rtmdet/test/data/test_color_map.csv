@@ -1,0 +1,4 @@
+id,name,r,g,b,label
+0,person,220,20,60,7
+1,bicycle,0,0,142,6
+2,car,0,0,255,1

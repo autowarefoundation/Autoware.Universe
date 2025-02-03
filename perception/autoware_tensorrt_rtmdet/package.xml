@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>autoware_tensorrt_rtmdet</name>
+  <version>0.0.1</version>
+  <description>TensorRT library implementation for RTMDet</description>
+  <maintainer email="baris@leodrive.ai">Barış Zeren</maintainer>
+
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake_auto</buildtool_depend>
+  <buildtool_depend>autoware_cmake</buildtool_depend>
+  <buildtool_depend>cudnn_cmake_module</buildtool_depend>
+  <buildtool_depend>tensorrt_cmake_module</buildtool_depend>
+
+  <buildtool_export_depend>cudnn_cmake_module</buildtool_export_depend>
+  <buildtool_export_depend>tensorrt_cmake_module</buildtool_export_depend>
+
+  <depend>autoware_cuda_utils</depend>
+  <depend>autoware_internal_perception_msgs</depend>
+  <depend>autoware_object_recognition_utils</depend>
+  <depend>autoware_perception_msgs</depend>
+  <depend>autoware_tensorrt_common</depend>
+  <depend>cv_bridge</depend>
+  <depend>image_transport</depend>
+  <depend>libopencv-dev</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tier4_perception_msgs</depend>
+  <depend>trt_batched_nms</depend>
+
+  <exec_depend>image_transport_decompressor</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>autoware_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

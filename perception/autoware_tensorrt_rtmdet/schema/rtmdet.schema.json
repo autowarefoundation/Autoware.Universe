@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for tensorrt_rtmdet Nodes",
+  "type": "object",
+  "definitions": {
+    "rtmdet": {
+      "type": "object",
+      "properties": {
+        "is_publish_debug_image": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, debug image which contain bounding boxes is published at runtime."
+        },
+        "is_publish_color_mask": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, debug image which contain colorful masks is published at runtime."
+        },
+        "model_path": {
+          "type": "string",
+          "default": "$(var data_path)/tensorrt_rtmdet/$(var model_name).onnx",
+          "description": "Path to ONNX file."
+        },
+        "color_map_path": {
+          "type": "string",
+          "default": "$(var data_path)/tensorrt_rtmdet/color_map.csv",
+          "description": "Path to color map file."
+        },
+        "plugin_paths": {
+          "type": "array",
+          "default": ["./build/tensorrt_rtmdet/libtensorrt_rtmdet_plugin.so"],
+          "description": "Path to plugin files."
+        },
+        "input_image_mean": {
+          "type": "array",
+          "default": [103.53, 116.28, 123.675],
+          "description": "Mean values for the model."
+        },
+        "input_image_std_dev": {
+          "type": "array",
+          "default": [57.375, 57.12, 58.395],
+          "description": "Standard deviation values for model."
+        },
+        "score_threshold": {
+          "type": "number",
+          "default": 0.3,
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "A threshold value of existence probability score, all of objects with score less than this threshold are ignored."
+        },
+        "nms_threshold": {
+          "type": "number",
+          "default": 0.0,
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "A threshold value of NMS."
+        },
+        "mask_threshold": {
+          "type": "number",
+          "default": 0.7,
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "A threshold value of pixel values in the output mask."
+        },
+        "precision": {
+          "type": "string",
+          "default": "fp16",
+          "description": "Operation precision to be used on inference. Valid value is one of: [fp32, fp16, int8]."
+        },
+        "dla_core_id": {
+          "type": "number",
+          "default": -1,
+          "description": "If positive ID value is specified, the node assign inference task to the DLA core."
+        },
+        "quantize_first_layer": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, set the operating precision for the first (input) layer to be fp16. This option is valid only when precision==int8."
+        },
+        "quantize_last_layer": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, set the operating precision for the last (output) layer to be fp16. This option is valid only when precision==int8."
+        },
+        "profile_per_layer": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, profiler function will be enabled. Since the profile function may affect execution speed, it is recommended to set this flag true only for development purpose."
+        },
+        "clip_value": {
+          "type": "number",
+          "default": 0.0,
+          "description": "If positive value is specified, the value of each layer output will be clipped between [0.0, clip_value]. This option is valid only when precision==int8 and used to manually specify the dynamic range instead of using any calibration."
+        },
+        "apply_erosion": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, apply erosion to the output mask."
+        },
+        "calibration_image_list_path": {
+          "type": "string",
+          "default": "",
+          "description": "Path to a file which contains path to images. Those images will be used for int8 quantization."
+        }
+      },
+      "required": [
+        "is_publish_debug_image",
+        "is_publish_color_mask",
+        "model_path",
+        "color_map_path",
+        "plugin_paths",
+        "input_image_mean",
+        "input_image_std_dev",
+        "score_threshold",
+        "nms_threshold",
+        "mask_threshold",
+        "precision",
+        "dla_core_id",
+        "quantize_first_layer",
+        "quantize_last_layer",
+        "profile_per_layer",
+        "clip_value",
+        "apply_erosion"
+      ]
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/rtmdet"
+        }
+      },
+      "required": ["ros__parameters"]
+    }
+  },
+  "required": ["/**"]
+}

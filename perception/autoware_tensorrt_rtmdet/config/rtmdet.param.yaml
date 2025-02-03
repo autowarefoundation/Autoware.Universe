@@ -1,0 +1,23 @@
+/**:
+  ros__parameters:
+    is_publish_debug_image: false
+
+    is_publish_color_mask: false
+
+    # cspell: ignore libtrt
+    model_path: "$(var data_path)/tensorrt_rtmdet/$(var model_name).onnx"
+    color_map_path: "$(var data_path)/tensorrt_rtmdet/color_map.csv"
+    plugin_paths: [ "$(find-pkg-prefix trt_batched_nms)/lib/libtrt_batched_nms_plugin.so" ]
+    input_image_mean: [ 103.53, 116.28, 123.675 ]
+    input_image_std_dev: [ 57.375, 57.12, 58.395 ]
+    score_threshold: 0.3
+    nms_threshold: 0.3
+    mask_threshold: 0.7
+    precision: "fp16"
+    dla_core_id: -1
+    quantize_first_layer: false
+    quantize_last_layer: false
+    profile_per_layer: false
+    clip_value: 6.0
+    apply_erosion: false
+    calibration_image_list_path: ""

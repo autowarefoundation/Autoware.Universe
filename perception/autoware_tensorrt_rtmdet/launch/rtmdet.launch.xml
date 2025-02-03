@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="input/image" default="/camera0/image_raw"/>
+  <arg name="output/objects" default="/perception/object_recognition/detection/rois0"/>
+  <arg name="output/mask" default="/perception/object_recognition/detection/mask0"/>
+  <arg name="model_name" default="rtmdet_x" description="options `rtmdet_x` and `rtmdet_s`"/>
+  <arg name="data_path" default="$(env HOME)/autoware_data" description="packages data and artifacts directory path"/>
+  <arg name="rtmdet_param_path" default="$(find-pkg-share autoware_tensorrt_rtmdet)/config/rtmdet.param.yaml"/>
+  <arg name="use_decompress" default="true" description="use image decompress"/>
+  <arg name="build_only" default="false" description="exit after trt engine is built"/>
+
+  <arg name="param_file" default="$(find-pkg-share autoware_image_transport_decompressor)/config/image_transport_decompressor.param.yaml"/>
+  <node pkg="autoware_image_transport_decompressor" exec="image_transport_decompressor_node" name="image_transport_decompressor_node" if="$(var use_decompress)">
+    <remap from="~/input/compressed_image" to="$(var input/image)/compressed"/>
+    <remap from="~/output/raw_image" to="$(var input/image)"/>
+    <param from="$(var param_file)"/>
+  </node>
+
+  <node pkg="autoware_tensorrt_rtmdet" exec="autoware_tensorrt_rtmdet_node_exe" name="tensorrt_rtmdet" output="screen">
+    <remap from="~/in/image" to="$(var input/image)"/>
+    <remap from="~/out/objects" to="$(var output/objects)"/>
+    <remap from="~/out/mask" to="$(var output/mask)"/>
+    <param from="$(var rtmdet_param_path)" allow_substs="true"/>
+    <param name="build_only" value="$(var build_only)"/>
+  </node>
+</launch>
