@@ -151,20 +151,26 @@ private:
 };
 }  // namespace alt
 
-double area(const alt::ConvexPolygon2d & poly);
+double area(const alt::PointList2d & ring);
+
+double area(const alt::Polygon2d & poly);
 
 std::optional<alt::ConvexPolygon2d> convex_hull(const alt::Points2d & points);
 
 void correct(alt::Polygon2d & poly);
 
-bool covered_by(const alt::Point2d & point, const alt::ConvexPolygon2d & poly);
+bool covered_by(const alt::Point2d & point, const alt::PointList2d & ring);
+
+bool covered_by(const alt::Point2d & point, const alt::Polygon2d & poly);
+
+bool disjoint(const alt::Polygon2d & poly1, const alt::Polygon2d & poly2);
 
 bool disjoint(const alt::ConvexPolygon2d & poly1, const alt::ConvexPolygon2d & poly2);
 
 double distance(
   const alt::Point2d & point, const alt::Point2d & seg_start, const alt::Point2d & seg_end);
 
-double distance(const alt::Point2d & point, const alt::ConvexPolygon2d & poly);
+double distance(const alt::Point2d & point, const alt::Polygon2d & poly);
 
 std::optional<alt::ConvexPolygon2d> envelope(const alt::Polygon2d & poly);
 
@@ -179,12 +185,14 @@ bool intersects(
   const alt::Point2d & seg1_start, const alt::Point2d & seg1_end, const alt::Point2d & seg2_start,
   const alt::Point2d & seg2_end);
 
+bool intersects(const alt::Polygon2d & poly1, const alt::Polygon2d & poly2);
+
 bool intersects(const alt::ConvexPolygon2d & poly1, const alt::ConvexPolygon2d & poly2);
 
 bool is_above(
   const alt::Point2d & point, const alt::Point2d & seg_start, const alt::Point2d & seg_end);
 
-bool is_clockwise(const alt::PointList2d & vertices);
+bool is_clockwise(const alt::PointList2d & ring);
 
 bool is_convex(const alt::Polygon2d & poly);
 
@@ -193,12 +201,15 @@ alt::PointList2d simplify(const alt::PointList2d & line, const double max_distan
 bool touches(
   const alt::Point2d & point, const alt::Point2d & seg_start, const alt::Point2d & seg_end);
 
-bool touches(const alt::Point2d & point, const alt::ConvexPolygon2d & poly);
+bool touches(const alt::Point2d & point, const alt::PointList2d & line);
 
-bool within(const alt::Point2d & point, const alt::ConvexPolygon2d & poly);
+bool touches(const alt::Point2d & point, const alt::Polygon2d & poly);
 
-bool within(
-  const alt::ConvexPolygon2d & poly_contained, const alt::ConvexPolygon2d & poly_containing);
+bool within(const alt::Point2d & point, const alt::PointList2d & ring);
+
+bool within(const alt::Point2d & point, const alt::Polygon2d & poly);
+
+bool within(const alt::Polygon2d & poly_contained, const alt::Polygon2d & poly_containing);
 }  // namespace autoware::universe_utils
 
 #endif  // AUTOWARE__UNIVERSE_UTILS__GEOMETRY__ALT_GEOMETRY_HPP_

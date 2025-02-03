@@ -148,16 +148,26 @@ std::optional<ConvexPolygon2d> ConvexPolygon2d::create(
 }
 }  // namespace alt
 
-double area(const alt::ConvexPolygon2d & poly)
+double area(const alt::PointList2d & ring)
 {
-  const auto & vertices = poly.vertices();
-
-  double area = 0.;
-  for (auto it = std::next(vertices.cbegin()); it != std::prev(vertices.cend(), 2); ++it) {
-    area += (*std::next(it) - vertices.front()).cross(*it - vertices.front()) / 2;
+  double area_2 = 0.;
+  for (auto it = ring.cbegin(); it != std::prev(ring.cend()); ++it) {
+    area_2 += (*std::next(it)).cross(*it);
   }
 
-  return area;
+  return area_2 / 2;
+}
+
+double area(const alt::Polygon2d & poly)
+{
+  const auto outer_area = area(poly.outer());
+
+  double inner_area = 0.;
+  for (const auto & inner : poly.inners()) {
+    inner_area += area(inner);
+  }
+
+  return outer_area - inner_area;
 }
 
 std::optional<alt::ConvexPolygon2d> convex_hull(const alt::Points2d & points)
@@ -249,22 +259,21 @@ void correct(alt::Polygon2d & poly)
   }
 }
 
-bool covered_by(const alt::Point2d & point, const alt::ConvexPolygon2d & poly)
+bool covered_by(const alt::Point2d & point, const alt::PointList2d & ring)
 {
   constexpr double epsilon = 1e-6;
 
-  const auto & vertices = poly.vertices();
   std::size_t winding_number = 0;
 
   const auto [y_min_vertex, y_max_vertex] = std::minmax_element(
-    vertices.begin(), std::prev(vertices.end()),
+    ring.begin(), std::prev(ring.end()),
     [](const auto & a, const auto & b) { return a.y() < b.y(); });
   if (point.y() < y_min_vertex->y() || point.y() > y_max_vertex->y()) {
     return false;
   }
 
   double cross;
-  for (auto it = vertices.cbegin(); it != std::prev(vertices.cend()); ++it) {
+  for (auto it = ring.cbegin(); it != std::prev(ring.cend()); ++it) {
     const auto & p1 = *it;
     const auto & p2 = *std::next(it);
 
@@ -292,23 +301,25 @@ bool covered_by(const alt::Point2d & point, const alt::ConvexPolygon2d & poly)
   return winding_number != 0;
 }
 
-bool disjoint(const alt::ConvexPolygon2d & poly1, const alt::ConvexPolygon2d & poly2)
+bool covered_by(const alt::Point2d & point, const alt::Polygon2d & poly)
 {
-  if (equals(poly1, poly2)) {
-    return false;
-  }
-
-  if (intersects(poly1, poly2)) {
-    return false;
-  }
-
-  for (const auto & vertex : poly1.vertices()) {
-    if (touches(vertex, poly2)) {
+  for (const auto & inner : poly.inners()) {
+    if (within(point, inner)) {
       return false;
     }
   }
 
-  return true;
+  return covered_by(point, poly.outer());
+}
+
+bool disjoint(const alt::Polygon2d & poly1, const alt::Polygon2d & poly2)
+{
+  return !intersects(poly1, poly2);
+}
+
+bool disjoint(const alt::ConvexPolygon2d & poly1, const alt::ConvexPolygon2d & poly2)
+{
+  return !intersects(poly1, poly2);
 }
 
 double distance(
@@ -331,14 +342,14 @@ double distance(
   }
 }
 
-double distance(const alt::Point2d & point, const alt::ConvexPolygon2d & poly)
+double distance(const alt::Point2d & point, const alt::Polygon2d & poly)
 {
-  if (covered_by(point, poly)) {
+  if (covered_by(point, poly.outer())) {
     return 0.0;
   }
 
   // TODO(mitukou1109): Use plane sweep method to improve performance?
-  const auto & vertices = poly.vertices();
+  const auto & vertices = poly.outer();
   double min_distance = std::numeric_limits<double>::max();
   for (auto it = vertices.cbegin(); it != std::prev(vertices.cend()); ++it) {
     min_distance = std::min(min_distance, distance(point, *it, *std::next(it)));
@@ -422,10 +433,56 @@ bool intersects(
   return true;
 }
 
+bool intersects(const alt::Polygon2d & poly1, const alt::Polygon2d & poly2)
+{
+  // TODO(mitukou1109): Use plane sweep method to improve performance
+  for (const auto & vertex : poly1.outer()) {
+    if (within(vertex, poly2)) {
+      return true;
+    }
+  }
+
+  for (const auto & vertex : poly2.outer()) {
+    if (within(vertex, poly1)) {
+      return true;
+    }
+  }
+
+  for (auto it1 = poly1.outer().cbegin(); it1 != std::prev(poly1.outer().cend()); ++it1) {
+    for (auto it2 = poly2.outer().cbegin(); it2 != std::prev(poly2.outer().cend()); ++it2) {
+      if (intersects(*it1, *std::next(it1), *it2, *std::next(it2))) {
+        return true;
+      }
+    }
+
+    for (const auto & inner : poly2.inners()) {
+      for (auto it2 = inner.cbegin(); it2 != std::prev(inner.cend()); ++it2) {
+        if (intersects(*it1, *std::next(it1), *it2, *std::next(it2))) {
+          return true;
+        }
+      }
+    }
+  }
+
+  for (const auto & inner : poly1.inners()) {
+    for (auto it1 = inner.cbegin(); it1 != std::prev(inner.cend()); ++it1) {
+      for (auto it2 = poly2.outer().cbegin(); it2 != std::prev(poly2.outer().cend()); ++it2) {
+        if (intersects(*it1, *std::next(it1), *it2, *std::next(it2))) {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+}
+
 bool intersects(const alt::ConvexPolygon2d & poly1, const alt::ConvexPolygon2d & poly2)
 {
-  if (equals(poly1, poly2)) {
-    return true;
+  for (const auto & vertex : poly1.vertices()) {
+    if (touches(vertex, poly2)) {
+      return true;
+    }
   }
 
   // GJK algorithm
@@ -482,10 +539,10 @@ bool is_above(
   return (seg_end - seg_start).cross(point - seg_start) > 0;
 }
 
-bool is_clockwise(const alt::PointList2d & vertices)
+bool is_clockwise(const alt::PointList2d & ring)
 {
   double sum = 0.;
-  for (auto it = vertices.cbegin(); it != std::prev(vertices.cend()); ++it) {
+  for (auto it = ring.cbegin(); it != std::prev(ring.cend()); ++it) {
     sum += (std::next(it)->x() - it->x()) * (std::next(it)->y() + it->y());
   }
 
@@ -565,19 +622,17 @@ bool touches(
   return std::abs(start_vec.cross(end_vec)) < epsilon && start_vec.dot(end_vec) <= 0;
 }
 
-bool touches(const alt::Point2d & point, const alt::ConvexPolygon2d & poly)
+bool touches(const alt::Point2d & point, const alt::PointList2d & line)
 {
-  const auto & vertices = poly.vertices();
-
   const auto [y_min_vertex, y_max_vertex] = std::minmax_element(
-    vertices.begin(), std::prev(vertices.end()),
+    line.begin(), std::prev(line.end()),
     [](const auto & a, const auto & b) { return a.y() < b.y(); });
   if (point.y() < y_min_vertex->y() || point.y() > y_max_vertex->y()) {
     return false;
   }
 
-  for (auto it = vertices.cbegin(); it != std::prev(vertices.cend()); ++it) {
-    // check if the point is on each edge of the polygon
+  for (auto it = line.cbegin(); it != std::prev(line.cend()); ++it) {
+    // check if the point is on each segment
     if (touches(point, *it, *std::next(it))) {
       return true;
     }
@@ -586,22 +641,36 @@ bool touches(const alt::Point2d & point, const alt::ConvexPolygon2d & poly)
   return false;
 }
 
-bool within(const alt::Point2d & point, const alt::ConvexPolygon2d & poly)
+bool touches(const alt::Point2d & point, const alt::Polygon2d & poly)
+{
+  if (touches(point, poly.outer())) {
+    return true;
+  }
+
+  for (const auto & inner : poly.inners()) {
+    if (touches(point, inner)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool within(const alt::Point2d & point, const alt::PointList2d & ring)
 {
   constexpr double epsilon = 1e-6;
 
-  const auto & vertices = poly.vertices();
   int64_t winding_number = 0;
 
   const auto [y_min_vertex, y_max_vertex] = std::minmax_element(
-    vertices.begin(), std::prev(vertices.end()),
+    ring.begin(), std::prev(ring.end()),
     [](const auto & a, const auto & b) { return a.y() < b.y(); });
   if (point.y() <= y_min_vertex->y() || point.y() >= y_max_vertex->y()) {
     return false;
   }
 
   double cross;
-  for (auto it = vertices.cbegin(); it != std::prev(vertices.cend()); ++it) {
+  for (auto it = ring.cbegin(); it != std::prev(ring.cend()); ++it) {
     const auto & p1 = *it;
     const auto & p2 = *std::next(it);
 
@@ -626,20 +695,42 @@ bool within(const alt::Point2d & point, const alt::ConvexPolygon2d & poly)
     }
   }
 
-  return winding_number != 0;
+  if (winding_number == 0) {
+    return false;
+  }
+
+  return true;
 }
 
-bool within(
-  const alt::ConvexPolygon2d & poly_contained, const alt::ConvexPolygon2d & poly_containing)
+bool within(const alt::Point2d & point, const alt::Polygon2d & poly)
+{
+  for (const auto & inner : poly.inners()) {
+    if (covered_by(point, inner)) {
+      return false;
+    }
+  }
+
+  return within(point, poly.outer());
+}
+
+bool within(const alt::Polygon2d & poly_contained, const alt::Polygon2d & poly_containing)
 {
   if (equals(poly_contained, poly_containing)) {
     return true;
   }
 
   // check if all points of poly_contained are within poly_containing
-  for (const auto & vertex : poly_contained.vertices()) {
+  for (const auto & vertex : poly_contained.outer()) {
     if (!within(vertex, poly_containing)) {
       return false;
+    }
+  }
+
+  for (const auto & inner : poly_contained.inners()) {
+    for (const auto & vertex : inner) {
+      if (!within(vertex, poly_containing)) {
+        return false;
+      }
     }
   }
 
