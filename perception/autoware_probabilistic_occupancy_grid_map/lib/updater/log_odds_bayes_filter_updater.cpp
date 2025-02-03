@@ -73,12 +73,6 @@ bool OccupancyGridMapLOBFUpdater::update(
     applyLOBFLaunch(
       single_frame_occupancy_grid_map.getDeviceCostmap().get(), cost_value::NO_INFORMATION,
       getSizeInCellsX() * getSizeInCellsY(), device_costmap_.get(), stream_);
-
-    cudaMemcpy(
-      costmap_, device_costmap_.get(), getSizeInCellsX() * getSizeInCellsY() * sizeof(std::uint8_t),
-      cudaMemcpyDeviceToHost);
-
-    cudaStreamSynchronize(stream_);
   } else {
     for (unsigned int x = 0; x < getSizeInCellsX(); x++) {
       for (unsigned int y = 0; y < getSizeInCellsY(); y++) {

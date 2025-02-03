@@ -102,6 +102,8 @@ public:
 
   bool isCudaEnabled() const;
 
+  void setCudaStream(const cudaStream_t & stream);
+
   const autoware::cuda_utils::CudaUniquePtr<std::uint8_t[]> & getDeviceCostmap() const;
 
   void copyDeviceCostmapToHost() const;

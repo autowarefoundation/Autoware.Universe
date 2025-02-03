@@ -90,7 +90,6 @@ OccupancyGridMapInterface::OccupancyGridMapInterface(
     const auto num_cells_x = this->getSizeInCellsX();
     const auto num_cells_y = this->getSizeInCellsY();
 
-    cudaStreamCreate(&stream_);
     device_costmap_ = autoware::cuda_utils::make_unique<std::uint8_t[]>(num_cells_x * num_cells_y);
     device_costmap_aux_ =
       autoware::cuda_utils::make_unique<std::uint8_t[]>(num_cells_x * num_cells_y);
@@ -136,8 +135,9 @@ void OccupancyGridMapInterface::updateOrigin(double new_origin_x, double new_ori
       device_costmap_.get(), lower_left_x, lower_left_y, size_x_, size_y_,
       device_costmap_aux_.get(), 0, 0, cell_size_x, cell_size_y, cell_size_x, cell_size_y, stream_);
 
-    cudaMemset(
-      device_costmap_.get(), cost_value::NO_INFORMATION, size_x_ * size_y_ * sizeof(std::uint8_t));
+    cudaMemsetAsync(
+      device_costmap_.get(), cost_value::NO_INFORMATION, size_x_ * size_y_ * sizeof(std::uint8_t),
+      stream_);
   } else {
     local_map = new unsigned char[cell_size_x * cell_size_y];
 
@@ -207,6 +207,13 @@ bool OccupancyGridMapInterface::isCudaEnabled() const
   return use_cuda_;
 }
 
+void OccupancyGridMapInterface::setCudaStream(const cudaStream_t & stream)
+{
+  if (isCudaEnabled()) {
+    stream_ = stream;
+  }
+}
+
 const autoware::cuda_utils::CudaUniquePtr<std::uint8_t[]> &
 OccupancyGridMapInterface::getDeviceCostmap() const
 {
@@ -215,9 +222,10 @@ OccupancyGridMapInterface::getDeviceCostmap() const
 
 void OccupancyGridMapInterface::copyDeviceCostmapToHost() const
 {
-  cudaMemcpy(
+  cudaMemcpyAsync(
     costmap_, device_costmap_.get(), getSizeInCellsX() * getSizeInCellsY() * sizeof(std::uint8_t),
-    cudaMemcpyDeviceToHost);
+    cudaMemcpyDeviceToHost, stream_);
+  cudaStreamSynchronize(stream_);
 }
 
 }  // namespace costmap_2d

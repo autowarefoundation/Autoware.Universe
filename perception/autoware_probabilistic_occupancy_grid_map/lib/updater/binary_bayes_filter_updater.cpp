@@ -56,9 +56,9 @@ void OccupancyGridMapBBFUpdater::initRosParam(rclcpp::Node & node)
     }
   }
 
-  cudaMemcpy(
+  cudaMemcpyAsync(
     device_probability_matrix_.get(), probability_matrix_vector.data(),
-    sizeof(float) * Index::NUM_STATES * Index::NUM_STATES, cudaMemcpyHostToDevice);
+    sizeof(float) * Index::NUM_STATES * Index::NUM_STATES, cudaMemcpyHostToDevice, stream_);
 }
 
 inline unsigned char OccupancyGridMapBBFUpdater::applyBBF(
@@ -103,12 +103,6 @@ bool OccupancyGridMapBBFUpdater::update(
       Index::NUM_STATES, Index::FREE, Index::OCCUPIED, cost_value::FREE_SPACE,
       cost_value::LETHAL_OBSTACLE, cost_value::NO_INFORMATION, v_ratio_,
       getSizeInCellsX() * getSizeInCellsY(), device_costmap_.get(), stream_);
-
-    cudaMemcpy(
-      costmap_, device_costmap_.get(), getSizeInCellsX() * getSizeInCellsY() * sizeof(std::uint8_t),
-      cudaMemcpyDeviceToHost);
-
-    cudaStreamSynchronize(stream_);
   } else {
     for (unsigned int x = 0; x < getSizeInCellsX(); x++) {
       for (unsigned int y = 0; y < getSizeInCellsY(); y++) {

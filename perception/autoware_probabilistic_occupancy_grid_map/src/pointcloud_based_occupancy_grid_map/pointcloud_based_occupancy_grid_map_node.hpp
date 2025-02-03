@@ -30,10 +30,7 @@
 #include <sensor_msgs/msg/laser_scan.hpp>
 #include <sensor_msgs/point_cloud2_iterator.hpp>
 
-#include <message_filters/pass_through.h>
-#include <message_filters/subscriber.h>
-#include <message_filters/sync_policies/exact_time.h>
-#include <message_filters/synchronizer.h>
+#include <cuda_runtime.h>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
 
@@ -59,30 +56,28 @@ public:
   explicit PointcloudBasedOccupancyGridMapNode(const rclcpp::NodeOptions & node_options);
 
 private:
-  void onPointcloudWithObstacleAndRaw(
-    const PointCloud2::ConstSharedPtr & input_obstacle_msg,
-    const PointCloud2::ConstSharedPtr & input_raw_msg);
+  void obstaclePointcloudCallback(const PointCloud2::ConstSharedPtr & input_obstacle_msg);
+  void rawPointcloudCallback(const PointCloud2::ConstSharedPtr & input_raw_msg);
+  void onPointcloudWithObstacleAndRaw();
+
   OccupancyGrid::UniquePtr OccupancyGridMapToMsgPtr(
     const std::string & frame_id, const Time & stamp, const float & robot_pose_z,
     const Costmap2D & occupancy_grid_map);
 
 private:
   rclcpp::Publisher<OccupancyGrid>::SharedPtr occupancy_grid_map_pub_;
-  message_filters::Subscriber<PointCloud2> obstacle_pointcloud_sub_;
-  message_filters::Subscriber<PointCloud2> raw_pointcloud_sub_;
+  rclcpp::Subscription<PointCloud2>::SharedPtr obstacle_pointcloud_sub_ptr_;
+  rclcpp::Subscription<PointCloud2>::SharedPtr raw_pointcloud_sub_ptr_;
   std::unique_ptr<autoware::universe_utils::StopWatch<std::chrono::milliseconds>> stop_watch_ptr_{};
   std::unique_ptr<autoware::universe_utils::DebugPublisher> debug_publisher_ptr_{};
 
   std::shared_ptr<Buffer> tf2_{std::make_shared<Buffer>(get_clock())};
   std::shared_ptr<TransformListener> tf2_listener_{std::make_shared<TransformListener>(*tf2_)};
 
-  using SyncPolicy = message_filters::sync_policies::ExactTime<PointCloud2, PointCloud2>;
-  using Sync = message_filters::Synchronizer<SyncPolicy>;
-  std::shared_ptr<Sync> sync_ptr_;
-
   std::unique_ptr<OccupancyGridMapInterface> occupancy_grid_map_ptr_;
   std::unique_ptr<OccupancyGridMapUpdaterInterface> occupancy_grid_map_updater_ptr_;
 
+  cudaStream_t stream_;
   CudaPointCloud2 raw_pointcloud_;
   CudaPointCloud2 obstacle_pointcloud_;
 
