@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- cspell: ignore semseg, finetune  -->
+  <arg name="input/image" default="/sensing/camera/camera0/image_rect_color"/>
+  <arg name="output/objects" default="/perception/object_recognition/detection/yolov10/rois0"/>
+  <arg name="model_path" default="$(env HOME)/autoware_data/tensorrt_yolov10/yolov10m.onnx"/>
+  <arg name="label_path" default="$(env HOME)/autoware_data/tensorrt_yolov10/label.txt"/>
+
+  <node pkg="autoware_tensorrt_yolov10" exec="autoware_tensorrt_yolov10_node_exe" name="tensorrt_yolov10" output="screen">
+    <remap from="~/in/image" to="$(var input/image)"/>
+    <remap from="~/out/objects" to="$(var output/objects)"/>
+    <param name="model_path" value="$(var model_path)"/>
+    <param name="label_path" value="$(var label_path)"/>
+  </node>
+</launch>
