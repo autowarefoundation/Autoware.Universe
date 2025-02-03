@@ -6,6 +6,11 @@ autoware_package()
 
 find_package(PCL REQUIRED COMPONENTS io)
 
+include_directories(
+  src
+  ${PCL_INCLUDE_DIRS}
+)
+
 ament_auto_add_library(${PROJECT_NAME} SHARED
   src/elevation_map_loader_node.cpp
 )
@@ -23,6 +28,12 @@ rclcpp_components_register_node(${PROJECT_NAME}
   PLUGIN "autoware::elevation_map_loader::ElevationMapLoaderNode"
   EXECUTABLE elevation_map_loader_node
 )
+
+if(BUILD_TESTING)
+  ament_auto_add_gtest(elevation_map_loader_node_test
+    test/test_elevation_map_loader_node.cpp
+  )
+endif()
 
 ament_auto_package(INSTALL_TO_SHARE
   launch
