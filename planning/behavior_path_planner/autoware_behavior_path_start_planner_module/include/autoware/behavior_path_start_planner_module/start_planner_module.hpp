@@ -165,6 +165,8 @@ private:
     PlannerData planner_data;
     ModuleStatus current_status;
     PullOutStatus main_thread_pull_out_status;
+    lanelet::ConstLanelets current_lanelets;
+    lanelet::ConstLanelets extended_current_lanelets;
     bool is_stopped;
 
     StartPlannerData clone() const;

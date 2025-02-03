@@ -21,6 +21,7 @@
 #include "autoware/behavior_path_start_planner_module/util.hpp"
 #include "autoware/motion_utils/trajectory/trajectory.hpp"
 
+#include <autoware/behavior_path_planner_common/data_manager.hpp>
 #include <autoware_lanelet2_extension/utility/message_conversion.hpp>
 #include <autoware_lanelet2_extension/utility/query.hpp>
 #include <autoware_lanelet2_extension/utility/utilities.hpp>
@@ -371,7 +372,7 @@ bool StartPlannerModule::isModuleRunning() const
 bool StartPlannerModule::isCurrentPoseOnMiddleOfTheRoad() const
 {
   const Pose & current_pose = planner_data_->self_odometry->pose.pose;
-  const lanelet::ConstLanelets current_lanes = utils::getCurrentLanes(planner_data_);
+  const lanelet::ConstLanelets & current_lanes = start_planner_data_->current_lanelets;
   const double lateral_distance_to_center_lane =
     lanelet::utils::getArcCoordinates(current_lanes, current_pose).distance;
 
@@ -417,7 +418,8 @@ bool StartPlannerModule::isPreventingRearVehicleFromPassingThrough(const Pose & 
   const auto & route_handler = planner_data_->route_handler;
   const Pose start_pose = planner_data_->route_handler->getOriginalStartPose();
 
-  const auto target_lanes = utils::getCurrentLanes(planner_data_);
+  const auto & target_lanes = start_planner_data_->current_lanelets;
+
   if (target_lanes.empty()) return false;
 
   // Define functions to get distance between a point and a lane's boundaries.
@@ -813,12 +815,6 @@ BehaviorModuleOutput StartPlannerModule::planWaitingApproval()
   }
 
   waitApproval();
-
-  const double backward_path_length =
-    planner_data_->parameters.backward_path_length + parameters_->max_back_distance;
-  const auto current_lanes = utils::getExtendedCurrentLanes(
-    planner_data_, backward_path_length, std::numeric_limits<double>::max(),
-    /*forward_only_in_route*/ true);
 
   auto stop_path = status_.driving_forward ? getCurrentPath() : status_.backward_path;
   const auto drivable_lanes = generateDrivableLanes(stop_path);
@@ -1299,11 +1295,7 @@ bool StartPlannerModule::hasReachedPullOutEnd() const
   const auto current_pose = planner_data_->self_odometry->pose.pose;
 
   // check that ego has passed pull out end point
-  const double backward_path_length =
-    planner_data_->parameters.backward_path_length + parameters_->max_back_distance;
-  const auto current_lanes = utils::getExtendedCurrentLanes(
-    planner_data_, backward_path_length, std::numeric_limits<double>::max(),
-    /*forward_only_in_route*/ true);
+  const auto & current_lanes = start_planner_data_->extended_current_lanelets;
 
   const auto arclength_current = lanelet::utils::getArcCoordinates(current_lanes, current_pose);
   const auto arclength_pull_out_end =
@@ -1348,7 +1340,7 @@ TurnSignalInfo StartPlannerModule::calcTurnSignalInfo()
     path.points, status_.pull_out_path.start_pose.position);
   const auto shift_end_idx =
     autoware::motion_utils::findNearestIndex(path.points, status_.pull_out_path.end_pose.position);
-  const lanelet::ConstLanelets current_lanes = utils::getExtendedCurrentLanes(planner_data_);
+  const auto & current_lanes = start_planner_data_->extended_current_lanelets;
 
   const auto is_ignore_signal = [this](const lanelet::Id & id) {
     if (!ignore_signal_.has_value()) {
@@ -1426,12 +1418,7 @@ bool StartPlannerModule::isSafePath() const
     planner_data_->self_odometry->twist.twist.linear.y);
   const auto & dynamic_object = planner_data_->dynamic_object;
   const auto & route_handler = planner_data_->route_handler;
-  const double backward_path_length =
-    planner_data_->parameters.backward_path_length + parameters_->max_back_distance;
-
-  const auto current_lanes = utils::getExtendedCurrentLanes(
-    planner_data_, backward_path_length, std::numeric_limits<double>::max(),
-    /*forward_only_in_route*/ true);
+  const auto & current_lanes = start_planner_data_->extended_current_lanelets;
 
   // for ego predicted path
   const size_t ego_seg_idx = planner_data_->findEgoSegmentIndex(pull_out_path.points);
@@ -1551,11 +1538,7 @@ std::optional<PullOutStatus> StartPlannerModule::planFreespacePath(
   const double end_pose_search_end_distance = parameters.end_pose_search_end_distance;
   const double end_pose_search_interval = parameters.end_pose_search_interval;
 
-  const double backward_path_length =
-    planner_data->parameters.backward_path_length + parameters.max_back_distance;
-  const auto current_lanes = utils::getExtendedCurrentLanes(
-    planner_data, backward_path_length, std::numeric_limits<double>::max(),
-    /*forward_only_in_route*/ true);
+  const auto & current_lanes = start_planner_data_->extended_current_lanelets;
 
   const auto current_arc_coords = lanelet::utils::getArcCoordinates(current_lanes, current_pose);
 
@@ -1996,5 +1979,18 @@ void StartPlannerModule::StartPlannerData::update(
   current_status = current_status_;
   main_thread_pull_out_status = pull_out_status_;
   is_stopped = is_stopped_;
+
+  // compute current lanes
+  {
+    auto planner_data_ptr = std::make_shared<PlannerData>(planner_data);
+
+    current_lanelets = utils::getCurrentLanes(planner_data_ptr);
+
+    const double backward_path_length =
+      planner_data_.parameters.backward_path_length + parameters_.max_back_distance;
+    extended_current_lanelets = utils::getExtendedCurrentLanes(
+      planner_data_ptr, backward_path_length, std::numeric_limits<double>::max(),
+      /*forward_only_in_route*/ true);
+  }
 }
 }  // namespace autoware::behavior_path_planner
