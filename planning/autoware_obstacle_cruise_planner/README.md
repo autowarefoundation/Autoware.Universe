@@ -68,6 +68,10 @@ struct Obstacle
 };
 ```
 
+### Parameters
+
+{{ json_to_markdown("planning/obstacle_cruise_planner/schema/obstacle_cruise_planner.schema.json") }}
+
 ### Behavior determination against obstacles
 
 Obstacles for cruising, stopping and slowing down are selected in this order based on their pose and velocity.

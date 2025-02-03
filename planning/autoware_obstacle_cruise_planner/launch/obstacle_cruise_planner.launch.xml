@@ -6,6 +6,9 @@
   <!-- vehicle info param -->
   <arg name="vehicle_info_param_path" default="$(find-pkg-share autoware_vehicle_info_utils)/config/vehicle_info.param.yaml"/>
 
+  <!-- default common param -->
+  <arg name="default_common_param_path" default="$(find-pkg-share autoware_obstacle_cruise_planner)/config/default_common.param.yaml"/>
+
   <!-- input -->
   <arg name="input_trajectory" default="/planning/scenario_planning/lane_driving/trajectory"/>
   <arg name="input_odometry" default="/localization/kinematic_state"/>
@@ -21,6 +24,7 @@
     <!-- param -->
     <param from="$(var obstacle_cruise_planner_param_path)"/>
     <param from="$(var vehicle_info_param_path)"/>
+    <param from="$(var default_common_param_path)"/>
 
     <!-- input -->
     <remap from="~/input/trajectory" to="$(var input_trajectory)"/>

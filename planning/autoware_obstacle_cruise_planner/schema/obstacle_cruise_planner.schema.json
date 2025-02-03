@@ -1,0 +1,1296 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameter for OBstacle Cruise Planner Node",
+  "type": "object",
+  "definitions": {
+    "obstacle_cruise_planner": {
+      "type": "object",
+      "properties": {
+        "normal": {
+          "type": "object",
+          "properties": {
+            "min_acc": {
+              "type": "number",
+              "description": "min deceleration [m/ss]",
+              "default": "-1.0"
+            },
+            "max_acc": {
+              "type": "number",
+              "description": "max acceleration [m/ss]",
+              "default": "1.0"
+            },
+            "min_jerk": {
+              "type": "number",
+              "description": "min jerk [m/sss]",
+              "default": "-1.0"
+            },
+            "max_jerk": {
+              "type": "number",
+              "description": "max jerk [m/sss]",
+              "default": "1.0"
+            }
+          },
+          "required": ["min_acc", "max_acc", "min_jerk", "max_jerk"]
+        },
+
+        "limit": {
+          "type": "object",
+          "properties": {
+            "min_acc": {
+              "type": "number",
+              "description": "min deceleration limit [m/ss]",
+              "default": "-2.5"
+            },
+            "max_acc": {
+              "type": "number",
+              "description": "max acceleration limit [m/ss]",
+              "default": "1.0"
+            },
+            "min_jerk": {
+              "type": "number",
+              "description": "max velocity limit [m/sss]",
+              "default": "-1.5"
+            },
+            "max_jerk": {
+              "type": "number",
+              "description": "max velocity limit [m/sss]",
+              "default": "1.5"
+            }
+          },
+          "required": ["min_acc", "max_acc", "min_jerk", "max_jerk"]
+        },
+
+        "ego_nearest_dist_threshold": {
+          "type": "number",
+          "description": "threadhold for ego position distance",
+          "default": "1.0"
+        },
+        "ego_nearest_yaw_threshold": {
+          "type": "number",
+          "description": "threadhold for ego position yaw",
+          "default": "5.0"
+        },
+
+        "common": {
+          "type": "object",
+          "properties": {
+            "planning_algorithm": {
+              "type": "string",
+              "description": "currently supported algorithm is 'pid_base'",
+              "default": "pid_base"
+            },
+            "enable_debug_info": {
+              "type": "boolean",
+              "description": "enable debug info",
+              "default": "false"
+            },
+            "enable_calculation_time_info": {
+              "type": "boolean",
+              "description": "enable calculation time info",
+              "default": "false"
+            },
+            "enable_slow_down_planning": {
+              "type": "boolean",
+              "description": "enable slow down planning",
+              "default": "true"
+            },
+            "idling_time": {
+              "type": "number",
+              "description": "idling time to detect front vehicle starting deceleration [s]",
+              "default": "2.0"
+            },
+            "min_ego_accel_for_rss": {
+              "type": "number",
+              "description": "ego's acceleration to calculate RSS distance [m/ss]",
+              "default": "-1.0"
+            },
+            "min_object_accel_for_rss": {
+              "type": "number",
+              "description": "front obstacle's acceleration to calculate RSS distance [m/ss]",
+              "default": "-1.0"
+            },
+            "safe_distance_margin": {
+              "type": "number",
+              "description": "This is also used as a stop margin [m]",
+              "default": "5.0"
+            },
+            "terminal_safe_distance_margin": {
+              "type": "number",
+              "description": "Stop margin at the goal. This value cannot exceed safe distance margin. [m]",
+              "default": "3.0"
+            },
+            "hold_stop_velocity_threshold": {
+              "type": "number",
+              "description": "The maximum ego velocity to hold stopping [m/s]",
+              "default": "0.01"
+            },
+            "hold_stop_distance_threshold": {
+              "type": "number",
+              "description": "The ego keeps stopping if the distance to stop changes within the threshold [m]",
+              "default": "0.3"
+            },
+            "slow_down_min_acc": {
+              "type": "number",
+              "description": "slow down min deceleration [m/ss]",
+              "default": "-1.0"
+            },
+            "slow_down_min_jerk": {
+              "type": "number",
+              "description": "slow down min jerk [m/sss]",
+              "default": "-1.0"
+            },
+            "nearest_dist_deviation_threshold": {
+              "type": "number",
+              "description": "[m] for finding nearest index",
+              "default": "3.0"
+            },
+            "nearest_yaw_deviation_threshold": {
+              "type": "number",
+              "description": "[rad] for finding nearest index",
+              "default": "1.57"
+            },
+            "min_behavior_stop_margin": {
+              "type": "number",
+              "description": "min_behavior_stop_margin [m]",
+              "default": "3.0"
+            },
+
+            "stop_on_curve": {
+              "type": "object",
+              "properties": {
+                "enable_approaching": {
+                  "type": "boolean",
+                  "description": "enable approaching",
+                  "default": "false"
+                },
+                "additional_safe_distance_margin": {
+                  "type": "number",
+                  "description": "additional safe distance margin [m]",
+                  "default": "3.0"
+                },
+                "min_safe_distance_margin": {
+                  "type": "number",
+                  "description": "min safe distance margin [m]",
+                  "default": "3.0"
+                }
+              },
+              "required": [
+                "enable_approaching",
+                "additional_safe_distance_margin",
+                "min_safe_distance_margin"
+              ]
+            },
+
+            "suppress_sudden_obstacle_stop": {
+              "type": "boolean",
+              "description": "suppress_sudden_obstacle_stop",
+              "default": "false"
+            },
+
+            "stop_obstacle_type": {
+              "type": "object",
+              "properties": {
+                "pointcloud": {
+                  "type": "boolean",
+                  "description": "enable pointcloud",
+                  "default": "false"
+                },
+                "inside:": {
+                  "type": "object",
+                  "properties": {
+                    "unknown": {
+                      "type": "boolean",
+                      "description": "unknow obstacle",
+                      "default": "true"
+                    },
+                    "car": {
+                      "type": "boolean",
+                      "description": "car",
+                      "default": "true"
+                    },
+                    "truck": {
+                      "type": "boolean",
+                      "description": "truck",
+                      "default": "true"
+                    },
+                    "bus": {
+                      "type": "boolean",
+                      "description": "bus",
+                      "default": "true"
+                    },
+                    "trailer": {
+                      "type": "boolean",
+                      "description": "trailer",
+                      "default": "true"
+                    },
+                    "motorcycle": {
+                      "type": "boolean",
+                      "description": "motorcycle",
+                      "default": "true"
+                    },
+                    "bicycle": {
+                      "type": "boolean",
+                      "description": "bicycle",
+                      "default": "true"
+                    },
+                    "pedestrian": {
+                      "type": "boolean",
+                      "description": "pedestrian",
+                      "default": "true"
+                    }
+                  },
+                  "required": [
+                    "unknown",
+                    "car",
+                    "truck",
+                    "bus",
+                    "trailer",
+                    "motorcycle",
+                    "bicycle",
+                    "pedestrian"
+                  ]
+                },
+                "outside": {
+                  "type": "object",
+                  "properties": {
+                    "unknown": {
+                      "type": "boolean",
+                      "description": "unknow obstacle",
+                      "default": "false"
+                    },
+                    "car": {
+                      "type": "boolean",
+                      "description": "car",
+                      "default": "true"
+                    },
+                    "truck": {
+                      "type": "boolean",
+                      "description": "truck",
+                      "default": "true"
+                    },
+                    "bus": {
+                      "type": "boolean",
+                      "description": "bus",
+                      "default": "true"
+                    },
+                    "trailer": {
+                      "type": "boolean",
+                      "description": "trailer",
+                      "default": "true"
+                    },
+                    "motorcycle": {
+                      "type": "boolean",
+                      "description": "motorcycle",
+                      "default": "true"
+                    },
+                    "bicycle": {
+                      "type": "boolean",
+                      "description": "bicycle",
+                      "default": "true"
+                    },
+                    "pedestrian": {
+                      "type": "boolean",
+                      "description": "pedestrian",
+                      "default": "true"
+                    }
+                  },
+                  "required": [
+                    "unknown",
+                    "car",
+                    "truck",
+                    "bus",
+                    "trailer",
+                    "motorcycle",
+                    "bicycle",
+                    "pedestrian"
+                  ]
+                }
+              },
+              "required": ["pointcloud", "inside", "outside"]
+            },
+
+            "cruise_obstacle_type": {
+              "type": "object",
+              "properties": {
+                "inside": {
+                  "type": "object",
+                  "properties": {
+                    "unknown": {
+                      "type": "boolean",
+                      "description": "unknow obstacle",
+                      "default": "true"
+                    },
+                    "car": {
+                      "type": "boolean",
+                      "description": "car",
+                      "default": "true"
+                    },
+                    "truck": {
+                      "type": "boolean",
+                      "description": "truck",
+                      "default": "true"
+                    },
+                    "bus": {
+                      "type": "boolean",
+                      "description": "bus",
+                      "default": "true"
+                    },
+                    "trailer": {
+                      "type": "boolean",
+                      "description": "trailer",
+                      "default": "true"
+                    },
+                    "motorcycle": {
+                      "type": "boolean",
+                      "description": "motorcycle",
+                      "default": "true"
+                    },
+                    "bicycle": {
+                      "type": "boolean",
+                      "description": "bicycle",
+                      "default": "true"
+                    },
+                    "pedestrian": {
+                      "type": "boolean",
+                      "description": "pedestrian",
+                      "default": "false"
+                    }
+                  },
+                  "required": [
+                    "unknown",
+                    "car",
+                    "truck",
+                    "bus",
+                    "trailer",
+                    "motorcycle",
+                    "bicycle",
+                    "pedestrian"
+                  ]
+                },
+                "outside": {
+                  "type": "object",
+                  "properties": {
+                    "unknown": {
+                      "type": "boolean",
+                      "description": "unknow obstacle",
+                      "default": "false"
+                    },
+                    "car": {
+                      "type": "boolean",
+                      "description": "car",
+                      "default": "true"
+                    },
+                    "truck": {
+                      "type": "boolean",
+                      "description": "truck",
+                      "default": "true"
+                    },
+                    "bus": {
+                      "type": "boolean",
+                      "description": "bus",
+                      "default": "true"
+                    },
+                    "trailer": {
+                      "type": "boolean",
+                      "description": "trailer",
+                      "default": "true"
+                    },
+                    "motorcycle": {
+                      "type": "boolean",
+                      "description": "motorcycle",
+                      "default": "true"
+                    },
+                    "bicycle": {
+                      "type": "boolean",
+                      "description": "bicycle",
+                      "default": "true"
+                    },
+                    "pedestrian": {
+                      "type": "boolean",
+                      "description": "pedestrian",
+                      "default": "false"
+                    }
+                  },
+                  "required": [
+                    "unknown",
+                    "car",
+                    "truck",
+                    "bus",
+                    "trailer",
+                    "motorcycle",
+                    "bicycle",
+                    "pedestrian"
+                  ]
+                }
+              },
+              "required": ["inside", "outside"]
+            },
+
+            "slow_down_obstacle_type": {
+              "type": "object",
+              "properties": {
+                "unknown": {
+                  "type": "boolean",
+                  "description": "unknow obstacle",
+                  "default": "false"
+                },
+                "car": {
+                  "type": "boolean",
+                  "description": "car",
+                  "default": "true"
+                },
+                "truck": {
+                  "type": "boolean",
+                  "description": "truck",
+                  "default": "true"
+                },
+                "bus": {
+                  "type": "boolean",
+                  "description": "bus",
+                  "default": "true"
+                },
+                "trailer": {
+                  "type": "boolean",
+                  "description": "trailer",
+                  "default": "true"
+                },
+                "motorcycle": {
+                  "type": "boolean",
+                  "description": "motorcycle",
+                  "default": "true"
+                },
+                "bicycle": {
+                  "type": "boolean",
+                  "description": "bicycle",
+                  "default": "true"
+                },
+                "pedestrian": {
+                  "type": "boolean",
+                  "description": "pedestrian",
+                  "default": "true"
+                },
+                "pointcloud": {
+                  "type": "boolean",
+                  "description": "enable pointcloud",
+                  "default": "false"
+                }
+              },
+              "required": [
+                "unknown",
+                "car",
+                "truck",
+                "bus",
+                "trailer",
+                "motorcycle",
+                "bicycle",
+                "pedestrian",
+                "pointcloud"
+              ]
+            }
+          },
+          "required": [
+            "planning_algorithm",
+            "enable_debug_info",
+            "enable_calculation_time_info",
+            "enable_slow_down_planning",
+            "idling_time",
+            "min_ego_accel_for_rss",
+            "min_object_accel_for_rss",
+            "safe_distance_margin",
+            "terminal_safe_distance_margin",
+            "hold_stop_velocity_threshold",
+            "hold_stop_distance_threshold",
+            "slow_down_min_acc",
+            "slow_down_min_jerk",
+            "nearest_dist_deviation_threshold",
+            "nearest_yaw_deviation_threshold",
+            "min_behavior_stop_margin",
+            "stop_on_curve",
+            "suppress_sudden_obstacle_stop",
+            "stop_obstacle_type",
+            "cruise_obstacle_type",
+            "slow_down_obstacle_type"
+          ]
+        },
+
+        "behavior_determination": {
+          "type": "object",
+          "properties": {
+            "pointcloud_search_radius": {
+              "type": "number",
+              "description": "pointcloud search radius [m]",
+              "default": "5.0"
+            },
+            "pointcloud_voxel_grid_x": {
+              "type": "number",
+              "description": "x value of pointcloud voxel grid filter [m]",
+              "default": "0.05"
+            },
+            "pointcloud_voxel_grid_y": {
+              "type": "number",
+              "description": "y value of pointcloud voxel grid filter [m]",
+              "default": "0.05"
+            },
+            "pointcloud_voxel_grid_z": {
+              "type": "number",
+              "description": "y value of pointcloud voxel grid filter [m]",
+              "default": "100000.0"
+            },
+            "pointcloud_cluster_tolerance": {
+              "type": "number",
+              "description": "pointcloud cluster tolerance value",
+              "default": "1.0"
+            },
+            "pointcloud_min_cluster_size": {
+              "type": "integer",
+              "description": "minimum pointcloud cluster size",
+              "default": "1"
+            },
+            "pointcloud_max_cluster_size": {
+              "type": "integer",
+              "description": "maximum pointcloud cluster size",
+              "default": "100000"
+            },
+            "decimate_trajectory_step_length": {
+              "type": "number",
+              "description": "longitudinal step length to calculate trajectory polygon for collision checking",
+              "default": "2.0"
+            },
+            "prediction_resampling_time_interval": {
+              "type": "number",
+              "description": "prediction_resampling_time_interval",
+              "default": "0.1"
+            },
+            "prediction_resampling_time_horizon": {
+              "type": "number",
+              "description": "prediction_resampling_time_horizon",
+              "default": "10.0"
+            },
+            "stop_obstacle_hold_time_threshold": {
+              "type": "number",
+              "description": "maximum time for holding closest stop obstacle",
+              "default": "1.0"
+            },
+            "obstacle_velocity_threshold_from_cruise_to_stop": {
+              "type": "number",
+              "description": "stop planning is executed to the obstacle whose velocity is less than this value [m/s]",
+              "default": "3.0"
+            },
+            "obstacle_velocity_threshold_from_stop_to_cruise": {
+              "type": "number",
+              "description": "stop planning is executed to the obstacle whose velocity is less than this value [m/s]",
+              "default": "3.5"
+            },
+            "crossing_obstacle": {
+              "type": "object",
+              "properties": {
+                "obstacle_velocity_threshold": {
+                  "type": "number",
+                  "description": "velocity threshold for crossing obstacle for cruise or stop [m/s]",
+                  "default": "3.0"
+                },
+                "obstacle_traj_angle_threshold": {
+                  "type": "number",
+                  "description": "[rad] = 70 [deg], yaw threshold of crossing obstacle against the nearest trajectory point for cruise or stop",
+                  "default": "1.22"
+                }
+              },
+              "required": ["obstacle_velocity_threshold", "obstacle_traj_angle_threshold"]
+            },
+            "stop": {
+              "type": "object",
+              "properties": {
+                "max_lat_margin": {
+                  "type": "number",
+                  "description": "lateral margin between the obstacles except for unknown and ego's footprint",
+                  "default": "0.3"
+                },
+                "max_lat_margin_against_unknown": {
+                  "type": "number",
+                  "description": "lateral margin between the unknown obstacles and ego's footprint",
+                  "default": "0.3"
+                },
+                "min_velocity_to_reach_collision_point": {
+                  "type": "number",
+                  "description": "minimum velocity margin to calculate time to reach collision [m/s]",
+                  "default": "2.0"
+                },
+                "outside_obstacle": {
+                  "type": "object",
+                  "properties": {
+                    "max_lateral_time_margin": {
+                      "type": "number",
+                      "description": "time threshold of lateral margin between the obstacles and ego's footprint [s]",
+                      "default": "4.0"
+                    },
+                    "num_of_predicted_paths": {
+                      "type": "integer",
+                      "description": "number of the highest confidence predicted path to check collision between obstacle and ego",
+                      "default": "3"
+                    },
+                    "pedestrian_deceleration_rate": {
+                      "type": "number",
+                      "description": "planner perceives pedestrians will stop with this rate to avoid unnecessary stops [m/ss]",
+                      "default": "0.5"
+                    },
+                    "bicycle_deceleration_rate": {
+                      "type": "number",
+                      "description": "planner perceives bicycles will stop with this rate to avoid unnecessary stops [m/ss]",
+                      "default": "0.5"
+                    }
+                  },
+                  "required": [
+                    "max_lateral_time_margin",
+                    "num_of_predicted_paths",
+                    "pedestrian_deceleration_rate",
+                    "bicycle_deceleration_rate"
+                  ]
+                },
+                "crossing_obstacle": {
+                  "type": "object",
+                  "properties": {
+                    "collision_time_margin": {
+                      "type": "number",
+                      "description": "time threshold of collision between obstacle adn ego for cruise or stop [s]",
+                      "default": "4.0"
+                    }
+                  },
+                  "required": ["collision_time_margin"]
+                }
+              },
+              "required": [
+                "max_lat_margin",
+                "max_lat_margin_against_unknown",
+                "min_velocity_to_reach_collision_point",
+                "crossing_obstacle",
+                "outside_obstacle"
+              ]
+            },
+            "cruise": {
+              "type": "object",
+              "properties": {
+                "max_lat_margin": {
+                  "type": "number",
+                  "description": "lateral margin between obstacle and trajectory band with ego's width",
+                  "default": "1.0"
+                },
+                "outside_obstacle": {
+                  "type": "object",
+                  "properties": {
+                    "obstacle_velocity_threshold": {
+                      "type": "number",
+                      "description": "minimum velocity threshold of obstacles outside the trajectory to cruise or stop [m/s]",
+                      "default": "3.5"
+                    },
+                    "ego_obstacle_overlap_time_threshold": {
+                      "type": "number",
+                      "description": "time threshold to decide cut-in obstacle for cruise or stop [s]",
+                      "default": "2.0"
+                    },
+                    "max_prediction_time_for_collision_check": {
+                      "type": "number",
+                      "description": "prediction time to check collision between obstacle and ego",
+                      "default": "20.0"
+                    },
+                    "max_lateral_time_margin": {
+                      "type": "number",
+                      "description": "time threshold of lateral margin between obstacle and trajectory band with ego's width [s]",
+                      "default": "5.0"
+                    },
+                    "num_of_predicted_paths": {
+                      "type": "integer",
+                      "description": "number of the highest confidence predicted path to check collision between obstacle and ego",
+                      "default": "3"
+                    }
+                  },
+                  "required": [
+                    "obstacle_velocity_threshold",
+                    "ego_obstacle_overlap_time_threshold",
+                    "max_prediction_time_for_collision_check",
+                    "max_lateral_time_margin",
+                    "num_of_predicted_paths"
+                  ]
+                },
+                "yield": {
+                  "type": "object",
+                  "properties": {
+                    "enable_yield": {
+                      "type": "boolean",
+                      "description": "enable_yield",
+                      "default": "true"
+                    },
+                    "lat_distance_threshold": {
+                      "type": "number",
+                      "description": "lateral margin between obstacle in neighbor lanes and trajectory band with ego's width for yielding",
+                      "default": "5.0"
+                    },
+                    "max_lat_dist_between_obstacles": {
+                      "type": "number",
+                      "description": "lateral margin between moving obstacle in neighbor lanes and stopped obstacle in front of it",
+                      "default": "2.5"
+                    },
+                    "max_obstacles_collision_time": {
+                      "type": "number",
+                      "description": "how far the blocking obstacle",
+                      "default": "10.0"
+                    },
+                    "stopped_obstacle_velocity_threshold": {
+                      "type": "number",
+                      "description": "velocity threshold for stopped obstacle",
+                      "default": "0.5"
+                    }
+                  },
+                  "required": [
+                    "enable_yield",
+                    "lat_distance_threshold",
+                    "max_lat_dist_between_obstacles",
+                    "max_obstacles_collision_time",
+                    "stopped_obstacle_velocity_threshold"
+                  ]
+                }
+              },
+              "required": ["max_lat_margin", "outside_obstacle", "yield"]
+            },
+            "slow_down": {
+              "type": "object",
+              "properties": {
+                "max_lat_margin": {
+                  "type": "number",
+                  "description": "lateral margin between obstacle and trajectory band with ego's width",
+                  "default": "1.1"
+                },
+                "lat_hysteresis_margin": {
+                  "type": "number",
+                  "description": "lat_hysteresis_margin",
+                  "default": "0.2"
+                },
+                "successive_num_to_entry_slow_down_condition": {
+                  "type": "integer",
+                  "description": "successive_num_to_entry_slow_down_condition",
+                  "default": "5"
+                },
+                "successive_num_to_exit_slow_down_condition": {
+                  "type": "integer",
+                  "description": "successive_num_to_exit_slow_down_condition",
+                  "default": "5"
+                }
+              },
+              "required": [
+                "max_lat_margin",
+                "lat_hysteresis_margin",
+                "successive_num_to_entry_slow_down_condition",
+                "successive_num_to_exit_slow_down_condition"
+              ]
+            },
+
+            "consider_current_pose": {
+              "type": "object",
+              "properties": {
+                "enable_to_consider_current_pose": {
+                  "type": "boolean",
+                  "description": "enable to consider current pose",
+                  "default": "true"
+                },
+                "time_to_convergence": {
+                  "type": "number",
+                  "description": "time to convergence [s]",
+                  "default": "1.5"
+                }
+              },
+              "required": ["enable_to_consider_current_pose", "time_to_convergence"]
+            }
+          },
+          "required": [
+            "pointcloud_search_radius",
+            "pointcloud_voxel_grid_x",
+            "pointcloud_voxel_grid_y",
+            "pointcloud_voxel_grid_z",
+            "pointcloud_cluster_tolerance",
+            "pointcloud_min_cluster_size",
+            "pointcloud_max_cluster_size",
+            "decimate_trajectory_step_length",
+            "prediction_resampling_time_interval",
+            "prediction_resampling_time_horizon",
+            "stop_obstacle_hold_time_threshold",
+            "obstacle_velocity_threshold_from_cruise_to_stop",
+            "obstacle_velocity_threshold_from_stop_to_cruise",
+            "crossing_obstacle",
+            "stop",
+            "cruise",
+            "slow_down",
+            "consider_current_pose"
+          ]
+        },
+        "cruise": {
+          "type": "object",
+          "properties": {
+            "pid_based_planner": {
+              "type": "object",
+              "properties": {
+                "use_velocity_limit_based_planner": {
+                  "type": "boolean",
+                  "description": "use_velocity_limit_based_planner",
+                  "default": "true"
+                },
+                "error_function_type": {
+                  "type": "string",
+                  "description": "choose from linear, quadratic",
+                  "default": "quadratic"
+                },
+                "velocity_limit_based_planner": {
+                  "type": "object",
+                  "properties": {
+                    "kp": {
+                      "type": "number",
+                      "description": "PID gains to keep safe distance with the front vehicle",
+                      "default": "10.0"
+                    },
+                    "ki": {
+                      "type": "number",
+                      "description": "PID gains to keep safe distance with the front vehicle",
+                      "default": "0.0"
+                    },
+                    "kd": {
+                      "type": "number",
+                      "description": "PID gains to keep safe distance with the front vehicle",
+                      "default": "2.0"
+                    },
+                    "output_ratio_during_accel": {
+                      "type": "number",
+                      "description": "target acceleration is multiplied with this value while ego accelerates to catch up the front vehicle [-]",
+                      "default": "0.6"
+                    },
+                    "vel_to_acc_weight": {
+                      "type": "number",
+                      "description": "target acceleration is calculated by (target_velocity - current_velocity) * vel_to_acc_weight [-]",
+                      "default": "12.0"
+                    },
+                    "enable_jerk_limit_to_output_acc": {
+                      "type": "boolean",
+                      "description": "enable_jerk_limit_to_output_acc",
+                      "default": "false"
+                    },
+                    "disable_target_acceleration": {
+                      "type": "boolean",
+                      "description": "disable_target_acceleration",
+                      "default": "true"
+                    }
+                  },
+                  "required": [
+                    "kp",
+                    "ki",
+                    "kd",
+                    "output_ratio_during_accel",
+                    "vel_to_acc_weight",
+                    "enable_jerk_limit_to_output_acc",
+                    "disable_target_acceleration"
+                  ]
+                },
+                "velocity_insertion_based_planner": {
+                  "type": "object",
+                  "properties": {
+                    "kp_acc": {
+                      "type": "number",
+                      "description": "kp_acc",
+                      "default": "6.0"
+                    },
+                    "ki_acc": {
+                      "type": "number",
+                      "description": "ki_acc",
+                      "default": "0.0"
+                    },
+                    "kd_acc": {
+                      "type": "number",
+                      "description": "kd_acc",
+                      "default": "2.0"
+                    },
+                    "kp_jerk": {
+                      "type": "number",
+                      "description": "kp_jerk",
+                      "default": "20.0"
+                    },
+                    "ki_jerk": {
+                      "type": "number",
+                      "description": "ki_jerk",
+                      "default": "0.0"
+                    },
+                    "kd_jerk": {
+                      "type": "number",
+                      "description": "kd_jerk",
+                      "default": "0.0"
+                    },
+                    "output_acc_ratio_during_accel": {
+                      "type": "number",
+                      "description": "target acceleration is multiplied with this value while ego accelerates to catch up the front vehicle [-]",
+                      "default": "0.6"
+                    },
+                    "output_jerk_ratio_during_accel": {
+                      "type": "number",
+                      "description": "target acceleration is multiplied with this value while ego accelerates to catch up the front vehicle [-]",
+                      "default": "1.0"
+                    },
+                    "enable_jerk_limit_to_output_acc": {
+                      "type": "boolean",
+                      "description": "enable_jerk_limit_to_output_acc",
+                      "default": "true"
+                    }
+                  },
+                  "required": [
+                    "kp_acc",
+                    "ki_acc",
+                    "kd_acc",
+                    "kp_jerk",
+                    "ki_jerk",
+                    "kd_jerk",
+                    "output_acc_ratio_during_accel",
+                    "output_jerk_ratio_during_accel",
+                    "enable_jerk_limit_to_output_acc"
+                  ]
+                },
+                "min_accel_during_cruise": {
+                  "type": "number",
+                  "description": "minimum acceleration during cruise to slow down [m/ss]",
+                  "default": "-2.0"
+                },
+                "min_cruise_target_vel": {
+                  "type": "number",
+                  "description": "minimum target velocity during slow down [m/s]",
+                  "default": "0.0"
+                },
+                "time_to_evaluate_rss": {
+                  "type": "number",
+                  "description": "time_to_evaluate_rss",
+                  "default": "0.0"
+                },
+                "lpf_normalized_error_cruise_dist_gain": {
+                  "type": "number",
+                  "description": "minimum acceleration during cruise to slow down [m/ss]",
+                  "default": "0.2"
+                }
+              },
+              "required": [
+                "use_velocity_limit_based_planner",
+                "error_function_type",
+                "velocity_limit_based_planner",
+                "velocity_insertion_based_planner",
+                "min_accel_during_cruise",
+                "min_cruise_target_vel",
+                "time_to_evaluate_rss",
+                "lpf_normalized_error_cruise_dist_gain"
+              ]
+            },
+            "optimization_based_planner": {
+              "type": "object",
+              "properties": {
+                "dense_resampling_time_interval": {
+                  "type": "number",
+                  "description": "dense_resampling_time_interval",
+                  "default": "0.2"
+                },
+                "optimization_based_planner.sparse_resampling_time_interval": {
+                  "type": "number",
+                  "description": "sparse_resampling_time_interval",
+                  "default": "2.0"
+                },
+                "optimization_based_planner.dense_time_horizon": {
+                  "type": "number",
+                  "description": "dense_time_horizon",
+                  "default": "5.0"
+                },
+                "optimization_based_planner.max_time_horizon": {
+                  "type": "number",
+                  "description": "max_time_horizon",
+                  "default": "25.0"
+                },
+                "optimization_based_planner.velocity_margin": {
+                  "type": "number",
+                  "description": "[m/s]",
+                  "default": "0.2"
+                },
+                "optimization_based_planner.t_dangerous": {
+                  "type": "number",
+                  "description": "Parameters for safe distance",
+                  "default": "0.5"
+                },
+                "optimization_based_planner.replan_vel_deviation": {
+                  "type": "number",
+                  "description": "velocity deviation to replan initial velocity [m/s]",
+                  "default": "5.0"
+                },
+                "optimization_based_planner.engage_velocity": {
+                  "type": "number",
+                  "description": "engage velocity threshold [m/s] (if the trajectory velocity is higher than this value, use this velocity for engage vehicle speed)",
+                  "default": "0.25"
+                },
+                "optimization_based_planner.engage_acceleration": {
+                  "type": "number",
+                  "description": "engage acceleration [m/ss] (use this acceleration when engagement)",
+                  "default": "0.1"
+                },
+                "optimization_based_planner.engage_exit_ratio": {
+                  "type": "number",
+                  "description": "exit engage sequence to normal velocity planning when the velocity exceeds engage_exit_ratio x engage_velocity.",
+                  "default": "0.5"
+                },
+                "optimization_based_planner.stop_dist_to_prohibit_engage": {
+                  "type": "number",
+                  "description": "if the stop point is in this distance, the speed is set to 0 not to move the vehicle [m]",
+                  "default": "0.5"
+                },
+                "optimization_based_planner.max_s_weight": {
+                  "type": "number",
+                  "description": "Weights for optimization",
+                  "default": "100.0"
+                },
+                "optimization_based_planner.max_v_weight": {
+                  "type": "number",
+                  "description": "Weights for optimization",
+                  "default": "1.0"
+                },
+                "optimization_based_planner.over_s_safety_weight": {
+                  "type": "number",
+                  "description": "Weights for optimization",
+                  "default": "1000000.0"
+                },
+                "optimization_based_planner.over_s_ideal_weight": {
+                  "type": "number",
+                  "description": "Weights for optimization",
+                  "default": "50.0"
+                },
+                "optimization_based_planner.over_v_weight": {
+                  "type": "number",
+                  "description": "Weights for optimization",
+                  "default": "500000.0"
+                },
+                "optimization_based_planner.over_a_weight": {
+                  "type": "number",
+                  "description": "over_a_weight",
+                  "default": "5000.0"
+                },
+                "optimization_based_planner.over_j_weight": {
+                  "type": "number",
+                  "description": "Weights for optimization",
+                  "default": "10000.0"
+                }
+              },
+              "required": [
+                "dense_resampling_time_interval",
+                "sparse_resampling_time_interval",
+                "dense_time_horizon",
+                "max_time_horizon",
+                "velocity_margin",
+                "t_dangerous",
+                "replan_vel_deviation",
+                "engage_velocity",
+                "engage_acceleration",
+                "engage_exit_ratio",
+                "stop_dist_to_prohibit_engage",
+                "max_s_weight",
+                "max_v_weight",
+                "over_s_safety_weight",
+                "over_s_ideal_weight",
+                "over_v_weight",
+                "over_a_weight",
+                "over_j_weight"
+              ]
+            }
+          },
+          "required": ["pid_based_planner", "optimization_based_planner"]
+        },
+
+        "slow_down": {
+          "type": "object",
+          "description": "parameters to calculate slow down velocity by linear interpolation",
+          "properties": {
+            "labels": {
+              "type": "array",
+              "description": "Labels for different types of slow down configurations",
+              "default": ["default"]
+            },
+            "default": {
+              "type": "object",
+              "properties": {
+                "moving": {
+                  "type": "object",
+                  "properties": {
+                    "min_lat_margin": {
+                      "type": "number",
+                      "description": "Minimum lateral margin for moving objects",
+                      "default": "0.2"
+                    },
+                    "max_lat_margin": {
+                      "type": "number",
+                      "description": "Maximum lateral margin for moving objects",
+                      "default": "1.0"
+                    },
+                    "min_ego_velocity": {
+                      "type": "number",
+                      "description": "Minimum ego vehicle velocity for moving objects",
+                      "default": "2.0"
+                    },
+                    "max_ego_velocity": {
+                      "type": "number",
+                      "description": "Maximum ego vehicle velocity for moving objects",
+                      "default": "8.0"
+                    }
+                  },
+                  "required": [
+                    "min_lat_margin",
+                    "max_lat_margin",
+                    "min_ego_velocity",
+                    "max_ego_velocity"
+                  ]
+                },
+                "static": {
+                  "type": "object",
+                  "properties": {
+                    "min_lat_margin": {
+                      "type": "number",
+                      "description": "Minimum lateral margin for moving objects",
+                      "default": "0.2"
+                    },
+                    "max_lat_margin": {
+                      "type": "number",
+                      "description": "Maximum lateral margin for moving objects",
+                      "default": "1.0"
+                    },
+                    "min_ego_velocity": {
+                      "type": "number",
+                      "description": "Minimum ego vehicle velocity for moving objects",
+                      "default": "4.0"
+                    },
+                    "max_ego_velocity": {
+                      "type": "number",
+                      "description": "Maximum ego vehicle velocity for moving objects",
+                      "default": "8.0"
+                    }
+                  },
+                  "required": [
+                    "min_lat_margin",
+                    "max_lat_margin",
+                    "min_ego_velocity",
+                    "max_ego_velocity"
+                  ]
+                }
+              },
+              "required": ["moving", "static"]
+            },
+            "moving_object_speed_threshold": {
+              "type": "number",
+              "description": "[m/s] how fast the object needs to move to be considered as 'moving'",
+              "default": 0.5
+            },
+            "moving_object_hysteresis_range": {
+              "type": "number",
+              "description": "[m/s] hysteresis range used to prevent chattering when obstacle moves close to moving_object_speed_threshold",
+              "default": 0.1
+            },
+            "time_margin_on_target_velocity": {
+              "type": "number",
+              "description": "time_margin_on_target_velocity [s]",
+              "default": 1.5
+            },
+            "lpf_gain_slow_down_vel": {
+              "type": "number",
+              "description": "low-pass filter gain for slow down velocity",
+              "default": 0.99
+            },
+            "lpf_gain_lat_dist": {
+              "type": "number",
+              "description": "low-pass filter gain for lateral distance from obstacle to ego's path",
+              "default": 0.999
+            },
+            "lpf_gain_dist_to_slow_down": {
+              "type": "number",
+              "description": "low-pass filter gain for distance to slow down start",
+              "default": 0.7
+            }
+          },
+          "required": [
+            "labels",
+            "default",
+            "pedestrian",
+            "moving_object_speed_threshold",
+            "moving_object_hysteresis_range",
+            "time_margin_on_target_velocity",
+            "lpf_gain_slow_down_vel",
+            "lpf_gain_lat_dist",
+            "lpf_gain_dist_to_slow_down"
+          ]
+        },
+        "stop": {
+          "type": "object",
+          "properties": {
+            "type_specified_params": {
+              "type": "object",
+              "properties": {
+                "labels": {
+                  "type": "array",
+                  "description": "For the listed types, the node try to read the following type specified values",
+                  "default": ["default", "unknown"]
+                },
+                "unknow": {
+                  "type": "object",
+                  "properties": {
+                    "limit_min_acc": {
+                      "type": "number",
+                      "description": "overwrite the deceleration limit, in usually, common_param.yaml/limit.min_acc is referred.",
+                      "default": -1.2
+                    },
+                    "sudden_object_acc_threshold": {
+                      "type": "number",
+                      "description": "If a stop can be achieved by a deceleration smaller than this value, it is not considered as 'sudden stop'.",
+                      "default": -1.1
+                    },
+                    "sudden_object_dist_threshold": {
+                      "type": "number",
+                      "description": "If a stop distance is longer than this value, it is not considered as 'sudden stop'.",
+                      "default": 1000.0
+                    },
+                    "abandon_to_stop": {
+                      "type": "boolean",
+                      "description": "If true, the planner gives up to stop when it cannot avoid to run over while maintaining the deceleration limit.",
+                      "default": false
+                    }
+                  },
+                  "required": [
+                    "limit_min_acc",
+                    "sudden_object_acc_threshold",
+                    "sudden_object_dist_threshold",
+                    "abandon_to_stop"
+                  ]
+                }
+              },
+              "required": ["labels", "unknown"]
+            }
+          },
+          "required": ["type_specified_params"]
+        }
+      },
+      "required": [
+        "normal",
+        "limit",
+        "ego_nearest_dist_threshold",
+        "ego_nearest_yaw_threshold",
+        "common",
+        "behavior_determination",
+        "cruise",
+        "slow_down",
+        "stop"
+      ]
+    }
+  },
+
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/obstacle_cruise_planner"
+        }
+      },
+      "required": ["ros__parameters"]
+    }
+  },
+  "required": ["/**"]
+}

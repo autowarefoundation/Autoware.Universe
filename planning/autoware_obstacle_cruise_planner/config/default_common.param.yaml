@@ -19,3 +19,7 @@
       max_acc: 1.0          # max acceleration limit [m/ss]
       min_jerk: -1.5        # min jerk limit [m/sss]
       max_jerk: 1.5         # max jerk limit [m/sss]
+
+    # threadhold for ego position
+    ego_nearest_dist_threshold: 1.0
+    ego_nearest_yaw_threshold: 5.0
