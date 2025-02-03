@@ -244,6 +244,5 @@ You can choose whether to use this feature by parameter of `slow_down_limit.enab
 ### Future extensions / Unimplemented parts
 
 - Calculate obstacle's min velocity and max velocity from covariance
-- Detect collisions with polygon object
 - Handle the case when the predicted path of obstacles are not straight line
   - Currently collision check is calculated based on the assumption that the predicted path of the obstacle is a straight line

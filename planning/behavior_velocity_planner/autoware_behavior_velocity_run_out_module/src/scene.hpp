@@ -115,10 +115,15 @@ private:
     const geometry_msgs::msg::Vector3 & dimension,
     std::vector<geometry_msgs::msg::Point> & collision_points) const;
 
-  bool checkCollisionWithPolygon() const;
+  bool checkCollisionWithPolygon(
+    const Polygon2d & vehicle_polygon, const PoseWithRange pose_with_range, const Shape & shape,
+    std::vector<geometry_msgs::msg::Point> & collision_points) const;
 
   std::vector<geometry_msgs::msg::Point> createBoundingBoxForRangedPoints(
     const PoseWithRange & pose_with_range, const float x_offset, const float y_offset) const;
+
+  Polygon2d createPolygonForRangedPoints(
+    const PoseWithRange & pose_with_range, const Shape & shape) const;
 
   std::optional<geometry_msgs::msg::Pose> calcStopPoint(
     const std::optional<DynamicObstacle> & dynamic_obstacle, const PathWithLaneId & path,

@@ -24,6 +24,7 @@
 #include <autoware/universe_utils/geometry/geometry.hpp>
 #include <autoware/universe_utils/ros/uuid_helper.hpp>
 
+#include <boost/geometry/algorithms/append.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/algorithms/within.hpp>
 
@@ -518,7 +519,8 @@ bool RunOutModule::checkCollisionWithShape(
       break;
 
     case Shape::POLYGON:
-      collision_detected = checkCollisionWithPolygon();
+      collision_detected =
+        checkCollisionWithPolygon(vehicle_polygon, pose_with_range, shape, collision_points);
       break;
 
     default:
@@ -641,11 +643,60 @@ bool RunOutModule::checkCollisionWithBoundingBox(
   return true;
 }
 
-bool RunOutModule::checkCollisionWithPolygon() const
+Polygon2d RunOutModule::createPolygonForRangedPoints(
+  const PoseWithRange & pose_with_range, const Shape & shape) const
 {
-  RCLCPP_WARN_STREAM(logger_, "detection for POLYGON type is not implemented yet.");
+  // Convert the obstacle's pose to a min and max polygon
+  const auto pose_min_polygon =
+    autoware::universe_utils::toPolygon2d(pose_with_range.pose_min, shape);
+  const auto pose_max_polygon =
+    autoware::universe_utils::toPolygon2d(pose_with_range.pose_max, shape);
 
-  return false;
+  // Compute the convex hull of the min and max polygons
+  auto ranged_polygon = pose_min_polygon;
+  bg::append(ranged_polygon.outer(), pose_max_polygon.outer());
+  Polygon2d convex_polygon;
+  bg::convex_hull(ranged_polygon, convex_polygon);
+
+  return convex_polygon;
+}
+
+bool RunOutModule::checkCollisionWithPolygon(
+  const Polygon2d & vehicle_polygon, const PoseWithRange pose_with_range, const Shape & shape,
+  std::vector<geometry_msgs::msg::Point> & collision_points) const
+{
+  const auto bg_ranged_polygon = createPolygonForRangedPoints(pose_with_range, shape);
+
+  if (bg_ranged_polygon.outer().empty()) {
+    RCLCPP_WARN_STREAM_THROTTLE(logger_, *clock_, 1000, "failed to check collision with polygon");
+    return false;
+  }
+
+  std::vector<geometry_msgs::msg::Point> ranged_polygon;
+  for (const auto & point : bg_ranged_polygon.outer()) {
+    const auto p_msg = autoware::universe_utils::createPoint(
+      point.x(), point.y(), pose_with_range.pose_min.position.z);
+    ranged_polygon.emplace_back(p_msg);
+  }
+
+  // Check for collision between the vehicle and the obstacle polygon
+  std::vector<Point2d> collision_points_bg;
+  bg::intersection(vehicle_polygon, bg_ranged_polygon, collision_points_bg);
+
+  debug_ptr_->pushPredictedObstaclePolygons(ranged_polygon);
+
+  // No collision detected
+  if (collision_points_bg.empty()) {
+    return false;
+  }
+
+  // Collision detected
+  for (const auto & p : collision_points_bg) {
+    const auto p_msg =
+      autoware::universe_utils::createPoint(p.x(), p.y(), pose_with_range.pose_min.position.z);
+    collision_points.emplace_back(p_msg);
+  }
+  return true;
 }
 
 std::optional<geometry_msgs::msg::Pose> RunOutModule::calcStopPoint(
