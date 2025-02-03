@@ -180,7 +180,7 @@ private:
   typedef message_filters::Synchronizer<SyncPolicyWithRoughRoi> SyncWithRoughRoi;
   std::shared_ptr<SyncWithRoughRoi> sync_with_rough_roi_;
 
-  bool enable_fine_detection_;
+  bool use_ml_detector_;
   bool use_image_transport_;
 };
 

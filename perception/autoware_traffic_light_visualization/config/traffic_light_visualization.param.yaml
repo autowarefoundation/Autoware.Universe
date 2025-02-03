@@ -1,4 +1,4 @@
 /**:
   ros__parameters:
-    enable_fine_detection: false
+    use_ml_detector: false
     use_image_transport: true

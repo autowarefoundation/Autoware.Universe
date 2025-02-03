@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="enable_image_decompressor" default="true" description="enable image decompressor"/>
-  <arg name="enable_fine_detection" default="true" description="enable fine position adjustment of traffic light"/>
+  <arg name="use_ml_detector" default="true" description="enable fine position adjustment of traffic light"/>
+  <arg name="ml_detection_model_type" default="fine_detection_model" description="select ml model for TL detection: fine_detection_model or whole_image_detection_model"/>
   <arg name="fusion_only" default="false" description="launch only occlusion_predictor and multi_camera_fusion"/>
   <arg name="input/cloud" default="/sensing/lidar/top/pointcloud_raw_ex" description="point cloud for occlusion prediction"/>
   <arg name="judged/traffic_signals" default="/perception/traffic_light_recognition/judged/traffic_signals"/>
@@ -13,6 +14,8 @@
   <arg name="all_camera_namespaces" default="[camera6, camera7]"/>
 
   <!-- ML parameters -->
+  <arg name="whole_image_detector_model_path" default="/home/autoware/autoware_data"/>
+  <arg name="whole_image_detector_model_name" default="yolox_s_car_ped_tl_detector_960_960_batch_1.onnx"/>
   <arg name="fine_detector_param_path" default="$(find-pkg-share autoware_traffic_light_fine_detector)/config/traffic_light_fine_detector.param.yaml"/>
   <arg name="car_classifier_param_path" default="$(find-pkg-share autoware_traffic_light_classifier)/config/car_traffic_light_classifier.param.yaml"/>
   <arg name="pedestrian_classifier_param_path" default="$(find-pkg-share autoware_traffic_light_classifier)/config/pedestrian_traffic_light_classifier.param.yaml"/>
@@ -32,22 +35,31 @@
     </include>
     <include file="$(find-pkg-share tier4_perception_launch)/launch/traffic_light_recognition/traffic_light_map_based_detector.launch.py">
       <arg name="all_camera_namespaces" value="$(var all_camera_namespaces)"/>
-      <arg name="enable_fine_detection" value="$(var enable_fine_detection)"/>
+      <arg name="use_ml_detector" value="$(var use_ml_detector)"/>
     </include>
     <include file="$(find-pkg-share tier4_perception_launch)/launch/traffic_light_recognition/traffic_light_node_container.launch.py">
       <arg name="all_camera_namespaces" value="$(var all_camera_namespaces)"/>
       <arg name="enable_image_decompressor" value="$(var enable_image_decompressor)"/>
-      <arg name="enable_fine_detection" value="$(var enable_fine_detection)"/>
+      <arg name="ml_detection_model_type" value="$(var ml_detection_model_type)"/>
+      <arg name="use_ml_detector" value="$(var use_ml_detector)"/>
       <arg name="use_intra_process" value="true"/>
       <arg name="use_multithread" value="true"/>
+      <arg name="whole_image_detector_model_path" value="$(var whole_image_detector_model_path)"/>
+      <arg name="whole_image_detector_model_name" value="$(var whole_image_detector_model_name)"/>
       <arg name="fine_detector_param_path" value="$(var fine_detector_param_path)"/>
       <arg name="car_classifier_param_path" value="$(var car_classifier_param_path)"/>
       <arg name="pedestrian_classifier_param_path" value="$(var pedestrian_classifier_param_path)"/>
     </include>
   </group>
 
+  <group if="$(eval &quot;'$(var ml_detection_model_type)'=='whole_image_detection_model'&quot;)">
+    <include file="$(find-pkg-share tier4_perception_launch)/launch/traffic_light_recognition/traffic_light_category_merger.launch.py">
+      <arg name="all_camera_namespaces" value="$(var all_camera_namespaces)"/>
+    </include>
+  </group>
+
   <!-- traffic_light_occlusion_predictor on each camera -->
-  <group>
+  <group if="$(eval &quot;'$(var ml_detection_model_type)'=='fine_detection_model'&quot;)">
     <include file="$(find-pkg-share tier4_perception_launch)/launch/traffic_light_recognition/traffic_light_occlusion_predictor.launch.py">
       <arg name="all_camera_namespaces" value="$(var all_camera_namespaces)"/>
       <arg name="input/cloud" value="$(var input/cloud)"/>

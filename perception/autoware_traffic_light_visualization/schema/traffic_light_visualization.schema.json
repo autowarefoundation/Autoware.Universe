@@ -6,7 +6,7 @@
     "traffic_light_visualization": {
       "type": "object",
       "properties": {
-        "enable_fine_detection": {
+        "use_ml_detector": {
           "type": "boolean",
           "description": "whether to visualize result of the traffic light fine detection",
           "default": "false"
@@ -17,7 +17,7 @@
           "default": "true"
         }
       },
-      "required": ["enable_fine_detection", "use_image_transport"]
+      "required": ["use_ml_detector", "use_image_transport"]
     }
   },
   "properties": {

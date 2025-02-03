@@ -30,10 +30,10 @@ TrafficLightRoiVisualizerNode::TrafficLightRoiVisualizerNode(const rclcpp::NodeO
   using std::placeholders::_2;
   using std::placeholders::_3;
   using std::placeholders::_4;
-  enable_fine_detection_ = this->declare_parameter<bool>("enable_fine_detection");
+  use_ml_detector_ = this->declare_parameter<bool>("use_ml_detector");
   use_image_transport_ = this->declare_parameter<bool>("use_image_transport");
 
-  if (enable_fine_detection_) {
+  if (use_ml_detector_) {
     sync_with_rough_roi_.reset(new SyncWithRoughRoi(
       SyncPolicyWithRoughRoi(10), image_sub_, roi_sub_, rough_roi_sub_, traffic_signals_sub_));
     sync_with_rough_roi_->registerCallback(
@@ -69,7 +69,7 @@ void TrafficLightRoiVisualizerNode::connectCb()
     image_sub_.unsubscribe();
     traffic_signals_sub_.unsubscribe();
     roi_sub_.unsubscribe();
-    if (enable_fine_detection_) {
+    if (use_ml_detector_) {
       rough_roi_sub_.unsubscribe();
     }
   } else if (!image_sub_.getSubscriber()) {
@@ -77,7 +77,7 @@ void TrafficLightRoiVisualizerNode::connectCb()
     roi_sub_.subscribe(this, "~/input/rois", rclcpp::QoS{1}.get_rmw_qos_profile());
     traffic_signals_sub_.subscribe(
       this, "~/input/traffic_signals", rclcpp::QoS{1}.get_rmw_qos_profile());
-    if (enable_fine_detection_) {
+    if (use_ml_detector_) {
       rough_roi_sub_.subscribe(this, "~/input/rough/rois", rclcpp::QoS{1}.get_rmw_qos_profile());
     }
   }

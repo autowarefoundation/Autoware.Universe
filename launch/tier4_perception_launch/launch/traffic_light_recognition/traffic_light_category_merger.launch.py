@@ -1,4 +1,4 @@
-# Copyright 2024 TIER IV, Inc.
+# Copyright 2025 TIER IV, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ from launch.actions import DeclareLaunchArgument
 from launch.actions import GroupAction
 from launch.actions import IncludeLaunchDescription
 from launch.actions import OpaqueFunction
-from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PathJoinSubstitution
 from launch_ros.actions import PushRosNamespace
@@ -26,29 +25,20 @@ from launch_ros.substitutions import FindPackageShare
 import yaml
 
 
-def create_traffic_light_map_based_detector(namespace, context):
-    package = FindPackageShare("autoware_traffic_light_map_based_detector")
-    include = PathJoinSubstitution([package, "launch/traffic_light_map_based_detector.launch.xml"])
-
-    output_rois = (
-        "rough/rois"
-        if IfCondition(LaunchConfiguration("use_ml_detector")).evaluate(context)
-        else f"/perception/traffic_light_recognition/{namespace}/detection/rois"
-    )
+def create_traffic_light_category_merger(namespace):
+    package = FindPackageShare("autoware_traffic_light_category_merger")
+    include = PathJoinSubstitution([package, "launch/traffic_light_category_merger.launch.xml"])
 
     arguments = {
-        "input/camera_info": f"/sensing/camera/{namespace}/camera_info",
-        "expect/rois": "expect/rois",
-        "output/rois": output_rois,
-        # This parameter should be configured differently for each camera considering their delay.
-        "min_timestamp_offset": "-0.3",
-        "max_timestamp_offset": "0.0",
+        "input/car_signals": "classified/car/traffic_signals",
+        "input/pedestrian_signals": "classified/pedestrian/traffic_signals",
+        "output/traffic_light_signals": f"/perception/traffic_light_recognition/{namespace}/classification/traffic_signals",
     }.items()
 
     group = GroupAction(
         [
             PushRosNamespace(namespace),
-            PushRosNamespace("detection"),
+            PushRosNamespace("classification"),
             IncludeLaunchDescription(include, launch_arguments=arguments),
         ]
     )
@@ -73,8 +63,7 @@ def launch_setup(context, *args, **kwargs):
 
     # Create containers for all cameras
     traffic_light_recognition_containers = [
-        create_traffic_light_map_based_detector(namespace, context)
-        for namespace in all_camera_namespaces
+        create_traffic_light_category_merger(namespace) for namespace in all_camera_namespaces
     ]
     return traffic_light_recognition_containers
 
@@ -89,11 +78,6 @@ def generate_launch_description():
         )
 
     add_launch_arg("all_camera_namespaces", "[camera6, camera7]")
-    add_launch_arg(
-        "use_ml_detector",
-        "True",
-        "If True, output_topic will be for ml detector, otherwise for classifier",
-    )
 
     return launch.LaunchDescription(
         [
