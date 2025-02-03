@@ -71,3 +71,7 @@ class AstarSearch:
             )
 
         return waypoints
+
+    def getDistanceToObstacle(self, pose: Pose):
+        pose_byte = serialize_message(pose)
+        return self.astar_search.getDistanceToObstacle(pose_byte)

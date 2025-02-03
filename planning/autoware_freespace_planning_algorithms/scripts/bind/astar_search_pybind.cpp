@@ -99,6 +99,22 @@ public:
     waypoints_vector.length = waypoints.compute_length();
     return waypoints_vector;
   }
+
+  double getDistanceToObstacle(const std::string & pose_byte)
+  {
+    rclcpp::SerializedMessage serialized_msg;
+    static constexpr size_t message_header_length = 8u;
+    serialized_msg.reserve(message_header_length + pose_byte.size());
+    serialized_msg.get_rcl_serialized_message().buffer_length = pose_byte.size();
+    for (size_t i = 0; i < pose_byte.size(); ++i) {
+      serialized_msg.get_rcl_serialized_message().buffer[i] = pose_byte[i];
+    }
+    geometry_msgs::msg::Pose pose;
+    static rclcpp::Serialization<geometry_msgs::msg::Pose> serializer;
+    serializer.deserialize_message(&serialized_msg, &pose);
+
+    return freespace_planning_algorithms::AstarSearch::getDistanceToObstacle(pose);
+  }
 };
 
 namespace py = pybind11;
@@ -106,13 +122,12 @@ namespace py = pybind11;
 // cppcheck-suppress syntaxError
 PYBIND11_MODULE(autoware_freespace_planning_algorithms_pybind, p)
 {
-  auto pyPlannerWaypointsVector =
-    py::class_<PlannerWaypointsVector>(p, "PlannerWaypointsVector", py::dynamic_attr())
-      .def(py::init<>())
-      .def_readwrite("waypoints", &PlannerWaypointsVector::waypoints)
-      .def_readwrite("length", &PlannerWaypointsVector::length);
+  auto pyPlannerWaypointsVector = py::class_<PlannerWaypointsVector>(p, "PlannerWaypointsVector")
+                                    .def(py::init<>())
+                                    .def_readwrite("waypoints", &PlannerWaypointsVector::waypoints)
+                                    .def_readwrite("length", &PlannerWaypointsVector::length);
   auto pyAstarParam =
-    py::class_<freespace_planning_algorithms::AstarParam>(p, "AstarParam", py::dynamic_attr())
+    py::class_<freespace_planning_algorithms::AstarParam>(p, "AstarParam")
       .def(py::init<>())
       .def_readwrite("search_method", &freespace_planning_algorithms::AstarParam::search_method)
       .def_readwrite(
@@ -137,8 +152,7 @@ PYBIND11_MODULE(autoware_freespace_planning_algorithms_pybind, p)
         "goal_lat_distance_weight",
         &freespace_planning_algorithms::AstarParam::goal_lat_distance_weight);
   auto pyPlannerCommonParam =
-    py::class_<freespace_planning_algorithms::PlannerCommonParam>(
-      p, "PlannerCommonParam", py::dynamic_attr())
+    py::class_<freespace_planning_algorithms::PlannerCommonParam>(p, "PlannerCommonParam")
       .def(py::init<>())
       .def_readwrite("time_limit", &freespace_planning_algorithms::PlannerCommonParam::time_limit)
       .def_readwrite("theta_size", &freespace_planning_algorithms::PlannerCommonParam::theta_size)
@@ -165,14 +179,16 @@ PYBIND11_MODULE(autoware_freespace_planning_algorithms_pybind, p)
         "obstacle_threshold",
         &freespace_planning_algorithms::PlannerCommonParam::obstacle_threshold);
   auto pyVehicleShape =
-    py::class_<freespace_planning_algorithms::VehicleShape>(p, "VehicleShape", py::dynamic_attr())
+    py::class_<freespace_planning_algorithms::VehicleShape>(p, "VehicleShape")
       .def(py::init<>())
       .def(py::init<double, double, double, double, double>())
+      .def("setMinMaxDimension", &freespace_planning_algorithms::VehicleShape::setMinMaxDimension)
       .def_readwrite("length", &freespace_planning_algorithms::VehicleShape::length)
       .def_readwrite("width", &freespace_planning_algorithms::VehicleShape::width)
       .def_readwrite("base_length", &freespace_planning_algorithms::VehicleShape::base_length)
       .def_readwrite("max_steering", &freespace_planning_algorithms::VehicleShape::max_steering)
-      .def_readwrite("base2back", &freespace_planning_algorithms::VehicleShape::base2back);
+      .def_readwrite("base2back", &freespace_planning_algorithms::VehicleShape::base2back)
+      .def_readwrite("min_dimension", &freespace_planning_algorithms::VehicleShape::min_dimension);
 
   auto pyAbstractPlanningAlgorithm =
     py::class_<freespace_planning_algorithms::AbstractPlanningAlgorithm>(
@@ -187,6 +203,7 @@ PYBIND11_MODULE(autoware_freespace_planning_algorithms_pybind, p)
          freespace_planning_algorithms::AstarParam &>())
     .def("setMap", &AstarSearchPython::setMapByte)
     .def("makePlan", &AstarSearchPython::makePlanByte)
-    .def("getWaypoints", &AstarSearchPython::getWaypointsAsVector);
+    .def("getWaypoints", &AstarSearchPython::getWaypointsAsVector)
+    .def("getDistanceToObstacle", &AstarSearchPython::getDistanceToObstacle);
 }
 }  // namespace autoware::freespace_planning_algorithms
