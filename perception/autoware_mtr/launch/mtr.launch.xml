@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="param_path" default="$(find-pkg-share autoware_mtr)/config/mtr.param.yaml"/>
+  <arg name="data_path" default="$(find-pkg-share autoware_mtr)/data"/>
+
+  <arg name="input/objects" default="/perception/object_recognition/tracking/objects"/>
+  <arg name="input/vector_map" default="/map/vector_map"/>
+  <arg name="input/ego" default="/localization/kinematic_state"/>
+  <arg name="output/objects" default="mtr/objects"/>
+  <arg name="build_only" default="false"/>
+
+  <node pkg="autoware_mtr" exec="autoware_mtr" name="mtr" output="screen">
+    <param from="$(var param_path)" allow_substs="true"/>
+    <remap from="~/input/objects" to="$(var input/objects)"/>
+    <remap from="~/input/vector_map" to="$(var input/vector_map)"/>
+    <remap from="~/input/ego" to="$(var input/ego)"/>
+    <remap from="~/output/objects" to="$(var output/objects)"/>
+    <param name="build_only" value="$(var build_only)"/>
+  </node>
+</launch>

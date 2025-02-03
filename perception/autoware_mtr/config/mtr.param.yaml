@@ -1,0 +1,17 @@
+/**:
+  ros__parameters:
+    model_params:
+      model_path: "$(var data_path)/mtr_static.onnx"
+      target_labels: ["VEHICLE", "PEDESTRIAN", "CYCLIST"]
+      num_past: 11
+      num_mode: 6
+      num_future: 80
+      max_num_polyline: 768
+      max_num_point: 20
+      point_break_distance: 1.0
+      intention_point_filepath: "$(var data_path)/intention_point.csv"
+      num_intention_point_cluster: 64
+    build_params:
+      is_dynamic: false
+      precision: "FP32"
+      calibration: "MINMAX"
