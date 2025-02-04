@@ -34,9 +34,4 @@ You don't need to configure these topics manually. Just provide the `camera_name
 
 ## Node parameters
 
-| Parameter              | Type            | Description                                      |
-| ---------------------- | --------------- | ------------------------------------------------ |
-| `camera_namespaces`    | vector\<string> | Camera Namespaces to be fused                    |
-| `message_lifespan`     | double          | The maximum timestamp span to be fused           |
-| `approximate_sync`     | bool            | Whether work in Approximate Synchronization Mode |
-| `perform_group_fusion` | bool            | Whether perform Group Fusion                     |
+{{ json_to_markdown("perception/autoware_traffic_light_multi_camera_fusion/schema/traffic_light_multi_camera_fusion.schema.json") }}
