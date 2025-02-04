@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Parameters for pure_pursuit",
+  "type": "object",
+  "definitions": {
+    "pure_pursuit_params": {
+      "type": "object",
+      "properties": {
+        "ld_velocity_ratio": {
+          "type": "number",
+          "default": 2.4,
+          "description": "Velocity ratio for lookahead distance."
+        },
+        "ld_lateral_error_ratio": {
+          "type": "number",
+          "default": 3.6,
+          "description": "Lateral error ratio for lookahead distance."
+        },
+        "ld_curvature_ratio": {
+          "type": "number",
+          "default": 120.0,
+          "description": "Curvature ratio for lookahead distance."
+        },
+        "long_ld_lateral_error_threshold": {
+          "type": "number",
+          "default": 0.5,
+          "description": "Threshold for lateral error in long lookahead distance."
+        },
+        "min_lookahead_distance": {
+          "type": "number",
+          "default": 4.35,
+          "description": "Minimum lookahead distance."
+        },
+        "max_lookahead_distance": {
+          "type": "number",
+          "default": 15.0,
+          "description": "Maximum lookahead distance."
+        },
+        "converged_steer_rad": {
+          "type": "number",
+          "default": 0.1,
+          "description": "Steering angle considered as converged."
+        },
+        "reverse_min_lookahead_distance": {
+          "type": "number",
+          "default": 7.0,
+          "description": "Minimum lookahead distance for reversing."
+        },
+        "prediction_ds": {
+          "type": "number",
+          "default": 0.3,
+          "description": "Prediction step size."
+        },
+        "prediction_distance_length": {
+          "type": "number",
+          "default": 21.0,
+          "description": "Prediction distance length."
+        },
+        "resampling_ds": {
+          "type": "number",
+          "default": 0.1,
+          "description": "Resampling step size."
+        },
+        "curvature_calculation_distance": {
+          "type": "number",
+          "default": 4.0,
+          "description": "Distance for curvature calculation."
+        },
+        "enable_path_smoothing": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable or disable path smoothing."
+        },
+        "path_filter_moving_ave_num": {
+          "type": "number",
+          "default": 25,
+          "description": "Number of points for moving average path filter."
+        },
+        "control_period": {
+          "type": "number",
+          "default": 0.03,
+          "description": "Control period."
+        }
+      },
+      "required": [
+        "ld_velocity_ratio",
+        "ld_lateral_error_ratio",
+        "ld_curvature_ratio",
+        "long_ld_lateral_error_threshold",
+        "min_lookahead_distance",
+        "max_lookahead_distance",
+        "converged_steer_rad",
+        "reverse_min_lookahead_distance",
+        "prediction_ds",
+        "prediction_distance_length",
+        "resampling_ds",
+        "curvature_calculation_distance",
+        "enable_path_smoothing",
+        "path_filter_moving_ave_num",
+        "control_period"
+      ]
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/pure_pursuit_params"
+        }
+      },
+      "required": ["ros__parameters"]
+    }
+  },
+  "required": ["/**"]
+}

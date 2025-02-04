@@ -17,3 +17,7 @@ Return LateralOutput which contains the following to the controller node
 - LateralSyncData
   - steer angle convergence
 - `autoware_planning_msgs/Trajectory`: predicted path for ego vehicle
+
+## Parameters
+
+{{json_to_markdown("control/autoware_pure_pursuit/schema/pure_pursuit.schema.json")}}

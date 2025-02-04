@@ -14,3 +14,4 @@
     curvature_calculation_distance: 4.0
     enable_path_smoothing: false
     path_filter_moving_ave_num: 25
+    control_period: 0.03
