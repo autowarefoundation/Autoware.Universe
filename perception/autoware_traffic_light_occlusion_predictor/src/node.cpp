@@ -62,13 +62,13 @@ TrafficLightOcclusionPredictorNode::TrafficLightOcclusionPredictorNode(
 
   // configuration parameters
   config_.azimuth_occlusion_resolution_deg =
-    declare_parameter<double>("azimuth_occlusion_resolution_deg", 0.15);
+    declare_parameter<double>("azimuth_occlusion_resolution_deg");
   config_.elevation_occlusion_resolution_deg =
-    declare_parameter<double>("elevation_occlusion_resolution_deg", 0.08);
-  config_.max_valid_pt_dist = declare_parameter<double>("max_valid_pt_dist", 50.0);
-  config_.max_image_cloud_delay = declare_parameter<double>("max_image_cloud_delay", 1.0);
-  config_.max_wait_t = declare_parameter<double>("max_wait_t", 0.02);
-  config_.max_occlusion_ratio = declare_parameter<int>("max_occlusion_ratio", 50);
+    declare_parameter<double>("elevation_occlusion_resolution_deg");
+  config_.max_valid_pt_dist = declare_parameter<double>("max_valid_pt_dist");
+  config_.max_image_cloud_delay = declare_parameter<double>("max_image_cloud_delay");
+  config_.max_wait_t = declare_parameter<double>("max_wait_t");
+  config_.max_occlusion_ratio = declare_parameter<int>("max_occlusion_ratio");
 
   cloud_occlusion_predictor_ = std::make_shared<CloudOcclusionPredictor>(
     this, config_.max_valid_pt_dist, config_.azimuth_occlusion_resolution_deg,

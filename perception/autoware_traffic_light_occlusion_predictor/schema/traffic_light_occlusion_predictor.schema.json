@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "autoware_traffic_light_occlusion_predictor parameter",
+  "type": "object",
+  "definitions": {
+    "autoware_traffic_light_occlusion_predictor": {
+      "type": "object",
+      "properties": {
+        "azimuth_occlusion_resolution_deg": {
+          "type": "number",
+          "description": "Azimuth resolution of LiDAR point cloud (degree).",
+          "default": 0.15
+        },
+        "elevation_occlusion_resolution_deg": {
+          "type": "number",
+          "description": "Elevation resolution of LiDAR point cloud (degree).",
+          "default": 0.08
+        },
+        "max_valid_pt_dist": {
+          "type": "number",
+          "description": "The points within this distance would be used for calculation.",
+          "default": 50.0
+        },
+        "max_image_cloud_delay": {
+          "type": "number",
+          "description": "The maximum delay between LiDAR point cloud and camera image.",
+          "default": 0.5
+        },
+        "max_wait_t": {
+          "type": "number",
+          "description": "The maximum time waiting for the LiDAR point cloud.",
+          "default": 0.05
+        },
+        "max_occlusion_ratio": {
+          "type": "integer",
+          "description": "Maximum occlusion ratio for traffic lights.",
+          "default": 50
+        }
+      },
+      "required": [
+        "azimuth_occlusion_resolution_deg",
+        "elevation_occlusion_resolution_deg",
+        "max_valid_pt_dist",
+        "max_image_cloud_delay",
+        "max_wait_t",
+        "max_occlusion_ratio"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "$ref": "#/definitions/autoware_traffic_light_occlusion_predictor"
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}

@@ -31,11 +31,4 @@ If no point cloud is received or all point clouds have very large stamp differen
 
 ## Node parameters
 
-| Parameter                            | Type   | Description                                                   |
-| ------------------------------------ | ------ | ------------------------------------------------------------- |
-| `azimuth_occlusion_resolution_deg`   | double | azimuth resolution of LiDAR point cloud (degree)              |
-| `elevation_occlusion_resolution_deg` | double | elevation resolution of LiDAR point cloud (degree)            |
-| `max_valid_pt_dist`                  | double | The points within this distance would be used for calculation |
-| `max_image_cloud_delay`              | double | The maximum delay between LiDAR point cloud and camera image  |
-| `max_wait_t`                         | double | The maximum time waiting for the LiDAR point cloud            |
-| `max_occlusion_ratio`                | int    | The maximum occlusion ratio for setting signal as unknown     |
+{{ json_to_markdown("perception/autoware_traffic_light_occlusion_predictor/schema/traffic_light_occlusion_predictor.schema.json") }}
