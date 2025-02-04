@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lane_change_abort",
+  "type": "object",
+  "definitions": {
+    "behavior_path_lane_change_module": {
+      "type": "object",
+      "properties": {
+        "cancel": {
+          "type": "object",
+          "properties": {
+            "enable_on_prepare_phase": {
+              "type": "boolean",
+              "units": "s",
+              "description": "Enable cancel lane change.",
+              "default": true
+            },
+            "enable_on_lane_changing_phase": {
+              "type": "boolean",
+              "units": "s",
+              "description": "Enable abort lane change.",
+              "default": true
+            },
+            "overhang_tolerance": {
+              "type": "number",
+              "units": "s",
+              "description": "Threshold to determine ego vehicle diverges from the current lane.",
+              "default": 0.0,
+              "minimum": 0.0
+            },
+            "delta_time": {
+              "type": "number",
+              "units": "s",
+              "description": "The time taken to start steering to return to the center line.",
+              "default": 2.0,
+              "minimum": 1.0,
+              "maximum": 3.0
+            },
+            "duration": {
+              "type": "number",
+              "units": "s",
+              "description": "The time taken to complete returning to the center line.",
+              "default": 2.0,
+              "minimum": 1.0,
+              "maximum": 3.0
+            },
+            "max_lateral_jerk": {
+              "type": "number",
+              "units": "m/s³",
+              "description": "The maximum lateral jerk for abort path.",
+              "default": 1000.0
+            },
+            "unsafe_hysteresis_threshold": {
+              "type": "integer",
+              "description": "Threshold to determine ego vehicle diverges from the current lane.",
+              "default": 5,
+              "minimum": 1
+            },
+            "deceleration_sampling_num": {
+              "type": "integer",
+              "units": "m/s³",
+              "description": "Number of samples used for deceleration.",
+              "default": 5,
+              "minimum": 1
+            }
+          },
+          "required": [
+            "enable_on_prepare_phase",
+            "enable_on_lane_changing_phase",
+            "overhang_tolerance",
+            "delta_time",
+            "duration",
+            "max_lateral_jerk",
+            "unsafe_hysteresis_threshold",
+            "deceleration_sampling_num"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": ["cancel"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "/**": {
+      "type": "object",
+      "properties": {
+        "ros__parameters": {
+          "type": "object",
+          "properties": {
+            "lane_change": {
+              "$ref": "#/definitions/behavior_path_lane_change_module"
+            }
+          },
+          "required": ["lane_change"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["ros__parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["/**"],
+  "additionalProperties": false
+}
