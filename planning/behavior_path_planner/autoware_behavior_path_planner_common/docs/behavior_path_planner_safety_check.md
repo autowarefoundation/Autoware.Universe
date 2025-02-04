@@ -42,13 +42,24 @@ After the overlap check, it starts to perform the safety check for the broader r
 
 #### 4. Calculate RSS distance
 
-After we find which vehicle is running ahead of the other vehicle, we start to compute the RSS distance. With the reaction time $t_{reaction}$ and safety time margin $t_{margin}$, RSS distance can be described as:
+After determining which vehicle is ahead, the RSS (Responsibility-Sensitive Safety) distance is computed as follows:
 
 $$
-rss_{dist} = v_{rear} (t_{reaction} + t_{margin}) + \frac{v_{rear}^2}{2|a_{rear, decel}|} - \frac{v_{front}^2}{2|a_{front, decel|}}
+d_{\text{rss}} = v_{\text{rear}} (t_{\text{reaction}} + t_{\text{margin}}) + \frac{v_{\text{rear}}^2}{2|a_{\text{rear, decel}}|} - \frac{v_{\text{front}}^2}{2|a_{\text{front, decel}}|}
 $$
 
-where $V_{front}$, $v_{rear}$ are front and rear vehicle velocity respectively and $a_{rear, front}$, $a_{rear, decel}$ are front and rear vehicle deceleration. Note that RSS distance is normally used for objects traveling in the same direction, if the yaw difference between a given ego pose and object pose is more than a user-defined yaw difference threshold, the rss collision check will be skipped for that specific pair of poses.
+where:
+
+- $v_{\text{front}}$: Velocity of the front vehicle.
+- $v_{\text{rear}}$: Velocity of the rear vehicle.
+- $a_{\text{front, decel}}$: Expected deceleration of the front vehicle.
+- $a_{\text{rear, decel}}$: Expected deceleration of the rear vehicle.
+- $t_{\text{reaction}}$: Reaction time of the rear vehicle driver.
+- $t_{\text{margin}}$: Additional safety time margin, which accounts for uncertainties in vehicle behavior or delays in driver reactions during braking.
+
+!!! note
+
+    RSS distance is normally used for objects traveling in the same direction, if the yaw difference between a given ego pose and object pose is more than a user-defined yaw difference threshold, the rss collision check will be skipped for that specific pair of poses.
 
 #### 5. Create extended ego and target object polygons
 
@@ -61,3 +72,57 @@ As the picture shows, we expand the rear object polygon. For the longitudinal si
 #### 6. Check overlap
 
 Similar to the previous step, we check the overlap of the extended rear object polygon and front object polygon. If they are overlapped each other, we regard it as the unsafe situation.
+
+## Parameter configuration
+
+The following parameters are related to the safety checks:
+
+| Name                                  | Unit   | Type   | Description                                                                                                                                       |
+| :------------------------------------ | ------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `expected_front_deceleration`         | [m/s²] | double | The maximum deceleration of the front object during sudden braking.                                                                               |
+| `expected_rear_deceleration`          | [m/s²] | double | The maximum deceleration of the rear object during sudden braking.                                                                                |
+| `rear_vehicle_reaction_time`          | [s]    | double | The reaction time of the rear vehicle driver, starting from noticing the sudden braking of the front vehicle until stepping on the brake.         |
+| `rear_vehicle_safety_time_margin`     | [s]    | double | The time buffer for the rear vehicle to come to a complete stop during sudden braking.                                                            |
+| `lateral_distance_max_threshold`      | [m]    | double | The lateral distance threshold used to determine whether the lateral distance between two objects is sufficient for a safe lane change.           |
+| `longitudinal_distance_min_threshold` | [m]    | double | The longitudinal distance threshold used to determine whether the longitudinal distance between two objects is sufficient for a safe lane change. |
+| `longitudinal_velocity_delta_time`    | [s]    | double | A time multiplier used to compute the actual gap between vehicles at each predicted point (not RSS distance).                                     |
+| `extended_polygon_policy`             | [-]    | string | Policy used to determine the polygon shape for the safety check. Available options are: `rectangle` or `along-path`.                              |
+
+To provide flexibility, these parameters can vary by module. Each module can define its own set of safety check parameters to accommodate different scenarios or requirements.
+
+!!! note
+
+    Based on [RSS distance equation](#4-calculate-rss-distance), the $t_{\text{reaction}}$ and $t_{\text{margin}}$ are added together, so increasing either of them will make the RSS polygon longer. However, users should tune these parameters according to the RSS principles as closely as possible. Specifically:
+
+    - $t_{\text{reaction}}$ should reflect the driver’s reaction time.
+    - $t_{\text{margin}}$ should account for uncertainties, such as varying road conditions or unexpected reaction delays.
+
+### Extended Polygon Policy
+
+The Extended Polygon Policy defines the shape of the extended polygon. It can be configured using the parameter `extended_polygon_policy`. The value can be set to either `rectangle` or `along-path`.
+
+- `rectangle`: A rectangular polygon is generated around the ego vehicle predicted pose. This option is simpler and computationally efficient, making it suitable for most scenarios.
+- `along-path`: A polygon is generated by extending along the planned trajectory of the ego vehicle. This option provides a more accurate representation of the ego vehicle's path, especially on curved path like lane change.
+
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <div style="text-align: center;">
+        <div style="color: black; font-size: 20px; margin-bottom: 10px;">rectangle</div>
+        <img src="images/path_safety_checker/rectangle.png" alt="Rectangle">
+        </div>
+      </td>
+      <td>
+        <div style="text-align: center;">
+        <div style="color: black; font-size: 20px; margin-bottom: 10px;">along_path</div>
+        <img src="images/path_safety_checker/along_path.png" alt="Along Path">
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+!!! warning
+
+    The extended polygon policy is applied only to the ego vehicle’s polygon when an object is in front of the ego vehicle. For objects behind the ego vehicle, this policy is not applied.
